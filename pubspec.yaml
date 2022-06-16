@@ -1,0 +1,36 @@
+name: x50pay
+description: x50 pay mockup
+publish_to: none
+version: 1.0.0+1
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.0.3
+  r_dart_library:
+    git:
+      url: 'https://github.com/YK-Unit/r_dart_library.git'
+      ref: 0.4.1
+  url_launcher: ^6.1.3
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/images/common/header_float_icon.jpg
+  - assets/images/common/header_icon.png
+  - assets/images/common/logo.jpg
+  - assets/images/common/logo_150.jpg
+  - assets/images/common/ouo.png
+  - assets/images/login/login_banner.jpg
+  - assets/texts/license.txt
+flr:
+  core_version: 3.1.0
+  dartfmt_line_length: 80
+  assets:
+  - /assets/images/
+  - /assets/texts/
+  fonts: []
