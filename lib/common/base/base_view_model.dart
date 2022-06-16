@@ -24,4 +24,12 @@ class BaseViewModel extends ChangeNotifier {
     _isHeaderBackType = value;
     notifyListeners();
   }
+
+  String? _floatHeaderText;
+  String? get floatHeaderText => _floatHeaderText;
+
+  set floatHeaderText(String? value) {
+    _floatHeaderText = value;
+    notifyListeners();
+  }
 }

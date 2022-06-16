@@ -13,6 +13,7 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
   HeaderType headerType = HeaderType.normal;
   bool isShowFooter = false;
   bool isHeaderBackType = false;
+  String? floatHeaderText;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
       headerType = baseViewModel()!.isFloatHeader ? HeaderType.float : HeaderType.normal;
       isShowFooter = baseViewModel()!.isShowFooter;
       isHeaderBackType = baseViewModel()!.isHeaderBackType;
+      floatHeaderText = baseViewModel()!.floatHeaderText;
     }
 
     return ChangeNotifierProvider.value(
@@ -39,7 +41,7 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
                     children: [
                       headerType == HeaderType.normal
                           ? const _Header()
-                          : _Header.float(isBackType: isHeaderBackType),
+                          : _Header.float(isBackType: isHeaderBackType, title: floatHeaderText),
                       body(),
                       isShowFooter
                           ? const Padding(padding: EdgeInsets.all(30), child: _Footer())
@@ -59,14 +61,16 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
 class _Header extends StatelessWidget {
   final HeaderType _type;
   final bool isBackType;
-
+  final String? title;
   const _Header({Key? key})
       : _type = HeaderType.normal,
         isBackType = false,
+        title = null,
         super(key: key);
 
-  const _Header.float({Key? key, required this.isBackType})
+  const _Header.float({Key? key, required this.isBackType, this.title})
       : _type = HeaderType.float,
+        assert(isBackType != false || title != null, 'floatHeaderText must be set'),
         super(key: key);
 
   @override
@@ -75,7 +79,6 @@ class _Header extends StatelessWidget {
       case HeaderType.normal:
         return Container(
           color: Colors.white,
-          // color: Colors.grey,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
@@ -90,8 +93,9 @@ class _Header extends StatelessWidget {
           ),
         );
       case HeaderType.float:
-        return Container(
+        return Card(
           margin: const EdgeInsets.all(10),
+          elevation: 1,
           color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
@@ -118,7 +122,7 @@ class _Header extends StatelessWidget {
                       CircleAvatar(
                           backgroundImage: R.image.header_icon(), backgroundColor: const Color(0xff5a5a5a)),
                       const SizedBox(width: 10),
-                      const Text('X50 Pay - 忘記密碼'),
+                      Text(title == '' ? 'X50 Pay' : 'X50 Pay - $title'),
                     ],
             ),
           ),

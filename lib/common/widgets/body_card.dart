@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class BodyCard extends StatelessWidget {
   final Widget child;
-  const BodyCard({Key? key, required this.child}) : super(key: key);
+  final double paddingOffset;
+  const BodyCard({Key? key, required this.child, this.paddingOffset = 30}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class BodyCard extends StatelessWidget {
       margin: const EdgeInsets.all(15),
       child: Container(
         padding: const EdgeInsets.all(15),
-        child: Padding(padding: const EdgeInsets.all(30), child: child),
+        child: Padding(padding: EdgeInsets.all(paddingOffset), child: child),
       ),
     );
   }

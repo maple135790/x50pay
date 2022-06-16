@@ -11,6 +11,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const ForgotPassword());
       case AppRoute.license:
         return MaterialPageRoute(builder: (context) => const License());
+      case AppRoute.signUp:
+        return MaterialPageRoute(builder: (context) => const SignUp());
+
       default:
         return MaterialPageRoute(builder: (context) => const NotExist());
     }

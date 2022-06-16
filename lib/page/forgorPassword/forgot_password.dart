@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:x50pay/common/base/base_page.dart';
-import 'package:x50pay/common/base/base_stateful_state.dart';
-import 'package:x50pay/common/base/base_view_model.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
 import 'package:x50pay/page/forgorPassword/forgot_password_view_model.dart';
 
@@ -15,6 +13,7 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends BaseStatefulState<ForgotPassword> with BasePage {
   final email = TextEditingController();
   final viewModel = ForgotPasswordViewModel()
+    ..floatHeaderText = '忘記密碼'
     ..isFloatHeader = true
     ..isShowFooter = true;
 

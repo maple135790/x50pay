@@ -1,9 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base_page.dart';
-import 'package:x50pay/common/base/base_stateful_state.dart';
-import 'package:x50pay/common/base/base_view_model.dart';
+import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
 import 'package:x50pay/r.g.dart';
 
@@ -117,7 +116,60 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       Material(
                         type: MaterialType.transparency,
                         child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: const Text('請閱讀會員條款'),
+                                        content: SingleChildScrollView(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text('一、本平台只提供本店及經本店授權之店家內服務使用，除上述以外的其他店家不可使用。'),
+                                              const Text(
+                                                  '二、基於保障帳戶安全原則，本服務所需之使用者個人資料提供僅用於註冊、系統登入驗證使用，但當本平台認為有必要性時不在此限，例如：使用者參加本平台舉辦活動獲獎後發送領獎通知。'),
+                                              const Text(
+                                                  '三、使用者應保證所提供之資料及個人資訊為正確且完整，若有虛假或不實之情形導致無法繼續使用本服務，使用者需自行承擔。如果使用者發現有錯誤，請通知X50粉絲專頁更正。'),
+                                              const Text(
+                                                  '四、本平台無積分、押分、退幣等功能。當使用者於本平台進行加值並放入鈔票時，即視同使用者同意消費，恕無法取消或找零。'),
+                                              const Text(
+                                                  '五、消費 Point / 遊玩卷 前請確認欲遊玩模式與欲消費機台編號，付款成功後使用者不得要求任何形式之退款。'),
+                                              const Text(
+                                                  '六、本店提供的所有優惠活動，均以活動公布之辦法為準，本店並有權隨時變更、暫停或終止任何進行中之活動，如獲得方式、使用方式、獲獎名額或使用期限等，並保有活動最終解釋權力。'),
+                                              const Text(
+                                                  '七、本平台所提供的服務，包括使用者帳號、Point 、遊玩卷等資訊，一概禁止任何形式之轉移、販售、買賣行為。'),
+                                              const Text(
+                                                  '八、使用本平台服務將視同您同意服務條款之約定辦理。如您不同意本使用條款中任何一項，請不要使用本平台所提供的任何服務。'),
+                                              const Text('\n'),
+                                              RichText(
+                                                text: TextSpan(
+                                                    text: '完整版條款請點擊我閱讀',
+                                                    style: const TextStyle(color: Colors.blue),
+                                                    recognizer: TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        Navigator.of(context)
+                                                            .pushNamed(AppRoute.license);
+                                                      }),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              style: Themes.cancel(),
+                                              child: const Text('取消')),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).popAndPushNamed(AppRoute.signUp);
+                                              },
+                                              style: Themes.confirm(),
+                                              child: const Text('確認'))
+                                        ],
+                                      ));
+                            },
                             style: ButtonStyle(
                                 splashFactory: NoSplash.splashFactory,
                                 backgroundColor: MaterialStateProperty.resolveWith((states) {
@@ -139,15 +191,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       const SizedBox(width: 5),
                       TextButton(
                           onPressed: () {},
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            backgroundColor: MaterialStateProperty.resolveWith((states) {
-                              if (states.contains(MaterialState.pressed)) {
-                                return const Color(0xff677A40);
-                              }
-                              return const Color(0xff8bb96e);
-                            }),
-                          ),
+                          style: Themes.confirm(),
                           child: const Text('登入', style: TextStyle(color: Colors.white)))
                     ],
                   )
