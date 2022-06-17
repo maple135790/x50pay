@@ -25,6 +25,7 @@ flutter:
   - assets/images/common/logo.jpg
   - assets/images/common/logo_150.jpg
   - assets/images/common/ouo.png
+  - assets/images/dev/dev_avatar.png
   - assets/images/login/login_banner.jpg
   - assets/texts/license.txt
 flr:

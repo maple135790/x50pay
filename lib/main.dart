@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: AppThemeData().materialTheme,
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: kDebugMode ? AppRoute.login : AppRoute.login,
+      initialRoute: kDebugMode ? AppRoute.home : AppRoute.login,
     );
   }
 }

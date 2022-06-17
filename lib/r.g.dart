@@ -120,6 +120,11 @@ class _R_Image_AssetResource {
   final ouo =
       const AssetResource("assets/images/common/ouo.png", packageName: null);
 
+  /// asset: assets/images/dev/dev_avatar.png
+  // ignore: non_constant_identifier_names
+  final dev_avatar = const AssetResource("assets/images/dev/dev_avatar.png",
+      packageName: null);
+
   /// asset: assets/images/login/login_banner.jpg
   // ignore: non_constant_identifier_names
   final login_banner_jpg = const AssetResource(
@@ -177,6 +182,12 @@ class _R_Image {
   // ignore: non_constant_identifier_names
   AssetImage ouo() {
     return AssetImage(asset.ouo.keyName);
+  }
+
+  /// asset: assets/images/dev/dev_avatar.png
+  // ignore: non_constant_identifier_names
+  AssetImage dev_avatar() {
+    return AssetImage(asset.dev_avatar.keyName);
   }
 
   /// asset: assets/images/login/login_banner.jpg

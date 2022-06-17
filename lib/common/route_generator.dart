@@ -13,6 +13,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => const License());
       case AppRoute.signUp:
         return MaterialPageRoute(builder: (context) => const SignUp());
+      case AppRoute.home:
+        return MaterialPageRoute(builder: (context) => const Home());
 
       default:
         return MaterialPageRoute(builder: (context) => const NotExist());
