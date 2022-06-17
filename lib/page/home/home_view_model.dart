@@ -1,35 +1,41 @@
-import 'package:flutter/material.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/r.g.dart';
+import 'package:x50pay/common/models/entry/entry.dart';
+import 'package:x50pay/common/models/user/user.dart';
 
 class HomeViewModel extends BaseViewModel {
-  Future<ImageProvider<Object>> getUserImage() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    return R.image.dev_avatar();
+  User? _user;
+  User? get user => _user;
+
+  set user(User? value) {
+    _user = value;
+    notifyListeners();
   }
 
-  Future<String> getUserName() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    return '鯖缶';
+  Entry? _entry;
+  Entry? get entry => _entry;
+
+  set entry(Entry? value) {
+    _entry = value;
+    notifyListeners();
   }
 
-  Future<String> getUserId() async {
+  Future<bool> initHome() async {
+    // isLoading = true;
     await Future.delayed(const Duration(milliseconds: 1500));
-    return '00938 (已驗證)';
+    user = await getUser();
+    entry = await getEntry();
+    // isLoading = false;
+
+    return entry != null && user != null;
   }
 
-  Future<bool> getMPassStatus() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    return true;
+  Future<User>? getUser() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return testUser;
   }
 
-  Future<int> getPointCount() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    return 222;
-  }
-
-  Future<int> getTicketCount() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
-    return 9;
+  Future<Entry>? getEntry() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return testEntry;
   }
 }

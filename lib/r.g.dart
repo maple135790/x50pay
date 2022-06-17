@@ -125,6 +125,21 @@ class _R_Image_AssetResource {
   final dev_avatar = const AssetResource("assets/images/dev/dev_avatar.png",
       packageName: null);
 
+  /// asset: assets/images/home/mari_level/ouo.png
+  // ignore: non_constant_identifier_names
+  final ouo$1 = const AssetResource("assets/images/home/mari_level/ouo.png",
+      packageName: null);
+
+  /// asset: assets/images/home/top.png
+  // ignore: non_constant_identifier_names
+  final top =
+      const AssetResource("assets/images/home/top.png", packageName: null);
+
+  /// asset: assets/images/home/vts.png
+  // ignore: non_constant_identifier_names
+  final vts =
+      const AssetResource("assets/images/home/vts.png", packageName: null);
+
   /// asset: assets/images/login/login_banner.jpg
   // ignore: non_constant_identifier_names
   final login_banner_jpg = const AssetResource(
@@ -188,6 +203,24 @@ class _R_Image {
   // ignore: non_constant_identifier_names
   AssetImage dev_avatar() {
     return AssetImage(asset.dev_avatar.keyName);
+  }
+
+  /// asset: assets/images/home/mari_level/ouo.png
+  // ignore: non_constant_identifier_names
+  AssetImage ouo$1() {
+    return AssetImage(asset.ouo$1.keyName);
+  }
+
+  /// asset: assets/images/home/top.png
+  // ignore: non_constant_identifier_names
+  AssetImage top() {
+    return AssetImage(asset.top.keyName);
+  }
+
+  /// asset: assets/images/home/vts.png
+  // ignore: non_constant_identifier_names
+  AssetImage vts() {
+    return AssetImage(asset.vts.keyName);
   }
 
   /// asset: assets/images/login/login_banner.jpg

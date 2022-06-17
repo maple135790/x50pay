@@ -5,8 +5,10 @@ version: 1.0.0+1
 environment:
   sdk: '>=2.17.0 <3.0.0'
 dependencies:
+  collection: ^1.16.0
   flutter:
     sdk: flutter
+  percent_indicator: ^4.2.2
   provider: ^6.0.3
   r_dart_library:
     git:
@@ -26,6 +28,9 @@ flutter:
   - assets/images/common/logo_150.jpg
   - assets/images/common/ouo.png
   - assets/images/dev/dev_avatar.png
+  - assets/images/home/mari_level/ouo.png
+  - assets/images/home/top.png
+  - assets/images/home/vts.png
   - assets/images/login/login_banner.jpg
   - assets/texts/license.txt
 flr:

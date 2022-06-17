@@ -1,9 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/models/entry/entry.dart';
+import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/widgets/body_card.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
+import 'package:x50pay/page/home/message/message.dart';
+import 'package:x50pay/r.g.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -19,6 +25,24 @@ class _HomeState extends BaseStatefulState<Home> with BasePage {
 
   @override
   Widget body() {
+    return FutureBuilder<bool>(
+      future: viewModel.initHome(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
+        return _HomeLoaded(viewModel.user!, viewModel);
+      },
+    );
+  }
+}
+
+class _HomeLoaded extends StatelessWidget {
+  final HomeViewModel viewModel;
+  final User user;
+
+  const _HomeLoaded(this.user, this.viewModel, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Theme(
@@ -36,48 +60,36 @@ class _HomeState extends BaseStatefulState<Home> with BasePage {
                   padding: const EdgeInsets.all(30),
                   child: Row(
                     children: [
-                      FutureBuilder<ImageProvider<Object>>(
-                          future: viewModel.getUserImage(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState != ConnectionState.done) {
-                              return const CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: Color(0xff999999),
-                                  child: Icon(Icons.person, size: 65, color: Colors.white));
-                            }
-                            return Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(image: snapshot.data!, fit: BoxFit.fill)));
-                          }),
+                      Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: user.userimg != null
+                                  ? DecorationImage(image: NetworkImage(user.userimg!), fit: BoxFit.fill)
+                                  : DecorationImage(image: R.image.logo_150_jpg(), fit: BoxFit.fill))),
                       const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                             const Icon(Icons.person),
-                            FutureBuilder<String>(
-                                future: viewModel.getUserName(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState != ConnectionState.done) return const Text('');
-                                  return Text(snapshot.data!,
-                                      style: const TextStyle(color: Colors.white, fontSize: 20));
-                                })
+                            Text(user.name!, style: const TextStyle(color: Colors.white, fontSize: 20))
                           ]),
                           const SizedBox(height: 5),
                           Row(children: [
                             const Icon(Icons.perm_contact_cal),
-                            FutureBuilder<String>(
-                                future: viewModel.getUserId(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState != ConnectionState.done) {
-                                    return const Text('');
-                                  }
-                                  return Text('ID : ${snapshot.data!}',
-                                      style: const TextStyle(color: Colors.white));
-                                })
+                            RichText(
+                                text: TextSpan(text: 'ID : ${user.uid!.padLeft(6, '0')}', children: [
+                              user.phoneactive!
+                                  ? const TextSpan(text: ' (已驗證)')
+                                  : TextSpan(
+                                      text: ' (驗證手機)',
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Navigator.of(context).pushNamed(AppRoute.setting);
+                                        })
+                            ])),
                           ])
                         ],
                       ),
@@ -95,56 +107,30 @@ class _HomeState extends BaseStatefulState<Home> with BasePage {
                       Column(
                         children: [
                           const Text('月票', style: TextStyle(color: Colors.white)),
-                          FutureBuilder<bool>(
-                            future: viewModel.getMPassStatus(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState != ConnectionState.done) {
-                                return const Text('---', style: TextStyle(color: Colors.white, fontSize: 20));
-                              }
-                              if (snapshot.data!) {
-                                return const Text('已購買', style: TextStyle(color: Colors.white, fontSize: 20));
-                              } else {
-                                return RichText(
-                                    text: TextSpan(
-                                        text: '購買月票',
-                                        style: const TextStyle(color: Colors.blue, fontSize: 20),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            Navigator.of(context).pushNamed(AppRoute.buyMPass);
-                                          }));
-                              }
-                            },
-                          )
+                          user.vip!
+                              ? const Text('已購買', style: TextStyle(color: Colors.white, fontSize: 20))
+                              : RichText(
+                                  text: TextSpan(
+                                      text: '購買',
+                                      style: const TextStyle(color: Colors.blue, fontSize: 20),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Navigator.of(context).pushNamed(AppRoute.buyMPass);
+                                        })),
                         ],
                       ),
                       Column(
                         children: [
                           const Text('餘點', style: TextStyle(color: Colors.white)),
-                          FutureBuilder<int>(
-                            future: viewModel.getPointCount(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState != ConnectionState.done) {
-                                return const Text('0', style: TextStyle(color: Colors.white, fontSize: 30));
-                              }
-                              return Text(snapshot.data!.toString(),
-                                  style: const TextStyle(color: Colors.white, fontSize: 30));
-                            },
-                          )
+                          Text(user.point!.toString(),
+                              style: const TextStyle(color: Colors.white, fontSize: 30)),
                         ],
                       ),
                       Column(
                         children: [
                           const Text('遊玩券', style: TextStyle(color: Colors.white)),
-                          FutureBuilder<int>(
-                            future: viewModel.getTicketCount(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState != ConnectionState.done) {
-                                return const Text('0', style: TextStyle(color: Colors.white, fontSize: 30));
-                              }
-                              return Text(snapshot.data!.toString(),
-                                  style: const TextStyle(color: Colors.white, fontSize: 30));
-                            },
-                          )
+                          Text(user.ticketint!.toString(),
+                              style: const TextStyle(color: Colors.white, fontSize: 30)),
                         ],
                       ),
                     ],
@@ -163,7 +149,105 @@ class _HomeState extends BaseStatefulState<Home> with BasePage {
               ],
             ),
           ),
-        )
+        ),
+        BodyCard(
+            paddingOffset: 15,
+            child: Column(children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image(image: R.image.ouo$1(), height: 190, width: 150),
+                  const SizedBox(width: 10),
+                  Expanded(child: _Level(viewModel)),
+                ],
+              ),
+              const SizedBox(height: 30),
+              _Info(viewModel)
+            ])),
+        Padding(padding: const EdgeInsets.fromLTRB(15, 0, 15, 0), child: Image(image: R.image.vts())),
+        Padding(padding: const EdgeInsets.fromLTRB(15, 15, 15, 0), child: Image(image: R.image.top())),
+        const SizedBox(height: 25),
+      ],
+    );
+  }
+}
+
+class _Level extends StatelessWidget {
+  final HomeViewModel vm;
+  const _Level(this.vm, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Entry entry = vm.entry!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+              text: 'Lv. ',
+              style: const TextStyle(color: Color(0xff404040), fontSize: 16),
+              children: [
+                TextSpan(
+                    text: entry.grade![2] > 999998 ? '-' : entry.grade!.first,
+                    style: const TextStyle(color: Color(0xff808080), fontSize: 30))
+              ]),
+        ),
+        const SizedBox(height: 5),
+        // const SizedBox(height: 25),
+        // const LinearProgressIndicator(
+        //   value: 1,
+        //   minHeight: 25,
+        //   valueColor: AlwaysStoppedAnimation(Color(0xffd2691e)),
+        //   backgroundColor: Color(0xff5a5a5a),
+        // ),
+        LinearPercentIndicator(
+          padding: EdgeInsets.zero,
+          barRadius: Radius.circular(12),
+          percent: 0.7,
+          backgroundColor: Color(0xffe9e9e9),
+          progressColor: Color(0xffd2691e),
+          lineHeight: 25,
+        ),
+        const SizedBox(height: 10),
+
+        Text(
+            entry.grade![2] > 999998
+                ? '賽季已結束，請關注粉專取得最新消息'
+                : '再${entry.grade![1]}道即可升級至 Lv.${entry.grade![0] + 1}\n (將於 ${entry.grade![3]} 重置)',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Color(0xff404040), fontSize: 11)),
+        OutlinedButton(
+            onPressed: () {},
+            style: Themes.outlinedRed(),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [Text('查看獎勵列表', style: TextStyle(fontSize: 11))])),
+      ],
+    );
+  }
+}
+
+class _Info extends StatelessWidget {
+  final HomeViewModel vm;
+  const _Info(this.vm, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Entry entry = vm.entry!;
+    if (entry.evlist!.isEmpty) return const SizedBox();
+    List<Widget> events = [];
+    for (Evlist evt in entry.evlist!) {
+      events.add(Text('> ${evt.name} : ${evt.describe}',
+          style: const TextStyle(color: Color(0xffb59120), fontSize: 14)));
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(thickness: 1),
+        const SizedBox(height: 10),
+        const Text('訊息告知', style: TextStyle(color: Color(0xff8a6e18), fontSize: 16)),
+        const SizedBox(height: 10),
+        ...events
       ],
     );
   }

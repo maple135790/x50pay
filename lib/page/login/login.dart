@@ -31,7 +31,9 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
               width: constraints.maxWidth,
               child: Stack(
                 children: [
-                  Positioned.fill(child: Image(image: R.image.login_banner_jpg(), fit: BoxFit.none)),
+                  Positioned.fill(
+                      child: Image(
+                          image: R.image.login_banner_jpg(), fit: BoxFit.none)),
                   Positioned.fill(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -46,26 +48,42 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                   Positioned(
                     bottom: 15,
                     left: 15,
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      const Text('歡迎回來！',
-                          style: TextStyle(
-                              shadows: [Shadow(color: Colors.black, blurRadius: 25)],
-                              fontSize: 26,
-                              color: Color(0xe6ffffff))),
-                      const SizedBox(height: 5),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-                        Icon(Icons.schedule, size: 12, color: Colors.white),
-                        Text(' 24Hr 年中無休', style: TextStyle(fontSize: 12, color: Color(0xe6ffffff)))
-                      ]),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-                        Icon(Icons.pin_drop, size: 12, color: Colors.white),
-                        Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 12, color: Color(0xe6ffffff)))
-                      ]),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-                        Icon(Icons.pin_drop, size: 12, color: Colors.white),
-                        Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 12, color: Color(0xe6ffffff)))
-                      ]),
-                    ]),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('歡迎回來！',
+                              style: TextStyle(shadows: [
+                                Shadow(color: Colors.black, blurRadius: 25)
+                              ], fontSize: 26, color: Color(0xe6ffffff))),
+                          const SizedBox(height: 5),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Icon(Icons.schedule,
+                                    size: 12, color: Colors.white),
+                                Text(' 24Hr 年中無休',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Color(0xe6ffffff)))
+                              ]),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Icon(Icons.pin_drop,
+                                    size: 12, color: Colors.white),
+                                Text(' X50 ：萬華區武昌街二段134號1樓',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Color(0xe6ffffff)))
+                              ]),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: const [
+                                Icon(Icons.pin_drop,
+                                    size: 12, color: Colors.white),
+                                Text(' X40 ：士林區大南路49號2樓',
+                                    style: TextStyle(
+                                        fontSize: 12, color: Color(0xe6ffffff)))
+                              ]),
+                        ]),
                   ),
                 ],
               ),
@@ -74,7 +92,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text('立即登入會員系統', style: TextStyle(color: Color(0xff5a5a5a))),
+                  const Text('立即登入會員系統',
+                      style: TextStyle(color: Color(0xff5a5a5a))),
                   const SizedBox(height: 15),
                   const Text('電子郵件'),
                   const SizedBox(height: 12),
@@ -83,32 +102,40 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        focusedBorder:
-                            OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 1)),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.blue, width: 1)),
                       )),
                   const SizedBox(height: 15),
                   RichText(
-                      text: TextSpan(text: '密碼 ', style: const TextStyle(color: Colors.black), children: [
-                    const TextSpan(text: '( '),
-                    TextSpan(
-                        text: '忘記密碼嗎?',
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.of(context).pushNamed(AppRoute.forgotPassword);
-                          },
-                        style: const TextStyle(color: Colors.blue)),
-                    const TextSpan(text: ' )')
-                  ])),
+                      text: TextSpan(
+                          text: '密碼 ',
+                          style: const TextStyle(color: Colors.black),
+                          children: [
+                        const TextSpan(text: '( '),
+                        TextSpan(
+                            text: '忘記密碼嗎?',
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context)
+                                    .pushNamed(AppRoute.forgotPassword);
+                              },
+                            style: const TextStyle(color: Colors.blue)),
+                        const TextSpan(text: ' )')
+                      ])),
                   const SizedBox(height: 12),
                   TextField(
                       controller: password,
                       obscureText: true,
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          focusedBorder:
-                              OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 1)))),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 1)))),
                   const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -123,9 +150,11 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                         title: const Text('請閱讀會員條款'),
                                         content: SingleChildScrollView(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              const Text('一、本平台只提供本店及經本店授權之店家內服務使用，除上述以外的其他店家不可使用。'),
+                                              const Text(
+                                                  '一、本平台只提供本店及經本店授權之店家內服務使用，除上述以外的其他店家不可使用。'),
                                               const Text(
                                                   '二、基於保障帳戶安全原則，本服務所需之使用者個人資料提供僅用於註冊、系統登入驗證使用，但當本平台認為有必要性時不在此限，例如：使用者參加本平台舉辦活動獲獎後發送領獎通知。'),
                                               const Text(
@@ -144,12 +173,17 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                               RichText(
                                                 text: TextSpan(
                                                     text: '完整版條款請點擊我閱讀',
-                                                    style: const TextStyle(color: Colors.blue),
-                                                    recognizer: TapGestureRecognizer()
-                                                      ..onTap = () {
-                                                        Navigator.of(context)
-                                                            .pushNamed(AppRoute.license);
-                                                      }),
+                                                    style: const TextStyle(
+                                                        color: Colors.blue),
+                                                    recognizer:
+                                                        TapGestureRecognizer()
+                                                          ..onTap = () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pushNamed(
+                                                                    AppRoute
+                                                                        .license);
+                                                          }),
                                               )
                                             ],
                                           ),
@@ -163,7 +197,9 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                               child: const Text('取消')),
                                           TextButton(
                                               onPressed: () {
-                                                Navigator.of(context).popAndPushNamed(AppRoute.signUp);
+                                                Navigator.of(context)
+                                                    .popAndPushNamed(
+                                                        AppRoute.signUp);
                                               },
                                               style: Themes.confirm(),
                                               child: const Text('確認'))
@@ -172,27 +208,31 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                             },
                             style: ButtonStyle(
                                 splashFactory: NoSplash.splashFactory,
-                                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith((states) {
                                   if (states.contains(MaterialState.pressed)) {
                                     return const Color(0xffCE5F58);
                                   }
                                   return Colors.white;
                                 }),
-                                foregroundColor: MaterialStateProperty.resolveWith((states) {
+                                foregroundColor:
+                                    MaterialStateProperty.resolveWith((states) {
                                   if (states.contains(MaterialState.pressed)) {
                                     return Colors.white;
                                   }
                                   return const Color(0xffCE5F58);
                                 }),
                                 side: MaterialStateProperty.all(
-                                    const BorderSide(color: Color(0xffCE5F58), width: 1))),
+                                    const BorderSide(
+                                        color: Color(0xffCE5F58), width: 1))),
                             child: const Text('註冊')),
                       ),
                       const SizedBox(width: 5),
                       TextButton(
                           onPressed: () {},
                           style: Themes.confirm(),
-                          child: const Text('登入', style: TextStyle(color: Colors.white)))
+                          child: const Text('登入',
+                              style: TextStyle(color: Colors.white)))
                     ],
                   )
                 ],

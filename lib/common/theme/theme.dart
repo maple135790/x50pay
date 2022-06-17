@@ -46,4 +46,22 @@ class Themes {
       }),
     );
   }
+
+  static ButtonStyle outlinedRed() {
+    return ButtonStyle(
+        splashFactory: NoSplash.splashFactory,
+        backgroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.pressed)) {
+            return const Color(0xffCE5F58);
+          }
+          return Colors.white;
+        }),
+        foregroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.pressed)) {
+            return Colors.white;
+          }
+          return const Color(0xffCE5F58);
+        }),
+        side: MaterialStateProperty.all(const BorderSide(color: Color(0xffCE5F58), width: 1)));
+  }
 }

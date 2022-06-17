@@ -120,7 +120,9 @@ class _SignUpState extends BaseStatefulState<SignUp> with BasePage {
                                 if (true) {
                                   // if (_formKey.currentState!.validate()) {
                                   Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(builder: (context) => _EmailSent(email.text)));
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              _EmailSent(email.text)));
                                 }
                               }
                             : null,
@@ -136,11 +138,14 @@ class _SignUpState extends BaseStatefulState<SignUp> with BasePage {
 
   RichText _title(String text, {bool isOptional = false}) {
     return RichText(
-        text: TextSpan(text: text, style: const TextStyle(color: Colors.black), children: [
-      isOptional
-          ? const TextSpan(text: ' (選填)')
-          : const TextSpan(text: ' *', style: TextStyle(color: Colors.red))
-    ]));
+        text: TextSpan(
+            text: text,
+            style: const TextStyle(color: Colors.black),
+            children: [
+          isOptional
+              ? const TextSpan(text: ' (選填)')
+              : const TextSpan(text: ' *', style: TextStyle(color: Colors.red))
+        ]));
   }
 }
 
@@ -178,11 +183,13 @@ class __EmailSentState extends BaseStatefulState<_EmailSent> with BasePage {
               width: 150,
               height: 150,
               decoration: BoxDecoration(
-                  image: DecorationImage(image: R.image.logo_150_jpg()), shape: BoxShape.circle)),
+                  image: DecorationImage(image: R.image.logo_150_jpg()),
+                  shape: BoxShape.circle)),
           const SizedBox(height: 30),
           Container(
             decoration: BoxDecoration(
-                border: Border.all(width: 2, color: const Color(0xffcddee4)), color: const Color(0xffe6eff2)),
+                border: Border.all(width: 2, color: const Color(0xffcddee4)),
+                color: const Color(0xffe6eff2)),
             child: Padding(
               padding: const EdgeInsets.all(30),
               child: Row(
