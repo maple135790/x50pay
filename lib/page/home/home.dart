@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
@@ -8,7 +9,6 @@ import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
-import 'package:x50pay/page/home/message/message.dart';
 import 'package:x50pay/r.g.dart';
 
 class Home extends StatefulWidget {
@@ -18,8 +18,8 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends BaseStatefulState<Home> with BasePage {
-  final viewModel = HomeViewModel();
+class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
+  final viewModel = HomeViewModel()..isFunctionalHeader = false;
   @override
   BaseViewModel? baseViewModel() => viewModel;
 
@@ -28,19 +28,24 @@ class _HomeState extends BaseStatefulState<Home> with BasePage {
     return FutureBuilder<bool>(
       future: viewModel.initHome(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
+        if (snapshot.connectionState != ConnectionState.done) return const SizedBox(child: Text('loading'));
         return _HomeLoaded(viewModel.user!, viewModel);
       },
     );
   }
 }
 
-class _HomeLoaded extends StatelessWidget {
+class _HomeLoaded extends StatefulWidget {
   final HomeViewModel viewModel;
   final User user;
 
   const _HomeLoaded(this.user, this.viewModel, {Key? key}) : super(key: key);
 
+  @override
+  State<_HomeLoaded> createState() => _HomeLoadedState();
+}
+
+class _HomeLoadedState extends State<_HomeLoaded> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -65,8 +70,9 @@ class _HomeLoaded extends StatelessWidget {
                           height: 80,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: user.userimg != null
-                                  ? DecorationImage(image: NetworkImage(user.userimg!), fit: BoxFit.fill)
+                              image: widget.user.userimg != null
+                                  ? DecorationImage(
+                                      image: NetworkImage(widget.user.userimg!), fit: BoxFit.fill)
                                   : DecorationImage(image: R.image.logo_150_jpg(), fit: BoxFit.fill))),
                       const SizedBox(width: 10),
                       Column(
@@ -74,14 +80,14 @@ class _HomeLoaded extends StatelessWidget {
                         children: [
                           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                             const Icon(Icons.person),
-                            Text(user.name!, style: const TextStyle(color: Colors.white, fontSize: 20))
+                            Text(widget.user.name!, style: const TextStyle(color: Colors.white, fontSize: 20))
                           ]),
                           const SizedBox(height: 5),
                           Row(children: [
                             const Icon(Icons.perm_contact_cal),
                             RichText(
-                                text: TextSpan(text: 'ID : ${user.uid!.padLeft(6, '0')}', children: [
-                              user.phoneactive!
+                                text: TextSpan(text: 'ID : ${widget.user.uid!.padLeft(6, '0')}', children: [
+                              widget.user.phoneactive!
                                   ? const TextSpan(text: ' (已驗證)')
                                   : TextSpan(
                                       text: ' (驗證手機)',
@@ -107,7 +113,7 @@ class _HomeLoaded extends StatelessWidget {
                       Column(
                         children: [
                           const Text('月票', style: TextStyle(color: Colors.white)),
-                          user.vip!
+                          widget.user.vip!
                               ? const Text('已購買', style: TextStyle(color: Colors.white, fontSize: 20))
                               : RichText(
                                   text: TextSpan(
@@ -122,14 +128,14 @@ class _HomeLoaded extends StatelessWidget {
                       Column(
                         children: [
                           const Text('餘點', style: TextStyle(color: Colors.white)),
-                          Text(user.point!.toString(),
+                          Text(widget.user.point!.toString(),
                               style: const TextStyle(color: Colors.white, fontSize: 30)),
                         ],
                       ),
                       Column(
                         children: [
                           const Text('遊玩券', style: TextStyle(color: Colors.white)),
-                          Text(user.ticketint!.toString(),
+                          Text(widget.user.ticketint!.toString(),
                               style: const TextStyle(color: Colors.white, fontSize: 30)),
                         ],
                       ),
@@ -158,14 +164,26 @@ class _HomeLoaded extends StatelessWidget {
                 children: [
                   Image(image: R.image.ouo$1(), height: 190, width: 150),
                   const SizedBox(width: 10),
-                  Expanded(child: _Level(viewModel)),
+                  Expanded(child: _Level(widget.viewModel)),
                 ],
               ),
               const SizedBox(height: 30),
-              _Info(viewModel)
+              _Info(widget.viewModel)
             ])),
-        Padding(padding: const EdgeInsets.fromLTRB(15, 0, 15, 0), child: Image(image: R.image.vts())),
-        Padding(padding: const EdgeInsets.fromLTRB(15, 15, 15, 0), child: Image(image: R.image.top())),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+            child: GestureDetector(
+                onTap: () {
+                  launchUrlString('https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ');
+                },
+                child: Image(image: R.image.vts()))),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+            child: GestureDetector(
+                onTap: () {
+                  launchUrlString('https://www.youtube.com/c/X50MusicGameStation-onAir');
+                },
+                child: Image(image: R.image.top()))),
         const SizedBox(height: 25),
       ],
     );
@@ -175,6 +193,10 @@ class _HomeLoaded extends StatelessWidget {
 class _Level extends StatelessWidget {
   final HomeViewModel vm;
   const _Level(this.vm, {Key? key}) : super(key: key);
+
+  int getPercent(List grade) {
+    return ((int.parse(grade[1]) + int.parse(grade[2])) / int.parse(grade[2]) * 100).round();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,23 +215,16 @@ class _Level extends StatelessWidget {
               ]),
         ),
         const SizedBox(height: 5),
-        // const SizedBox(height: 25),
-        // const LinearProgressIndicator(
-        //   value: 1,
-        //   minHeight: 25,
-        //   valueColor: AlwaysStoppedAnimation(Color(0xffd2691e)),
-        //   backgroundColor: Color(0xff5a5a5a),
-        // ),
         LinearPercentIndicator(
-          padding: EdgeInsets.zero,
-          barRadius: Radius.circular(12),
-          percent: 0.7,
-          backgroundColor: Color(0xffe9e9e9),
-          progressColor: Color(0xffd2691e),
-          lineHeight: 25,
-        ),
+            padding: EdgeInsets.zero,
+            center: Text(entry.grade![2] > 999998 ? '少女祈禱中...' : getPercent(entry.grade!).toString(),
+                style: const TextStyle(color: Colors.white, fontSize: 12)),
+            barRadius: const Radius.circular(12),
+            percent: entry.grade![2] > 999998 ? 1.0 : getPercent(entry.grade!) / 100,
+            backgroundColor: const Color(0xffe9e9e9),
+            progressColor: const Color(0xffd2691e),
+            lineHeight: 25),
         const SizedBox(height: 10),
-
         Text(
             entry.grade![2] > 999998
                 ? '賽季已結束，請關注粉專取得最新消息'

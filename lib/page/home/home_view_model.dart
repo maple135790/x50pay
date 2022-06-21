@@ -1,16 +1,11 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
 
 class HomeViewModel extends BaseViewModel {
-  User? _user;
-  User? get user => _user;
-
-  set user(User? value) {
-    _user = value;
-    notifyListeners();
-  }
-
+  User? user;
   Entry? _entry;
   Entry? get entry => _entry;
 
@@ -20,11 +15,12 @@ class HomeViewModel extends BaseViewModel {
   }
 
   Future<bool> initHome() async {
-    // isLoading = true;
-    await Future.delayed(const Duration(milliseconds: 1500));
+    await EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 100));
     user = await getUser();
+    GlobalSingleton.instance.user = user;
     entry = await getEntry();
-    // isLoading = false;
+    await EasyLoading.dismiss();
 
     return entry != null && user != null;
   }

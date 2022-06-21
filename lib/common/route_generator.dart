@@ -6,18 +6,37 @@ class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoute.login:
-        return MaterialPageRoute(builder: (context) => const Login());
+        return NoTransitionRouter(const Login(), s: settings);
       case AppRoute.forgotPassword:
-        return MaterialPageRoute(builder: (context) => const ForgotPassword());
+        return NoTransitionRouter(const ForgotPassword(), s: settings);
       case AppRoute.license:
-        return MaterialPageRoute(builder: (context) => const License());
+        return NoTransitionRouter(const License(), s: settings);
       case AppRoute.signUp:
-        return MaterialPageRoute(builder: (context) => const SignUp());
+        return NoTransitionRouter(const SignUp(), s: settings);
+      case AppRoute.game:
+        return NoTransitionRouter(const Game(), s: settings);
       case AppRoute.home:
-        return MaterialPageRoute(builder: (context) => const Home());
+        return NoTransitionRouter(Home(), s: settings);
 
       default:
         return MaterialPageRoute(builder: (context) => const NotExist());
     }
   }
+}
+
+class NoTransitionRouter extends PageRouteBuilder {
+  final Widget page;
+  final RouteSettings? s;
+  NoTransitionRouter(this.page, {this.s})
+      : super(
+          settings: s,
+          transitionDuration: Duration.zero,
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation1,
+            Animation<double> animation2,
+          ) {
+            return page;
+          },
+        );
 }

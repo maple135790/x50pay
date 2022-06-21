@@ -30,8 +30,7 @@ class _LicenseState extends BaseStatefulState<License> with BasePage {
             future: vm.getLicense(),
             initialData: '',
             builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done)
-                return const Text('loading');
+              if (snapshot.connectionState != ConnectionState.done) return const Text('loading');
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -40,9 +39,7 @@ class _LicenseState extends BaseStatefulState<License> with BasePage {
                       height: 150,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: R.image.logo_150_jpg(),
-                              fit: BoxFit.fill))),
+                          image: DecorationImage(image: R.image.logo_150_jpg(), fit: BoxFit.fill))),
                   const SizedBox(height: 30),
                   Text(snapshot.data!)
                 ],

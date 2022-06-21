@@ -125,6 +125,16 @@ class _R_Image_AssetResource {
   final dev_avatar = const AssetResource("assets/images/dev/dev_avatar.png",
       packageName: null);
 
+  /// asset: assets/images/game/store/x40mgs.jpg
+  // ignore: non_constant_identifier_names
+  final x40mgs_jpg = const AssetResource("assets/images/game/store/x40mgs.jpg",
+      packageName: null);
+
+  /// asset: assets/images/game/store/x50mgs.jpg
+  // ignore: non_constant_identifier_names
+  final x50mgs_jpg = const AssetResource("assets/images/game/store/x50mgs.jpg",
+      packageName: null);
+
   /// asset: assets/images/home/mari_level/ouo.png
   // ignore: non_constant_identifier_names
   final ouo$1 = const AssetResource("assets/images/home/mari_level/ouo.png",
@@ -203,6 +213,18 @@ class _R_Image {
   // ignore: non_constant_identifier_names
   AssetImage dev_avatar() {
     return AssetImage(asset.dev_avatar.keyName);
+  }
+
+  /// asset: assets/images/game/store/x40mgs.jpg
+  // ignore: non_constant_identifier_names
+  AssetImage x40mgs_jpg() {
+    return AssetImage(asset.x40mgs_jpg.keyName);
+  }
+
+  /// asset: assets/images/game/store/x50mgs.jpg
+  // ignore: non_constant_identifier_names
+  AssetImage x50mgs_jpg() {
+    return AssetImage(asset.x50mgs_jpg.keyName);
   }
 
   /// asset: assets/images/home/mari_level/ouo.png

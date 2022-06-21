@@ -6,4 +6,5 @@ class AppRoute {
   static const signUp = '/signUp';
   static const buyMPass = '/buyMPass';
   static const setting = '/setting';
+  static const game = '/game';
 }

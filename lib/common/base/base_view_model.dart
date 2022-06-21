@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BaseViewModel extends ChangeNotifier {
+  bool _isFunctionalHeader = true;
+  bool get isFunctionalHeader => _isFunctionalHeader;
+
+  set isFunctionalHeader(bool value) {
+    _isFunctionalHeader = value;
+    notifyListeners();
+  }
+
   bool _isFloatHeader = false;
   bool get isFloatHeader => _isFloatHeader;
 
