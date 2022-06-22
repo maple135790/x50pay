@@ -7,13 +7,13 @@ import 'package:x50pay/common/theme/theme.dart';
 
 void main() {
   runApp(const MyApp());
-  configLoading();
+  configLoadingStyle();
 }
 
-void configLoading() {
+void configLoadingStyle() {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.ring
-    ..maskType =EasyLoadingMaskType.black
+    ..maskType = EasyLoadingMaskType.black
     ..loadingStyle = EasyLoadingStyle.dark
     ..userInteractions = false
     ..dismissOnTap = false;

@@ -125,6 +125,87 @@ class _R_Image_AssetResource {
   final dev_avatar = const AssetResource("assets/images/dev/dev_avatar.png",
       packageName: null);
 
+  /// asset: assets/images/game/machine/chu.png
+  // ignore: non_constant_identifier_names
+  final chu = const AssetResource("assets/images/game/machine/chu.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/ddr.png
+  // ignore: non_constant_identifier_names
+  final ddr = const AssetResource("assets/images/game/machine/ddr.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/gc.png
+  // ignore: non_constant_identifier_names
+  final gc = const AssetResource("assets/images/game/machine/gc.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/ju.png
+  // ignore: non_constant_identifier_names
+  final ju = const AssetResource("assets/images/game/machine/ju.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/mmdx.png
+  // ignore: non_constant_identifier_names
+  final mmdx = const AssetResource("assets/images/game/machine/mmdx.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/nvsv.png
+  // ignore: non_constant_identifier_names
+  final nvsv = const AssetResource("assets/images/game/machine/nvsv.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/pop.png
+  // ignore: non_constant_identifier_names
+  final pop = const AssetResource("assets/images/game/machine/pop.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/sdvx.png
+  // ignore: non_constant_identifier_names
+  final sdvx = const AssetResource("assets/images/game/machine/sdvx.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/tko.png
+  // ignore: non_constant_identifier_names
+  final tko = const AssetResource("assets/images/game/machine/tko.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/wac.png
+  // ignore: non_constant_identifier_names
+  final wac = const AssetResource("assets/images/game/machine/wac.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/x40chu.png
+  // ignore: non_constant_identifier_names
+  final x40chu = const AssetResource("assets/images/game/machine/x40chu.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/x40ddr.png
+  // ignore: non_constant_identifier_names
+  final x40ddr = const AssetResource("assets/images/game/machine/x40ddr.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/x40maidx.png
+  // ignore: non_constant_identifier_names
+  final x40maidx = const AssetResource(
+      "assets/images/game/machine/x40maidx.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/x40sdvx.png
+  // ignore: non_constant_identifier_names
+  final x40sdvx = const AssetResource("assets/images/game/machine/x40sdvx.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/x40tko.png
+  // ignore: non_constant_identifier_names
+  final x40tko = const AssetResource("assets/images/game/machine/x40tko.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/x40wac.png
+  // ignore: non_constant_identifier_names
+  final x40wac = const AssetResource("assets/images/game/machine/x40wac.png",
+      packageName: null);
+
   /// asset: assets/images/game/store/x40mgs.jpg
   // ignore: non_constant_identifier_names
   final x40mgs_jpg = const AssetResource("assets/images/game/store/x40mgs.jpg",
@@ -213,6 +294,102 @@ class _R_Image {
   // ignore: non_constant_identifier_names
   AssetImage dev_avatar() {
     return AssetImage(asset.dev_avatar.keyName);
+  }
+
+  /// asset: assets/images/game/machine/chu.png
+  // ignore: non_constant_identifier_names
+  AssetImage chu() {
+    return AssetImage(asset.chu.keyName);
+  }
+
+  /// asset: assets/images/game/machine/ddr.png
+  // ignore: non_constant_identifier_names
+  AssetImage ddr() {
+    return AssetImage(asset.ddr.keyName);
+  }
+
+  /// asset: assets/images/game/machine/gc.png
+  // ignore: non_constant_identifier_names
+  AssetImage gc() {
+    return AssetImage(asset.gc.keyName);
+  }
+
+  /// asset: assets/images/game/machine/ju.png
+  // ignore: non_constant_identifier_names
+  AssetImage ju() {
+    return AssetImage(asset.ju.keyName);
+  }
+
+  /// asset: assets/images/game/machine/mmdx.png
+  // ignore: non_constant_identifier_names
+  AssetImage mmdx() {
+    return AssetImage(asset.mmdx.keyName);
+  }
+
+  /// asset: assets/images/game/machine/nvsv.png
+  // ignore: non_constant_identifier_names
+  AssetImage nvsv() {
+    return AssetImage(asset.nvsv.keyName);
+  }
+
+  /// asset: assets/images/game/machine/pop.png
+  // ignore: non_constant_identifier_names
+  AssetImage pop() {
+    return AssetImage(asset.pop.keyName);
+  }
+
+  /// asset: assets/images/game/machine/sdvx.png
+  // ignore: non_constant_identifier_names
+  AssetImage sdvx() {
+    return AssetImage(asset.sdvx.keyName);
+  }
+
+  /// asset: assets/images/game/machine/tko.png
+  // ignore: non_constant_identifier_names
+  AssetImage tko() {
+    return AssetImage(asset.tko.keyName);
+  }
+
+  /// asset: assets/images/game/machine/wac.png
+  // ignore: non_constant_identifier_names
+  AssetImage wac() {
+    return AssetImage(asset.wac.keyName);
+  }
+
+  /// asset: assets/images/game/machine/x40chu.png
+  // ignore: non_constant_identifier_names
+  AssetImage x40chu() {
+    return AssetImage(asset.x40chu.keyName);
+  }
+
+  /// asset: assets/images/game/machine/x40ddr.png
+  // ignore: non_constant_identifier_names
+  AssetImage x40ddr() {
+    return AssetImage(asset.x40ddr.keyName);
+  }
+
+  /// asset: assets/images/game/machine/x40maidx.png
+  // ignore: non_constant_identifier_names
+  AssetImage x40maidx() {
+    return AssetImage(asset.x40maidx.keyName);
+  }
+
+  /// asset: assets/images/game/machine/x40sdvx.png
+  // ignore: non_constant_identifier_names
+  AssetImage x40sdvx() {
+    return AssetImage(asset.x40sdvx.keyName);
+  }
+
+  /// asset: assets/images/game/machine/x40tko.png
+  // ignore: non_constant_identifier_names
+  AssetImage x40tko() {
+    return AssetImage(asset.x40tko.keyName);
+  }
+
+  /// asset: assets/images/game/machine/x40wac.png
+  // ignore: non_constant_identifier_names
+  AssetImage x40wac() {
+    return AssetImage(asset.x40wac.keyName);
   }
 
   /// asset: assets/images/game/store/x40mgs.jpg

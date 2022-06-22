@@ -17,7 +17,7 @@ class HomeViewModel extends BaseViewModel {
   Future<bool> initHome() async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 100));
-    user = await getUser();
+    user = await fakeGetUser();
     GlobalSingleton.instance.user = user;
     entry = await getEntry();
     await EasyLoading.dismiss();
@@ -25,8 +25,13 @@ class HomeViewModel extends BaseViewModel {
     return entry != null && user != null;
   }
 
-  Future<User>? getUser() async {
+  Future<User>? fakeGetUser() async {
     await Future.delayed(const Duration(milliseconds: 300));
+    return testUser;
+  }
+
+  Future<User>? getUser() async {
+    await Future.delayed(const Duration(milliseconds: 200));
     return testUser;
   }
 

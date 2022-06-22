@@ -10,15 +10,15 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   BaseViewModel? baseViewModel();
   Widget body();
   LoadedHeaderType headerType = LoadedHeaderType.normal;
-  int point = -1;
+  int? point;
 
   @override
   Widget build(BuildContext context) {
-    String? currentPage = ModalRoute.of(context)?.settings.name!.split('/').last;
+    String? currentPage = ModalRoute.of(context)?.settings.name?.split('/').last;
     if (baseViewModel() != null) {
       headerType =
           baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.normal;
-      point = GlobalSingleton.instance.user!.point!;
+      point = GlobalSingleton.instance.user?.point!;
       if (kDebugMode) {
         print("user.toString()   ${GlobalSingleton.instance.user.toString()}");
       }
@@ -40,14 +40,14 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                           children: [
                             headerType == LoadedHeaderType.normal
                                 ? const _LoadedHeader()
-                                : _LoadedHeader.functional(point: point),
-                            body()
+                                : _LoadedHeader.functional(point: point ?? -87),
+                            body(),
+                            const SizedBox(height: 20)
                           ],
                         ),
                       )))),
           bottomNavigationBar: Container(
-            decoration:
-                const BoxDecoration(border: Border(top: BorderSide(color: Color(0xffe9e9e9), width: 1))),
+            decoration: BoxDecoration(border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -203,9 +203,18 @@ class _LoadedHeader extends StatelessWidget {
                     child: const Icon(Icons.chevron_left_outlined, size: 25, color: Color(0xff5a5a5a))),
               ),
               const Spacer(),
-              Text('$point P', style: const TextStyle(color: Color(0xff5a5a5a))),
+              Container(
+                  padding: const EdgeInsets.symmetric(vertical: 5.5, horizontal: 20),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: const Color(0xfff4f4f4)),
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text('$point P',
+                      style: const TextStyle(color: Color(0xff5a5a5a), fontWeight: FontWeight.bold))),
               const SizedBox(width: 20),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.qr_code)),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.qr_code, size: 28),
+                  color: const Color(0xff7b7b7b)),
             ]),
           ),
         );

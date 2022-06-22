@@ -6,18 +6,25 @@ environment:
   sdk: '>=2.17.0 <3.0.0'
 dependencies:
   collection: ^1.16.0
+  dio: ^4.0.6
   flutter:
     sdk: flutter
   flutter_easyloading: ^3.0.5
+  json_annotation: ^4.5.0
   percent_indicator: ^4.2.2
+  pretty_dio_logger: ^1.2.0-beta-1
   provider: ^6.0.3
   r_dart_library:
     git:
       url: 'https://github.com/YK-Unit/r_dart_library.git'
       ref: 0.4.1
+  retrofit: ^3.0.1+1
   shared_preferences: ^2.0.15
   url_launcher: ^6.1.3
 dev_dependencies:
+  retrofit_generator: '>=4.0.0 <5.0.0'
+  build_runner: ^2.1.11
+  json_serializable: '>4.4.0'
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
@@ -30,6 +37,22 @@ flutter:
   - assets/images/common/logo_150.jpg
   - assets/images/common/ouo.png
   - assets/images/dev/dev_avatar.png
+  - assets/images/game/machine/chu.png
+  - assets/images/game/machine/ddr.png
+  - assets/images/game/machine/gc.png
+  - assets/images/game/machine/ju.png
+  - assets/images/game/machine/mmdx.png
+  - assets/images/game/machine/nvsv.png
+  - assets/images/game/machine/pop.png
+  - assets/images/game/machine/sdvx.png
+  - assets/images/game/machine/tko.png
+  - assets/images/game/machine/wac.png
+  - assets/images/game/machine/x40chu.png
+  - assets/images/game/machine/x40ddr.png
+  - assets/images/game/machine/x40maidx.png
+  - assets/images/game/machine/x40sdvx.png
+  - assets/images/game/machine/x40tko.png
+  - assets/images/game/machine/x40wac.png
   - assets/images/game/store/x40mgs.jpg
   - assets/images/game/store/x50mgs.jpg
   - assets/images/home/mari_level/ouo.png

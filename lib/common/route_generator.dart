@@ -16,7 +16,7 @@ class RouteGenerator {
       case AppRoute.game:
         return NoTransitionRouter(const Game(), s: settings);
       case AppRoute.home:
-        return NoTransitionRouter(Home(), s: settings);
+        return NoTransitionRouter(const Home(), s: settings);
 
       default:
         return MaterialPageRoute(builder: (context) => const NotExist());
