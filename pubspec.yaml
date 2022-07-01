@@ -9,8 +9,10 @@ dependencies:
   dio: ^4.0.6
   flutter:
     sdk: flutter
+  flutter_colorpicker: ^1.0.3
   flutter_easyloading: ^3.0.5
   json_annotation: ^4.5.0
+  navigation_history_observer: ^1.1.0
   percent_indicator: ^4.2.2
   pretty_dio_logger: ^1.2.0-beta-1
   provider: ^6.0.3

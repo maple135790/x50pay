@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
@@ -19,6 +20,11 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
 
   @override
   BaseViewModel? baseViewModel() => null;
+  @override
+  void initState() {
+    super.initState();
+    EasyLoading.dismiss();
+  }
 
   @override
   Widget body() {

@@ -21,14 +21,12 @@ class Game extends StatefulWidget {
 class _GameState extends BaseStatefulState<Game> with BaseLoaded {
   final GameViewModel viewModel = GameViewModel();
   Future<bool>? _initialStore;
-  Future<bool>? _hasStoreHistory;
 
   @override
   BaseViewModel? baseViewModel() => viewModel;
   @override
   void initState() {
     _initialStore = viewModel.initStore();
-    _hasStoreHistory = viewModel.hasRecentStore();
     super.initState();
   }
 

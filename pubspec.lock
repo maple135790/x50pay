@@ -195,6 +195,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_colorpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_colorpicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   flutter_easyloading:
     dependency: "direct main"
     description:
@@ -338,6 +345,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  navigation_history_observer:
+    dependency: "direct main"
+    description:
+      name: navigation_history_observer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   nested:
     dependency: transitive
     description:

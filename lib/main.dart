@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
+
+final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +29,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      scaffoldMessengerKey: scaffoldKey,
       theme: AppThemeData().materialTheme,
+      navigatorObservers: [NavigationHistoryObserver()],
       onGenerateRoute: RouteGenerator.generateRoute,
       initialRoute: kDebugMode ? AppRoute.home : AppRoute.login,
       builder: EasyLoading.init(),

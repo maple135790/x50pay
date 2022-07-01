@@ -22,6 +22,18 @@ class AppThemeData {
 }
 
 class Themes {
+  static ButtonStyle grey() {
+    return ButtonStyle(
+      splashFactory: NoSplash.splashFactory,
+      foregroundColor: MaterialStateProperty.all(const Color(0xff5a5a5a)),
+      backgroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.isPressed) return const Color(0xffbfbfbf);
+        if (states.isDisabled) return const Color(0xffdcead3);
+        return const Color(0xffd9d9d9);
+      }),
+    );
+  }
+
   static ButtonStyle confirm() {
     return ButtonStyle(
       splashFactory: NoSplash.splashFactory,
@@ -30,6 +42,18 @@ class Themes {
         if (states.isPressed) return const Color(0xff677A40);
         if (states.isDisabled) return const Color(0xffdcead3);
         return const Color(0xff8bb96e);
+      }),
+    );
+  }
+
+  static ButtonStyle severe() {
+    return ButtonStyle(
+      splashFactory: NoSplash.splashFactory,
+      foregroundColor: MaterialStateProperty.all(const Color(0xfffafafa)),
+      backgroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.isPressed) return const Color(0xff8a3145);
+        if (states.isDisabled) return const Color(0xffdcead3);
+        return const Color(0xffB85052);
       }),
     );
   }

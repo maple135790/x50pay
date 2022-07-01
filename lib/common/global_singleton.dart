@@ -8,5 +8,7 @@ class GlobalSingleton {
 
   static GlobalSingleton get instance => _instance ??= GlobalSingleton._();
 
-  void someMethod() {}
+  void clearUser() {
+    user = null;
+  }
 }

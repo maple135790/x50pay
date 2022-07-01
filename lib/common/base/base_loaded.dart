@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -7,10 +9,30 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/r.g.dart';
 
 mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
+  List<String> routeStack = [];
   BaseViewModel? baseViewModel();
+  bool disableBottomNavigationBar = false;
   Widget body();
   LoadedHeaderType headerType = LoadedHeaderType.normal;
   int? point;
+
+  @override
+  void initState() {
+    super.initState();
+    routeStack.add(AppRoute.home);
+  }
+
+  Future _tabNavigateTo(String nextRouteName) async {
+    if (NavigationHistoryObserver().top!.settings.name == nextRouteName) {
+      setState(() {});
+    } else {
+      final nav = Navigator.of(context);
+      await _intentedDelay();
+      NavigationHistoryObserver().history.length == 3
+          ? nav.pushReplacementNamed(nextRouteName)
+          : nav.pushNamed(nextRouteName);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +51,9 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: Scaffold(
-          body: SafeArea(
+        child: SafeArea(
+          child: Scaffold(
+            body: Scrollbar(
               child: SingleChildScrollView(
                   child: Container(
                       color: const Color(0xfffafafa),
@@ -45,106 +68,124 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                             const SizedBox(height: 20)
                           ],
                         ),
-                      )))),
-          bottomNavigationBar: Container(
-            decoration: BoxDecoration(border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  child: Material(
-                    color: currentPage == 'home' ? const Color(0xfff0f0f0) : Colors.white,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(AppRoute.home);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.home, color: Color(0xff404040)),
-                            SizedBox(height: 5),
-                            Text('首頁', style: TextStyle(color: Color(0xff404040), fontSize: 10))
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Material(
-                    color: currentPage == 'game' ? const Color(0xfff0f0f0) : Colors.white,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(AppRoute.game);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.sports_esports, color: Color(0xff404040)),
-                            SizedBox(height: 5),
-                            Text('遊玩系統', style: TextStyle(color: Color(0xff404040), fontSize: 10))
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Material(
-                    color: currentPage == 'account' ? const Color(0xfff0f0f0) : Colors.white,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(AppRoute.home);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.person, color: Color(0xff404040)),
-                            SizedBox(height: 5),
-                            Text('會員中心', style: TextStyle(color: Color(0xff404040), fontSize: 10))
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Material(
-                    color: currentPage == 'gift' ? const Color(0xfff0f0f0) : Colors.white,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(AppRoute.home);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.redeem_rounded, color: Color(0xff404040)),
-                            SizedBox(height: 5),
-                            Text('禮物盒子', style: TextStyle(color: Color(0xff404040), fontSize: 10))
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                      ))),
             ),
+            bottomNavigationBar: !disableBottomNavigationBar
+                ? Container(
+                    decoration: BoxDecoration(border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(
+                          child: Material(
+                            color: currentPage == 'home' ? const Color(0xfff0f0f0) : Colors.white,
+                            child: InkWell(
+                              onTap: () async {
+                                if (NavigationHistoryObserver().top!.settings.name == AppRoute.home) {
+                                  setState(() {});
+                                } else {
+                                  final nav = Navigator.of(context);
+                                  await _intentedDelay();
+                                  nav.popUntil(ModalRoute.withName(AppRoute.home));
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.home, color: Color(0xff404040)),
+                                    SizedBox(height: 5),
+                                    Text('首頁', style: TextStyle(color: Color(0xff404040), fontSize: 10))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Material(
+                            color: currentPage == 'game' ? const Color(0xfff0f0f0) : Colors.white,
+                            child: InkWell(
+                              onTap: () async {
+                                await _tabNavigateTo(AppRoute.game);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.sports_esports, color: Color(0xff404040)),
+                                    SizedBox(height: 5),
+                                    Text('遊玩系統', style: TextStyle(color: Color(0xff404040), fontSize: 10))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Material(
+                            color: currentPage == 'account' ? const Color(0xfff0f0f0) : Colors.white,
+                            child: InkWell(
+                              onTap: () async {
+                                await _tabNavigateTo(AppRoute.account);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.person, color: Color(0xff404040)),
+                                    SizedBox(height: 5),
+                                    Text('會員中心', style: TextStyle(color: Color(0xff404040), fontSize: 10))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Material(
+                            color: currentPage == 'gift' ? const Color(0xfff0f0f0) : Colors.white,
+                            child: InkWell(
+                              onTap: () {
+                                if (ModalRoute.of(context)!.settings.name != AppRoute.home) {
+                                  Navigator.of(context).pushNamed(AppRoute.home);
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.redeem_rounded, color: Color(0xff404040)),
+                                    SizedBox(height: 5),
+                                    Text('禮物盒子', style: TextStyle(color: Color(0xff404040), fontSize: 10))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _intentedDelay() async {
+    await EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 200));
+    await EasyLoading.dismiss();
   }
 }
 
