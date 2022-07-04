@@ -26,7 +26,7 @@ class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
   @override
   Widget body() {
     return FutureBuilder<bool>(
-      future: viewModel.initHome(),
+      future: viewModel.initHome(force: true),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) return const SizedBox(child: Text('loading'));
         return _HomeLoaded(viewModel.user!, viewModel);
@@ -37,7 +37,7 @@ class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
 
 class _HomeLoaded extends StatefulWidget {
   final HomeViewModel viewModel;
-  final User user;
+  final UserModel user;
 
   const _HomeLoaded(this.user, this.viewModel, {Key? key}) : super(key: key);
 
@@ -128,7 +128,7 @@ class _HomeLoadedState extends State<_HomeLoaded> {
                       Column(
                         children: [
                           const Text('餘點', style: TextStyle(color: Colors.white)),
-                          Text(widget.user.point!.toString(),
+                          Text(widget.user.point!.toInt().toString(),
                               style: const TextStyle(color: Colors.white, fontSize: 30)),
                         ],
                       ),
@@ -200,7 +200,7 @@ class _Level extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Entry entry = vm.entry!;
+    EntryModel entry = vm.entry!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -248,7 +248,7 @@ class _Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Entry entry = vm.entry!;
+    EntryModel entry = vm.entry!;
     if (entry.evlist!.isEmpty) return const SizedBox();
     List<Widget> events = [];
     for (Evlist evt in entry.evlist!) {

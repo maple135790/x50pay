@@ -8,14 +8,11 @@ class Gamelist {
   final int? code;
   @JsonKey(name: "machinelist")
   final List<MachineList>? machineList;
-  // unknown
   final String? payMid;
-  // unknown
   final String? payLid;
-  // unknown
   final String? payCid;
 
-  Gamelist({this.message, this.code, this.machineList, this.payMid, this.payLid, this.payCid});
+  const Gamelist({this.message, this.code, this.machineList, this.payMid, this.payLid, this.payCid});
 
   factory Gamelist.fromJson(Map<String, dynamic> json) => _$GamelistFromJson(json);
 
@@ -25,15 +22,15 @@ class Gamelist {
 @JsonSerializable()
 class MachineList {
   final String? lable;
-  final int? price;
+  final double? price;
   final num? discount;
   @JsonKey(name: "downprice")
   final dynamic downPrice;
   final List<List<dynamic>>? mode;
   final List<dynamic>? note;
   @JsonKey(name: "cabinet_detail")
-  final Map<int, Map<String, dynamic>>? cabDatail;
-  final int? cabinet;
+  final Map<String, Map<String, dynamic>>? cabDatail;
+  final num? cabinet;
   final bool? enable;
   final String? id;
   final String? shop;
@@ -41,11 +38,11 @@ class MachineList {
   final bool? pad;
   final String? padlid;
   final String? padmid;
-  final List<int>? qcounter;
+  final List<double>? qcounter;
   final bool? quic;
   final bool? vipb;
 
-  MachineList(
+  const MachineList(
       this.lable,
       this.price,
       this.discount,

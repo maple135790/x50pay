@@ -40,7 +40,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
     if (baseViewModel() != null) {
       headerType =
           baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.normal;
-      point = GlobalSingleton.instance.user?.point!;
+      point = GlobalSingleton.instance.user?.point?.toInt();
       if (kDebugMode) {
         print("user.toString()   ${GlobalSingleton.instance.user.toString()}");
       }

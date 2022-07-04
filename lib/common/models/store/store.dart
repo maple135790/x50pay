@@ -1,47 +1,26 @@
-class Store {
-  String? prefix;
-  List<Storelist>? storelist;
+import 'package:json_annotation/json_annotation.dart';
 
-  Store({this.prefix, this.storelist});
+part "store.g.dart";
 
-  Store.fromJson(Map<String, dynamic> json) {
-    prefix = json['prefix'];
-    if (json['storelist'] != null) {
-      storelist = <Storelist>[];
-      json['storelist'].forEach((v) {
-        storelist!.add(Storelist.fromJson(v));
-      });
-    }
-  }
+@JsonSerializable()
+class StoreModel {
+  final String? prefix;
+  final List<Storelist>? storelist;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['prefix'] = prefix;
-    if (storelist != null) {
-      data['storelist'] = storelist!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  const StoreModel({this.prefix, this.storelist});
+
+  factory StoreModel.fromJson(Map<String, dynamic> json) => _$StoreModelFromJson(json);
+  Map<String, dynamic> toJson() => _$StoreModelToJson(this);
 }
 
+@JsonSerializable()
 class Storelist {
-  String? address;
-  String? name;
-  int? sid;
+  final String? address;
+  final String? name;
+  final int? sid;
 
-  Storelist({this.address, this.name, this.sid});
+  const Storelist({this.address, this.name, this.sid});
 
-  Storelist.fromJson(Map<String, dynamic> json) {
-    address = json['address'];
-    name = json['name'];
-    sid = json['sid'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['address'] = address;
-    data['name'] = name;
-    data['sid'] = sid;
-    return data;
-  }
+  factory Storelist.fromJson(Map<String, dynamic> json) => _$StorelistFromJson(json);
+  Map<String, dynamic> toJson() => _$StorelistToJson(this);
 }

@@ -16,7 +16,6 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/main.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/r.g.dart';
-import 'package:x50pay/repository/repository.dart';
 
 part 'popups/quick_pay.dart';
 part 'popups/quiC_pay_pref.dart';

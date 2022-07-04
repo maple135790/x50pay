@@ -1,7 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:retrofit/retrofit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/api.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
@@ -15,72 +13,287 @@ import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/common/models/user/user.dart';
 
-part 'repository.g.dart';
-
-@RestApi()
-abstract class Repository extends Api {
-  factory Repository() {
-    Dio dio = Dio(BaseOptions(baseUrl: Api.domainBase));
-    if (kDebugMode) {
-      dio.interceptors.add(PrettyDioLogger(responseBody: true, compact: false));
-    }
-    return _Repository(dio, baseUrl: dio.options.baseUrl);
+class Repository extends Api {
+  Future<BasicResponse?> login({required String email, required String password}) async {
+    late BasicResponse? res;
+    await Api.makeRequest(
+      dest: '/login',
+      body: {'email': email, 'pwd': password},
+      method: HttpMethod.post,
+      onSuccess: (json) {
+        res = BasicResponse.fromJson(json);
+      },
+      responseHeader: (header) async {
+        final pref = await SharedPreferences.getInstance();
+        final session = header['set-cookie']?.split(';')[0].split('=').last;
+        await pref.setString('session', session ?? 'null');
+      },
+    );
+    return res;
   }
-  @POST("/me")
-  Future<User> getUser();
 
-  @POST("/login")
-  Future<int> login(@Field('email') String email, @Field('pwd') String pwd);
+  Future<UserModel?> getUser() async {
+    late UserModel? user;
 
-  @GET("/fuckout")
-  Future<int> logout();
+    await Api.makeRequest(
+      dest: '/me',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        user = UserModel.fromJson(json);
+      },
+    );
+    return user;
+  }
 
-  @POST("/entry")
-  Future<Entry> getEntry();
+  Future<EntryModel> getEntry() async {
+    late EntryModel entry;
 
-  @POST("/store/list")
-  Future<Store> getStore();
+    await Api.makeRequest(
+      dest: '/entry',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        entry = EntryModel.fromJson(json);
+      },
+    );
+    return entry;
+  }
 
-  @POST("/gamelist")
-  Future<Gamelist> getGameList(@Field('sid') String storeId);
+  Future<void> logout() async {
+    await Api.makeRequest(
+      dest: '/fuckout',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+    );
+    return;
+  }
 
-  @GET("/pad/getSettings")
-  Future<PadSettingsModel> getPadSettings();
+  Future<StoreModel> getStore() async {
+    late StoreModel store;
 
-  @POST('/settingPadConfirm')
+    await Api.makeRequest(
+      dest: '/store/list',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        store = StoreModel.fromJson(json);
+      },
+    );
+    return store;
+  }
+
+  Future<Gamelist> getGameList({required String storeId}) async {
+    late Gamelist gameList;
+
+    await Api.makeRequest(
+      dest: '/gamelist',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'sid': '70$storeId'},
+      onSuccess: (json) {
+        gameList = Gamelist.fromJson(json);
+        if (kDebugMode) {
+          print('json\n $json');
+          print('gamelist got!');
+          print(gameList.toJson().toString());
+        }
+      },
+    );
+    return gameList;
+  }
+
+  Future<PadSettingsModel> getPadSettings() async {
+    late PadSettingsModel padSettingsModel;
+
+    await Api.makeRequest(
+      dest: '/pad/getSettings',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        padSettingsModel = PadSettingsModel.fromJson(json);
+      },
+    );
+    return padSettingsModel;
+  }
+
   Future<PadSettingsModel> setPadSettings(
-      @Field('shid') String shid, @Field('shcolor') String shcolor, @Field('shname') String shname);
+      {required String shid, required String shcolor, required String shname}) async {
+    late PadSettingsModel padSettingsModel;
 
-  @GET("/nfc/getSettings")
-  Future<QuicSettingsModel> getQuicSettings();
+    await Api.makeRequest(
+      dest: '/settingPadConfirm',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'shid': shid, 'shcolor': shcolor, 'shname': shname},
+      onSuccess: (json) {
+        padSettingsModel = PadSettingsModel.fromJson(json);
+      },
+    );
+    return padSettingsModel;
+  }
 
-  @POST("/quicConfirm")
-  Future<void> quicConfirm(@Field('atq') String atq, @Field('atq1') String atq1);
+  Future<QuicSettingsModel> getQuicSettings() async {
+    late QuicSettingsModel quicSettingsModel;
 
-  @POST("/setting/chgpwd")
-  Future<BasicResponse> changePassword(@Field('old-pwd') String oldPwd, @Field('pwd') String pwd);
+    await Api.makeRequest(
+      dest: '/nfc/getSettings',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        quicSettingsModel = QuicSettingsModel.fromJson(json);
+      },
+    );
+    return quicSettingsModel;
+  }
 
-  @POST("/setting/chgemail")
-  Future<BasicResponse> changeEmail(@Field('remail') String remail);
+  Future<void> quicConfirm({required String atq, required String atq1}) async {
+    await Api.makeRequest(
+      dest: '/settingPadConfirm',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'atq': atq, 'atq1': atq1},
+    );
+  }
 
-  @POST("/setting/chgphone")
-  Future<BasicResponse> changePhone({String nullStr = ''});
+  Future<BasicResponse> changePassword({required String oldPwd, required String pwd}) async {
+    late BasicResponse res;
 
-  @POST("/setting/activePhone")
-  Future<BasicResponse> doChangePhone(@Field('chg_phone') String phone);
+    await Api.makeRequest(
+      dest: '/setting/chgpwd',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'old_pwd': oldPwd, 'pwd': pwd},
+      onSuccess: (json) {
+        res = BasicResponse.fromJson(json);
+      },
+    );
+    return res;
+  }
 
-  @POST("/setting/activeSms")
-  Future<BasicResponse> smsActivate(@Field('sms') String sms);
+  Future<BasicResponse> changeEmail({required String remail}) async {
+    late BasicResponse res;
 
-  @GET("/log/ticDate")
-  Future<TicDateLogModel> getTicDateLog();
+    await Api.makeRequest(
+      dest: '/setting/chgemail',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'remail': remail},
+      onSuccess: (json) {
+        res = BasicResponse.fromJson(json);
+      },
+    );
+    return res;
+  }
 
-  @GET("/log/Bid")
-  Future<BidLogModel> getBidLog();
+  Future<BasicResponse> changePhone() async {
+    late BasicResponse res;
 
-  @GET("/log/Play")
-  Future<PlayRecordModel> getPlayLog();
+    await Api.makeRequest(
+      dest: '/setting/chgphone',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        res = BasicResponse.fromJson(json);
+      },
+    );
+    return res;
+  }
 
-  @GET("/log/ticUsed")
-  Future<TicUsedModel> getTicUsedLog();
+  Future<BasicResponse> doChangePhone({required String phone}) async {
+    late BasicResponse res;
+
+    await Api.makeRequest(
+      dest: '/setting/activePhone',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'chg_phone': phone},
+      onSuccess: (json) {
+        res = BasicResponse.fromJson(json);
+      },
+    );
+    return res;
+  }
+
+  Future<BasicResponse> smsActivate({required String sms}) async {
+    late BasicResponse res;
+
+    await Api.makeRequest(
+      dest: '/setting/activeSms',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'sms': sms},
+      onSuccess: (json) {
+        res = BasicResponse.fromJson(json);
+      },
+    );
+    return res;
+  }
+
+  Future<TicDateLogModel> getTicDateLog() async {
+    late TicDateLogModel ticDateLogModel;
+
+    await Api.makeRequest(
+      dest: '/log/ticDate',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        ticDateLogModel = TicDateLogModel.fromJson(json);
+      },
+    );
+    return ticDateLogModel;
+  }
+
+  Future<BidLogModel> getBidLog() async {
+    late BidLogModel bidLogModel;
+
+    await Api.makeRequest(
+      dest: '/log/Bid',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        bidLogModel = BidLogModel.fromJson(json);
+      },
+    );
+    return bidLogModel;
+  }
+
+  Future<PlayRecordModel> getPlayLog() async {
+    late PlayRecordModel playRecordModel;
+
+    await Api.makeRequest(
+      dest: '/log/Play',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        playRecordModel = PlayRecordModel.fromJson(json);
+      },
+    );
+    return playRecordModel;
+  }
+
+  Future<TicUsedModel> getTicUsedLog() async {
+    late TicUsedModel ticUsedModel;
+
+    await Api.makeRequest(
+      dest: '/log/Bid',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        ticUsedModel = TicUsedModel.fromJson(json);
+      },
+    );
+    return ticUsedModel;
+  }
 }

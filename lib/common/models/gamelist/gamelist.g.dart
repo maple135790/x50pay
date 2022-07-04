@@ -28,15 +28,15 @@ Map<String, dynamic> _$GamelistToJson(Gamelist instance) => <String, dynamic>{
 
 MachineList _$MachineListFromJson(Map<String, dynamic> json) => MachineList(
       json['lable'] as String?,
-      json['price'] as int?,
+      (json['price'] as num?)?.toDouble(),
       json['discount'] as num?,
       json['downprice'],
       (json['mode'] as List<dynamic>?)?.map((e) => e as List<dynamic>).toList(),
       json['note'] as List<dynamic>?,
       (json['cabinet_detail'] as Map<String, dynamic>?)?.map(
-        (k, e) => MapEntry(int.parse(k), e as Map<String, dynamic>),
+        (k, e) => MapEntry(k, e as Map<String, dynamic>),
       ),
-      json['cabinet'] as int?,
+      json['cabinet'] as num?,
       json['enable'] as bool?,
       json['id'] as String?,
       json['shop'] as String?,
@@ -44,7 +44,9 @@ MachineList _$MachineListFromJson(Map<String, dynamic> json) => MachineList(
       json['pad'] as bool?,
       json['padlid'] as String?,
       json['padmid'] as String?,
-      (json['qcounter'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      (json['qcounter'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(),
       json['quic'] as bool?,
       json['vipb'] as bool?,
     );
@@ -57,8 +59,7 @@ Map<String, dynamic> _$MachineListToJson(MachineList instance) =>
       'downprice': instance.downPrice,
       'mode': instance.mode,
       'note': instance.note,
-      'cabinet_detail':
-          instance.cabDatail?.map((k, e) => MapEntry(k.toString(), e)),
+      'cabinet_detail': instance.cabDatail,
       'cabinet': instance.cabinet,
       'enable': instance.enable,
       'id': instance.id,

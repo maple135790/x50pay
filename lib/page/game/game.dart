@@ -24,9 +24,10 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
 
   @override
   BaseViewModel? baseViewModel() => viewModel;
+
   @override
   void initState() {
-    _initialStore = viewModel.initStore();
+    _initialStore = viewModel.initStore(force: true);
     super.initState();
   }
 
@@ -59,19 +60,20 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
 
   FutureBuilder<bool> loadGamelist() {
     return FutureBuilder<bool>(
-        future: viewModel.canGetGamelist(),
+        future: viewModel.getGamelist(force: true),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
           if (snapshot.data == false) {
             return const SizedBox(child: Text('failed'));
+          } else {
+            return _GameCabs(games: viewModel.gamelist!, storeName: viewModel.storeName!);
           }
-          return _GameCabs(games: viewModel.gamelist!, storeName: viewModel.storeName!);
         });
   }
 }
 
 class _GameStoreLoaded extends StatelessWidget {
-  final Store stores;
+  final StoreModel stores;
   const _GameStoreLoaded(this.stores, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

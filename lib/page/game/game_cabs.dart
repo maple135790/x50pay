@@ -15,10 +15,9 @@ class _GameCabs extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
             padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
             decoration: BoxDecoration(
-              color: const Color(0xfffbfbfb),
-              border: Border.all(color: const Color(0xffededed), width: 1),
-              borderRadius: BorderRadius.circular(5),
-            ),
+                color: const Color(0xfffbfbfb),
+                border: Border.all(color: const Color(0xffededed), width: 1),
+                borderRadius: BorderRadius.circular(5)),
             child: Row(
               children: [
                 const Icon(Icons.pin_drop, color: Color(0xff5a5a5a), size: 16),
@@ -28,7 +27,8 @@ class _GameCabs extends StatelessWidget {
                     onPressed: () async {
                       final nav = Navigator.of(context);
                       final prefs = await SharedPreferences.getInstance();
-                      await prefs.clear();
+                      await prefs.remove('store_name');
+                      await prefs.remove('store_id');
                       nav.pushReplacementNamed(AppRoute.game);
                     },
                     style: Themes.confirm(),

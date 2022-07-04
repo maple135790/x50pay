@@ -1,7 +1,7 @@
 import 'package:x50pay/common/models/user/user.dart';
 
 class GlobalSingleton {
-  User? user;
+  UserModel? user;
   static GlobalSingleton? _instance;
 
   GlobalSingleton._();

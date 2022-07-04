@@ -67,7 +67,7 @@ class AccountViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode) {
-        response = await repo.changePassword(oldPwd, pwd);
+        response = await repo.changePassword(oldPwd: oldPwd, pwd: pwd);
       } else {
         if (debugFlag == 700) {
           response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
@@ -92,7 +92,7 @@ class AccountViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode) {
-        response = await repo.changeEmail(email);
+        response = await repo.changeEmail(remail: email);
       } else {
         if (debugFlag == 700) {
           response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
@@ -142,7 +142,7 @@ class AccountViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode) {
-        response = await repo.doChangePhone(phone);
+        response = await repo.doChangePhone(phone: phone);
       } else {
         if (debugFlag == 700) {
           response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
@@ -167,7 +167,7 @@ class AccountViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode) {
-        response = await repo.smsActivate(smsCode);
+        response = await repo.smsActivate(sms: smsCode);
       } else {
         if (debugFlag == 700) {
           response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
