@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
+import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/game_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 part 'game_cabs.dart';
+part 'cab_detail.dart';
 
 class Game extends StatefulWidget {
   const Game({Key? key}) : super(key: key);
@@ -26,8 +32,14 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
   BaseViewModel? baseViewModel() => viewModel;
 
   @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    await GlobalSingleton.instance.checkUser(force: false);
+  }
+
+  @override
   void initState() {
-    _initialStore = viewModel.initStore(force: true);
+    _initialStore = viewModel.initStore();
     super.initState();
   }
 
@@ -60,7 +72,7 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
 
   FutureBuilder<bool> loadGamelist() {
     return FutureBuilder<bool>(
-        future: viewModel.getGamelist(force: true),
+        future: viewModel.getGamelist(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
           if (snapshot.data == false) {
@@ -150,4 +162,56 @@ class _StoreItem extends StatelessWidget {
       ),
     );
   }
+}
+
+ImageProvider _getBackground(String gameId) {
+  if (gameId == 'chu') {
+    return R.image.chu();
+  }
+  if (gameId == 'ddr') {
+    return R.image.ddr();
+  }
+  if (gameId == 'gc') {
+    return R.image.gc();
+  }
+  if (gameId == 'ju') {
+    return R.image.ju();
+  }
+  if (gameId == 'mmdx') {
+    return R.image.mmdx();
+  }
+  if (gameId == 'nvsv') {
+    return R.image.nvsv();
+  }
+  if (gameId == 'pop') {
+    return R.image.pop();
+  }
+  if (gameId == 'sdvx') {
+    return R.image.sdvx();
+  }
+  if (gameId == 'tko') {
+    return R.image.tko();
+  }
+  if (gameId == 'wac') {
+    return R.image.wac();
+  }
+  if (gameId == 'x40chu') {
+    return R.image.x40chu();
+  }
+  if (gameId == 'x40ddr') {
+    return R.image.x40ddr();
+  }
+  if (gameId == 'x40maidx') {
+    return R.image.x40maidx();
+  }
+  if (gameId == 'x40sdvx') {
+    return R.image.x40sdvx();
+  }
+  if (gameId == 'x40tko') {
+    return R.image.x40tko();
+  }
+  if (gameId == 'x40wac') {
+    return R.image.x40wac();
+  }
+  return R.image.logo_150_jpg();
 }

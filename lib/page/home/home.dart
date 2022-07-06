@@ -26,7 +26,7 @@ class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
   @override
   Widget body() {
     return FutureBuilder<bool>(
-      future: viewModel.initHome(force: true),
+      future: viewModel.initHome(),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) return const SizedBox(child: Text('loading'));
         return _HomeLoaded(viewModel.user!, viewModel);
@@ -106,38 +106,58 @@ class _HomeLoadedState extends State<_HomeLoaded> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          const Text('月票', style: TextStyle(color: Colors.white)),
-                          widget.user.vip!
-                              ? const Text('已購買', style: TextStyle(color: Colors.white, fontSize: 20))
-                              : RichText(
-                                  text: TextSpan(
-                                      text: '購買',
-                                      style: const TextStyle(color: Colors.blue, fontSize: 20),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          Navigator.of(context).pushNamed(AppRoute.buyMPass);
-                                        })),
-                        ],
+                      Expanded(
+                        flex: 3,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(AppRoute.buyMPass);
+                          },
+                          child: Column(
+                            children: [
+                              const Text('月票', style: TextStyle(color: Colors.white, fontSize: 13)),
+                              widget.user.vip!
+                                  ? const Text('已購買', style: TextStyle(color: Colors.white, fontSize: 20))
+                                  : const Text('購買', style: TextStyle(color: Colors.blue, fontSize: 20)),
+                            ],
+                          ),
+                        ),
                       ),
-                      Column(
-                        children: [
-                          const Text('餘點', style: TextStyle(color: Colors.white)),
-                          Text(widget.user.point!.toInt().toString(),
-                              style: const TextStyle(color: Colors.white, fontSize: 30)),
-                        ],
+                      Expanded(
+                        flex: 4,
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              const Text('餘點', style: TextStyle(color: Colors.white, fontSize: 13)),
+                              Text(widget.user.point!.toInt().toString(),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      height: 1.3,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                        ),
                       ),
-                      Column(
-                        children: [
-                          const Text('遊玩券', style: TextStyle(color: Colors.white)),
-                          Text(widget.user.ticketint!.toString(),
-                              style: const TextStyle(color: Colors.white, fontSize: 30)),
-                        ],
+                      Expanded(
+                        flex: 3,
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              const Text('遊玩券', style: TextStyle(color: Colors.white, fontSize: 13)),
+                              Text(widget.user.ticketint!.toString(),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      height: 1.3,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),

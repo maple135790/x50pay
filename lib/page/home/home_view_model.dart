@@ -10,6 +10,7 @@ import 'package:x50pay/repository/repository.dart';
 
 class HomeViewModel extends BaseViewModel {
   final repo = Repository();
+  final isForce = GlobalSingleton.instance.isForce;
   UserModel? user;
   EntryModel? _entry;
   EntryModel? get entry => _entry;
@@ -19,13 +20,14 @@ class HomeViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<bool> initHome({int debugFlag = 200, bool force = false}) async {
+  Future<bool> initHome({int debugFlag = 200}) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 100));
 
     try {
-      if (kDebugMode || force) {
-        user = await repo.getUser();
+      if (kDebugMode || isForce) {
+        await GlobalSingleton.instance.checkUser(force: true);
+        user = GlobalSingleton.instance.user;
         entry = await repo.getEntry();
       } else {
         user = UserModel.fromJson(jsonDecode(testUser(code: debugFlag)));

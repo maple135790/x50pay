@@ -8,7 +8,7 @@ class _GameCabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<MachineList> machineList = games.machineList!;
+    List<Machine> machine = games.machine!;
     return Column(
       children: [
         Container(
@@ -37,9 +37,9 @@ class _GameCabs extends StatelessWidget {
             )),
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: machineList.length,
+          itemCount: machine.length,
           shrinkWrap: true,
-          itemBuilder: (context, index) => _GameCabItem(machineList[index]),
+          itemBuilder: (context, index) => _GameCabItem(machine[index]),
         ),
         Container(
           padding: const EdgeInsets.all(20),
@@ -63,60 +63,8 @@ class _GameCabs extends StatelessWidget {
 }
 
 class _GameCabItem extends StatelessWidget {
-  final MachineList machine;
+  final Machine machine;
   const _GameCabItem(this.machine, {Key? key}) : super(key: key);
-
-  ImageProvider _getBackground(String gameId) {
-    if (gameId == 'chu') {
-      return R.image.chu();
-    }
-    if (gameId == 'ddr') {
-      return R.image.ddr();
-    }
-    if (gameId == 'gc') {
-      return R.image.gc();
-    }
-    if (gameId == 'ju') {
-      return R.image.ju();
-    }
-    if (gameId == 'mmdx') {
-      return R.image.mmdx();
-    }
-    if (gameId == 'nvsv') {
-      return R.image.nvsv();
-    }
-    if (gameId == 'pop') {
-      return R.image.pop();
-    }
-    if (gameId == 'sdvx') {
-      return R.image.sdvx();
-    }
-    if (gameId == 'tko') {
-      return R.image.tko();
-    }
-    if (gameId == 'wac') {
-      return R.image.wac();
-    }
-    if (gameId == 'x40chu') {
-      return R.image.x40chu();
-    }
-    if (gameId == 'x40ddr') {
-      return R.image.x40ddr();
-    }
-    if (gameId == 'x40maidx') {
-      return R.image.x40maidx();
-    }
-    if (gameId == 'x40sdvx') {
-      return R.image.x40sdvx();
-    }
-    if (gameId == 'x40tko') {
-      return R.image.x40tko();
-    }
-    if (gameId == 'x40wac') {
-      return R.image.x40wac();
-    }
-    return R.image.logo_150_jpg();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +79,9 @@ class _GameCabItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
       child: GestureDetector(
-        onTap: () async {},
+        onTap: () async {
+          Navigator.of(context).push(NoTransitionRouter(_CabDetail(machine.id!)));
+        },
         child: SizedBox(
           height: 150,
           child: ClipRRect(

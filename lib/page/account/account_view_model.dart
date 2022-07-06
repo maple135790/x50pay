@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
 import 'package:x50pay/common/models/padSettings/pad_settings.dart';
@@ -14,13 +15,14 @@ import 'package:x50pay/repository/repository.dart';
 
 class AccountViewModel extends BaseViewModel {
   final repo = Repository();
+  final isForce = GlobalSingleton.instance.isForce;
+
   QuicSettingsModel? quicSettingModel;
   PadSettingsModel? padSettingsModel;
   BidLogModel? bidModel;
   TicDateLogModel? ticDateLogModel;
   TicUsedModel? ticUsedModel;
   PlayRecordModel? playRecordModel;
-
   BasicResponse? response;
 
   Future<bool> getQuicSettings() async {
@@ -28,7 +30,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         quicSettingModel = await repo.getQuicSettings();
       } else {
         quicSettingModel = QuicSettingsModel.fromJson(jsonDecode(testQuicSettings));
@@ -47,7 +49,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         padSettingsModel = await repo.getPadSettings();
       } else {
         padSettingsModel = PadSettingsModel.fromJson(jsonDecode(testPadSettings));
@@ -61,12 +63,16 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> changePassword({required String oldPwd, required String pwd, int debugFlag = 200}) async {
+  Future<bool> changePassword({
+    required String oldPwd,
+    required String pwd,
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         response = await repo.changePassword(oldPwd: oldPwd, pwd: pwd);
       } else {
         if (debugFlag == 700) {
@@ -86,12 +92,15 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> changeEmail({required String email, int debugFlag = 200}) async {
+  Future<bool> changeEmail({
+    required String email,
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         response = await repo.changeEmail(remail: email);
       } else {
         if (debugFlag == 700) {
@@ -111,12 +120,14 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> detachPhone({int debugFlag = 200}) async {
+  Future<bool> detachPhone({
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         response = await repo.changePhone();
       } else {
         if (debugFlag == 700) {
@@ -136,12 +147,15 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> doChangePhone({required String phone, int debugFlag = 200}) async {
+  Future<bool> doChangePhone({
+    required String phone,
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         response = await repo.doChangePhone(phone: phone);
       } else {
         if (debugFlag == 700) {
@@ -161,12 +175,15 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> smsActivate({required String smsCode, int debugFlag = 200}) async {
+  Future<bool> smsActivate({
+    required String smsCode,
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         response = await repo.smsActivate(sms: smsCode);
       } else {
         if (debugFlag == 700) {
@@ -186,12 +203,14 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> getBidLog({int debugFlag = 200}) async {
+  Future<bool> getBidLog({
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         bidModel = await repo.getBidLog();
       } else {
         if (debugFlag != 200) {
@@ -209,12 +228,14 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> getTicketLog({int debugFlag = 200}) async {
+  Future<bool> getTicketLog({
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         ticDateLogModel = await repo.getTicDateLog();
       } else {
         if (debugFlag != 200) {
@@ -232,12 +253,14 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> getPlayRecord({int debugFlag = 200}) async {
+  Future<bool> getPlayRecord({
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         playRecordModel = await repo.getPlayLog();
       } else {
         if (debugFlag != 200) {
@@ -255,12 +278,14 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> getTicUsedLog({int debugFlag = 200}) async {
+  Future<bool> getTicUsedLog({
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         ticUsedModel = await repo.getTicUsedLog();
       } else {
         if (debugFlag != 200) {
@@ -278,12 +303,14 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> logout({int debugFlag = 200}) async {
+  Future<bool> logout({
+    int debugFlag = 200,
+  }) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode) {
+      if (!kDebugMode || isForce) {
         await repo.logout();
       } else {
         if (debugFlag != 200) {

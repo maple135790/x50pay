@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/api.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
+import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/padSettings/pad_settings.dart';
@@ -15,7 +16,7 @@ import 'package:x50pay/common/models/user/user.dart';
 
 class Repository extends Api {
   Future<BasicResponse?> login({required String email, required String password}) async {
-    late BasicResponse? res;
+    BasicResponse? res;
     await Api.makeRequest(
       dest: '/login',
       body: {'email': email, 'pwd': password},
@@ -72,12 +73,12 @@ class Repository extends Api {
     return;
   }
 
-  Future<StoreModel> getStore() async {
+  Future<StoreModel> getStores() async {
     late StoreModel store;
 
     await Api.makeRequest(
       dest: '/store/list',
-      method: HttpMethod.get,
+      method: HttpMethod.post,
       withSession: true,
       body: {},
       onSuccess: (json) {
@@ -286,7 +287,7 @@ class Repository extends Api {
     late TicUsedModel ticUsedModel;
 
     await Api.makeRequest(
-      dest: '/log/Bid',
+      dest: '/log/ticUsed',
       method: HttpMethod.get,
       withSession: true,
       body: {},
@@ -295,5 +296,51 @@ class Repository extends Api {
       },
     );
     return ticUsedModel;
+  }
+
+  Future<CabinetModel> selGame(String machineId) async {
+    late CabinetModel cabinetModel;
+
+    await Api.makeRequest(
+      dest: '/cablist/$machineId',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        cabinetModel = CabinetModel.fromJson(json);
+      },
+    );
+    return cabinetModel;
+  }
+
+  Future<BasicResponse> doInsert(bool isTicket, String machineId, num mode) async {
+    late BasicResponse response;
+    String insertUrl = isTicket ? 'tic/' : 'pay/';
+
+    await Api.makeRequest(
+      dest: '/$insertUrl+$machineId/${mode.toInt()}',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        response = BasicResponse.fromJson(json);
+      },
+    );
+    return response;
+  }
+
+  Future<int> getPadLineup(String padmid, String padlid) async {
+    late int lineupCount;
+
+    await Api.makeRequest(
+      dest: '/pad/getCount/+$padmid/$padlid',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccessString: (text) {
+        lineupCount = int.parse(text);
+      },
+    );
+    return lineupCount;
   }
 }

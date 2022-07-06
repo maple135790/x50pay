@@ -3,26 +3,24 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class LoginViewModel extends BaseViewModel {
   final repo = Repository();
-  // final repo = Repository();
+  final isForce = GlobalSingleton.instance.isForce;
   BasicResponse? response;
 
-  Future<bool> login(
-      {required String email, required String password, int debugFlag = 200, bool force = false}) async {
+  Future<bool> login({required String email, required String password, int debugFlag = 200}) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || force) {
+      if (!kDebugMode || isForce) {
         response = await repo.login(email: email, password: password);
       } else {
-        if (debugFlag != 200) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
-        }
+        response = BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
       }
       await EasyLoading.dismiss();
 

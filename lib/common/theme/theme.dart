@@ -22,6 +22,18 @@ class AppThemeData {
 }
 
 class Themes {
+  static ButtonStyle energy() {
+    return ButtonStyle(
+      splashFactory: NoSplash.splashFactory,
+      foregroundColor: MaterialStateProperty.all(Colors.white),
+      backgroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.isPressed) return const Color(0xff005a8b);
+        if (states.isDisabled) return const Color(0xffdcead3);
+        return const Color(0xff00adea);
+      }),
+    );
+  }
+
   static ButtonStyle grey() {
     return ButtonStyle(
       splashFactory: NoSplash.splashFactory,

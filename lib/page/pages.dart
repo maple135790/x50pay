@@ -1,4 +1,5 @@
 export 'account/account.dart';
+export 'buyMPass/buy_mpass.dart';
 export 'debug/not_exist.dart';
 export 'forgorPassword/forgot_password.dart';
 export 'game/game.dart';

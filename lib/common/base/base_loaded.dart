@@ -11,9 +11,11 @@ import 'package:x50pay/r.g.dart';
 mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   List<String> routeStack = [];
   BaseViewModel? baseViewModel();
+  String? subPageOf;
   bool disableBottomNavigationBar = false;
   Widget body();
   LoadedHeaderType headerType = LoadedHeaderType.normal;
+  Color? customBackgroundColor;
   int? point;
 
   @override
@@ -36,7 +38,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
 
   @override
   Widget build(BuildContext context) {
-    String? currentPage = ModalRoute.of(context)?.settings.name?.split('/').last;
+    String? currentPage = subPageOf ??= ModalRoute.of(context)?.settings.name?.split('/').last;
     if (baseViewModel() != null) {
       headerType =
           baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.normal;
@@ -56,7 +58,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
             body: Scrollbar(
               child: SingleChildScrollView(
                   child: Container(
-                      color: const Color(0xfffafafa),
+                      color: customBackgroundColor ?? const Color(0xfffafafa),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 700),
                         child: Column(

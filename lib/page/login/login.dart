@@ -8,7 +8,6 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/r.g.dart';
-import 'package:x50pay/repository/repository.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -175,12 +174,10 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       const SizedBox(width: 5),
                       TextButton(
                           onPressed: () async {
-                            if (await viewModel.login(
-                              email: email.text,
-                              password: password.text,
-                              // debugFlag: 400,
-                              force: true,
-                            )) {
+                            final nav = Navigator.of(context);
+                            final isSuccessLogin =
+                                await viewModel.login(email: email.text, password: password.text);
+                            if (isSuccessLogin) {
                               int code = viewModel.response!.code;
                               if (code == 400) {
                                 _errorMsg = '帳號或密碼錯誤';
@@ -195,8 +192,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                 _errorMsg = '未知錯誤';
                                 setState(() {});
                               } else if (code == 200) {
-                                final nav = Navigator.of(context);
-                                GlobalSingleton.instance.user = await Repository().getUser();
+                                await GlobalSingleton.instance.checkUser(force: true);
                                 nav.pushReplacementNamed(AppRoute.home);
                               }
                             }
