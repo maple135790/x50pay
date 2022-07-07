@@ -13,10 +13,12 @@ dependencies:
   flutter_easyloading: ^3.0.5
   http: ^0.13.4
   json_annotation: ^4.5.0
+  location: ^4.4.0
   navigation_history_observer: ^1.1.0
   percent_indicator: ^4.2.2
   pretty_dio_logger: ^1.2.0-beta-1
   provider: ^6.0.3
+  qr_code_scanner: ^1.0.0
   r_dart_library:
     git:
       url: 'https://github.com/YK-Unit/r_dart_library.git'

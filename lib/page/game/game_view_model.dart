@@ -12,7 +12,7 @@ import 'package:x50pay/repository/repository.dart';
 
 class GameViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.isForce;
+  final isForce = GlobalSingleton.instance.isOnline;
 
   StoreModel? stores;
   String? storeName;

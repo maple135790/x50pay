@@ -1,12 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/route_generator.dart';
+import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/r.g.dart';
+import 'package:x50pay/repository/repository.dart';
+
+part "../../page/scan/scan.dart";
 
 mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   List<String> routeStack = [];
@@ -44,7 +52,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
           baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.normal;
       point = GlobalSingleton.instance.user?.point?.toInt();
       if (kDebugMode) {
-        print("user.toString()   ${GlobalSingleton.instance.user.toString()}");
+        // print("user.toString()   ${GlobalSingleton.instance.user.toString()}");
       }
     }
     return ChangeNotifierProvider.value(
@@ -255,7 +263,9 @@ class _LoadedHeader extends StatelessWidget {
                       style: const TextStyle(color: Color(0xff5a5a5a), fontWeight: FontWeight.bold))),
               const SizedBox(width: 20),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(NoTransitionRouter(const ScanQRCode()));
+                  },
                   icon: const Icon(Icons.qr_code, size: 28),
                   color: const Color(0xff7b7b7b)),
             ]),

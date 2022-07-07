@@ -15,7 +15,7 @@ import 'package:x50pay/repository/repository.dart';
 
 class AccountViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.isForce;
+  final isForce = GlobalSingleton.instance.isOnline;
 
   QuicSettingsModel? quicSettingModel;
   PadSettingsModel? padSettingsModel;

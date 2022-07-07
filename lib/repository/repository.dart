@@ -304,6 +304,7 @@ class Repository extends Api {
     await Api.makeRequest(
       dest: '/cablist/$machineId',
       method: HttpMethod.post,
+      verbose: true,
       withSession: true,
       body: {},
       onSuccess: (json) {
@@ -330,17 +331,51 @@ class Repository extends Api {
   }
 
   Future<int> getPadLineup(String padmid, String padlid) async {
-    late int lineupCount;
+    int lineupCount = -87;
 
     await Api.makeRequest(
-      dest: '/pad/getCount/+$padmid/$padlid',
+      dest: '/pad/getCount/$padmid/$padlid',
       method: HttpMethod.post,
       withSession: true,
       body: {},
+      isResponseString: true,
       onSuccessString: (text) {
         lineupCount = int.parse(text);
       },
     );
     return lineupCount;
+  }
+
+  Future<String> qrDecryt(String rawText) async {
+    String result = '';
+    await Api.makeRequest(
+      dest: '/qrDecryt/',
+      method: HttpMethod.post,
+      contentType: ContentType.xForm,
+      withSession: true,
+      body: {'code': rawText},
+      isResponseString: true,
+      onSuccessString: (text) {
+        result = text;
+      },
+    );
+    return result;
+  }
+
+  Future<String> remoteOpenDoor(double distance) async {
+    String result = '';
+    await Api.makeRequest(
+      customDest: 'https://pay.x50.fun/api/door/open/$distance',
+      dest: '',
+      method: HttpMethod.post,
+      contentType: ContentType.xForm,
+      withSession: true,
+      body: {},
+      isResponseString: true,
+      onSuccessString: (text) {
+        result = text;
+      },
+    );
+    return result;
   }
 }

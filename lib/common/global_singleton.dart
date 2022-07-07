@@ -3,7 +3,7 @@ import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class GlobalSingleton {
-  final isForce = false;
+  final isOnline = false;
   UserModel? user;
   int _lastChkMe = -1;
   static GlobalSingleton? _instance;
@@ -24,7 +24,7 @@ class GlobalSingleton {
       if (isLess30Sec && !force) return;
       final repo = Repository();
       _lastChkMe = DateTime.now().millisecondsSinceEpoch;
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isOnline) {
         user = await repo.getUser();
       } else {
         user = UserModel(

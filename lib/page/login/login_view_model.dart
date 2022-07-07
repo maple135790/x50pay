@@ -9,7 +9,7 @@ import 'package:x50pay/repository/repository.dart';
 
 class LoginViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.isForce;
+  final isForce = GlobalSingleton.instance.isOnline;
   BasicResponse? response;
 
   Future<bool> login({required String email, required String password, int debugFlag = 200}) async {

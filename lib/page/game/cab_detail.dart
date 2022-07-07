@@ -177,7 +177,7 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: GestureDetector(
                     onTap: () {
-                      launchUrlString(model.surl!);
+                      launchUrlString(model.surl!.replaceAll('\'', ''), mode: LaunchMode.externalNonBrowserApplication);
                     },
                     child: Image(image: NetworkImage('https://pay.x50.fun${model.spic}', scale: 1))),
               )

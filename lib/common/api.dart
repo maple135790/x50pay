@@ -9,17 +9,21 @@ abstract class Api {
   static Uri destURL(String dest) => Uri.parse(domainBase + dest);
 
   static Future makeRequest({
+    ContentType contentType = ContentType.json,
+    Map<String, String>? session,
+    String? customDest,
+    bool isResponseString = false,
+    bool verbose = false,
     required String dest,
     required Map<String, dynamic> body,
-    Function(Map<String, dynamic>)? onSuccess,
-    bool isResponseString = false,
-    Function(String)? onSuccessString,
     required HttpMethod method,
-    Map<String, String>? session,
+    Function(Map<String, dynamic>)? onSuccess,
+    Function(String)? onSuccessString,
     Function(int, String)? onError,
     Function(Map<String, String>)? responseHeader,
     bool withSession = false,
   }) async {
+    http.Response response;
     bool isEmptyBody = body.isEmpty;
     String? session;
 
@@ -30,11 +34,21 @@ abstract class Api {
 
     switch (method) {
       case HttpMethod.post:
-        var response = await http.post(
-          destURL(dest),
-          body: isEmptyBody ? '' : jsonEncode(body),
-          headers: withSession ? {'Cookie': 'session=$session'} : null,
-        );
+        response = await http.post(customDest != null ? Uri.parse(customDest) : destURL(dest),
+            body: isEmptyBody
+                ? ''
+                : contentType == ContentType.json
+                    ? jsonEncode(body)
+                    : body,
+            headers: withSession
+                ? {
+                    'Cookie': 'session=$session',
+                    "Content-Type": contentType == ContentType.json
+                        ? 'application/json'
+                        : 'application/x-www-form-urlencoded'
+                  }
+                : null,
+            encoding: Encoding.getByName('utf-8'));
         if (response.statusCode == 200) {
           isResponseString
               ? onSuccessString?.call(response.body)
@@ -47,8 +61,8 @@ abstract class Api {
         break;
 
       case HttpMethod.get:
-        var response = await http.get(
-          destURL(dest),
+        response = await http.get(
+          customDest != null ? Uri.parse(customDest) : destURL(dest),
           headers: withSession ? {'Cookie': 'session=$session'} : null,
         );
         if (response.statusCode == 200) {
@@ -62,7 +76,15 @@ abstract class Api {
         responseHeader?.call(response.headers);
         break;
     }
+    if (verbose) {
+      print('request:');
+      print(response.request);
+      print('response:');
+      print(response.body);
+    }
   }
 }
 
 enum HttpMethod { post, get }
+
+enum ContentType { json, xForm }

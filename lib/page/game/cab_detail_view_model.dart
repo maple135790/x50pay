@@ -11,7 +11,7 @@ import 'package:x50pay/repository/repository.dart';
 
 class CabDatailViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.isForce;
+  final isForce = GlobalSingleton.instance.isOnline;
   CabinetModel? cabinetModel;
   BasicResponse? response;
   int lineupCount = -1;

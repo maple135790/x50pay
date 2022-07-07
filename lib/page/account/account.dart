@@ -82,7 +82,7 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
               subtitle: '外連至 Gravator 更換大頭貼相片',
               color: _SettingTileColor.green,
               onTap: () {
-                launchUrlString('https://en.gravatar.com/');
+                launchUrlString('https://en.gravatar.com/', mode: LaunchMode.externalApplication);
               }),
           _SettingTile(
               iconData: Icons.rss_feed,

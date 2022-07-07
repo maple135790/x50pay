@@ -147,7 +147,7 @@ class _Footer extends StatelessWidget {
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   final Uri emailLaunchUri = Uri(scheme: 'mailto', path: 'pay@x50.fun');
-                  launchUrl(emailLaunchUri);
+                  launchUrl(emailLaunchUri, mode: LaunchMode.externalApplication);
                 })
         ])),
         const SizedBox(height: 10),

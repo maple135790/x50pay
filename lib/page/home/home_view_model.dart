@@ -10,7 +10,7 @@ import 'package:x50pay/repository/repository.dart';
 
 class HomeViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.isForce;
+  final isForce = GlobalSingleton.instance.isOnline;
   UserModel? user;
   EntryModel? _entry;
   EntryModel? get entry => _entry;
