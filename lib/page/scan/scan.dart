@@ -7,7 +7,92 @@ class ScanQRCode extends StatefulWidget {
   State<ScanQRCode> createState() => _ScanQRCodeState();
 }
 
-class _ScanQRCodeState extends BaseStatefulState<ScanQRCode> with BaseLoaded {
+class _ScanQRCodeState extends State<ScanQRCode> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? qrViewController;
+  Barcode? result, lastEvent;
+  bool isBusy = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 25),
+      contentPadding: EdgeInsets.zero,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: Row(children: [
+              const Text('請掃 QRCode 或 線上付款', style: TextStyle(fontSize: 17)),
+              const Spacer(),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(Icons.cancel, color: Color(0xffdcdcdc)))
+            ]),
+          ),
+          const Divider(thickness: 1, height: 0),
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  width: 300,
+                  height: 225,
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: (controller) {
+                      qrViewController = controller;
+                      controller.scannedDataStream.listen((event) async {
+                        if (isBusy) {
+                          return;
+                        } else {
+                          isBusy = true;
+                          final nav = Navigator.of(context);
+                          String msg = await Repository().qrDecryt(event.code!);
+                          if (msg != 'oof') {
+                            await controller.pauseCamera();
+                            await EasyLoading.showInfo(msg, duration: const Duration(milliseconds: 1000));
+                            await Future.delayed(const Duration(milliseconds: 1000));
+                            nav.popUntil(ModalRoute.withName(AppRoute.home));
+                          }
+                          setState(() {
+                            result = event;
+                          });
+                          isBusy = false;
+                        }
+                      });
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: Themes.pale(),
+                  child: const Text('信用卡 / ATM 線上加值'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ScanQRCodeV2 extends StatefulWidget {
+  const ScanQRCodeV2({Key? key}) : super(key: key);
+
+  @override
+  State<ScanQRCodeV2> createState() => _ScanQRCodeV2State();
+}
+
+class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2> with BaseLoaded {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrViewController;
   Barcode? result, lastEvent;

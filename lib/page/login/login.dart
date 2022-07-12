@@ -21,6 +21,9 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   final password = TextEditingController();
   final viewModel = LoginViewModel();
 
+  @override
+  bool get isDarkHeader => true;
+
   String? _errorMsg;
 
   @override
@@ -42,7 +45,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
               width: constraints.maxWidth,
               child: Stack(
                 children: [
-                  Positioned.fill(child: Image(image: R.image.login_banner_jpg(), fit: BoxFit.none)),
+                  Positioned.fill(child: Image(image: R.image.login_banner_jpg(), fit: BoxFit.fitWidth)),
                   Positioned.fill(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -50,7 +53,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                             colors: [Colors.transparent, Colors.black],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            stops: [0.1, 1]),
+                            stops: [0.2, 1]),
                       ),
                     ),
                   ),
@@ -61,149 +64,113 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       const Text('歡迎回來！',
                           style: TextStyle(
                               shadows: [Shadow(color: Colors.black, blurRadius: 25)],
-                              fontSize: 26,
+                              fontSize: 17,
                               color: Color(0xe6ffffff))),
                       const SizedBox(height: 5),
                       Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
                         Icon(Icons.schedule, size: 12, color: Colors.white),
-                        Text(' 24Hr 年中無休', style: TextStyle(fontSize: 12, color: Color(0xe6ffffff)))
+                        Text(' 24Hr 年中無休', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
                       ]),
                       Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
                         Icon(Icons.pin_drop, size: 12, color: Colors.white),
-                        Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 12, color: Color(0xe6ffffff)))
+                        Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
                       ]),
                       Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
-                        Icon(Icons.pin_drop, size: 12, color: Colors.white),
-                        Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 12, color: Color(0xe6ffffff)))
+                        Icon(Icons.restaurant, size: 12, color: Colors.white),
+                        Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
                       ]),
                     ]),
                   ),
                 ],
               ),
             ),
-            BodyCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _errorMsg == null
-                      ? const SizedBox()
-                      : Container(
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                              color: const Color(0xffF6E1DF),
-                              border: Border.all(color: const Color(0xffE5A9A5), width: 1),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    border: Border.all(color: const Color(0xff3e3e3e), width: 1),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('電子郵件'),
+                    const SizedBox(height: 12),
+                    TextField(
+                        controller: email,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(prefixIcon: Icon(Icons.person))),
+                    const SizedBox(height: 15),
+                    RichText(
+                        text: TextSpan(
+                            text: '密碼 ',
+                            style: const TextStyle(color: Color(0xfffafafa)),
                             children: [
-                              const Icon(Icons.priority_high, color: Color(0xffA1414C)),
-                              const SizedBox(width: 14),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Text('錯誤', style: TextStyle(color: Color(0xffA1414C), fontSize: 16)),
-                                  Text(_errorMsg!, style: const TextStyle(color: Color(0xffA1414C))),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                  const Text('立即登入會員系統', style: TextStyle(color: Color(0xffbfbfbf))),
-                  const SizedBox(height: 15),
-                  const Text('電子郵件'),
-                  const SizedBox(height: 12),
-                  TextField(
-                      controller: email,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        focusedBorder:
-                            OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 1)),
-                      )),
-                  const SizedBox(height: 15),
-                  RichText(
-                      text: TextSpan(text: '密碼 ', style: const TextStyle(color: Colors.black), children: [
-                    const TextSpan(text: '( '),
-                    TextSpan(
-                        text: '忘記密碼嗎?',
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.of(context).pushNamed(AppRoute.forgotPassword);
-                          },
-                        style: const TextStyle(color: Colors.blue)),
-                    const TextSpan(text: ' )')
-                  ])),
-                  const SizedBox(height: 12),
-                  TextField(
-                      controller: password,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          focusedBorder:
-                              OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 1)))),
-                  const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Material(
-                        type: MaterialType.transparency,
-                        child: OutlinedButton(
+                          const TextSpan(text: '( '),
+                          TextSpan(
+                              text: '忘記密碼嗎 ? ',
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushNamed(AppRoute.forgotPassword);
+                                },
+                              style: const TextStyle(
+                                  color: Color(0xfffafafa), decoration: TextDecoration.underline)),
+                          const TextSpan(text: ' )')
+                        ])),
+                    const SizedBox(height: 12),
+                    TextField(
+                        controller: password,
+                        obscureText: true,
+                        decoration: const InputDecoration(prefixIcon: Icon(Icons.lock))),
+                    const SizedBox(height: 10),
+                    const Divider(color: Colors.white60),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextButton(
                             onPressed: () async {
-                              await signUpDialog(context);
-                            },
-                            style: ButtonStyle(
-                                splashFactory: NoSplash.splashFactory,
-                                backgroundColor: MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.pressed)) {
-                                    return const Color(0xffCE5F58);
-                                  }
-                                  return Colors.white;
-                                }),
-                                foregroundColor: MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.pressed)) {
-                                    return Colors.white;
-                                  }
-                                  return const Color(0xffCE5F58);
-                                }),
-                                side: MaterialStateProperty.all(
-                                    const BorderSide(color: Color(0xffCE5F58), width: 1))),
-                            child: const Text('註冊')),
-                      ),
-                      const SizedBox(width: 5),
-                      TextButton(
-                          onPressed: () async {
-                            final nav = Navigator.of(context);
-                            final isSuccessLogin =
-                                await viewModel.login(email: email.text, password: password.text);
-                            if (isSuccessLogin) {
-                              int code = viewModel.response!.code;
-                              if (code == 400) {
-                                _errorMsg = '帳號或密碼錯誤';
-                                setState(() {});
-                              } else if (code == 401) {
-                                _errorMsg = 'Email尚未驗證，請先驗證信箱\n若有問題請聯絡X50粉絲團';
-                                setState(() {});
-                              } else if (code == 402) {
-                                _errorMsg = 'nologin';
-                                setState(() {});
-                              } else if (code != 200) {
-                                _errorMsg = '未知錯誤';
-                                setState(() {});
-                              } else if (code == 200) {
-                                await GlobalSingleton.instance.checkUser(force: true);
-                                nav.pushReplacementNamed(AppRoute.home);
+                              final nav = Navigator.of(context);
+                              final isSuccessLogin =
+                                  await viewModel.login(email: email.text, password: password.text);
+                              if (isSuccessLogin) {
+                                int code = viewModel.response!.code;
+                                if (code == 400) {
+                                  _errorMsg = '帳號或密碼錯誤';
+                                  setState(() {});
+                                } else if (code == 401) {
+                                  _errorMsg = 'Email尚未驗證，請先驗證信箱\n若有問題請聯絡X50粉絲團';
+                                  setState(() {});
+                                } else if (code == 402) {
+                                  _errorMsg = 'nologin';
+                                  setState(() {});
+                                } else if (code != 200) {
+                                  _errorMsg = '未知錯誤';
+                                  setState(() {});
+                                } else if (code == 200) {
+                                  await GlobalSingleton.instance.checkUser(force: true);
+                                  nav.pushReplacementNamed(AppRoute.home);
+                                }
                               }
-                            }
-                          },
-                          style: Themes.confirm(),
-                          child: const Text('登入', style: TextStyle(color: Colors.white)))
-                    ],
-                  )
-                ],
+                            },
+                            style: Themes.pale(),
+                            child: const Text('登入')),
+                        const SizedBox(width: 5),
+                        Material(
+                          type: MaterialType.transparency,
+                          child: OutlinedButton(
+                              onPressed: () async {
+                                await signUpDialog(context);
+                              },
+                              style: Themes.severe(isV4: true),
+                              child: const Text('註冊')),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            )
+            ),
           ],
         );
       },

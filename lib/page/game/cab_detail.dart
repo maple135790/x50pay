@@ -78,9 +78,9 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
                 children: [
-                  const Expanded(child: Divider(color: Color(0xffe5e5e5), thickness: 1)),
-                  Text(divText, style: const TextStyle(color: Color(0xff919191))),
-                  const Expanded(child: Divider(color: Color(0xffe5e5e5), thickness: 1))
+                  const Expanded(child: Divider(thickness: 1, endIndent: 15)),
+                  Text(divText, style: const TextStyle(color: Color(0xfffafafa))),
+                  const Expanded(child: Divider(thickness: 1, indent: 15))
                 ],
               )))
           ..add(const SizedBox(height: 15))
@@ -103,16 +103,22 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
             margin: const EdgeInsets.fromLTRB(15, 20, 15, 8),
             padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
             decoration: BoxDecoration(
-                color: const Color(0xfffbfbfb),
-                border: Border.all(color: const Color(0xffededed), width: 1),
+                color: Theme.of(context).scaffoldBackgroundColor,
+                border: Border.all(color: Themes.borderColor, width: 1),
                 borderRadius: BorderRadius.circular(5)),
             child: Row(
               children: [
-                const Icon(Icons.tablet_mac, color: Color(0xff5a5a5a), size: 16),
                 Text('  X50Pad 排隊狀況：${viewModel.lineupCount} 人等待中',
-                    style: const TextStyle(color: Color(0xff5a5a5a))),
+                    style: const TextStyle(color: Color(0xfffafafa))),
                 const Spacer(),
-                TextButton(onPressed: () async {}, style: Themes.energy(), child: const Text('立刻排隊'))
+                GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: const Color(0xfffafafa), borderRadius: BorderRadius.circular(8)),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: const Icon(Icons.tablet_mac),
+                    ))
               ],
             )),
         const SizedBox(height: 8),
@@ -177,7 +183,8 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: GestureDetector(
                     onTap: () {
-                      launchUrlString(model.surl!.replaceAll('\'', ''), mode: LaunchMode.externalNonBrowserApplication);
+                      launchUrlString(model.surl!.replaceAll('\'', ''),
+                          mode: LaunchMode.externalNonBrowserApplication);
                     },
                     child: Image(image: NetworkImage('https://pay.x50.fun${model.spic}', scale: 1))),
               )
@@ -200,17 +207,21 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
               builder: (context) => _CabSelect(viewModel,
                   label: cab.label, machineId: widget.machineId, machineIndex: cab.num, modes: cab.mode));
         },
-        child: Card(
+        child: Container(
           margin: EdgeInsets.zero,
-          color: Colors.white,
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Themes.borderColor, width: 1)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(cab.num.toString(), style: const TextStyle(color: Color(0xff404040), fontSize: 34)),
-              const SizedBox(height: 8),
+              Text(cab.num.toString(), style: const TextStyle(fontSize: 34)),
+              const SizedBox(height: 5),
               Text(cab.notice, style: const TextStyle(color: Color(0xff808080), fontSize: 12)),
-              Text('${cab.nbusy}/$isPaid', style: const TextStyle(color: Color(0xff5a5a5a), fontSize: 12)),
+              const SizedBox(height: 4),
+              Text('${cab.nbusy}/$isPaid', style: const TextStyle(color: Color(0xfffafafa), fontSize: 12)),
             ],
           ),
         ),
@@ -384,6 +395,18 @@ class _CabSelectState extends State<_CabSelect> {
                   ),
                 ),
                 Positioned(
+                    top: 8,
+                    right: 8,
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Icon(
+                          Icons.cancel,
+                          color: Color(0xffdcdcdc),
+                          shadows: [Shadow(blurRadius: 7, color: Colors.black, offset: Offset(2, 3))],
+                        ))),
+                Positioned(
                   bottom: 15,
                   left: 15,
                   child: Column(
@@ -421,7 +444,7 @@ class _CabSelectState extends State<_CabSelect> {
       final double price = mode.last;
       children
         ..add(const SizedBox(height: 20))
-        ..add(Text(mode[1], style: const TextStyle(color: Color(0xff5a5a5a))))
+        ..add(Text(mode[1], style: const TextStyle(color: Color(0xfffafafa))))
         ..add(ButtonBar(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -431,7 +454,7 @@ class _CabSelectState extends State<_CabSelect> {
                   paymentType = 'point';
                   setState(() {});
                 },
-                style: Themes.severe(),
+                style: Themes.severe(isV4: true),
                 child: Text('${price.toInt()}P')),
             TextButton(
                 onPressed: () {
@@ -439,7 +462,7 @@ class _CabSelectState extends State<_CabSelect> {
                   paymentType = 'ticket';
                   setState(() {});
                 },
-                style: Themes.confirm(),
+                style: Themes.pale(),
                 child: const Text('遊玩券')),
           ],
         ));

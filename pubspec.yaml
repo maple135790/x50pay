@@ -9,6 +9,7 @@ dependencies:
   dio: ^4.0.6
   flutter:
     sdk: flutter
+  flutter_animation_progress_bar: ^2.2.1
   flutter_colorpicker: ^1.0.3
   flutter_easyloading: ^3.0.5
   http: ^0.13.4
@@ -38,6 +39,7 @@ flutter:
   assets:
   - assets/images/common/header_float_icon.jpg
   - assets/images/common/header_icon.png
+  - assets/images/common/header_icon_rsz.png
   - assets/images/common/logo.jpg
   - assets/images/common/logo_150.jpg
   - assets/images/common/ouo.png
@@ -65,10 +67,15 @@ flutter:
   - assets/images/home/vts.png
   - assets/images/login/login_banner.jpg
   - assets/texts/license.txt
+  fonts:
+  - family: NotoSansJP
+    fonts:
+    - asset: assets/fonts/NotoSansJP/NotoSansJP-Bold.otf
 flr:
   core_version: 3.1.0
   dartfmt_line_length: 80
   assets:
   - /assets/images/
   - /assets/texts/
-  fonts: []
+  fonts:
+  - /assets/fonts/

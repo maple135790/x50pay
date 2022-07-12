@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: AppThemeData().materialTheme,
       navigatorObservers: [NavigationHistoryObserver()],
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: (kDebugMode || !GlobalSingleton.instance.isOnline) ? AppRoute.login : AppRoute.login,
+      initialRoute: (kDebugMode || !GlobalSingleton.instance.isOnline) ? AppRoute.home : AppRoute.login,
       builder: EasyLoading.init(),
     );
   }

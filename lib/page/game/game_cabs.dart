@@ -8,6 +8,7 @@ class _GameCabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
     List<Machine> machine = games.machine!;
     return Column(
       children: [
@@ -15,24 +16,41 @@ class _GameCabs extends StatelessWidget {
             margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
             padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
             decoration: BoxDecoration(
-                color: const Color(0xfffbfbfb),
-                border: Border.all(color: const Color(0xffededed), width: 1),
+                color: bgColor,
+                border: Border.all(color: Themes.borderColor, width: 1),
                 borderRadius: BorderRadius.circular(5)),
             child: Row(
               children: [
-                const Icon(Icons.pin_drop, color: Color(0xff5a5a5a), size: 16),
-                Text('  目前所在「$storeName」', style: const TextStyle(color: Color(0xff5a5a5a))),
+                const Icon(Icons.search, color: Color(0xfffafafa), size: 16),
+                Text('  目前所在「 $storeName 」', style: const TextStyle(color: Color(0xfffafafa))),
                 const Spacer(),
-                TextButton(
-                    onPressed: () async {
-                      final nav = Navigator.of(context);
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.remove('store_name');
-                      await prefs.remove('store_id');
-                      nav.pushReplacementNamed(AppRoute.game);
-                    },
-                    style: Themes.confirm(),
-                    child: const Text('切換店鋪'))
+                GestureDetector(
+                  onTap: () async {
+                    final nav = Navigator.of(context);
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.remove('store_name');
+                    await prefs.remove('store_id');
+                    nav.pushReplacementNamed(AppRoute.game);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: const Color(0xfffafafa),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    child: Icon(Icons.sync, color: bgColor, size: 26),
+                  ),
+                ),
+                // TextButton(
+                //     onPressed: () async {
+                //       final nav = Navigator.of(context);
+                //       final prefs = await SharedPreferences.getInstance();
+                //       await prefs.remove('store_name');
+                //       await prefs.remove('store_id');
+                //       nav.pushReplacementNamed(AppRoute.game);
+                //     },
+                //     style: Themes.pale(padding: EdgeInsets.symmetric(horizontal: 0)),
+                //     child: const Icon(Icons.sync, size: 26))
               ],
             )),
         ListView.builder(
@@ -45,15 +63,13 @@ class _GameCabs extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           margin: const EdgeInsets.symmetric(horizontal: 15),
           width: double.infinity,
-          decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffe9e9e9), width: 1),
-              borderRadius: BorderRadius.circular(5)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              Text('優惠時段:\n', style: TextStyle(color: Color(0xff5a5a5a), fontSize: 16)),
-              Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案\n', style: TextStyle(color: Color(0xff5a5a5a))),
-              Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xff5a5a5a))),
+              Text('優惠時段:\n', style: TextStyle(color: Color(0xfffafafa), fontSize: 16)),
+              Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案', style: TextStyle(color: Color(0xfffafafa))),
+              SizedBox(height: 5),
+              Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xfffafafa))),
             ],
           ),
         )
@@ -112,11 +128,11 @@ class _GameCabItem extends StatelessWidget {
                               fontSize: 18,
                               shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
                       Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                        const Icon(Icons.schedule, size: 16, color: Color(0xe6ffffff)),
+                        const Icon(Icons.schedule, size: 15, color: Color(0xe6ffffff)),
                         Text('  | $time$addition',
                             style: const TextStyle(
                                 color: Color(0xffbcbfbf),
-                                fontSize: 16,
+                                fontSize: 13,
                                 shadows: [Shadow(color: Colors.black, blurRadius: 15)]))
                       ]),
                     ],

@@ -38,6 +38,7 @@ class GlobalSingleton {
             ticketint: 9,
             phoneactive: true,
             vip: true,
+            vipdate: const VipDate(date: 1657660411780),
             sid: "",
             sixn: "575707",
             tphone: 1,

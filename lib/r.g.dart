@@ -105,6 +105,12 @@ class _R_Image_AssetResource {
       "assets/images/common/header_icon.png",
       packageName: null);
 
+  /// asset: assets/images/common/header_icon_rsz.png
+  // ignore: non_constant_identifier_names
+  final header_icon_rsz = const AssetResource(
+      "assets/images/common/header_icon_rsz.png",
+      packageName: null);
+
   /// asset: assets/images/common/logo.jpg
   // ignore: non_constant_identifier_names
   final logo_jpg =
@@ -270,6 +276,12 @@ class _R_Image {
   // ignore: non_constant_identifier_names
   AssetImage header_icon() {
     return AssetImage(asset.header_icon.keyName);
+  }
+
+  /// asset: assets/images/common/header_icon_rsz.png
+  // ignore: non_constant_identifier_names
+  AssetImage header_icon_rsz() {
+    return AssetImage(asset.header_icon_rsz.keyName);
   }
 
   /// asset: assets/images/common/logo.jpg
@@ -456,4 +468,8 @@ class _R_Text {
 // ignore: camel_case_types
 class _R_FontFamily {
   const _R_FontFamily();
+
+  /// font family: NotoSansJP
+  // ignore: non_constant_identifier_names
+  final notoSansJP = "NotoSansJP";
 }

@@ -14,6 +14,7 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
   bool isShowFooter = false;
   bool isHeaderBackType = false;
   String? floatHeaderText;
+  bool isDarkHeader = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,21 +34,19 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
         child: Scaffold(
           body: SafeArea(
             child: SingleChildScrollView(
-              child: Container(
-                color: const Color(0xfffafafa),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 700),
-                  child: Column(
-                    children: [
-                      headerType == HeaderType.normal
-                          ? const _Header()
-                          : _Header.float(isBackType: isHeaderBackType, title: floatHeaderText),
-                      body(),
-                      isShowFooter
-                          ? const Padding(padding: EdgeInsets.all(30), child: _Footer())
-                          : const SizedBox()
-                    ],
-                  ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 700),
+                child: Column(
+                  children: [
+                    headerType == HeaderType.normal
+                        ? _Header(isDark: isDarkHeader)
+                        : _Header.float(
+                            isBackType: isHeaderBackType, title: floatHeaderText, isDark: isDarkHeader),
+                    body(),
+                    isShowFooter
+                        ? const Padding(padding: EdgeInsets.all(30), child: _Footer())
+                        : const SizedBox()
+                  ],
                 ),
               ),
             ),
@@ -60,15 +59,16 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
 
 class _Header extends StatelessWidget {
   final HeaderType _type;
+  final bool isDark;
   final bool isBackType;
   final String? title;
-  const _Header({Key? key})
+  const _Header({Key? key, this.isDark = false})
       : _type = HeaderType.normal,
         isBackType = false,
         title = null,
         super(key: key);
 
-  const _Header.float({Key? key, required this.isBackType, this.title})
+  const _Header.float({Key? key, required this.isBackType, this.title, this.isDark = false})
       : _type = HeaderType.float,
         assert(isBackType != false || title != null, 'floatHeaderText must be set'),
         super(key: key);
@@ -78,16 +78,16 @@ class _Header extends StatelessWidget {
     switch (_type) {
       case HeaderType.normal:
         return Container(
-          color: Colors.white,
+          color: isDark ? const Color(0xff1e1e1e) : Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                    backgroundImage: R.image.header_icon(), backgroundColor: const Color(0xff5a5a5a)),
+                    backgroundImage: R.image.header_icon(), backgroundColor: Colors.black, radius: 14),
                 const SizedBox(width: 10),
-                const Text('X50 Music Game Station'),
+                const Text('X50Pay'),
               ],
             ),
           ),
@@ -96,7 +96,7 @@ class _Header extends StatelessWidget {
         return Card(
           margin: const EdgeInsets.all(10),
           elevation: 1,
-          color: Colors.white,
+          color: isDark ? const Color(0xff1e1e1e) : Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
@@ -120,7 +120,8 @@ class _Header extends StatelessWidget {
                   : [
                       const SizedBox(width: 15),
                       CircleAvatar(
-                          backgroundImage: R.image.header_icon(), backgroundColor: const Color(0xff5a5a5a)),
+                          backgroundImage: R.image.header_icon_rsz(),
+                          backgroundColor: const Color(0xff5a5a5a)),
                       const SizedBox(width: 10),
                       Text(title == '' ? 'X50 Pay' : 'X50 Pay - $title'),
                     ],

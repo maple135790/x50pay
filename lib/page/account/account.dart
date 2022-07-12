@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -17,6 +20,7 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/main.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/r.g.dart';
+import 'package:x50pay/repository/repository.dart';
 
 part 'popups/quick_pay.dart';
 part 'popups/quiC_pay_pref.dart';
@@ -44,193 +48,247 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
 
   @override
   Widget body() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xffe9e9e9), width: 1), color: Colors.white),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              child: Row(
-                children: [
-                  user.userimg != null
-                      ? CircleAvatar(foregroundImage: NetworkImage(user.userimg!), radius: 30)
-                      : CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 30),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(user.name!, style: const TextStyle(color: Color(0xff404040), fontSize: 18)),
-                        const SizedBox(height: 10),
-                        Text(user.email!, style: const TextStyle(color: Color(0xff919191))),
-                      ],
-                    ),
-                  )
-                ],
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Themes.borderColor, width: 1),
+                  color: bgColor),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Row(
+                  children: [
+                    user.userimg != null
+                        ? CircleAvatar(foregroundImage: NetworkImage(user.userimg!), radius: 30)
+                        : CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 30),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(user.name!, style: const TextStyle(color: Color(0xfffafafa))),
+                          const SizedBox(height: 5),
+                          Text(user.email!, style: const TextStyle(color: Color(0xfffafafa))),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        _AccountBlock(children: [
-          _SettingTile(
-              iconData: Icons.remember_me,
-              title: '修改頭像',
-              subtitle: '外連至 Gravator 更換大頭貼相片',
-              color: _SettingTileColor.green,
-              onTap: () {
-                launchUrlString('https://en.gravatar.com/', mode: LaunchMode.externalApplication);
-              }),
-          _SettingTile(
-              iconData: Icons.rss_feed,
-              title: '快速付款設定',
-              subtitle: 'NFC / QuiC 喜愛選項設定',
-              color: _SettingTileColor.red,
-              onTap: () async {
-                await showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return QuickPayDialog(viewModel);
-                    });
-              }),
-          _SettingTile(
-              iconData: Icons.badge_outlined,
-              title: 'QuiC 卡片管理',
-              subtitle: 'QuiC 靠卡系統刪除/鎖定/管理',
-              color: _SettingTileColor.red,
-              onTap: () async {
-                await showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return QuiCPayPrefDialog(viewModel);
-                    });
-              }),
-          _SettingTile(
-              iconData: Icons.tablet_mac,
-              title: '線上排隊設定',
-              subtitle: 'X50Pad 西門線上排隊系統偏好設定',
-              color: _SettingTileColor.red,
-              onTap: () async {
-                await showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return PadPrefDialog(viewModel);
-                    });
-              }),
-        ]),
-        _AccountBlock(children: [
-          _SettingTile(
-              iconData: Icons.key,
-              title: '更改密碼',
-              subtitle: '密碼不夠安全嗎？點我更改！',
-              color: _SettingTileColor.red,
-              onTap: () async {
-                await showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return ChangePasswordDialog(viewModel);
-                    });
-              }),
-          _SettingTile(
-              iconData: Icons.email_outlined,
-              title: '更改信箱',
-              subtitle: '換信箱了嗎，點我修改信箱。',
-              color: _SettingTileColor.blue,
-              onTap: () async {
-                await showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return ChangeEmailDialog(viewModel);
-                    });
-              }),
-          _SettingTile(
-              iconData: Icons.tablet_mac,
-              title: '更改手機',
-              subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
-              color: _SettingTileColor.blue,
-              onTap: () async {
-                if (user.tphone != 0 && !user.phoneactive!) {
+          _AccountBlock(children: [
+            _SettingTile(
+                iconData: Icons.remember_me,
+                title: '修改頭像',
+                subtitle: '外連至 Gravator 更換大頭貼相片',
+                color: _SettingTileColor.green,
+                onTap: () {
+                  launchUrlString('https://en.gravatar.com/', mode: LaunchMode.externalApplication);
+                }),
+            _SettingTile(
+                iconData: Icons.rss_feed,
+                title: '快速付款設定',
+                subtitle: 'NFC / QuiC 喜愛選項設定',
+                color: _SettingTileColor.blue,
+                onTap: () async {
                   await showDialog(
                       barrierDismissible: false,
                       context: context,
-                      builder: (context) => _ChangePhoneConfirmedDialog(viewModel, context));
-                }
-                await showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return ChangePhoneDialog(
-                        viewModel,
-                        callback: (isOk) async {
-                          Navigator.of(context).pop();
-                          if (isOk) {
-                            showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) => _ChangePhoneConfirmedDialog(viewModel, context));
-                          } else {
-                            await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-                                dismissOnTap: false, duration: const Duration(seconds: 2));
-                          }
-                        },
-                      );
-                    });
-              }),
-        ]),
-        _AccountBlock(children: [
-          _SettingTile(
-              iconData: Icons.local_atm,
-              title: '儲值紀錄',
-              subtitle: '查詢加值相關記錄。',
-              color: _SettingTileColor.yellow,
-              onTap: () async {
-                Navigator.of(context).push(NoTransitionRouter(_BidRecord(viewModel)));
-              }),
-          _SettingTile(
-              iconData: Icons.redeem,
-              title: '獲券紀錄',
-              subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
-              color: _SettingTileColor.yellow,
-              onTap: () async {
-                Navigator.of(context).push(NoTransitionRouter(_TicketRecord(viewModel)));
-              }),
-          _SettingTile(
-              iconData: Icons.format_list_bulleted,
-              title: '付費明細',
-              subtitle: '查詢點數付款明細。',
-              color: _SettingTileColor.yellow,
-              onTap: () async {
-                Navigator.of(context).push(NoTransitionRouter(_PlayRecord(viewModel)));
-              }),
-          _SettingTile(
-              iconData: Icons.confirmation_num,
-              title: '扣券明細',
-              subtitle: '查詢遊玩券使用明細。',
-              color: _SettingTileColor.yellow,
-              onTap: () async {
-                Navigator.of(context).push(NoTransitionRouter(_TicketUsedRecord(viewModel)));
-              }),
-        ]),
-        _AccountBlock(children: [
-          _SettingTile(
-              iconData: Icons.person_remove,
-              title: '登出帳號',
-              subtitle: '就是個登出',
-              color: _SettingTileColor.black,
-              onTap: () async {
-                showDialog(context: context, builder: (context) => _askLogout());
-              }),
-        ]),
-      ],
+                      builder: (context) {
+                        return QuickPayDialog(viewModel);
+                      });
+                }),
+            _SettingTile(
+                iconData: Icons.badge_outlined,
+                title: 'QuiC 卡片管理',
+                subtitle: 'QuiC 靠卡系統刪除/鎖定/管理',
+                color: _SettingTileColor.blue,
+                onTap: () async {
+                  await showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return QuiCPayPrefDialog(viewModel);
+                      });
+                }),
+            _SettingTile(
+                iconData: Icons.tablet_mac,
+                title: '線上排隊設定',
+                subtitle: 'X50Pad 西門線上排隊系統偏好設定',
+                color: _SettingTileColor.blue,
+                onTap: () async {
+                  await showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return PadPrefDialog(viewModel);
+                      });
+                }),
+          ]),
+          _AccountBlock(children: [
+            _SettingTile(
+                iconData: Icons.key,
+                title: '更改密碼',
+                subtitle: '密碼不夠安全嗎？點我更改！',
+                color: _SettingTileColor.red,
+                onTap: () async {
+                  await showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return ChangePasswordDialog(viewModel);
+                      });
+                }),
+            _SettingTile(
+                iconData: Icons.email_outlined,
+                title: '更改信箱',
+                subtitle: '換信箱了嗎，點我修改信箱。',
+                color: _SettingTileColor.white,
+                onTap: () async {
+                  await showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return ChangeEmailDialog(viewModel);
+                      });
+                }),
+            _SettingTile(
+                iconData: Icons.call,
+                title: '更改手機',
+                subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
+                color: _SettingTileColor.white,
+                onTap: () async {
+                  if (user.tphone != 0 && !user.phoneactive!) {
+                    await showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) => _ChangePhoneConfirmedDialog(viewModel, context));
+                  }
+                  await showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return ChangePhoneDialog(
+                          viewModel,
+                          callback: (isOk) async {
+                            Navigator.of(context).pop();
+                            if (isOk) {
+                              showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) => _ChangePhoneConfirmedDialog(viewModel, context));
+                            } else {
+                              await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
+                                  dismissOnTap: false, duration: const Duration(seconds: 2));
+                            }
+                          },
+                        );
+                      });
+                }),
+          ]),
+          _AccountBlock(children: [
+            _SettingTile(
+                iconData: Icons.local_atm,
+                title: '儲值紀錄',
+                subtitle: '查詢加值相關記錄。',
+                color: _SettingTileColor.yellow,
+                onTap: () async {
+                  Navigator.of(context).push(NoTransitionRouter(_BidRecord(viewModel)));
+                }),
+            _SettingTile(
+                iconData: Icons.redeem,
+                title: '獲券紀錄',
+                subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
+                color: _SettingTileColor.yellow,
+                onTap: () async {
+                  Navigator.of(context).push(NoTransitionRouter(_TicketRecord(viewModel)));
+                }),
+            _SettingTile(
+                iconData: Icons.format_list_bulleted,
+                title: '付費明細',
+                subtitle: '查詢點數付款明細。',
+                color: _SettingTileColor.yellow,
+                onTap: () async {
+                  Navigator.of(context).push(NoTransitionRouter(_PlayRecord(viewModel)));
+                }),
+            _SettingTile(
+                iconData: Icons.confirmation_num,
+                title: '扣券明細',
+                subtitle: '查詢遊玩券使用明細。',
+                color: _SettingTileColor.yellow,
+                onTap: () async {
+                  Navigator.of(context).push(NoTransitionRouter(_TicketUsedRecord(viewModel)));
+                }),
+          ]),
+          _AccountBlock(children: [
+            _SettingTile(
+                iconData: Icons.home,
+                title: '西門店開門',
+                subtitle: '就是個開門按鈕',
+                color: _SettingTileColor.white,
+                onTap: checkRemoteOpen),
+            _SettingTile(
+                iconData: Icons.logout,
+                title: '登出帳號',
+                subtitle: '就是個登出',
+                color: _SettingTileColor.white,
+                onTap: () async {
+                  showDialog(context: context, builder: (context) => _askLogout());
+                }),
+          ]),
+        ],
+      ),
     );
+  }
+
+  void checkRemoteOpen() async {
+    await EasyLoading.show();
+    final location = Location();
+    double deg2rad(double deg) => deg * (pi / 180);
+
+    double getDistance(double lat1, double lon1, double lat2, double lon2) {
+      var R = 6371; // Radius of the earth in km
+      var dLat = deg2rad(lat2 - lat1); // deg2rad below
+      var dLon = deg2rad(lon2 - lon1);
+      var a = sin(dLat / 2) * sin(dLat / 2) +
+          cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon / 2) * sin(dLon / 2);
+      var c = 2 * atan2(sqrt(a), sqrt(1 - a));
+      var d = R * c; // Distance in km
+      return d;
+    }
+
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    LocationData locationData;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) return;
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    locationData = await location.getLocation();
+    double myLat = locationData.latitude!;
+    double myLng = locationData.longitude!;
+    String result = await Repository().remoteOpenDoor(getDistance(25.0455991, 121.5027702, myLat, myLng));
+    await EasyLoading.dismiss();
+    await EasyLoading.showInfo(result.replaceFirst(',', '\n'));
   }
 
   Widget _askLogout() {
@@ -283,13 +341,15 @@ class _AccountBlock extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffe9e9e9), width: 1), color: Colors.white),
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: Themes.borderColor, width: 1),
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
           child: ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: children.length,
-            separatorBuilder: (context, index) =>
-                const Divider(color: Color(0xffe9e9e9), thickness: 1, height: 1, endIndent: 15, indent: 15),
+            separatorBuilder: (context, index) => const Divider(thickness: 1, height: 1),
             itemBuilder: (context, index) {
               final tile = children[index];
               return _SettingTile(
@@ -308,7 +368,7 @@ class _AccountBlock extends StatelessWidget {
   }
 }
 
-enum _SettingTileColor { green, red, yellow, blue, black }
+enum _SettingTileColor { green, red, yellow, blue, black, white }
 
 class _SettingTile extends StatelessWidget {
   final IconData iconData;
@@ -328,36 +388,39 @@ class _SettingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late Color boxColor;
     Color? iconColor;
 
     switch (color) {
       case _SettingTileColor.green:
-        boxColor = const Color(0xff8bb96e);
+        iconColor = const Color(0xff37970e);
         break;
       case _SettingTileColor.red:
-        boxColor = const Color(0xffce5f58);
+        iconColor = const Color(0xfff5222d);
         break;
       case _SettingTileColor.yellow:
-        boxColor = const Color(0xffE8F562);
-        iconColor = const Color(0xffB59120);
+        iconColor = const Color(0xfff4d614);
         break;
       case _SettingTileColor.blue:
-        boxColor = const Color(0xff79A8B9);
+        iconColor = const Color(0xff2492f7);
         break;
       case _SettingTileColor.black:
-        boxColor = const Color(0xff333333);
+        iconColor = const Color(0xff333333);
+        break;
+      case _SettingTileColor.white:
+        iconColor = const Color(0xfffafafa);
         break;
     }
-    iconColor ??= const Color(0xfffffefa);
+    // iconColor ??= const Color(0xfffffefa);
 
     return ListTile(
       onTap: onTap,
       leading: Container(
           height: 42,
           width: 42,
-          decoration: BoxDecoration(color: boxColor, borderRadius: BorderRadius.circular(5)),
-          child: Icon(iconData, color: iconColor)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Themes.borderColor, width: 2)),
+          child: Icon(iconData, color: iconColor, size: 18)),
       title: Text(title, style: const TextStyle(fontSize: 18)),
       subtitle: Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
     );

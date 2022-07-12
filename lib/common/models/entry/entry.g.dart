@@ -9,7 +9,7 @@ part of 'entry.dart';
 EntryModel _$EntryModelFromJson(Map<String, dynamic> json) => EntryModel(
       message: json['message'] as String,
       code: json['code'] as int,
-      gr2: json['gr2'] as List<dynamic>?,
+      gr2: json['gr2'] as List<dynamic>,
       grade: json['grade'] as List<dynamic>?,
       evlist: (json['evlist'] as List<dynamic>?)
           ?.map((e) => Evlist.fromJson(e as Map<String, dynamic>))

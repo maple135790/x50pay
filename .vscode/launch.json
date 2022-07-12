@@ -7,7 +7,6 @@
         {
             "name": "x50pay",
             "request": "launch",
-            "deviceId": "emulator-5554",
             "type": "dart"
         },{
             "name": "x50pay p4a5g",
