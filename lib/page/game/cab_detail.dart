@@ -99,28 +99,30 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
 
     return Column(
       children: [
-        Container(
-            margin: const EdgeInsets.fromLTRB(15, 20, 15, 8),
-            padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
-            decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(color: Themes.borderColor, width: 1),
-                borderRadius: BorderRadius.circular(5)),
-            child: Row(
-              children: [
-                Text('  X50Pad 排隊狀況：${viewModel.lineupCount} 人等待中',
-                    style: const TextStyle(color: Color(0xfffafafa))),
-                const Spacer(),
-                GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: const Color(0xfffafafa), borderRadius: BorderRadius.circular(8)),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      child: const Icon(Icons.tablet_mac),
-                    ))
-              ],
-            )),
+        viewModel.lineupCount != -1
+            ? Container(
+                margin: const EdgeInsets.fromLTRB(15, 20, 15, 8),
+                padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    border: Border.all(color: Themes.borderColor, width: 1),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Row(
+                  children: [
+                    Text('  X50Pad 排隊狀況：${viewModel.lineupCount} 人等待中',
+                        style: const TextStyle(color: Color(0xfffafafa))),
+                    const Spacer(),
+                    GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: const Color(0xfffafafa), borderRadius: BorderRadius.circular(8)),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: const Icon(Icons.tablet_mac),
+                        ))
+                  ],
+                ))
+            : const SizedBox(),
         const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -275,96 +277,102 @@ class _CabSelectState extends State<_CabSelect> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('注意！請確認是否有玩家正在遊玩。', style: TextStyle(fontSize: 18, color: Color(0xff404040))),
+              const Text('注意！請確認是否有玩家正在遊玩。', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 14),
-              Text('機種：${widget.label}', style: const TextStyle(fontSize: 18, color: Color(0xff404040))),
-              Text('編號：${widget.machineIndex}號機',
-                  style: const TextStyle(fontSize: 18, color: Color(0xff404040))),
-              Text('消費：$paymentType', style: const TextStyle(fontSize: 18, color: Color(0xff404040))),
+              Text('機種：${widget.label}', style: const TextStyle(fontSize: 18)),
+              Text('編號：${widget.machineIndex}號機', style: const TextStyle(fontSize: 18)),
+              Text('消費：$paymentType', style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 12.6),
               const Text('請勿影響他人權益。如投幣扣點後機台無動作請聯絡粉專！請勿再次點擊',
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: Color(0xff5a5a5a))),
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 13)),
               const SizedBox(height: 16),
             ],
           ),
         ),
-        const Divider(color: Color(0xffd9d9d9), thickness: 1, height: 0),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 14),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: Themes.grey(),
-                  child: const Text('取消')),
-              const SizedBox(width: 8),
-              TextButton(
-                  onPressed: () async {
-                    final nav = Navigator.of(context);
-                    final isInsertSuccess = await widget.viewModel.doInsert(
-                        machineId: widget.machineId,
-                        isTicket: paymentType == 'ticket',
-                        mode: widget.modes[0].first);
-                    if (isInsertSuccess) {
-                      final code = widget.viewModel.response!.code;
-                      String msg = '';
-                      String describe = '';
-                      bool is200 = false;
-                      switch (code) {
-                        case 200:
-                          is200 = true;
-                          msg = '投幣成功，感謝您的惠顧！';
-                          describe = '請等候約三秒鐘，若機台仍無反應請盡速與X50粉絲專頁聯絡';
-                          break;
-                        case 601:
-                          msg = '機台鎖定中';
-                          describe = '目前機台正在遊玩中   請稍候再投幣';
-                          break;
-                        case 602:
-                          msg = '投幣失敗';
-                          describe = '請確認您的網路環境，再次重試，如多次無法請回報粉專';
-                          break;
-                        case 603:
-                          msg = '餘額不足';
-                          describe = '您的餘額不足，無法遊玩   請加值';
-                          break;
-                        case 604:
-                          msg = '請重新登入';
-                          describe = '請等候約三秒鐘，若機台仍無反應請盡速與X50粉絲專頁聯絡';
-                          break;
-                        case 609:
-                          msg = '請驗證電話';
-                          describe = '您的帳號並沒有電話驗證   請先驗證電話方可用遊玩券';
-                          break;
-                        case 698:
-                          msg = '遊玩券使用失敗';
-                          describe = '此機不開放使用遊玩券';
-                          break;
-                        case 699:
-                          msg = '遊玩券使用失敗';
-                          describe = '請等候約三秒鐘，若機台仍無反應請盡速與X50粉絲專頁聯絡';
-                          break;
-                        case 6099:
-                          msg = '請先填寫實聯驗證';
-                          describe = '尚未實聯';
-                          break;
-                      }
-                      is200
-                          ? await EasyLoading.showSuccess('$msg\n$describe')
-                          : await EasyLoading.showError('$msg\n$describe');
-                    } else {
-                      await EasyLoading.showError('投幣失敗\n請確認您的網路環境，再次重試，如多次無法請回報粉專');
-                    }
-                    await Future.delayed(const Duration(seconds: 2));
-                    await GlobalSingleton.instance.checkUser(force: true);
-                    nav.popUntil(ModalRoute.withName(AppRoute.game));
-                  },
-                  style: Themes.confirm(),
-                  child: const Text('確認'))
-            ],
+        const Divider(thickness: 1, height: 0),
+        Container(
+          color: const Color(0xff2a2a2a),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: Themes.pale(),
+                      child: const Text('取消')),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: TextButton(
+                      onPressed: () async {
+                        final nav = Navigator.of(context);
+                        final isInsertSuccess = await widget.viewModel.doInsert(
+                            machineId: widget.machineId,
+                            isTicket: paymentType == 'ticket',
+                            mode: widget.modes[0].first);
+                        if (isInsertSuccess) {
+                          final code = widget.viewModel.response!.code;
+                          String msg = '';
+                          String describe = '';
+                          bool is200 = false;
+                          switch (code) {
+                            case 200:
+                              is200 = true;
+                              msg = '投幣成功，感謝您的惠顧！';
+                              describe = '請等候約三秒鐘，若機台仍無反應請盡速與X50粉絲專頁聯絡';
+                              break;
+                            case 601:
+                              msg = '機台鎖定中';
+                              describe = '目前機台正在遊玩中   請稍候再投幣';
+                              break;
+                            case 602:
+                              msg = '投幣失敗';
+                              describe = '請確認您的網路環境，再次重試，如多次無法請回報粉專';
+                              break;
+                            case 603:
+                              msg = '餘額不足';
+                              describe = '您的餘額不足，無法遊玩   請加值';
+                              break;
+                            case 604:
+                              msg = '未知錯誤';
+                              describe = '反正就是錯誤';
+                              break;
+                            case 609:
+                              msg = '請驗證電話';
+                              describe = '您的帳號並沒有電話驗證   請先驗證電話方可用遊玩券';
+                              break;
+                            case 698:
+                              msg = '遊玩券使用失敗';
+                              describe = '您的遊玩券此機種不適用 請進入會員中心 -> 獲券紀錄 檢閱';
+                              break;
+                            case 699:
+                              msg = '遊玩券使用失敗';
+                              describe = '此機不開放使用遊玩券';
+                              break;
+                            case 6099:
+                              msg = '請先填寫實聯驗證';
+                              describe = '尚未實聯';
+                              break;
+                          }
+                          is200
+                              ? await EasyLoading.showSuccess('$msg\n$describe')
+                              : await EasyLoading.showError('$msg\n$describe');
+                        } else {
+                          await EasyLoading.showError('投幣失敗\n請確認您的網路環境，再次重試，如多次無法請回報粉專');
+                        }
+                        await Future.delayed(const Duration(seconds: 2));
+                        await GlobalSingleton.instance.checkUser(force: true);
+                        nav.popUntil(ModalRoute.withName(AppRoute.game));
+                      },
+                      style: Themes.severe(isV4: true),
+                      child: const Text('確認')),
+                )
+              ],
+            ),
           ),
         )
       ],

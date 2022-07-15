@@ -22,6 +22,7 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
   @override
   Widget build(BuildContext context) {
     return _Dialog(
+      scrollable: true,
       saveCallback: () {},
       content: FutureBuilder(
           future: getPadSettings,

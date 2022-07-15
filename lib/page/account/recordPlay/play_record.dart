@@ -52,9 +52,9 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
       List<DataRow> rows = [];
       for (PlayLog log in model.logs) {
         rows.add(DataRow(cells: [
-          DataCell(Text(log.time, style: const TextStyle(color: Color(0xff5a5a5a)))),
-          DataCell(Text('${log.mid}-${log.cid}號機', style: const TextStyle(color: Color(0xff5a5a5a)))),
-          DataCell(Text('${log.price.toInt()}P', style: const TextStyle(color: Color(0xff5a5a5a)))),
+          DataCell(Text(log.time)),
+          DataCell(Text('${log.mid}-${log.cid}號機')),
+          DataCell(Text('${log.price.toInt()}P')),
         ]));
       }
       return rows;
@@ -66,12 +66,13 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           decoration: BoxDecoration(
-              color: Colors.white, border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(color: Themes.borderColor, width: 1)),
           child: Row(
             children: [
-              CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 20),
+              CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 29),
               const SizedBox(width: 16.8),
-              const Text('近兩個月的扣點明細如下', style: TextStyle(color: Color(0xff404040), fontSize: 18))
+              const Text('近兩個月的扣點明細如下', style: TextStyle(fontSize: 18))
             ],
           ),
         ),
@@ -80,15 +81,9 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
             ? SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
-                  headingRowColor: MaterialStateProperty.all(const Color(0xfff7f7f7)),
-                  border: TableBorder.all(color: const Color(0xffe9e9e9), width: 1),
+                  border: TableBorder.all(color: Themes.borderColor, width: 1),
                   dataRowHeight: 60,
-                  decoration: BoxDecoration(
-                      color: Colors.white, border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
-                  columns: ['日期', '機台', '使用點數']
-                      .map(
-                          (e) => DataColumn(label: Text(e, style: const TextStyle(color: Color(0xff5a5a5a)))))
-                      .toList(),
+                  columns: ['日期', '機台', '使用點數'].map((e) => DataColumn(label: Text(e))).toList(),
                   rows: _buildRows(),
                 ),
               )

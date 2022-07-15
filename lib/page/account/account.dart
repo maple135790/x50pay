@@ -279,6 +279,7 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
     if (permissionGranted == PermissionStatus.denied) {
       permissionGranted = await location.requestPermission();
       if (permissionGranted != PermissionStatus.granted) {
+        await EasyLoading.dismiss();
         return;
       }
     }
@@ -429,31 +430,38 @@ class _SettingTile extends StatelessWidget {
 
 class _Dialog extends StatelessWidget {
   final Widget content;
+  final bool scrollable;
   final void Function() saveCallback;
   final Widget? customSaveButton;
-  const _Dialog({required this.content, required this.saveCallback, Key? key, this.customSaveButton})
+  const _Dialog(
+      {required this.content,
+      required this.saveCallback,
+      Key? key,
+      this.customSaveButton,
+      this.scrollable = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: scrollable,
       contentPadding: const EdgeInsets.only(top: 28, left: 28, right: 28, bottom: 14),
       actionsPadding: const EdgeInsets.only(top: 0, left: 28, right: 28, bottom: 28),
       content: GestureDetector(
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          child: SingleChildScrollView(child: content)),
+          child: content),
       actionsAlignment: MainAxisAlignment.start,
       actions: [
         TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            style: Themes.grey(),
+            style: Themes.pale(),
             child: const Text('取消')),
         customSaveButton == null
-            ? TextButton(onPressed: saveCallback, style: Themes.confirm(), child: const Text('保存'))
+            ? TextButton(onPressed: saveCallback, style: Themes.severe(isV4: true), child: const Text('保存'))
             : customSaveButton!
       ],
     );
@@ -587,7 +595,7 @@ class _DialogWidgetState extends State<_DialogWidget> {
             alignment: Alignment.centerLeft,
             child: RichText(
                 text: TextSpan(
-              style: const TextStyle(color: Color(0xff5a5a5a)),
+              style: const TextStyle(color: Color(0xfffafafa)),
               children: widget.isRequired
                   ? [
                       widget.titleIcon == null

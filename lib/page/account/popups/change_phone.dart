@@ -22,57 +22,62 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        '注意！',
-        style: TextStyle(fontSize: 24),
-      ),
-      titlePadding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 10),
-      // contentPadding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
-      contentPadding: EdgeInsets.zero,
+      clipBehavior: Clip.hardEdge,
+      scrollable: true,
+      contentPadding: const EdgeInsets.only(top: 15),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Divider(color: Color(0xffd9d9d9), thickness: 1),
+          const Icon(Icons.error, size: 50, color: Color(0xfffafafa)),
+          const SizedBox(height: 15),
           Container(
-            padding: const EdgeInsets.fromLTRB(15, 25, 15, 20),
-            // color: Colors.red,
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 RichText(
-                    text: const TextSpan(
-                        text: '此選項會',
-                        style: TextStyle(color: Color(0xff5a5a5a), fontSize: 16),
-                        children: [
-                      TextSpan(text: "解除您的帳戶的手機綁定", style: TextStyle(color: Colors.red)),
-                      TextSpan(text: '，並且讓原先的手機號碼可以被再次使用', style: TextStyle(color: Color(0xff5a5a5a)))
-                    ])),
-                const Text('\n'),
-                const Text('且您的帳戶會變成尚未簡訊驗證的狀況，直到您驗證完新的電話號碼。', style: TextStyle(color: Color(0xff5a5a5a))),
-                const Text('\n'),
+                    text: const TextSpan(text: '此選項會', style: TextStyle(fontSize: 16), children: [
+                  TextSpan(text: "解除您的帳戶的手機綁定", style: TextStyle(color: Color(0xfffad814))),
+                  TextSpan(text: '，並且讓原先的手機號碼可以被再次使用')
+                ])),
+                const Text('且您的帳戶會變成尚未簡訊驗證的狀況，直到您驗證完新的電話號碼。'),
+                const SizedBox(height: 20),
                 const Text('您確定要取消手機綁定並重新驗證？',
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                    style: TextStyle(color: Color(0xfffad814), fontWeight: FontWeight.bold)),
               ],
             ),
           ),
-          const Divider(color: Color(0xffd9d9d9), thickness: 1),
+          const Divider(thickness: 1, height: 0),
+          Container(
+            color: const Color(0xff2a2a2a),
+            padding: const EdgeInsets.all(15),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: Themes.cancel(),
+                      child: const Text('取消')),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: TextButton(
+                      onPressed: () async {
+                        widget.callback(await model.detachPhone());
+                      },
+                      style: Themes.severe(isV4: true),
+                      child: const Text('確認')),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
-      actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            style: Themes.cancel(),
-            child: const Text('取消')),
-        TextButton(
-            onPressed: () async {
-              widget.callback(await model.detachPhone());
-            },
-            style: Themes.severe(),
-            child: const Text('確認')),
-      ],
+      // actionsAlignment: MainAxisAlignment.spaceBetween,
+      // actions:,
     );
   }
 }

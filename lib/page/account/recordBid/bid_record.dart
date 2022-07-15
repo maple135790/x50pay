@@ -65,22 +65,20 @@ class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           decoration: BoxDecoration(
-              color: Colors.white, border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(color: Themes.borderColor, width: 1)),
           child: Row(
             children: [
-              CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 20),
+              CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 29),
               const SizedBox(width: 16.8),
-              const Text('近兩個月的儲值紀錄如下', style: TextStyle(color: Color(0xff404040), fontSize: 18))
+              const Text('近兩個月的儲值紀錄如下', style: TextStyle(fontSize: 18))
             ],
           ),
         ),
         const SizedBox(height: 12),
         hasData
             ? DataTable(
-                border: TableBorder.all(color: const Color(0xffe9e9e9), width: 1),
-                headingRowColor: MaterialStateProperty.all(const Color(0xfff7f7f7)),
-                decoration: BoxDecoration(
-                    color: Colors.white, border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
+                border: TableBorder.all(color: Themes.borderColor, width: 1),
                 columns: ['時間', '儲值金額'].map((e) => DataColumn(label: Text(e))).toList(),
                 rows: _buildRows(),
               )

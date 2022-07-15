@@ -27,9 +27,10 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   @override
   Widget build(BuildContext context) {
     return _Dialog(
+      scrollable: true,
       saveCallback: () {},
       customSaveButton: TextButton(
-        style: Themes.confirm(),
+        style: Themes.severe(isV4: true),
         onPressed: isEnabled
             ? () async {
                 final nav = Navigator.of(context);

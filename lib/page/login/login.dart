@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -5,7 +6,6 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/common/widgets/body_card.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
@@ -20,6 +20,12 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   final email = TextEditingController();
   final password = TextEditingController();
   final viewModel = LoginViewModel();
+
+  @override
+  void Function()? get debugFunction => () {
+        email.text = 'test';
+        password.text = 'test';
+      };
 
   @override
   bool get isDarkHeader => true;
@@ -95,6 +101,33 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    _errorMsg == null
+                        ? const SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                  color: const Color(0xffF6E1DF),
+                                  border: Border.all(color: const Color(0xffE5A9A5), width: 1),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.priority_high, color: Color(0xffA1414C)),
+                                  const SizedBox(width: 14),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text('錯誤',
+                                          style: TextStyle(color: Color(0xffA1414C), fontSize: 16)),
+                                      Text(_errorMsg!, style: const TextStyle(color: Color(0xffA1414C))),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                     const Text('電子郵件'),
                     const SizedBox(height: 12),
                     TextField(
@@ -130,6 +163,12 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       children: [
                         TextButton(
                             onPressed: () async {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              if (email.text.isEmpty || password.text.isEmpty) {
+                                _errorMsg = '帳密不得為空';
+                                setState(() {});
+                                return;
+                              }
                               final nav = Navigator.of(context);
                               final isSuccessLogin =
                                   await viewModel.login(email: email.text, password: password.text);

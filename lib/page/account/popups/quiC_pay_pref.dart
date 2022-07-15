@@ -8,6 +8,7 @@ class QuiCPayPrefDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _Dialog(
+      scrollable: true,
       saveCallback: () {},
       content: FutureBuilder(
           future: viewModel.getQuicSettings(),

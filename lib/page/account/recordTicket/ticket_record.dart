@@ -14,7 +14,7 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
 
   @override
   bool get disableBottomNavigationBar => true;
-  
+
   @override
   BaseViewModel? baseViewModel() => widget.viewModel;
 
@@ -59,10 +59,10 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
         if (maybeString is String) details = maybeString;
 
         rows.add(DataRow(cells: [
-          DataCell(Text(eventName, style: const TextStyle(color: Color(0xff5a5a5a)))),
-          DataCell(Text(expDate, style: const TextStyle(color: Color(0xff5a5a5a)))),
-          DataCell(Text(remainCount, style: const TextStyle(color: Color(0xff5a5a5a)))),
-          DataCell(Text(details ?? '', style: const TextStyle(color: Color(0xff5a5a5a)))),
+          DataCell(Text(eventName)),
+          DataCell(Text(expDate)),
+          DataCell(Text(remainCount)),
+          DataCell(Text(details ?? '')),
         ]));
       }
       return rows;
@@ -74,12 +74,13 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           decoration: BoxDecoration(
-              color: Colors.white, border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(color: Themes.borderColor, width: 1)),
           child: Row(
             children: [
-              CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 20),
+              CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 29),
               const SizedBox(width: 16.8),
-              const Text('以下是您尚未使用的遊玩券記錄', style: TextStyle(color: Color(0xff404040), fontSize: 18))
+              const Text('以下是您尚未使用的遊玩券記錄', style: TextStyle(fontSize: 18))
             ],
           ),
         ),
@@ -88,15 +89,9 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
             ? SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
-                  headingRowColor: MaterialStateProperty.all(const Color(0xfff7f7f7)),
-                  border: TableBorder.all(color: const Color(0xffe9e9e9), width: 1),
+                  border: TableBorder.all(color: Themes.borderColor, width: 1),
                   dataRowHeight: 60,
-                  decoration: BoxDecoration(
-                      color: Colors.white, border: Border.all(color: const Color(0xffe9e9e9), width: 1)),
-                  columns: ['活動名稱', '過期日', '剩餘張數', '詳情']
-                      .map(
-                          (e) => DataColumn(label: Text(e, style: const TextStyle(color: Color(0xff5a5a5a)))))
-                      .toList(),
+                  columns: ['活動名稱', '過期日', '剩餘張數', '詳情'].map((e) => DataColumn(label: Text(e))).toList(),
                   rows: _buildRows(),
                 ),
               )

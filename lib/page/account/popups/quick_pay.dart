@@ -42,6 +42,7 @@ class QuickPayDialog extends StatelessWidget {
     }
 
     return _Dialog(
+      scrollable: true,
       saveCallback: () {},
       content: FutureBuilder<bool>(
         future: viewModel.getQuicSettings(),

@@ -9,6 +9,12 @@ extension MaterialStateSet on Set<MaterialState> {
 class AppThemeData {
   ThemeData get materialTheme {
     return ThemeData(
+      dataTableTheme: DataTableThemeData(
+        headingTextStyle: const TextStyle(color: Color(0xfffafafa)),
+        headingRowColor: MaterialStateProperty.all(const Color(0xff2a2a2a)),
+        decoration: BoxDecoration(
+            color: const Color(0xff1e1e1e), border: Border.all(color: Themes.borderColor, width: 1)),
+      ),
       dialogBackgroundColor: const Color(0xff1e1e1e),
       dividerColor: const Color(0xff3e3e3e),
       textTheme: const TextTheme(
@@ -19,12 +25,11 @@ class AppThemeData {
       inputDecorationTheme: const InputDecorationTheme(
           filled: true,
           fillColor: Color(0xff2a2a2a),
+          hintStyle: TextStyle(color: Color(0xff757575)),
           prefixIconColor: Color(0xfffafafa),
           enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xff505050), width: 3)),
           isDense: true,
           border: UnderlineInputBorder(
-              // borderSide: BorderSide(color: Colors.amber, width: 3),
-              // borderSide: BorderSide(color: Color(0xff505050), width: 3),
               borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
           contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 3))),
@@ -93,11 +98,15 @@ class Themes {
             splashFactory: NoSplash.splashFactory,
             padding: MaterialStateProperty.all(padding),
             shape: MaterialStateProperty.all(outlinedBorder),
-            foregroundColor: MaterialStateProperty.all(const Color(0xfffafafa)),
+            // foregroundColor: MaterialStateProperty.all(const Color(0xfffafafa)),
+            foregroundColor: MaterialStateProperty.resolveWith((states) {
+              if (states.isDisabled) return const Color(0xff8e8e8e);
+              return const Color(0xfffafafa);
+            }),
             overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: MaterialStateProperty.resolveWith((states) {
               if (states.isPressed) return const Color(0xff8a3145);
-              if (states.isDisabled) return const Color(0xffdcead3);
+              if (states.isDisabled) return const Color(0xff892025);
               return const Color(0xffF5222D);
             }),
           )

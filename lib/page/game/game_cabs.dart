@@ -101,7 +101,7 @@ class _GameCabItem extends StatelessWidget {
         child: SizedBox(
           height: 150,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(8),
             child: Stack(
               children: [
                 Positioned.fill(child: Image(image: _getBackground(machine.id!), fit: BoxFit.fitWidth)),

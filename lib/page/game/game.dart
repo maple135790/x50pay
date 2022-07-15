@@ -135,11 +135,10 @@ class _StoreItem extends StatelessWidget {
                 await SharedPreferences.getInstance()
                   ..setString('store_name', store.name!)
                   ..setString('store_id', store.sid!.toString());
-                await EasyLoading.showSuccess('已切換至${store.name}', duration: const Duration(seconds: 2))
-                    .then((_) async {
-                  await Future.delayed(const Duration(seconds: 2));
-                  navigator.pushNamed(AppRoute.game);
-                });
+                await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
+                    duration: const Duration(seconds: 2));
+                await Future.delayed(const Duration(seconds: 2));
+                navigator.pushNamed(AppRoute.game);
               },
               child: Padding(
                 padding: const EdgeInsets.all(15),
