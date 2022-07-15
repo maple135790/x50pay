@@ -222,6 +222,42 @@ class _R_Image_AssetResource {
   final x50mgs_jpg = const AssetResource("assets/images/game/store/x50mgs.jpg",
       packageName: null);
 
+  /// asset: assets/images/gradeBox/chu_80.png
+  // ignore: non_constant_identifier_names
+  final chu_80 = const AssetResource("assets/images/gradeBox/chu_80.png",
+      packageName: null);
+
+  /// asset: assets/images/gradeBox/mayhem.png
+  // ignore: non_constant_identifier_names
+  final mayhem = const AssetResource("assets/images/gradeBox/mayhem.png",
+      packageName: null);
+
+  /// asset: assets/images/gradeBox/miku2nd.png
+  // ignore: non_constant_identifier_names
+  final miku2nd = const AssetResource("assets/images/gradeBox/miku2nd.png",
+      packageName: null);
+
+  /// asset: assets/images/gradeBox/mmdxc.jpg
+  // ignore: non_constant_identifier_names
+  final mmdxc_jpg = const AssetResource("assets/images/gradeBox/mmdxc.jpg",
+      packageName: null);
+
+  /// asset: assets/images/gradeBox/ouo_80.png
+  // ignore: non_constant_identifier_names
+  final ouo_80 = const AssetResource("assets/images/gradeBox/ouo_80.png",
+      packageName: null);
+
+  /// asset: assets/images/gradeBox/sdvx10th.jpg
+  // ignore: non_constant_identifier_names
+  final sdvx10th_jpg = const AssetResource(
+      "assets/images/gradeBox/sdvx10th.jpg",
+      packageName: null);
+
+  /// asset: assets/images/gradeBox/vvelcome.png
+  // ignore: non_constant_identifier_names
+  final vvelcome = const AssetResource("assets/images/gradeBox/vvelcome.png",
+      packageName: null);
+
   /// asset: assets/images/home/mari_level/ouo.png
   // ignore: non_constant_identifier_names
   final ouo$1 = const AssetResource("assets/images/home/mari_level/ouo.png",
@@ -247,6 +283,11 @@ class _R_Image_AssetResource {
 // ignore: camel_case_types
 class _R_Svg_AssetResource {
   const _R_Svg_AssetResource();
+
+  /// asset: assets/images/common/torii.svg
+  // ignore: non_constant_identifier_names
+  final torii =
+      const AssetResource("assets/images/common/torii.svg", packageName: null);
 }
 
 // ignore: camel_case_types
@@ -416,6 +457,48 @@ class _R_Image {
     return AssetImage(asset.x50mgs_jpg.keyName);
   }
 
+  /// asset: assets/images/gradeBox/chu_80.png
+  // ignore: non_constant_identifier_names
+  AssetImage chu_80() {
+    return AssetImage(asset.chu_80.keyName);
+  }
+
+  /// asset: assets/images/gradeBox/mayhem.png
+  // ignore: non_constant_identifier_names
+  AssetImage mayhem() {
+    return AssetImage(asset.mayhem.keyName);
+  }
+
+  /// asset: assets/images/gradeBox/miku2nd.png
+  // ignore: non_constant_identifier_names
+  AssetImage miku2nd() {
+    return AssetImage(asset.miku2nd.keyName);
+  }
+
+  /// asset: assets/images/gradeBox/mmdxc.jpg
+  // ignore: non_constant_identifier_names
+  AssetImage mmdxc_jpg() {
+    return AssetImage(asset.mmdxc_jpg.keyName);
+  }
+
+  /// asset: assets/images/gradeBox/ouo_80.png
+  // ignore: non_constant_identifier_names
+  AssetImage ouo_80() {
+    return AssetImage(asset.ouo_80.keyName);
+  }
+
+  /// asset: assets/images/gradeBox/sdvx10th.jpg
+  // ignore: non_constant_identifier_names
+  AssetImage sdvx10th_jpg() {
+    return AssetImage(asset.sdvx10th_jpg.keyName);
+  }
+
+  /// asset: assets/images/gradeBox/vvelcome.png
+  // ignore: non_constant_identifier_names
+  AssetImage vvelcome() {
+    return AssetImage(asset.vvelcome.keyName);
+  }
+
   /// asset: assets/images/home/mari_level/ouo.png
   // ignore: non_constant_identifier_names
   AssetImage ouo$1() {
@@ -447,6 +530,14 @@ class _R_Svg {
   const _R_Svg();
 
   final asset = const _R_Svg_AssetResource();
+
+  /// asset: assets/images/common/torii.svg
+  // ignore: non_constant_identifier_names
+  AssetSvg torii({required double width, required double height}) {
+    final imageProvider =
+        AssetSvg(asset.torii.keyName, width: width, height: height);
+    return imageProvider;
+  }
 }
 
 /// This `_R_Text` class is generated and contains references to static text asset resources.

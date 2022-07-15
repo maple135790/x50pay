@@ -16,16 +16,22 @@ class GlobalSingleton {
     user = null;
   }
 
-  Future<void> checkUser({bool force = false}) async {
+  Future<bool> checkUser({bool force = false}) async {
+    await Future.delayed(const Duration(milliseconds: 300));
     try {
       final current = DateTime.now().millisecondsSinceEpoch;
       final isLess30Sec = (current ~/ 1000) - _lastChkMe < 30;
 
-      if (isLess30Sec && !force) return;
+      if (isLess30Sec && !force) return false;
       final repo = Repository();
       _lastChkMe = DateTime.now().millisecondsSinceEpoch;
       if (!kDebugMode || isOnline) {
         user = await repo.getUser();
+        // 未回傳UserModel
+        if (user == null) return false;
+        // 回傳UserModel, 驗證失敗或是伺服器錯誤
+        if (user!.code != 200) return false;
+        return true;
       } else {
         user = UserModel(
             message: "done",
@@ -43,7 +49,10 @@ class GlobalSingleton {
             sixn: "575707",
             tphone: 1,
             doorpwd: "本期門禁密碼爲 : 1743#");
+        return true;
       }
-    } on Exception catch (_) {}
+    } on Exception catch (_) {
+      return false;
+    }
   }
 }

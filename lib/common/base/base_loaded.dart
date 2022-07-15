@@ -23,6 +23,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   bool disableBottomNavigationBar = false;
   Widget body();
   LoadedHeaderType headerType = LoadedHeaderType.normal;
+  void Function()? debugFunction;
   Color? customBackgroundColor;
   int? point;
 
@@ -46,6 +47,15 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
 
   @override
   Widget build(BuildContext context) {
+    checkUser() async {
+      final val = await GlobalSingleton.instance.checkUser(force: true);
+      if (val == false) {
+        await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
+      } else {
+        return;
+      }
+    }
+
     final backgroundColor = customBackgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
     String? currentPage = subPageOf ??= ModalRoute.of(context)?.settings.name?.split('/').last;
     Color pressedColor(String tabName) {
@@ -68,22 +78,34 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
+          floatingActionButton: kDebugMode && debugFunction != null
+              ? FloatingActionButton(onPressed: debugFunction, child: const Icon(Icons.developer_mode))
+              : null,
           backgroundColor: backgroundColor,
           body: SafeArea(
-            child: Scrollbar(
-              child: SingleChildScrollView(
-                  child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 700),
-                child: Column(
-                  children: [
-                    headerType == LoadedHeaderType.normal
-                        ? const _LoadedHeader()
-                        : _LoadedHeader.functional(point: point ?? -87),
-                    body(),
-                    const SizedBox(height: 20)
-                  ],
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await GlobalSingleton.instance.checkUser();
+              },
+              child: Scrollbar(
+                child: SingleChildScrollView(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 700),
+                      child: Column(
+                        children: [
+                          headerType == LoadedHeaderType.normal
+                              ? const _LoadedHeader()
+                              : _LoadedHeader.functional(point: point ?? -87),
+                          body(),
+                          const SizedBox(height: 20)
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              )),
+              ),
             ),
           ),
           bottomNavigationBar: !disableBottomNavigationBar
@@ -97,10 +119,11 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                           color: backgroundColor,
                           child: InkWell(
                             onTap: () async {
+                              final nav = Navigator.of(context);
+                              await checkUser();
                               if (NavigationHistoryObserver().top!.settings.name == AppRoute.home) {
                                 setState(() {});
                               } else {
-                                final nav = Navigator.of(context);
                                 await _intentedDelay();
                                 nav.popUntil(ModalRoute.withName(AppRoute.home));
                               }
@@ -124,6 +147,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                           color: backgroundColor,
                           child: InkWell(
                             onTap: () async {
+                              await checkUser();
                               await _tabNavigateTo(AppRoute.game);
                             },
                             child: Padding(
@@ -145,6 +169,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                           color: backgroundColor,
                           child: InkWell(
                             onTap: () async {
+                              await checkUser();
                               await _tabNavigateTo(AppRoute.account);
                             },
                             child: Padding(
@@ -267,7 +292,7 @@ class _LoadedHeader extends StatelessWidget {
               const SizedBox(width: 20),
               IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(NoTransitionRouter(const ScanQRCodeV2()));
+                    // Navigator.of(context).push(NoTransitionRouter(const ScanQRCodeV2()));
                   },
                   icon: const Icon(Icons.qr_code, size: 28),
                   color: const Color(0xfffafafa)),

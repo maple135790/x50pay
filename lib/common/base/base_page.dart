@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
   bool isHeaderBackType = false;
   String? floatHeaderText;
   bool isDarkHeader = false;
+  void Function()? debugFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +34,27 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
+          floatingActionButton: kDebugMode && debugFunction != null
+              ? FloatingActionButton(onPressed: debugFunction, child: const Icon(Icons.developer_mode))
+              : null,
           body: SafeArea(
             child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 700),
-                child: Column(
-                  children: [
-                    headerType == HeaderType.normal
-                        ? _Header(isDark: isDarkHeader)
-                        : _Header.float(
-                            isBackType: isHeaderBackType, title: floatHeaderText, isDark: isDarkHeader),
-                    body(),
-                    isShowFooter
-                        ? const Padding(padding: EdgeInsets.all(30), child: _Footer())
-                        : const SizedBox()
-                  ],
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 700),
+                  child: Column(
+                    children: [
+                      headerType == HeaderType.normal
+                          ? _Header(isDark: isDarkHeader)
+                          : _Header.float(
+                              isBackType: isHeaderBackType, title: floatHeaderText, isDark: isDarkHeader),
+                      body(),
+                      isShowFooter
+                          ? const Padding(padding: EdgeInsets.all(30), child: _Footer())
+                          : const SizedBox()
+                    ],
+                  ),
                 ),
               ),
             ),

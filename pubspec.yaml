@@ -43,6 +43,7 @@ flutter:
   - assets/images/common/logo.jpg
   - assets/images/common/logo_150.jpg
   - assets/images/common/ouo.png
+  - assets/images/common/torii.svg
   - assets/images/dev/dev_avatar.png
   - assets/images/game/machine/chu.png
   - assets/images/game/machine/ddr.png
@@ -62,6 +63,13 @@ flutter:
   - assets/images/game/machine/x40wac.png
   - assets/images/game/store/x40mgs.jpg
   - assets/images/game/store/x50mgs.jpg
+  - assets/images/gradeBox/chu_80.png
+  - assets/images/gradeBox/mayhem.png
+  - assets/images/gradeBox/miku2nd.png
+  - assets/images/gradeBox/mmdxc.jpg
+  - assets/images/gradeBox/ouo_80.png
+  - assets/images/gradeBox/sdvx10th.jpg
+  - assets/images/gradeBox/vvelcome.png
   - assets/images/home/mari_level/ouo.png
   - assets/images/home/top.png
   - assets/images/home/vts.png

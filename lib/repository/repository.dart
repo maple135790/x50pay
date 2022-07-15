@@ -304,7 +304,6 @@ class Repository extends Api {
     await Api.makeRequest(
       dest: '/cablist/$machineId',
       method: HttpMethod.post,
-      verbose: true,
       withSession: true,
       body: {},
       onSuccess: (json) {
@@ -377,5 +376,20 @@ class Repository extends Api {
       },
     );
     return result;
+  }
+
+  Future<BasicResponse> chgGradev2({required String gid, required String grid}) async {
+    late BasicResponse basicResponse;
+
+    await Api.makeRequest(
+      dest: '/change/Gradev2',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'grid': grid, 'gid': gid},
+      onSuccess: (json) {
+        basicResponse = BasicResponse.fromJson(json);
+      },
+    );
+    return basicResponse;
   }
 }
