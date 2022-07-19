@@ -70,7 +70,7 @@ class _HomeLoadedState extends State<_HomeLoaded> {
   Widget build(BuildContext context) {
     final user = widget.user;
     final entry = widget.viewModel.entry!;
-    final gradeLv = entry.gr2[0].toString();
+    final gradeLv = entry.gr2[0].toInt().toString();
     final gr2HowMuch = entry.gr2[1].toInt().toString();
     final gr2Limit = entry.gr2[2].toInt().toString();
     final gr2Next = entry.gr2[3].toString();
