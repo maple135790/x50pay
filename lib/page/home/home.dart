@@ -1,20 +1,16 @@
 import 'dart:convert';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:location/location.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
-import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/buyMPass/buy_mpass.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
@@ -132,7 +128,7 @@ class _HomeLoadedState extends State<_HomeLoaded> {
                         border: Border.all(color: Themes.borderColor)),
                     child: IntrinsicHeight(
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Column(
@@ -165,12 +161,14 @@ class _HomeLoadedState extends State<_HomeLoaded> {
                             ],
                           ),
                           const Spacer(),
-                          const VerticalDivider(thickness: 1),
-                          IconButton(
-                              onPressed: () async {
-                                await showDialog(context: context, builder: (context) => const ScanQRCode());
-                              },
-                              icon: const Icon(Icons.qr_code, color: Color(0xfffafafa), size: 45))
+                          const VerticalDivider(thickness: 1, width: 0),
+                          const SizedBox(width: 16),
+                          GestureDetector(
+                            onTap: () async {
+                              await showDialog(context: context, builder: (context) => const ScanQRCode());
+                            },
+                            child: const Icon(Icons.qr_code, color: Color(0xfffafafa), size: 45),
+                          ),
                         ],
                       ),
                     ),
@@ -197,9 +195,9 @@ class _HomeLoadedState extends State<_HomeLoaded> {
                                 .push(MaterialPageRoute(builder: (context) => const BuyMPass()));
                           },
                           child: const Icon(Icons.confirmation_number, color: Color(0xff237804), size: 50)),
-                      const SizedBox(width: 10),
-                      const VerticalDivider(thickness: 1),
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 16),
+                      const VerticalDivider(thickness: 1, width: 0),
+                      const SizedBox(width: 15),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
