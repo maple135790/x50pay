@@ -9,7 +9,6 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -67,9 +66,6 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
       headerType =
           baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.normal;
       point = GlobalSingleton.instance.user?.point?.toInt();
-      if (kDebugMode) {
-        // print("user.toString()   ${GlobalSingleton.instance.user.toString()}");
-      }
     }
     return ChangeNotifierProvider.value(
       value: baseViewModel(),
@@ -110,7 +106,14 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
           ),
           bottomNavigationBar: !disableBottomNavigationBar
               ? Container(
-                  decoration: BoxDecoration(border: Border.all(color: const Color(0xff3e3e3e), width: 1)),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: const Color(0xff3e3e3e), width: 1), boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3)),
+                  ]),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
