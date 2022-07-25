@@ -10,7 +10,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/buyMPass/buy_mpass.dart';
@@ -119,46 +118,6 @@ class _HomeLoadedState extends State<_HomeLoaded> {
       ),
     );
   }
-
-  void checkRemoteOpen() async {
-    final location = Location();
-    double deg2rad(double deg) => deg * (pi / 180);
-
-    double getDistance(double lat1, double lon1, double lat2, double lon2) {
-      var R = 6371; // Radius of the earth in km
-      var dLat = deg2rad(lat2 - lat1); // deg2rad below
-      var dLon = deg2rad(lon2 - lon1);
-      var a = sin(dLat / 2) * sin(dLat / 2) +
-          cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon / 2) * sin(dLon / 2);
-      var c = 2 * atan2(sqrt(a), sqrt(1 - a));
-      var d = R * c; // Distance in km
-      return d;
-    }
-
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-    LocationData locationData;
-
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) return;
-    }
-
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-
-    locationData = await location.getLocation();
-    double myLat = locationData.latitude!;
-    double myLng = locationData.longitude!;
-    String result = await Repository().remoteOpenDoor(getDistance(25.0455991, 121.5027702, myLat, myLng));
-    await EasyLoading.showInfo(result.replaceFirst(',', '\n'));
-  }
 }
 
 class _TicketInfo extends StatelessWidget {
@@ -170,8 +129,8 @@ class _TicketInfo extends StatelessWidget {
   }) : super(key: key);
 
   String vipExpDate() {
-    final date = DateTime.fromMillisecondsSinceEpoch(user.vipdate!.date - 480 * 60000);
-    return '${date.month + 1}/${date.day} ${date.hour}:${date.minute}';
+    final date = DateTime.fromMillisecondsSinceEpoch(user.vipdate!.date);
+    return '${date.month}/${date.day} ${date.hour}:${date.minute}';
   }
 
   @override
@@ -434,7 +393,10 @@ class _TopInfo extends StatelessWidget {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: user.userimg != null
-                      ? DecorationImage(image: NetworkImage(user.userimg!), fit: BoxFit.fill)
+                      ? DecorationImage(
+                          image: NetworkImage(
+                              user.userimg! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg"),
+                          fit: BoxFit.fill)
                       : DecorationImage(image: R.image.logo_150_jpg(), fit: BoxFit.fill))),
           const SizedBox(width: 12),
           Expanded(

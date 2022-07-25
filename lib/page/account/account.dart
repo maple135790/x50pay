@@ -65,7 +65,10 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 child: Row(
                   children: [
                     user.userimg != null
-                        ? CircleAvatar(foregroundImage: NetworkImage(user.userimg!), radius: 30)
+                        ? CircleAvatar(
+                            foregroundImage: NetworkImage(
+                                user.userimg! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg"),
+                            radius: 30)
                         : CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 30),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
