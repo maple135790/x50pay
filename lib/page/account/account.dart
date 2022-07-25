@@ -43,11 +43,18 @@ class Account extends StatefulWidget {
 class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
   final user = GlobalSingleton.instance.user!;
   final viewModel = AccountViewModel();
+  late String avatarUrl;
   @override
   BaseViewModel? baseViewModel() => viewModel;
 
   @override
   Widget body() {
+    if (user.userimg!.contains('size')) {
+      avatarUrl =
+          '${user.userimg!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
+    } else {
+      avatarUrl = user.userimg! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+    }
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -66,9 +73,9 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                   children: [
                     user.userimg != null
                         ? CircleAvatar(
-                            foregroundImage: NetworkImage(
-                                user.userimg! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg"),
-                            radius: 30)
+                            foregroundImage: NetworkImage(avatarUrl),
+                            radius: 30,
+                            backgroundImage: R.image.logo_150_jpg())
                         : CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 30),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
