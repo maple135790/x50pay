@@ -116,45 +116,75 @@ class _StoreItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-      elevation: 5,
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+          border: Border.all(color: Themes.borderColor), borderRadius: BorderRadius.circular(5)),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7.5),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
-        child: Material(
-          child: Ink.image(
-            colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.9), BlendMode.modulate),
-            alignment: Alignment.bottomCenter,
-            image: _getBackground(store.name!),
-            fit: BoxFit.fitWidth,
+        child: GestureDetector(
+          onTap: () async {
+            final navigator = Navigator.of(context);
+            await SharedPreferences.getInstance()
+              ..setString('store_name', store.name!)
+              ..setString('store_id', store.sid!.toString());
+            await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...', duration: const Duration(seconds: 2));
+            await Future.delayed(const Duration(seconds: 2));
+            navigator.pushNamed(AppRoute.game);
+          },
+          child: SizedBox(
             width: double.infinity,
-            height: 180,
-            child: InkWell(
-              onTap: () async {
-                final navigator = Navigator.of(context);
-                await SharedPreferences.getInstance()
-                  ..setString('store_name', store.name!)
-                  ..setString('store_id', store.sid!.toString());
-                await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
-                    duration: const Duration(seconds: 2));
-                await Future.delayed(const Duration(seconds: 2));
-                navigator.pushNamed(AppRoute.game);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(store.name!, style: const TextStyle(color: Colors.white, fontSize: 18)),
-                    Row(children: [
-                      const Icon(Icons.near_me, size: 15, color: Color(0xe6ffffff)),
-                      Text('  | ${store.address!}', style: const TextStyle(color: Color(0xe6ffffff)))
-                    ]),
-                  ],
+            height: 150,
+            child: Stack(
+              children: [
+                Positioned(
+                    width: 400,
+                    top: -100,
+                    child: Image(
+                      image: _getBackground(store.name!),
+                      fit: BoxFit.fitWidth,
+                      colorBlendMode: BlendMode.modulate,
+                    )),
+                Positioned.fill(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Colors.transparent, Colors.black54],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: [0.1, 1]),
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  bottom: 15,
+                  left: 15,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Text(store.name!, style: const TextStyle(color: Colors.white, fontSize: 18)),
+                      //             Row(children: [
+                      //               const Icon(Icons.near_me, size: 15, color: Color(0xe6ffffff)),
+                      //               Text('  | ${store.address!}', style: const TextStyle(color: Color(0xe6ffffff)))
+                      //             ]),
+                      Text(store.name!,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
+                      Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                        const Icon(Icons.near_me, size: 15, color: Color(0xe6ffffff)),
+                        Text('  | ${store.address!}',
+                            style: const TextStyle(
+                                color: Color(0xffbcbfbf),
+                                fontSize: 13,
+                                shadows: [Shadow(color: Colors.black, blurRadius: 15)]))
+                      ]),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),

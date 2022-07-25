@@ -21,7 +21,7 @@ class _GameCabs extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5)),
             child: Row(
               children: [
-                const Icon(Icons.search, color: Color(0xfffafafa), size: 16),
+                const Icon(Icons.push_pin, color: Color(0xfffafafa), size: 16),
                 Text('  目前所在「 $storeName 」', style: const TextStyle(color: Color(0xfffafafa))),
                 const Spacer(),
                 GestureDetector(
@@ -33,24 +33,12 @@ class _GameCabs extends StatelessWidget {
                     nav.pushReplacementNamed(AppRoute.game);
                   },
                   child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: const Color(0xfffafafa),
-                    ),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(8), color: const Color(0xfffafafa)),
                     padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     child: Icon(Icons.sync, color: bgColor, size: 26),
                   ),
                 ),
-                // TextButton(
-                //     onPressed: () async {
-                //       final nav = Navigator.of(context);
-                //       final prefs = await SharedPreferences.getInstance();
-                //       await prefs.remove('store_name');
-                //       await prefs.remove('store_id');
-                //       nav.pushReplacementNamed(AppRoute.game);
-                //     },
-                //     style: Themes.pale(padding: EdgeInsets.symmetric(horizontal: 0)),
-                //     child: const Icon(Icons.sync, size: 26))
               ],
             )),
         ListView.builder(
@@ -59,20 +47,41 @@ class _GameCabs extends StatelessWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) => _GameCabItem(machine[index]),
         ),
-        Container(
-          padding: const EdgeInsets.all(20),
-          margin: const EdgeInsets.symmetric(horizontal: 15),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text('優惠時段:\n', style: TextStyle(color: Color(0xfffafafa), fontSize: 16)),
-              Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案', style: TextStyle(color: Color(0xfffafafa))),
-              SizedBox(height: 5),
-              Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xfffafafa))),
-            ],
-          ),
-        )
+        Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 80,
+              margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+              padding: const EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Themes.borderColor, width: 1),
+                  borderRadius: BorderRadius.circular(5),
+                  shape: BoxShape.rectangle),
+            ),
+            Positioned(
+                left: 35,
+                top: 12,
+                child: Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: const Text('優惠時段', style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
+                )),
+            Positioned(
+              top: 40,
+              left: 35,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案', style: TextStyle(color: Color(0xfffafafa))),
+                  SizedBox(height: 5),
+                  Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xfffafafa))),
+                ],
+              ),
+            )
+          ],
+        ),
       ],
     );
   }
@@ -98,27 +107,34 @@ class _GameCabItem extends StatelessWidget {
         onTap: () async {
           Navigator.of(context).push(NoTransitionRouter(_CabDetail(machine.id!)));
         },
-        child: SizedBox(
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5), border: Border.all(color: Themes.borderColor)),
           height: 150,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(5),
             child: Stack(
               children: [
-                Positioned.fill(child: Image(image: _getBackground(machine.id!), fit: BoxFit.fitWidth)),
+                Positioned.fill(
+                    child: Image(
+                        image: _getBackground(machine.id!),
+                        fit: BoxFit.fitWidth,
+                        alignment: Alignment.topCenter)),
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Colors.transparent, Colors.black],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.1, 1]),
+                      gradient: RadialGradient(
+                          colors: [Colors.black54, Colors.transparent],
+                          radius: 2.5,
+                          focalRadius: 5,
+                          center: Alignment(-1, 1.8),
+                          stops: [0.3, 1]),
                     ),
                   ),
                 ),
                 Positioned(
-                  bottom: 15,
-                  left: 15,
+                  bottom: 8,
+                  left: 10,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -129,9 +145,9 @@ class _GameCabItem extends StatelessWidget {
                               shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
                       Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                         const Icon(Icons.schedule, size: 15, color: Color(0xe6ffffff)),
-                        Text('  | $time$addition',
+                        Text('  $time$addition',
                             style: const TextStyle(
-                                color: Color(0xffbcbfbf),
+                                color: Color(0xffffffe6),
                                 fontSize: 13,
                                 shadows: [Shadow(color: Colors.black, blurRadius: 15)]))
                       ]),

@@ -109,8 +109,8 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                   decoration:
                       BoxDecoration(border: Border.all(color: const Color(0xff3e3e3e), width: 1), boxShadow: [
                     BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 5,
+                        color: Colors.black87.withOpacity(0.5),
+                        spreadRadius: 10,
                         blurRadius: 7,
                         offset: const Offset(0, 3)),
                   ]),
@@ -286,9 +286,11 @@ class _LoadedHeader extends StatelessWidget {
               ),
               const Spacer(),
               Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5.5, horizontal: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
                   decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: const Color(0xff3e3e3e)),
+                      boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 15, spreadRadius: 0.5)],
+                      color: const Color(0xff3e3e3e),
+                      // border: Border.all(width: 1, color: const Color(0xff3e3e3e)),
                       borderRadius: BorderRadius.circular(5)),
                   child: Text('$point P',
                       style: const TextStyle(color: Color(0xfffafafa), fontWeight: FontWeight.bold))),

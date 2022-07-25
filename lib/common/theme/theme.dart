@@ -15,6 +15,8 @@ class AppThemeData {
         decoration: BoxDecoration(
             color: const Color(0xff1e1e1e), border: Border.all(color: Themes.borderColor, width: 1)),
       ),
+      dialogTheme: const DialogTheme(
+          titleTextStyle: TextStyle(color: Color(0xfffafafa), fontSize: 20, wordSpacing: 0.15)),
       dialogBackgroundColor: const Color(0xff1e1e1e),
       dividerColor: const Color(0xff3e3e3e),
       textTheme: const TextTheme(
