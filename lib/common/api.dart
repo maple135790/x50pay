@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,7 +13,6 @@ abstract class Api {
     ContentType contentType = ContentType.json,
     Map<String, String>? session,
     String? customDest,
-    bool isResponseString = false,
     bool verbose = false,
     required String dest,
     required Map<String, dynamic> body,
@@ -24,6 +24,7 @@ abstract class Api {
     bool withSession = false,
   }) async {
     http.Response response;
+    bool isResponseString = onSuccessString != null;
     bool isEmptyBody = body.isEmpty;
     String? session;
 
@@ -50,9 +51,7 @@ abstract class Api {
                 : null,
             encoding: Encoding.getByName('utf-8'));
         if (response.statusCode == 200) {
-          isResponseString
-              ? onSuccessString?.call(response.body)
-              : onSuccess?.call(jsonDecode(response.body));
+          isResponseString ? onSuccessString.call(response.body) : onSuccess?.call(jsonDecode(response.body));
         } else {
           onError?.call(response.statusCode, response.body);
           throw Exception(['response code: ', response.statusCode, '\nresponse body: ', response.body]);
@@ -66,9 +65,7 @@ abstract class Api {
           headers: withSession ? {'Cookie': 'session=$session'} : null,
         );
         if (response.statusCode == 200) {
-          isResponseString
-              ? onSuccessString?.call(response.body)
-              : onSuccess?.call(jsonDecode(response.body));
+          isResponseString ? onSuccessString.call(response.body) : onSuccess?.call(jsonDecode(response.body));
         } else {
           onError?.call(response.statusCode, response.body);
           throw Exception(['response code: ', response.statusCode, '\nresponse body: ', response.body]);
@@ -76,10 +73,14 @@ abstract class Api {
         responseHeader?.call(response.headers);
         break;
     }
-    if (verbose) {
+    if (verbose && kDebugMode) {
+      // ignore: avoid_print
       print('request:');
+      // ignore: avoid_print
       print(response.request);
+      // ignore: avoid_print
       print('response:');
+      // ignore: avoid_print
       print(response.body);
     }
   }

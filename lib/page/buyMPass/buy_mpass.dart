@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 
 enum _MpassState { info, choosePlan }

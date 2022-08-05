@@ -6,6 +6,8 @@ import 'package:x50pay/common/models/bid/bid.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
+import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/padSettings/pad_settings.dart';
 import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
@@ -337,7 +339,6 @@ class Repository extends Api {
       method: HttpMethod.post,
       withSession: true,
       body: {},
-      isResponseString: true,
       onSuccessString: (text) {
         lineupCount = int.parse(text);
       },
@@ -353,7 +354,6 @@ class Repository extends Api {
       contentType: ContentType.xForm,
       withSession: true,
       body: {'code': rawText},
-      isResponseString: true,
       onSuccessString: (text) {
         result = text;
       },
@@ -370,7 +370,6 @@ class Repository extends Api {
       contentType: ContentType.xForm,
       withSession: true,
       body: {},
-      isResponseString: true,
       onSuccessString: (text) {
         result = text;
       },
@@ -391,5 +390,60 @@ class Repository extends Api {
       },
     );
     return basicResponse;
+  }
+
+  Future<GiftBoxModel> getGiftBox() async {
+    late GiftBoxModel giftBoxModel;
+
+    await Api.makeRequest(
+      dest: '/giftBox',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        giftBoxModel = GiftBoxModel.fromJson(json);
+      },
+    );
+    return giftBoxModel;
+  }
+
+  Future<LotteListModel> getLotteList() async {
+    late LotteListModel lotteListModel;
+
+    await Api.makeRequest(
+      dest: '/lotte/list',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        lotteListModel = LotteListModel.fromJson(json);
+      },
+    );
+    return lotteListModel;
+  }
+
+  Future<String> lotteSave() async {
+    late String res;
+
+    await Api.makeRequest(
+      dest: '/lotte/save',
+      method: HttpMethod.post,
+      onSuccessString: (str) {
+        res = str;
+      },
+      withSession: true,
+      body: {},
+    );
+    return res;
+  }
+
+  Future<void> giftExchange(String gid) async {
+    await Api.makeRequest(
+      dest: '/confirmGFID',
+      method: HttpMethod.post,
+      withSession: true,
+      body: {'contentgid': gid},
+    );
+    return;
   }
 }

@@ -329,7 +329,7 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                     dismissOnTap: false, duration: const Duration(seconds: 2));
               }
             },
-            style: Themes.severe(),
+            style: Themes.severe(isV4: true),
             child: const Text('登出'))
       ],
     );

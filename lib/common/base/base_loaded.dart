@@ -22,6 +22,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   bool disableBottomNavigationBar = false;
   Widget body();
   LoadedHeaderType headerType = LoadedHeaderType.normal;
+  bool isScrollable = true;
   void Function()? debugFunction;
   Color? customBackgroundColor;
   int? point;
@@ -83,25 +84,40 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
               onRefresh: () async {
                 await GlobalSingleton.instance.checkUser();
               },
-              child: Scrollbar(
-                child: SingleChildScrollView(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 700),
-                      child: Column(
-                        children: [
-                          headerType == LoadedHeaderType.normal
-                              ? const _LoadedHeader()
-                              : _LoadedHeader.functional(point: point ?? -87),
-                          body(),
-                          const SizedBox(height: 20)
-                        ],
+              child: isScrollable
+                  ? Scrollbar(
+                      child: SingleChildScrollView(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 700),
+                            child: Column(
+                              children: [
+                                headerType == LoadedHeaderType.normal
+                                    ? const _LoadedHeader()
+                                    : _LoadedHeader.functional(point: point ?? -87),
+                                body(),
+                                const SizedBox(height: 20)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Align(
+                      alignment: Alignment.topCenter,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 700),
+                        child: Column(
+                          children: [
+                            headerType == LoadedHeaderType.normal
+                                ? const _LoadedHeader()
+                                : _LoadedHeader.functional(point: point ?? -87),
+                            Expanded(child: body()),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
             ),
           ),
           bottomNavigationBar: !disableBottomNavigationBar
@@ -193,10 +209,12 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                         child: Material(
                           color: backgroundColor,
                           child: InkWell(
-                            onTap: () {
-                              if (ModalRoute.of(context)!.settings.name != AppRoute.home) {
-                                Navigator.of(context).pushNamed(AppRoute.home);
-                              }
+                            onTap: () async {
+                              // if (ModalRoute.of(context)!.settings.name != AppRoute.home) {
+                              //   Navigator.of(context).pushNamed(AppRoute.home);
+                              // }
+                              await checkUser();
+                              await _tabNavigateTo(AppRoute.gift);
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),

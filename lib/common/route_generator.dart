@@ -19,8 +19,8 @@ class RouteGenerator {
         return NoTransitionRouter(const Account(), s: settings);
       case AppRoute.buyMPass:
         return NoTransitionRouter(const BuyMPass(), s: settings);
-      // case AppRoute.gift:
-      // return NoTransitionRouter(const Gift(), s: settings);
+      case AppRoute.gift:
+        return NoTransitionRouter(const GiftSystem(), s: settings);
       case AppRoute.home:
         return NoTransitionRouter(const Home(), s: settings);
 

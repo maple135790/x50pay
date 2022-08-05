@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:location/location.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -15,7 +13,6 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/buyMPass/buy_mpass.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/r.g.dart';
-import 'package:x50pay/repository/repository.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
