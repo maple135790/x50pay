@@ -219,10 +219,16 @@ class _MariInfo extends StatelessWidget {
               borderRadius: BorderRadius.circular(5), border: Border.all(color: Themes.borderColor)),
           child: Row(
             children: [
-              const SizedBox(width: 15),
-              Image.memory(base64Decode(ava),
-                  filterQuality: FilterQuality.high, gaplessPlayback: true, height: 270, cacheHeight: 270),
-              const SizedBox(width: 15),
+              SizedBox(
+                width: 173,
+                child: Image.memory(base64Decode(ava),
+                    alignment: Alignment.center,
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.fitHeight,
+                    gaplessPlayback: true,
+                    height: 270,
+                    cacheHeight: 270),
+              ),
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,7 +280,7 @@ class _MariInfo extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 12), children: [
+                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
                               const WidgetSpan(child: Icon(Icons.redeem, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
                               const TextSpan(text: ' 每 '),
@@ -287,7 +293,7 @@ class _MariInfo extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 12), children: [
+                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
                               const WidgetSpan(
                                   child: Icon(Icons.favorite, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
@@ -299,7 +305,7 @@ class _MariInfo extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 12), children: [
+                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
                               const WidgetSpan(
                                   child: Icon(Icons.calendar_today, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
@@ -311,7 +317,7 @@ class _MariInfo extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 12), children: [
+                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
                               const WidgetSpan(
                                   child: Icon(Icons.how_to_vote, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
@@ -324,7 +330,7 @@ class _MariInfo extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 12), children: [
+                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
                               const WidgetSpan(child: Icon(Icons.sync, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
                               const TextSpan(text: ' 重置日期: '),
