@@ -16,7 +16,6 @@ import 'package:x50pay/repository/repository.dart';
 part "../../page/scan/scan.dart";
 
 mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
-  List<String> routeStack = [];
   BaseViewModel? baseViewModel();
   String? subPageOf;
   bool disableBottomNavigationBar = false;
@@ -30,32 +29,36 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   @override
   void initState() {
     super.initState();
-    routeStack.add(AppRoute.home);
   }
 
   Future _tabNavigateTo(String nextRouteName) async {
-    if (NavigationHistoryObserver().top!.settings.name == nextRouteName) {
-      setState(() {});
+    final nav = Navigator.of(context);
+    final val = await GlobalSingleton.instance.checkUser(force: true);
+    if (val == false) {
+      await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
     } else {
-      final nav = Navigator.of(context);
-      await _intentedDelay();
-      NavigationHistoryObserver().history.length == 3
-          ? nav.pushReplacementNamed(nextRouteName)
-          : nav.pushNamed(nextRouteName);
+      if (NavigationHistoryObserver().top!.settings.name == nextRouteName) {
+        setState(() {});
+      } else {
+        await _intentedDelay();
+        NavigationHistoryObserver().history.length == 3
+            ? nav.pushReplacementNamed(nextRouteName)
+            : nav.pushNamed(nextRouteName);
+      }
+    }
+  }
+
+  Future<void> checkUser() async {
+    final val = await GlobalSingleton.instance.checkUser(force: true);
+    if (val == false) {
+      await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
+    } else {
+      return;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    checkUser() async {
-      final val = await GlobalSingleton.instance.checkUser(force: true);
-      if (val == false) {
-        await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
-      } else {
-        return;
-      }
-    }
-
     final backgroundColor = customBackgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
     String? currentPage = subPageOf ??= ModalRoute.of(context)?.settings.name?.split('/').last;
     Color pressedColor(String tabName) {
@@ -82,7 +85,8 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
           body: SafeArea(
             child: RefreshIndicator(
               onRefresh: () async {
-                await GlobalSingleton.instance.checkUser();
+                await GlobalSingleton.instance.checkUser(force: true);
+                setState(() {});
               },
               child: isScrollable
                   ? Scrollbar(
@@ -166,7 +170,6 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                           color: backgroundColor,
                           child: InkWell(
                             onTap: () async {
-                              await checkUser();
                               await _tabNavigateTo(AppRoute.game);
                             },
                             child: Padding(
@@ -188,7 +191,6 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                           color: backgroundColor,
                           child: InkWell(
                             onTap: () async {
-                              await checkUser();
                               await _tabNavigateTo(AppRoute.account);
                             },
                             child: Padding(
@@ -213,7 +215,6 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                               // if (ModalRoute.of(context)!.settings.name != AppRoute.home) {
                               //   Navigator.of(context).pushNamed(AppRoute.home);
                               // }
-                              await checkUser();
                               await _tabNavigateTo(AppRoute.gift);
                             },
                             child: Padding(

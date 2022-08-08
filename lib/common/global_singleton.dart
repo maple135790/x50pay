@@ -4,8 +4,10 @@ import 'package:x50pay/repository/repository.dart';
 
 class GlobalSingleton {
   final isOnline = false;
+  final _costEnabled = false;
   UserModel? user;
   int _lastChkMe = -1;
+  double _point = 220;
   static GlobalSingleton? _instance;
 
   GlobalSingleton._();
@@ -33,13 +35,14 @@ class GlobalSingleton {
         if (user!.code != 200) return false;
         return true;
       } else {
+        if (_costEnabled) _point -= 20;
         user = UserModel(
             message: "done",
             code: 200,
             userimg: 'https://secure.gravatar.com/avatar/6a4cbe004cdedee9738d82fe9670b326?size=250',
             email: "maple135790@gmail.com",
             uid: '938',
-            point: 222,
+            point: _point,
             name: "testUser (Offline)",
             ticketint: 9,
             phoneactive: true,

@@ -58,8 +58,8 @@ class GameViewModel extends BaseViewModel {
         storeName = prefs.getString('store_name');
       } else {
         storeName = prefs.getString('store_name');
-        if (sid == '37656') gamelist = Gamelist.fromJson(jsonDecode(testGamelistWULIN));
-        if (sid == '37657') gamelist = Gamelist.fromJson(jsonDecode(testGamelistSHILIN));
+        if (sid == '7037656') gamelist = Gamelist.fromJson(jsonDecode(testGamelistWULIN));
+        if (sid == '7037657') gamelist = Gamelist.fromJson(jsonDecode(testGamelistSHILIN));
       }
       return true;
     } on Exception catch (_) {

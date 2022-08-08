@@ -105,7 +105,9 @@ class _GameCabItem extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
       child: GestureDetector(
         onTap: () async {
-          Navigator.of(context).push(NoTransitionRouter(_CabDetail(machine.id!)));
+          final nav = Navigator.of(context);
+          await nav.push(NoTransitionRouter(_CabDetail(machine.id!)));
+          nav.pushReplacementNamed(AppRoute.game);
         },
         child: Container(
           decoration: BoxDecoration(
