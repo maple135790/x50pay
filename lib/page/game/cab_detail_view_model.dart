@@ -49,12 +49,18 @@ class CabDatailViewModel extends BaseViewModel {
   }
 
   Future<bool> doInsert(
-      {required bool isTicket, required String machineId, required num mode, int debugFlag = 200}) async {
+      {required bool isTicket,
+      required String id,
+      required int machineNum,
+      required num mode,
+      int debugFlag = 200}) async {
     try {
       await EasyLoading.show();
       await Future.delayed(const Duration(milliseconds: 100));
+      final prefs = await SharedPreferences.getInstance();
+      final sid = prefs.getString('store_id');
       if (!kDebugMode || isForce) {
-        response = await repo.doInsert(isTicket, machineId, mode);
+        response = await repo.doInsert(isTicket, '$id/$sid$machineNum', mode);
       } else {
         response = BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
       }

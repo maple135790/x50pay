@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,14 +96,15 @@ class _GameStoreLoaded extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: storeList.length,
       shrinkWrap: true,
-      itemBuilder: (context, index) => _StoreItem(storeList[index]),
+      itemBuilder: (context, index) => _StoreItem(storeList[index], stores.prefix!),
     );
   }
 }
 
 class _StoreItem extends StatelessWidget {
   final Storelist store;
-  const _StoreItem(this.store, {Key? key}) : super(key: key);
+  final String prefix;
+  const _StoreItem(this.store, this.prefix, {Key? key}) : super(key: key);
 
   ImageProvider _getBackground(String storeName) {
     if (storeName == '西門店') {
@@ -128,7 +130,7 @@ class _StoreItem extends StatelessWidget {
             final navigator = Navigator.of(context);
             await SharedPreferences.getInstance()
               ..setString('store_name', store.name!)
-              ..setString('store_id', store.sid!.toString());
+              ..setString('store_id', prefix + (store.sid!.toString()));
             await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...', duration: const Duration(seconds: 2));
             await Future.delayed(const Duration(seconds: 2));
             navigator.pushNamed(AppRoute.game);

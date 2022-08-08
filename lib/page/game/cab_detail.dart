@@ -57,7 +57,7 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
       model.cabinets[4] = nwcabinet;
       model.cabinets[5] = nwcabinet1;
     }
-    List<Widget> _buildCabBlock() {
+    List<Widget> _buildCabBlock({required String caboid}) {
       List<Widget> widgets = [];
       double gi = note.first;
       int cabGroupIndex = gi.toInt();
@@ -90,7 +90,7 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
               height: 100,
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: _buildChildren(divIndex == 0 ? cabGroup1 : cabGroup2!)),
+                  children: _buildChildren(divIndex == 0 ? cabGroup1 : cabGroup2!, caboid: caboid)),
             ),
           ));
       }
@@ -191,12 +191,12 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
                     child: Image(image: NetworkImage('https://pay.x50.fun${model.spic}', scale: 1))),
               )
             : const SizedBox(),
-        ..._buildCabBlock()
+        ..._buildCabBlock(caboid: model.caboid)
       ],
     );
   }
 
-  List<Widget> _buildChildren(List<Cabinet> cabs) {
+  List<Widget> _buildChildren(List<Cabinet> cabs, {required String caboid}) {
     List<Widget> children = [];
 
     for (Cabinet cab in cabs) {
@@ -206,8 +206,14 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
         onTap: () {
           showDialog(
               context: context,
-              builder: (context) => _CabSelect(viewModel,
-                  label: cab.label, machineId: widget.machineId, machineIndex: cab.num, modes: cab.mode));
+              builder: (context) => _CabSelect(
+                    viewModel,
+                    caboid: caboid,
+                    label: cab.label,
+                    id: widget.machineId,
+                    machineIndex: cab.num,
+                    modes: cab.mode,
+                  ));
         },
         child: Container(
           margin: EdgeInsets.zero,
@@ -236,16 +242,18 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
 
 class _CabSelect extends StatefulWidget {
   final CabDatailViewModel viewModel;
-  final String machineId;
+  final String id;
   final String label;
   final int machineIndex;
+  final String caboid;
   final List<List> modes;
   const _CabSelect(this.viewModel,
       {Key? key,
-      required this.machineId,
+      required this.id,
       required this.label,
       required this.machineIndex,
-      required this.modes})
+      required this.modes,
+      required this.caboid})
       : super(key: key);
 
   @override
@@ -269,6 +277,7 @@ class _CabSelectState extends State<_CabSelect> {
 
   Column confirmPayment() {
     paymentType = paymentType == 'point' ? '點數' : '遊玩券';
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -311,7 +320,8 @@ class _CabSelectState extends State<_CabSelect> {
                       onPressed: () async {
                         final nav = Navigator.of(context);
                         final isInsertSuccess = await widget.viewModel.doInsert(
-                            machineId: widget.machineId,
+                            id: widget.caboid,
+                            machineNum: widget.machineIndex - 1,
                             isTicket: paymentType == 'ticket',
                             mode: widget.modes[0].first);
                         if (isInsertSuccess) {
@@ -390,7 +400,7 @@ class _CabSelectState extends State<_CabSelect> {
             height: 150,
             child: Stack(
               children: [
-                Positioned.fill(child: Image(image: _getBackground(widget.machineId), fit: BoxFit.fitWidth)),
+                Positioned.fill(child: Image(image: _getBackground(widget.id), fit: BoxFit.fitWidth)),
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(

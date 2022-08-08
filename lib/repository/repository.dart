@@ -97,14 +97,9 @@ class Repository extends Api {
       dest: '/gamelist',
       method: HttpMethod.post,
       withSession: true,
-      body: {'sid': '70$storeId'},
+      body: {'sid': storeId},
       onSuccess: (json) {
         gameList = Gamelist.fromJson(json);
-        if (kDebugMode) {
-          print('json\n $json');
-          print('gamelist got!');
-          print(gameList.toJson().toString());
-        }
       },
     );
     return gameList;
@@ -315,12 +310,12 @@ class Repository extends Api {
     return cabinetModel;
   }
 
-  Future<BasicResponse> doInsert(bool isTicket, String machineId, num mode) async {
+  Future<BasicResponse> doInsert(bool isTicket, String id, num mode) async {
     late BasicResponse response;
-    String insertUrl = isTicket ? 'tic/' : 'pay/';
+    String insertUrl = isTicket ? 'tic' : 'pay';
 
     await Api.makeRequest(
-      dest: '/$insertUrl+$machineId/${mode.toInt()}',
+      dest: '/$insertUrl/$id/${mode.toInt()}',
       method: HttpMethod.post,
       withSession: true,
       body: {},
