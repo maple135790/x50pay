@@ -93,6 +93,16 @@ class AssetResource {
 class _R_Image_AssetResource {
   const _R_Image_AssetResource();
 
+  /// asset: assets/images/appIcon/appstore.png
+  // ignore: non_constant_identifier_names
+  final appstore = const AssetResource("assets/images/appIcon/appstore.png",
+      packageName: null);
+
+  /// asset: assets/images/appIcon/playstore.png
+  // ignore: non_constant_identifier_names
+  final playstore = const AssetResource("assets/images/appIcon/playstore.png",
+      packageName: null);
+
   /// asset: assets/images/common/header_float_icon.jpg
   // ignore: non_constant_identifier_names
   final header_float_icon_jpg = const AssetResource(
@@ -306,6 +316,18 @@ class _R_Image {
   const _R_Image();
 
   final asset = const _R_Image_AssetResource();
+
+  /// asset: assets/images/appIcon/appstore.png
+  // ignore: non_constant_identifier_names
+  AssetImage appstore() {
+    return AssetImage(asset.appstore.keyName);
+  }
+
+  /// asset: assets/images/appIcon/playstore.png
+  // ignore: non_constant_identifier_names
+  AssetImage playstore() {
+    return AssetImage(asset.playstore.keyName);
+  }
 
   /// asset: assets/images/common/header_float_icon.jpg
   // ignore: non_constant_identifier_names

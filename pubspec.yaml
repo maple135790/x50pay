@@ -3,7 +3,7 @@ description: x50 pay mockup
 publish_to: none
 version: 1.0.0+1
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: ">=2.17.0 <3.0.0"
 dependencies:
   collection: ^1.16.0
   dio: ^4.0.6
@@ -12,6 +12,11 @@ dependencies:
   flutter_animation_progress_bar: ^2.2.1
   flutter_colorpicker: ^1.0.3
   flutter_easyloading: ^3.0.5
+  flutter_launcher_icons:
+    git:
+      url: https://github.com/Davenchy/flutter_launcher_icons.git
+      ref: fixMinSdkParseFlutter2.8
+  flutter_native_splash: ^2.2.7
   http: ^0.13.4
   json_annotation: ^4.5.0
   location: ^4.4.0
@@ -23,68 +28,96 @@ dependencies:
   qr_code_scanner: ^1.0.0
   r_dart_library:
     git:
-      url: 'https://github.com/YK-Unit/r_dart_library.git'
+      url: "https://github.com/YK-Unit/r_dart_library.git"
       ref: 0.4.1
   retrofit: ^3.0.1+1
   shared_preferences: ^2.0.15
   url_launcher: ^6.1.3
 dev_dependencies:
-  retrofit_generator: '>=4.0.0 <5.0.0'
+  retrofit_generator: ">=4.0.0 <5.0.0"
   build_runner: ^2.1.11
-  json_serializable: '>4.4.0'
+  json_serializable: ">4.4.0"
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 flutter:
   uses-material-design: true
   assets:
-  - assets/images/common/header_float_icon.jpg
-  - assets/images/common/header_icon.png
-  - assets/images/common/header_icon_rsz.png
-  - assets/images/common/logo.jpg
-  - assets/images/common/logo_150.jpg
-  - assets/images/common/ouo.png
-  - assets/images/common/torii.svg
-  - assets/images/dev/dev_avatar.png
-  - assets/images/game/machine/chu.png
-  - assets/images/game/machine/ddr.png
-  - assets/images/game/machine/gc.png
-  - assets/images/game/machine/ju.png
-  - assets/images/game/machine/mmdx.png
-  - assets/images/game/machine/nvsv.png
-  - assets/images/game/machine/pop.png
-  - assets/images/game/machine/sdvx.png
-  - assets/images/game/machine/tko.png
-  - assets/images/game/machine/wac.png
-  - assets/images/game/machine/x40chu.png
-  - assets/images/game/machine/x40ddr.png
-  - assets/images/game/machine/x40maidx.png
-  - assets/images/game/machine/x40sdvx.png
-  - assets/images/game/machine/x40tko.png
-  - assets/images/game/machine/x40wac.png
-  - assets/images/game/store/x40mgs.jpg
-  - assets/images/game/store/x50mgs.jpg
-  - assets/images/gradeBox/chu_80.png
-  - assets/images/gradeBox/mayhem.png
-  - assets/images/gradeBox/miku2nd.png
-  - assets/images/gradeBox/mmdxc.jpg
-  - assets/images/gradeBox/ouo_80.png
-  - assets/images/gradeBox/sdvx10th.jpg
-  - assets/images/gradeBox/vvelcome.png
-  - assets/images/home/mari_level/ouo.png
-  - assets/images/home/top.png
-  - assets/images/home/vts.png
-  - assets/images/login/login_banner.jpg
-  - assets/texts/license.txt
+    - assets/images/appIcon/appstore.png
+    - assets/images/appIcon/playstore.png
+    - assets/images/common/header_float_icon.jpg
+    - assets/images/common/header_icon.png
+    - assets/images/common/header_icon_rsz.png
+    - assets/images/common/logo.jpg
+    - assets/images/common/logo_150.jpg
+    - assets/images/common/ouo.png
+    - assets/images/common/torii.svg
+    - assets/images/dev/dev_avatar.png
+    - assets/images/game/machine/chu.png
+    - assets/images/game/machine/ddr.png
+    - assets/images/game/machine/gc.png
+    - assets/images/game/machine/ju.png
+    - assets/images/game/machine/mmdx.png
+    - assets/images/game/machine/nvsv.png
+    - assets/images/game/machine/pop.png
+    - assets/images/game/machine/sdvx.png
+    - assets/images/game/machine/tko.png
+    - assets/images/game/machine/wac.png
+    - assets/images/game/machine/x40chu.png
+    - assets/images/game/machine/x40ddr.png
+    - assets/images/game/machine/x40maidx.png
+    - assets/images/game/machine/x40sdvx.png
+    - assets/images/game/machine/x40tko.png
+    - assets/images/game/machine/x40wac.png
+    - assets/images/game/store/x40mgs.jpg
+    - assets/images/game/store/x50mgs.jpg
+    - assets/images/gradeBox/chu_80.png
+    - assets/images/gradeBox/mayhem.png
+    - assets/images/gradeBox/miku2nd.png
+    - assets/images/gradeBox/mmdxc.jpg
+    - assets/images/gradeBox/ouo_80.png
+    - assets/images/gradeBox/sdvx10th.jpg
+    - assets/images/gradeBox/vvelcome.png
+    - assets/images/home/mari_level/ouo.png
+    - assets/images/home/top.png
+    - assets/images/home/vts.png
+    - assets/images/login/login_banner.jpg
+    - assets/texts/license.txt
   fonts:
-  - family: NotoSansJP
-    fonts:
-    - asset: assets/fonts/NotoSansJP/NotoSansJP-Bold.otf
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP/NotoSansJP-Bold.otf
 flr:
   core_version: 3.1.0
   dartfmt_line_length: 80
   assets:
-  - /assets/images/
-  - /assets/texts/
+    - /assets/images/
+    - /assets/texts/
   fonts:
-  - /assets/fonts/
+    - /assets/fonts/
+flutter_icons:
+  image_path: "assets/images/appIcon/appstore.png"
+  adaptive_icon_foreground: "assets/images/appIcon/playstore.png"
+  adaptive_icon_background: "#1c1728"
+  image_path_ios: "assets/images/appIcon/appstore.png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
+
+flutter_native_splash:
+  color: "#1e1e1e"
+  # The branding property allows you to specify an image used as branding in the splash screen.
+  # It must be a png file. It is supported for Android < v12, iOS and the Web.
+  #branding: assets/dart.png
+
+  # To position the branding image at the bottom of the screen you can use bottom, bottomRight,
+  # and bottomLeft. The default values is bottom if not specified or specified something else.
+  #branding_mode: bottom
+
+  # Android 12 handles the splash screen differently than previous versions.  Please visit
+  # https://developer.android.com/guide/topics/ui/splash-screen
+  # Following are Android 12 specific parameter.
+  android_12:
+    # Splash screen background color.
+    color: "#1e1e1e"
