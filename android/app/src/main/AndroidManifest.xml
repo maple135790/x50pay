@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.x50pay">
    <application
-        android:label="x50pay"
+        android:label="X50Pay"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
