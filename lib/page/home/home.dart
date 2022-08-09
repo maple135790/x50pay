@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -445,7 +446,13 @@ class _TopInfo extends StatelessWidget {
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () async {
-                        await showDialog(context: context, builder: (context) => const ScanQRCode());
+                        var status = await Permission.camera.status;
+                        if (status.isDenied) {
+                          await Permission.camera.request();
+                        }
+                        await showDialog(
+                            context: context,
+                            builder: (context) => ScanQRCode(status == PermissionStatus.granted));
                       },
                       child: const Icon(Icons.qr_code, color: Color(0xfffafafa), size: 45),
                     ),

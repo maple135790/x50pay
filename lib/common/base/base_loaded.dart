@@ -4,11 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:navigation_history_observer/navigation_history_observer.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -294,13 +296,13 @@ class _LoadedHeader extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               const SizedBox(width: 15),
-              Container(
+              Padding(
                 padding: const EdgeInsets.all(5),
-                alignment: Alignment.center,
                 child: InkWell(
                     onTap: () {
                       Navigator.of(context).pop();
                     },
+                    splashFactory: NoSplash.splashFactory,
                     child: const Icon(Icons.chevron_left_outlined, size: 25, color: Color(0xfffafafa))),
               ),
               const Spacer(),
@@ -314,12 +316,22 @@ class _LoadedHeader extends StatelessWidget {
                   child: Text('$point P',
                       style: const TextStyle(color: Color(0xfffafafa), fontWeight: FontWeight.bold))),
               const SizedBox(width: 20),
-              IconButton(
-                  onPressed: () {
-                    // Navigator.of(context).push(NoTransitionRouter(const ScanQRCodeV2()));
-                  },
-                  icon: const Icon(Icons.qr_code, size: 28),
-                  color: const Color(0xfffafafa)),
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: InkWell(
+                    onTap: () async {
+                      var status = await Permission.camera.status;
+                      if (status.isDenied) {
+                        await Permission.camera.request();
+                      }
+                      await showDialog(
+                          context: context,
+                          builder: (context) => ScanQRCode(status == PermissionStatus.granted));
+                    },
+                    splashFactory: NoSplash.splashFactory,
+                    child: const Icon(Icons.qr_code, size: 28, color: Color(0xfffafafa))),
+              ),
+              const SizedBox(width: 15),
             ]),
           ),
         );

@@ -1,7 +1,8 @@
 part of "../../common/base/base_loaded.dart";
 
 class ScanQRCode extends StatefulWidget {
-  const ScanQRCode({Key? key}) : super(key: key);
+  final bool hasPermissions;
+  const ScanQRCode(this.hasPermissions, {Key? key}) : super(key: key);
 
   @override
   State<ScanQRCode> createState() => _ScanQRCodeState();
@@ -45,31 +46,40 @@ class _ScanQRCodeState extends State<ScanQRCode> {
                   padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   width: 300,
                   height: 225,
-                  child: QRView(
-                    key: qrKey,
-                    onQRViewCreated: (controller) {
-                      qrViewController = controller;
-                      controller.scannedDataStream.listen((event) async {
-                        if (isBusy) {
-                          return;
-                        } else {
-                          isBusy = true;
-                          final nav = Navigator.of(context);
-                          String msg = await Repository().qrDecryt(event.code!);
-                          if (msg != 'oof') {
-                            await controller.pauseCamera();
-                            await EasyLoading.showInfo(msg, duration: const Duration(milliseconds: 1000));
-                            await Future.delayed(const Duration(milliseconds: 1000));
-                            nav.popUntil(ModalRoute.withName(AppRoute.home));
-                          }
-                          setState(() {
-                            result = event;
-                          });
-                          isBusy = false;
-                        }
-                      });
-                    },
-                  ),
+                  child: widget.hasPermissions
+                      ? QRView(
+                          key: qrKey,
+                          // onPermissionSet: (controller, hasPermissions) {
+                          //   if (!hasPermissions) {
+                          //     Permission.camera.request();
+
+                          //   }
+                          // },
+                          onQRViewCreated: (controller) {
+                            qrViewController = controller;
+                            controller.scannedDataStream.listen((event) async {
+                              if (isBusy) {
+                                return;
+                              } else {
+                                isBusy = true;
+                                final nav = Navigator.of(context);
+                                String msg = await Repository().qrDecryt(event.code!);
+                                if (msg != 'oof') {
+                                  await controller.pauseCamera();
+                                  await EasyLoading.showInfo(msg,
+                                      duration: const Duration(milliseconds: 1000));
+                                  await Future.delayed(const Duration(milliseconds: 1000));
+                                  nav.popUntil(ModalRoute.withName(AppRoute.home));
+                                }
+                                setState(() {
+                                  result = event;
+                                });
+                                isBusy = false;
+                              }
+                            });
+                          },
+                        )
+                      : const Center(child: Text('no camera permission')),
                 ),
                 ElevatedButton(
                   onPressed: () {},
