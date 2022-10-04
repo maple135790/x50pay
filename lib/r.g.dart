@@ -5,6 +5,8 @@
 // - https://github.com/Fly-Mix/flr-as-plugin
 //
 
+// ignore_for_file: depend_on_referenced_packages
+
 // ignore: unused_import
 import 'package:flutter/widgets.dart';
 // ignore: unused_import
