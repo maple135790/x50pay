@@ -64,7 +64,7 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
       future: _initialStore,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const Text('loading...');
+          return const Text(kDebugMode ? 'loading...' : '');
         }
         return _GameStoreLoaded(viewModel.stores!);
       },
@@ -106,14 +106,25 @@ class _StoreItem extends StatelessWidget {
   final String prefix;
   const _StoreItem(this.store, this.prefix, {Key? key}) : super(key: key);
 
-  ImageProvider _getBackground(String storeName) {
-    if (storeName == '西門店') {
-      return R.image.x50mgs_jpg();
+  ImageProvider _getBackground(int storeId, {bool isOnline = false}) {
+    late _X50Store store;
+
+    if (isOnline) return NetworkImage("https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
+    for (var s in _X50Store.values) {
+      if (s.sid == storeId) {
+        store = s;
+        break;
+      }
     }
-    if (storeName == '士林店') {
-      return R.image.x40mgs_jpg();
+
+    switch (store) {
+      case _X50Store.ximen1:
+        return R.image.a37656_jpg();
+      case _X50Store.shilin:
+        return R.image.a37657_jpg();
+      case _X50Store.ximen2:
+        return R.image.a37658_jpg();
     }
-    return R.image.logo_150_jpg();
   }
 
   @override
@@ -137,14 +148,14 @@ class _StoreItem extends StatelessWidget {
           },
           child: SizedBox(
             width: double.infinity,
-            height: 150,
+            height: 180,
             child: Stack(
               children: [
                 Positioned(
                     width: 400,
                     top: -100,
                     child: Image(
-                      image: _getBackground(store.name!),
+                      image: _getBackground(store.sid!, isOnline: GlobalSingleton.instance.isOnline),
                       fit: BoxFit.fitWidth,
                       colorBlendMode: BlendMode.modulate,
                     )),
@@ -160,7 +171,7 @@ class _StoreItem extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  bottom: 15,
+                  bottom: 10,
                   left: 15,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,54 +206,97 @@ class _StoreItem extends StatelessWidget {
   }
 }
 
-ImageProvider _getBackground(String gameId) {
-  if (gameId == 'chu') {
-    return R.image.chu();
+enum _X50Store {
+  ximen1(37656),
+  shilin(37657),
+  ximen2(37658);
+
+  final int sid;
+  const _X50Store(this.sid);
+}
+
+ImageProvider _getBackground(String gameId, {bool isOnline = false}) {
+  _Machine? machine;
+  for (var m in _Machine.values) {
+    if (m.gameId != gameId) continue;
+    machine = m;
+    break;
   }
-  if (gameId == 'ddr') {
-    return R.image.ddr();
+  if (machine == null) throw Exception('No machine found: $gameId');
+  switch (machine) {
+    case _Machine.chu:
+      return R.image.chu();
+    case _Machine.ddr:
+      return R.image.ddr();
+    case _Machine.gc:
+      return R.image.gc();
+    case _Machine.ju:
+      return R.image.ju();
+    case _Machine.mmdx:
+      return R.image.mmdx();
+    case _Machine.nvsv:
+      return R.image.nvsv();
+    case _Machine.pop:
+      return R.image.pop();
+    case _Machine.sdvx:
+      return R.image.sdvx();
+    case _Machine.tko:
+      return R.image.tko();
+    case _Machine.wac:
+      return R.image.wac();
+    case _Machine.x40chu:
+      return R.image.x40chu();
+    case _Machine.x40ddr:
+      return R.image.x40ddr();
+    case _Machine.x40maidx:
+      return R.image.x40maidx();
+    case _Machine.x40sdvx:
+      return R.image.x40sdvx();
+    case _Machine.x40tko:
+      return R.image.x40tko();
+    case _Machine.x40wac:
+      return R.image.x40wac();
+    case _Machine.twoChu:
+      return R.image.a2chu();
+    case _Machine.twoMmdx:
+      return R.image.a2mmdx();
+    case _Machine.twoTko:
+      return R.image.a2tko();
+    case _Machine.twoDm:
+      return R.image.a2dm();
+    case _Machine.twoNos:
+      return R.image.a2nos();
+    case _Machine.twoBom:
+      return R.image.a2bom();
+    default:
+      return R.image.logo_150_jpg();
   }
-  if (gameId == 'gc') {
-    return R.image.gc();
-  }
-  if (gameId == 'ju') {
-    return R.image.ju();
-  }
-  if (gameId == 'mmdx') {
-    return R.image.mmdx();
-  }
-  if (gameId == 'nvsv') {
-    return R.image.nvsv();
-  }
-  if (gameId == 'pop') {
-    return R.image.pop();
-  }
-  if (gameId == 'sdvx') {
-    return R.image.sdvx();
-  }
-  if (gameId == 'tko') {
-    return R.image.tko();
-  }
-  if (gameId == 'wac') {
-    return R.image.wac();
-  }
-  if (gameId == 'x40chu') {
-    return R.image.x40chu();
-  }
-  if (gameId == 'x40ddr') {
-    return R.image.x40ddr();
-  }
-  if (gameId == 'x40maidx') {
-    return R.image.x40maidx();
-  }
-  if (gameId == 'x40sdvx') {
-    return R.image.x40sdvx();
-  }
-  if (gameId == 'x40tko') {
-    return R.image.x40tko();
-  }
-  if (gameId == 'x40wac') {
-    return R.image.x40wac();
-  }
-  return R.image.logo_150_jpg();
+}
+
+enum _Machine {
+  chu('chu'),
+  ddr('ddr'),
+  gc('gc'),
+  ju('ju'),
+  mmdx('mmdx'),
+  nvsv('nvsv'),
+  pop('pop'),
+  sdvx('sdvx'),
+  tko('tko'),
+  wac('wac'),
+  twoChu('2chu'),
+  twoMmdx('2mmdx'),
+  twoTko('2tko'),
+  twoDm('2dm'),
+  twoNos('2nos'),
+  twoBom('2bom'),
+  x40chu('x40chu'),
+  x40ddr('x40ddr'),
+  x40maidx('x40maidx'),
+  x40sdvx('x40sdvx'),
+  x40tko('x40tko'),
+  x40wac('x40wac');
+
+  final String gameId;
+  const _Machine(this.gameId);
 }

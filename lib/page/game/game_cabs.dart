@@ -112,24 +112,29 @@ class _GameCabItem extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), border: Border.all(color: Themes.borderColor)),
-          height: 150,
+          height: 155,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Stack(
               children: [
                 Positioned.fill(
                     child: Image(
-                        image: _getBackground(machine.id!),
-                        fit: BoxFit.fitWidth,
-                        alignment: Alignment.topCenter)),
+                  image: _getBackground(machine.id!, isOnline: GlobalSingleton.instance.isOnline),
+                  color: const Color.fromARGB(35, 0, 0, 0),
+                  colorBlendMode: BlendMode.srcATop,
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.center,
+                )),
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(
                       gradient: RadialGradient(
                           colors: [Colors.black54, Colors.transparent],
-                          radius: 2.5,
-                          focalRadius: 5,
-                          center: Alignment(-1, 1.8),
+                          // colors: [Colors.red, Colors.transparent],
+                          radius: 1,
+                          focalRadius: 15,
+                          // center: Alignment(-1, 1.8),
+                          center: Alignment.bottomLeft,
                           stops: [0.3, 1]),
                     ),
                   ),

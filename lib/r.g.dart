@@ -143,6 +143,36 @@ class _R_Image_AssetResource {
   final dev_avatar = const AssetResource("assets/images/dev/dev_avatar.png",
       packageName: null);
 
+  /// asset: assets/images/game/machine/2bom.png
+  // ignore: non_constant_identifier_names
+  final a2bom = const AssetResource("assets/images/game/machine/2bom.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/2chu.png
+  // ignore: non_constant_identifier_names
+  final a2chu = const AssetResource("assets/images/game/machine/2chu.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/2dm.png
+  // ignore: non_constant_identifier_names
+  final a2dm = const AssetResource("assets/images/game/machine/2dm.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/2mmdx.png
+  // ignore: non_constant_identifier_names
+  final a2mmdx = const AssetResource("assets/images/game/machine/2mmdx.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/2nos.png
+  // ignore: non_constant_identifier_names
+  final a2nos = const AssetResource("assets/images/game/machine/2nos.png",
+      packageName: null);
+
+  /// asset: assets/images/game/machine/2tko.png
+  // ignore: non_constant_identifier_names
+  final a2tko = const AssetResource("assets/images/game/machine/2tko.png",
+      packageName: null);
+
   /// asset: assets/images/game/machine/chu.png
   // ignore: non_constant_identifier_names
   final chu = const AssetResource("assets/images/game/machine/chu.png",
@@ -222,6 +252,21 @@ class _R_Image_AssetResource {
   /// asset: assets/images/game/machine/x40wac.png
   // ignore: non_constant_identifier_names
   final x40wac = const AssetResource("assets/images/game/machine/x40wac.png",
+      packageName: null);
+
+  /// asset: assets/images/game/store/37656.jpg
+  // ignore: non_constant_identifier_names
+  final a37656_jpg = const AssetResource("assets/images/game/store/37656.jpg",
+      packageName: null);
+
+  /// asset: assets/images/game/store/37657.jpg
+  // ignore: non_constant_identifier_names
+  final a37657_jpg = const AssetResource("assets/images/game/store/37657.jpg",
+      packageName: null);
+
+  /// asset: assets/images/game/store/37658.jpg
+  // ignore: non_constant_identifier_names
+  final a37658_jpg = const AssetResource("assets/images/game/store/37658.jpg",
       packageName: null);
 
   /// asset: assets/images/game/store/x40mgs.jpg
@@ -373,6 +418,42 @@ class _R_Image {
     return AssetImage(asset.dev_avatar.keyName);
   }
 
+  /// asset: assets/images/game/machine/2bom.png
+  // ignore: non_constant_identifier_names
+  AssetImage a2bom() {
+    return AssetImage(asset.a2bom.keyName);
+  }
+
+  /// asset: assets/images/game/machine/2chu.png
+  // ignore: non_constant_identifier_names
+  AssetImage a2chu() {
+    return AssetImage(asset.a2chu.keyName);
+  }
+
+  /// asset: assets/images/game/machine/2dm.png
+  // ignore: non_constant_identifier_names
+  AssetImage a2dm() {
+    return AssetImage(asset.a2dm.keyName);
+  }
+
+  /// asset: assets/images/game/machine/2mmdx.png
+  // ignore: non_constant_identifier_names
+  AssetImage a2mmdx() {
+    return AssetImage(asset.a2mmdx.keyName);
+  }
+
+  /// asset: assets/images/game/machine/2nos.png
+  // ignore: non_constant_identifier_names
+  AssetImage a2nos() {
+    return AssetImage(asset.a2nos.keyName);
+  }
+
+  /// asset: assets/images/game/machine/2tko.png
+  // ignore: non_constant_identifier_names
+  AssetImage a2tko() {
+    return AssetImage(asset.a2tko.keyName);
+  }
+
   /// asset: assets/images/game/machine/chu.png
   // ignore: non_constant_identifier_names
   AssetImage chu() {
@@ -467,6 +548,24 @@ class _R_Image {
   // ignore: non_constant_identifier_names
   AssetImage x40wac() {
     return AssetImage(asset.x40wac.keyName);
+  }
+
+  /// asset: assets/images/game/store/37656.jpg
+  // ignore: non_constant_identifier_names
+  AssetImage a37656_jpg() {
+    return AssetImage(asset.a37656_jpg.keyName);
+  }
+
+  /// asset: assets/images/game/store/37657.jpg
+  // ignore: non_constant_identifier_names
+  AssetImage a37657_jpg() {
+    return AssetImage(asset.a37657_jpg.keyName);
+  }
+
+  /// asset: assets/images/game/store/37658.jpg
+  // ignore: non_constant_identifier_names
+  AssetImage a37658_jpg() {
+    return AssetImage(asset.a37658_jpg.keyName);
   }
 
   /// asset: assets/images/game/store/x40mgs.jpg

@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String debugRoute = AppRoute.home;
+    String debugRoute = AppRoute.login;
 
     return MaterialApp(
       title: 'Flutter Demo',
