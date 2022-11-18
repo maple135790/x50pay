@@ -315,9 +315,30 @@ class _R_Image_AssetResource {
   final vvelcome = const AssetResource("assets/images/gradeBox/vvelcome.png",
       packageName: null);
 
+  /// asset: assets/images/home/bolt-solid.png
+  // ignore: non_constant_identifier_names
+  final bolt_solid = const AssetResource("assets/images/home/bolt-solid.png",
+      packageName: null);
+
+  /// asset: assets/images/home/heart-regular.png
+  // ignore: non_constant_identifier_names
+  final heart_regular = const AssetResource(
+      "assets/images/home/heart-regular.png",
+      packageName: null);
+
+  /// asset: assets/images/home/heart-solid.png
+  // ignore: non_constant_identifier_names
+  final heart_solid = const AssetResource("assets/images/home/heart-solid.png",
+      packageName: null);
+
   /// asset: assets/images/home/mari_level/ouo.png
   // ignore: non_constant_identifier_names
   final ouo$1 = const AssetResource("assets/images/home/mari_level/ouo.png",
+      packageName: null);
+
+  /// asset: assets/images/home/shirt-solid.png
+  // ignore: non_constant_identifier_names
+  final shirt_solid = const AssetResource("assets/images/home/shirt-solid.png",
       packageName: null);
 
   /// asset: assets/images/home/top.png
@@ -622,10 +643,34 @@ class _R_Image {
     return AssetImage(asset.vvelcome.keyName);
   }
 
+  /// asset: assets/images/home/bolt-solid.png
+  // ignore: non_constant_identifier_names
+  AssetImage bolt_solid() {
+    return AssetImage(asset.bolt_solid.keyName);
+  }
+
+  /// asset: assets/images/home/heart-regular.png
+  // ignore: non_constant_identifier_names
+  AssetImage heart_regular() {
+    return AssetImage(asset.heart_regular.keyName);
+  }
+
+  /// asset: assets/images/home/heart-solid.png
+  // ignore: non_constant_identifier_names
+  AssetImage heart_solid() {
+    return AssetImage(asset.heart_solid.keyName);
+  }
+
   /// asset: assets/images/home/mari_level/ouo.png
   // ignore: non_constant_identifier_names
   AssetImage ouo$1() {
     return AssetImage(asset.ouo$1.keyName);
+  }
+
+  /// asset: assets/images/home/shirt-solid.png
+  // ignore: non_constant_identifier_names
+  AssetImage shirt_solid() {
+    return AssetImage(asset.shirt_solid.keyName);
   }
 
   /// asset: assets/images/home/top.png

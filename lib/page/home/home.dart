@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/buyMPass/buy_mpass.dart';
@@ -93,6 +97,7 @@ class _HomeLoadedState extends State<_HomeLoaded> {
           _TopInfo(user: user),
           _TicketInfo(user: user),
           _MariInfo(isVip: user.vip!, viewModel: widget.viewModel),
+          _EventInfo(widget.viewModel.entry!.evlist),
           Padding(
               padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
               child: GestureDetector(
@@ -207,7 +212,7 @@ class _MariInfo extends StatelessWidget {
     final gr2GradeBoxContent = entry.gr2[6].toString();
     final ava = entry.gr2[7].toString().split(',').last;
     final gr2VDay = entry.gr2[9].toInt().toString();
-    final gr2Progress = entry.gr2[0] / 10;
+    final gr2Progress = entry.gr2[0] / 15;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
@@ -237,7 +242,7 @@ class _MariInfo extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(children: [
-                      const Icon(Icons.favorite, color: Color(0xffc71508)),
+                      Image(image: R.image.heart_solid(), color: const Color(0xbfff1100)),
                       const SizedBox(width: 5),
                       Text(gradeLv.toString(),
                           style: const TextStyle(color: Color(0xff808080), fontSize: 30)),
@@ -253,15 +258,21 @@ class _MariInfo extends StatelessWidget {
                             child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Icon(Icons.bolt, color: Color(0xfffafafa), size: 20),
-                                  Text('3'),
-                                  SizedBox(width: 3)
+                                children: [
+                                  // Icon(Icons.bolt, color: Color(0xfffafafa), size: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child:
+                                        Image(image: R.image.bolt_solid(), height: 10, color: Colors.white),
+                                  ),
+                                  const Text('3'),
+                                  const SizedBox(width: 3)
                                 ])),
                       )
                     ]),
                     const SizedBox(height: 5),
                     // ProgressBar
+                    ProgressBar(currentValue: gr2Progress <= 20 ? 20 : gr2Progress),
                     FAProgressBar(
                       backgroundColor: const Color(0xff949494),
                       borderRadius: BorderRadius.circular(15),
@@ -373,6 +384,150 @@ class _MariInfo extends StatelessWidget {
           ),
         ),
       ]),
+    );
+  }
+}
+
+class ProgressBar extends StatefulWidget {
+  final double currentValue;
+  const ProgressBar({super.key, required this.currentValue});
+
+  @override
+  State<ProgressBar> createState() => _ProgressBarState();
+}
+
+class _ProgressBarState extends State<ProgressBar> with TickerProviderStateMixin {
+  late Future<DrawableRoot> getDrawableRoot;
+  late ui.Image _image;
+  late Future<void> loadImageInit;
+  late final Animation<double> _animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(seconds: 5),
+    vsync: this,
+  )..repeat(reverse: false);
+
+  @override
+  void initState() {
+    loadImageInit = _loadImage();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadImage() async {
+    ByteData bd = await rootBundle.load(R.image.heart_regular().assetName);
+    final Uint8List bytes = Uint8List.view(bd.buffer);
+    final codec =
+        await ui.instantiateImageCodec(bytes, targetHeight: 12, targetWidth: 12, allowUpscaling: false);
+    final image = (await codec.getNextFrame()).image;
+
+    setState(() => _image = image);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+      future: loadImageInit,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: CustomPaint(
+            painter: ProgressBackgroundPainter(),
+            foregroundPainter: ProgressPainter(progress: widget.currentValue, image: _image),
+            size: const Size(double.maxFinite, 24),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ProgressPainter extends CustomPainter {
+  final double progress;
+  final ui.Image image;
+  final imagePadding = 8;
+  final progressBarHeight = 24.0;
+
+  const ProgressPainter({required this.progress, required this.image});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final width = size.width * ((progress < 8 ? 8 : progress) / 100);
+    final imageX = width - image.width - imagePadding;
+    canvas
+      ..drawRRect(
+        RRect.fromRectAndRadius(Offset.zero & Size(width, progressBarHeight), const Radius.circular(24)),
+        Paint()..color = const Color(0xffff9bad),
+      )
+      ..drawImage(image, Offset(imageX, 6),
+          Paint()..colorFilter = const ColorFilter.mode(Colors.white, BlendMode.srcATop));
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class ProgressBackgroundPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(Offset.zero & size, const Radius.circular(24)),
+      Paint()..color = const Color(0xff949494),
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class _EventInfo extends StatelessWidget {
+  final List<Evlist>? evlist;
+  const _EventInfo(this.evlist, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (evlist == null) return const SizedBox();
+    if (evlist!.isEmpty) return const SizedBox();
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 80,
+          margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+          padding: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+              border: Border.all(color: Themes.borderColor, width: 1),
+              borderRadius: BorderRadius.circular(5),
+              shape: BoxShape.rectangle),
+        ),
+        Positioned(
+            left: 35,
+            top: 12,
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: const Text('優惠時段', style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
+            )),
+        Positioned(
+          top: 40,
+          left: 35,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案', style: TextStyle(color: Color(0xfffafafa))),
+              SizedBox(height: 5),
+              Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xfffafafa))),
+            ],
+          ),
+        )
+      ],
     );
   }
 }
