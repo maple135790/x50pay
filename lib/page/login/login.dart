@@ -29,7 +29,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   @override
   bool get isDarkHeader => true;
 
-  String? _errorMsg;
+  String? errorMsg;
 
   @override
   BaseViewModel? baseViewModel() => null;
@@ -37,6 +37,36 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   void initState() {
     super.initState();
     EasyLoading.dismiss();
+  }
+
+  void doLogin() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (email.text.isEmpty || password.text.isEmpty) {
+      errorMsg = '帳密不得為空';
+      setState(() {});
+      return;
+    }
+    final nav = Navigator.of(context);
+    final isSuccessLogin = await viewModel.login(email: email.text, password: password.text);
+    if (isSuccessLogin) {
+      int code = viewModel.response!.code;
+      if (code == 400) {
+        errorMsg = '帳號或密碼錯誤';
+        setState(() {});
+      } else if (code == 401) {
+        errorMsg = 'Email尚未驗證，請先驗證信箱\n若有問題請聯絡X50粉絲團';
+        setState(() {});
+      } else if (code == 402) {
+        errorMsg = 'nologin';
+        setState(() {});
+      } else if (code != 200) {
+        errorMsg = '未知錯誤';
+        setState(() {});
+      } else if (code == 200) {
+        await GlobalSingleton.instance.checkUser(force: true);
+        nav.pushReplacementNamed(AppRoute.home);
+      }
+    }
   }
 
   @override
@@ -76,21 +106,22 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                         Icon(Icons.schedule, size: 12, color: Colors.white),
                         Text(' 24Hr 年中無休', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
                       ]),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                        Icon(Icons.pin_drop, size: 12, color: Colors.white),
-                        Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
-                      ]),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                        Icon(Icons.restaurant, size: 12, color: Colors.white),
-                        Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
-                      ]),
+                      // Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      //   Icon(Icons.pin_drop, size: 12, color: Colors.white),
+                      //   Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
+                      // ]),
+                      // Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      //   Icon(Icons.restaurant, size: 12, color: Colors.white),
+                      //   Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
+                      // ]),
                     ]),
                   ),
                 ],
               ),
             ),
+            errorNotice(),
             Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -100,33 +131,6 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _errorMsg == null
-                        ? const SizedBox()
-                        : Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                  color: const Color(0xffF6E1DF),
-                                  border: Border.all(color: const Color(0xffE5A9A5), width: 1),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.priority_high, color: Color(0xffA1414C)),
-                                  const SizedBox(width: 14),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text('錯誤',
-                                          style: TextStyle(color: Color(0xffA1414C), fontSize: 16)),
-                                      Text(_errorMsg!, style: const TextStyle(color: Color(0xffA1414C))),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
                     const Text('電子郵件'),
                     const SizedBox(height: 12),
                     TextField(
@@ -161,38 +165,10 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TextButton(
-                            onPressed: () async {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              if (email.text.isEmpty || password.text.isEmpty) {
-                                _errorMsg = '帳密不得為空';
-                                setState(() {});
-                                return;
-                              }
-                              final nav = Navigator.of(context);
-                              final isSuccessLogin =
-                                  await viewModel.login(email: email.text, password: password.text);
-                              if (isSuccessLogin) {
-                                int code = viewModel.response!.code;
-                                if (code == 400) {
-                                  _errorMsg = '帳號或密碼錯誤';
-                                  setState(() {});
-                                } else if (code == 401) {
-                                  _errorMsg = 'Email尚未驗證，請先驗證信箱\n若有問題請聯絡X50粉絲團';
-                                  setState(() {});
-                                } else if (code == 402) {
-                                  _errorMsg = 'nologin';
-                                  setState(() {});
-                                } else if (code != 200) {
-                                  _errorMsg = '未知錯誤';
-                                  setState(() {});
-                                } else if (code == 200) {
-                                  await GlobalSingleton.instance.checkUser(force: true);
-                                  nav.pushReplacementNamed(AppRoute.home);
-                                }
-                              }
-                            },
-                            style: Themes.pale(),
-                            child: const Text('登入')),
+                          onPressed: doLogin,
+                          style: Themes.pale(),
+                          child: const Text('登入'),
+                        ),
                         const SizedBox(width: 5),
                         Material(
                           type: MaterialType.transparency,
@@ -212,6 +188,28 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
           ],
         );
       },
+    );
+  }
+
+  Widget errorNotice() {
+    if (errorMsg == null) return const SizedBox();
+
+    return Container(
+      margin: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(vertical: 6.75, horizontal: 15),
+      decoration: const BoxDecoration(color: Color(0xfff5222d)),
+      child: Row(
+        children: [
+          // const Icon(Icons.priority_high, color: Color(0xffA1414C)),
+          // const SizedBox(width: 14),
+          Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.white),
+              padding: const EdgeInsets.symmetric(vertical: 4.5, horizontal: 7.5),
+              child: const Text('錯誤', style: TextStyle(color: Color(0xffcf1322)))),
+          const SizedBox(width: 15),
+          Text(errorMsg!),
+        ],
+      ),
     );
   }
 
