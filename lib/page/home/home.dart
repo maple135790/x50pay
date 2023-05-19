@@ -7,7 +7,6 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -400,7 +399,7 @@ class _ProgressBarState extends State<ProgressBar> with TickerProviderStateMixin
   late Future<DrawableRoot> getDrawableRoot;
   late ui.Image _image;
   late Future<void> loadImageInit;
-  late final Animation<double> _animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
+  late final Animation<double> animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 5),
     vsync: this,
@@ -514,13 +513,13 @@ class _EventInfo extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: const Text('優惠時段', style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
             )),
-        Positioned(
+        const Positioned(
           top: 40,
           left: 35,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案', style: TextStyle(color: Color(0xfffafafa))),
               SizedBox(height: 5),
               Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xfffafafa))),
@@ -533,10 +532,7 @@ class _EventInfo extends StatelessWidget {
 }
 
 class _TopInfo extends StatelessWidget {
-  const _TopInfo({
-    Key? key,
-    required this.user,
-  }) : super(key: key);
+  const _TopInfo({Key? key, required this.user}) : super(key: key);
 
   final UserModel user;
 
@@ -602,12 +598,12 @@ class _TopInfo extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         var status = await Permission.camera.status;
-                        if (status.isDenied) {
-                          await Permission.camera.request();
+                        if (status.isDenied) await Permission.camera.request();
+                        if (context.mounted) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => ScanQRCode(status == PermissionStatus.granted));
                         }
-                        await showDialog(
-                            context: context,
-                            builder: (context) => ScanQRCode(status == PermissionStatus.granted));
                       },
                       child: const Icon(Icons.qr_code, color: Color(0xfffafafa), size: 45),
                     ),

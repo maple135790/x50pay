@@ -11,10 +11,10 @@ class _GiftClaim extends StatelessWidget {
       prototypeItem: ListTile(
         visualDensity: VisualDensity.comfortable,
         title: const Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
-        subtitle: Column(
+        subtitle: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: const [
+          children: [
             SizedBox(height: 4),
             Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14))
           ],
@@ -81,10 +81,10 @@ class _ConfirmChangeDialog extends StatelessWidget {
           const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
+              children: [
                 Text('請確認已經出示給工作人員看過'),
                 SizedBox(height: 16),
                 Text('您確定要兌換禮物嗎？', style: TextStyle(color: Color(0xfffad814), fontWeight: FontWeight.bold)),

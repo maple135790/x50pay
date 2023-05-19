@@ -62,25 +62,25 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       ),
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     bottom: 15,
                     left: 15,
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      const Text('歡迎回來！',
+                      Text('歡迎回來！',
                           style: TextStyle(
                               shadows: [Shadow(color: Colors.black, blurRadius: 25)],
                               fontSize: 17,
                               color: Color(0xe6ffffff))),
-                      const SizedBox(height: 5),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
+                      SizedBox(height: 5),
+                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                         Icon(Icons.schedule, size: 12, color: Colors.white),
                         Text(' 24Hr 年中無休', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
                       ]),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
+                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                         Icon(Icons.pin_drop, size: 12, color: Colors.white),
                         Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
                       ]),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: const [
+                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                         Icon(Icons.restaurant, size: 12, color: Colors.white),
                         Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
                       ]),

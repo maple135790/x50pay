@@ -6,7 +6,7 @@ class QuickPayDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NVSVPayment? _toNVSVPayment(String str) {
+    NVSVPayment? toNVSVPayment(String str) {
       switch (str) {
         case '0':
           return NVSVPayment.light;
@@ -19,7 +19,7 @@ class QuickPayDialog extends StatelessWidget {
       }
     }
 
-    SDVXPayment? _toSDVXPayment(String str) {
+    SDVXPayment? toSDVXPayment(String str) {
       switch (str) {
         case '0':
           return SDVXPayment.standard;
@@ -30,7 +30,7 @@ class QuickPayDialog extends StatelessWidget {
       }
     }
 
-    DPPayment? _toDPPayment(String str) {
+    DPPayment? toDPPayment(String str) {
       switch (str) {
         case '0':
           return DPPayment.single;
@@ -57,9 +57,9 @@ class QuickPayDialog extends StatelessWidget {
             bool isNfcAutoPayEnabled = model.nfcAuto;
             bool isQuiCPayEnabled = model.nfcQuic;
             bool isUseTicketEnabled = model.nfcTicket;
-            NVSVPayment? nvsvP = _toNVSVPayment(model.nfcNVSV);
-            SDVXPayment? sdvxP = _toSDVXPayment(model.nfcSDVX);
-            DPPayment? dpP = _toDPPayment(model.nfcTwo);
+            NVSVPayment? nvsvP = toNVSVPayment(model.nfcNVSV);
+            SDVXPayment? sdvxP = toSDVXPayment(model.nfcSDVX);
+            DPPayment? dpP = toDPPayment(model.nfcTwo);
 
             return _DialogBody(
               title: '快速付款偏好選項',

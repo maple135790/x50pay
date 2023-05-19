@@ -48,7 +48,7 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
   Column ticketRecordLoaded(TicDateLogModel model) {
     bool hasData = model.logs.isNotEmpty;
 
-    List<DataRow> _buildRows() {
+    List<DataRow> buildRows() {
       List<DataRow> rows = [];
       for (List log in model.logs) {
         final String eventName = log[1];
@@ -90,9 +90,9 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
                   border: TableBorder.all(color: Themes.borderColor, width: 1),
-                  dataRowHeight: 60,
+                  dataRowMaxHeight: 60,
                   columns: ['活動名稱', '過期日', '剩餘張數', '詳情'].map((e) => DataColumn(label: Text(e))).toList(),
-                  rows: _buildRows(),
+                  rows: buildRows(),
                 ),
               )
             : const Text('無資料'),

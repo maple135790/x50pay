@@ -83,10 +83,10 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
                     color: const Color.fromARGB(12, 255, 255, 255),
                     width: MediaQuery.of(context).size.width,
                     height: 90,
-                    child: Column(
+                    child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           Text('禮物系統', style: TextStyle(fontSize: 17)),
                           Text('X50Pay 禮物系統', style: TextStyle(color: Color(0xffb4b4b4)))
                         ])),

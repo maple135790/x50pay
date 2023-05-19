@@ -3,7 +3,7 @@ description: X50Pay app
 publish_to: none
 version: 1.0.0+1
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 dependencies:
   collection: ^1.16.0
   dio: ^4.0.6

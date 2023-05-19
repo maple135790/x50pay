@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/api.dart';
 import 'package:x50pay/common/models/basic_response.dart';

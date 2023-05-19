@@ -189,10 +189,10 @@ class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2> with BaseLoaded
           TextButton(
             style: Themes.confirm(),
             onPressed: () {},
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [Icon(Icons.credit_card), SizedBox(width: 10), Text('信用卡/ATM 線上加值')],
+              children: [Icon(Icons.credit_card), SizedBox(width: 10), Text('信用卡/ATM 線上加值')],
             ),
           ),
         ],

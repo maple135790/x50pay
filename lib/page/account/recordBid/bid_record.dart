@@ -48,7 +48,7 @@ class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
   Column bidRecordLoaded(BidLogModel model) {
     bool hasData = model.logs.isNotEmpty;
 
-    List<DataRow> _buildRows() {
+    List<DataRow> buildRows() {
       List<DataRow> rows = [];
       for (BidLog log in model.logs) {
         rows.add(DataRow(cells: [
@@ -80,7 +80,7 @@ class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
             ? DataTable(
                 border: TableBorder.all(color: Themes.borderColor, width: 1),
                 columns: ['時間', '儲值金額'].map((e) => DataColumn(label: Text(e))).toList(),
-                rows: _buildRows(),
+                rows: buildRows(),
               )
             : const Text('無資料'),
       ],

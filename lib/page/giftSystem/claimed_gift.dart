@@ -11,10 +11,10 @@ class _ClaimedGift extends StatelessWidget {
       prototypeItem: ListTile(
         visualDensity: VisualDensity.comfortable,
         title: const Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
-        subtitle: Column(
+        subtitle: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: const [
+          children: [
             SizedBox(height: 4),
             Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14))
           ],

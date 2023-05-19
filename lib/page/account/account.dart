@@ -177,12 +177,12 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 color: _SettingTileColor.white,
                 onTap: () async {
                   if (user.tphone != 0 && !user.phoneactive!) {
-                    await showDialog(
+                    showDialog(
                         barrierDismissible: false,
                         context: context,
                         builder: (context) => _ChangePhoneConfirmedDialog(viewModel, context));
                   }
-                  await showDialog(
+                  showDialog(
                       barrierDismissible: false,
                       context: context,
                       builder: (context) {
@@ -315,8 +315,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
             child: const Text('取消')),
         TextButton(
             onPressed: () async {
+              final nav = Navigator.of(context);
               if (await viewModel.logout()) {
-                final nav = Navigator.of(context);
                 GlobalSingleton.instance.clearUser();
                 final prefs = await SharedPreferences.getInstance();
                 await EasyLoading.showSuccess('感謝\n登出成功！歡迎再光臨本小店',

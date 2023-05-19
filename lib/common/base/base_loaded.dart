@@ -62,19 +62,16 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor =
-        customBackgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
-    String? currentPage =
-        subPageOf ??= ModalRoute.of(context)?.settings.name?.split('/').last;
+    final backgroundColor = customBackgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
+    String? currentPage = subPageOf ??= ModalRoute.of(context)?.settings.name?.split('/').last;
     Color pressedColor(String tabName) {
       if (currentPage == tabName) return const Color(0xfffafafa);
       return const Color(0xffb4b4b4);
     }
 
     if (baseViewModel() != null) {
-      headerType = baseViewModel()!.isFunctionalHeader
-          ? LoadedHeaderType.functional
-          : LoadedHeaderType.normal;
+      headerType =
+          baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.normal;
       point = GlobalSingleton.instance.user?.point?.toInt();
     }
     return ChangeNotifierProvider.value(
@@ -85,9 +82,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
         },
         child: Scaffold(
           floatingActionButton: kDebugMode && debugFunction != null
-              ? FloatingActionButton(
-                  onPressed: debugFunction,
-                  child: const Icon(Icons.developer_mode))
+              ? FloatingActionButton(onPressed: debugFunction, child: const Icon(Icons.developer_mode))
               : null,
           backgroundColor: backgroundColor,
           body: AnnotatedRegion(
@@ -109,8 +104,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                                 children: [
                                   headerType == LoadedHeaderType.normal
                                       ? const _LoadedHeader()
-                                      : _LoadedHeader.functional(
-                                          point: point ?? -87),
+                                      : _LoadedHeader.functional(point: point ?? -87),
                                   body(),
                                   const SizedBox(height: 20)
                                 ],
@@ -127,8 +121,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                             children: [
                               headerType == LoadedHeaderType.normal
                                   ? const _LoadedHeader()
-                                  : _LoadedHeader.functional(
-                                      point: point ?? -87),
+                                  : _LoadedHeader.functional(point: point ?? -87),
                               Expanded(child: body()),
                             ],
                           ),
@@ -141,10 +134,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
               ? SafeArea(
                   child: Container(
                     decoration: BoxDecoration(
-                        border: const Border(
-                            top: navBarStyle,
-                            left: navBarStyle,
-                            right: navBarStyle),
+                        border: const Border(top: navBarStyle, left: navBarStyle, right: navBarStyle),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.black87.withOpacity(0.5),
@@ -163,31 +153,21 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                               onTap: () async {
                                 final nav = Navigator.of(context);
                                 await checkUser();
-                                if (NavigationHistoryObserver()
-                                        .top!
-                                        .settings
-                                        .name ==
-                                    AppRoute.home) {
+                                if (NavigationHistoryObserver().top!.settings.name == AppRoute.home) {
                                   setState(() {});
                                 } else {
                                   await _intentedDelay();
-                                  nav.popUntil(
-                                      ModalRoute.withName(AppRoute.home));
+                                  nav.popUntil(ModalRoute.withName(AppRoute.home));
                                 }
                               },
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(vertical: 10),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.home,
-                                        color: pressedColor('home')),
-                                    Text('首頁',
-                                        style: TextStyle(
-                                            color: pressedColor('home'),
-                                            fontSize: 12))
+                                    Icon(Icons.home, color: pressedColor('home')),
+                                    Text('首頁', style: TextStyle(color: pressedColor('home'), fontSize: 12))
                                   ],
                                 ),
                               ),
@@ -202,18 +182,13 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                                 await _tabNavigateTo(AppRoute.game);
                               },
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(vertical: 10),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.videogame_asset_rounded,
-                                        color: pressedColor('game')),
-                                    Text('遊玩系統',
-                                        style: TextStyle(
-                                            color: pressedColor('game'),
-                                            fontSize: 12))
+                                    Icon(Icons.videogame_asset_rounded, color: pressedColor('game')),
+                                    Text('遊玩系統', style: TextStyle(color: pressedColor('game'), fontSize: 12))
                                   ],
                                 ),
                               ),
@@ -228,18 +203,14 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                                 await _tabNavigateTo(AppRoute.account);
                               },
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(vertical: 10),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.person,
-                                        color: pressedColor('account')),
+                                    Icon(Icons.person, color: pressedColor('account')),
                                     Text('會員中心',
-                                        style: TextStyle(
-                                            color: pressedColor('account'),
-                                            fontSize: 12))
+                                        style: TextStyle(color: pressedColor('account'), fontSize: 12))
                                   ],
                                 ),
                               ),
@@ -257,18 +228,13 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                                 await _tabNavigateTo(AppRoute.gift);
                               },
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(vertical: 10),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.redeem_rounded,
-                                        color: pressedColor('gift')),
-                                    Text('禮物盒子',
-                                        style: TextStyle(
-                                            color: pressedColor('gift'),
-                                            fontSize: 12))
+                                    Icon(Icons.redeem_rounded, color: pressedColor('gift')),
+                                    Text('禮物盒子', style: TextStyle(color: pressedColor('gift'), fontSize: 12))
                                   ],
                                 ),
                               ),
@@ -312,18 +278,14 @@ class _LoadedHeader extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border(
-                  bottom: BorderSide(
-                      color: Theme.of(context).dividerColor, width: 1))),
+              border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor, width: 1))),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                    backgroundImage: R.image.header_icon_rsz(),
-                    backgroundColor: Colors.black,
-                    radius: 14),
+                    backgroundImage: R.image.header_icon_rsz(), backgroundColor: Colors.black, radius: 14),
                 const SizedBox(width: 10),
                 const Text('X50Pay'),
               ],
@@ -332,15 +294,13 @@ class _LoadedHeader extends StatelessWidget {
         );
       case LoadedHeaderType.functional:
         return Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3)),
-              ]),
+          decoration: BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor, boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3)),
+          ]),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -352,44 +312,34 @@ class _LoadedHeader extends StatelessWidget {
                       Navigator.of(context).pop();
                     },
                     splashFactory: NoSplash.splashFactory,
-                    child: const Icon(Icons.chevron_left_outlined,
-                        size: 25, color: Color(0xfffafafa))),
+                    child: const Icon(Icons.chevron_left_outlined, size: 25, color: Color(0xfffafafa))),
               ),
               const Spacer(),
               Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
+                  padding: const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
                   decoration: BoxDecoration(
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black54,
-                            blurRadius: 15,
-                            spreadRadius: 0.5)
-                      ],
+                      boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 15, spreadRadius: 0.5)],
                       color: const Color(0xff3e3e3e),
                       // border: Border.all(width: 1, color: const Color(0xff3e3e3e)),
                       borderRadius: BorderRadius.circular(5)),
                   child: Text('$point P',
-                      style: const TextStyle(
-                          color: Color(0xfffafafa),
-                          fontWeight: FontWeight.bold))),
+                      style: const TextStyle(color: Color(0xfffafafa), fontWeight: FontWeight.bold))),
               const SizedBox(width: 20),
               Padding(
                 padding: const EdgeInsets.all(5),
                 child: InkWell(
                     onTap: () async {
                       var status = await Permission.camera.status;
-                      if (status.isDenied) {
-                        await Permission.camera.request();
+                      if (status.isDenied) await Permission.camera.request();
+
+                      if (context.mounted) {
+                        showDialog(
+                            context: context,
+                            builder: (context) => ScanQRCode(status == PermissionStatus.granted));
                       }
-                      await showDialog(
-                          context: context,
-                          builder: (context) =>
-                              ScanQRCode(status == PermissionStatus.granted));
                     },
                     splashFactory: NoSplash.splashFactory,
-                    child: const Icon(Icons.qr_code,
-                        size: 28, color: Color(0xfffafafa))),
+                    child: const Icon(Icons.qr_code, size: 28, color: Color(0xfffafafa))),
               ),
               const SizedBox(width: 15),
             ]),

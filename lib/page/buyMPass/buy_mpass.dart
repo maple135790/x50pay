@@ -207,40 +207,40 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> with BaseLoaded {
             borderRadius: BorderRadius.circular(8),
             color: const Color(0xff2a2a2a),
           ),
-          child: Row(
+          child: const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.redeem, color: Color(0xfffafafa), size: 34),
-              const SizedBox(width: 15),
+              Icon(Icons.redeem, color: Color(0xfffafafa), size: 34),
+              SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(children: const [
+                  Row(children: [
                     Icon(Icons.add_circle, color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('天上掉下來的遊玩券')
                   ]),
-                  const SizedBox(height: 5),
-                  Row(children: const [
+                  SizedBox(height: 5),
+                  Row(children: [
                     Icon(Icons.add_circle, color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('比別人更長的優惠時段')
                   ]),
-                  const SizedBox(height: 5),
-                  Row(children: const [
+                  SizedBox(height: 5),
+                  Row(children: [
                     Icon(Icons.add_circle, color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('養成每日增加兩次加成')
                   ]),
-                  const SizedBox(height: 5),
-                  Row(children: const [
+                  SizedBox(height: 5),
+                  Row(children: [
                     Icon(Icons.add_circle, color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('月票會員專屬活動')
                   ]),
-                  const SizedBox(height: 5),
-                  Row(children: const [
+                  SizedBox(height: 5),
+                  Row(children: [
                     Icon(Icons.do_not_disturb_on, color: Color(0xffd60000), size: 22),
                     SizedBox(width: 5),
                     Text('沒有專屬停車位')
@@ -258,22 +258,22 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> with BaseLoaded {
             borderRadius: BorderRadius.circular(8),
             color: const Color(0xff2a2a2a),
           ),
-          child: Row(
+          child: const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.card_membership, color: Color(0xfffafafa), size: 34),
-              const SizedBox(width: 15),
+              Icon(Icons.card_membership, color: Color(0xfffafafa), size: 34),
+              SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(children: const [
+                  Row(children: [
                     Icon(Icons.check_circle, color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('邊緣人專屬 : 99P / mo')
                   ]),
-                  const SizedBox(height: 5),
-                  Row(children: const [
+                  SizedBox(height: 5),
+                  Row(children: [
                     Icon(Icons.check_circle, color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('人際帝專屬 : 399P / mo')
@@ -291,28 +291,28 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> with BaseLoaded {
             borderRadius: BorderRadius.circular(8),
             color: const Color(0xff2a2a2a),
           ),
-          child: Row(
+          child: const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.edit, color: Color(0xfffafafa), size: 34),
-              const SizedBox(width: 15),
+              Icon(Icons.edit, color: Color(0xfffafafa), size: 34),
+              SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(children: const [
+                  Row(children: [
                     Icon(Icons.cancel, color: Color(0xffd60000), size: 22),
                     SizedBox(width: 5),
                     Text('嚴禁多人共享/代投幣')
                   ]),
-                  const SizedBox(height: 5),
-                  Row(children: const [
+                  SizedBox(height: 5),
+                  Row(children: [
                     Icon(Icons.cancel, color: Color(0xffd60000), size: 22),
                     SizedBox(width: 5),
                     Text('違約將取消方案且不可重新加入')
                   ]),
-                  const SizedBox(height: 5),
-                  Row(children: const [
+                  SizedBox(height: 5),
+                  Row(children: [
                     Icon(Icons.cancel, color: Color(0xffd60000), size: 22),
                     SizedBox(width: 5),
                     Text('違約者養成系統將取消養成權限')

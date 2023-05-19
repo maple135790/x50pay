@@ -20,9 +20,9 @@ class AppThemeData {
       dialogBackgroundColor: const Color(0xff1e1e1e),
       dividerColor: const Color(0xff3e3e3e),
       textTheme: const TextTheme(
-          bodyText1: TextStyle(color: Color(0xfffafafa)),
-          bodyText2: TextStyle(color: Color(0xfffafafa)),
-          subtitle1: TextStyle(color: Color(0xfffafafa))),
+          bodyLarge: TextStyle(color: Color(0xfffafafa)),
+          bodyMedium: TextStyle(color: Color(0xfffafafa)),
+          titleMedium: TextStyle(color: Color(0xfffafafa))),
       scaffoldBackgroundColor: const Color(0xff1e1e1e),
       inputDecorationTheme: const InputDecorationTheme(
           filled: true,

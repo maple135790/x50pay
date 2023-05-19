@@ -103,6 +103,7 @@ class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog
   }
 
   void _doChangePhone() async {
+    final nav = Navigator.of(context);
     final model = widget.viewModel;
     if (await model.doChangePhone(phone: textController.text)) {
       switch (model.response!.code) {
@@ -115,17 +116,17 @@ class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog
         default:
           await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50', duration: const Duration(seconds: 2));
           await Future.delayed(const Duration(seconds: 2));
-          Navigator.of(context).pop();
+          nav.pop();
       }
     }
   }
 
   void _smsActivate() async {
     final model = widget.viewModel;
+    final nav = Navigator.of(context);
     if (await model.smsActivate(smsCode: textController.text)) {
       switch (model.response!.code) {
         case 200:
-          final nav = Navigator.of(context);
           await EasyLoading.showSuccess('簡訊驗證成功！', duration: const Duration(seconds: 2));
           await Future.delayed(const Duration(seconds: 2));
           nav.pop();
@@ -136,7 +137,7 @@ class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog
         default:
           await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50', duration: const Duration(seconds: 2));
           await Future.delayed(const Duration(seconds: 2));
-          Navigator.of(context).pop();
+          nav.pop();
       }
     }
   }

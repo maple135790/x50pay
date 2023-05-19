@@ -67,13 +67,13 @@ class _GameCabs extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: const Text('優惠時段', style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
                 )),
-            Positioned(
+            const Positioned(
               top: 40,
               left: 35,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案', style: TextStyle(color: Color(0xfffafafa))),
                   SizedBox(height: 5),
                   Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xfffafafa))),

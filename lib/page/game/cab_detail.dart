@@ -57,7 +57,7 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
       model.cabinets[4] = nwcabinet;
       model.cabinets[5] = nwcabinet1;
     }
-    List<Widget> _buildCabBlock({required String caboid}) {
+    List<Widget> buildCabBlock({required String caboid}) {
       List<Widget> widgets = [];
       double gi = note.first;
       int cabGroupIndex = gi.toInt();
@@ -191,7 +191,7 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
                     child: Image(image: NetworkImage('https://pay.x50.fun${model.spic}', scale: 1))),
               )
             : const SizedBox(),
-        ..._buildCabBlock(caboid: model.caboid)
+        ...buildCabBlock(caboid: model.caboid)
       ],
     );
   }

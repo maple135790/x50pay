@@ -48,7 +48,7 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
   Column playRecordLoaded(PlayRecordModel model) {
     bool hasData = model.logs.isNotEmpty;
 
-    List<DataRow> _buildRows() {
+    List<DataRow> buildRows() {
       List<DataRow> rows = [];
       for (PlayLog log in model.logs) {
         rows.add(DataRow(cells: [
@@ -82,9 +82,9 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
                   border: TableBorder.all(color: Themes.borderColor, width: 1),
-                  dataRowHeight: 60,
+                  dataRowMaxHeight: 60,
                   columns: ['日期', '機台', '使用點數'].map((e) => DataColumn(label: Text(e))).toList(),
-                  rows: _buildRows(),
+                  rows: buildRows(),
                 ),
               )
             : const Text('無資料'),
