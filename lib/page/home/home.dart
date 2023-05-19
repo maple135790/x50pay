@@ -1,11 +1,8 @@
 import 'dart:convert';
 
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -16,6 +13,7 @@ import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/buyMPass/buy_mpass.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
+import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
 
 class Home extends StatefulWidget {
@@ -270,19 +268,7 @@ class _MariInfo extends StatelessWidget {
                       )
                     ]),
                     const SizedBox(height: 5),
-                    // ProgressBar
                     ProgressBar(currentValue: gr2Progress <= 20 ? 20 : gr2Progress),
-                    FAProgressBar(
-                      backgroundColor: const Color(0xff949494),
-                      borderRadius: BorderRadius.circular(15),
-                      currentValue: gr2Progress <= 20 ? 20 : gr2Progress,
-                      size: 25,
-                      progressColor: const Color(0xffff9bad),
-                      displayTextStyle: TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w900, fontFamily: R.fontFamily.notoSansJP),
-                      formatValue: (str, t) => '',
-                      displayText: ' ♡  ',
-                    ),
                     const SizedBox(height: 12),
                     Flexible(
                       child: Column(
@@ -384,104 +370,6 @@ class _MariInfo extends StatelessWidget {
         ),
       ]),
     );
-  }
-}
-
-class ProgressBar extends StatefulWidget {
-  final double currentValue;
-  const ProgressBar({super.key, required this.currentValue});
-
-  @override
-  State<ProgressBar> createState() => _ProgressBarState();
-}
-
-class _ProgressBarState extends State<ProgressBar> with TickerProviderStateMixin {
-  late Future<DrawableRoot> getDrawableRoot;
-  late ui.Image _image;
-  late Future<void> loadImageInit;
-  late final Animation<double> animation = CurvedAnimation(parent: _controller, curve: Curves.linear);
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 5),
-    vsync: this,
-  )..repeat(reverse: false);
-
-  @override
-  void initState() {
-    loadImageInit = _loadImage();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<void> _loadImage() async {
-    ByteData bd = await rootBundle.load(R.image.heart_regular().assetName);
-    final Uint8List bytes = Uint8List.view(bd.buffer);
-    final codec =
-        await ui.instantiateImageCodec(bytes, targetHeight: 12, targetWidth: 12, allowUpscaling: false);
-    final image = (await codec.getNextFrame()).image;
-
-    setState(() => _image = image);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: loadImageInit,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: CustomPaint(
-            painter: ProgressBackgroundPainter(),
-            foregroundPainter: ProgressPainter(progress: widget.currentValue, image: _image),
-            size: const Size(double.maxFinite, 24),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class ProgressPainter extends CustomPainter {
-  final double progress;
-  final ui.Image image;
-  final imagePadding = 8;
-  final progressBarHeight = 24.0;
-
-  const ProgressPainter({required this.progress, required this.image});
-  @override
-  void paint(Canvas canvas, Size size) {
-    final width = size.width * ((progress < 8 ? 8 : progress) / 100);
-    final imageX = width - image.width - imagePadding;
-    canvas
-      ..drawRRect(
-        RRect.fromRectAndRadius(Offset.zero & Size(width, progressBarHeight), const Radius.circular(24)),
-        Paint()..color = const Color(0xffff9bad),
-      )
-      ..drawImage(image, Offset(imageX, 6),
-          Paint()..colorFilter = const ColorFilter.mode(Colors.white, BlendMode.srcATop));
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
-
-class ProgressBackgroundPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(Offset.zero & size, const Radius.circular(24)),
-      Paint()..color = const Color(0xff949494),
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
 

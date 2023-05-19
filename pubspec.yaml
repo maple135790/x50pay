@@ -21,6 +21,7 @@ dependencies:
   http: ^0.13.4
   json_annotation: ^4.5.0
   location: ^4.4.0
+  matrix4_transform: ^2.0.1
   navigation_history_observer: ^1.1.0
   percent_indicator: ^4.2.2
   permission_handler: ^10.0.0
