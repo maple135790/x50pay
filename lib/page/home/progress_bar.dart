@@ -65,11 +65,13 @@ class _ProgressBarState extends State<ProgressBar> with TickerProviderStateMixin
         if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: CustomPaint(
-            painter: ProgressBackgroundPainter(dx: animation.value),
-            foregroundPainter: ProgressPainter(progress: widget.currentValue, image: heartIcon),
-            size: const Size(double.maxFinite, 24),
-            willChange: true,
+          child: RepaintBoundary(
+            child: CustomPaint(
+              painter: ProgressBackgroundPainter(dx: animation.value),
+              foregroundPainter: ProgressPainter(progress: widget.currentValue, image: heartIcon),
+              size: const Size(double.maxFinite, 24),
+              willChange: true,
+            ),
           ),
         );
       },
