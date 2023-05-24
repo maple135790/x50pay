@@ -10,14 +10,8 @@ EntryModel _$EntryModelFromJson(Map<String, dynamic> json) => EntryModel(
       message: json['message'] as String,
       code: json['code'] as int,
       gr2: json['gr2'] as List<dynamic>,
-      grade: json['grade'] as List<dynamic>?,
       evlist: (json['evlist'] as List<dynamic>?)
           ?.map((e) => Evlist.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      history: (json['history'] as List<dynamic>?)
-          ?.map((e) => (e as List<dynamic>?)
-              ?.map((e) => EntryHistory.fromJson(e as Map<String, dynamic>))
-              .toList())
           .toList(),
       giftlist: json['giftlist'] == null
           ? null
@@ -29,9 +23,7 @@ Map<String, dynamic> _$EntryModelToJson(EntryModel instance) =>
       'message': instance.message,
       'code': instance.code,
       'gr2': instance.gr2,
-      'grade': instance.grade,
       'evlist': instance.evlist,
-      'history': instance.history,
       'giftlist': instance.giftlist,
     };
 

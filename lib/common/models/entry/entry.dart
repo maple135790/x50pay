@@ -8,20 +8,14 @@ class EntryModel {
   final String message;
   final int code;
   final List<dynamic> gr2;
-  @Deprecated('deprecated in v4')
-  final List<dynamic>? grade;
   final List<Evlist>? evlist;
-  @Deprecated('deprecated in v4')
-  final List<List<EntryHistory>?>? history;
   final GiftList? giftlist;
 
   const EntryModel(
       {required this.message,
       required this.code,
       required this.gr2,
-      this.grade,
       this.evlist,
-      this.history,
       this.giftlist});
 
   factory EntryModel.fromJson(Map<String, dynamic> json) => _$EntryModelFromJson(json);
