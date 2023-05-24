@@ -9,6 +9,7 @@ extension MaterialStateSet on Set<MaterialState> {
 class AppThemeData {
   ThemeData get materialTheme {
     return ThemeData(
+      useMaterial3: true,
       dataTableTheme: DataTableThemeData(
         headingTextStyle: const TextStyle(color: Color(0xfffafafa)),
         headingRowColor: MaterialStateProperty.all(const Color(0xff2a2a2a)),

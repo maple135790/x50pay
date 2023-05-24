@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
@@ -9,7 +10,7 @@ abstract class Api {
 
   static Uri destURL(String dest) => Uri.parse(domainBase + dest);
 
-  static Future makeRequest({
+  static Future<http.Response> makeRequest({
     ContentType contentType = ContentType.json,
     Map<String, String>? session,
     String? customDest,
@@ -19,7 +20,7 @@ abstract class Api {
     required HttpMethod method,
     Function(Map<String, dynamic>)? onSuccess,
     Function(String)? onSuccessString,
-    Function(int, String)? onError,
+    Function(int statusCode, String body)? onError,
     Function(Map<String, String>)? responseHeader,
     bool withSession = false,
   }) async {
@@ -28,28 +29,41 @@ abstract class Api {
     bool isEmptyBody = body.isEmpty;
     String? session;
 
+    const fixHeaders = {
+      "Host": "pay.x50.fun",
+      "Origin": "https://pay.x50.fun",
+      "Referer": "https://pay.x50.fun/"
+    };
+
     if (withSession) {
       final pref = await SharedPreferences.getInstance();
       session = pref.getString('session');
     }
 
+    Map<String, String> getHeaders() {
+      Map<String, String> headers = {};
+      if (withSession) {
+        headers.addAll({
+          'Cookie': 'session=$session',
+          if (contentType != ContentType.none) "Content-Type": contentType.value
+        });
+      }
+      headers.addAll(fixHeaders);
+      return headers;
+    }
+
     switch (method) {
       case HttpMethod.post:
-        response = await http.post(customDest != null ? Uri.parse(customDest) : destURL(dest),
-            body: isEmptyBody
-                ? ''
-                : contentType == ContentType.json
-                    ? jsonEncode(body)
-                    : body,
-            headers: withSession
-                ? {
-                    'Cookie': 'session=$session',
-                    "Content-Type": contentType == ContentType.json
-                        ? 'application/json'
-                        : 'application/x-www-form-urlencoded'
-                  }
-                : null,
-            encoding: Encoding.getByName('utf-8'));
+        response = await http.post(
+          customDest != null ? Uri.parse(customDest) : destURL(dest),
+          body: isEmptyBody
+              ? ''
+              : contentType == ContentType.json
+                  ? jsonEncode(body)
+                  : body,
+          headers: getHeaders(),
+          encoding: Encoding.getByName('utf-8'),
+        );
         if (response.statusCode == 200) {
           isResponseString ? onSuccessString.call(response.body) : onSuccess?.call(jsonDecode(response.body));
         } else {
@@ -57,6 +71,9 @@ abstract class Api {
           throw Exception(['response code: ', response.statusCode, '\nresponse body: ', response.body]);
         }
         responseHeader?.call(response.headers);
+        log("url: ${response.request!.url}", name: 'makeRequest url');
+        log("header: ${response.request!.headers}", name: 'makeRequest header');
+        log("response: ${response.body.length > 5000 ? 'too long' : response.body}", name: 'makeRequest response');
         break;
 
       case HttpMethod.get:
@@ -83,9 +100,17 @@ abstract class Api {
       // ignore: avoid_print
       print(response.body);
     }
+    return response;
   }
 }
 
 enum HttpMethod { post, get }
 
-enum ContentType { json, xForm }
+enum ContentType {
+  json('application/json'),
+  xForm('application/x-www-form-urlencoded'),
+  none('');
+
+  final String value;
+  const ContentType(this.value);
+}

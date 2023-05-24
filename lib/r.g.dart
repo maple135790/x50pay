@@ -258,6 +258,9 @@
     class _R_Text_AssetResource {
       const _R_Text_AssetResource();
     
+  /// asset: assets/texts/avater.txt
+      // ignore: non_constant_identifier_names
+      final avater_txt = const AssetResource("assets/texts/avater.txt", packageName: null);
   /// asset: assets/texts/license.txt
       // ignore: non_constant_identifier_names
       final license_txt = const AssetResource("assets/texts/license.txt", packageName: null);
@@ -546,6 +549,12 @@
     
       final asset = const _R_Text_AssetResource();
     
+  /// asset: assets/texts/avater.txt
+      // ignore: non_constant_identifier_names
+      Future<String> avater_txt() {
+        final str = rootBundle.loadString(asset.avater_txt.keyName);
+        return str;
+      }
   /// asset: assets/texts/license.txt
       // ignore: non_constant_identifier_names
       Future<String> license_txt() {

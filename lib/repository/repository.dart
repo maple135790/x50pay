@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/api.dart';
 import 'package:x50pay/common/models/basic_response.dart';
@@ -439,5 +442,28 @@ class Repository extends Api {
       body: {'contentgid': gid},
     );
     return;
+  }
+
+  Future<http.Response> getAvatar() async {
+    final response = await Api.makeRequest(
+      dest: '/list/avater',
+      body: {},
+      method: HttpMethod.get,
+      withSession: true,
+    );
+    return response;
+  }
+
+  Future<http.Response> setAvatar(String id) async {
+    final response = await Api.makeRequest(
+      dest: '/cgAva/$id',
+      body: {},
+      method: HttpMethod.post,
+      withSession: true,
+      contentType: ContentType.none,
+    );
+    log("request: ${response.request!.contentLength}", name: 'setAvatar');
+    log("request: ${response.request!.headers}", name: 'setAvatar');
+    return response;
   }
 }

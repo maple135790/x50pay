@@ -263,6 +263,25 @@ class _MariInfoState extends State<_MariInfo> {
                     height: 270,
                     cacheHeight: 270),
               ),
+              Column(
+                verticalDirection: VerticalDirection.up,
+                children: [
+                  SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: IconButton(
+                      iconSize: 16.5,
+                      onPressed: dressRoomPopup,
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(Icons.checkroom),
+                      color: const Color(0xffffc0cb),
+                      style: const ButtonStyle(
+                        side: MaterialStatePropertyAll(BorderSide(color: Color(0xff3e3e3e))),
+                      ),
+                    ),
+                  )
+                ],
+              ),
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

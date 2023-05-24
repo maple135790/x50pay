@@ -18,6 +18,8 @@ dependencies:
       ref: fixMinSdkParseFlutter2.8
   flutter_native_splash: ^2.2.7
   flutter_svg: ^1.1.6
+  fluttertoast: ^8.2.2
+  html: ^0.15.3
   http: ^0.13.4
   json_annotation: ^4.5.0
   location: ^4.4.0
@@ -98,6 +100,7 @@ flutter:
   - assets/images/home/top.png
   - assets/images/home/vts.png
   - assets/images/login/login_banner.jpg
+  - assets/texts/avater.txt
   - assets/texts/license.txt
   fonts:
   - family: NotoSansJP
