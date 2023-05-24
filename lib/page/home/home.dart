@@ -12,6 +12,7 @@ import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/buyMPass/buy_mpass.dart';
+import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
@@ -32,6 +33,7 @@ class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
   Widget body() {
     return FutureBuilder<bool>(
       future: viewModel.initHome(),
+      key: ValueKey(viewModel.entry),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
         if (snapshot.data == false) {
@@ -56,44 +58,36 @@ class _HomeLoaded extends StatefulWidget {
 }
 
 class _HomeLoadedState extends State<_HomeLoaded> {
+  Widget divider() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 13, vertical: 14),
+      child: Row(
+        children: [
+          Expanded(child: Divider(color: Color(0xff3e3e3e))),
+          Text(' 官方資訊 '),
+          Expanded(child: Divider(color: Color(0xff3e3e3e))),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = widget.user;
 
     return WillPopScope(
       onWillPop: () async {
-        final shouldPop = await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('確認離開 ?', style: TextStyle(color: Color(0xfffafafa))),
-              actions: [
-                TextButton(
-                  style: Themes.severe(isV4: true),
-                  onPressed: () {
-                    SystemNavigator.pop();
-                  },
-                  child: const Text('是'),
-                ),
-                TextButton(
-                  style: Themes.pale(),
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: const Text('否'),
-                ),
-              ],
-            );
-          },
-        );
+        final shouldPop = await confirmPopup();
         return shouldPop!;
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 10),
           _TopInfo(user: user),
           _TicketInfo(user: user),
           _MariInfo(isVip: user.vip!, viewModel: widget.viewModel),
+          divider(),
           _EventInfo(widget.viewModel.entry!.evlist),
           Padding(
               padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
@@ -118,15 +112,39 @@ class _HomeLoadedState extends State<_HomeLoaded> {
       ),
     );
   }
+
+  Future<bool?> confirmPopup() {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('確認離開 ?', style: TextStyle(color: Color(0xfffafafa))),
+          actions: [
+            TextButton(
+              style: Themes.severe(isV4: true),
+              onPressed: () {
+                SystemNavigator.pop();
+              },
+              child: const Text('是'),
+            ),
+            TextButton(
+              style: Themes.pale(),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text('否'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class _TicketInfo extends StatelessWidget {
   final UserModel user;
 
-  const _TicketInfo({
-    Key? key,
-    required this.user,
-  }) : super(key: key);
+  const _TicketInfo({Key? key, required this.user}) : super(key: key);
 
   String vipExpDate() {
     final date = DateTime.fromMillisecondsSinceEpoch(user.vipdate!.date);
@@ -153,7 +171,7 @@ class _TicketInfo extends StatelessWidget {
                     },
                     child: const Icon(Icons.confirmation_number, color: Color(0xff237804), size: 50)),
                 const SizedBox(width: 16),
-                const VerticalDivider(thickness: 1, width: 0),
+                const VerticalDivider(thickness: 0, width: 0, color: Color(0xff3e3e3e)),
                 const SizedBox(width: 15),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,15 +210,27 @@ class _TicketInfo extends StatelessWidget {
   }
 }
 
-class _MariInfo extends StatelessWidget {
+class _MariInfo extends StatefulWidget {
   final HomeViewModel viewModel;
   final bool isVip;
   const _MariInfo({Key? key, required this.viewModel, required this.isVip}) : super(key: key);
 
   @override
+  State<_MariInfo> createState() => _MariInfoState();
+}
+
+class _MariInfoState extends State<_MariInfo> {
+  void dressRoomPopup() {
+    showDialog(
+      context: context,
+      builder: (context) => const DressRoomPopup(),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final entry = viewModel.entry!;
-    final gradeLv = entry.gr2[0].toInt().toString();
+    final entry = widget.viewModel.entry!;
+    final gradeLv = entry.gr2[0].toString();
     final gr2HowMuch = entry.gr2[1].toInt().toString();
     final gr2Limit = entry.gr2[2].toInt().toString();
     final gr2Next = entry.gr2[3].toString();
@@ -208,7 +238,7 @@ class _MariInfo extends StatelessWidget {
     final gr2Date = entry.gr2[5].toString();
     final gr2GradeBoxContent = entry.gr2[6].toString();
     final ava = entry.gr2[7].toString().split(',').last;
-    final gr2VDay = entry.gr2[9].toInt().toString();
+    final gr2VDay = entry.gr2[9].toString();
     final gr2Progress = entry.gr2[0] / 15;
 
     return Padding(
@@ -221,9 +251,10 @@ class _MariInfo extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), border: Border.all(color: Themes.borderColor)),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               SizedBox(
-                width: 173,
+                width: 141.6,
                 child: Image.memory(base64Decode(ava),
                     alignment: Alignment.center,
                     filterQuality: FilterQuality.high,
@@ -248,7 +279,7 @@ class _MariInfo extends StatelessWidget {
                         preferBelow: false,
                         decoration: BoxDecoration(
                             color: const Color(0x33fefefe), borderRadius: BorderRadius.circular(8)),
-                        message: isVip ? '月票：當日前12道加成' : '當日前10道加成',
+                        message: widget.isVip ? '月票：當日前12道加成' : '當日前10道加成',
                         child: Container(
                             decoration: BoxDecoration(
                                 color: const Color(0xff2f2f2f), borderRadius: BorderRadius.circular(5)),
@@ -256,7 +287,6 @@ class _MariInfo extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // Icon(Icons.bolt, color: Color(0xfffafafa), size: 20),
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child:
@@ -294,7 +324,7 @@ class _MariInfo extends StatelessWidget {
                               const WidgetSpan(
                                   child: Icon(Icons.favorite, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 下一階段: '),
+                              const TextSpan(text: ' 下一階: '),
                               TextSpan(text: gr2Next),
                               const TextSpan(text: ' 親密度 '),
                             ])),
@@ -306,7 +336,7 @@ class _MariInfo extends StatelessWidget {
                               const WidgetSpan(
                                   child: Icon(Icons.calendar_today, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 連續登入: '),
+                              const TextSpan(text: ' 已簽到: '),
                               TextSpan(text: gr2Day),
                               const TextSpan(text: ' 天 '),
                             ])),
@@ -318,10 +348,10 @@ class _MariInfo extends StatelessWidget {
                               const WidgetSpan(
                                   child: Icon(Icons.how_to_vote, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 領抽獎券: '),
+                              const TextSpan(text: ' 抽獎券: '),
                               const TextSpan(text: ' 再 '),
                               TextSpan(text: gr2VDay),
-                              const TextSpan(text: ' 親密度 '),
+                              const TextSpan(text: ' 點 '),
                             ])),
                           ),
                           Padding(
@@ -330,7 +360,7 @@ class _MariInfo extends StatelessWidget {
                                 text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
                               const WidgetSpan(child: Icon(Icons.sync, color: Color(0xfffafafa), size: 15)),
                               const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 重置日期: '),
+                              const TextSpan(text: ' 換季日: '),
                               TextSpan(text: gr2Date),
                             ])),
                           ),
@@ -340,7 +370,7 @@ class _MariInfo extends StatelessWidget {
                               onPressed: () {
                                 showDialog(
                                     context: context,
-                                    builder: (context) => _GradeBox(gr2GradeBoxContent, viewModel));
+                                    builder: (context) => _GradeBox(gr2GradeBoxContent, widget.viewModel));
                               },
                               style: ButtonStyle(
                                 overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -481,7 +511,7 @@ class _TopInfo extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    const VerticalDivider(thickness: 1, width: 0),
+                    const VerticalDivider(thickness: 1, width: 0, color: Color(0xff3e3e3e)),
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () async {
