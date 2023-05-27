@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/page/collab/collab.dart';
 import 'package:x50pay/page/pages.dart';
 
 class RouteGenerator {
@@ -23,7 +24,8 @@ class RouteGenerator {
         return NoTransitionRouter(const GiftSystem(), s: settings);
       case AppRoute.home:
         return NoTransitionRouter(const Home(), s: settings);
-
+      case AppRoute.collab:
+        return NoTransitionRouter(const Collab(), s: settings);
       default:
         return MaterialPageRoute(builder: (context) => const NotExist());
     }

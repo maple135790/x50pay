@@ -36,7 +36,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
     (icon: Icons.settings, label: '設定', routeName: AppRoute.account),
     (icon: Icons.home_rounded, label: 'Me', routeName: AppRoute.home),
     (icon: Icons.redeem_rounded, label: '禮物', routeName: AppRoute.gift),
-    (icon: Icons.handshake_rounded, label: '合作', routeName: null),
+    (icon: Icons.handshake_rounded, label: '合作', routeName: AppRoute.collab),
   ];
 
   late final String? currentRouteName = ModalRoute.of(context)?.settings.name;

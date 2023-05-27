@@ -88,7 +88,7 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
                 Container(
                     color: const Color.fromARGB(12, 255, 255, 255),
                     width: MediaQuery.of(context).size.width,
-                    height: 90,
+                    height: 89.19,
                     child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
@@ -97,6 +97,7 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
                           Text('X50Pay 禮物系統', style: TextStyle(color: Color(0xffb4b4b4)))
                         ])),
                 Container(
+                    height: 42.5,
                     alignment: Alignment.centerLeft,
                     color: const Color.fromARGB(5, 255, 255, 255),
                     child: TabBar(

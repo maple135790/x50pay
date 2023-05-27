@@ -9,4 +9,5 @@ class AppRoute {
   static const game = '/game';
   static const account = '/account';
   static const gift = '/gift';
+  static const collab = '/collab';
 }

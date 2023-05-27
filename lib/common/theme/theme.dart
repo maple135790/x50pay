@@ -23,7 +23,7 @@ class AppThemeData {
           backgroundColor: Color(0xff1e1e1e),
           titleTextStyle: TextStyle(color: Color(0xfffafafa), fontSize: 20, wordSpacing: 0.15)),
       dialogBackgroundColor: const Color(0xff1e1e1e),
-      dividerColor: const Color(0xff3e3e3e),
+      dividerTheme: const DividerThemeData(color: Color(0xff3e3e3e)),
       tabBarTheme: const TabBarTheme(
         labelColor: Colors.white,
         dividerColor: Colors.transparent,

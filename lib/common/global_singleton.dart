@@ -5,7 +5,8 @@ import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class GlobalSingleton {
-  final isOnline = false;
+  final isOnline = false
+  ;
   final _costEnabled = false;
   UserModel? user;
   int _lastChkMe = -1;
