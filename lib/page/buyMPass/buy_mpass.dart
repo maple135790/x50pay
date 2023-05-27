@@ -37,7 +37,7 @@ enum _MpassProgram {
       icon: Icons.people,
       discountTimeDesc: '較長',
       raisingBounsAmount: 2),
-  MonthlyRaising(
+  monthlyRaising(
       name: '月養成',
       price: 349,
       priceDesc: '1人1個月',
@@ -503,7 +503,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
           EasyLoading.showSuccess('購買成功，感謝您的惠顧');
         }
         break;
-      case _MpassProgram.MonthlyRaising:
+      case _MpassProgram.monthlyRaising:
         if (GlobalSingleton.instance.isOnline) {
           final rawResponse = await repo.buyVipGradeOne();
           parseResponse(rawResponse);

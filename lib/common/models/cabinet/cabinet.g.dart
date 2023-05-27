@@ -11,13 +11,16 @@ CabinetModel _$CabinetModelFromJson(Map<String, dynamic> json) => CabinetModel(
       code: json['code'] as int,
       note: json['note'] as List<dynamic>,
       caboid: json['caboid'] as String,
-      spic: json['spic'] as String?,
-      surl: json['surl'] as String?,
+      spic: (json['spic'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      surl: (json['surl'] as List<dynamic>?)?.map((e) => e as String).toList(),
       pad: json['pad'] as bool,
       padmid: json['padmid'] as String,
       padlid: json['padlid'] as String,
       cabinets: (json['cabinet'] as List<dynamic>)
           .map((e) => Cabinet.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      reservations: (json['re'] as List<dynamic>)
+          .map((e) => (e as List<dynamic>?)?.map((e) => e as String).toList())
           .toList(),
     );
 
@@ -33,6 +36,7 @@ Map<String, dynamic> _$CabinetModelToJson(CabinetModel instance) =>
       'padmid': instance.padmid,
       'padlid': instance.padlid,
       'cabinet': instance.cabinets,
+      're': instance.reservations,
     };
 
 Cabinet _$CabinetFromJson(Map<String, dynamic> json) => Cabinet(

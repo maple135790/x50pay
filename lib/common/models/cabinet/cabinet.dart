@@ -10,15 +10,17 @@ class CabinetModel {
   final String caboid;
 
   /// stream pic
-  final String? spic;
+  final List<String>? spic;
 
   /// stream url
-  final String? surl;
+  final List<String>? surl;
   final bool pad;
   final String padmid;
   final String padlid;
   @JsonKey(name: 'cabinet')
   final List<Cabinet> cabinets;
+  @JsonKey(name: 're')
+  final List<List<String>?> reservations;
 
   const CabinetModel(
       {required this.message,
@@ -30,7 +32,8 @@ class CabinetModel {
       required this.pad,
       required this.padmid,
       required this.padlid,
-      required this.cabinets});
+      required this.cabinets,
+      required this.reservations});
 
   factory CabinetModel.fromJson(Map<String, dynamic> json) => _$CabinetModelFromJson(json);
   Map<String, dynamic> toJson() => _$CabinetModelToJson(this);

@@ -30,15 +30,15 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
   }
 
   Widget cabDetailLoaded(CabinetModel model) {
-    String tagLabel = model.cabinets.first.isBool == true
+    List<Cabinet> cabs = model.cabinets;
+    final tagLabel = model.cabinets.first.isBool == true
         ? model.cabinets.first.vipbool == true
             ? '月票'
             : '離峰'
         : '通常';
-    double price = model.cabinets.first.mode[0][2];
-    List<Cabinet> cabs = model.cabinets;
-    List note = model.note;
-    bool revbool = note.reversed.elementAt(1);
+    final price = double.parse(model.cabinets.first.mode[0][2].toString());
+    final note = model.note;
+    final revbool = note.reversed.elementAt(1) as bool;
     var rrbool = note.reversed.elementAt(2);
     if (note[note.length - 1] == "twor") {
       note[note.length - 1] = "two";
@@ -56,7 +56,7 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
     }
     List<Widget> buildCabBlock({required String caboid}) {
       List<Widget> widgets = [];
-      double gi = note.first;
+      double gi = double.parse(note.first.toString());
       int cabGroupIndex = gi.toInt();
       int blockCount = 0;
 
@@ -65,7 +65,8 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
       }
       for (int divIndex = 0; divIndex < blockCount; divIndex++) {
         String divText = note[1 + divIndex];
-        List<Cabinet> cabGroup1 = cabs.sublist(0, cabGroupIndex + 1);
+        List<Cabinet> cabGroup1 =
+            cabs.sublist(0, cabGroupIndex + 1 > cabs.length ? cabGroupIndex : cabGroupIndex + 1);
         List<Cabinet>? cabGroup2;
         if (cabGroupIndex != cabs.length) cabGroup2 = cabs.sublist(cabGroupIndex + 1);
 
@@ -94,110 +95,167 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
       return widgets;
     }
 
-    return Column(
-      children: [
-        viewModel.lineupCount != -1
-            ? Container(
-                margin: const EdgeInsets.fromLTRB(15, 20, 15, 8),
-                padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    border: Border.all(color: Themes.borderColor, width: 1),
-                    borderRadius: BorderRadius.circular(5)),
-                child: Row(
-                  children: [
-                    Text('  X50Pad 排隊狀況：${viewModel.lineupCount} 人等待中',
-                        style: const TextStyle(color: Color(0xfffafafa))),
-                    const Spacer(),
-                    GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: const Color(0xfffafafa), borderRadius: BorderRadius.circular(8)),
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          child: const Icon(Icons.tablet_mac),
-                        ))
-                  ],
-                ))
-            : const SizedBox(),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: SizedBox(
-            height: 150,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                      child: Image(
-                    image: _getGameCabImage(widget.machineId),
-                    fit: BoxFit.fitWidth,
-                    errorBuilder: (context, error, stackTrace) {
-                      log('', name: 'err cabDetailLoaded', error: 'error loading gamecab image: $error');
-                      return Image(image: _getGameCabImageFallback(widget.machineId));
-                    },
-                  )),
-                  Positioned.fill(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Colors.transparent, Colors.black],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            stops: [0.1, 1]),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 15,
-                    left: 15,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(model.cabinets.first.label,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
-                        Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                          const Icon(Icons.sell, size: 16, color: Color(0xe6ffffff)),
-                          Text('  $tagLabel',
-                              style: const TextStyle(
-                                  color: Color(0xffbcbfbf),
-                                  fontSize: 16,
-                                  shadows: [Shadow(color: Colors.black, blurRadius: 15)])),
-                          const SizedBox(width: 5),
-                          const Icon(Icons.attach_money, size: 16, color: Color(0xe6ffffff)),
-                          Text('${price.toInt()}P',
-                              style: const TextStyle(
-                                  color: Color(0xffbcbfbf),
-                                  fontSize: 16,
-                                  shadows: [Shadow(color: Colors.black, blurRadius: 15)]))
-                        ]),
-                      ],
-                    ),
-                  ),
-                ],
+    Widget buildPadLineUp() {
+      if (viewModel.lineupCount == -1) return const SizedBox();
+      return Container(
+          margin: const EdgeInsets.fromLTRB(15, 0, 15, 8),
+          padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(color: Themes.borderColor, width: 1),
+              borderRadius: BorderRadius.circular(5)),
+          child: Row(
+            children: [
+              Text('  X50Pad 排隊狀況：${viewModel.lineupCount} 人等待中',
+                  style: const TextStyle(color: Color(0xfffafafa))),
+              const Spacer(),
+              GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    decoration:
+                        BoxDecoration(color: const Color(0xfffafafa), borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: const Icon(Icons.tablet_mac),
+                  ))
+            ],
+          ));
+    }
+
+    void showRSVPPopup() {
+      showDialog(context: context, builder: (context) => _RSVPDialog(model.reservations));
+    }
+
+    Widget buildRSVP(List<List<String>?> reservations) {
+      if (reservations.isEmpty) return const SizedBox();
+
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(color: const Color(0xffa8071a), borderRadius: BorderRadius.circular(4)),
+        child: Row(
+          children: [
+            Container(
+                width: 15,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
+                child: const Text('!', style: TextStyle(color: Color(0xffcf1322)))),
+            const SizedBox(width: 15),
+            const Text('該機種當周有無限制台預約'),
+            const Spacer(),
+            GestureDetector(
+              onTap: showRSVPPopup,
+              child: Container(
+                padding: const EdgeInsets.all(4.5),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
+                child: const Icon(Icons.calendar_month, color: Color(0xffa8071a), size: 16),
               ),
             ),
-          ),
+          ],
         ),
+      );
+    }
+
+    return Column(
+      children: [
         const SizedBox(height: 15),
-        model.spic != null
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: GestureDetector(
-                    onTap: () {
-                      launchUrlString(model.surl!.replaceAll('\'', ''),
-                          mode: LaunchMode.externalNonBrowserApplication);
-                    },
-                    child: Image(image: NetworkImage('https://pay.x50.fun${model.spic}', scale: 1))),
-              )
-            : const SizedBox(),
+        buildRSVP(model.reservations),
+        const SizedBox(height: 10),
+        buildPadLineUp(),
+        const SizedBox(height: 8),
+        buildCabInfo(price: price, tagName: tagLabel, cabLabel: model.cabinets.first.label),
+        const SizedBox(height: 15),
+        ...buildStreamPic(model.spic, model.surl),
         ...buildCabBlock(caboid: model.caboid)
       ],
     );
+  }
+
+  Widget buildCabInfo({required double price, required String tagName, required String cabLabel}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: SizedBox(
+        height: 150,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                  child: Image(
+                image: _getGameCabImage(widget.machineId),
+                fit: BoxFit.fitWidth,
+                errorBuilder: (context, error, stackTrace) {
+                  log('', name: 'err cabDetailLoaded', error: 'error loading gamecab image: $error');
+                  return Image(image: _getGameCabImageFallback(widget.machineId));
+                },
+              )),
+              Positioned.fill(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [Colors.transparent, Colors.black],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [0.1, 1]),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 15,
+                left: 15,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(cabLabel,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
+                    Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                      const Icon(Icons.sell, size: 18, color: Color(0xe6ffffff)),
+                      Text('  $tagName',
+                          style: const TextStyle(
+                              height: 0,
+                              color: Color(0xffbcbfbf),
+                              fontSize: 16,
+                              shadows: [Shadow(color: Colors.black, blurRadius: 15)])),
+                      const SizedBox(width: 5),
+                      const Icon(Icons.attach_money, size: 18, color: Color(0xe6ffffff)),
+                      Text('${price.toInt()}P',
+                          style: const TextStyle(
+                              height: 0,
+                              color: Color(0xffbcbfbf),
+                              fontSize: 16,
+                              shadows: [Shadow(color: Colors.black, blurRadius: 15)]))
+                    ]),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> buildStreamPic(List<String>? spic, List<String>? surl) {
+    if (spic == null || surl == null) return [const SizedBox()];
+    if (spic.length != surl.length) {
+      log('', name: 'err buildStreamPic', error: 'spic and surl length not equal');
+      return [const SizedBox()];
+    }
+    var list = <Widget>[];
+    for (var i = 0; i < surl.length; i++) {
+      list.add(Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: GestureDetector(
+            onTap: () {
+              launchUrlString(surl[i].replaceAll('\'', ''), mode: LaunchMode.externalNonBrowserApplication);
+            },
+            child: Image(image: NetworkImage('https://pay.x50.fun${spic[i]}', scale: 1))),
+      ));
+    }
+
+    return list;
   }
 
   List<Widget> _buildChildren(List<Cabinet> cabs, {required String caboid}) {
@@ -490,5 +548,87 @@ class _CabSelectState extends State<_CabSelect> {
         ));
     }
     return Column(mainAxisSize: MainAxisSize.min, children: children);
+  }
+}
+
+class _RSVPDialog extends StatefulWidget {
+  final List<List<String>?> rsvp;
+
+  const _RSVPDialog(this.rsvp);
+
+  @override
+  State<_RSVPDialog> createState() => _RSVPDialogState();
+}
+
+class _RSVPDialogState extends State<_RSVPDialog> {
+  String get title => widget.rsvp[0]![1];
+
+  List<Widget> buildRSVPs() {
+    var widgets = <Widget>[];
+    for (var r in widget.rsvp) {
+      widgets.add(Text(r?[0] ?? ''));
+    }
+    return widgets;
+  }
+
+  void doRSVP() {
+    launchUrlString('https://m.me/X50MGS', mode: LaunchMode.externalNonBrowserApplication);
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      clipBehavior: Clip.hardEdge,
+      scrollable: true,
+      contentPadding: EdgeInsets.zero,
+      content: Container(
+        constraints: const BoxConstraints(maxWidth: 380),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(title, style: const TextStyle(fontSize: 17)),
+                  const SizedBox(height: 5),
+                  const Text(' 已預約時段: '),
+                  const SizedBox(height: 5),
+                  ...buildRSVPs(),
+                ],
+              ),
+            ),
+            const Divider(thickness: 1, height: 0, color: Color(0xff3e3e3e)),
+            Container(
+              color: const Color(0xff2a2a2a),
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: Themes.cancel(),
+                        child: const Text('關閉')),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: doRSVP,
+                      style: Themes.severe(isV4: true),
+                      child: const Text('馬上預約'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
