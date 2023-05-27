@@ -61,7 +61,17 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
                       )),
                   _DialogWidget(
                       title: '平板上顯示不同暱稱',
-                      child: Row(children: [Expanded(child: TextField(controller: name))])),
+                      child: Row(children: [
+                        Expanded(
+                            child: TextField(
+                                controller: name,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5), borderSide: BorderSide.none),
+                                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                                )))
+                      ])),
                 ],
               );
             }

@@ -10,6 +10,7 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
+import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/buyMPass/buy_mpass.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
@@ -169,7 +170,8 @@ class _TicketInfo extends StatelessWidget {
               children: [
                 GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BuyMPass()));
+                      Navigator.of(context).push(
+                          NoTransitionRouter(const BuyMPass(), s: const RouteSettings(name: AppRoute.home)));
                     },
                     child: const Icon(Icons.confirmation_number, color: Color(0xff237804), size: 50)),
                 const SizedBox(width: 16),
@@ -259,8 +261,8 @@ class _MariInfoState extends State<_MariInfo> {
                 width: 141.6,
                 child: Image.memory(base64Decode(ava),
                     alignment: Alignment.center,
-                    filterQuality: FilterQuality.high,
                     fit: BoxFit.fitHeight,
+                    filterQuality: FilterQuality.high,
                     gaplessPlayback: true,
                     height: 270,
                     cacheHeight: 270),

@@ -4,6 +4,8 @@ extension MaterialStateSet on Set<MaterialState> {
   bool get isHovered => contains(MaterialState.hovered);
   bool get isDisabled => contains(MaterialState.disabled);
   bool get isPressed => contains(MaterialState.pressed);
+  bool get isSelected => contains(MaterialState.selected);
+  bool get isFocused => contains(MaterialState.focused);
 }
 
 class AppThemeData {
@@ -17,14 +19,35 @@ class AppThemeData {
             color: const Color(0xff1e1e1e), border: Border.all(color: Themes.borderColor, width: 1)),
       ),
       dialogTheme: const DialogTheme(
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: Color(0xff1e1e1e),
           titleTextStyle: TextStyle(color: Color(0xfffafafa), fontSize: 20, wordSpacing: 0.15)),
       dialogBackgroundColor: const Color(0xff1e1e1e),
       dividerColor: const Color(0xff3e3e3e),
+      tabBarTheme: const TabBarTheme(
+        labelColor: Colors.white,
+        dividerColor: Colors.transparent,
+      ),
       textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Color(0xfffafafa)),
           bodyMedium: TextStyle(color: Color(0xfffafafa)),
           titleMedium: TextStyle(color: Color(0xfffafafa))),
       scaffoldBackgroundColor: const Color(0xff1e1e1e),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: const Color(0xff1e1e1e),
+        indicatorColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        labelTextStyle: MaterialStateProperty.resolveWith((states) {
+          if (states.isSelected) return const TextStyle(color: Color(0xffe3c81b), fontSize: 11);
+          return null;
+        }),
+        iconTheme: MaterialStateProperty.resolveWith((states) {
+          if (states.isSelected) return const IconThemeData(color: Color(0xfffafafa));
+          return const IconThemeData(color: Color(0xffb4b4b4));
+        }),
+      ),
+      textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.white),
       inputDecorationTheme: const InputDecorationTheme(
           filled: true,
           fillColor: Color(0xff2a2a2a),

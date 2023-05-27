@@ -65,7 +65,7 @@ class _GameCabs extends StatelessWidget {
                 child: Container(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: const Text('優惠時段', style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
+                  child: const Text('離峰時段', style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
                 )),
             const Positioned(
               top: 40,
@@ -74,9 +74,9 @@ class _GameCabs extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案', style: TextStyle(color: Color(0xfffafafa))),
+                  Text('●   部分機種不提供離峰方案', style: TextStyle(color: Color(0xfffafafa))),
                   SizedBox(height: 5),
-                  Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xfffafafa))),
+                  Text('●   詳情請見粉絲專業更新貼文', style: TextStyle(color: Color(0xfffafafa))),
                 ],
               ),
             )
@@ -94,19 +94,20 @@ class _GameCabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isWeekend = DateTime.now().weekday == 6 || DateTime.now().weekday == 7;
-    final time = machine.mode![0][3] == true ? "優惠時段" : "通常時段";
+    final time = machine.mode![0][3] == true ? "離峰時段" : "通常時段";
     final addition = machine.vipb == true
         ? " [月票]"
         : isWeekend
-            ? " 23:00 ~ 13:00 [假日]"
-            : " 22:00 ~ 15:00 [平日]";
+            ? " [假日]"
+            : " [平日]";
 
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
       child: GestureDetector(
         onTap: () async {
           final nav = Navigator.of(context);
-          await nav.push(NoTransitionRouter(_CabDetail(machine.id!)));
+          await nav
+              .push(NoTransitionRouter(_CabDetail(machine.id!), s: const RouteSettings(name: AppRoute.game)));
           nav.pushReplacementNamed(AppRoute.game);
         },
         child: Container(
@@ -119,7 +120,7 @@ class _GameCabItem extends StatelessWidget {
               children: [
                 Positioned.fill(
                     child: Image(
-                  image: _getBackground(machine.id!, isOnline: GlobalSingleton.instance.isOnline),
+                  image: _getGameCabImage(machine.id!, isOnline: GlobalSingleton.instance.isOnline),
                   color: const Color.fromARGB(35, 0, 0, 0),
                   colorBlendMode: BlendMode.srcATop,
                   fit: BoxFit.fitWidth,

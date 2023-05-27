@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -106,7 +109,7 @@ class _StoreItem extends StatelessWidget {
   final String prefix;
   const _StoreItem(this.store, this.prefix, {Key? key}) : super(key: key);
 
-  ImageProvider _getBackground(int storeId, {bool isOnline = false}) {
+  ImageProvider _getStoreImage(int storeId, {bool isOnline = false}) {
     late _X50Store store;
 
     if (isOnline) return NetworkImage("https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
@@ -155,7 +158,7 @@ class _StoreItem extends StatelessWidget {
                     width: 400,
                     top: -100,
                     child: Image(
-                      image: _getBackground(store.sid!, isOnline: GlobalSingleton.instance.isOnline),
+                      image: _getStoreImage(store.sid!, isOnline: GlobalSingleton.instance.isOnline),
                       fit: BoxFit.fitWidth,
                       colorBlendMode: BlendMode.modulate,
                     )),
@@ -215,14 +218,9 @@ enum _X50Store {
   const _X50Store(this.sid);
 }
 
-ImageProvider _getBackground(String gameId, {bool isOnline = false}) {
-  _Machine? machine;
-  for (var m in _Machine.values) {
-    if (m.gameId != gameId) continue;
-    machine = m;
-    break;
-  }
-  if (machine == null) throw Exception('No machine found: $gameId');
+ImageProvider _getGameCabImageFallback(String gameId) {
+  final machine = _Machine.values.firstWhereOrNull((m) => m.gameId == gameId);
+
   switch (machine) {
     case _Machine.chu:
       return R.image.chu();
@@ -269,8 +267,13 @@ ImageProvider _getBackground(String gameId, {bool isOnline = false}) {
     case _Machine.twoBom:
       return R.image.a2bom();
     default:
+      log('', name: "err _getBackground", error: 'unknown machine: $gameId');
       return R.image.logo_150_jpg();
   }
+}
+
+ImageProvider _getGameCabImage(String gameId, {bool isOnline = false}) {
+  return NetworkImage('https://pay.x50.fun/static/gamesimg/$gameId.png?v1.1');
 }
 
 enum _Machine {

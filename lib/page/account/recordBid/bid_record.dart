@@ -13,9 +13,6 @@ class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
   late AccountViewModel model;
 
   @override
-  bool get disableBottomNavigationBar => true;
-
-  @override
   BaseViewModel? baseViewModel() => widget.viewModel;
 
   @override

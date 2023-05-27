@@ -14,9 +14,6 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
   BaseViewModel? baseViewModel() => null;
 
   @override
-  String? get subPageOf => 'game';
-
-  @override
   Widget body() {
     return FutureBuilder(
       future: viewModel.getSelGame(widget.machineId),
@@ -133,7 +130,14 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
               child: Stack(
                 children: [
                   Positioned.fill(
-                      child: Image(image: _getBackground(widget.machineId), fit: BoxFit.fitWidth)),
+                      child: Image(
+                    image: _getGameCabImage(widget.machineId),
+                    fit: BoxFit.fitWidth,
+                    errorBuilder: (context, error, stackTrace) {
+                      log('', name: 'err cabDetailLoaded', error: 'error loading gamecab image: $error');
+                      return Image(image: _getGameCabImageFallback(widget.machineId));
+                    },
+                  )),
                   Positioned.fill(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -400,7 +404,7 @@ class _CabSelectState extends State<_CabSelect> {
             height: 150,
             child: Stack(
               children: [
-                Positioned.fill(child: Image(image: _getBackground(widget.id), fit: BoxFit.fitWidth)),
+                Positioned.fill(child: Image(image: _getGameCabImage(widget.id), fit: BoxFit.fitWidth)),
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(

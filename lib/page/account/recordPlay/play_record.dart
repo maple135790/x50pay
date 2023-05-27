@@ -13,9 +13,6 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
   late AccountViewModel model;
 
   @override
-  bool get disableBottomNavigationBar => true;
-
-  @override
   BaseViewModel? baseViewModel() => widget.viewModel;
 
   @override

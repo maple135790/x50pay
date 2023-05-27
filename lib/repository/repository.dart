@@ -358,10 +358,10 @@ class Repository extends Api {
     return result;
   }
 
-  Future<String> remoteOpenDoor(double distance) async {
+  Future<String> remoteOpenDoor(double distance, {required String doorName}) async {
     String result = '';
     await Api.makeRequest(
-      customDest: 'https://pay.x50.fun/api/door/open/$distance',
+      customDest: 'https://pay.x50.fun/api/$doorName/open/$distance',
       dest: '',
       method: HttpMethod.post,
       contentType: ContentType.xForm,
@@ -393,7 +393,7 @@ class Repository extends Api {
     late GiftBoxModel giftBoxModel;
 
     await Api.makeRequest(
-      dest: '/giftBox',
+      dest: '/gift/box',
       method: HttpMethod.post,
       withSession: true,
       body: {},
@@ -464,6 +464,51 @@ class Repository extends Api {
     );
     log("request: ${response.request!.contentLength}", name: 'setAvatar');
     log("request: ${response.request!.headers}", name: 'setAvatar');
+    return response;
+  }
+
+  Future<http.Response> buyVipMany(List<String>? applicants) async {
+    Map<String, String> body = {};
+
+    if (applicants != null) {
+      int count = 0;
+      for (var applicant in applicants) {
+        count++;
+        body.addAll({'id$count': applicant});
+      }
+    }
+
+    final response = await Api.makeRequest(
+      dest: '/vip/buymany',
+      body: body,
+      method: HttpMethod.post,
+      withSession: true,
+      contentType: ContentType.json,
+    );
+    return response;
+  }
+
+  Future<http.Response> buyVipGradeOne() async {
+    final response = await Api.makeRequest(
+      dest: '/vip/buygrdone',
+      body: {},
+      method: HttpMethod.post,
+      withSession: true,
+      contentType: ContentType.json,
+    );
+
+    return response;
+  }
+
+  Future<http.Response> buyVipOne() async {
+    final response = await Api.makeRequest(
+      dest: '/vip/buyone',
+      body: {},
+      method: HttpMethod.post,
+      withSession: true,
+      contentType: ContentType.json,
+    );
+
     return response;
   }
 }

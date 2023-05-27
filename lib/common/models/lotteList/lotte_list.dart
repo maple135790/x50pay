@@ -9,13 +9,13 @@ class LotteListModel {
   final int self;
   final String name;
   final String date;
-  final int tic;
+  final String tic;
 
   LotteListModel(this.rawLotteList)
       : self = rawLotteList[4],
         name = rawLotteList[0],
         date = rawLotteList[1],
-        tic = rawLotteList[2];
+        tic = rawLotteList[2].toString();
 
   factory LotteListModel.fromJson(Map<String, dynamic> json) => _$LotteListModelFromJson(json);
 

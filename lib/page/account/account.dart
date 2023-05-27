@@ -65,7 +65,7 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Themes.borderColor, width: 1),
+                  border: Border.all(color: Themes.borderColor, width: 0),
                   color: bgColor),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -211,7 +211,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢加值相關記錄。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(NoTransitionRouter(_BidRecord(viewModel)));
+                  Navigator.of(context).push(NoTransitionRouter(_BidRecord(viewModel),
+                      s: const RouteSettings(name: AppRoute.account)));
                 }),
             _SettingTile(
                 iconData: Icons.redeem,
@@ -219,7 +220,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(NoTransitionRouter(_TicketRecord(viewModel)));
+                  Navigator.of(context).push(NoTransitionRouter(_TicketRecord(viewModel),
+                      s: const RouteSettings(name: AppRoute.account)));
                 }),
             _SettingTile(
                 iconData: Icons.format_list_bulleted,
@@ -227,7 +229,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢點數付款明細。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(NoTransitionRouter(_PlayRecord(viewModel)));
+                  Navigator.of(context).push(NoTransitionRouter(_PlayRecord(viewModel),
+                      s: const RouteSettings(name: AppRoute.account)));
                 }),
             _SettingTile(
                 iconData: Icons.confirmation_num,
@@ -235,16 +238,27 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢遊玩券使用明細。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(NoTransitionRouter(_TicketUsedRecord(viewModel)));
+                  Navigator.of(context).push(NoTransitionRouter(_TicketUsedRecord(viewModel),
+                      s: const RouteSettings(name: AppRoute.account)));
                 }),
           ]),
           _AccountBlock(children: [
             _SettingTile(
                 iconData: Icons.home,
-                title: '西門店開門',
-                subtitle: '就是個開門按鈕',
+                title: '西門一店開門',
+                subtitle: '就是個一店開門按鈕',
                 color: _SettingTileColor.white,
-                onTap: checkRemoteOpen),
+                onTap: () {
+                  checkRemoteOpen(shop: RemoteOpenShop.firstShop);
+                }),
+            _SettingTile(
+                iconData: Icons.home,
+                title: '西門二店開門',
+                subtitle: '就是個二店開門按鈕',
+                color: _SettingTileColor.white,
+                onTap: () {
+                  checkRemoteOpen(shop: RemoteOpenShop.secondShop);
+                }),
             _SettingTile(
                 iconData: Icons.logout,
                 title: '登出帳號',
@@ -259,15 +273,15 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
     );
   }
 
-  void checkRemoteOpen() async {
+  void checkRemoteOpen({required RemoteOpenShop shop}) async {
     await EasyLoading.show();
     final location = Location();
     double deg2rad(double deg) => deg * (pi / 180);
 
-    double getDistance(double lat1, double lon1, double lat2, double lon2) {
+    double getDistance(double lat1, double lng1, double lat2, double lng2) {
       var R = 6371; // Radius of the earth in km
       var dLat = deg2rad(lat2 - lat1); // deg2rad below
-      var dLon = deg2rad(lon2 - lon1);
+      var dLon = deg2rad(lng2 - lng1);
       var a = sin(dLat / 2) * sin(dLat / 2) +
           cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon / 2) * sin(dLon / 2);
       var c = 2 * atan2(sqrt(a), sqrt(1 - a));
@@ -297,7 +311,10 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
     locationData = await location.getLocation();
     double myLat = locationData.latitude!;
     double myLng = locationData.longitude!;
-    String result = await Repository().remoteOpenDoor(getDistance(25.0455991, 121.5027702, myLat, myLng));
+    String result = await Repository().remoteOpenDoor(
+      getDistance(25.0455991, 121.5027702, myLat, myLng),
+      doorName: shop.doorName,
+    );
     await EasyLoading.dismiss();
     await EasyLoading.showInfo(result.replaceFirst(',', '\n'));
   }
@@ -360,7 +377,8 @@ class _AccountBlock extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: children.length,
-            separatorBuilder: (context, index) => const Divider(thickness: 1, height: 1),
+            separatorBuilder: (context, index) =>
+                const Divider(thickness: 1, height: 1, color: Themes.borderColor),
             itemBuilder: (context, index) {
               final tile = children[index];
               return _SettingTile(
@@ -421,7 +439,6 @@ class _SettingTile extends StatelessWidget {
         iconColor = const Color(0xfffafafa);
         break;
     }
-    // iconColor ??= const Color(0xfffffefa);
 
     return ListTile(
       onTap: onTap,
@@ -632,4 +649,13 @@ class _DialogWidgetState extends State<_DialogWidget> {
       ],
     );
   }
+}
+
+enum RemoteOpenShop {
+  firstShop((lat: 25.0455991, lng: 121.5027702), doorName: 'door'),
+  secondShop((lat: 25.0455991, lng: 121.5027702), doorName: 'door2');
+
+  final ({double lat, double lng}) location;
+  final String doorName;
+  const RemoteOpenShop(this.location, {required this.doorName});
 }

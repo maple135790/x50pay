@@ -22,17 +22,23 @@ class GiftSystem extends StatefulWidget {
 
 class _GiftSystemState extends BaseStatefulState<GiftSystem> with BaseLoaded {
   final viewModel = GiftSystemViewModel();
+  late Future<bool> init;
 
   @override
   bool get isScrollable => false;
 
   @override
   BaseViewModel? baseViewModel() => viewModel;
+  @override
+  void initState() {
+    super.initState();
+    init = viewModel.giftSystemInit();
+  }
 
   @override
   Widget body() {
     return FutureBuilder<bool>(
-      future: viewModel.giftSystemInit(),
+      future: init,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const SizedBox(child: kDebugMode ? Text('not done') : null);

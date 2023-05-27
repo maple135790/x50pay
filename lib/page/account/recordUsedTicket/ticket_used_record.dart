@@ -13,9 +13,6 @@ class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord> with 
   late AccountViewModel model;
 
   @override
-  bool get disableBottomNavigationBar => true;
-
-  @override
   BaseViewModel? baseViewModel() => widget.viewModel;
 
   @override

@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -19,35 +21,195 @@ part "../../page/scan/scan.dart";
 
 mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   BaseViewModel? baseViewModel();
-  String? subPageOf;
-  bool disableBottomNavigationBar = false;
   Widget body();
-  LoadedHeaderType headerType = LoadedHeaderType.normal;
-  bool isScrollable = true;
-  void Function()? debugFunction;
-  Color? customBackgroundColor;
+  int selectedMenuIndex = 2;
   int? point;
+  bool isScrollable = true;
+  bool disableBottomNavigationBar = false;
+  Color? customBackgroundColor;
+  LoadedHeaderType headerType = LoadedHeaderType.fixed;
+
+  void Function()? debugFunction;
   static const navBarStyle = BorderSide(color: Color(0xff3e3e3e), width: 1);
+  final menus = [
+    (icon: Icons.sports_esports, label: '投幣', routeName: AppRoute.game),
+    (icon: Icons.settings, label: '設定', routeName: AppRoute.account),
+    (icon: Icons.home_rounded, label: 'Me', routeName: AppRoute.home),
+    (icon: Icons.redeem_rounded, label: '禮物', routeName: AppRoute.gift),
+    (icon: Icons.handshake_rounded, label: '合作', routeName: null),
+  ];
+
+  late final String? currentRouteName = ModalRoute.of(context)?.settings.name;
+  late ValueNotifier<int> menuIndexNotifier =
+      ValueNotifier(menus.indexWhere((menu) => menu.routeName == currentRouteName));
 
   @override
   void initState() {
     super.initState();
   }
 
+  Widget buildButtomNavBar(Color backgroundColor) {
+    if (disableBottomNavigationBar) return const SizedBox();
+
+    return Container(
+      decoration: const BoxDecoration(border: Border(top: BorderSide(width: 1, color: Color(0xff3e3e3e)))),
+      child: ValueListenableBuilder(
+          valueListenable: menuIndexNotifier,
+          builder: (context, selectedIndex, child) {
+            return NavigationBar(
+              selectedIndex: selectedIndex,
+              labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+              onDestinationSelected: (index) async {
+                menuIndexNotifier.value = index;
+                log('change menu: ${menus[index].label}', name: 'buildButtomNavBar');
+                if (menus[index].routeName == null) {
+                  Fluttertoast.showToast(msg: 'dev');
+                  return;
+                }
+                selectedMenuIndex = index;
+                await _tabNavigateTo(menus[index].routeName!);
+              },
+              destinations: menus
+                  .map((menu) => NavigationDestination(
+                        icon: Icon(menu.icon, color: const Color(0xffb4b4b4)),
+                        label: menu.label,
+                        selectedIcon: Icon(menu.icon, color: const Color(0xfffafafa)),
+                      ))
+                  .toList(),
+            );
+          }),
+    );
+/*
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+            border: const Border(top: navBarStyle, left: navBarStyle, right: navBarStyle),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black87.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  offset: const Offset(0, -10)),
+            ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: Material(
+                color: backgroundColor,
+                child: InkWell(
+                  onTap: () async {
+                    final nav = Navigator.of(context);
+                    await checkUser();
+                    if (NavigationHistoryObserver().top!.settings.name == AppRoute.home) {
+                      setState(() {});
+                    } else {
+                      await _intentedDelay();
+                      nav.popUntil(ModalRoute.withName(AppRoute.home));
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.home, color: getColor('home')),
+                        Text('首頁', style: TextStyle(color: getColor('home'), fontSize: 12))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Material(
+                color: backgroundColor,
+                child: InkWell(
+                  onTap: () async {
+                    await _tabNavigateTo(AppRoute.game);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.videogame_asset_rounded, color: getColor('game')),
+                        Text('遊玩系統', style: TextStyle(color: getColor('game'), fontSize: 12))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Material(
+                color: backgroundColor,
+                child: InkWell(
+                  onTap: () async {
+                    await _tabNavigateTo(AppRoute.account);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.person, color: getColor('account')),
+                        Text('會員中心', style: TextStyle(color: getColor('account'), fontSize: 12))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Material(
+                color: backgroundColor,
+                child: InkWell(
+                  onTap: () async {
+                    // if (ModalRoute.of(context)!.settings.name != AppRoute.home) {
+                    //   Navigator.of(context).pushNamed(AppRoute.home);
+                    // }
+                    await _tabNavigateTo(AppRoute.gift);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.redeem_rounded, color: getColor('gift')),
+                        Text('禮物盒子', style: TextStyle(color: getColor('gift'), fontSize: 12))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+ */
+  }
+
   Future _tabNavigateTo(String nextRouteName) async {
     final nav = Navigator.of(context);
     final val = await GlobalSingleton.instance.checkUser(force: true);
+    log('nextRoute: $nextRouteName', name: '_tabNavigateTo');
+    for (var route in NavigationHistoryObserver().history) {
+      log('name: ${route.settings.name}', name: '_tabNavigateTo');
+    }
     if (val == false) {
       await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
     } else {
-      if (NavigationHistoryObserver().top!.settings.name == nextRouteName) {
-        setState(() {});
-      } else {
-        await _intentedDelay();
-        NavigationHistoryObserver().history.length == 3
-            ? nav.pushReplacementNamed(nextRouteName)
-            : nav.pushNamed(nextRouteName);
-      }
+      log('top: ${NavigationHistoryObserver().top!.settings.name}', name: '_tabNavigateTo');
+
+      NavigationHistoryObserver().history.length == 3
+          ? nav.pushReplacementNamed(nextRouteName)
+          : nav.pushNamed(nextRouteName);
     }
   }
 
@@ -63,15 +225,9 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = customBackgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
-    String? currentPage = subPageOf ??= ModalRoute.of(context)?.settings.name?.split('/').last;
-    Color pressedColor(String tabName) {
-      if (currentPage == tabName) return const Color(0xfffafafa);
-      return const Color(0xffb4b4b4);
-    }
 
     if (baseViewModel() != null) {
-      headerType =
-          baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.normal;
+      headerType = baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.fixed;
       point = GlobalSingleton.instance.user?.point?.toInt();
     }
     return ChangeNotifierProvider.value(
@@ -89,6 +245,9 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
             value: SystemUiOverlayStyle.light,
             child: SafeArea(
               child: RefreshIndicator(
+                edgeOffset: headerType == LoadedHeaderType.fixed
+                    ? _LoadedHeader.kFixedHeaderHeight
+                    : _LoadedHeader.kFunctionalHeaderHeight,
                 onRefresh: () async {
                   await GlobalSingleton.instance.checkUser(force: true);
                   setState(() {});
@@ -102,7 +261,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                               constraints: const BoxConstraints(maxWidth: 700),
                               child: Column(
                                 children: [
-                                  headerType == LoadedHeaderType.normal
+                                  headerType == LoadedHeaderType.fixed
                                       ? const _LoadedHeader()
                                       : _LoadedHeader.functional(point: point ?? -87),
                                   body(),
@@ -119,7 +278,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                           constraints: const BoxConstraints(maxWidth: 700),
                           child: Column(
                             children: [
-                              headerType == LoadedHeaderType.normal
+                              headerType == LoadedHeaderType.fixed
                                   ? const _LoadedHeader()
                                   : _LoadedHeader.functional(point: point ?? -87),
                               Expanded(child: body()),
@@ -130,128 +289,13 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
               ),
             ),
           ),
-          bottomNavigationBar: !disableBottomNavigationBar
-              ? SafeArea(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: const Border(top: navBarStyle, left: navBarStyle, right: navBarStyle),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black87.withOpacity(0.5),
-                              // color: Colors.red,
-                              spreadRadius: 2,
-                              blurRadius: 7,
-                              offset: const Offset(0, -10)),
-                        ]),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Expanded(
-                          child: Material(
-                            color: backgroundColor,
-                            child: InkWell(
-                              onTap: () async {
-                                final nav = Navigator.of(context);
-                                await checkUser();
-                                if (NavigationHistoryObserver().top!.settings.name == AppRoute.home) {
-                                  setState(() {});
-                                } else {
-                                  await _intentedDelay();
-                                  nav.popUntil(ModalRoute.withName(AppRoute.home));
-                                }
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.home, color: pressedColor('home')),
-                                    Text('首頁', style: TextStyle(color: pressedColor('home'), fontSize: 12))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Material(
-                            color: backgroundColor,
-                            child: InkWell(
-                              onTap: () async {
-                                await _tabNavigateTo(AppRoute.game);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.videogame_asset_rounded, color: pressedColor('game')),
-                                    Text('遊玩系統', style: TextStyle(color: pressedColor('game'), fontSize: 12))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Material(
-                            color: backgroundColor,
-                            child: InkWell(
-                              onTap: () async {
-                                await _tabNavigateTo(AppRoute.account);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.person, color: pressedColor('account')),
-                                    Text('會員中心',
-                                        style: TextStyle(color: pressedColor('account'), fontSize: 12))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Material(
-                            color: backgroundColor,
-                            child: InkWell(
-                              onTap: () async {
-                                // if (ModalRoute.of(context)!.settings.name != AppRoute.home) {
-                                //   Navigator.of(context).pushNamed(AppRoute.home);
-                                // }
-                                await _tabNavigateTo(AppRoute.gift);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.redeem_rounded, color: pressedColor('gift')),
-                                    Text('禮物盒子', style: TextStyle(color: pressedColor('gift'), fontSize: 12))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : const SizedBox(),
+          bottomNavigationBar: buildButtomNavBar(backgroundColor),
         ),
       ),
     );
   }
 
-  Future<void> _intentedDelay() async {
+  Future<void> _intentionalDelay() async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
     await EasyLoading.dismiss();
@@ -259,11 +303,13 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
 }
 
 class _LoadedHeader extends StatelessWidget {
+  static const double kFixedHeaderHeight = 40;
+  static const double kFunctionalHeaderHeight = 50;
   final LoadedHeaderType _type;
   final String? title;
   final int point;
   const _LoadedHeader({Key? key})
-      : _type = LoadedHeaderType.normal,
+      : _type = LoadedHeaderType.fixed,
         title = null,
         point = 0,
         super(key: key);
@@ -274,8 +320,9 @@ class _LoadedHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (_type) {
-      case LoadedHeaderType.normal:
+      case LoadedHeaderType.fixed:
         return Container(
+          height: kFixedHeaderHeight,
           decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor, width: 1))),
@@ -294,6 +341,7 @@ class _LoadedHeader extends StatelessWidget {
         );
       case LoadedHeaderType.functional:
         return Container(
+          height: kFunctionalHeaderHeight,
           decoration: BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor, boxShadow: [
             BoxShadow(
                 color: Colors.black.withOpacity(0.3),
@@ -350,6 +398,6 @@ class _LoadedHeader extends StatelessWidget {
 }
 
 enum LoadedHeaderType {
-  normal,
+  fixed,
   functional,
 }

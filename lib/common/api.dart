@@ -64,6 +64,11 @@ abstract class Api {
           headers: getHeaders(),
           encoding: Encoding.getByName('utf-8'),
         );
+        log("url: ${response.request!.url}", name: 'makeRequest url');
+        log("header: ${response.request!.headers}", name: 'makeRequest header');
+        log("response: ${response.body.length > 5000 ? 'too long' : response.body}",
+            name: 'makeRequest response');
+
         if (response.statusCode == 200) {
           isResponseString ? onSuccessString.call(response.body) : onSuccess?.call(jsonDecode(response.body));
         } else {
@@ -71,9 +76,6 @@ abstract class Api {
           throw Exception(['response code: ', response.statusCode, '\nresponse body: ', response.body]);
         }
         responseHeader?.call(response.headers);
-        log("url: ${response.request!.url}", name: 'makeRequest url');
-        log("header: ${response.request!.headers}", name: 'makeRequest header');
-        log("response: ${response.body.length > 5000 ? 'too long' : response.body}", name: 'makeRequest response');
         break;
 
       case HttpMethod.get:

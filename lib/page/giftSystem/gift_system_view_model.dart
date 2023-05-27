@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -38,7 +39,8 @@ class GiftSystemViewModel extends BaseViewModel {
         lotteListModel = LotteListModel.fromJson(jsonDecode(testLotteList));
       }
       return true;
-    } on Exception catch (_) {
+    } catch (e) {
+      log('', name: 'err _getLotteList', error: e);
       return false;
     }
   }
@@ -51,7 +53,8 @@ class GiftSystemViewModel extends BaseViewModel {
         giftBoxModel = GiftBoxModel.fromJson(jsonDecode(testGiftBox));
       }
       return true;
-    } on Exception catch (_) {
+    } catch (e) {
+      log('', name: 'err _getGiftBox', error: e);
       return false;
     }
   }
