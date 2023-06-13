@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -88,7 +89,7 @@ class ProgressPainter extends CustomPainter {
   const ProgressPainter({required this.progress, required this.image});
   @override
   void paint(Canvas canvas, Size size) {
-    final width = size.width * ((progress < 8 ? 8 : progress) / 100);
+    final width = min(size.width * ((progress < 8 ? 8 : progress) / 100), size.width);
     final imageX = width - image.width - imagePadding;
     canvas
       ..drawRRect(

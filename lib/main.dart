@@ -37,7 +37,7 @@ void configLoadingStyle() {
 
 class MyApp extends StatelessWidget {
   final bool isLogin;
-  const MyApp(this.isLogin, {Key? key}) : super(key: key);
+  const MyApp(this.isLogin, {super.key});
 
   @override
   Widget build(BuildContext context) {
