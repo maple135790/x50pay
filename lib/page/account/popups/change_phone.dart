@@ -145,7 +145,7 @@ class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog
   @override
   Widget build(BuildContext context) {
     return _Dialog(
-      saveCallback: () async {
+      onConfirm: () async {
         if (isEnteredNewPhone) {
           _smsActivate();
         } else {

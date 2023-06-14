@@ -1,6 +1,8 @@
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -12,6 +14,7 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
+import 'package:x50pay/common/models/padSettings/pad_settings.dart';
 import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
@@ -105,29 +108,23 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 }),
             _SettingTile(
                 iconData: Icons.rss_feed,
-                title: '快速付款設定',
-                subtitle: 'NFC / QuiC 喜愛選項設定',
+                title: '多元付款設定',
+                subtitle: 'X50MGS 多元付款喜好設定',
                 color: _SettingTileColor.blue,
                 onTap: () async {
-                  await showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return QuickPayDialog(viewModel);
-                      });
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return QuickPayDialog(viewModel);
+                  }));
                 }),
             _SettingTile(
                 iconData: Icons.badge_outlined,
-                title: 'QuiC 卡片管理',
-                subtitle: 'QuiC 靠卡系統刪除/鎖定/管理',
+                title: 'QuiC Pay 設定',
+                subtitle: 'QuiC 喜愛選項設定',
                 color: _SettingTileColor.blue,
                 onTap: () async {
-                  await showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return QuiCPayPrefDialog(viewModel);
-                      });
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return QuiCPayPrefDialog(viewModel);
+                  }));
                 }),
             _SettingTile(
                 iconData: Icons.tablet_mac,
@@ -135,12 +132,9 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: 'X50Pad 西門線上排隊系統偏好設定',
                 color: _SettingTileColor.blue,
                 onTap: () async {
-                  await showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return PadPrefDialog(viewModel);
-                      });
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return PadPrefDialog(viewModel);
+                  }));
                 }),
           ]),
           _AccountBlock(children: [
@@ -150,12 +144,9 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '密碼不夠安全嗎？點我更改！',
                 color: _SettingTileColor.red,
                 onTap: () async {
-                  await showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return ChangePasswordDialog(viewModel);
-                      });
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return ChangePasswordDialog(viewModel);
+                  }));
                 }),
             _SettingTile(
                 iconData: Icons.email_outlined,
@@ -163,12 +154,9 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '換信箱了嗎，點我修改信箱。',
                 color: _SettingTileColor.white,
                 onTap: () async {
-                  await showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return ChangeEmailDialog(viewModel);
-                      });
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return ChangeEmailDialog(viewModel);
+                  }));
                 }),
             _SettingTile(
                 iconData: Icons.call,
@@ -211,8 +199,9 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢加值相關記錄。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(NoTransitionRouter(_BidRecord(viewModel),
-                      s: const RouteSettings(name: AppRoute.account)));
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return _BidRecord(viewModel);
+                  }));
                 }),
             _SettingTile(
                 iconData: Icons.redeem,
@@ -220,8 +209,9 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(NoTransitionRouter(_TicketRecord(viewModel),
-                      s: const RouteSettings(name: AppRoute.account)));
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return _TicketRecord(viewModel);
+                  }));
                 }),
             _SettingTile(
                 iconData: Icons.format_list_bulleted,
@@ -229,8 +219,9 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢點數付款明細。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(NoTransitionRouter(_PlayRecord(viewModel),
-                      s: const RouteSettings(name: AppRoute.account)));
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return _PlayRecord(viewModel);
+                  }));
                 }),
             _SettingTile(
                 iconData: Icons.confirmation_num,
@@ -238,8 +229,9 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢遊玩券使用明細。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(NoTransitionRouter(_TicketUsedRecord(viewModel),
-                      s: const RouteSettings(name: AppRoute.account)));
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                    return _TicketUsedRecord(viewModel);
+                  }));
                 }),
           ]),
           _AccountBlock(children: [
@@ -276,15 +268,15 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
   void checkRemoteOpen({required RemoteOpenShop shop}) async {
     await EasyLoading.show();
     final location = Location();
-    double deg2rad(double deg) => deg * (pi / 180);
+    double deg2rad(double deg) => deg * (math.pi / 180);
 
     double getDistance(double lat1, double lng1, double lat2, double lng2) {
       var R = 6371; // Radius of the earth in km
       var dLat = deg2rad(lat2 - lat1); // deg2rad below
       var dLon = deg2rad(lng2 - lng1);
-      var a = sin(dLat / 2) * sin(dLat / 2) +
-          cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon / 2) * sin(dLon / 2);
-      var c = 2 * atan2(sqrt(a), sqrt(1 - a));
+      var a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+          math.cos(deg2rad(lat1)) * math.cos(deg2rad(lat2)) * math.sin(dLon / 2) * math.sin(dLon / 2);
+      var c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
       var d = R * c; // Distance in km
       return d;
     }
@@ -353,11 +345,43 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
   }
 }
 
-enum NVSVPayment { light, standard, blaster }
+enum NVSVPayment {
+  light('Light', '0'),
+  standard('Standard', '1'),
+  blaster('Blaster', '2');
 
-enum SDVXPayment { standard, blaster }
+  final String name;
+  final String value;
+  const NVSVPayment(this.name, this.value);
+}
 
-enum DPPayment { single, double }
+enum SDVXPayment {
+  standard('Standard', '0'),
+  blaster('Blaster', '1');
+
+  final String name;
+  final String value;
+  const SDVXPayment(this.name, this.value);
+}
+
+enum DPPayment {
+  single('單人', "0"),
+  double('雙人', "1");
+
+  final String name;
+  final String value;
+  const DPPayment(this.name, this.value);
+}
+
+enum DefaultCabPayment {
+  ask('每次都詢問我', '0'),
+  x50pay('X50Pay', '1'),
+  jko('街口支付', '2');
+
+  final String name;
+  final String value;
+  const DefaultCabPayment(this.name, this.value);
+}
 
 class _AccountBlock extends StatelessWidget {
   final List<_SettingTile> children;
@@ -458,18 +482,46 @@ class _SettingTile extends StatelessWidget {
 class _Dialog extends StatelessWidget {
   final Widget content;
   final bool scrollable;
-  final void Function() saveCallback;
-  final Widget? customSaveButton;
-  const _Dialog(
-      {required this.content,
-      required this.saveCallback,
-      Key? key,
-      this.customSaveButton,
-      this.scrollable = false})
-      : super(key: key);
+  final void Function()? onConfirm;
+  final Widget? customConfirmButton;
+  final bool _iosLike;
+  final String title;
+
+  const _Dialog({
+    required this.content,
+    required this.onConfirm,
+    this.customConfirmButton,
+    this.scrollable = false,
+  })  : _iosLike = false,
+        title = '';
+
+  const _Dialog.ios({
+    required this.content,
+    required this.title,
+    this.onConfirm,
+    this.customConfirmButton,
+    this.scrollable = false,
+  }) : _iosLike = true;
 
   @override
   Widget build(BuildContext context) {
+    if (_iosLike) {
+      return CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.systemGroupedBackground,
+        navigationBar: CupertinoNavigationBar(
+            previousPageTitle: '設定',
+            middle: Text(title),
+            trailing: customConfirmButton ??
+                (onConfirm != null
+                    ? CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: onConfirm,
+                        child: const Text('保存', style: TextStyle(color: CupertinoColors.activeBlue)),
+                      )
+                    : null)),
+        child: content,
+      );
+    }
     return AlertDialog(
       scrollable: scrollable,
       contentPadding: const EdgeInsets.only(top: 28, left: 28, right: 28, bottom: 14),
@@ -487,9 +539,9 @@ class _Dialog extends StatelessWidget {
             },
             style: Themes.pale(),
             child: const Text('取消')),
-        customSaveButton == null
-            ? TextButton(onPressed: saveCallback, style: Themes.severe(isV4: true), child: const Text('保存'))
-            : customSaveButton!
+        customConfirmButton == null
+            ? TextButton(onPressed: onConfirm, style: Themes.severe(isV4: true), child: const Text('保存'))
+            : customConfirmButton!
       ],
     );
   }
@@ -517,7 +569,11 @@ class _DialogBody extends StatelessWidget {
 class _DialogSwitch extends StatefulWidget {
   final bool value;
   final String title;
-  const _DialogSwitch({Key? key, required this.value, required this.title}) : super(key: key);
+  final bool _iosLike;
+  final void Function(bool value)? onChanged;
+  const _DialogSwitch({required this.value, required this.title, this.onChanged}) : _iosLike = false;
+  const _DialogSwitch.ios({required this.value, required this.title, required this.onChanged})
+      : _iosLike = true;
 
   @override
   State<_DialogSwitch> createState() => _DialogSwitchState();
@@ -534,6 +590,19 @@ class _DialogSwitchState extends State<_DialogSwitch> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget._iosLike) {
+      return CupertinoListTile.notched(
+        title: Text(widget.title),
+        trailing: CupertinoSwitch(
+            activeColor: const Color(0xff005eb0),
+            value: v,
+            onChanged: (newValue) {
+              v = newValue;
+              setState(() {});
+              widget.onChanged?.call(newValue);
+            }),
+      );
+    }
     return Row(
       children: [
         CupertinoSwitch(
@@ -544,8 +613,8 @@ class _DialogSwitchState extends State<_DialogSwitch> {
                 v = newValue;
               });
             }),
-        const SizedBox(width: 15),
-        Text(widget.title),
+        if (!widget._iosLike) const SizedBox(width: 15),
+        if (!widget._iosLike) Text(widget.title),
       ],
     );
   }
@@ -555,8 +624,14 @@ class _DialogDropdown<T> extends StatefulWidget {
   final String title;
   final T? value;
   final List<T> avaliList;
-  const _DialogDropdown({Key? key, required this.title, required this.value, required this.avaliList})
-      : super(key: key);
+  final bool _ios;
+  final void Function(T value)? onChanged;
+  const _DialogDropdown({required this.title, required this.value, required this.avaliList})
+      : _ios = false,
+        onChanged = null;
+  const _DialogDropdown.ios(
+      {required this.title, required this.value, required this.avaliList, required this.onChanged})
+      : _ios = true;
 
   @override
   State<_DialogDropdown<T>> createState() => _DialogDropdownState<T>();
@@ -570,8 +645,62 @@ class _DialogDropdownState<T> extends State<_DialogDropdown<T>> {
     super.initState();
   }
 
+  Widget buildCupertinoPicker() {
+    return CupertinoPicker.builder(
+      childCount: widget.avaliList.length,
+      magnification: 1.22,
+      squeeze: 1.2,
+      useMagnifier: true,
+      itemExtent: 32,
+      scrollController: FixedExtentScrollController(
+        initialItem: v == null ? 0 : widget.avaliList.indexOf(v as T),
+      ),
+      onSelectedItemChanged: (int selectedItem) {
+        v = widget.avaliList[selectedItem];
+        HapticFeedback.mediumImpact();
+        setState(() {});
+        widget.onChanged?.call(v as T);
+      },
+      itemBuilder: (context, index) =>
+          Center(child: Text(widget.avaliList[index].toString().split('.').last)),
+    );
+  }
+
+  void _showCupertinoPickerDialog() {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 216,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(
+          top: false,
+          child: buildCupertinoPicker(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (widget._ios) {
+      return CupertinoListTile.notched(
+        title: Text(widget.title),
+        onTap: _showCupertinoPickerDialog,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              v.toString().split('.').last,
+              style: const TextStyle(color: CupertinoColors.systemGrey, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(width: 10),
+            const CupertinoListTileChevron(),
+          ],
+        ),
+      );
+    }
     return Column(
       children: [
         Align(alignment: Alignment.centerLeft, child: Text(widget.title)),
@@ -605,9 +734,11 @@ class _DialogWidget extends StatefulWidget {
   final Widget child;
   final IconData? titleIcon;
   final bool isRequired;
-  const _DialogWidget(
-      {Key? key, required this.title, required this.child, this.isRequired = false, this.titleIcon})
-      : super(key: key);
+  final bool _iosLike;
+  const _DialogWidget({required this.title, required this.child, this.isRequired = false, this.titleIcon})
+      : _iosLike = false;
+  const _DialogWidget.ios({required this.title, required this.child, this.isRequired = false, this.titleIcon})
+      : _iosLike = true;
 
   @override
   State<_DialogWidget> createState() => _DialogWidgetState();

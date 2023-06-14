@@ -122,20 +122,19 @@ class Repository extends Api {
     return padSettingsModel;
   }
 
-  Future<PadSettingsModel> setPadSettings(
-      {required String shid, required String shcolor, required String shname}) async {
-    late PadSettingsModel padSettingsModel;
-
-    await Api.makeRequest(
+  Future<http.Response> setPadSettings({
+    required bool shid,
+    required String shcolor,
+    required String shname,
+  }) async {
+    final response = await Api.makeRequest(
       dest: '/settingPadConfirm',
       method: HttpMethod.post,
       withSession: true,
       body: {'shid': shid, 'shcolor': shcolor, 'shname': shname},
-      onSuccess: (json) {
-        padSettingsModel = PadSettingsModel.fromJson(json);
-      },
+      onSuccess: (json) {},
     );
-    return padSettingsModel;
+    return response;
   }
 
   Future<QuicSettingsModel> getQuicSettings() async {
@@ -153,13 +152,14 @@ class Repository extends Api {
     return quicSettingsModel;
   }
 
-  Future<void> quicConfirm({required String atq, required String atq1}) async {
-    await Api.makeRequest(
+  Future<http.Response> quicConfirm({required bool atq, required String atql}) async {
+    final response = await Api.makeRequest(
       dest: '/settingPadConfirm',
       method: HttpMethod.post,
       withSession: true,
-      body: {'atq': atq, 'atq1': atq1},
+      body: {'atq': atq, 'atq1': atql},
     );
+    return response;
   }
 
   Future<BasicResponse> changePassword({required String oldPwd, required String pwd}) async {
@@ -167,6 +167,7 @@ class Repository extends Api {
 
     await Api.makeRequest(
       dest: '/setting/chgpwd',
+      contentType: ContentType.xForm,
       method: HttpMethod.post,
       withSession: true,
       body: {'old_pwd': oldPwd, 'pwd': pwd},
@@ -504,6 +505,32 @@ class Repository extends Api {
     final response = await Api.makeRequest(
       dest: '/vip/buyone',
       body: {},
+      method: HttpMethod.post,
+      withSession: true,
+      contentType: ContentType.json,
+    );
+
+    return response;
+  }
+
+  Future<http.Response> autoConfirm({
+    required bool atc,
+    required String atn,
+    required bool atp,
+    required bool atq,
+    required String ats,
+    required String att,
+  }) async {
+    final response = await Api.makeRequest(
+      dest: '/autoConfirm',
+      body: {
+        'atc': atc,
+        'atn': atn,
+        'atp': atp,
+        'atq': atq,
+        'ats': ats,
+        'att': att,
+      },
       method: HttpMethod.post,
       withSession: true,
       contentType: ContentType.json,

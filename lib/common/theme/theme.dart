@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 extension MaterialStateSet on Set<MaterialState> {
@@ -12,12 +13,27 @@ class AppThemeData {
   ThemeData get materialTheme {
     return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.dark,
+      cupertinoOverrideTheme: const CupertinoThemeData(
+        primaryColor: CupertinoColors.activeBlue,
+          barBackgroundColor: Color(0xff1e1e1e),
+          scaffoldBackgroundColor: Color(0xff1e1e1e),
+          textTheme: CupertinoTextThemeData(
+            pickerTextStyle: TextStyle(color: Color(0xfffafafa)),
+            navTitleTextStyle: TextStyle(color: Color(0xfffafafa)),
+            navActionTextStyle: TextStyle(color: CupertinoColors.activeBlue),
+            textStyle: TextStyle(color: Color(0xfffafafa)),
+          )),
       dataTableTheme: DataTableThemeData(
         headingTextStyle: const TextStyle(color: Color(0xfffafafa)),
         headingRowColor: MaterialStateProperty.all(const Color(0xff2a2a2a)),
         decoration: BoxDecoration(
             color: const Color(0xff1e1e1e), border: Border.all(color: Themes.borderColor, width: 1)),
       ),
+      pageTransitionsTheme: const PageTransitionsTheme(builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      }),
       dialogTheme: const DialogTheme(
           surfaceTintColor: Colors.transparent,
           backgroundColor: Color(0xff1e1e1e),

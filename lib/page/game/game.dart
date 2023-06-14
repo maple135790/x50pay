@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -147,7 +148,10 @@ class _StoreItem extends StatelessWidget {
               ..setString('store_id', prefix + (store.sid!.toString()));
             await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...', duration: const Duration(seconds: 2));
             await Future.delayed(const Duration(seconds: 2));
-            navigator.pushNamed(AppRoute.game);
+            navigator.pushReplacement(CupertinoPageRoute(
+              builder: (context) => const Game(),
+              settings: const RouteSettings(name: AppRoute.game),
+            ));
           },
           child: SizedBox(
             width: double.infinity,

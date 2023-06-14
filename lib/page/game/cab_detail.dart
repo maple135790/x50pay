@@ -10,6 +10,10 @@ class _CabDetail extends StatefulWidget {
 
 class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
   final viewModel = CabDatailViewModel();
+
+  @override
+  bool get disableBottomNavigationBar => true;
+
   @override
   BaseViewModel? baseViewModel() => viewModel;
 

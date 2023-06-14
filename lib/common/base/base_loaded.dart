@@ -40,8 +40,10 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   ];
 
   late final String? currentRouteName = ModalRoute.of(context)?.settings.name;
-  late ValueNotifier<int> menuIndexNotifier =
-      ValueNotifier(menus.indexWhere((menu) => menu.routeName == currentRouteName));
+  late ValueNotifier<int> menuIndexNotifier = ValueNotifier(menus.indexWhere((menu) {
+    if (currentRouteName == '/buyMPass') return menu.routeName == AppRoute.home;
+    return menu.routeName == currentRouteName;
+  }));
 
   @override
   void initState() {
@@ -353,15 +355,15 @@ class _LoadedHeader extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               const SizedBox(width: 15),
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    splashFactory: NoSplash.splashFactory,
-                    child: const Icon(Icons.chevron_left_outlined, size: 25, color: Color(0xfffafafa))),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(5),
+              //   child: InkWell(
+              //       onTap: () {
+              //         Navigator.of(context).pop();
+              //       },
+              //       splashFactory: NoSplash.splashFactory,
+              //       child: const Icon(Icons.chevron_left_outlined, size: 25, color: Color(0xfffafafa))),
+              // ),
               const Spacer(),
               Container(
                   padding: const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),

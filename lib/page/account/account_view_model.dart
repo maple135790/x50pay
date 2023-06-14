@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:http/http.dart' as http;
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
@@ -25,6 +27,100 @@ class AccountViewModel extends BaseViewModel {
   PlayRecordModel? playRecordModel;
   BasicResponse? response;
 
+  Future<bool> quicConfirm({required bool autoQuic, required String autoQlock}) async {
+    log('autoQuic $autoQuic', name: 'quicConfirm');
+    log('autoQlock $autoQlock', name: 'quicConfirm');
+
+    await EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 200));
+    late http.Response httpResponse;
+
+    try {
+      if (!kDebugMode || isForce) {
+        httpResponse = await repo.quicConfirm(atq: autoQuic, atql: autoQlock);
+      } else {
+        httpResponse = http.Response(testResponse(), 200);
+      }
+      await EasyLoading.dismiss();
+
+      return httpResponse.statusCode == 200;
+    } on Exception catch (_) {
+      await EasyLoading.dismiss();
+      return false;
+    }
+  }
+
+  Future<bool> setPadSettings({
+    required bool isNicknameShown,
+    required String showColor,
+    required String nickname,
+  }) async {
+    log('$isNicknameShown, $showColor, $nickname', name: 'setPadSettings');
+
+    await EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 200));
+    late http.Response httpResponse;
+
+    try {
+      if (!kDebugMode || isForce) {
+        httpResponse = await repo.setPadSettings(
+          shname: nickname,
+          shid: isNicknameShown,
+          shcolor: showColor,
+        );
+      } else {
+        httpResponse = http.Response(testResponse(), 200);
+      }
+      await EasyLoading.dismiss();
+
+      return httpResponse.statusCode == 200;
+    } on Exception catch (_) {
+      await EasyLoading.dismiss();
+      return false;
+    }
+  }
+
+  Future<bool> confirmQuickPay({
+    required bool autoPay,
+    required bool autoQuicPay,
+    required bool autoTicket,
+    required String autoTwo,
+    required String autoNVSV,
+    required String autoSDVX,
+  }) async {
+    log('autoQuicPay $autoQuicPay', name: 'confirmQuickPay');
+    log('autoPay $autoPay', name: 'confirmQuickPay');
+    log('autoTicket $autoTicket', name: 'confirmQuickPay');
+    log('autoSDVX $autoSDVX', name: 'confirmQuickPay');
+    log('autoNVSV $autoNVSV', name: 'confirmQuickPay');
+    log('autoTwo $autoTwo', name: 'confirmQuickPay');
+
+    await EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 200));
+    late http.Response httpResponse;
+
+    try {
+      if (!kDebugMode || isForce) {
+        httpResponse = await repo.autoConfirm(
+          atc: autoTicket,
+          atn: autoNVSV,
+          atp: autoPay,
+          atq: autoQuicPay,
+          ats: autoSDVX,
+          att: autoTwo,
+        );
+      } else {
+        httpResponse = http.Response(testAutoConfirm, 200);
+      }
+      await EasyLoading.dismiss();
+
+      return httpResponse.statusCode == 200;
+    } on Exception catch (_) {
+      await EasyLoading.dismiss();
+      return false;
+    }
+  }
+
   Future<bool> getQuicSettings() async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
@@ -36,15 +132,15 @@ class AccountViewModel extends BaseViewModel {
         quicSettingModel = QuicSettingsModel.fromJson(jsonDecode(testQuicSettings));
       }
       await EasyLoading.dismiss();
-
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'getQuicSettings', error: e);
       await EasyLoading.dismiss();
       return false;
     }
   }
 
-  Future<bool> getPadSettings() async {
+  Future<PadSettingsModel?> getPadSettings() async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
@@ -56,10 +152,10 @@ class AccountViewModel extends BaseViewModel {
       }
       await EasyLoading.dismiss();
 
-      return true;
+      return padSettingsModel;
     } on Exception catch (_) {
       await EasyLoading.dismiss();
-      return false;
+      return null;
     }
   }
 
@@ -330,11 +426,12 @@ class AccountViewModel extends BaseViewModel {
 
   final testPadSettings = """{"shid": false, "shcolor": "#abb3ff", "shname": "SABA.KEN"}""";
 
-  final testQuicSettings =
-      """{"nfcAuto": true, "nfcTicket": false, "nfcTwo": "0", "nfcSDVX": "0", "nfcNVSV": "0", "nfcQuic": true, "nfcQlock": 15}""";
+  String get testQuicSettings =>
+      """{"nfcAuto": true, "nfcTicket": false, "nfcTwo": "0", "nfcSDVX": "0", "nfcNVSV": "0", "nfcQuic": true, "nfcQlock": 0, "mtpMode": 1}""";
 
   String testResponse({int? code = 200}) => """{"code": $code,"message": "smth"}""";
-
+  String get testAutoConfirm =>
+      """{"nfcAuto":true,"nfcTicket":false,"nfcTwo":"0","nfcSDVX":"0","nfcNVSV":"0"}""";
   String testBidLog({int? code = 200}) =>
       '''{"message":"done","code":$code,"log":[{"_id":{"\$oid":"62bd79dbfe009eb67dc4f853"},"uid":"938","point":500.0,"shop":"37656","time":"2022-06-30 18:24"},{"_id":{"\$oid":"62baf388e4f0f77b8c3738df"},"uid":"938","point":400.0,"shop":"37656","time":"2022-06-28 20:26"},{"_id":{"\$oid":"62a5f9b1c3ee84ed28fe0780"},"uid":"938","point":500.0,"shop":"37656","time":"2022-06-12 22:35"},{"_id":{"\$oid":"62a5e647c3ee84ed28fe075e"},"uid":"938","point":200.0,"shop":"37656","time":"2022-06-12 21:12"},{"_id":{"\$oid":"62a5e584c3ee84ed28fe0758"},"uid":"938","point":200.0,"shop":"37656","time":"2022-06-12 21:09"},{"_id":{"\$oid":"6273bf5ee0223d7557c05626"},"uid":"938","point":500,"shop":"37656","3kcre":true,"time":"2022-05-05 20:13"}]}''';
 

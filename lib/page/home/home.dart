@@ -170,8 +170,9 @@ class _TicketInfo extends StatelessWidget {
               children: [
                 GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(
-                          NoTransitionRouter(const BuyMPass(), s: const RouteSettings(name: AppRoute.home)));
+                      Navigator.of(context).pushNamed(AppRoute.buyMPass);
+                      // Navigator.of(context).push(
+                      //     NoTransitionRouter(const BuyMPass(), s: const RouteSettings(name: AppRoute.home)));
                     },
                     child: const Icon(Icons.confirmation_number, color: Color(0xff237804), size: 50)),
                 const SizedBox(width: 16),

@@ -4,15 +4,17 @@ part 'quic_settings.g.dart';
 
 @JsonSerializable()
 class QuicSettingsModel {
+  final int mtpMode;
   final bool nfcAuto;
+  final String nfcNVSV;
+  final int nfcQlock;
+  final bool nfcQuic;
+  final String nfcSDVX;
   final bool nfcTicket;
   final String nfcTwo;
-  final String nfcSDVX;
-  final String nfcNVSV;
-  final bool nfcQuic;
-  final int nfcQlock;
 
   const QuicSettingsModel({
+    required this.mtpMode,
     required this.nfcAuto,
     required this.nfcTicket,
     required this.nfcTwo,

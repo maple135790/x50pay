@@ -106,8 +106,9 @@ class _GameCabItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           final nav = Navigator.of(context);
-          await nav
-              .push(NoTransitionRouter(_CabDetail(machine.id!), s: const RouteSettings(name: AppRoute.game)));
+          await nav.push(CupertinoPageRoute(
+              builder: (context) => _CabDetail(machine.id!),
+              settings: const RouteSettings(name: AppRoute.game)));
           nav.pushReplacementNamed(AppRoute.game);
         },
         child: Container(

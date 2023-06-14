@@ -10,8 +10,9 @@ class PadPrefDialog extends StatefulWidget {
 }
 
 class _PadPrefDialogState extends State<PadPrefDialog> {
-  late Future<bool> getPadSettings;
-  Color? shColor;
+  bool gotModel = false;
+  _PadPrefModalValue? modalValue;
+  late Future<PadSettingsModel?> getPadSettings;
 
   @override
   void initState() {
@@ -19,77 +20,109 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
     super.initState();
   }
 
+  void savePadPref() {
+    if (gotModel == false || modalValue == null) return;
+    widget.viewModel.setPadSettings(
+      isNicknameShown: modalValue!.isNameShown,
+      nickname: modalValue!.nickname,
+      showColor: modalValue!.showColor,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return _Dialog(
+    return _Dialog.ios(
+      title: 'X50Pad 西門排隊平板偏好選項',
       scrollable: true,
-      saveCallback: () {},
+      onConfirm: savePadPref,
       content: FutureBuilder(
           future: getPadSettings,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: Text('loading'));
+              return kDebugMode ? const Center(child: Text('loading')) : const SizedBox();
             }
-            if (snapshot.data != true) {
-              return const Center(child: Text('failed'));
+            if (snapshot.data == null) {
+              return kDebugMode ? const Center(child: Text('failed')) : const SizedBox();
             } else {
-              final model = widget.viewModel.padSettingsModel!;
-              final name = TextEditingController(text: model.shname);
-              bool isNameShown = model.shid;
-              shColor ??= _HexColor(model.shcolor);
-
-              return _DialogBody(
-                title: 'x50Pad 西門排隊平板偏好選項',
-                children: [
-                  _DialogSwitch(value: isNameShown, title: '不顯示暱稱'),
-                  const SizedBox(height: 22.4),
-                  _DialogWidget(
-                      title: '選擇暱稱顯示顏色',
-                      child: GestureDetector(
-                        onTap: () {
-                          _showColorPicker(context);
-                        },
-                        child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                            width: double.infinity,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: shColor,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: const Color(0xffd9d9d9), width: 1),
-                            )),
-                      )),
-                  _DialogWidget(
-                      title: '平板上顯示不同暱稱',
-                      child: Row(children: [
-                        Expanded(
-                            child: TextField(
-                                controller: name,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5), borderSide: BorderSide.none),
-                                  focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-                                )))
-                      ])),
-                ],
+              gotModel = true;
+              return _PadPrefLoaded(
+                model: widget.viewModel.padSettingsModel!,
+                getValues: (value) {
+                  modalValue = value;
+                },
               );
             }
           }),
     );
   }
+}
 
-  Future<dynamic> _showColorPicker(BuildContext context) {
-    return showDialog(
+typedef _PadPrefModalValue = ({String nickname, String showColor, bool isNameShown});
+
+class _PadPrefLoaded extends StatefulWidget {
+  final PadSettingsModel model;
+  final void Function(_PadPrefModalValue value) getValues;
+
+  const _PadPrefLoaded({required this.model, required this.getValues, Key? key}) : super(key: key);
+
+  @override
+  State<_PadPrefLoaded> createState() => __PadPrefLoadedState();
+}
+
+class __PadPrefLoadedState extends State<_PadPrefLoaded> {
+  late String nickname;
+  late bool isNameShown;
+  Color? showColor;
+
+  void changeNicknamePage() async {
+    final nameController = TextEditingController(text: nickname);
+
+    final newNickname = await Navigator.of(context).push<String?>(CupertinoPageRoute(
+      builder: (context) => WillPopScope(
+        onWillPop: () async {
+          log(nameController.text, name: 'changeNicknamePage');
+          Navigator.of(context).pop(nameController.text.isEmpty ? null : nameController.text);
+          nameController.dispose();
+          return true;
+        },
+        child: _Dialog.ios(
+          title: '平板上顯示不同暱稱',
+          content: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+            child: CupertinoTextField(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              decoration: BoxDecoration(
+                color: const Color(0xff1c1c1e),
+                borderRadius: BorderRadius.circular(11),
+              ),
+              placeholder: nickname,
+              controller: nameController,
+              autofocus: true,
+              style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+      ),
+    ));
+    if (newNickname == null) return;
+    nickname = newNickname;
+    log(nickname, name: 'changeNicknamePage nickname');
+    setState(() {});
+    return;
+  }
+
+  Future<dynamic> showColorPicker() {
+    return showCupertinoDialog(
         context: context,
+        barrierDismissible: true,
         builder: (context) {
-          return AlertDialog(
+          return CupertinoAlertDialog(
             content: SingleChildScrollView(
               child: ColorPicker(
-                pickerColor: shColor!,
+                pickerColor: showColor!,
                 enableAlpha: false,
                 onColorChanged: (color) {
-                  shColor = color;
+                  showColor = color;
                   setState(() {});
                 },
               ),
@@ -97,14 +130,90 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
           );
         });
   }
+
+  void updateValue() {
+    widget.getValues.call((
+      nickname: nickname,
+      isNameShown: isNameShown,
+      showColor: showColor!.value.toRadixString(16).substring(2),
+    ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    nickname = widget.model.shname;
+    isNameShown = widget.model.shid;
+    showColor ??= _HexColor(widget.model.shcolor);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    updateValue();
+    return Column(
+      children: [
+        CupertinoListSection.insetGrouped(
+          children: [
+            _DialogSwitch.ios(
+              value: isNameShown,
+              title: '不顯示暱稱',
+              onChanged: (value) {
+                isNameShown = value;
+                setState(() {});
+                updateValue();
+              },
+            ),
+          ],
+        ),
+        CupertinoListSection.insetGrouped(
+          children: [
+            CupertinoListTile.notched(
+              title: const Text('選擇暱稱顯示顏色'),
+              onTap: showColorPicker,
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: showColor,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: const Color(0xffd9d9d9), width: 1),
+                      )),
+                  const SizedBox(width: 10),
+                  const CupertinoListTileChevron(),
+                ],
+              ),
+            ),
+            CupertinoListTile.notched(
+              title: const Text('平板上顯示不同暱稱'),
+              onTap: changeNicknamePage,
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(nickname,
+                      style: const TextStyle(
+                        color: CupertinoColors.systemGrey,
+                        fontWeight: FontWeight.w500,
+                      )),
+                  const SizedBox(width: 10),
+                  const CupertinoListTileChevron(),
+                ],
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
 }
 
 class _HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
     hexColor = hexColor.toUpperCase().replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF$hexColor";
-    }
+    if (hexColor.length == 6) hexColor = "FF$hexColor";
+
     return int.parse(hexColor, radix: 16);
   }
 

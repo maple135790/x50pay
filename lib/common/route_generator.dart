@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/page/collab/collab.dart';
@@ -16,10 +19,17 @@ class RouteGenerator {
         return NoTransitionRouter(const SignUp(), s: settings);
       case AppRoute.game:
         return NoTransitionRouter(const Game(), s: settings);
+        // return CupertinoPageRoute(
+        //   builder: (context) => const Game(),
+        //   settings: settings,
+        // );
       case AppRoute.account:
         return NoTransitionRouter(const Account(), s: settings);
       case AppRoute.buyMPass:
-        return NoTransitionRouter(const BuyMPass(), s: settings);
+        return CupertinoPageRoute(
+          builder: (context) => const BuyMPass(),
+          settings: settings,
+        );
       case AppRoute.gift:
         return NoTransitionRouter(const GiftSystem(), s: settings);
       case AppRoute.home:

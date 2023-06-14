@@ -16,6 +16,9 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
   BaseViewModel? baseViewModel() => widget.viewModel;
 
   @override
+  bool get disableBottomNavigationBar => true;
+
+  @override
   void initState() {
     super.initState();
     model = widget.viewModel;

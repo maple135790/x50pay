@@ -16,6 +16,9 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
   BaseViewModel? baseViewModel() => widget.viewModel;
 
   @override
+  bool get disableBottomNavigationBar => true;
+
+  @override
   void initState() {
     super.initState();
     model = widget.viewModel;

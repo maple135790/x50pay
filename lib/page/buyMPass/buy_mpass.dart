@@ -79,6 +79,9 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> with BaseLoaded {
   int stateIndex = 1;
 
   @override
+  bool get disableBottomNavigationBar => true;
+
+  @override
   BaseViewModel? baseViewModel() => BaseViewModel();
 
   @override
