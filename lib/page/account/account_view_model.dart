@@ -27,7 +27,8 @@ class AccountViewModel extends BaseViewModel {
   PlayRecordModel? playRecordModel;
   BasicResponse? response;
 
-  Future<bool> quicConfirm({required bool autoQuic, required String autoQlock}) async {
+  Future<bool> quicConfirm(
+      {required bool autoQuic, required String autoQlock}) async {
     log('autoQuic $autoQuic', name: 'quicConfirm');
     log('autoQlock $autoQlock', name: 'quicConfirm');
 
@@ -129,7 +130,8 @@ class AccountViewModel extends BaseViewModel {
       if (!kDebugMode || isForce) {
         quicSettingModel = await repo.getQuicSettings();
       } else {
-        quicSettingModel = QuicSettingsModel.fromJson(jsonDecode(testQuicSettings));
+        quicSettingModel =
+            QuicSettingsModel.fromJson(jsonDecode(testQuicSettings));
       }
       await EasyLoading.dismiss();
       return true;
@@ -148,7 +150,8 @@ class AccountViewModel extends BaseViewModel {
       if (!kDebugMode || isForce) {
         padSettingsModel = await repo.getPadSettings();
       } else {
-        padSettingsModel = PadSettingsModel.fromJson(jsonDecode(testPadSettings));
+        padSettingsModel =
+            PadSettingsModel.fromJson(jsonDecode(testPadSettings));
       }
       await EasyLoading.dismiss();
 
@@ -172,9 +175,11 @@ class AccountViewModel extends BaseViewModel {
         response = await repo.changePassword(oldPwd: oldPwd, pwd: pwd);
       } else {
         if (debugFlag == 700) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
         } else if (debugFlag == 701) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
         } else {
           response = BasicResponse.fromJson(jsonDecode(testResponse()));
         }
@@ -200,9 +205,11 @@ class AccountViewModel extends BaseViewModel {
         response = await repo.changeEmail(remail: email);
       } else {
         if (debugFlag == 700) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
         } else if (debugFlag == 701) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
         } else {
           response = BasicResponse.fromJson(jsonDecode(testResponse()));
         }
@@ -227,9 +234,11 @@ class AccountViewModel extends BaseViewModel {
         response = await repo.changePhone();
       } else {
         if (debugFlag == 700) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
         } else if (debugFlag == 701) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
         } else {
           response = BasicResponse.fromJson(jsonDecode(testResponse()));
         }
@@ -255,9 +264,11 @@ class AccountViewModel extends BaseViewModel {
         response = await repo.doChangePhone(phone: phone);
       } else {
         if (debugFlag == 700) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
         } else if (debugFlag == 701) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
         } else {
           response = BasicResponse.fromJson(jsonDecode(testResponse()));
         }
@@ -283,9 +294,11 @@ class AccountViewModel extends BaseViewModel {
         response = await repo.smsActivate(sms: smsCode);
       } else {
         if (debugFlag == 700) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
         } else if (debugFlag == 701) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
         } else {
           response = BasicResponse.fromJson(jsonDecode(testResponse()));
         }
@@ -335,9 +348,11 @@ class AccountViewModel extends BaseViewModel {
         ticDateLogModel = await repo.getTicDateLog();
       } else {
         if (debugFlag != 200) {
-          ticDateLogModel = TicDateLogModel.fromJson(jsonDecode(testTicDateLog(code: 700)));
+          ticDateLogModel =
+              TicDateLogModel.fromJson(jsonDecode(testTicDateLog(code: 700)));
         } else {
-          ticDateLogModel = TicDateLogModel.fromJson(jsonDecode(testTicDateLog()));
+          ticDateLogModel =
+              TicDateLogModel.fromJson(jsonDecode(testTicDateLog()));
         }
       }
       await EasyLoading.dismiss();
@@ -360,9 +375,11 @@ class AccountViewModel extends BaseViewModel {
         playRecordModel = await repo.getPlayLog();
       } else {
         if (debugFlag != 200) {
-          playRecordModel = PlayRecordModel.fromJson(jsonDecode(testPlayRecord(code: 700)));
+          playRecordModel =
+              PlayRecordModel.fromJson(jsonDecode(testPlayRecord(code: 700)));
         } else {
-          playRecordModel = PlayRecordModel.fromJson(jsonDecode(testPlayRecord()));
+          playRecordModel =
+              PlayRecordModel.fromJson(jsonDecode(testPlayRecord()));
         }
       }
       await EasyLoading.dismiss();
@@ -385,7 +402,8 @@ class AccountViewModel extends BaseViewModel {
         ticUsedModel = await repo.getTicUsedLog();
       } else {
         if (debugFlag != 200) {
-          ticUsedModel = TicUsedModel.fromJson(jsonDecode(testTicUsedLog(code: 700)));
+          ticUsedModel =
+              TicUsedModel.fromJson(jsonDecode(testTicUsedLog(code: 700)));
         } else {
           ticUsedModel = TicUsedModel.fromJson(jsonDecode(testTicUsedLog()));
         }
@@ -410,7 +428,8 @@ class AccountViewModel extends BaseViewModel {
         await repo.logout();
       } else {
         if (debugFlag != 200) {
-          response = BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
+          response =
+              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
         } else {
           response = BasicResponse.fromJson(jsonDecode(testResponse()));
         }
@@ -424,12 +443,14 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  final testPadSettings = """{"shid": false, "shcolor": "#abb3ff", "shname": "SABA.KEN"}""";
+  final testPadSettings =
+      """{"shid": false, "shcolor": "#abb3ff", "shname": "SABA.KEN"}""";
 
   String get testQuicSettings =>
       """{"nfcAuto": true, "nfcTicket": false, "nfcTwo": "0", "nfcSDVX": "0", "nfcNVSV": "0", "nfcQuic": true, "nfcQlock": 0, "mtpMode": 1}""";
 
-  String testResponse({int? code = 200}) => """{"code": $code,"message": "smth"}""";
+  String testResponse({int? code = 200}) =>
+      """{"code": $code,"message": "smth"}""";
   String get testAutoConfirm =>
       """{"nfcAuto":true,"nfcTicket":false,"nfcTwo":"0","nfcSDVX":"0","nfcNVSV":"0"}""";
   String testBidLog({int? code = 200}) =>

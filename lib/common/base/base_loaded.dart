@@ -40,7 +40,8 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
   ];
 
   late final String? currentRouteName = ModalRoute.of(context)?.settings.name;
-  late ValueNotifier<int> menuIndexNotifier = ValueNotifier(menus.indexWhere((menu) {
+  late ValueNotifier<int> menuIndexNotifier =
+      ValueNotifier(menus.indexWhere((menu) {
     if (currentRouteName == '/buyMPass') return menu.routeName == AppRoute.home;
     return menu.routeName == currentRouteName;
   }));
@@ -54,16 +55,19 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
     if (disableBottomNavigationBar) return const SizedBox();
 
     return Container(
-      decoration: const BoxDecoration(border: Border(top: BorderSide(width: 1, color: Color(0xff3e3e3e)))),
+      decoration: const BoxDecoration(
+          border: Border(top: BorderSide(width: 1, color: Color(0xff3e3e3e)))),
       child: ValueListenableBuilder(
           valueListenable: menuIndexNotifier,
           builder: (context, selectedIndex, child) {
             return NavigationBar(
               selectedIndex: selectedIndex,
-              labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+              labelBehavior:
+                  NavigationDestinationLabelBehavior.onlyShowSelected,
               onDestinationSelected: (index) async {
                 menuIndexNotifier.value = index;
-                log('change menu: ${menus[index].label}', name: 'buildButtomNavBar');
+                log('change menu: ${menus[index].label}',
+                    name: 'buildButtomNavBar');
                 if (menus[index].routeName == null) {
                   Fluttertoast.showToast(msg: 'dev');
                   return;
@@ -75,7 +79,8 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                   .map((menu) => NavigationDestination(
                         icon: Icon(menu.icon, color: const Color(0xffb4b4b4)),
                         label: menu.label,
-                        selectedIcon: Icon(menu.icon, color: const Color(0xfffafafa)),
+                        selectedIcon:
+                            Icon(menu.icon, color: const Color(0xfffafafa)),
                       ))
                   .toList(),
             );
@@ -207,7 +212,8 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
     if (val == false) {
       await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
     } else {
-      log('top: ${NavigationHistoryObserver().top!.settings.name}', name: '_tabNavigateTo');
+      log('top: ${NavigationHistoryObserver().top!.settings.name}',
+          name: '_tabNavigateTo');
 
       NavigationHistoryObserver().history.length == 3
           ? nav.pushReplacementNamed(nextRouteName)
@@ -226,10 +232,13 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = customBackgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
+    final backgroundColor =
+        customBackgroundColor ?? Theme.of(context).scaffoldBackgroundColor;
 
     if (baseViewModel() != null) {
-      headerType = baseViewModel()!.isFunctionalHeader ? LoadedHeaderType.functional : LoadedHeaderType.fixed;
+      headerType = baseViewModel()!.isFunctionalHeader
+          ? LoadedHeaderType.functional
+          : LoadedHeaderType.fixed;
       point = GlobalSingleton.instance.user?.point?.toInt();
     }
     return ChangeNotifierProvider.value(
@@ -240,7 +249,9 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
         },
         child: Scaffold(
           floatingActionButton: kDebugMode && debugFunction != null
-              ? FloatingActionButton(onPressed: debugFunction, child: const Icon(Icons.developer_mode))
+              ? FloatingActionButton(
+                  onPressed: debugFunction,
+                  child: const Icon(Icons.developer_mode))
               : null,
           backgroundColor: backgroundColor,
           body: AnnotatedRegion(
@@ -265,7 +276,8 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                                 children: [
                                   headerType == LoadedHeaderType.fixed
                                       ? const _LoadedHeader()
-                                      : _LoadedHeader.functional(point: point ?? -87),
+                                      : _LoadedHeader.functional(
+                                          point: point ?? -87),
                                   body(),
                                   const SizedBox(height: 20)
                                 ],
@@ -282,7 +294,8 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                             children: [
                               headerType == LoadedHeaderType.fixed
                                   ? const _LoadedHeader()
-                                  : _LoadedHeader.functional(point: point ?? -87),
+                                  : _LoadedHeader.functional(
+                                      point: point ?? -87),
                               Expanded(child: body()),
                             ],
                           ),
@@ -327,14 +340,18 @@ class _LoadedHeader extends StatelessWidget {
           height: kFixedHeaderHeight,
           decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor, width: 1))),
+              border: Border(
+                  bottom: BorderSide(
+                      color: Theme.of(context).dividerColor, width: 1))),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                    backgroundImage: R.image.header_icon_rsz(), backgroundColor: Colors.black, radius: 14),
+                    backgroundImage: R.image.header_icon_rsz(),
+                    backgroundColor: Colors.black,
+                    radius: 14),
                 const SizedBox(width: 10),
                 const Text('X50Pay'),
               ],
@@ -344,13 +361,15 @@ class _LoadedHeader extends StatelessWidget {
       case LoadedHeaderType.functional:
         return Container(
           height: kFunctionalHeaderHeight,
-          decoration: BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor, boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3)),
-          ]),
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3)),
+              ]),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -366,14 +385,22 @@ class _LoadedHeader extends StatelessWidget {
               // ),
               const Spacer(),
               Container(
-                  padding: const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
                   decoration: BoxDecoration(
-                      boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 15, spreadRadius: 0.5)],
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Colors.black54,
+                            blurRadius: 15,
+                            spreadRadius: 0.5)
+                      ],
                       color: const Color(0xff3e3e3e),
                       // border: Border.all(width: 1, color: const Color(0xff3e3e3e)),
                       borderRadius: BorderRadius.circular(5)),
                   child: Text('$point P',
-                      style: const TextStyle(color: Color(0xfffafafa), fontWeight: FontWeight.bold))),
+                      style: const TextStyle(
+                          color: Color(0xfffafafa),
+                          fontWeight: FontWeight.bold))),
               const SizedBox(width: 20),
               Padding(
                 padding: const EdgeInsets.all(5),
@@ -385,11 +412,13 @@ class _LoadedHeader extends StatelessWidget {
                       if (context.mounted) {
                         showDialog(
                             context: context,
-                            builder: (context) => ScanQRCode(status == PermissionStatus.granted));
+                            builder: (context) =>
+                                ScanQRCode(status == PermissionStatus.granted));
                       }
                     },
                     splashFactory: NoSplash.splashFactory,
-                    child: const Icon(Icons.qr_code, size: 28, color: Color(0xfffafafa))),
+                    child: const Icon(Icons.qr_code,
+                        size: 28, color: Color(0xfffafafa))),
               ),
               const SizedBox(width: 15),
             ]),

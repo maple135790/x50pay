@@ -19,7 +19,8 @@ import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/common/models/user/user.dart';
 
 class Repository extends Api {
-  Future<BasicResponse?> login({required String email, required String password}) async {
+  Future<BasicResponse?> login(
+      {required String email, required String password}) async {
     BasicResponse? res;
     await Api.makeRequest(
       dest: '/login',
@@ -152,7 +153,8 @@ class Repository extends Api {
     return quicSettingsModel;
   }
 
-  Future<http.Response> quicConfirm({required bool atq, required String atql}) async {
+  Future<http.Response> quicConfirm(
+      {required bool atq, required String atql}) async {
     final response = await Api.makeRequest(
       dest: '/settingPadConfirm',
       method: HttpMethod.post,
@@ -162,7 +164,8 @@ class Repository extends Api {
     return response;
   }
 
-  Future<BasicResponse> changePassword({required String oldPwd, required String pwd}) async {
+  Future<BasicResponse> changePassword(
+      {required String oldPwd, required String pwd}) async {
     late BasicResponse res;
 
     await Api.makeRequest(
@@ -359,7 +362,8 @@ class Repository extends Api {
     return result;
   }
 
-  Future<String> remoteOpenDoor(double distance, {required String doorName}) async {
+  Future<String> remoteOpenDoor(double distance,
+      {required String doorName}) async {
     String result = '';
     await Api.makeRequest(
       customDest: 'https://pay.x50.fun/api/$doorName/open/$distance',
@@ -375,7 +379,8 @@ class Repository extends Api {
     return result;
   }
 
-  Future<BasicResponse> chgGradev2({required String gid, required String grid}) async {
+  Future<BasicResponse> chgGradev2(
+      {required String gid, required String grid}) async {
     late BasicResponse basicResponse;
 
     await Api.makeRequest(

@@ -43,7 +43,8 @@ class _ScanQRCodeState extends State<ScanQRCode> {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  padding:
+                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                   width: 300,
                   height: 225,
                   child: widget.hasPermissions
@@ -63,13 +64,17 @@ class _ScanQRCodeState extends State<ScanQRCode> {
                               } else {
                                 isBusy = true;
                                 final nav = Navigator.of(context);
-                                String msg = await Repository().qrDecryt(event.code!);
+                                String msg =
+                                    await Repository().qrDecryt(event.code!);
                                 if (msg != 'oof') {
                                   await controller.pauseCamera();
                                   await EasyLoading.showInfo(msg,
-                                      duration: const Duration(milliseconds: 1000));
-                                  await Future.delayed(const Duration(milliseconds: 1000));
-                                  nav.popUntil(ModalRoute.withName(AppRoute.home));
+                                      duration:
+                                          const Duration(milliseconds: 1000));
+                                  await Future.delayed(
+                                      const Duration(milliseconds: 1000));
+                                  nav.popUntil(
+                                      ModalRoute.withName(AppRoute.home));
                                 }
                                 setState(() {
                                   result = event;
@@ -102,7 +107,8 @@ class ScanQRCodeV2 extends StatefulWidget {
   State<ScanQRCodeV2> createState() => _ScanQRCodeV2State();
 }
 
-class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2> with BaseLoaded {
+class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2>
+    with BaseLoaded {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrViewController;
   Barcode? result, lastEvent;
@@ -144,13 +150,16 @@ class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2> with BaseLoaded
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('排隊/加值請掃描QRCode', style: TextStyle(color: Color(0xff5a5a5a))),
+                const Text('排隊/加值請掃描QRCode',
+                    style: TextStyle(color: Color(0xff5a5a5a))),
                 kDebugMode ? Text(result?.code ?? 'null') : const SizedBox(),
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(53, 28, 53, 0),
                   child: Container(
-                    decoration: BoxDecoration(border: Border.all(color: const Color(0xffd3d3d3), width: 1)),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: const Color(0xffd3d3d3), width: 1)),
                     width: 250,
                     height: 250,
                     child: QRView(
@@ -163,11 +172,14 @@ class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2> with BaseLoaded
                           } else {
                             isBusy = true;
                             final nav = Navigator.of(context);
-                            String msg = await Repository().qrDecryt(event.code!);
+                            String msg =
+                                await Repository().qrDecryt(event.code!);
                             if (msg != 'oof') {
                               await controller.pauseCamera();
-                              await EasyLoading.showInfo(msg, duration: const Duration(milliseconds: 1000));
-                              await Future.delayed(const Duration(milliseconds: 1000));
+                              await EasyLoading.showInfo(msg,
+                                  duration: const Duration(milliseconds: 1000));
+                              await Future.delayed(
+                                  const Duration(milliseconds: 1000));
                               nav.popUntil(ModalRoute.withName(AppRoute.home));
                             }
                             setState(() {
@@ -192,7 +204,11 @@ class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2> with BaseLoaded
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Icon(Icons.credit_card), SizedBox(width: 10), Text('信用卡/ATM 線上加值')],
+              children: [
+                Icon(Icons.credit_card),
+                SizedBox(width: 10),
+                Text('信用卡/ATM 線上加值')
+              ],
             ),
           ),
         ],

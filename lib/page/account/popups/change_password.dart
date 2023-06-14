@@ -30,15 +30,18 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
       onPressed: isEnabled
           ? () async {
               final nav = Navigator.of(context);
-              if (await viewModel.changePassword(oldPwd: oldPwd.text, pwd: newPwd.text, debugFlag: 200)) {
+              if (await viewModel.changePassword(
+                  oldPwd: oldPwd.text, pwd: newPwd.text, debugFlag: 200)) {
                 switch (viewModel.response!.code) {
                   case 200:
                     _errorText = null;
                     await EasyLoading.showSuccess('密碼變更成功，請重新登入',
-                        dismissOnTap: false, duration: const Duration(seconds: 2));
+                        dismissOnTap: false,
+                        duration: const Duration(seconds: 2));
                     await Future.delayed(const Duration(seconds: 2));
                     await EasyLoading.show(dismissOnTap: false);
-                    nav.pushNamedAndRemoveUntil(AppRoute.login, (route) => false);
+                    nav.pushNamedAndRemoveUntil(
+                        AppRoute.login, (route) => false);
                     break;
                   case 700:
                     setState(() {
@@ -52,7 +55,8 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                     break;
                   default:
                     await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-                        dismissOnTap: false, duration: const Duration(seconds: 2));
+                        dismissOnTap: false,
+                        duration: const Duration(seconds: 2));
                 }
               } else {
                 await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
@@ -74,7 +78,8 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
           child: CupertinoFormSection.insetGrouped(
-            footer: Text(_errorText ?? '', style: const TextStyle(color: CupertinoColors.destructiveRed)),
+            footer: Text(_errorText ?? '',
+                style: const TextStyle(color: CupertinoColors.destructiveRed)),
             key: _formKey,
             children: [
               CupertinoTextFormFieldRow(

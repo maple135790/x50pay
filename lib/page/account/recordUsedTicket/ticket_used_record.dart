@@ -9,7 +9,8 @@ class _TicketUsedRecord extends StatefulWidget {
   State<_TicketUsedRecord> createState() => __TicketUsedRecordState();
 }
 
-class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord> with BaseLoaded {
+class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord>
+    with BaseLoaded {
   late AccountViewModel model;
 
   @override
@@ -33,11 +34,13 @@ class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord> with 
           return const SizedBox();
         }
         if (snapshot.data == false) {
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
+          scaffoldKey.currentState!.showSnackBar(
+              const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
           return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         }
         if (model.ticUsedModel!.code != 200) {
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
+          scaffoldKey.currentState!.showSnackBar(
+              const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
           return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         }
         return ticUsedRecordLoaded(model.ticUsedModel!);
@@ -83,7 +86,9 @@ class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord> with 
                 child: DataTable(
                   border: TableBorder.all(color: Themes.borderColor, width: 1),
                   dataRowMaxHeight: 60,
-                  columns: ['日期', '機台', '消耗'].map((e) => DataColumn(label: Text(e))).toList(),
+                  columns: ['日期', '機台', '消耗']
+                      .map((e) => DataColumn(label: Text(e)))
+                      .toList(),
                   rows: buildRows(),
                 ),
               )

@@ -12,7 +12,10 @@ class LoginViewModel extends BaseViewModel {
   final isForce = GlobalSingleton.instance.isOnline;
   BasicResponse? response;
 
-  Future<bool> login({required String email, required String password, int debugFlag = 200}) async {
+  Future<bool> login(
+      {required String email,
+      required String password,
+      int debugFlag = 200}) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
@@ -20,7 +23,8 @@ class LoginViewModel extends BaseViewModel {
       if (!kDebugMode || isForce) {
         response = await repo.login(email: email, password: password);
       } else {
-        response = BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
+        response =
+            BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
       }
       await EasyLoading.dismiss();
 
@@ -31,5 +35,6 @@ class LoginViewModel extends BaseViewModel {
     }
   }
 
-  String testResponse({int? code = 200}) => """{"code": $code,"message": "smth"}""";
+  String testResponse({int? code = 200}) =>
+      """{"code": $code,"message": "smth"}""";
 }

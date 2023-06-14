@@ -12,7 +12,8 @@ class _ClaimedGift extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
         child: ListTile(
           visualDensity: VisualDensity.comfortable,
-          title: const Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+          title: const Text('',
+              style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
           subtitle: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -21,7 +22,8 @@ class _ClaimedGift extends StatelessWidget {
               Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14))
             ],
           ),
-          trailing: ElevatedButton(onPressed: null, style: Themes.grey(), child: const Text('已領取')),
+          trailing: ElevatedButton(
+              onPressed: null, style: Themes.grey(), child: const Text('已領取')),
         ),
       ),
       itemBuilder: (context, index) {
@@ -42,17 +44,22 @@ class _ClaimedGift extends StatelessWidget {
             leading: ClipRRect(
                 borderRadius: BorderRadius.circular(4),
                 child: Image(image: NetworkImage(claimedList[index].pic))),
-            title:
-                Text(claimedList[index].name, style: const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+            title: Text(claimedList[index].name,
+                style: const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 4),
-                Text(subtitle, style: const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+                Text(subtitle,
+                    style: const TextStyle(
+                        color: Color(0xfffafafa), fontSize: 14)),
               ],
             ),
-            trailing: ElevatedButton(onPressed: null, style: Themes.grey(), child: const Text('已領取')),
+            trailing: ElevatedButton(
+                onPressed: null,
+                style: Themes.grey(),
+                child: const Text('已領取')),
           ),
         );
       },

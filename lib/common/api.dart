@@ -70,10 +70,17 @@ abstract class Api {
             name: 'makeRequest response');
 
         if (response.statusCode == 200) {
-          isResponseString ? onSuccessString.call(response.body) : onSuccess?.call(jsonDecode(response.body));
+          isResponseString
+              ? onSuccessString.call(response.body)
+              : onSuccess?.call(jsonDecode(response.body));
         } else {
           onError?.call(response.statusCode, response.body);
-          throw Exception(['response code: ', response.statusCode, '\nresponse body: ', response.body]);
+          throw Exception([
+            'response code: ',
+            response.statusCode,
+            '\nresponse body: ',
+            response.body
+          ]);
         }
         responseHeader?.call(response.headers);
         break;
@@ -84,10 +91,17 @@ abstract class Api {
           headers: withSession ? {'Cookie': 'session=$session'} : null,
         );
         if (response.statusCode == 200) {
-          isResponseString ? onSuccessString.call(response.body) : onSuccess?.call(jsonDecode(response.body));
+          isResponseString
+              ? onSuccessString.call(response.body)
+              : onSuccess?.call(jsonDecode(response.body));
         } else {
           onError?.call(response.statusCode, response.body);
-          throw Exception(['response code: ', response.statusCode, '\nresponse body: ', response.body]);
+          throw Exception([
+            'response code: ',
+            response.statusCode,
+            '\nresponse body: ',
+            response.body
+          ]);
         }
         responseHeader?.call(response.headers);
         break;

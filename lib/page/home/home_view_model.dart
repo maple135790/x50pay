@@ -44,7 +44,8 @@ class HomeViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> chgGradev2({int debugFlag = 200, required String gid, required String grid}) async {
+  Future<bool> chgGradev2(
+      {int debugFlag = 200, required String gid, required String grid}) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 100));
 

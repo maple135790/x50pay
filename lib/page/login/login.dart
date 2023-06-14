@@ -47,7 +47,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
       return;
     }
     final nav = Navigator.of(context);
-    final isSuccessLogin = await viewModel.login(email: email.text, password: password.text);
+    final isSuccessLogin =
+        await viewModel.login(email: email.text, password: password.text);
     if (isSuccessLogin) {
       int code = viewModel.response!.code;
       if (code == 400) {
@@ -80,7 +81,10 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
               width: constraints.maxWidth,
               child: Stack(
                 children: [
-                  Positioned.fill(child: Image(image: R.image.login_banner_jpg(), fit: BoxFit.fitWidth)),
+                  Positioned.fill(
+                      child: Image(
+                          image: R.image.login_banner_jpg(),
+                          fit: BoxFit.fitWidth)),
                   Positioned.fill(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -95,26 +99,32 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                   const Positioned(
                     bottom: 15,
                     left: 15,
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text('歡迎回來！',
-                          style: TextStyle(
-                              shadows: [Shadow(color: Colors.black, blurRadius: 25)],
-                              fontSize: 17,
-                              color: Color(0xe6ffffff))),
-                      SizedBox(height: 5),
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                        Icon(Icons.schedule, size: 12, color: Colors.white),
-                        Text(' 24Hr 年中無休', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
-                      ]),
-                      // Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      //   Icon(Icons.pin_drop, size: 12, color: Colors.white),
-                      //   Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
-                      // ]),
-                      // Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      //   Icon(Icons.restaurant, size: 12, color: Colors.white),
-                      //   Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
-                      // ]),
-                    ]),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('歡迎回來！',
+                              style: TextStyle(shadows: [
+                                Shadow(color: Colors.black, blurRadius: 25)
+                              ], fontSize: 17, color: Color(0xe6ffffff))),
+                          SizedBox(height: 5),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(Icons.schedule,
+                                    size: 12, color: Colors.white),
+                                Text(' 24Hr 年中無休',
+                                    style: TextStyle(
+                                        fontSize: 13, color: Color(0xe6ffffff)))
+                              ]),
+                          // Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                          //   Icon(Icons.pin_drop, size: 12, color: Colors.white),
+                          //   Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
+                          // ]),
+                          // Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                          //   Icon(Icons.restaurant, size: 12, color: Colors.white),
+                          //   Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
+                          // ]),
+                        ]),
                   ),
                 ],
               ),
@@ -126,7 +136,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                     color: Theme.of(context).scaffoldBackgroundColor,
-                    border: Border.all(color: const Color(0xff3e3e3e), width: 1),
+                    border:
+                        Border.all(color: const Color(0xff3e3e3e), width: 1),
                     borderRadius: BorderRadius.circular(5)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +147,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                     TextField(
                         controller: email,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(prefixIcon: Icon(Icons.person))),
+                        decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.person))),
                     const SizedBox(height: 15),
                     RichText(
                         text: TextSpan(
@@ -148,17 +160,20 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                               text: '忘記密碼嗎 ? ',
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.of(context).pushNamed(AppRoute.forgotPassword);
+                                  Navigator.of(context)
+                                      .pushNamed(AppRoute.forgotPassword);
                                 },
                               style: const TextStyle(
-                                  color: Color(0xfffafafa), decoration: TextDecoration.underline)),
+                                  color: Color(0xfffafafa),
+                                  decoration: TextDecoration.underline)),
                           const TextSpan(text: ' )')
                         ])),
                     const SizedBox(height: 12),
                     TextField(
                         controller: password,
                         obscureText: true,
-                        decoration: const InputDecoration(prefixIcon: Icon(Icons.lock))),
+                        decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.lock))),
                     const SizedBox(height: 10),
                     const Divider(color: Colors.white60),
                     Column(
@@ -203,9 +218,12 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
           // const Icon(Icons.priority_high, color: Color(0xffA1414C)),
           // const SizedBox(width: 14),
           Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.white),
-              padding: const EdgeInsets.symmetric(vertical: 4.5, horizontal: 7.5),
-              child: const Text('錯誤', style: TextStyle(color: Color(0xffcf1322)))),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4), color: Colors.white),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.5, horizontal: 7.5),
+              child:
+                  const Text('錯誤', style: TextStyle(color: Color(0xffcf1322)))),
           const SizedBox(width: 15),
           Text(errorMsg!),
         ],
@@ -227,12 +245,16 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                         '二、基於保障帳戶安全原則，本服務所需之使用者個人資料提供僅用於註冊、系統登入驗證使用，但當本平台認為有必要性時不在此限，例如：使用者參加本平台舉辦活動獲獎後發送領獎通知。'),
                     const Text(
                         '三、使用者應保證所提供之資料及個人資訊為正確且完整，若有虛假或不實之情形導致無法繼續使用本服務，使用者需自行承擔。如果使用者發現有錯誤，請通知X50粉絲專頁更正。'),
-                    const Text('四、本平台無積分、押分、退幣等功能。當使用者於本平台進行加值並放入鈔票時，即視同使用者同意消費，恕無法取消或找零。'),
-                    const Text('五、消費 Point / 遊玩卷 前請確認欲遊玩模式與欲消費機台編號，付款成功後使用者不得要求任何形式之退款。'),
+                    const Text(
+                        '四、本平台無積分、押分、退幣等功能。當使用者於本平台進行加值並放入鈔票時，即視同使用者同意消費，恕無法取消或找零。'),
+                    const Text(
+                        '五、消費 Point / 遊玩卷 前請確認欲遊玩模式與欲消費機台編號，付款成功後使用者不得要求任何形式之退款。'),
                     const Text(
                         '六、本店提供的所有優惠活動，均以活動公布之辦法為準，本店並有權隨時變更、暫停或終止任何進行中之活動，如獲得方式、使用方式、獲獎名額或使用期限等，並保有活動最終解釋權力。'),
-                    const Text('七、本平台所提供的服務，包括使用者帳號、Point 、遊玩卷等資訊，一概禁止任何形式之轉移、販售、買賣行為。'),
-                    const Text('八、使用本平台服務將視同您同意服務條款之約定辦理。如您不同意本使用條款中任何一項，請不要使用本平台所提供的任何服務。'),
+                    const Text(
+                        '七、本平台所提供的服務，包括使用者帳號、Point 、遊玩卷等資訊，一概禁止任何形式之轉移、販售、買賣行為。'),
+                    const Text(
+                        '八、使用本平台服務將視同您同意服務條款之約定辦理。如您不同意本使用條款中任何一項，請不要使用本平台所提供的任何服務。'),
                     const Text('\n'),
                     RichText(
                       text: TextSpan(

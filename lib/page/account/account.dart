@@ -56,7 +56,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
       avatarUrl =
           '${user.userimg!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
     } else {
-      avatarUrl = user.userimg! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+      avatarUrl =
+          user.userimg! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
     }
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
     return Padding(
@@ -71,7 +72,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                   border: Border.all(color: Themes.borderColor, width: 0),
                   color: bgColor),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 child: Row(
                   children: [
                     user.userimg != null
@@ -79,16 +81,20 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                             foregroundImage: NetworkImage(avatarUrl),
                             radius: 30,
                             backgroundImage: R.image.logo_150_jpg())
-                        : CircleAvatar(foregroundImage: R.image.logo_150_jpg(), radius: 30),
+                        : CircleAvatar(
+                            foregroundImage: R.image.logo_150_jpg(),
+                            radius: 30),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.name!, style: const TextStyle(color: Color(0xfffafafa))),
+                          Text(user.name!,
+                              style: const TextStyle(color: Color(0xfffafafa))),
                           const SizedBox(height: 5),
-                          Text(user.email!, style: const TextStyle(color: Color(0xfffafafa))),
+                          Text(user.email!,
+                              style: const TextStyle(color: Color(0xfffafafa))),
                         ],
                       ),
                     )
@@ -104,7 +110,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '外連至 Gravator 更換大頭貼相片',
                 color: _SettingTileColor.green,
                 onTap: () {
-                  launchUrlString('https://en.gravatar.com/', mode: LaunchMode.externalApplication);
+                  launchUrlString('https://en.gravatar.com/',
+                      mode: LaunchMode.externalApplication);
                 }),
             _SettingTile(
                 iconData: Icons.rss_feed,
@@ -112,7 +119,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: 'X50MGS 多元付款喜好設定',
                 color: _SettingTileColor.blue,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return QuickPayDialog(viewModel);
                   }));
                 }),
@@ -122,7 +130,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: 'QuiC 喜愛選項設定',
                 color: _SettingTileColor.blue,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return QuiCPayPrefDialog(viewModel);
                   }));
                 }),
@@ -132,7 +141,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: 'X50Pad 西門線上排隊系統偏好設定',
                 color: _SettingTileColor.blue,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return PadPrefDialog(viewModel);
                   }));
                 }),
@@ -144,7 +154,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '密碼不夠安全嗎？點我更改！',
                 color: _SettingTileColor.red,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return ChangePasswordDialog(viewModel);
                   }));
                 }),
@@ -154,7 +165,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '換信箱了嗎，點我修改信箱。',
                 color: _SettingTileColor.white,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return ChangeEmailDialog(viewModel);
                   }));
                 }),
@@ -168,7 +180,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                     showDialog(
                         barrierDismissible: false,
                         context: context,
-                        builder: (context) => _ChangePhoneConfirmedDialog(viewModel, context));
+                        builder: (context) =>
+                            _ChangePhoneConfirmedDialog(viewModel, context));
                   }
                   showDialog(
                       barrierDismissible: false,
@@ -182,10 +195,13 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                               showDialog(
                                   barrierDismissible: false,
                                   context: context,
-                                  builder: (context) => _ChangePhoneConfirmedDialog(viewModel, context));
+                                  builder: (context) =>
+                                      _ChangePhoneConfirmedDialog(
+                                          viewModel, context));
                             } else {
                               await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-                                  dismissOnTap: false, duration: const Duration(seconds: 2));
+                                  dismissOnTap: false,
+                                  duration: const Duration(seconds: 2));
                             }
                           },
                         );
@@ -199,7 +215,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢加值相關記錄。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return _BidRecord(viewModel);
                   }));
                 }),
@@ -209,7 +226,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return _TicketRecord(viewModel);
                   }));
                 }),
@@ -219,7 +237,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢點數付款明細。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return _PlayRecord(viewModel);
                   }));
                 }),
@@ -229,7 +248,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '查詢遊玩券使用明細。',
                 color: _SettingTileColor.yellow,
                 onTap: () async {
-                  Navigator.of(context).push(CupertinoPageRoute(builder: (context) {
+                  Navigator.of(context)
+                      .push(CupertinoPageRoute(builder: (context) {
                     return _TicketUsedRecord(viewModel);
                   }));
                 }),
@@ -257,7 +277,8 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
                 subtitle: '就是個登出',
                 color: _SettingTileColor.white,
                 onTap: () async {
-                  showDialog(context: context, builder: (context) => _askLogout());
+                  showDialog(
+                      context: context, builder: (context) => _askLogout());
                 }),
           ]),
         ],
@@ -275,7 +296,10 @@ class _AccountState extends BaseStatefulState<Account> with BaseLoaded {
       var dLat = deg2rad(lat2 - lat1); // deg2rad below
       var dLon = deg2rad(lng2 - lng1);
       var a = math.sin(dLat / 2) * math.sin(dLat / 2) +
-          math.cos(deg2rad(lat1)) * math.cos(deg2rad(lat2)) * math.sin(dLon / 2) * math.sin(dLon / 2);
+          math.cos(deg2rad(lat1)) *
+              math.cos(deg2rad(lat2)) *
+              math.sin(dLon / 2) *
+              math.sin(dLon / 2);
       var c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
       var d = R * c; // Distance in km
       return d;
@@ -401,8 +425,8 @@ class _AccountBlock extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: children.length,
-            separatorBuilder: (context, index) =>
-                const Divider(thickness: 1, height: 1, color: Themes.borderColor),
+            separatorBuilder: (context, index) => const Divider(
+                thickness: 1, height: 1, color: Themes.borderColor),
             itemBuilder: (context, index) {
               final tile = children[index];
               return _SettingTile(
@@ -474,7 +498,8 @@ class _SettingTile extends StatelessWidget {
               border: Border.all(color: Themes.borderColor, width: 2)),
           child: Icon(iconData, color: iconColor, size: 18)),
       title: Text(title, style: const TextStyle(fontSize: 18)),
-      subtitle: Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
+      subtitle:
+          Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
     );
   }
 }
@@ -516,7 +541,9 @@ class _Dialog extends StatelessWidget {
                     ? CupertinoButton(
                         padding: EdgeInsets.zero,
                         onPressed: onConfirm,
-                        child: const Text('保存', style: TextStyle(color: CupertinoColors.activeBlue)),
+                        child: const Text('保存',
+                            style:
+                                TextStyle(color: CupertinoColors.activeBlue)),
                       )
                     : null)),
         child: content,
@@ -524,8 +551,10 @@ class _Dialog extends StatelessWidget {
     }
     return AlertDialog(
       scrollable: scrollable,
-      contentPadding: const EdgeInsets.only(top: 28, left: 28, right: 28, bottom: 14),
-      actionsPadding: const EdgeInsets.only(top: 0, left: 28, right: 28, bottom: 28),
+      contentPadding:
+          const EdgeInsets.only(top: 28, left: 28, right: 28, bottom: 14),
+      actionsPadding:
+          const EdgeInsets.only(top: 0, left: 28, right: 28, bottom: 28),
       content: GestureDetector(
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
@@ -540,7 +569,10 @@ class _Dialog extends StatelessWidget {
             style: Themes.pale(),
             child: const Text('取消')),
         customConfirmButton == null
-            ? TextButton(onPressed: onConfirm, style: Themes.severe(isV4: true), child: const Text('保存'))
+            ? TextButton(
+                onPressed: onConfirm,
+                style: Themes.severe(isV4: true),
+                child: const Text('保存'))
             : customConfirmButton!
       ],
     );
@@ -550,7 +582,8 @@ class _Dialog extends StatelessWidget {
 class _DialogBody extends StatelessWidget {
   final List<Widget> children;
   final String title;
-  const _DialogBody({Key? key, required this.children, required this.title}) : super(key: key);
+  const _DialogBody({Key? key, required this.children, required this.title})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -559,7 +592,9 @@ class _DialogBody extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Align(
               alignment: Alignment.topLeft,
-              child: Text(title, style: const TextStyle(color: Color(0xffbfbfbf), fontSize: 12))),
+              child: Text(title,
+                  style:
+                      const TextStyle(color: Color(0xffbfbfbf), fontSize: 12))),
           const SizedBox(height: 30),
           ...children,
         ]));
@@ -571,8 +606,11 @@ class _DialogSwitch extends StatefulWidget {
   final String title;
   final bool _iosLike;
   final void Function(bool value)? onChanged;
-  const _DialogSwitch({required this.value, required this.title, this.onChanged}) : _iosLike = false;
-  const _DialogSwitch.ios({required this.value, required this.title, required this.onChanged})
+  const _DialogSwitch(
+      {required this.value, required this.title, this.onChanged})
+      : _iosLike = false;
+  const _DialogSwitch.ios(
+      {required this.value, required this.title, required this.onChanged})
       : _iosLike = true;
 
   @override
@@ -626,11 +664,15 @@ class _DialogDropdown<T> extends StatefulWidget {
   final List<T> avaliList;
   final bool _ios;
   final void Function(T value)? onChanged;
-  const _DialogDropdown({required this.title, required this.value, required this.avaliList})
+  const _DialogDropdown(
+      {required this.title, required this.value, required this.avaliList})
       : _ios = false,
         onChanged = null;
   const _DialogDropdown.ios(
-      {required this.title, required this.value, required this.avaliList, required this.onChanged})
+      {required this.title,
+      required this.value,
+      required this.avaliList,
+      required this.onChanged})
       : _ios = true;
 
   @override
@@ -661,8 +703,8 @@ class _DialogDropdownState<T> extends State<_DialogDropdown<T>> {
         setState(() {});
         widget.onChanged?.call(v as T);
       },
-      itemBuilder: (context, index) =>
-          Center(child: Text(widget.avaliList[index].toString().split('.').last)),
+      itemBuilder: (context, index) => Center(
+          child: Text(widget.avaliList[index].toString().split('.').last)),
     );
   }
 
@@ -672,7 +714,8 @@ class _DialogDropdownState<T> extends State<_DialogDropdown<T>> {
       builder: (BuildContext context) => Container(
         height: 216,
         padding: const EdgeInsets.only(top: 6.0),
-        margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        margin:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         color: CupertinoColors.systemBackground.resolveFrom(context),
         child: SafeArea(
           top: false,
@@ -693,7 +736,9 @@ class _DialogDropdownState<T> extends State<_DialogDropdown<T>> {
           children: [
             Text(
               v.toString().split('.').last,
-              style: const TextStyle(color: CupertinoColors.systemGrey, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  color: CupertinoColors.systemGrey,
+                  fontWeight: FontWeight.w500),
             ),
             const SizedBox(width: 10),
             const CupertinoListTileChevron(),
@@ -707,7 +752,8 @@ class _DialogDropdownState<T> extends State<_DialogDropdown<T>> {
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffd9d9d9)), borderRadius: BorderRadius.circular(5)),
+              border: Border.all(color: const Color(0xffd9d9d9)),
+              borderRadius: BorderRadius.circular(5)),
           child: DropdownButtonHideUnderline(
               child: DropdownButton<T>(
             value: v,
@@ -735,9 +781,17 @@ class _DialogWidget extends StatefulWidget {
   final IconData? titleIcon;
   final bool isRequired;
   final bool _iosLike;
-  const _DialogWidget({required this.title, required this.child, this.isRequired = false, this.titleIcon})
+  const _DialogWidget(
+      {required this.title,
+      required this.child,
+      this.isRequired = false,
+      this.titleIcon})
       : _iosLike = false;
-  const _DialogWidget.ios({required this.title, required this.child, this.isRequired = false, this.titleIcon})
+  const _DialogWidget.ios(
+      {required this.title,
+      required this.child,
+      this.isRequired = false,
+      this.titleIcon})
       : _iosLike = true;
 
   @override
@@ -759,21 +813,26 @@ class _DialogWidgetState extends State<_DialogWidget> {
                       widget.titleIcon == null
                           ? const WidgetSpan(child: SizedBox())
                           : WidgetSpan(
-                              child: Icon(widget.titleIcon!, color: const Color(0xff5a5a5a), size: 18)),
+                              child: Icon(widget.titleIcon!,
+                                  color: const Color(0xff5a5a5a), size: 18)),
                       TextSpan(text: widget.title),
-                      const TextSpan(text: ' *', style: TextStyle(color: Colors.red))
+                      const TextSpan(
+                          text: ' *', style: TextStyle(color: Colors.red))
                     ]
                   : [
                       widget.titleIcon == null
                           ? const WidgetSpan(child: SizedBox())
-                          : WidgetSpan(child: Icon(widget.titleIcon!, color: const Color(0xff5a5a5a))),
+                          : WidgetSpan(
+                              child: Icon(widget.titleIcon!,
+                                  color: const Color(0xff5a5a5a))),
                       TextSpan(text: widget.title)
                     ],
             ))),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffd9d9d9)), borderRadius: BorderRadius.circular(5)),
+              border: Border.all(color: const Color(0xffd9d9d9)),
+              borderRadius: BorderRadius.circular(5)),
           child: widget.child,
         ),
         const SizedBox(height: 22.4),

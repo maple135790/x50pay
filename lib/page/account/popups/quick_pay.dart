@@ -47,11 +47,15 @@ class _QuickPayDialogState extends State<QuickPayDialog> {
             isNfcAutoPayEnabled = model.nfcAuto;
             isQuiCPayEnabled = model.nfcQuic;
             isUseTicketEnabled = model.nfcTicket;
-            nvsvP = NVSVPayment.values.firstWhere((element) => element.value == model.nfcNVSV);
-            sdvxP = SDVXPayment.values.firstWhere((element) => element.value == model.nfcSDVX);
-            dpP = DPPayment.values.firstWhere((element) => element.value == model.nfcTwo);
+            nvsvP = NVSVPayment.values
+                .firstWhere((element) => element.value == model.nfcNVSV);
+            sdvxP = SDVXPayment.values
+                .firstWhere((element) => element.value == model.nfcSDVX);
+            dpP = DPPayment.values
+                .firstWhere((element) => element.value == model.nfcTwo);
             // TODO: 機台付款碼預設尚未開放
-            defaultCabP = DefaultCabPayment.values.firstWhere((element) => element.value == '0');
+            defaultCabP = DefaultCabPayment.values
+                .firstWhere((element) => element.value == '0');
 
             return Column(
               children: [
@@ -85,24 +89,29 @@ class _QuickPayDialogState extends State<QuickPayDialog> {
                     _DialogDropdown.ios(
                       title: '機台付款碼預設',
                       value: defaultCabP.name,
-                      avaliList: DefaultCabPayment.values.map((e) => e.name).toList(),
+                      avaliList:
+                          DefaultCabPayment.values.map((e) => e.name).toList(),
                       onChanged: (value) {
-                        defaultCabP = DefaultCabPayment.values.firstWhere((element) => element.name == value);
+                        defaultCabP = DefaultCabPayment.values
+                            .firstWhere((element) => element.name == value);
                       },
                     ),
                     _DialogDropdown.ios(
                         title: '女武神預設扣款模式',
                         value: nvsvP.name,
-                        avaliList: NVSVPayment.values.map((e) => e.name).toList(),
+                        avaliList:
+                            NVSVPayment.values.map((e) => e.name).toList(),
                         onChanged: (value) {
-                          nvsvP = NVSVPayment.values.firstWhere((element) => element.name == value);
+                          nvsvP = NVSVPayment.values
+                              .firstWhere((element) => element.name == value);
                         }),
                     _DialogDropdown.ios(
                         title: '雙人遊玩機種預設扣款模式',
                         value: dpP.name,
                         avaliList: DPPayment.values.map((e) => e.name).toList(),
                         onChanged: (value) {
-                          dpP = DPPayment.values.firstWhere((element) => element.name == value);
+                          dpP = DPPayment.values
+                              .firstWhere((element) => element.name == value);
                         }),
                   ],
                 ),

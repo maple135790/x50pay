@@ -33,7 +33,8 @@ class _DressRoomPopupState extends State<DressRoomPopup> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
               child: Row(children: [
                 const Text('更換角色/衣裝'),
                 const Spacer(),
@@ -41,7 +42,8 @@ class _DressRoomPopupState extends State<DressRoomPopup> {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Icon(Icons.cancel, color: Color(0xfffafafa), size: 20))
+                    child: const Icon(Icons.cancel,
+                        color: Color(0xfffafafa), size: 20))
               ])),
           const Divider(height: 0),
           SizedBox(
@@ -58,11 +60,12 @@ class _DressRoomPopupState extends State<DressRoomPopup> {
                     final avatars = snapshot.data!;
                     return GridView.builder(
                       itemCount: avatars.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 106 / 150,
-                          crossAxisSpacing: 18,
-                          mainAxisSpacing: 12),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 106 / 150,
+                              crossAxisSpacing: 18,
+                              mainAxisSpacing: 12),
                       itemBuilder: (context, index) => DressedAvatar(
                         id: avatars[index].id,
                         imageSrc: avatars[index].b64Image,
@@ -86,7 +89,11 @@ class DressedAvatar extends StatefulWidget {
   final Future<String> Function(String id) onTap;
 
   const DressedAvatar(
-      {super.key, required this.id, required this.imageSrc, required this.amount, required this.onTap});
+      {super.key,
+      required this.id,
+      required this.imageSrc,
+      required this.amount,
+      required this.onTap});
 
   @override
   State<DressedAvatar> createState() => _DressedAvatarState();

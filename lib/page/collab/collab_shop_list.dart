@@ -12,7 +12,9 @@ class __CollabShopListState extends State<_CollabShopList> {
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
     if (context.mounted) {
-      showDialog(context: context, builder: (context) => ScanQRCode(status == PermissionStatus.granted));
+      showDialog(
+          context: context,
+          builder: (context) => ScanQRCode(status == PermissionStatus.granted));
     }
   }
 
@@ -29,15 +31,18 @@ class __CollabShopListState extends State<_CollabShopList> {
               onTap: showQRCodeScan,
               child: Container(
                 padding: const EdgeInsets.all(15),
-                decoration:
-                    BoxDecoration(color: const Color(0xff2a2a2a), borderRadius: BorderRadius.circular(5)),
+                decoration: BoxDecoration(
+                    color: const Color(0xff2a2a2a),
+                    borderRadius: BorderRadius.circular(5)),
                 alignment: Alignment.center,
                 height: 93.86,
                 child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.qr_code_rounded, size: 28, color: Colors.white),
-                    Text('點我掃店鋪 QRCode', style: TextStyle(color: Color(0xffdcdcdc), fontSize: 17)),
+                    Text('點我掃店鋪 QRCode',
+                        style:
+                            TextStyle(color: Color(0xffdcdcdc), fontSize: 17)),
                   ],
                 ),
               ),
@@ -54,13 +59,18 @@ class __CollabShopListState extends State<_CollabShopList> {
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network('https://pay.x50.fun/static/gc/01.jpg',
-                    fit: BoxFit.fill, width: 80, height: 80, cacheHeight: 80, cacheWidth: 80),
+                    fit: BoxFit.fill,
+                    width: 80,
+                    height: 80,
+                    cacheHeight: 80,
+                    cacheWidth: 80),
               ),
               subtitleTextStyle: const TextStyle(color: Color(0xfffafafa)),
               isThreeLine: true,
-              title: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [Icon(Icons.store_mall_directory_rounded), Text('獅子林冰茶')]),
+              title: const Row(mainAxisSize: MainAxisSize.min, children: [
+                Icon(Icons.store_mall_directory_rounded),
+                Text('獅子林冰茶')
+              ]),
               subtitle: const Text(
                 '萬華區西寧南路36-1號\n每杯折抵5元',
                 style: TextStyle(color: Color(0xfffafafa)),

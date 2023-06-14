@@ -18,7 +18,8 @@ class EntryModel {
       this.evlist,
       this.giftlist});
 
-  factory EntryModel.fromJson(Map<String, dynamic> json) => _$EntryModelFromJson(json);
+  factory EntryModel.fromJson(Map<String, dynamic> json) =>
+      _$EntryModelFromJson(json);
   Map<String, dynamic> toJson() => _$EntryModelToJson(this);
 }
 
@@ -68,7 +69,8 @@ class GiftList {
 
   const GiftList({this.gift});
 
-  factory GiftList.fromJson(Map<String, dynamic> json) => _$GiftListFromJson(json);
+  factory GiftList.fromJson(Map<String, dynamic> json) =>
+      _$GiftListFromJson(json);
   Map<String, dynamic> toJson() => _$GiftListToJson(this);
 }
 
@@ -79,7 +81,8 @@ class EventTime {
 
   const EventTime({required this.date});
 
-  factory EventTime.fromJson(Map<String, dynamic> json) => _$EventTimeFromJson(json);
+  factory EventTime.fromJson(Map<String, dynamic> json) =>
+      _$EventTimeFromJson(json);
   Map<String, dynamic> toJson() => _$EventTimeToJson(this);
 }
 
@@ -115,6 +118,7 @@ class EntryHistory {
       this.uid,
       this.underscoreId});
 
-  factory EntryHistory.fromJson(Map<String, dynamic> json) => _$EntryHistoryFromJson(json);
+  factory EntryHistory.fromJson(Map<String, dynamic> json) =>
+      _$EntryHistoryFromJson(json);
   Map<String, dynamic> toJson() => _$EntryHistoryToJson(this);
 }

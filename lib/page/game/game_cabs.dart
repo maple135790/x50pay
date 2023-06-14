@@ -4,7 +4,8 @@ class _GameCabs extends StatelessWidget {
   final Gamelist games;
   final String storeName;
 
-  const _GameCabs({required this.games, required this.storeName, Key? key}) : super(key: key);
+  const _GameCabs({required this.games, required this.storeName, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,8 @@ class _GameCabs extends StatelessWidget {
             child: Row(
               children: [
                 const Icon(Icons.push_pin, color: Color(0xfffafafa), size: 16),
-                Text('  目前所在「 $storeName 」', style: const TextStyle(color: Color(0xfffafafa))),
+                Text('  目前所在「 $storeName 」',
+                    style: const TextStyle(color: Color(0xfffafafa))),
                 const Spacer(),
                 GestureDetector(
                   onTap: () async {
@@ -33,9 +35,11 @@ class _GameCabs extends StatelessWidget {
                     nav.pushReplacementNamed(AppRoute.game);
                   },
                   child: Container(
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(8), color: const Color(0xfffafafa)),
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color(0xfffafafa)),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     child: Icon(Icons.sync, color: bgColor, size: 26),
                   ),
                 ),
@@ -65,7 +69,8 @@ class _GameCabs extends StatelessWidget {
                 child: Container(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: const Text('離峰時段', style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
+                  child: const Text('離峰時段',
+                      style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
                 )),
             const Positioned(
               top: 40,
@@ -74,9 +79,11 @@ class _GameCabs extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('●   部分機種不提供離峰方案', style: TextStyle(color: Color(0xfffafafa))),
+                  Text('●   部分機種不提供離峰方案',
+                      style: TextStyle(color: Color(0xfffafafa))),
                   SizedBox(height: 5),
-                  Text('●   詳情請見粉絲專業更新貼文', style: TextStyle(color: Color(0xfffafafa))),
+                  Text('●   詳情請見粉絲專業更新貼文',
+                      style: TextStyle(color: Color(0xfffafafa))),
                 ],
               ),
             )
@@ -93,7 +100,8 @@ class _GameCabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWeekend = DateTime.now().weekday == 6 || DateTime.now().weekday == 7;
+    final isWeekend =
+        DateTime.now().weekday == 6 || DateTime.now().weekday == 7;
     final time = machine.mode![0][3] == true ? "離峰時段" : "通常時段";
     final addition = machine.vipb == true
         ? " [月票]"
@@ -113,7 +121,8 @@ class _GameCabItem extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), border: Border.all(color: Themes.borderColor)),
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Themes.borderColor)),
           height: 155,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
@@ -121,7 +130,8 @@ class _GameCabItem extends StatelessWidget {
               children: [
                 Positioned.fill(
                     child: Image(
-                  image: _getGameCabImage(machine.id!, isOnline: GlobalSingleton.instance.isOnline),
+                  image: _getGameCabImage(machine.id!,
+                      isOnline: GlobalSingleton.instance.isOnline),
                   color: const Color.fromARGB(35, 0, 0, 0),
                   colorBlendMode: BlendMode.srcATop,
                   fit: BoxFit.fitWidth,
@@ -151,15 +161,23 @@ class _GameCabItem extends StatelessWidget {
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,
-                              shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
-                      Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                        const Icon(Icons.schedule, size: 15, color: Color(0xe6ffffff)),
-                        Text('  $time$addition',
-                            style: const TextStyle(
-                                color: Color(0xffffffe6),
-                                fontSize: 13,
-                                shadows: [Shadow(color: Colors.black, blurRadius: 15)]))
-                      ]),
+                              shadows: [
+                                Shadow(color: Colors.black, blurRadius: 18)
+                              ])),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Icon(Icons.schedule,
+                                size: 15, color: Color(0xe6ffffff)),
+                            Text('  $time$addition',
+                                style: const TextStyle(
+                                    color: Color(0xffffffe6),
+                                    fontSize: 13,
+                                    shadows: [
+                                      Shadow(
+                                          color: Colors.black, blurRadius: 15)
+                                    ]))
+                          ]),
                     ],
                   ),
                 ),

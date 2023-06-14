@@ -10,9 +10,11 @@ class PlayRecordModel {
   @JsonKey(name: 'log')
   final List<PlayLog> logs;
 
-  const PlayRecordModel({required this.code, required this.message, required this.logs});
+  const PlayRecordModel(
+      {required this.code, required this.message, required this.logs});
 
-  factory PlayRecordModel.fromJson(Map<String, dynamic> json) => _$PlayRecordModelFromJson(json);
+  factory PlayRecordModel.fromJson(Map<String, dynamic> json) =>
+      _$PlayRecordModelFromJson(json);
   Map<String, dynamic> toJson() => _$PlayRecordModelToJson(this);
 }
 
@@ -47,6 +49,7 @@ class PlayLog {
       required this.uid,
       required this.id});
 
-  factory PlayLog.fromJson(Map<String, dynamic> json) => _$PlayLogFromJson(json);
+  factory PlayLog.fromJson(Map<String, dynamic> json) =>
+      _$PlayLogFromJson(json);
   Map<String, dynamic> toJson() => _$PlayLogToJson(this);
 }

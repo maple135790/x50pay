@@ -39,10 +39,14 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
           future: getPadSettings,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
-              return kDebugMode ? const Center(child: Text('loading')) : const SizedBox();
+              return kDebugMode
+                  ? const Center(child: Text('loading'))
+                  : const SizedBox();
             }
             if (snapshot.data == null) {
-              return kDebugMode ? const Center(child: Text('failed')) : const SizedBox();
+              return kDebugMode
+                  ? const Center(child: Text('failed'))
+                  : const SizedBox();
             } else {
               gotModel = true;
               return _PadPrefLoaded(
@@ -57,13 +61,18 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
   }
 }
 
-typedef _PadPrefModalValue = ({String nickname, String showColor, bool isNameShown});
+typedef _PadPrefModalValue = ({
+  String nickname,
+  String showColor,
+  bool isNameShown
+});
 
 class _PadPrefLoaded extends StatefulWidget {
   final PadSettingsModel model;
   final void Function(_PadPrefModalValue value) getValues;
 
-  const _PadPrefLoaded({required this.model, required this.getValues, Key? key}) : super(key: key);
+  const _PadPrefLoaded({required this.model, required this.getValues, Key? key})
+      : super(key: key);
 
   @override
   State<_PadPrefLoaded> createState() => __PadPrefLoadedState();
@@ -77,11 +86,13 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
   void changeNicknamePage() async {
     final nameController = TextEditingController(text: nickname);
 
-    final newNickname = await Navigator.of(context).push<String?>(CupertinoPageRoute(
+    final newNickname =
+        await Navigator.of(context).push<String?>(CupertinoPageRoute(
       builder: (context) => WillPopScope(
         onWillPop: () async {
           log(nameController.text, name: 'changeNicknamePage');
-          Navigator.of(context).pop(nameController.text.isEmpty ? null : nameController.text);
+          Navigator.of(context)
+              .pop(nameController.text.isEmpty ? null : nameController.text);
           nameController.dispose();
           return true;
         },
@@ -98,7 +109,8 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
               placeholder: nickname,
               controller: nameController,
               autofocus: true,
-              style: const TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.w500),
+              style: const TextStyle(
+                  color: CupertinoColors.white, fontWeight: FontWeight.w500),
             ),
           ),
         ),
@@ -179,7 +191,8 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
                       decoration: BoxDecoration(
                         color: showColor,
                         borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: const Color(0xffd9d9d9), width: 1),
+                        border: Border.all(
+                            color: const Color(0xffd9d9d9), width: 1),
                       )),
                   const SizedBox(width: 10),
                   const CupertinoListTileChevron(),

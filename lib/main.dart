@@ -28,7 +28,9 @@ void main() async {
 void configLoadingStyle() {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.ring
-    ..infoWidget = Image(image: R.svg.torii(width: 80, height: 80), color: const Color(0xfffafafa))
+    ..infoWidget = Image(
+        image: R.svg.torii(width: 80, height: 80),
+        color: const Color(0xfffafafa))
     ..maskType = EasyLoadingMaskType.black
     ..loadingStyle = EasyLoadingStyle.dark
     ..userInteractions = false

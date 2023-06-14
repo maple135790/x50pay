@@ -8,9 +8,11 @@ class PadSettingsModel {
   final bool shid;
   final String shname;
 
-  const PadSettingsModel({required this.shcolor, required this.shid, required this.shname});
+  const PadSettingsModel(
+      {required this.shcolor, required this.shid, required this.shname});
 
-  factory PadSettingsModel.fromJson(Map<String, dynamic> json) => _$PadSettingsModelFromJson(json);
+  factory PadSettingsModel.fromJson(Map<String, dynamic> json) =>
+      _$PadSettingsModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$PadSettingsModelToJson(this);
 }

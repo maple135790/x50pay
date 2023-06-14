@@ -13,7 +13,8 @@ class _GiftClaim extends StatelessWidget {
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           visualDensity: VisualDensity.comfortable,
-          title: const Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+          title: const Text('',
+              style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
           subtitle: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -22,7 +23,8 @@ class _GiftClaim extends StatelessWidget {
               Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14))
             ],
           ),
-          trailing: ElevatedButton(onPressed: null, style: Themes.grey(), child: const Text('已領取')),
+          trailing: ElevatedButton(
+              onPressed: null, style: Themes.grey(), child: const Text('已領取')),
         ),
       ),
       itemBuilder: (context, index) {
@@ -50,7 +52,9 @@ class _GiftClaim extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 4),
-                Text(subtitle, style: const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+                Text(subtitle,
+                    style: const TextStyle(
+                        color: Color(0xfffafafa), fontSize: 14)),
               ],
             ),
             trailing: ElevatedButton(
@@ -58,7 +62,8 @@ class _GiftClaim extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return _ConfirmChangeDialog(gid: canChangeList[index].gid);
+                        return _ConfirmChangeDialog(
+                            gid: canChangeList[index].gid);
                       });
                   getGiftDialog(canChangeList[index].gid);
                 },
@@ -97,7 +102,9 @@ class _ConfirmChangeDialog extends StatelessWidget {
               children: [
                 Text('請確認已經出示給工作人員看過'),
                 SizedBox(height: 16),
-                Text('您確定要兌換禮物嗎？', style: TextStyle(color: Color(0xfffad814), fontWeight: FontWeight.bold)),
+                Text('您確定要兌換禮物嗎？',
+                    style: TextStyle(
+                        color: Color(0xfffad814), fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -120,7 +127,9 @@ class _ConfirmChangeDialog extends StatelessWidget {
                   child: TextButton(
                       onPressed: () async {
                         final nav = Navigator.of(context);
-                        kDebugMode ? null : await Repository().giftExchange(gid);
+                        kDebugMode
+                            ? null
+                            : await Repository().giftExchange(gid);
                         await EasyLoading.showSuccess('成功兌換,將會回到首頁',
                             duration: const Duration(milliseconds: 800));
                         await Future.delayed(const Duration(milliseconds: 800));

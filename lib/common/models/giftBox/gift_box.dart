@@ -14,7 +14,8 @@ class GiftBoxModel {
     required this.alChange,
     required this.canChange,
   });
-  factory GiftBoxModel.fromJson(Map<String, dynamic> json) => _$GiftBoxModelFromJson(json);
+  factory GiftBoxModel.fromJson(Map<String, dynamic> json) =>
+      _$GiftBoxModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$GiftBoxModelToJson(this);
 }
@@ -28,8 +29,13 @@ class AlChange {
   final String pic;
 
   const AlChange(
-      {required this.auto, required this.chid, required this.gid, required this.name, required this.pic});
-  factory AlChange.fromJson(Map<String, dynamic> json) => _$AlChangeFromJson(json);
+      {required this.auto,
+      required this.chid,
+      required this.gid,
+      required this.name,
+      required this.pic});
+  factory AlChange.fromJson(Map<String, dynamic> json) =>
+      _$AlChangeFromJson(json);
 
   Map<String, dynamic> toJson() => _$AlChangeToJson(this);
 }
@@ -41,9 +47,14 @@ class CanChange {
   final String name;
   final String pic;
 
-  const CanChange({required this.chid, required this.gid, required this.name, required this.pic});
+  const CanChange(
+      {required this.chid,
+      required this.gid,
+      required this.name,
+      required this.pic});
 
-  factory CanChange.fromJson(Map<String, dynamic> json) => _$CanChangeFromJson(json);
+  factory CanChange.fromJson(Map<String, dynamic> json) =>
+      _$CanChangeFromJson(json);
 
   Map<String, dynamic> toJson() => _$CanChangeToJson(this);
 }

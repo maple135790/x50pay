@@ -15,7 +15,7 @@ class AppThemeData {
       useMaterial3: true,
       brightness: Brightness.dark,
       cupertinoOverrideTheme: const CupertinoThemeData(
-        primaryColor: CupertinoColors.activeBlue,
+          primaryColor: CupertinoColors.activeBlue,
           barBackgroundColor: Color(0xff1e1e1e),
           scaffoldBackgroundColor: Color(0xff1e1e1e),
           textTheme: CupertinoTextThemeData(
@@ -28,7 +28,8 @@ class AppThemeData {
         headingTextStyle: const TextStyle(color: Color(0xfffafafa)),
         headingRowColor: MaterialStateProperty.all(const Color(0xff2a2a2a)),
         decoration: BoxDecoration(
-            color: const Color(0xff1e1e1e), border: Border.all(color: Themes.borderColor, width: 1)),
+            color: const Color(0xff1e1e1e),
+            border: Border.all(color: Themes.borderColor, width: 1)),
       ),
       pageTransitionsTheme: const PageTransitionsTheme(builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -37,7 +38,8 @@ class AppThemeData {
       dialogTheme: const DialogTheme(
           surfaceTintColor: Colors.transparent,
           backgroundColor: Color(0xff1e1e1e),
-          titleTextStyle: TextStyle(color: Color(0xfffafafa), fontSize: 20, wordSpacing: 0.15)),
+          titleTextStyle: TextStyle(
+              color: Color(0xfffafafa), fontSize: 20, wordSpacing: 0.15)),
       dialogBackgroundColor: const Color(0xff1e1e1e),
       dividerTheme: const DividerThemeData(color: Color(0xff3e3e3e)),
       tabBarTheme: const TabBarTheme(
@@ -55,26 +57,32 @@ class AppThemeData {
         surfaceTintColor: Colors.transparent,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         labelTextStyle: MaterialStateProperty.resolveWith((states) {
-          if (states.isSelected) return const TextStyle(color: Color(0xffe3c81b), fontSize: 11);
+          if (states.isSelected)
+            return const TextStyle(color: Color(0xffe3c81b), fontSize: 11);
           return null;
         }),
         iconTheme: MaterialStateProperty.resolveWith((states) {
-          if (states.isSelected) return const IconThemeData(color: Color(0xfffafafa));
+          if (states.isSelected)
+            return const IconThemeData(color: Color(0xfffafafa));
           return const IconThemeData(color: Color(0xffb4b4b4));
         }),
       ),
-      textSelectionTheme: const TextSelectionThemeData(cursorColor: Colors.white),
+      textSelectionTheme:
+          const TextSelectionThemeData(cursorColor: Colors.white),
       inputDecorationTheme: const InputDecorationTheme(
           filled: true,
           fillColor: Color(0xff2a2a2a),
           hintStyle: TextStyle(color: Color(0xff757575)),
           prefixIconColor: Color(0xfffafafa),
-          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xff505050), width: 3)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xff505050), width: 3)),
           isDense: true,
           border: UnderlineInputBorder(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5), topRight: Radius.circular(5))),
           contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 3))),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue, width: 3))),
     );
   }
 }
@@ -134,7 +142,9 @@ class Themes {
   }
 
   static ButtonStyle severe(
-      {bool isV4 = false, EdgeInsetsGeometry? padding, OutlinedBorder? outlinedBorder}) {
+      {bool isV4 = false,
+      EdgeInsetsGeometry? padding,
+      OutlinedBorder? outlinedBorder}) {
     return isV4
         ? ButtonStyle(
             splashFactory: NoSplash.splashFactory,
@@ -194,6 +204,7 @@ class Themes {
           }
           return const Color(0xffCE5F58);
         }),
-        side: MaterialStateProperty.all(const BorderSide(color: Color(0xffCE5F58), width: 1)));
+        side: MaterialStateProperty.all(
+            const BorderSide(color: Color(0xffCE5F58), width: 1)));
   }
 }

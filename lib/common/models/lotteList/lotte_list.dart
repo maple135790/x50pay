@@ -17,7 +17,8 @@ class LotteListModel {
         date = rawLotteList[1],
         tic = rawLotteList[2].toString();
 
-  factory LotteListModel.fromJson(Map<String, dynamic> json) => _$LotteListModelFromJson(json);
+  factory LotteListModel.fromJson(Map<String, dynamic> json) =>
+      _$LotteListModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LotteListModelToJson(this);
 }

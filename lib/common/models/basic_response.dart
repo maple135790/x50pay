@@ -9,7 +9,8 @@ class BasicResponse {
 
   const BasicResponse({required this.code, required this.message});
 
-  factory BasicResponse.fromJson(Map<String, dynamic> json) => _$BasicResponseFromJson(json);
+  factory BasicResponse.fromJson(Map<String, dynamic> json) =>
+      _$BasicResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$BasicResponseToJson(this);
 }

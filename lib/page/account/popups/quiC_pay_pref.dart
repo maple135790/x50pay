@@ -12,7 +12,14 @@ class QuiCPayPrefDialog extends StatefulWidget {
 class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
   late bool isQuiCPayEnabled;
   late String nfcQlock;
-  final intervalMap = {"15": "15秒", "30": "30秒", "60": "60秒", "300": "5分鐘", "600": "10分鐘", "0": "不限制"};
+  final intervalMap = {
+    "15": "15秒",
+    "30": "30秒",
+    "60": "60秒",
+    "300": "5分鐘",
+    "600": "10分鐘",
+    "0": "不限制"
+  };
 
   void sendQuicConfirm() {
     widget.viewModel.quicConfirm(
@@ -55,7 +62,8 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
                     value: intervalMap[nfcQlock],
                     avaliList: intervalMap.values.toList(),
                     onChanged: (value) {
-                      nfcQlock = intervalMap.keys.firstWhere((key) => intervalMap[key] == value);
+                      nfcQlock = intervalMap.keys
+                          .firstWhere((key) => intervalMap[key] == value);
                     },
                   )
                 ],

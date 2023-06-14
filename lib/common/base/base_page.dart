@@ -21,7 +21,8 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
   @override
   Widget build(BuildContext context) {
     if (baseViewModel() != null) {
-      headerType = baseViewModel()!.isFloatHeader ? HeaderType.float : HeaderType.normal;
+      headerType =
+          baseViewModel()!.isFloatHeader ? HeaderType.float : HeaderType.normal;
       isShowFooter = baseViewModel()!.isShowFooter;
       isHeaderBackType = baseViewModel()!.isHeaderBackType;
       floatHeaderText = baseViewModel()!.floatHeaderText;
@@ -35,7 +36,9 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
         },
         child: Scaffold(
           floatingActionButton: kDebugMode && debugFunction != null
-              ? FloatingActionButton(onPressed: debugFunction, child: const Icon(Icons.developer_mode))
+              ? FloatingActionButton(
+                  onPressed: debugFunction,
+                  child: const Icon(Icons.developer_mode))
               : null,
           body: SafeArea(
             child: SingleChildScrollView(
@@ -48,10 +51,13 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
                       headerType == HeaderType.normal
                           ? _Header(isDark: isDarkHeader)
                           : _Header.float(
-                              isBackType: isHeaderBackType, title: floatHeaderText, isDark: isDarkHeader),
+                              isBackType: isHeaderBackType,
+                              title: floatHeaderText,
+                              isDark: isDarkHeader),
                       body(),
                       isShowFooter
-                          ? const Padding(padding: EdgeInsets.all(30), child: _Footer())
+                          ? const Padding(
+                              padding: EdgeInsets.all(30), child: _Footer())
                           : const SizedBox()
                     ],
                   ),
@@ -76,9 +82,11 @@ class _Header extends StatelessWidget {
         title = null,
         super(key: key);
 
-  const _Header.float({Key? key, required this.isBackType, this.title, this.isDark = false})
+  const _Header.float(
+      {Key? key, required this.isBackType, this.title, this.isDark = false})
       : _type = HeaderType.float,
-        assert(isBackType != false || title != null, 'floatHeaderText must be set'),
+        assert(isBackType != false || title != null,
+            'floatHeaderText must be set'),
         super(key: key);
 
   @override
@@ -93,7 +101,9 @@ class _Header extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                    backgroundImage: R.image.header_icon(), backgroundColor: Colors.black, radius: 14),
+                    backgroundImage: R.image.header_icon(),
+                    backgroundColor: Colors.black,
+                    radius: 14),
                 const SizedBox(width: 10),
                 const Text('X50Pay'),
               ],
@@ -113,15 +123,16 @@ class _Header extends StatelessWidget {
                   ? [
                       const SizedBox(width: 15),
                       Container(
-                        decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xffdfdfdf)),
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: Color(0xffdfdfdf)),
                         padding: const EdgeInsets.all(5),
                         alignment: Alignment.center,
                         child: InkWell(
                             onTap: () {
                               Navigator.of(context).pop();
                             },
-                            child:
-                                const Icon(Icons.chevron_left_outlined, size: 25, color: Color(0xff5a5a5a))),
+                            child: const Icon(Icons.chevron_left_outlined,
+                                size: 25, color: Color(0xff5a5a5a))),
                       ),
                       const SizedBox(width: 10),
                     ]
@@ -149,27 +160,35 @@ class _Footer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         RichText(
-            text: TextSpan(text: 'Copyright © ', style: const TextStyle(color: Color(0xff919191)), children: [
-          TextSpan(
-              text: 'X50 Music Game Station',
-              style: const TextStyle(color: Colors.blue),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  final Uri emailLaunchUri = Uri(scheme: 'mailto', path: 'pay@x50.fun');
-                  launchUrl(emailLaunchUri, mode: LaunchMode.externalApplication);
-                })
-        ])),
+            text: TextSpan(
+                text: 'Copyright © ',
+                style: const TextStyle(color: Color(0xff919191)),
+                children: [
+              TextSpan(
+                  text: 'X50 Music Game Station',
+                  style: const TextStyle(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      final Uri emailLaunchUri =
+                          Uri(scheme: 'mailto', path: 'pay@x50.fun');
+                      launchUrl(emailLaunchUri,
+                          mode: LaunchMode.externalApplication);
+                    })
+            ])),
         const SizedBox(height: 10),
         RichText(
-            text: TextSpan(text: '如使用本平台視為同意', style: const TextStyle(color: Color(0xff919191)), children: [
-          TextSpan(
-              text: '平台使用條款',
-              style: const TextStyle(color: Colors.blue),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  Navigator.of(context).pushNamed(AppRoute.license);
-                })
-        ]))
+            text: TextSpan(
+                text: '如使用本平台視為同意',
+                style: const TextStyle(color: Color(0xff919191)),
+                children: [
+              TextSpan(
+                  text: '平台使用條款',
+                  style: const TextStyle(color: Colors.blue),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.of(context).pushNamed(AppRoute.license);
+                    })
+            ]))
       ],
     );
   }

@@ -33,11 +33,13 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
           return const SizedBox();
         }
         if (snapshot.data == false) {
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
+          scaffoldKey.currentState!.showSnackBar(
+              const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
           return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         }
         if (model.playRecordModel!.code != 200) {
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
+          scaffoldKey.currentState!.showSnackBar(
+              const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
           return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         }
         return playRecordLoaded(model.playRecordModel!);
@@ -83,7 +85,9 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
                 child: DataTable(
                   border: TableBorder.all(color: Themes.borderColor, width: 1),
                   dataRowMaxHeight: 60,
-                  columns: ['日期', '機台', '使用點數'].map((e) => DataColumn(label: Text(e))).toList(),
+                  columns: ['日期', '機台', '使用點數']
+                      .map((e) => DataColumn(label: Text(e)))
+                      .toList(),
                   rows: buildRows(),
                 ),
               )

@@ -3,7 +3,8 @@ part of '../account.dart';
 class ChangePhoneDialog extends StatefulWidget {
   final AccountViewModel viewModel;
   final Function(bool) callback;
-  const ChangePhoneDialog(this.viewModel, {Key? key, required this.callback}) : super(key: key);
+  const ChangePhoneDialog(this.viewModel, {Key? key, required this.callback})
+      : super(key: key);
 
   @override
   State<ChangePhoneDialog> createState() => _ChangePhoneDialogState();
@@ -37,14 +38,20 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 RichText(
-                    text: const TextSpan(text: '此選項會', style: TextStyle(fontSize: 16), children: [
-                  TextSpan(text: "解除您的帳戶的手機綁定", style: TextStyle(color: Color(0xfffad814))),
-                  TextSpan(text: '，並且讓原先的手機號碼可以被再次使用')
-                ])),
+                    text: const TextSpan(
+                        text: '此選項會',
+                        style: TextStyle(fontSize: 16),
+                        children: [
+                      TextSpan(
+                          text: "解除您的帳戶的手機綁定",
+                          style: TextStyle(color: Color(0xfffad814))),
+                      TextSpan(text: '，並且讓原先的手機號碼可以被再次使用')
+                    ])),
                 const Text('且您的帳戶會變成尚未簡訊驗證的狀況，直到您驗證完新的電話號碼。'),
                 const SizedBox(height: 20),
                 const Text('您確定要取消手機綁定並重新驗證？',
-                    style: TextStyle(color: Color(0xfffad814), fontWeight: FontWeight.bold)),
+                    style: TextStyle(
+                        color: Color(0xfffad814), fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -86,13 +93,16 @@ class _ChangePhoneConfirmedDialog extends StatefulWidget {
   final BuildContext context;
   final AccountViewModel viewModel;
 
-  const _ChangePhoneConfirmedDialog(this.viewModel, this.context, {Key? key}) : super(key: key);
+  const _ChangePhoneConfirmedDialog(this.viewModel, this.context, {Key? key})
+      : super(key: key);
 
   @override
-  State<_ChangePhoneConfirmedDialog> createState() => _ChangePhoneConfirmedDialogState();
+  State<_ChangePhoneConfirmedDialog> createState() =>
+      _ChangePhoneConfirmedDialogState();
 }
 
-class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog> {
+class _ChangePhoneConfirmedDialogState
+    extends State<_ChangePhoneConfirmedDialog> {
   final textController = TextEditingController();
   String? _errorText;
   bool isEnteredNewPhone = false;
@@ -108,13 +118,15 @@ class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog
     if (await model.doChangePhone(phone: textController.text)) {
       switch (model.response!.code) {
         case 200:
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('資料已送出，等候簡訊驗證')));
+          scaffoldKey.currentState!
+              .showSnackBar(const SnackBar(content: Text('資料已送出，等候簡訊驗證')));
           isEnteredNewPhone = true;
           textController.clear();
           setState(() {});
           break;
         default:
-          await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50', duration: const Duration(seconds: 2));
+          await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
+              duration: const Duration(seconds: 2));
           await Future.delayed(const Duration(seconds: 2));
           nav.pop();
       }
@@ -127,15 +139,18 @@ class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog
     if (await model.smsActivate(smsCode: textController.text)) {
       switch (model.response!.code) {
         case 200:
-          await EasyLoading.showSuccess('簡訊驗證成功！', duration: const Duration(seconds: 2));
+          await EasyLoading.showSuccess('簡訊驗證成功！',
+              duration: const Duration(seconds: 2));
           await Future.delayed(const Duration(seconds: 2));
           nav.pop();
           break;
         case 700:
-          await EasyLoading.showError('驗證碼輸入錯誤，請檢查', duration: const Duration(seconds: 2));
+          await EasyLoading.showError('驗證碼輸入錯誤，請檢查',
+              duration: const Duration(seconds: 2));
           break;
         default:
-          await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50', duration: const Duration(seconds: 2));
+          await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
+              duration: const Duration(seconds: 2));
           await Future.delayed(const Duration(seconds: 2));
           nav.pop();
       }
@@ -149,7 +164,8 @@ class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog
         if (isEnteredNewPhone) {
           _smsActivate();
         } else {
-          bool isCorrectPhone = RegExp("^09\\d{2}-?\\d{3}-?\\d{3}\$").hasMatch(textController.text);
+          bool isCorrectPhone = RegExp("^09\\d{2}-?\\d{3}-?\\d{3}\$")
+              .hasMatch(textController.text);
           if (!isCorrectPhone) {
             _errorText = '手機號碼格式錯誤';
             setState(() {});
@@ -174,11 +190,14 @@ class _ChangePhoneConfirmedDialogState extends State<_ChangePhoneConfirmedDialog
               Expanded(
                   child: TextFormField(
                 maxLength: isEnteredNewPhone ? 6 : null,
-                buildCounter: (context, {currentLength = 0, isFocused = true, maxLength}) => null,
+                buildCounter: (context,
+                        {currentLength = 0, isFocused = true, maxLength}) =>
+                    null,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.phone,
                 controller: textController,
-                decoration: InputDecoration(hintText: isEnteredNewPhone ? '六位數字' : '送出後，我們將會寄送簡訊驗證'),
+                decoration: InputDecoration(
+                    hintText: isEnteredNewPhone ? '六位數字' : '送出後，我們將會寄送簡訊驗證'),
               ))
             ]),
           ),

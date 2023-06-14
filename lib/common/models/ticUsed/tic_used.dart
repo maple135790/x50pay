@@ -10,9 +10,11 @@ class TicUsedModel {
   @JsonKey(name: 'log')
   final List<TicUsedLog> logs;
 
-  const TicUsedModel({required this.code, required this.message, required this.logs});
+  const TicUsedModel(
+      {required this.code, required this.message, required this.logs});
 
-  factory TicUsedModel.fromJson(Map<String, dynamic> json) => _$TicUsedModelFromJson(json);
+  factory TicUsedModel.fromJson(Map<String, dynamic> json) =>
+      _$TicUsedModelFromJson(json);
   Map<String, dynamic> toJson() => _$TicUsedModelToJson(this);
 }
 
@@ -40,6 +42,7 @@ class TicUsedLog {
       required this.uid,
       required this.underscoreId});
 
-  factory TicUsedLog.fromJson(Map<String, dynamic> json) => _$TicUsedLogFromJson(json);
+  factory TicUsedLog.fromJson(Map<String, dynamic> json) =>
+      _$TicUsedLogFromJson(json);
   Map<String, dynamic> toJson() => _$TicUsedLogToJson(this);
 }

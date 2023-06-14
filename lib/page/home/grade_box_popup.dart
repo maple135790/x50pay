@@ -1,7 +1,8 @@
 part of "home.dart";
 
 class _GradeBoxPopup extends StatelessWidget {
-  final Future<bool> Function({int debugFlag, required String gid, required String grid}) onChangeGrade;
+  final Future<bool> Function(
+      {int debugFlag, required String gid, required String grid}) onChangeGrade;
   final String gradeBox;
 
   const _GradeBoxPopup({required this.onChangeGrade, required this.gradeBox});
@@ -68,7 +69,12 @@ class _GradeBoxPopup extends StatelessWidget {
           List<String> params = [];
           String substring = str.substring(start, i);
           if (substring.contains('chgGradev2')) {
-            var rawStr = substring.split(' ').last.split('="chgGradev2(').last.replaceAll(');"', '');
+            var rawStr = substring
+                .split(' ')
+                .last
+                .split('="chgGradev2(')
+                .last
+                .replaceAll(');"', '');
             for (String param in rawStr.split(',')) {
               params.add(param.replaceAll("'", ''));
             }
@@ -86,7 +92,11 @@ class _GradeBoxPopup extends StatelessWidget {
 
     for (int i = 0; i < titles.length; i++) {
       gifts.add(_TradeGift(
-          title: titles[i], meta: metas[i], price: prices[i], gid: params[i][0], grid: params[i][1]));
+          title: titles[i],
+          meta: metas[i],
+          price: prices[i],
+          gid: params[i][0],
+          grid: params[i][1]));
     }
     return gifts;
   }
@@ -103,7 +113,8 @@ class _GradeBoxPopup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15),
               child: Row(children: [
                 const Text('養成兌換箱'),
                 const Spacer(),
@@ -111,7 +122,8 @@ class _GradeBoxPopup extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Icon(Icons.cancel, color: Color(0xfffafafa), size: 20))
+                    child: const Icon(Icons.cancel,
+                        color: Color(0xfffafafa), size: 20))
               ])),
           const Divider(height: 0),
           Padding(
@@ -145,7 +157,8 @@ class _GradeBoxPopup extends StatelessWidget {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('確認兌換', style: TextStyle(color: Color(0xfffafafa))),
+            title:
+                const Text('確認兌換', style: TextStyle(color: Color(0xfffafafa))),
             content: const Text('確認是否要使用親密度兌換 ? '),
             actions: [
               TextButton(
@@ -178,7 +191,9 @@ class _GradeBoxPopup extends StatelessWidget {
         });
   }
 
-  Widget giftRow({required _TradeGift gift, required void Function(String, String) tradeOnPressed}) {
+  Widget giftRow(
+      {required _TradeGift gift,
+      required void Function(String, String) tradeOnPressed}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -188,8 +203,11 @@ class _GradeBoxPopup extends StatelessWidget {
             children: [
               Container(
                 clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                child: Image(image: getGiftImage(gift.title), filterQuality: FilterQuality.high),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                child: Image(
+                    image: getGiftImage(gift.title),
+                    filterQuality: FilterQuality.high),
               ),
               const SizedBox(width: 20),
               Flexible(
@@ -210,11 +228,17 @@ class _GradeBoxPopup extends StatelessWidget {
             onPressed: () {
               tradeOnPressed(gift.gid, gift.grid);
             },
-            style: Themes.severe(isV4: true, padding: const EdgeInsets.symmetric(horizontal: 15)),
+            style: Themes.severe(
+                isV4: true,
+                padding: const EdgeInsets.symmetric(horizontal: 15)),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [const Icon(Icons.favorite, size: 20), const SizedBox(width: 10), Text(gift.price)],
+              children: [
+                const Icon(Icons.favorite, size: 20),
+                const SizedBox(width: 10),
+                Text(gift.price)
+              ],
             )),
       ],
     );
@@ -229,7 +253,11 @@ class _TradeGift {
   final String grid;
 
   const _TradeGift(
-      {required this.title, required this.meta, required this.price, required this.gid, required this.grid});
+      {required this.title,
+      required this.meta,
+      required this.price,
+      required this.gid,
+      required this.grid});
 
   @override
   String toString() {

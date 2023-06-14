@@ -22,7 +22,8 @@ class DressRoomViewModel extends ChangeNotifier {
       late String rawDoc;
       if (!kDebugMode || isForce) {
         final response = await repo.getAvatar();
-        if (response.statusCode != 200) throw Exception('statusCode: ${response.statusCode}');
+        if (response.statusCode != 200)
+          throw Exception('statusCode: ${response.statusCode}');
         rawDoc = response.body;
       } else {
         rawDoc = await R.text.avater_txt();
@@ -31,7 +32,9 @@ class DressRoomViewModel extends ChangeNotifier {
       final parents = doc.querySelectorAll(parentSelector);
       for (var parent in parents) {
         avatars.add((
-          b64Image: parent.children[0].attributes['src']!.split('data:image/webp;base64,').last,
+          b64Image: parent.children[0].attributes['src']!
+              .split('data:image/webp;base64,')
+              .last,
           id: parent.children[0].attributes['onclick']?.split("'")[1],
           badgeText: parent.children[1].querySelector('div > div > div')!.text
         ));

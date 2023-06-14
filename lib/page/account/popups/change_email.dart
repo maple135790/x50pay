@@ -67,7 +67,8 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
       onConfirm: changeEmail,
       customConfirmButton: confirmButton(),
       content: CupertinoListSection.insetGrouped(
-        footer: Text(_errorText ?? '', style: const TextStyle(color: Colors.red)),
+        footer:
+            Text(_errorText ?? '', style: const TextStyle(color: Colors.red)),
         children: [
           CupertinoTextFormFieldRow(
             prefix: const Text('新的 Email'),

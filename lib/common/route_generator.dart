@@ -19,10 +19,10 @@ class RouteGenerator {
         return NoTransitionRouter(const SignUp(), s: settings);
       case AppRoute.game:
         return NoTransitionRouter(const Game(), s: settings);
-        // return CupertinoPageRoute(
-        //   builder: (context) => const Game(),
-        //   settings: settings,
-        // );
+      // return CupertinoPageRoute(
+      //   builder: (context) => const Game(),
+      //   settings: settings,
+      // );
       case AppRoute.account:
         return NoTransitionRouter(const Account(), s: settings);
       case AppRoute.buyMPass:

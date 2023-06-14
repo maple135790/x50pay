@@ -9,7 +9,8 @@ class _TicketRecord extends StatefulWidget {
   State<_TicketRecord> createState() => __TicketRecordState();
 }
 
-class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoaded {
+class __TicketRecordState extends BaseStatefulState<_TicketRecord>
+    with BaseLoaded {
   late AccountViewModel model;
 
   @override
@@ -33,11 +34,13 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
           return const SizedBox();
         }
         if (snapshot.data == false) {
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
+          scaffoldKey.currentState!.showSnackBar(
+              const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
           return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         }
         if (model.ticDateLogModel!.code != 200) {
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
+          scaffoldKey.currentState!.showSnackBar(
+              const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
           return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         }
         return ticketRecordLoaded(model.ticDateLogModel!);
@@ -91,7 +94,9 @@ class __TicketRecordState extends BaseStatefulState<_TicketRecord> with BaseLoad
                 child: DataTable(
                   border: TableBorder.all(color: Themes.borderColor, width: 1),
                   dataRowMaxHeight: 60,
-                  columns: ['活動名稱', '過期日', '剩餘張數', '詳情'].map((e) => DataColumn(label: Text(e))).toList(),
+                  columns: ['活動名稱', '過期日', '剩餘張數', '詳情']
+                      .map((e) => DataColumn(label: Text(e)))
+                      .toList(),
                   rows: buildRows(),
                 ),
               )

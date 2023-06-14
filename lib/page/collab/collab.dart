@@ -61,7 +61,9 @@ class _CollabLoaded extends StatefulWidget {
   final LotteListModel lotteListModel;
   final GiftBoxModel giftBoxModel;
 
-  const _CollabLoaded({Key? key, required this.giftBoxModel, required this.lotteListModel}) : super(key: key);
+  const _CollabLoaded(
+      {Key? key, required this.giftBoxModel, required this.lotteListModel})
+      : super(key: key);
 
   @override
   State<_CollabLoaded> createState() => _CollabLoadedState();
@@ -100,10 +102,11 @@ class _CollabLoadedState extends State<_CollabLoaded> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text('X50Pay 合作商家', style: TextStyle(fontSize: 17)),
-                            Text('查看 & 兌換合作商家優惠', style: TextStyle(color: Color(0xffb4b4b4)))
+                            Text('查看 & 兌換合作商家優惠',
+                                style: TextStyle(color: Color(0xffb4b4b4)))
                           ])),
                   Container(
-                    height: 42.5,
+                      height: 42.5,
                       alignment: Alignment.centerLeft,
                       color: const Color.fromARGB(5, 255, 255, 255),
                       child: TabBar(

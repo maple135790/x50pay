@@ -9,8 +9,10 @@ class BidLogModel {
   final List<BidLog> logs;
   final String message;
 
-  const BidLogModel({required this.code, required this.logs, required this.message});
-  factory BidLogModel.fromJson(Map<String, dynamic> json) => _$BidLogModelFromJson(json);
+  const BidLogModel(
+      {required this.code, required this.logs, required this.message});
+  factory BidLogModel.fromJson(Map<String, dynamic> json) =>
+      _$BidLogModelFromJson(json);
   Map<String, dynamic> toJson() => _$BidLogModelToJson(this);
 }
 
@@ -25,7 +27,8 @@ class BidLog {
   @JsonKey(name: '_id')
   final BidId? id;
 
-  const BidLog({this.point, this.threekcred, this.shop, this.time, this.uid, this.id});
+  const BidLog(
+      {this.point, this.threekcred, this.shop, this.time, this.uid, this.id});
 
   factory BidLog.fromJson(Map<String, dynamic> json) => _$BidLogFromJson(json);
   Map<String, dynamic> toJson() => _$BidLogToJson(this);

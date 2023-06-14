@@ -22,7 +22,8 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
     return FutureBuilder(
       future: viewModel.getSelGame(widget.machineId),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
+        if (snapshot.connectionState != ConnectionState.done)
+          return const SizedBox();
         if (snapshot.data == true) {
           final cabDetail = viewModel.cabinetModel!;
           return cabDetailLoaded(cabDetail);
@@ -69,10 +70,14 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
       }
       for (int divIndex = 0; divIndex < blockCount; divIndex++) {
         String divText = note[1 + divIndex];
-        List<Cabinet> cabGroup1 =
-            cabs.sublist(0, cabGroupIndex + 1 > cabs.length ? cabGroupIndex : cabGroupIndex + 1);
+        List<Cabinet> cabGroup1 = cabs.sublist(
+            0,
+            cabGroupIndex + 1 > cabs.length
+                ? cabGroupIndex
+                : cabGroupIndex + 1);
         List<Cabinet>? cabGroup2;
-        if (cabGroupIndex != cabs.length) cabGroup2 = cabs.sublist(cabGroupIndex + 1);
+        if (cabGroupIndex != cabs.length)
+          cabGroup2 = cabs.sublist(cabGroupIndex + 1);
 
         widgets
           ..add(const SizedBox(height: 15))
@@ -81,7 +86,8 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
               child: Row(
                 children: [
                   const Expanded(child: Divider(thickness: 1, endIndent: 15)),
-                  Text(divText, style: const TextStyle(color: Color(0xfffafafa))),
+                  Text(divText,
+                      style: const TextStyle(color: Color(0xfffafafa))),
                   const Expanded(child: Divider(thickness: 1, indent: 15))
                 ],
               )))
@@ -92,7 +98,9 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
               height: 100,
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: _buildChildren(divIndex == 0 ? cabGroup1 : cabGroup2!, caboid: caboid)),
+                  children: _buildChildren(
+                      divIndex == 0 ? cabGroup1 : cabGroup2!,
+                      caboid: caboid)),
             ),
           ));
       }
@@ -116,9 +124,11 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
               GestureDetector(
                   onTap: () {},
                   child: Container(
-                    decoration:
-                        BoxDecoration(color: const Color(0xfffafafa), borderRadius: BorderRadius.circular(8)),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                        color: const Color(0xfffafafa),
+                        borderRadius: BorderRadius.circular(8)),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: const Icon(Icons.tablet_mac),
                   ))
             ],
@@ -126,7 +136,9 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
     }
 
     void showRSVPPopup() {
-      showDialog(context: context, builder: (context) => _RSVPDialog(model.reservations));
+      showDialog(
+          context: context,
+          builder: (context) => _RSVPDialog(model.reservations));
     }
 
     Widget buildRSVP(List<List<String>?> reservations) {
@@ -135,14 +147,19 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 15),
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: const Color(0xffa8071a), borderRadius: BorderRadius.circular(4)),
+        decoration: BoxDecoration(
+            color: const Color(0xffa8071a),
+            borderRadius: BorderRadius.circular(4)),
         child: Row(
           children: [
             Container(
                 width: 15,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
-                child: const Text('!', style: TextStyle(color: Color(0xffcf1322)))),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: const Text('!',
+                    style: TextStyle(color: Color(0xffcf1322)))),
             const SizedBox(width: 15),
             const Text('該機種當周有無限制台預約'),
             const Spacer(),
@@ -150,8 +167,11 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
               onTap: showRSVPPopup,
               child: Container(
                 padding: const EdgeInsets.all(4.5),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
-                child: const Icon(Icons.calendar_month, color: Color(0xffa8071a), size: 16),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: const Icon(Icons.calendar_month,
+                    color: Color(0xffa8071a), size: 16),
               ),
             ),
           ],
@@ -166,7 +186,10 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
         const SizedBox(height: 10),
         buildPadLineUp(),
         const SizedBox(height: 8),
-        buildCabInfo(price: price, tagName: tagLabel, cabLabel: model.cabinets.first.label),
+        buildCabInfo(
+            price: price,
+            tagName: tagLabel,
+            cabLabel: model.cabinets.first.label),
         const SizedBox(height: 15),
         ...buildStreamPic(model.spic, model.surl),
         ...buildCabBlock(caboid: model.caboid)
@@ -174,7 +197,10 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
     );
   }
 
-  Widget buildCabInfo({required double price, required String tagName, required String cabLabel}) {
+  Widget buildCabInfo(
+      {required double price,
+      required String tagName,
+      required String cabLabel}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: SizedBox(
@@ -188,8 +214,11 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
                 image: _getGameCabImage(widget.machineId),
                 fit: BoxFit.fitWidth,
                 errorBuilder: (context, error, stackTrace) {
-                  log('', name: 'err cabDetailLoaded', error: 'error loading gamecab image: $error');
-                  return Image(image: _getGameCabImageFallback(widget.machineId));
+                  log('',
+                      name: 'err cabDetailLoaded',
+                      error: 'error loading gamecab image: $error');
+                  return Image(
+                      image: _getGameCabImageFallback(widget.machineId));
                 },
               )),
               Positioned.fill(
@@ -213,23 +242,31 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
                         style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
-                            shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
+                            shadows: [
+                              Shadow(color: Colors.black, blurRadius: 18)
+                            ])),
                     Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                      const Icon(Icons.sell, size: 18, color: Color(0xe6ffffff)),
+                      const Icon(Icons.sell,
+                          size: 18, color: Color(0xe6ffffff)),
                       Text('  $tagName',
                           style: const TextStyle(
                               height: 0,
                               color: Color(0xffbcbfbf),
                               fontSize: 16,
-                              shadows: [Shadow(color: Colors.black, blurRadius: 15)])),
+                              shadows: [
+                                Shadow(color: Colors.black, blurRadius: 15)
+                              ])),
                       const SizedBox(width: 5),
-                      const Icon(Icons.attach_money, size: 18, color: Color(0xe6ffffff)),
+                      const Icon(Icons.attach_money,
+                          size: 18, color: Color(0xe6ffffff)),
                       Text('${price.toInt()}P',
                           style: const TextStyle(
                               height: 0,
                               color: Color(0xffbcbfbf),
                               fontSize: 16,
-                              shadows: [Shadow(color: Colors.black, blurRadius: 15)]))
+                              shadows: [
+                                Shadow(color: Colors.black, blurRadius: 15)
+                              ]))
                     ]),
                   ],
                 ),
@@ -244,7 +281,8 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
   List<Widget> buildStreamPic(List<String>? spic, List<String>? surl) {
     if (spic == null || surl == null) return [const SizedBox()];
     if (spic.length != surl.length) {
-      log('', name: 'err buildStreamPic', error: 'spic and surl length not equal');
+      log('',
+          name: 'err buildStreamPic', error: 'spic and surl length not equal');
       return [const SizedBox()];
     }
     var list = <Widget>[];
@@ -253,9 +291,12 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: GestureDetector(
             onTap: () {
-              launchUrlString(surl[i].replaceAll('\'', ''), mode: LaunchMode.externalNonBrowserApplication);
+              launchUrlString(surl[i].replaceAll('\'', ''),
+                  mode: LaunchMode.externalNonBrowserApplication);
             },
-            child: Image(image: NetworkImage('https://pay.x50.fun${spic[i]}', scale: 1))),
+            child: Image(
+                image:
+                    NetworkImage('https://pay.x50.fun${spic[i]}', scale: 1))),
       ));
     }
 
@@ -293,9 +334,13 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
             children: [
               Text(cab.num.toString(), style: const TextStyle(fontSize: 34)),
               const SizedBox(height: 5),
-              Text(cab.notice, style: const TextStyle(color: Color(0xff808080), fontSize: 12)),
+              Text(cab.notice,
+                  style:
+                      const TextStyle(color: Color(0xff808080), fontSize: 12)),
               const SizedBox(height: 4),
-              Text('${cab.nbusy}/$isPaid', style: const TextStyle(color: Color(0xfffafafa), fontSize: 12)),
+              Text('${cab.nbusy}/$isPaid',
+                  style:
+                      const TextStyle(color: Color(0xfffafafa), fontSize: 12)),
             ],
           ),
         ),
@@ -336,7 +381,9 @@ class _CabSelectState extends State<_CabSelect> {
       insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       clipBehavior: Clip.hardEdge,
-      contentPadding: isSelectPayment ? const EdgeInsets.only(top: 14) : const EdgeInsets.only(bottom: 20),
+      contentPadding: isSelectPayment
+          ? const EdgeInsets.only(top: 14)
+          : const EdgeInsets.only(bottom: 20),
       content: isSelectPayment ? confirmPayment() : selectPayment(),
     );
   }
@@ -355,7 +402,8 @@ class _CabSelectState extends State<_CabSelect> {
               const Text('注意！請確認是否有玩家正在遊玩。', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 14),
               Text('機種：${widget.label}', style: const TextStyle(fontSize: 18)),
-              Text('編號：${widget.machineIndex}號機', style: const TextStyle(fontSize: 18)),
+              Text('編號：${widget.machineIndex}號機',
+                  style: const TextStyle(fontSize: 18)),
               Text('消費：$paymentType', style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 12.6),
               const Text('請勿影響他人權益。如投幣扣點後機台無動作請聯絡粉專！請勿再次點擊',
@@ -438,7 +486,8 @@ class _CabSelectState extends State<_CabSelect> {
                               ? await EasyLoading.showSuccess('$msg\n$describe')
                               : await EasyLoading.showError('$msg\n$describe');
                         } else {
-                          await EasyLoading.showError('投幣失敗\n請確認您的網路環境，再次重試，如多次無法請回報粉專');
+                          await EasyLoading.showError(
+                              '投幣失敗\n請確認您的網路環境，再次重試，如多次無法請回報粉專');
                         }
                         await Future.delayed(const Duration(seconds: 2));
                         await GlobalSingleton.instance.checkUser(force: true);
@@ -466,7 +515,10 @@ class _CabSelectState extends State<_CabSelect> {
             height: 150,
             child: Stack(
               children: [
-                Positioned.fill(child: Image(image: _getGameCabImage(widget.id), fit: BoxFit.fitWidth)),
+                Positioned.fill(
+                    child: Image(
+                        image: _getGameCabImage(widget.id),
+                        fit: BoxFit.fitWidth)),
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(
@@ -488,7 +540,12 @@ class _CabSelectState extends State<_CabSelect> {
                         child: const Icon(
                           Icons.cancel,
                           color: Color(0xffdcdcdc),
-                          shadows: [Shadow(blurRadius: 7, color: Colors.black, offset: Offset(2, 3))],
+                          shadows: [
+                            Shadow(
+                                blurRadius: 7,
+                                color: Colors.black,
+                                offset: Offset(2, 3))
+                          ],
                         ))),
                 Positioned(
                   bottom: 15,
@@ -500,14 +557,21 @@ class _CabSelectState extends State<_CabSelect> {
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,
-                              shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
-                      Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                        Text('${widget.machineIndex}號機',
-                            style: const TextStyle(
-                                color: Color(0xffbcbfbf),
-                                fontSize: 16,
-                                shadows: [Shadow(color: Colors.black, blurRadius: 15)])),
-                      ]),
+                              shadows: [
+                                Shadow(color: Colors.black, blurRadius: 18)
+                              ])),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text('${widget.machineIndex}號機',
+                                style: const TextStyle(
+                                    color: Color(0xffbcbfbf),
+                                    fontSize: 16,
+                                    shadows: [
+                                      Shadow(
+                                          color: Colors.black, blurRadius: 15)
+                                    ])),
+                          ]),
                     ],
                   ),
                 ),
@@ -576,7 +640,8 @@ class _RSVPDialogState extends State<_RSVPDialog> {
   }
 
   void doRSVP() {
-    launchUrlString('https://m.me/X50MGS', mode: LaunchMode.externalNonBrowserApplication);
+    launchUrlString('https://m.me/X50MGS',
+        mode: LaunchMode.externalNonBrowserApplication);
     Navigator.of(context).pop();
   }
 
@@ -592,7 +657,8 @@ class _RSVPDialogState extends State<_RSVPDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

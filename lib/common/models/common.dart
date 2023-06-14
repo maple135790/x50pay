@@ -9,7 +9,8 @@ class InitTime {
 
   const InitTime({required this.date});
 
-  factory InitTime.fromJson(Map<String, dynamic> json) => _$InitTimeFromJson(json);
+  factory InitTime.fromJson(Map<String, dynamic> json) =>
+      _$InitTimeFromJson(json);
   Map<String, dynamic> tojson() => _$InitTimeToJson(this);
 }
 
@@ -20,6 +21,7 @@ class UnderscoreId {
 
   const UnderscoreId({required this.oid});
 
-  factory UnderscoreId.fromJson(Map<String, dynamic> json) => _$UnderscoreIdFromJson(json);
+  factory UnderscoreId.fromJson(Map<String, dynamic> json) =>
+      _$UnderscoreIdFromJson(json);
   Map<String, dynamic> tojson() => _$UnderscoreIdToJson(this);
 }

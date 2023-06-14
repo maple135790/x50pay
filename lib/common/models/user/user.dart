@@ -36,7 +36,8 @@ class UserModel {
       this.tphone,
       this.doorpwd});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
@@ -53,6 +54,7 @@ class VipDate {
 
   const VipDate({required this.date});
 
-  factory VipDate.fromJson(Map<String, dynamic> json) => _$VipDateFromJson(json);
+  factory VipDate.fromJson(Map<String, dynamic> json) =>
+      _$VipDateFromJson(json);
   Map<String, dynamic> toJson() => _$VipDateToJson(this);
 }

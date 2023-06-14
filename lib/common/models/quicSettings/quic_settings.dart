@@ -24,7 +24,8 @@ class QuicSettingsModel {
     required this.nfcQlock,
   });
 
-  factory QuicSettingsModel.fromJson(Map<String, dynamic> json) => _$QuicSettingsModelFromJson(json);
+  factory QuicSettingsModel.fromJson(Map<String, dynamic> json) =>
+      _$QuicSettingsModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$QuicSettingsModelToJson(this);
 }

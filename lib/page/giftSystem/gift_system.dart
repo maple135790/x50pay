@@ -61,7 +61,8 @@ class _GiftBoxLoaded extends StatefulWidget {
   final LotteListModel lotteListModel;
   final GiftBoxModel giftBoxModel;
 
-  const _GiftBoxLoaded({Key? key, required this.giftBoxModel, required this.lotteListModel})
+  const _GiftBoxLoaded(
+      {Key? key, required this.giftBoxModel, required this.lotteListModel})
       : super(key: key);
 
   @override
@@ -70,7 +71,11 @@ class _GiftBoxLoaded extends StatefulWidget {
 
 class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
   final viewModel = GiftSystemViewModel();
-  final tabs = const <Widget>[Tab(text: '養成抽獎箱'), Tab(text: '領取禮物'), Tab(text: '已領取')];
+  final tabs = const <Widget>[
+    Tab(text: '養成抽獎箱'),
+    Tab(text: '領取禮物'),
+    Tab(text: '已領取')
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +86,9 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
         children: [
           Stack(children: [
             const Positioned(
-                bottom: -35, right: -20, child: Icon(Icons.redeem, size: 120, color: Color(0xff343434))),
+                bottom: -35,
+                right: -20,
+                child: Icon(Icons.redeem, size: 120, color: Color(0xff343434))),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -94,7 +101,8 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text('禮物系統', style: TextStyle(fontSize: 17)),
-                          Text('X50Pay 禮物系統', style: TextStyle(color: Color(0xffb4b4b4)))
+                          Text('X50Pay 禮物系統',
+                              style: TextStyle(color: Color(0xffb4b4b4)))
                         ])),
                 Container(
                     height: 42.5,

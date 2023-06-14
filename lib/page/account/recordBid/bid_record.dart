@@ -17,7 +17,7 @@ class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
 
   @override
   bool get disableBottomNavigationBar => true;
-  
+
   @override
   void initState() {
     super.initState();
@@ -33,11 +33,13 @@ class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
           return const SizedBox();
         }
         if (snapshot.data == false) {
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
+          scaffoldKey.currentState!.showSnackBar(
+              const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
           return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         }
         if (model.bidModel!.code != 200) {
-          scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
+          scaffoldKey.currentState!.showSnackBar(
+              const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
           return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         }
         return bidRecordLoaded(model.bidModel!);
@@ -79,7 +81,9 @@ class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
         hasData
             ? DataTable(
                 border: TableBorder.all(color: Themes.borderColor, width: 1),
-                columns: ['時間', '儲值金額'].map((e) => DataColumn(label: Text(e))).toList(),
+                columns: ['時間', '儲值金額']
+                    .map((e) => DataColumn(label: Text(e)))
+                    .toList(),
                 rows: buildRows(),
               )
             : const Text('無資料'),

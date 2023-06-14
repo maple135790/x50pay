@@ -35,7 +35,8 @@ class CabinetModel {
       required this.cabinets,
       required this.reservations});
 
-  factory CabinetModel.fromJson(Map<String, dynamic> json) => _$CabinetModelFromJson(json);
+  factory CabinetModel.fromJson(Map<String, dynamic> json) =>
+      _$CabinetModelFromJson(json);
   Map<String, dynamic> toJson() => _$CabinetModelToJson(this);
 }
 
@@ -68,6 +69,7 @@ class Cabinet {
       required this.nbusy,
       required this.pcl});
 
-  factory Cabinet.fromJson(Map<String, dynamic> json) => _$CabinetFromJson(json);
+  factory Cabinet.fromJson(Map<String, dynamic> json) =>
+      _$CabinetFromJson(json);
   Map<String, dynamic> toJson() => _$CabinetToJson(this);
 }

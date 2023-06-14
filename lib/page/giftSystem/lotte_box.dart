@@ -12,9 +12,11 @@ class _LotteBox extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.how_to_vote_rounded, size: 92, color: Color(0xff5e5e5e)),
+          const Icon(Icons.how_to_vote_rounded,
+              size: 92, color: Color(0xff5e5e5e)),
           const SizedBox(height: 15),
-          const Text('立即參予抽獎', style: TextStyle(color: Color(0xffdcdcdc), fontSize: 17)),
+          const Text('立即參予抽獎',
+              style: TextStyle(color: Color(0xffdcdcdc), fontSize: 17)),
           Text('您擁有的抽獎券 : ${lotteList.self}'),
           const SizedBox(height: 16),
           Text('本次獎品 : ${lotteList.name}'),

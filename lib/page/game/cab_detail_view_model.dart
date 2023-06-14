@@ -29,7 +29,8 @@ class CabDatailViewModel extends BaseViewModel {
       if (!kDebugMode || isForce) {
         cabinetModel = await repo.selGame(machineId);
       } else {
-        cabinetModel = CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
+        cabinetModel =
+            CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
       }
       if (cabinetModel!.pad) await getPadLineup(cabinetModel!);
       await EasyLoading.dismiss();
@@ -63,7 +64,8 @@ class CabDatailViewModel extends BaseViewModel {
       if (!kDebugMode || isForce) {
         response = await repo.doInsert(isTicket, '$id/$sid$machineNum', mode);
       } else {
-        response = BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
+        response =
+            BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
       }
       await EasyLoading.dismiss();
 
@@ -75,7 +77,8 @@ class CabDatailViewModel extends BaseViewModel {
     }
   }
 
-  String testResponse({int code = 200}) => '''{"code":$code,"message":"smth"}''';
+  String testResponse({int code = 200}) =>
+      '''{"code":$code,"message":"smth"}''';
   String testSelGame(String mid) {
     switch (mid) {
       case '2tko':

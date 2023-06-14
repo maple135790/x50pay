@@ -14,12 +14,14 @@ class ProgressBar extends StatefulWidget {
   State<ProgressBar> createState() => _ProgressBarState();
 }
 
-class _ProgressBarState extends State<ProgressBar> with TickerProviderStateMixin {
+class _ProgressBarState extends State<ProgressBar>
+    with TickerProviderStateMixin {
   late Future<DrawableRoot> getDrawableRoot;
   late ui.Image heartIcon;
   late Future<void> loadImageInit;
   late Animation<double> animation;
-  late final Animation<double> curve = CurvedAnimation(parent: controller, curve: Curves.linear);
+  late final Animation<double> curve =
+      CurvedAnimation(parent: controller, curve: Curves.linear);
   late final AnimationController controller = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,
@@ -51,8 +53,8 @@ class _ProgressBarState extends State<ProgressBar> with TickerProviderStateMixin
   Future<void> _loadImage() async {
     ByteData bd = await rootBundle.load(R.image.heart_regular().assetName);
     final Uint8List bytes = Uint8List.view(bd.buffer);
-    final codec =
-        await ui.instantiateImageCodec(bytes, targetHeight: 12, targetWidth: 12, allowUpscaling: false);
+    final codec = await ui.instantiateImageCodec(bytes,
+        targetHeight: 12, targetWidth: 12, allowUpscaling: false);
     final image = (await codec.getNextFrame()).image;
 
     setState(() => heartIcon = image);
@@ -63,13 +65,15 @@ class _ProgressBarState extends State<ProgressBar> with TickerProviderStateMixin
     return FutureBuilder<void>(
       future: loadImageInit,
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
+        if (snapshot.connectionState != ConnectionState.done)
+          return const SizedBox();
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: RepaintBoundary(
             child: CustomPaint(
               painter: ProgressBackgroundPainter(dx: animation.value),
-              foregroundPainter: ProgressPainter(progress: widget.currentValue, image: heartIcon),
+              foregroundPainter: ProgressPainter(
+                  progress: widget.currentValue, image: heartIcon),
               size: const Size(double.maxFinite, 24),
               willChange: true,
             ),
@@ -89,15 +93,21 @@ class ProgressPainter extends CustomPainter {
   const ProgressPainter({required this.progress, required this.image});
   @override
   void paint(Canvas canvas, Size size) {
-    final width = min(size.width * ((progress < 8 ? 8 : progress) / 100), size.width);
+    final width =
+        min(size.width * ((progress < 8 ? 8 : progress) / 100), size.width);
     final imageX = width - image.width - imagePadding;
     canvas
       ..drawRRect(
-        RRect.fromRectAndRadius(Offset.zero & Size(width, progressBarHeight), const Radius.circular(24)),
+        RRect.fromRectAndRadius(Offset.zero & Size(width, progressBarHeight),
+            const Radius.circular(24)),
         Paint()..color = const Color(0xffff9bad),
       )
-      ..drawImage(image, Offset(imageX, 6),
-          Paint()..colorFilter = const ColorFilter.mode(Colors.white, BlendMode.srcATop));
+      ..drawImage(
+          image,
+          Offset(imageX, 6),
+          Paint()
+            ..colorFilter =
+                const ColorFilter.mode(Colors.white, BlendMode.srcATop));
   }
 
   @override

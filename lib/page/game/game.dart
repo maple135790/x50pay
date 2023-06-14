@@ -53,7 +53,8 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
     return FutureBuilder<bool>(
       future: viewModel.hasRecentStore(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
+        if (snapshot.connectionState != ConnectionState.done)
+          return const SizedBox();
         if (snapshot.data == true) {
           return loadGamelist();
         } else {
@@ -79,11 +80,13 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
     return FutureBuilder<bool>(
         future: viewModel.getGamelist(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
+          if (snapshot.connectionState != ConnectionState.done)
+            return const SizedBox();
           if (snapshot.data == false) {
             return const SizedBox(child: Text('failed'));
           } else {
-            return _GameCabs(games: viewModel.gamelist!, storeName: viewModel.storeName!);
+            return _GameCabs(
+                games: viewModel.gamelist!, storeName: viewModel.storeName!);
           }
         });
   }
@@ -100,7 +103,8 @@ class _GameStoreLoaded extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: storeList.length,
       shrinkWrap: true,
-      itemBuilder: (context, index) => _StoreItem(storeList[index], stores.prefix!),
+      itemBuilder: (context, index) =>
+          _StoreItem(storeList[index], stores.prefix!),
     );
   }
 }
@@ -113,7 +117,9 @@ class _StoreItem extends StatelessWidget {
   ImageProvider _getStoreImage(int storeId, {bool isOnline = false}) {
     late _X50Store store;
 
-    if (isOnline) return NetworkImage("https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
+    if (isOnline)
+      return NetworkImage(
+          "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
     for (var s in _X50Store.values) {
       if (s.sid == storeId) {
         store = s;
@@ -136,7 +142,8 @@ class _StoreItem extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-          border: Border.all(color: Themes.borderColor), borderRadius: BorderRadius.circular(5)),
+          border: Border.all(color: Themes.borderColor),
+          borderRadius: BorderRadius.circular(5)),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7.5),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
@@ -146,7 +153,8 @@ class _StoreItem extends StatelessWidget {
             await SharedPreferences.getInstance()
               ..setString('store_name', store.name!)
               ..setString('store_id', prefix + (store.sid!.toString()));
-            await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...', duration: const Duration(seconds: 2));
+            await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
+                duration: const Duration(seconds: 2));
             await Future.delayed(const Duration(seconds: 2));
             navigator.pushReplacement(CupertinoPageRoute(
               builder: (context) => const Game(),
@@ -162,7 +170,8 @@ class _StoreItem extends StatelessWidget {
                     width: 400,
                     top: -100,
                     child: Image(
-                      image: _getStoreImage(store.sid!, isOnline: GlobalSingleton.instance.isOnline),
+                      image: _getStoreImage(store.sid!,
+                          isOnline: GlobalSingleton.instance.isOnline),
                       fit: BoxFit.fitWidth,
                       colorBlendMode: BlendMode.modulate,
                     )),
@@ -192,15 +201,23 @@ class _StoreItem extends StatelessWidget {
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,
-                              shadows: [Shadow(color: Colors.black, blurRadius: 18)])),
-                      Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                        const Icon(Icons.near_me, size: 15, color: Color(0xe6ffffff)),
-                        Text('  | ${store.address!}',
-                            style: const TextStyle(
-                                color: Color(0xffbcbfbf),
-                                fontSize: 13,
-                                shadows: [Shadow(color: Colors.black, blurRadius: 15)]))
-                      ]),
+                              shadows: [
+                                Shadow(color: Colors.black, blurRadius: 18)
+                              ])),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Icon(Icons.near_me,
+                                size: 15, color: Color(0xe6ffffff)),
+                            Text('  | ${store.address!}',
+                                style: const TextStyle(
+                                    color: Color(0xffbcbfbf),
+                                    fontSize: 13,
+                                    shadows: [
+                                      Shadow(
+                                          color: Colors.black, blurRadius: 15)
+                                    ]))
+                          ]),
                     ],
                   ),
                 ),

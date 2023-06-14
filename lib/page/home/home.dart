@@ -38,7 +38,8 @@ class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
       future: viewModel.initHome(),
       key: ValueKey(viewModel.entry),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) return const SizedBox();
+        if (snapshot.connectionState != ConnectionState.done)
+          return const SizedBox();
         if (snapshot.data == false) {
           EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
           return const SizedBox(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
@@ -96,20 +97,24 @@ class _HomeLoadedState extends State<_HomeLoaded> {
               padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
               child: GestureDetector(
                   onTap: () {
-                    launchUrlString('https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ',
+                    launchUrlString(
+                        'https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ',
                         mode: LaunchMode.externalNonBrowserApplication);
                   },
-                  child:
-                      ClipRRect(borderRadius: BorderRadius.circular(5), child: Image(image: R.image.vts())))),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image(image: R.image.vts())))),
           Padding(
               padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
               child: GestureDetector(
                   onTap: () {
-                    launchUrlString('https://www.youtube.com/c/X50MusicGameStation-onAir',
+                    launchUrlString(
+                        'https://www.youtube.com/c/X50MusicGameStation-onAir',
                         mode: LaunchMode.externalNonBrowserApplication);
                   },
-                  child:
-                      ClipRRect(borderRadius: BorderRadius.circular(5), child: Image(image: R.image.top())))),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image(image: R.image.top())))),
           const SizedBox(height: 25),
         ],
       ),
@@ -121,7 +126,8 @@ class _HomeLoadedState extends State<_HomeLoaded> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('確認離開 ?', style: TextStyle(color: Color(0xfffafafa))),
+          title:
+              const Text('確認離開 ?', style: TextStyle(color: Color(0xfffafafa))),
           actions: [
             TextButton(
               style: Themes.severe(isV4: true),
@@ -160,11 +166,14 @@ class _TicketInfo extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       child: Stack(children: [
         const Positioned(
-            bottom: -35, right: -20, child: Icon(Icons.east, size: 120, color: Color(0xff343434))),
+            bottom: -35,
+            right: -20,
+            child: Icon(Icons.east, size: 120, color: Color(0xff343434))),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), border: Border.all(color: Themes.borderColor)),
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Themes.borderColor)),
           child: IntrinsicHeight(
             child: Row(
               children: [
@@ -174,9 +183,11 @@ class _TicketInfo extends StatelessWidget {
                       // Navigator.of(context).push(
                       //     NoTransitionRouter(const BuyMPass(), s: const RouteSettings(name: AppRoute.home)));
                     },
-                    child: const Icon(Icons.confirmation_number, color: Color(0xff237804), size: 50)),
+                    child: const Icon(Icons.confirmation_number,
+                        color: Color(0xff237804), size: 50)),
                 const SizedBox(width: 16),
-                const VerticalDivider(thickness: 0, width: 0, color: Color(0xff3e3e3e)),
+                const VerticalDivider(
+                    thickness: 0, width: 0, color: Color(0xff3e3e3e)),
                 const SizedBox(width: 15),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,7 +206,8 @@ class _TicketInfo extends StatelessWidget {
                       const WidgetSpan(child: SizedBox(width: 5)),
                       TextSpan(
                           text: user.vip! ? '已購買' : '未購買',
-                          style: TextStyle(color: user.vip! == false ? Colors.red : null))
+                          style: TextStyle(
+                              color: user.vip! == false ? Colors.red : null))
                     ])),
                     const SizedBox(height: 5),
                     RichText(
@@ -218,7 +230,8 @@ class _TicketInfo extends StatelessWidget {
 class _MariInfo extends StatefulWidget {
   final HomeViewModel viewModel;
   final bool isVip;
-  const _MariInfo({Key? key, required this.viewModel, required this.isVip}) : super(key: key);
+  const _MariInfo({Key? key, required this.viewModel, required this.isVip})
+      : super(key: key);
 
   @override
   State<_MariInfo> createState() => _MariInfoState();
@@ -250,11 +263,14 @@ class _MariInfoState extends State<_MariInfo> {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       child: Stack(children: [
         const Positioned(
-            bottom: -25, right: -40, child: Icon(Icons.compost, size: 140, color: Color(0xff343434))),
+            bottom: -25,
+            right: -40,
+            child: Icon(Icons.compost, size: 140, color: Color(0xff343434))),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), border: Border.all(color: Themes.borderColor)),
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Themes.borderColor)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -281,7 +297,8 @@ class _MariInfoState extends State<_MariInfo> {
                       icon: const Icon(Icons.checkroom),
                       color: const Color(0xffffc0cb),
                       style: const ButtonStyle(
-                        side: MaterialStatePropertyAll(BorderSide(color: Color(0xff3e3e3e))),
+                        side: MaterialStatePropertyAll(
+                            BorderSide(color: Color(0xff3e3e3e))),
                       ),
                     ),
                   )
@@ -294,27 +311,35 @@ class _MariInfoState extends State<_MariInfo> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Row(children: [
-                      Image(image: R.image.heart_solid(), color: const Color(0xbfff1100)),
+                      Image(
+                          image: R.image.heart_solid(),
+                          color: const Color(0xbfff1100)),
                       const SizedBox(width: 5),
                       Text(gradeLv.toString(),
-                          style: const TextStyle(color: Color(0xff808080), fontSize: 30)),
+                          style: const TextStyle(
+                              color: Color(0xff808080), fontSize: 30)),
                       const SizedBox(width: 5),
                       Tooltip(
                         preferBelow: false,
                         decoration: BoxDecoration(
-                            color: const Color(0x33fefefe), borderRadius: BorderRadius.circular(8)),
+                            color: const Color(0x33fefefe),
+                            borderRadius: BorderRadius.circular(8)),
                         message: widget.isVip ? '月票：當日前12道加成' : '當日前10道加成',
                         child: Container(
                             decoration: BoxDecoration(
-                                color: const Color(0xff2f2f2f), borderRadius: BorderRadius.circular(5)),
+                                color: const Color(0xff2f2f2f),
+                                borderRadius: BorderRadius.circular(5)),
                             child: Row(
                                 mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
-                                    child:
-                                        Image(image: R.image.bolt_solid(), height: 10, color: Colors.white),
+                                    child: Image(
+                                        image: R.image.bolt_solid(),
+                                        height: 10,
+                                        color: Colors.white),
                                   ),
                                   const Text('3'),
                                   const SizedBox(width: 3)
@@ -322,7 +347,8 @@ class _MariInfoState extends State<_MariInfo> {
                       )
                     ]),
                     const SizedBox(height: 5),
-                    ProgressBar(currentValue: gr2Progress <= 20 ? 20 : gr2Progress),
+                    ProgressBar(
+                        currentValue: gr2Progress <= 20 ? 20 : gr2Progress),
                     const SizedBox(height: 12),
                     Flexible(
                       child: Column(
@@ -331,62 +357,79 @@ class _MariInfoState extends State<_MariInfo> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
-                              const WidgetSpan(child: Icon(Icons.redeem, color: Color(0xfffafafa), size: 15)),
-                              const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 每 '),
-                              TextSpan(text: gr2HowMuch),
-                              const TextSpan(text: ' 道贈 1 張，上限 '),
-                              TextSpan(text: gr2Limit),
-                              const TextSpan(text: ' 張 '),
-                            ])),
+                                text: TextSpan(
+                                    style: const TextStyle(fontSize: 11.5),
+                                    children: [
+                                  const WidgetSpan(
+                                      child: Icon(Icons.redeem,
+                                          color: Color(0xfffafafa), size: 15)),
+                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                  const TextSpan(text: ' 每 '),
+                                  TextSpan(text: gr2HowMuch),
+                                  const TextSpan(text: ' 道贈 1 張，上限 '),
+                                  TextSpan(text: gr2Limit),
+                                  const TextSpan(text: ' 張 '),
+                                ])),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
-                              const WidgetSpan(
-                                  child: Icon(Icons.favorite, color: Color(0xfffafafa), size: 15)),
-                              const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 下一階: '),
-                              TextSpan(text: gr2Next),
-                              const TextSpan(text: ' 親密度 '),
-                            ])),
+                                text: TextSpan(
+                                    style: const TextStyle(fontSize: 11.5),
+                                    children: [
+                                  const WidgetSpan(
+                                      child: Icon(Icons.favorite,
+                                          color: Color(0xfffafafa), size: 15)),
+                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                  const TextSpan(text: ' 下一階: '),
+                                  TextSpan(text: gr2Next),
+                                  const TextSpan(text: ' 親密度 '),
+                                ])),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
-                              const WidgetSpan(
-                                  child: Icon(Icons.calendar_today, color: Color(0xfffafafa), size: 15)),
-                              const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 已簽到: '),
-                              TextSpan(text: gr2Day),
-                              const TextSpan(text: ' 天 '),
-                            ])),
+                                text: TextSpan(
+                                    style: const TextStyle(fontSize: 11.5),
+                                    children: [
+                                  const WidgetSpan(
+                                      child: Icon(Icons.calendar_today,
+                                          color: Color(0xfffafafa), size: 15)),
+                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                  const TextSpan(text: ' 已簽到: '),
+                                  TextSpan(text: gr2Day),
+                                  const TextSpan(text: ' 天 '),
+                                ])),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
-                              const WidgetSpan(
-                                  child: Icon(Icons.how_to_vote, color: Color(0xfffafafa), size: 15)),
-                              const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 抽獎券: '),
-                              const TextSpan(text: ' 再 '),
-                              TextSpan(text: gr2VDay),
-                              const TextSpan(text: ' 點 '),
-                            ])),
+                                text: TextSpan(
+                                    style: const TextStyle(fontSize: 11.5),
+                                    children: [
+                                  const WidgetSpan(
+                                      child: Icon(Icons.how_to_vote,
+                                          color: Color(0xfffafafa), size: 15)),
+                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                  const TextSpan(text: ' 抽獎券: '),
+                                  const TextSpan(text: ' 再 '),
+                                  TextSpan(text: gr2VDay),
+                                  const TextSpan(text: ' 點 '),
+                                ])),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: RichText(
-                                text: TextSpan(style: const TextStyle(fontSize: 11.5), children: [
-                              const WidgetSpan(child: Icon(Icons.sync, color: Color(0xfffafafa), size: 15)),
-                              const WidgetSpan(child: SizedBox(width: 5)),
-                              const TextSpan(text: ' 換季日: '),
-                              TextSpan(text: gr2Date),
-                            ])),
+                                text: TextSpan(
+                                    style: const TextStyle(fontSize: 11.5),
+                                    children: [
+                                  const WidgetSpan(
+                                      child: Icon(Icons.sync,
+                                          color: Color(0xfffafafa), size: 15)),
+                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                  const TextSpan(text: ' 換季日: '),
+                                  TextSpan(text: gr2Date),
+                                ])),
                           ),
                           Align(
                             alignment: Alignment.center,
@@ -396,19 +439,26 @@ class _MariInfoState extends State<_MariInfo> {
                                     context: context,
                                     builder: (context) => _GradeBoxPopup(
                                         gradeBox: gr2GradeBoxContent,
-                                        onChangeGrade: widget.viewModel.chgGradev2));
+                                        onChangeGrade:
+                                            widget.viewModel.chgGradev2));
                               },
                               style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                padding:
-                                    MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 20)),
-                                textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 13)),
+                                overlayColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                padding: MaterialStateProperty.all(
+                                    const EdgeInsets.symmetric(horizontal: 20)),
+                                textStyle: MaterialStateProperty.all(
+                                    const TextStyle(fontSize: 13)),
                                 visualDensity: VisualDensity.comfortable,
                                 splashFactory: NoSplash.splashFactory,
                                 shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-                                foregroundColor: MaterialStateProperty.all(const Color(0xfff5222d)),
-                                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20))),
+                                foregroundColor: MaterialStateProperty.all(
+                                    const Color(0xfff5222d)),
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith((states) {
                                   return const Color(0x22f7f7f7);
                                 }),
                               ),
@@ -455,7 +505,8 @@ class _EventInfo extends StatelessWidget {
             child: Container(
               color: Theme.of(context).scaffoldBackgroundColor,
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: const Text('優惠時段', style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
+              child: const Text('優惠時段',
+                  style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
             )),
         const Positioned(
           top: 40,
@@ -464,9 +515,11 @@ class _EventInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案', style: TextStyle(color: Color(0xfffafafa))),
+              Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案',
+                  style: TextStyle(color: Color(0xfffafafa))),
               SizedBox(height: 5),
-              Text('●   月票： 全日延長至 19:00 優惠時段', style: TextStyle(color: Color(0xfffafafa))),
+              Text('●   月票： 全日延長至 19:00 優惠時段',
+                  style: TextStyle(color: Color(0xfffafafa))),
             ],
           ),
         )
@@ -493,16 +546,18 @@ class _TopInfo extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: user.userimg != null
                       ? DecorationImage(
-                          image: NetworkImage(
-                              user.userimg! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg"),
+                          image: NetworkImage(user.userimg! +
+                              r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg"),
                           fit: BoxFit.fill)
-                      : DecorationImage(image: R.image.logo_150_jpg(), fit: BoxFit.fill))),
+                      : DecorationImage(
+                          image: R.image.logo_150_jpg(), fit: BoxFit.fill))),
           const SizedBox(width: 12),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5), border: Border.all(color: Themes.borderColor)),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Themes.borderColor)),
               child: IntrinsicHeight(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -513,7 +568,9 @@ class _TopInfo extends StatelessWidget {
                       children: [
                         RichText(
                             text: TextSpan(children: [
-                          const WidgetSpan(child: Icon(Icons.person, color: Color(0xfffafafa), size: 20)),
+                          const WidgetSpan(
+                              child: Icon(Icons.person,
+                                  color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
                           TextSpan(text: user.name!)
                         ])),
@@ -521,7 +578,8 @@ class _TopInfo extends StatelessWidget {
                         RichText(
                             text: TextSpan(children: [
                           const WidgetSpan(
-                              child: Icon(Icons.perm_contact_cal, color: Color(0xfffafafa), size: 20)),
+                              child: Icon(Icons.perm_contact_cal,
+                                  color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
                           TextSpan(text: user.uid!)
                         ])),
@@ -529,7 +587,8 @@ class _TopInfo extends StatelessWidget {
                         RichText(
                             text: TextSpan(children: [
                           const WidgetSpan(
-                              child: Icon(Icons.currency_yen, color: Color(0xfffafafa), size: 20)),
+                              child: Icon(Icons.currency_yen,
+                                  color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
                           TextSpan(text: user.point!.toInt().toString()),
                           const TextSpan(text: 'P')
@@ -537,7 +596,8 @@ class _TopInfo extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    const VerticalDivider(thickness: 1, width: 0, color: Color(0xff3e3e3e)),
+                    const VerticalDivider(
+                        thickness: 1, width: 0, color: Color(0xff3e3e3e)),
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () async {
@@ -546,10 +606,12 @@ class _TopInfo extends StatelessWidget {
                         if (context.mounted) {
                           showDialog(
                               context: context,
-                              builder: (context) => ScanQRCode(status == PermissionStatus.granted));
+                              builder: (context) => ScanQRCode(
+                                  status == PermissionStatus.granted));
                         }
                       },
-                      child: const Icon(Icons.qr_code, color: Color(0xfffafafa), size: 45),
+                      child: const Icon(Icons.qr_code,
+                          color: Color(0xfffafafa), size: 45),
                     ),
                   ],
                 ),

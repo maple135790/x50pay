@@ -12,9 +12,16 @@ class Gamelist {
   final String? payLid;
   final String? payCid;
 
-  const Gamelist({this.message, this.code, this.machine, this.payMid, this.payLid, this.payCid});
+  const Gamelist(
+      {this.message,
+      this.code,
+      this.machine,
+      this.payMid,
+      this.payLid,
+      this.payCid});
 
-  factory Gamelist.fromJson(Map<String, dynamic> json) => _$GamelistFromJson(json);
+  factory Gamelist.fromJson(Map<String, dynamic> json) =>
+      _$GamelistFromJson(json);
 
   Map<String, dynamic> toJson() => _$GamelistToJson(this);
 }
@@ -62,7 +69,8 @@ class Machine {
       this.quic,
       this.vipb);
 
-  factory Machine.fromJson(Map<String, dynamic> json) => _$MachineFromJson(json);
+  factory Machine.fromJson(Map<String, dynamic> json) =>
+      _$MachineFromJson(json);
 
   Map<String, dynamic> toJson() => _$MachineToJson(this);
 }

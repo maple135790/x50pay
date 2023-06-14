@@ -9,7 +9,8 @@ class StoreModel {
 
   const StoreModel({this.prefix, this.storelist});
 
-  factory StoreModel.fromJson(Map<String, dynamic> json) => _$StoreModelFromJson(json);
+  factory StoreModel.fromJson(Map<String, dynamic> json) =>
+      _$StoreModelFromJson(json);
   Map<String, dynamic> toJson() => _$StoreModelToJson(this);
 }
 
@@ -21,6 +22,7 @@ class Storelist {
 
   const Storelist({this.address, this.name, this.sid});
 
-  factory Storelist.fromJson(Map<String, dynamic> json) => _$StorelistFromJson(json);
+  factory Storelist.fromJson(Map<String, dynamic> json) =>
+      _$StorelistFromJson(json);
   Map<String, dynamic> toJson() => _$StorelistToJson(this);
 }

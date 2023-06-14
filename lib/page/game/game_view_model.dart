@@ -43,7 +43,8 @@ class GameViewModel extends BaseViewModel {
 
   Future<bool> hasRecentStore() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('store_id') != null || prefs.getString('store_name') != null;
+    return prefs.getString('store_id') != null ||
+        prefs.getString('store_name') != null;
   }
 
   Future<bool> getGamelist() async {
@@ -58,9 +59,12 @@ class GameViewModel extends BaseViewModel {
         storeName = prefs.getString('store_name');
       } else {
         storeName = prefs.getString('store_name');
-        if (sid == '7037656') gamelist = Gamelist.fromJson(jsonDecode(testGamelistWULIN1));
-        if (sid == '7037657') gamelist = Gamelist.fromJson(jsonDecode(testGamelistSHILIN));
-        if (sid == '7037658') gamelist = Gamelist.fromJson(jsonDecode(testGamelistWULIN2));
+        if (sid == '7037656')
+          gamelist = Gamelist.fromJson(jsonDecode(testGamelistWULIN1));
+        if (sid == '7037657')
+          gamelist = Gamelist.fromJson(jsonDecode(testGamelistSHILIN));
+        if (sid == '7037658')
+          gamelist = Gamelist.fromJson(jsonDecode(testGamelistWULIN2));
       }
       return true;
     } on Exception catch (_) {
@@ -78,7 +82,8 @@ class GameViewModel extends BaseViewModel {
       if (!kDebugMode || isForce) {
         cabinetModel = await repo.selGame(machineId);
       } else {
-        cabinetModel = CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
+        cabinetModel =
+            CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
       }
       return true;
     } on Exception catch (_) {
