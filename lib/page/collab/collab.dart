@@ -1,15 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/giftSystem/gift_system_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
 
 part 'collab_shop_list.dart';
 
@@ -87,7 +83,7 @@ class _CollabLoadedState extends State<_CollabLoaded> {
                 child: Image.network(
                   titleImageUrl,
                   height: 135,
-                  opacity: AlwaysStoppedAnimation(80),
+                  opacity: const AlwaysStoppedAnimation(80),
                 )),
             SizedBox(
               child: Column(
@@ -120,7 +116,7 @@ class _CollabLoadedState extends State<_CollabLoaded> {
               ),
             ),
           ]),
-          Expanded(
+          const Expanded(
             child: TabBarView(
               children: [
                 _CollabShopList(),

@@ -13,7 +13,6 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
-import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/game_view_model.dart';
@@ -53,8 +52,9 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
     return FutureBuilder<bool>(
       future: viewModel.hasRecentStore(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done)
+        if (snapshot.connectionState != ConnectionState.done) {
           return const SizedBox();
+        }
         if (snapshot.data == true) {
           return loadGamelist();
         } else {
@@ -80,8 +80,9 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
     return FutureBuilder<bool>(
         future: viewModel.getGamelist(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done)
+          if (snapshot.connectionState != ConnectionState.done) {
             return const SizedBox();
+          }
           if (snapshot.data == false) {
             return const SizedBox(child: Text('failed'));
           } else {
@@ -117,9 +118,10 @@ class _StoreItem extends StatelessWidget {
   ImageProvider _getStoreImage(int storeId, {bool isOnline = false}) {
     late _X50Store store;
 
-    if (isOnline)
+    if (isOnline) {
       return NetworkImage(
           "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
+    }
     for (var s in _X50Store.values) {
       if (s.sid == storeId) {
         store = s;

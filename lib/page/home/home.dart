@@ -10,9 +10,7 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
-import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/buyMPass/buy_mpass.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
@@ -38,8 +36,9 @@ class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
       future: viewModel.initHome(),
       key: ValueKey(viewModel.entry),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done)
+        if (snapshot.connectionState != ConnectionState.done) {
           return const SizedBox();
+        }
         if (snapshot.data == false) {
           EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
           return const SizedBox(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));

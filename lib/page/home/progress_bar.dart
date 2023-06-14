@@ -65,8 +65,9 @@ class _ProgressBarState extends State<ProgressBar>
     return FutureBuilder<void>(
       future: loadImageInit,
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done)
+        if (snapshot.connectionState != ConnectionState.done) {
           return const SizedBox();
+        }
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: RepaintBoundary(

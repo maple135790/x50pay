@@ -68,12 +68,12 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                 menuIndexNotifier.value = index;
                 log('change menu: ${menus[index].label}',
                     name: 'buildButtomNavBar');
-                if (menus[index].routeName == null) {
+                if (menus[index].routeName.isEmpty) {
                   Fluttertoast.showToast(msg: 'dev');
                   return;
                 }
                 selectedMenuIndex = index;
-                await _tabNavigateTo(menus[index].routeName!);
+                await _tabNavigateTo(menus[index].routeName);
               },
               destinations: menus
                   .map((menu) => NavigationDestination(
@@ -310,11 +310,11 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
     );
   }
 
-  Future<void> _intentionalDelay() async {
-    await EasyLoading.show();
-    await Future.delayed(const Duration(milliseconds: 200));
-    await EasyLoading.dismiss();
-  }
+  // Future<void> _intentionalDelay() async {
+  //   await EasyLoading.show();
+  //   await Future.delayed(const Duration(milliseconds: 200));
+  //   await EasyLoading.dismiss();
+  // }
 }
 
 class _LoadedHeader extends StatelessWidget {

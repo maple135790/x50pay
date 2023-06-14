@@ -30,8 +30,9 @@ class _LicenseState extends BaseStatefulState<License> with BasePage {
             future: vm.getLicense(),
             initialData: '',
             builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done)
+              if (snapshot.connectionState != ConnectionState.done) {
                 return const Text('loading');
+              }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

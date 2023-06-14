@@ -57,13 +57,15 @@ class AppThemeData {
         surfaceTintColor: Colors.transparent,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         labelTextStyle: MaterialStateProperty.resolveWith((states) {
-          if (states.isSelected)
+          if (states.isSelected) {
             return const TextStyle(color: Color(0xffe3c81b), fontSize: 11);
+          }
           return null;
         }),
         iconTheme: MaterialStateProperty.resolveWith((states) {
-          if (states.isSelected)
+          if (states.isSelected) {
             return const IconThemeData(color: Color(0xfffafafa));
+          }
           return const IconThemeData(color: Color(0xffb4b4b4));
         }),
       ),

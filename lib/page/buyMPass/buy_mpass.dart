@@ -13,6 +13,7 @@ import 'package:x50pay/repository/repository.dart';
 enum _MpassProgressState {
   info(1),
   choosePlan(2),
+  // ignore: unused_field
   donePurchase(3);
 
   final int step;
@@ -442,8 +443,9 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
                   borderRadius: BorderRadius.circular(5),
                   borderSide: const BorderSide(color: Themes.borderColor)),
               fillColor: MaterialStateColor.resolveWith((states) {
-                if (states.isFocused)
+                if (states.isFocused) {
                   return Theme.of(context).dialogBackgroundColor;
+                }
                 return const Color(0xff2a2a2a);
               }),
             )))

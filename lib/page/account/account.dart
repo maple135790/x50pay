@@ -18,7 +18,6 @@ import 'package:x50pay/common/models/padSettings/pad_settings.dart';
 import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
-import 'package:x50pay/common/route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/main.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
@@ -515,9 +514,9 @@ class _Dialog extends StatelessWidget {
   const _Dialog({
     required this.content,
     required this.onConfirm,
-    this.customConfirmButton,
-    this.scrollable = false,
   })  : _iosLike = false,
+        customConfirmButton = null,
+        scrollable = false,
         title = '';
 
   const _Dialog.ios({
@@ -606,9 +605,9 @@ class _DialogSwitch extends StatefulWidget {
   final String title;
   final bool _iosLike;
   final void Function(bool value)? onChanged;
-  const _DialogSwitch(
-      {required this.value, required this.title, this.onChanged})
-      : _iosLike = false;
+  const _DialogSwitch({required this.value, required this.title})
+      : _iosLike = false,
+        onChanged = null;
   const _DialogSwitch.ios(
       {required this.value, required this.title, required this.onChanged})
       : _iosLike = true;
@@ -780,19 +779,11 @@ class _DialogWidget extends StatefulWidget {
   final Widget child;
   final IconData? titleIcon;
   final bool isRequired;
-  final bool _iosLike;
   const _DialogWidget(
       {required this.title,
       required this.child,
       this.isRequired = false,
-      this.titleIcon})
-      : _iosLike = false;
-  const _DialogWidget.ios(
-      {required this.title,
-      required this.child,
-      this.isRequired = false,
-      this.titleIcon})
-      : _iosLike = true;
+      this.titleIcon});
 
   @override
   State<_DialogWidget> createState() => _DialogWidgetState();

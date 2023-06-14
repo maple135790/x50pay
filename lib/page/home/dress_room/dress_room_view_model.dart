@@ -22,8 +22,9 @@ class DressRoomViewModel extends ChangeNotifier {
       late String rawDoc;
       if (!kDebugMode || isForce) {
         final response = await repo.getAvatar();
-        if (response.statusCode != 200)
+        if (response.statusCode != 200) {
           throw Exception('statusCode: ${response.statusCode}');
+        }
         rawDoc = response.body;
       } else {
         rawDoc = await R.text.avater_txt();

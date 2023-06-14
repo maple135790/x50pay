@@ -22,8 +22,9 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
     return FutureBuilder(
       future: viewModel.getSelGame(widget.machineId),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done)
+        if (snapshot.connectionState != ConnectionState.done) {
           return const SizedBox();
+        }
         if (snapshot.data == true) {
           final cabDetail = viewModel.cabinetModel!;
           return cabDetailLoaded(cabDetail);
@@ -76,8 +77,9 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
                 ? cabGroupIndex
                 : cabGroupIndex + 1);
         List<Cabinet>? cabGroup2;
-        if (cabGroupIndex != cabs.length)
+        if (cabGroupIndex != cabs.length) {
           cabGroup2 = cabs.sublist(cabGroupIndex + 1);
+        }
 
         widgets
           ..add(const SizedBox(height: 15))
