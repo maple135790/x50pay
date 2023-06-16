@@ -24,6 +24,7 @@ class _QuickPayDialogState extends State<QuickPayDialog> {
         autoTicket: isUseTicketEnabled,
         autoTwo: dpP.value,
         autoNVSV: nvsvP.value,
+        mtp: defaultCabP.value,
         autoSDVX: sdvxP.value);
   }
 
@@ -53,9 +54,8 @@ class _QuickPayDialogState extends State<QuickPayDialog> {
                 .firstWhere((element) => element.value == model.nfcSDVX);
             dpP = DPPayment.values
                 .firstWhere((element) => element.value == model.nfcTwo);
-            // TODO: 機台付款碼預設尚未開放
             defaultCabP = DefaultCabPayment.values
-                .firstWhere((element) => element.value == '0');
+                .firstWhere((element) => element.value == model.mtpMode);
 
             return Column(
               children: [

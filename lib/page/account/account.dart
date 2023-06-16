@@ -397,12 +397,12 @@ enum DPPayment {
 }
 
 enum DefaultCabPayment {
-  ask('每次都詢問我', '0'),
-  x50pay('X50Pay', '1'),
-  jko('街口支付', '2');
+  ask('每次都詢問我', 0),
+  x50pay('X50Pay', 1),
+  jko('街口支付', 2);
 
   final String name;
-  final String value;
+  final int value;
   const DefaultCabPayment(this.name, this.value);
 }
 

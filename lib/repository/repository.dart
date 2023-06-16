@@ -525,6 +525,7 @@ class Repository extends Api {
     required bool atq,
     required String ats,
     required String att,
+    required int mtp,
   }) async {
     final response = await Api.makeRequest(
       dest: '/autoConfirm',
@@ -535,6 +536,7 @@ class Repository extends Api {
         'atq': atq,
         'ats': ats,
         'att': att,
+        'mtp': mtp,
       },
       method: HttpMethod.post,
       withSession: true,

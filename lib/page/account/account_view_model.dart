@@ -87,6 +87,7 @@ class AccountViewModel extends BaseViewModel {
     required bool autoTicket,
     required String autoTwo,
     required String autoNVSV,
+    required int mtp,
     required String autoSDVX,
   }) async {
     log('autoQuicPay $autoQuicPay', name: 'confirmQuickPay');
@@ -94,6 +95,7 @@ class AccountViewModel extends BaseViewModel {
     log('autoTicket $autoTicket', name: 'confirmQuickPay');
     log('autoSDVX $autoSDVX', name: 'confirmQuickPay');
     log('autoNVSV $autoNVSV', name: 'confirmQuickPay');
+    log('mtp $mtp', name: 'confirmQuickPay');
     log('autoTwo $autoTwo', name: 'confirmQuickPay');
 
     await EasyLoading.show();
@@ -103,13 +105,13 @@ class AccountViewModel extends BaseViewModel {
     try {
       if (!kDebugMode || isForce) {
         httpResponse = await repo.autoConfirm(
-          atc: autoTicket,
-          atn: autoNVSV,
-          atp: autoPay,
-          atq: autoQuicPay,
-          ats: autoSDVX,
-          att: autoTwo,
-        );
+            atc: autoTicket,
+            atn: autoNVSV,
+            atp: autoPay,
+            atq: autoQuicPay,
+            ats: autoSDVX,
+            att: autoTwo,
+            mtp: mtp);
       } else {
         httpResponse = http.Response(testAutoConfirm, 200);
       }
