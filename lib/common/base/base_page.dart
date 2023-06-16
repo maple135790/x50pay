@@ -101,11 +101,9 @@ class _Header extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                    backgroundImage: R.image.header_icon(),
+                    backgroundImage: R.image.header_icon_rsz(),
                     backgroundColor: Colors.black,
                     radius: 14),
-                const SizedBox(width: 10),
-                const Text('X50Pay'),
               ],
             ),
           ),
@@ -141,8 +139,6 @@ class _Header extends StatelessWidget {
                       CircleAvatar(
                           backgroundImage: R.image.header_icon_rsz(),
                           backgroundColor: const Color(0xff5a5a5a)),
-                      const SizedBox(width: 10),
-                      Text(title == '' ? 'X50 Pay' : 'X50 Pay - $title'),
                     ],
             ),
           ),

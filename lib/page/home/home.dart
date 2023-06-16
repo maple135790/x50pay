@@ -167,7 +167,8 @@ class _TicketInfo extends StatelessWidget {
         const Positioned(
             bottom: -35,
             right: -20,
-            child: Icon(Icons.east, size: 120, color: Color(0xff343434))),
+            child:
+                Icon(Icons.east_rounded, size: 120, color: Color(0xff343434))),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -179,14 +180,12 @@ class _TicketInfo extends StatelessWidget {
                 GestureDetector(
                     onTap: () {
                       Navigator.of(context).pushNamed(AppRoute.buyMPass);
-                      // Navigator.of(context).push(
-                      //     NoTransitionRouter(const BuyMPass(), s: const RouteSettings(name: AppRoute.home)));
                     },
-                    child: const Icon(Icons.confirmation_number,
+                    child: const Icon(Icons.confirmation_number_rounded,
                         color: Color(0xff237804), size: 50)),
                 const SizedBox(width: 16),
                 const VerticalDivider(
-                    thickness: 0, width: 0, color: Color(0xff3e3e3e)),
+                    thickness: 1, width: 0, color: Color(0xff3e3e3e)),
                 const SizedBox(width: 15),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,220 +259,237 @@ class _MariInfoState extends State<_MariInfo> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-      child: Stack(children: [
-        const Positioned(
-            bottom: -25,
-            right: -40,
-            child: Icon(Icons.compost, size: 140, color: Color(0xff343434))),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Themes.borderColor)),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              SizedBox(
-                width: 141.6,
-                child: Image.memory(base64Decode(ava),
-                    alignment: Alignment.center,
-                    fit: BoxFit.fitHeight,
-                    filterQuality: FilterQuality.high,
-                    gaplessPlayback: true,
-                    height: 270,
-                    cacheHeight: 270),
-              ),
-              Column(
-                verticalDirection: VerticalDirection.up,
-                children: [
-                  SizedBox(
-                    width: 26,
-                    height: 26,
-                    child: IconButton(
-                      iconSize: 16.5,
-                      onPressed: dressRoomPopup,
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(Icons.checkroom),
-                      color: const Color(0xffffc0cb),
-                      style: const ButtonStyle(
-                        side: MaterialStatePropertyAll(
-                            BorderSide(color: Color(0xff3e3e3e))),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: Stack(children: [
+          const Positioned(
+              bottom: -25,
+              right: -40,
+              child: Icon(Icons.compost_rounded,
+                  size: 140, color: Color(0xff343434))),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Themes.borderColor)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SizedBox(
+                  width: 141.6,
+                  child: Image.memory(base64Decode(ava),
+                      alignment: Alignment.center,
+                      fit: BoxFit.fitHeight,
+                      filterQuality: FilterQuality.high,
+                      gaplessPlayback: true,
+                      height: 270,
+                      cacheHeight: 270),
+                ),
+                Column(
+                  verticalDirection: VerticalDirection.up,
                   children: [
-                    Row(children: [
-                      Image(
-                          image: R.image.heart_solid(),
-                          color: const Color(0xbfff1100)),
-                      const SizedBox(width: 5),
-                      Text(gradeLv.toString(),
-                          style: const TextStyle(
-                              color: Color(0xff808080), fontSize: 30)),
-                      const SizedBox(width: 5),
-                      Tooltip(
-                        preferBelow: false,
-                        decoration: BoxDecoration(
-                            color: const Color(0x33fefefe),
-                            borderRadius: BorderRadius.circular(8)),
-                        message: widget.isVip ? '月票：當日前12道加成' : '當日前10道加成',
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: const Color(0xff2f2f2f),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Image(
-                                        image: R.image.bolt_solid(),
-                                        height: 10,
-                                        color: Colors.white),
-                                  ),
-                                  const Text('3'),
-                                  const SizedBox(width: 3)
-                                ])),
-                      )
-                    ]),
-                    const SizedBox(height: 5),
-                    ProgressBar(
-                        currentValue: gr2Progress <= 20 ? 20 : gr2Progress),
-                    const SizedBox(height: 12),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.5),
-                            child: RichText(
-                                text: TextSpan(
-                                    style: const TextStyle(fontSize: 11.5),
-                                    children: [
-                                  const WidgetSpan(
-                                      child: Icon(Icons.redeem,
-                                          color: Color(0xfffafafa), size: 15)),
-                                  const WidgetSpan(child: SizedBox(width: 5)),
-                                  const TextSpan(text: ' 每 '),
-                                  TextSpan(text: gr2HowMuch),
-                                  const TextSpan(text: ' 道贈 1 張，上限 '),
-                                  TextSpan(text: gr2Limit),
-                                  const TextSpan(text: ' 張 '),
-                                ])),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.5),
-                            child: RichText(
-                                text: TextSpan(
-                                    style: const TextStyle(fontSize: 11.5),
-                                    children: [
-                                  const WidgetSpan(
-                                      child: Icon(Icons.favorite,
-                                          color: Color(0xfffafafa), size: 15)),
-                                  const WidgetSpan(child: SizedBox(width: 5)),
-                                  const TextSpan(text: ' 下一階: '),
-                                  TextSpan(text: gr2Next),
-                                  const TextSpan(text: ' 親密度 '),
-                                ])),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.5),
-                            child: RichText(
-                                text: TextSpan(
-                                    style: const TextStyle(fontSize: 11.5),
-                                    children: [
-                                  const WidgetSpan(
-                                      child: Icon(Icons.calendar_today,
-                                          color: Color(0xfffafafa), size: 15)),
-                                  const WidgetSpan(child: SizedBox(width: 5)),
-                                  const TextSpan(text: ' 已簽到: '),
-                                  TextSpan(text: gr2Day),
-                                  const TextSpan(text: ' 天 '),
-                                ])),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.5),
-                            child: RichText(
-                                text: TextSpan(
-                                    style: const TextStyle(fontSize: 11.5),
-                                    children: [
-                                  const WidgetSpan(
-                                      child: Icon(Icons.how_to_vote,
-                                          color: Color(0xfffafafa), size: 15)),
-                                  const WidgetSpan(child: SizedBox(width: 5)),
-                                  const TextSpan(text: ' 抽獎券: '),
-                                  const TextSpan(text: ' 再 '),
-                                  TextSpan(text: gr2VDay),
-                                  const TextSpan(text: ' 點 '),
-                                ])),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.5),
-                            child: RichText(
-                                text: TextSpan(
-                                    style: const TextStyle(fontSize: 11.5),
-                                    children: [
-                                  const WidgetSpan(
-                                      child: Icon(Icons.sync,
-                                          color: Color(0xfffafafa), size: 15)),
-                                  const WidgetSpan(child: SizedBox(width: 5)),
-                                  const TextSpan(text: ' 換季日: '),
-                                  TextSpan(text: gr2Date),
-                                ])),
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: TextButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => _GradeBoxPopup(
-                                        gradeBox: gr2GradeBoxContent,
-                                        onChangeGrade:
-                                            widget.viewModel.chgGradev2));
-                              },
-                              style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                                padding: MaterialStateProperty.all(
-                                    const EdgeInsets.symmetric(horizontal: 20)),
-                                textStyle: MaterialStateProperty.all(
-                                    const TextStyle(fontSize: 13)),
-                                visualDensity: VisualDensity.comfortable,
-                                splashFactory: NoSplash.splashFactory,
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20))),
-                                foregroundColor: MaterialStateProperty.all(
-                                    const Color(0xfff5222d)),
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  return const Color(0x22f7f7f7);
-                                }),
-                              ),
-                              child: const Text('養成點數商城'),
-                            ),
-                          )
-                        ],
+                    SizedBox(
+                      width: 26,
+                      height: 26,
+                      child: IconButton(
+                        iconSize: 16.5,
+                        onPressed: dressRoomPopup,
+                        padding: EdgeInsets.zero,
+                        icon: const Icon(Icons.checkroom_rounded),
+                        color: const Color(0xffffc0cb),
+                        style: const ButtonStyle(
+                          side: MaterialStatePropertyAll(
+                              BorderSide(color: Color(0xff3e3e3e))),
+                        ),
                       ),
                     )
                   ],
                 ),
-              ),
-            ],
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(children: [
+                        Image(
+                            image: R.image.heart_solid(),
+                            color: const Color(0xbfff1100)),
+                        const SizedBox(width: 5),
+                        Text(gradeLv.toString(),
+                            style: const TextStyle(
+                                color: Color(0xff808080), fontSize: 30)),
+                        const SizedBox(width: 5),
+                        Tooltip(
+                          preferBelow: false,
+                          decoration: BoxDecoration(
+                              color: const Color(0x33fefefe),
+                              borderRadius: BorderRadius.circular(8)),
+                          message: widget.isVip ? '月票：當日前12道加成' : '當日前10道加成',
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: const Color(0xff2f2f2f),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Image(
+                                          image: R.image.bolt_solid(),
+                                          height: 10,
+                                          color: Colors.white),
+                                    ),
+                                    const Text('3'),
+                                    const SizedBox(width: 3)
+                                  ])),
+                        )
+                      ]),
+                      const SizedBox(height: 5),
+                      ProgressBar(
+                          currentValue: gr2Progress <= 20 ? 20 : gr2Progress),
+                      const SizedBox(height: 12),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 2.5),
+                              child: RichText(
+                                  text: TextSpan(
+                                      style: const TextStyle(fontSize: 11.5),
+                                      children: [
+                                    const WidgetSpan(
+                                        child: Icon(Icons.redeem_rounded,
+                                            color: Color(0xfffafafa),
+                                            size: 15)),
+                                    const WidgetSpan(child: SizedBox(width: 5)),
+                                    const TextSpan(text: ' 每 '),
+                                    TextSpan(text: gr2HowMuch),
+                                    const TextSpan(text: ' 道贈 1 張，上限 '),
+                                    TextSpan(text: gr2Limit),
+                                    const TextSpan(text: ' 張 '),
+                                  ])),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 2.5),
+                              child: RichText(
+                                  text: TextSpan(
+                                      style: const TextStyle(fontSize: 11.5),
+                                      children: [
+                                    const WidgetSpan(
+                                        child: Icon(Icons.favorite_rounded,
+                                            color: Color(0xfffafafa),
+                                            size: 15)),
+                                    const WidgetSpan(child: SizedBox(width: 5)),
+                                    const TextSpan(text: ' 下一階: '),
+                                    TextSpan(text: gr2Next),
+                                    const TextSpan(text: ' 親密度 '),
+                                  ])),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 2.5),
+                              child: RichText(
+                                  text: TextSpan(
+                                      style: const TextStyle(fontSize: 11.5),
+                                      children: [
+                                    const WidgetSpan(
+                                        child: Icon(
+                                            Icons.calendar_today_rounded,
+                                            color: Color(0xfffafafa),
+                                            size: 15)),
+                                    const WidgetSpan(child: SizedBox(width: 5)),
+                                    const TextSpan(text: ' 已簽到: '),
+                                    TextSpan(text: gr2Day),
+                                    const TextSpan(text: ' 天 '),
+                                  ])),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 2.5),
+                              child: RichText(
+                                  text: TextSpan(
+                                      style: const TextStyle(fontSize: 11.5),
+                                      children: [
+                                    const WidgetSpan(
+                                        child: Icon(Icons.how_to_vote_rounded,
+                                            color: Color(0xfffafafa),
+                                            size: 15)),
+                                    const WidgetSpan(child: SizedBox(width: 5)),
+                                    const TextSpan(text: ' 抽獎券: '),
+                                    const TextSpan(text: ' 再 '),
+                                    TextSpan(text: gr2VDay),
+                                    const TextSpan(text: ' 點 '),
+                                  ])),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 2.5),
+                              child: RichText(
+                                  text: TextSpan(
+                                      style: const TextStyle(fontSize: 11.5),
+                                      children: [
+                                    const WidgetSpan(
+                                        child: Icon(Icons.sync_rounded,
+                                            color: Color(0xfffafafa),
+                                            size: 15)),
+                                    const WidgetSpan(child: SizedBox(width: 5)),
+                                    const TextSpan(text: ' 換季日: '),
+                                    TextSpan(text: gr2Date),
+                                  ])),
+                            ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => _GradeBoxPopup(
+                                          gradeBox: gr2GradeBoxContent,
+                                          onChangeGrade:
+                                              widget.viewModel.chgGradev2));
+                                },
+                                style: ButtonStyle(
+                                  overlayColor: MaterialStateProperty.all(
+                                      Colors.transparent),
+                                  padding: MaterialStateProperty.all(
+                                      const EdgeInsets.symmetric(
+                                          horizontal: 20)),
+                                  textStyle: MaterialStateProperty.all(
+                                      const TextStyle(fontSize: 13)),
+                                  visualDensity: VisualDensity.comfortable,
+                                  splashFactory: NoSplash.splashFactory,
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20))),
+                                  foregroundColor: MaterialStateProperty.all(
+                                      const Color(0xfff5222d)),
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith(
+                                          (states) {
+                                    return const Color(0x22f7f7f7);
+                                  }),
+                                ),
+                                child: const Text('養成點數商城'),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }
@@ -568,7 +584,7 @@ class _TopInfo extends StatelessWidget {
                         RichText(
                             text: TextSpan(children: [
                           const WidgetSpan(
-                              child: Icon(Icons.person,
+                              child: Icon(Icons.person_rounded,
                                   color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
                           TextSpan(text: user.name!)
@@ -577,7 +593,7 @@ class _TopInfo extends StatelessWidget {
                         RichText(
                             text: TextSpan(children: [
                           const WidgetSpan(
-                              child: Icon(Icons.perm_contact_cal,
+                              child: Icon(Icons.perm_contact_cal_rounded,
                                   color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
                           TextSpan(text: user.uid!)
@@ -586,7 +602,7 @@ class _TopInfo extends StatelessWidget {
                         RichText(
                             text: TextSpan(children: [
                           const WidgetSpan(
-                              child: Icon(Icons.currency_yen,
+                              child: Icon(Icons.currency_yen_rounded,
                                   color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
                           TextSpan(text: user.point!.toInt().toString()),
@@ -609,7 +625,7 @@ class _TopInfo extends StatelessWidget {
                                   status == PermissionStatus.granted));
                         }
                       },
-                      child: const Icon(Icons.qr_code,
+                      child: const Icon(Icons.qr_code_rounded,
                           color: Color(0xfffafafa), size: 45),
                     ),
                   ],

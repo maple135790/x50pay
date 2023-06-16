@@ -340,9 +340,8 @@ class _LoadedHeader extends StatelessWidget {
           height: kFixedHeaderHeight,
           decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border(
-                  bottom: BorderSide(
-                      color: Theme.of(context).dividerColor, width: 1))),
+              border: const Border(
+                  bottom: BorderSide(color: Themes.borderColor, width: 1))),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
@@ -352,8 +351,6 @@ class _LoadedHeader extends StatelessWidget {
                     backgroundImage: R.image.header_icon_rsz(),
                     backgroundColor: Colors.black,
                     radius: 14),
-                const SizedBox(width: 10),
-                const Text('X50Pay'),
               ],
             ),
           ),
@@ -395,7 +392,6 @@ class _LoadedHeader extends StatelessWidget {
                             spreadRadius: 0.5)
                       ],
                       color: const Color(0xff3e3e3e),
-                      // border: Border.all(width: 1, color: const Color(0xff3e3e3e)),
                       borderRadius: BorderRadius.circular(5)),
                   child: Text('$point P',
                       style: const TextStyle(
