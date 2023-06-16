@@ -26,13 +26,11 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
+class _HomeState extends BaseStatefulState<Home> {
   final viewModel = HomeViewModel()..isFunctionalHeader = false;
-  @override
-  BaseViewModel? baseViewModel() => viewModel;
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: viewModel.initHome(),
       key: ValueKey(viewModel.entry),
@@ -44,7 +42,8 @@ class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
           EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
           return const SizedBox(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
         } else {
-          return _HomeLoaded(GlobalSingleton.instance.user!, viewModel);
+          return SingleChildScrollView(
+              child: _HomeLoaded(GlobalSingleton.instance.user!, viewModel));
         }
       },
     );
