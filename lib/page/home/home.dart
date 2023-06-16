@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -28,6 +27,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends BaseStatefulState<Home> with BaseLoaded {
   final viewModel = HomeViewModel()..isFunctionalHeader = false;
+
+  @override
+  void Function()? get debugFunction => () {
+        EasyLoading.show();
+      };
+
   @override
   BaseViewModel? baseViewModel() => viewModel;
 

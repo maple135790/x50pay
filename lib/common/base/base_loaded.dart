@@ -214,6 +214,7 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
     } else {
       log('top: ${NavigationHistoryObserver().top!.settings.name}',
           name: '_tabNavigateTo');
+      await _intentionalDelay();
 
       NavigationHistoryObserver().history.length == 3
           ? nav.pushReplacementNamed(nextRouteName)
@@ -310,11 +311,11 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
     );
   }
 
-  // Future<void> _intentionalDelay() async {
-  //   await EasyLoading.show();
-  //   await Future.delayed(const Duration(milliseconds: 200));
-  //   await EasyLoading.dismiss();
-  // }
+  Future<void> _intentionalDelay() async {
+    await EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 200));
+    await EasyLoading.dismiss();
+  }
 }
 
 class _LoadedHeader extends StatelessWidget {

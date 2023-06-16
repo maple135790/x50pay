@@ -11,7 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_colorpicker: ^1.0.3
-  flutter_easyloading: ^3.0.5
+  flutter_easyloading:
+    path: ./dependencies/flutter_easyloading-3.0.5/
   flutter_launcher_icons:
     git:
       url: 'https://github.com/Davenchy/flutter_launcher_icons.git'
@@ -54,6 +55,7 @@ flutter:
   - assets/images/common/logo.jpg
   - assets/images/common/logo_150.jpg
   - assets/images/common/ouo.png
+  - assets/images/common/spinner-solid.svg
   - assets/images/common/torii.svg
   - assets/images/dev/dev_avatar.png
   - assets/images/game/machine/2bom.png
