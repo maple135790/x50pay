@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -245,6 +246,7 @@ class _MariInfoState extends State<_MariInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final pixelRatio = MediaQuery.of(context).devicePixelRatio;
     final entry = widget.viewModel.entry!;
     final gradeLv = entry.gr2[0].toString();
     final gr2HowMuch = entry.gr2[1].toInt().toString();
@@ -280,10 +282,10 @@ class _MariInfoState extends State<_MariInfo> {
                   child: Image.memory(base64Decode(ava),
                       alignment: Alignment.center,
                       fit: BoxFit.fitHeight,
-                      filterQuality: FilterQuality.high,
+                      filterQuality: FilterQuality.medium,
                       gaplessPlayback: true,
                       height: 270,
-                      cacheHeight: 270),
+                      cacheHeight: (270 * pixelRatio).toInt()),
                 ),
                 Column(
                   verticalDirection: VerticalDirection.up,
@@ -295,7 +297,8 @@ class _MariInfoState extends State<_MariInfo> {
                         iconSize: 16.5,
                         onPressed: dressRoomPopup,
                         padding: EdgeInsets.zero,
-                        icon: const Icon(Icons.checkroom_rounded),
+                        icon: ImageIcon(
+                            R.svg.shirt_solid(width: 16.25, height: 13)),
                         color: const Color(0xffffc0cb),
                         style: const ButtonStyle(
                           side: MaterialStatePropertyAll(
@@ -313,7 +316,7 @@ class _MariInfoState extends State<_MariInfo> {
                     children: [
                       Row(children: [
                         Image(
-                            image: R.image.heart_solid(),
+                            image: R.svg.heart_solid(width: 17, height: 17),
                             color: const Color(0xbfff1100)),
                         const SizedBox(width: 5),
                         Text(gradeLv.toString(),
@@ -338,7 +341,8 @@ class _MariInfoState extends State<_MariInfo> {
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: Image(
-                                          image: R.image.bolt_solid(),
+                                          image: R.svg
+                                              .bolt_solid(width: 9, height: 13),
                                           height: 10,
                                           color: Colors.white),
                                     ),

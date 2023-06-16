@@ -221,21 +221,9 @@
   /// asset: assets/images/gradeBox/vvelcome.png
       // ignore: non_constant_identifier_names
       final vvelcome = const AssetResource("assets/images/gradeBox/vvelcome.png", packageName: null);
-  /// asset: assets/images/home/bolt-solid.png
-      // ignore: non_constant_identifier_names
-      final bolt_solid = const AssetResource("assets/images/home/bolt-solid.png", packageName: null);
-  /// asset: assets/images/home/heart-regular.png
-      // ignore: non_constant_identifier_names
-      final heart_regular = const AssetResource("assets/images/home/heart-regular.png", packageName: null);
-  /// asset: assets/images/home/heart-solid.png
-      // ignore: non_constant_identifier_names
-      final heart_solid = const AssetResource("assets/images/home/heart-solid.png", packageName: null);
   /// asset: assets/images/home/mari_level/ouo.png
       // ignore: non_constant_identifier_names
       final ouo$1 = const AssetResource("assets/images/home/mari_level/ouo.png", packageName: null);
-  /// asset: assets/images/home/shirt-solid.png
-      // ignore: non_constant_identifier_names
-      final shirt_solid = const AssetResource("assets/images/home/shirt-solid.png", packageName: null);
   /// asset: assets/images/home/top.png
       // ignore: non_constant_identifier_names
       final top = const AssetResource("assets/images/home/top.png", packageName: null);
@@ -253,9 +241,18 @@
   /// asset: assets/images/common/torii.svg
       // ignore: non_constant_identifier_names
       final torii = const AssetResource("assets/images/common/torii.svg", packageName: null);
+  /// asset: assets/images/home/bolt-solid.svg
+      // ignore: non_constant_identifier_names
+      final bolt_solid = const AssetResource("assets/images/home/bolt-solid.svg", packageName: null);
   /// asset: assets/images/home/heart-regular.svg
       // ignore: non_constant_identifier_names
       final heart_regular = const AssetResource("assets/images/home/heart-regular.svg", packageName: null);
+  /// asset: assets/images/home/heart-solid.svg
+      // ignore: non_constant_identifier_names
+      final heart_solid = const AssetResource("assets/images/home/heart-solid.svg", packageName: null);
+  /// asset: assets/images/home/shirt-solid.svg
+      // ignore: non_constant_identifier_names
+      final shirt_solid = const AssetResource("assets/images/home/shirt-solid.svg", packageName: null);
     }
 // ignore: camel_case_types
     class _R_Text_AssetResource {
@@ -490,30 +487,10 @@
       AssetImage vvelcome() {
         return AssetImage(asset.vvelcome.keyName);
       }
-  /// asset: assets/images/home/bolt-solid.png
-      // ignore: non_constant_identifier_names
-      AssetImage bolt_solid() {
-        return AssetImage(asset.bolt_solid.keyName);
-      }
-  /// asset: assets/images/home/heart-regular.png
-      // ignore: non_constant_identifier_names
-      AssetImage heart_regular() {
-        return AssetImage(asset.heart_regular.keyName);
-      }
-  /// asset: assets/images/home/heart-solid.png
-      // ignore: non_constant_identifier_names
-      AssetImage heart_solid() {
-        return AssetImage(asset.heart_solid.keyName);
-      }
   /// asset: assets/images/home/mari_level/ouo.png
       // ignore: non_constant_identifier_names
       AssetImage ouo$1() {
         return AssetImage(asset.ouo$1.keyName);
-      }
-  /// asset: assets/images/home/shirt-solid.png
-      // ignore: non_constant_identifier_names
-      AssetImage shirt_solid() {
-        return AssetImage(asset.shirt_solid.keyName);
       }
   /// asset: assets/images/home/top.png
       // ignore: non_constant_identifier_names
@@ -544,10 +521,28 @@
         final imageProvider = AssetSvg(asset.torii.keyName, width: width, height: height);
         return imageProvider;
       }
+  /// asset: assets/images/home/bolt-solid.svg
+      // ignore: non_constant_identifier_names
+      AssetSvg bolt_solid({required double width, required double height}) {
+        final imageProvider = AssetSvg(asset.bolt_solid.keyName, width: width, height: height);
+        return imageProvider;
+      }
   /// asset: assets/images/home/heart-regular.svg
       // ignore: non_constant_identifier_names
       AssetSvg heart_regular({required double width, required double height}) {
         final imageProvider = AssetSvg(asset.heart_regular.keyName, width: width, height: height);
+        return imageProvider;
+      }
+  /// asset: assets/images/home/heart-solid.svg
+      // ignore: non_constant_identifier_names
+      AssetSvg heart_solid({required double width, required double height}) {
+        final imageProvider = AssetSvg(asset.heart_solid.keyName, width: width, height: height);
+        return imageProvider;
+      }
+  /// asset: assets/images/home/shirt-solid.svg
+      // ignore: non_constant_identifier_names
+      AssetSvg shirt_solid({required double width, required double height}) {
+        final imageProvider = AssetSvg(asset.shirt_solid.keyName, width: width, height: height);
         return imageProvider;
       }
     }

@@ -90,12 +90,11 @@ flutter:
   - assets/images/gradeBox/ouo_80.png
   - assets/images/gradeBox/sdvx10th.jpg
   - assets/images/gradeBox/vvelcome.png
-  - assets/images/home/bolt-solid.png
-  - assets/images/home/heart-regular.png
+  - assets/images/home/bolt-solid.svg
   - assets/images/home/heart-regular.svg
-  - assets/images/home/heart-solid.png
+  - assets/images/home/heart-solid.svg
   - assets/images/home/mari_level/ouo.png
-  - assets/images/home/shirt-solid.png
+  - assets/images/home/shirt-solid.svg
   - assets/images/home/top.png
   - assets/images/home/vts.png
   - assets/images/login/login_banner.jpg

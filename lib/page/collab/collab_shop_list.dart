@@ -62,8 +62,10 @@ class __CollabShopListState extends State<_CollabShopList> {
                     fit: BoxFit.fill,
                     width: 80,
                     height: 80,
-                    cacheHeight: 80,
-                    cacheWidth: 80),
+                    cacheHeight:
+                        (80 * MediaQuery.of(context).devicePixelRatio).round(),
+                    cacheWidth:
+                        (80 * MediaQuery.of(context).devicePixelRatio).round()),
               ),
               subtitleTextStyle: const TextStyle(color: Color(0xfffafafa)),
               isThreeLine: true,
