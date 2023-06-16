@@ -1,10 +1,12 @@
-import 'dart:math';
+import 'dart:math' hide log;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:x50pay/r.g.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
+import 'package:path_drawing/path_drawing.dart';
+import 'package:xml/xml.dart';
 
 class ProgressBar extends StatefulWidget {
   final double currentValue;
@@ -17,7 +19,7 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar>
     with TickerProviderStateMixin {
   late Future<DrawableRoot> getDrawableRoot;
-  late ui.Image heartIcon;
+  late Path heartPath;
   late Future<void> loadImageInit;
   late Animation<double> animation;
   late final Animation<double> curve =
@@ -51,13 +53,12 @@ class _ProgressBarState extends State<ProgressBar>
   }
 
   Future<void> _loadImage() async {
-    ByteData bd = await rootBundle.load(R.image.heart_regular().assetName);
-    final Uint8List bytes = Uint8List.view(bd.buffer);
-    final codec = await ui.instantiateImageCodec(bytes,
-        targetHeight: 12, targetWidth: 12, allowUpscaling: false);
-    final image = (await codec.getNextFrame()).image;
-
-    setState(() => heartIcon = image);
+    final doc = XmlDocument.parse(
+        await rootBundle.loadString('assets/images/home/heart-regular.svg'));
+    final svgPath =
+        doc.rootElement.getElement('path')!.getAttribute('d')!.toString();
+    heartPath = parseSvgPathData(svgPath);
+    setState(() {});
   }
 
   @override
@@ -74,7 +75,7 @@ class _ProgressBarState extends State<ProgressBar>
             child: CustomPaint(
               painter: ProgressBackgroundPainter(dx: animation.value),
               foregroundPainter: ProgressPainter(
-                  progress: widget.currentValue, image: heartIcon),
+                  iconPath: heartPath, progress: widget.currentValue),
               size: const Size(double.maxFinite, 24),
               willChange: true,
             ),
@@ -87,25 +88,32 @@ class _ProgressBarState extends State<ProgressBar>
 
 class ProgressPainter extends CustomPainter {
   final double progress;
-  final ui.Image image;
-  final imagePadding = 8;
+  final Path iconPath;
+  final imagePadding = 8.5;
   final progressBarHeight = 24.0;
 
-  const ProgressPainter({required this.progress, required this.image});
+  const ProgressPainter({required this.progress, required this.iconPath});
   @override
   void paint(Canvas canvas, Size size) {
     final width =
         min(size.width * ((progress < 8 ? 8 : progress) / 100), size.width);
-    final imageX = width - image.width - imagePadding;
+    final iconSize = iconPath.getBounds().size;
+    final xScale = 12 / iconSize.width * iconSize.aspectRatio;
+    final yScale = 12 / iconSize.height;
+    final offsetX = width - 12 - imagePadding;
+    final offsetY = (progressBarHeight - iconSize.height * yScale) / 2;
+    final scalingMatrix =
+        Matrix4Transform().scaleBy(x: xScale, y: yScale).m.storage;
+    final scaledIconPath =
+        iconPath.transform(scalingMatrix).shift(Offset(offsetX, offsetY));
     canvas
       ..drawRRect(
         RRect.fromRectAndRadius(Offset.zero & Size(width, progressBarHeight),
             const Radius.circular(24)),
         Paint()..color = const Color(0xffff9bad),
       )
-      ..drawImage(
-          image,
-          Offset(imageX, 6),
+      ..drawPath(
+          scaledIconPath,
           Paint()
             ..colorFilter =
                 const ColorFilter.mode(Colors.white, BlendMode.srcATop));

@@ -1,0 +1,4 @@
+{
+  "dart.flutterCreatePlatforms": ["android", "ios"],
+  "dart.lineLength": 80
+}
