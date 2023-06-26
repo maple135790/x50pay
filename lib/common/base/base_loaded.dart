@@ -248,64 +248,66 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: Scaffold(
-          floatingActionButton: kDebugMode && debugFunction != null
-              ? FloatingActionButton(
-                  onPressed: debugFunction,
-                  child: const Icon(Icons.developer_mode))
-              : null,
-          backgroundColor: backgroundColor,
-          body: AnnotatedRegion(
-            value: SystemUiOverlayStyle.light,
-            child: SafeArea(
-              child: RefreshIndicator(
-                edgeOffset: headerType == LoadedHeaderType.fixed
-                    ? _LoadedHeader.kFixedHeaderHeight
-                    : _LoadedHeader.kFunctionalHeaderHeight,
-                onRefresh: () async {
-                  await GlobalSingleton.instance.checkUser(force: true);
-                  setState(() {});
-                },
-                child: isScrollable
-                    ? Scrollbar(
-                        child: SingleChildScrollView(
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 700),
-                              child: Column(
-                                children: [
-                                  headerType == LoadedHeaderType.fixed
-                                      ? const _LoadedHeader()
-                                      : _LoadedHeader.functional(
-                                          point: point ?? -87),
-                                  body(),
-                                  const SizedBox(height: 20)
-                                ],
+        child: SafeArea(
+          child: Scaffold(
+            floatingActionButton: kDebugMode && debugFunction != null
+                ? FloatingActionButton(
+                    onPressed: debugFunction,
+                    child: const Icon(Icons.developer_mode))
+                : null,
+            backgroundColor: backgroundColor,
+            body: AnnotatedRegion(
+              value: SystemUiOverlayStyle.light,
+              child: SafeArea(
+                child: RefreshIndicator(
+                  edgeOffset: headerType == LoadedHeaderType.fixed
+                      ? _LoadedHeader.kFixedHeaderHeight
+                      : _LoadedHeader.kFunctionalHeaderHeight,
+                  onRefresh: () async {
+                    await GlobalSingleton.instance.checkUser(force: true);
+                    setState(() {});
+                  },
+                  child: isScrollable
+                      ? Scrollbar(
+                          child: SingleChildScrollView(
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 700),
+                                child: Column(
+                                  children: [
+                                    headerType == LoadedHeaderType.fixed
+                                        ? const _LoadedHeader()
+                                        : _LoadedHeader.functional(
+                                            point: point ?? -87),
+                                    body(),
+                                    const SizedBox(height: 20)
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    : Align(
-                        alignment: Alignment.topCenter,
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 700),
-                          child: Column(
-                            children: [
-                              headerType == LoadedHeaderType.fixed
-                                  ? const _LoadedHeader()
-                                  : _LoadedHeader.functional(
-                                      point: point ?? -87),
-                              Expanded(child: body()),
-                            ],
+                        )
+                      : Align(
+                          alignment: Alignment.topCenter,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 700),
+                            child: Column(
+                              children: [
+                                headerType == LoadedHeaderType.fixed
+                                    ? const _LoadedHeader()
+                                    : _LoadedHeader.functional(
+                                        point: point ?? -87),
+                                Expanded(child: body()),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                ),
               ),
             ),
+            bottomNavigationBar: buildButtomNavBar(backgroundColor),
           ),
-          bottomNavigationBar: buildButtomNavBar(backgroundColor),
         ),
       ),
     );
