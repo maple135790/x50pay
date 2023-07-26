@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -28,12 +29,9 @@ class Game extends StatefulWidget {
   State<Game> createState() => _GameState();
 }
 
-class _GameState extends BaseStatefulState<Game> with BaseLoaded {
-  final GameViewModel viewModel = GameViewModel();
-  Future<bool>? _initialStore;
-
-  @override
-  BaseViewModel? baseViewModel() => viewModel;
+class _GameState extends BaseStatefulState<Game> {
+  final viewModel = GameViewModel();
+  late Future<StoreModel?> _getStoreData;
 
   @override
   void didChangeDependencies() async {
@@ -41,14 +39,46 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
     await GlobalSingleton.instance.checkUser(force: false);
   }
 
-  @override
-  void initState() {
-    _initialStore = viewModel.initStore();
-    super.initState();
+  void init({
+    required void Function(StoreModel? storeData) onNoRecentStore,
+    required void Function(Gamelist? gameList) onHasRecentStore,
+  }) async {
+    // 先查有沒有選擇過店家
+    // 有的話就直接跳到選擇機台
+    // 沒有的話就跳到選擇店家
+    final hasRecentStore = await viewModel.hasRecentStore();
+    if (!hasRecentStore) {
+      final storeData = await viewModel.getStoreData();
+      onNoRecentStore.call(storeData);
+      return;
+    }
+    final gameList = await viewModel.getGamelist();
+    onHasRecentStore.call(gameList);
   }
 
   @override
-  Widget body() {
+  void initState() {
+    super.initState();
+    _getStoreData = viewModel.getStoreData();
+
+    // init(
+    //   onNoRecentStore: (StoreModel? storeData) {
+    //     GoRouter.of(context).pushNamed(
+    //       AppRoutes.gameStore.routeName,
+    //       extra: storeData,
+    //     );
+    //   },
+    //   onHasRecentStore: (gameList) {
+    //     GoRouter.of(context).pushNamed(
+    //       AppRoutes.gameCabs.routeName,
+    //       extra: gameList,
+    //     );
+    //   },
+    // );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: viewModel.hasRecentStore(),
       builder: (context, snapshot) {
@@ -64,30 +94,34 @@ class _GameState extends BaseStatefulState<Game> with BaseLoaded {
     );
   }
 
-  FutureBuilder<bool> loadGameStore() {
-    return FutureBuilder<bool>(
-      future: _initialStore,
+  FutureBuilder<StoreModel?> loadGameStore() {
+    return FutureBuilder<StoreModel?>(
+      future: _getStoreData,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Text(kDebugMode ? 'loading...' : '');
         }
-        return _GameStoreLoaded(viewModel.stores!);
+        if (snapshot.data == null) return const Text('failed');
+
+        return _GameStoreLoaded(snapshot.data!);
       },
     );
   }
 
-  FutureBuilder<bool> loadGamelist() {
-    return FutureBuilder<bool>(
+  FutureBuilder<Gamelist?> loadGamelist() {
+    return FutureBuilder<Gamelist?>(
         future: viewModel.getGamelist(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const SizedBox();
           }
-          if (snapshot.data == false) {
+          if (snapshot.data == null) {
             return const SizedBox(child: Text('failed'));
           } else {
-            return _GameCabs(
-                games: viewModel.gamelist!, storeName: viewModel.storeName!);
+            return GameCabs(
+              games: snapshot.data!,
+              storeName: viewModel.storeName!,
+            );
           }
         });
   }
@@ -139,6 +173,18 @@ class _StoreItem extends StatelessWidget {
     }
   }
 
+  void onStoreSelected(GoRouter router) async {
+    await SharedPreferences.getInstance()
+      ..setString('store_name', store.name!)
+      ..setString('store_id', prefix + (store.sid!.toString()));
+    await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
+        duration: const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
+    router.pushNamed(AppRoutes.game.routeName);
+    // Navigator.of(context).pushReplacement(
+    // CupertinoPageRoute(builder: (context) => const Game()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -150,18 +196,9 @@ class _StoreItem extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
         child: GestureDetector(
-          onTap: () async {
-            final navigator = Navigator.of(context);
-            await SharedPreferences.getInstance()
-              ..setString('store_name', store.name!)
-              ..setString('store_id', prefix + (store.sid!.toString()));
-            await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
-                duration: const Duration(seconds: 2));
-            await Future.delayed(const Duration(seconds: 2));
-            navigator.pushReplacement(CupertinoPageRoute(
-              builder: (context) => const Game(),
-              settings: const RouteSettings(name: AppRoute.game),
-            ));
+          onTap: () {
+            final router = GoRouter.of(context);
+            onStoreSelected(router);
           },
           child: SizedBox(
             width: double.infinity,
@@ -194,11 +231,6 @@ class _StoreItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Text(store.name!, style: const TextStyle(color: Colors.white, fontSize: 18)),
-                      //             Row(children: [
-                      //               const Icon(Icons.near_me, size: 15, color: Color(0xe6ffffff)),
-                      //               Text('  | ${store.address!}', style: const TextStyle(color: Color(0xe6ffffff)))
-                      //             ]),
                       Text(store.name!,
                           style: const TextStyle(
                               color: Colors.white,

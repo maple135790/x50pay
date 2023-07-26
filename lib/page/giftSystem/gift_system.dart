@@ -20,15 +20,10 @@ class GiftSystem extends StatefulWidget {
   State<GiftSystem> createState() => _GiftSystemState();
 }
 
-class _GiftSystemState extends BaseStatefulState<GiftSystem> with BaseLoaded {
+class _GiftSystemState extends BaseStatefulState<GiftSystem> {
   final viewModel = GiftSystemViewModel();
   late Future<bool> init;
 
-  @override
-  bool get isScrollable => false;
-
-  @override
-  BaseViewModel? baseViewModel() => viewModel;
   @override
   void initState() {
     super.initState();
@@ -36,7 +31,7 @@ class _GiftSystemState extends BaseStatefulState<GiftSystem> with BaseLoaded {
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: init,
       builder: (context, snapshot) {

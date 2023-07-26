@@ -273,7 +273,8 @@ mixin BaseLoaded<T extends StatefulWidget> on BaseStatefulState<T> {
                             child: Align(
                               alignment: Alignment.topCenter,
                               child: ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 700),
+                                constraints:
+                                    const BoxConstraints(maxWidth: 700),
                                 child: Column(
                                   children: [
                                     headerType == LoadedHeaderType.fixed

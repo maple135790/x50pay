@@ -75,113 +75,114 @@ class BuyMPass extends StatefulWidget {
   State<BuyMPass> createState() => _BuyMPassState();
 }
 
-class _BuyMPassState extends BaseStatefulState<BuyMPass> with BaseLoaded {
+class _BuyMPassState extends BaseStatefulState<BuyMPass> {
   _MpassProgressState currentState = _MpassProgressState.info;
   int stateIndex = 1;
 
   @override
-  bool get disableBottomNavigationBar => true;
-
-  @override
-  BaseViewModel? baseViewModel() => BaseViewModel();
-
-  @override
-  Widget body() {
+  Widget build(BuildContext context) {
     Color bgColor = Theme.of(context).scaffoldBackgroundColor;
 
-    return Padding(
-      padding: const EdgeInsets.all(25),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Icon(Icons.calendar_today, size: 51, color: Color(0xfffafafa)),
-          const SizedBox(height: 5),
-          const Align(
-              alignment: Alignment.center,
-              child: Text('月票 Pass', style: TextStyle(fontSize: 17))),
-          const SizedBox(height: 45),
-          IntrinsicWidth(
-            child: Row(
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                            color: Color(0xfffafafa), shape: BoxShape.circle),
-                        child: currentState.step > 1
-                            ? Icon(Icons.check, size: 20, color: bgColor)
-                            : Icon(Icons.format_list_bulleted,
-                                size: 20, color: bgColor)),
-                    const SizedBox(width: 5),
-                    const Text('讀條款'),
-                    const SizedBox(width: 5),
-                  ],
-                ),
-                const Expanded(child: Divider(thickness: 2)),
-                const SizedBox(width: 10),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: stateIndex >= 2
-                                ? const Color(0xfffafafa)
-                                : null,
-                            border: stateIndex >= 2
-                                ? null
-                                : Border.all(
-                                    color: const Color(0xff3e3e3e), width: 2)),
-                        child: currentState.step > 2
-                            ? Icon(Icons.check, size: 20, color: bgColor)
-                            : Icon(Icons.badge,
-                                size: 20,
-                                color: stateIndex >= 2
-                                    ? bgColor
-                                    : const Color(0xfffafafa))),
-                    const SizedBox(width: 5),
-                    const Text('選方案'),
-                    const SizedBox(width: 5),
-                  ],
-                ),
-                const Expanded(child: Divider(thickness: 2)),
-                const SizedBox(width: 10),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: stateIndex >= 3
-                                ? const Color(0xfffafafa)
-                                : null,
-                            shape: BoxShape.circle,
-                            border: stateIndex >= 3
-                                ? null
-                                : Border.all(
-                                    color: const Color(0xff3e3e3e), width: 2)),
-                        child: Icon(Icons.shopping_cart,
-                            size: 20,
-                            color: stateIndex >= 3
-                                ? bgColor
-                                : const Color(0xfffafafa))),
-                    const SizedBox(width: 5),
-                    const Text('買買買'),
-                    const SizedBox(width: 5),
-                  ],
-                ),
-              ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(25),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Icon(Icons.calendar_today,
+                size: 51, color: Color(0xfffafafa)),
+            const SizedBox(height: 5),
+            const Align(
+                alignment: Alignment.center,
+                child: Text('月票 Pass', style: TextStyle(fontSize: 17))),
+            const SizedBox(height: 45),
+            IntrinsicWidth(
+              child: Row(
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                              color: Color(0xfffafafa), shape: BoxShape.circle),
+                          child: currentState.step > 1
+                              ? Icon(Icons.check, size: 20, color: bgColor)
+                              : Icon(Icons.format_list_bulleted,
+                                  size: 20, color: bgColor)),
+                      const SizedBox(width: 5),
+                      const Text('讀條款'),
+                      const SizedBox(width: 5),
+                    ],
+                  ),
+                  const Expanded(child: Divider(thickness: 2)),
+                  const SizedBox(width: 10),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: stateIndex >= 2
+                                  ? const Color(0xfffafafa)
+                                  : null,
+                              border: stateIndex >= 2
+                                  ? null
+                                  : Border.all(
+                                      color: const Color(0xff3e3e3e),
+                                      width: 2)),
+                          child: currentState.step > 2
+                              ? Icon(Icons.check, size: 20, color: bgColor)
+                              : Icon(Icons.badge,
+                                  size: 20,
+                                  color: stateIndex >= 2
+                                      ? bgColor
+                                      : const Color(0xfffafafa))),
+                      const SizedBox(width: 5),
+                      const Text('選方案'),
+                      const SizedBox(width: 5),
+                    ],
+                  ),
+                  const Expanded(child: Divider(thickness: 2)),
+                  const SizedBox(width: 10),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              color: stateIndex >= 3
+                                  ? const Color(0xfffafafa)
+                                  : null,
+                              shape: BoxShape.circle,
+                              border: stateIndex >= 3
+                                  ? null
+                                  : Border.all(
+                                      color: const Color(0xff3e3e3e),
+                                      width: 2)),
+                          child: Icon(Icons.shopping_cart,
+                              size: 20,
+                              color: stateIndex >= 3
+                                  ? bgColor
+                                  : const Color(0xfffafafa))),
+                      const SizedBox(width: 5),
+                      const Text('買買買'),
+                      const SizedBox(width: 5),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 45),
-          currentState == _MpassProgressState.info ? _previlleges() : _plans(),
-        ],
+            const SizedBox(height: 45),
+            currentState == _MpassProgressState.info
+                ? _previlleges()
+                : _plans(),
+          ],
+        ),
       ),
     );
   }

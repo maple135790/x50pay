@@ -10,13 +10,17 @@ class EntryModel {
   final List<dynamic> gr2;
   final List<Evlist>? evlist;
   final GiftList? giftlist;
+  @JsonKey(name: 'rqc')
+  final List<QuestCampaign>? questCampaign;
 
-  const EntryModel(
-      {required this.message,
-      required this.code,
-      required this.gr2,
-      this.evlist,
-      this.giftlist});
+  const EntryModel({
+    required this.message,
+    required this.code,
+    required this.gr2,
+    this.evlist,
+    this.giftlist,
+    this.questCampaign,
+  });
 
   factory EntryModel.fromJson(Map<String, dynamic> json) =>
       _$EntryModelFromJson(json);
@@ -121,4 +125,28 @@ class EntryHistory {
   factory EntryHistory.fromJson(Map<String, dynamic> json) =>
       _$EntryHistoryFromJson(json);
   Map<String, dynamic> toJson() => _$EntryHistoryToJson(this);
+}
+
+@JsonSerializable()
+class QuestCampaign {
+  final String couid;
+  final String lpic;
+  final bool lpicshow;
+  final List<String> mid;
+  final String spic;
+  @JsonKey(name: '_id')
+  final UnderscoreId? underscoreId;
+
+  QuestCampaign({
+    required this.couid,
+    required this.lpic,
+    required this.lpicshow,
+    required this.mid,
+    required this.spic,
+    required this.underscoreId,
+  });
+
+  factory QuestCampaign.fromJson(Map<String, dynamic> json) =>
+      _$QuestCampaignFromJson(json);
+  Map<String, dynamic> toJson() => _$QuestCampaignToJson(this);
 }

@@ -16,6 +16,9 @@ EntryModel _$EntryModelFromJson(Map<String, dynamic> json) => EntryModel(
       giftlist: json['giftlist'] == null
           ? null
           : GiftList.fromJson(json['giftlist'] as Map<String, dynamic>),
+      questCampaign: (json['rqc'] as List<dynamic>?)
+          ?.map((e) => QuestCampaign.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$EntryModelToJson(EntryModel instance) =>
@@ -25,6 +28,7 @@ Map<String, dynamic> _$EntryModelToJson(EntryModel instance) =>
       'gr2': instance.gr2,
       'evlist': instance.evlist,
       'giftlist': instance.giftlist,
+      'rqc': instance.questCampaign,
     };
 
 Evlist _$EvlistFromJson(Map<String, dynamic> json) => Evlist(
@@ -119,5 +123,27 @@ Map<String, dynamic> _$EntryHistoryToJson(EntryHistory instance) =>
       'status': instance.status,
       'time': instance.time,
       'uid': instance.uid,
+      '_id': instance.underscoreId,
+    };
+
+QuestCampaign _$QuestCampaignFromJson(Map<String, dynamic> json) =>
+    QuestCampaign(
+      couid: json['couid'] as String,
+      lpic: json['lpic'] as String,
+      lpicshow: json['lpicshow'] as bool,
+      mid: (json['mid'] as List<dynamic>).map((e) => e as String).toList(),
+      spic: json['spic'] as String,
+      underscoreId: json['_id'] == null
+          ? null
+          : UnderscoreId.fromJson(json['_id'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$QuestCampaignToJson(QuestCampaign instance) =>
+    <String, dynamic>{
+      'couid': instance.couid,
+      'lpic': instance.lpic,
+      'lpicshow': instance.lpicshow,
+      'mid': instance.mid,
+      'spic': instance.spic,
       '_id': instance.underscoreId,
     };

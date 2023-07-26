@@ -20,7 +20,7 @@ class GameViewModel extends BaseViewModel {
   CabinetModel? cabinetModel;
   // UserModel? user;
 
-  Future<bool> initStore({
+  Future<StoreModel?> getStoreData({
     int debugFlag = 200,
   }) async {
     try {
@@ -35,9 +35,9 @@ class GameViewModel extends BaseViewModel {
       }
       // GlobalSingleton.instance.user = user;
       await EasyLoading.dismiss();
-      return true;
+      return stores;
     } on Exception catch (_) {
-      return false;
+      return null;
     }
   }
 
@@ -47,12 +47,12 @@ class GameViewModel extends BaseViewModel {
         prefs.getString('store_name') != null;
   }
 
-  Future<bool> getGamelist() async {
+  Future<Gamelist?> getGamelist() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final sid = prefs.getString('store_id');
 
-      if (sid == null) return false;
+      if (sid == null) return null;
 
       if (!kDebugMode || isForce) {
         gamelist = await repo.getGameList(storeId: sid);
@@ -69,9 +69,9 @@ class GameViewModel extends BaseViewModel {
           gamelist = Gamelist.fromJson(jsonDecode(testGamelistWULIN2));
         }
       }
-      return true;
+      return gamelist;
     } on Exception catch (_) {
-      return false;
+      return null;
     }
   }
 

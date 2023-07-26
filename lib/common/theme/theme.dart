@@ -32,8 +32,8 @@ class AppThemeData {
             border: Border.all(color: Themes.borderColor, width: 1)),
       ),
       pageTransitionsTheme: const PageTransitionsTheme(builders: {
-        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+        TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
       }),
       dialogTheme: const DialogTheme(
           surfaceTintColor: Colors.transparent,

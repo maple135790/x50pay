@@ -8,17 +8,11 @@ class _CabDetail extends StatefulWidget {
   State<_CabDetail> createState() => __CabDetailState();
 }
 
-class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
+class __CabDetailState extends BaseStatefulState<_CabDetail> {
   final viewModel = CabDatailViewModel();
 
   @override
-  bool get disableBottomNavigationBar => true;
-
-  @override
-  BaseViewModel? baseViewModel() => viewModel;
-
-  @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: viewModel.getSelGame(widget.machineId),
       builder: (context, snapshot) {
@@ -181,21 +175,23 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> with BaseLoaded {
       );
     }
 
-    return Column(
-      children: [
-        const SizedBox(height: 15),
-        buildRSVP(model.reservations),
-        const SizedBox(height: 10),
-        buildPadLineUp(),
-        const SizedBox(height: 8),
-        buildCabInfo(
-            price: price,
-            tagName: tagLabel,
-            cabLabel: model.cabinets.first.label),
-        const SizedBox(height: 15),
-        ...buildStreamPic(model.spic, model.surl),
-        ...buildCabBlock(caboid: model.caboid)
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(height: 15),
+          buildRSVP(model.reservations),
+          const SizedBox(height: 10),
+          buildPadLineUp(),
+          const SizedBox(height: 8),
+          buildCabInfo(
+              price: price,
+              tagName: tagLabel,
+              cabLabel: model.cabinets.first.label),
+          const SizedBox(height: 15),
+          ...buildStreamPic(model.spic, model.surl),
+          ...buildCabBlock(caboid: model.caboid)
+        ],
+      ),
     );
   }
 
@@ -591,7 +587,7 @@ class _CabSelectState extends State<_CabSelect> {
     List<Widget> children = [];
 
     for (List mode in widget.modes) {
-      final double price = mode.last;
+      final double price = double.parse(mode.last.toString());
       children
         ..add(const SizedBox(height: 20))
         ..add(Text(mode[1], style: const TextStyle(color: Color(0xfffafafa))))

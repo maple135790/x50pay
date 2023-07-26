@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
@@ -46,7 +47,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
       setState(() {});
       return;
     }
-    final nav = Navigator.of(context);
+    final nav = GoRouter.of(context);
     final isSuccessLogin =
         await viewModel.login(email: email.text, password: password.text);
     if (isSuccessLogin) {
@@ -65,7 +66,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
         setState(() {});
       } else if (code == 200) {
         await GlobalSingleton.instance.checkUser(force: true);
-        nav.pushReplacementNamed(AppRoute.home);
+        nav.pushReplacementNamed(AppRoutes.home.routeName);
       }
     }
   }
@@ -262,7 +263,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.of(context).pushNamed(AppRoute.license);
+                              // Navigator.of(context).pushNamed(AppRoute.license);
+                              GoRouter.of(context).goNamed(AppRoute.license);
                             }),
                     )
                   ],

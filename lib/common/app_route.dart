@@ -1,3 +1,4 @@
+@Deprecated("Use `AppRoutes` instead")
 class AppRoute {
   static const login = '/login';
   static const home = '/home';
@@ -10,4 +11,22 @@ class AppRoute {
   static const account = '/account';
   static const gift = '/gift';
   static const collab = '/collab';
+}
+
+typedef RouteProperty = ({String routeName, String path});
+
+class AppRoutes {
+  static const login = (routeName: 'login', path: '/login');
+  static const home = (routeName: 'home', path: '/home');
+  static const forgotPassword = (routeName: 'forgotPassword', path: '/iforgot');
+  static const license = (routeName: 'license', path: '/lic');
+  static const signUp = (routeName: 'signUp', path: '/signUp');
+  static const buyMPass = (routeName: 'buyMPass', path: 'buyMPass');
+  static const settings = (routeName: 'setting', path: '/setting');
+  static const game = (routeName: 'game', path: '/game');
+  static const gameStore = (routeName: 'gameStore', path: 'store');
+  static const gameCabs = (routeName: 'gameCabs', path: 'cabs');
+  static const account = (routeName: 'account', path: '/account');
+  static const gift = (routeName: 'gift', path: '/gift');
+  static const collab = (routeName: 'collab', path: '/collab');
 }

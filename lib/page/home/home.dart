@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -178,7 +179,9 @@ class _TicketInfo extends StatelessWidget {
               children: [
                 GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushNamed(AppRoute.buyMPass);
+                      GoRouter.of(context)
+                          .pushNamed(AppRoutes.buyMPass.routeName);
+                      // Navigator.of(context).pushNamed(AppRoute.buyMPass);
                     },
                     child: const Icon(Icons.confirmation_number_rounded,
                         color: Color(0xff237804), size: 50)),

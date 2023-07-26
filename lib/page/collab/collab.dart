@@ -16,15 +16,10 @@ class Collab extends StatefulWidget {
   State<Collab> createState() => _CollabState();
 }
 
-class _CollabState extends BaseStatefulState<Collab> with BaseLoaded {
+class _CollabState extends BaseStatefulState<Collab> {
   final viewModel = GiftSystemViewModel();
   late Future<bool> init;
 
-  @override
-  bool get isScrollable => false;
-
-  @override
-  BaseViewModel? baseViewModel() => viewModel;
   @override
   void initState() {
     super.initState();
@@ -32,7 +27,7 @@ class _CollabState extends BaseStatefulState<Collab> with BaseLoaded {
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: init,
       builder: (context, snapshot) {

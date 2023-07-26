@@ -1,95 +1,100 @@
 part of 'game.dart';
 
-class _GameCabs extends StatelessWidget {
+class GameCabs extends StatelessWidget {
   final Gamelist games;
   final String storeName;
 
-  const _GameCabs({required this.games, required this.storeName, Key? key})
-      : super(key: key);
+  const GameCabs({required this.games, required this.storeName, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = Theme.of(context).scaffoldBackgroundColor;
     List<Machine> machine = games.machine!;
-    return Column(
-      children: [
-        Container(
-            margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-            padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
-            decoration: BoxDecoration(
-                color: bgColor,
-                border: Border.all(color: Themes.borderColor, width: 1),
-                borderRadius: BorderRadius.circular(5)),
-            child: Row(
-              children: [
-                const Icon(Icons.push_pin, color: Color(0xfffafafa), size: 16),
-                Text('  目前所在「 $storeName 」',
-                    style: const TextStyle(color: Color(0xfffafafa))),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () async {
-                    final nav = Navigator.of(context);
-                    final prefs = await SharedPreferences.getInstance();
-                    await prefs.remove('store_name');
-                    await prefs.remove('store_id');
-                    nav.pushReplacementNamed(AppRoute.game);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color(0xfffafafa)),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    child: Icon(Icons.sync, color: bgColor, size: 26),
-                  ),
-                ),
-              ],
-            )),
-        ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: machine.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) => _GameCabItem(machine[index]),
-        ),
-        Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 80,
-              margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-              padding: const EdgeInsets.only(bottom: 10),
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+              margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+              padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
               decoration: BoxDecoration(
-                  border: Border.all(color: Themes.borderColor, width: 1),
-                  borderRadius: BorderRadius.circular(5),
-                  shape: BoxShape.rectangle),
-            ),
-            Positioned(
-                left: 35,
-                top: 12,
-                child: Container(
                   color: Theme.of(context).scaffoldBackgroundColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: const Text('離峰時段',
-                      style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
-                )),
-            const Positioned(
-              top: 40,
-              left: 35,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+                  border: Border.all(color: Themes.borderColor, width: 1),
+                  borderRadius: BorderRadius.circular(5)),
+              child: Row(
                 children: [
-                  Text('●   部分機種不提供離峰方案',
-                      style: TextStyle(color: Color(0xfffafafa))),
-                  SizedBox(height: 5),
-                  Text('●   詳情請見粉絲專業更新貼文',
-                      style: TextStyle(color: Color(0xfffafafa))),
+                  const Icon(Icons.push_pin,
+                      color: Color(0xfffafafa), size: 16),
+                  Text('  目前所在「 $storeName 」',
+                      style: const TextStyle(color: Color(0xfffafafa))),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () async {
+                      final router = GoRouter.of(context);
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.remove('store_name');
+                      await prefs.remove('store_id');
+                      router.pushNamed(AppRoutes.game.routeName);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: const Color(0xfffafafa)),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
+                      child: Icon(Icons.sync,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          size: 26),
+                    ),
+                  ),
                 ],
+              )),
+          ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: machine.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) => _GameCabItem(machine[index]),
+          ),
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 80,
+                margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                padding: const EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Themes.borderColor, width: 1),
+                    borderRadius: BorderRadius.circular(5),
+                    shape: BoxShape.rectangle),
               ),
-            )
-          ],
-        ),
-      ],
+              Positioned(
+                  left: 35,
+                  top: 12,
+                  child: Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: const Text('離峰時段',
+                        style:
+                            TextStyle(color: Color(0xfffafafa), fontSize: 13)),
+                  )),
+              const Positioned(
+                top: 40,
+                left: 35,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('●   部分機種不提供離峰方案',
+                        style: TextStyle(color: Color(0xfffafafa))),
+                    SizedBox(height: 5),
+                    Text('●   詳情請見粉絲專業更新貼文',
+                        style: TextStyle(color: Color(0xfffafafa))),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

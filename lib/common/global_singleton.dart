@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
 

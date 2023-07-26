@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -99,6 +100,12 @@ class _AccountState extends State<Account> {
   final viewModel = AccountViewModel();
   final user = GlobalSingleton.instance.user!;
 
+  Color get bgColor => Theme.of(context).scaffoldBackgroundColor;
+
+  void onLogout() {
+    GoRouter.of(context).goNamed(AppRoutes.login.routeName);
+  }
+
   void checkRemoteOpen({required RemoteOpenShop shop}) async {
     await EasyLoading.show();
     final location = Location();
@@ -161,7 +168,6 @@ class _AccountState extends State<Account> {
             child: const Text('取消')),
         TextButton(
             onPressed: () async {
-              final nav = Navigator.of(context);
               if (await viewModel.logout()) {
                 GlobalSingleton.instance.clearUser();
                 final prefs = await SharedPreferences.getInstance();
@@ -169,7 +175,7 @@ class _AccountState extends State<Account> {
                     dismissOnTap: false, duration: const Duration(seconds: 2));
                 await prefs.remove('session');
                 await Future.delayed(const Duration(seconds: 2));
-                nav.pushReplacementNamed(AppRoute.login);
+                onLogout();
               } else {
                 await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
                     dismissOnTap: false, duration: const Duration(seconds: 2));
@@ -181,7 +187,6 @@ class _AccountState extends State<Account> {
     );
   }
 
-  Color get bgColor => Theme.of(context).scaffoldBackgroundColor;
   @override
   void initState() {
     super.initState();
@@ -197,231 +202,234 @@ class _AccountState extends State<Account> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Themes.borderColor, width: 1),
-                    color: bgColor),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  child: Row(
-                    children: [
-                      user.userimg != null
-                          ? CircleAvatar(
-                              foregroundImage: NetworkImage(avatarUrl),
-                              radius: 30,
-                              backgroundImage: R.image.logo_150_jpg())
-                          : CircleAvatar(
-                              foregroundImage: R.image.logo_150_jpg(),
-                              radius: 30),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(user.name!,
-                                style:
-                                    const TextStyle(color: Color(0xfffafafa))),
-                            const SizedBox(height: 5),
-                            Text(user.email!,
-                                style:
-                                    const TextStyle(color: Color(0xfffafafa))),
-                          ],
-                        ),
-                      )
-                    ],
+      child: Container(
+        decoration: BoxDecoration(color: bgColor),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Themes.borderColor, width: 1),
+                      color: bgColor),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
+                    child: Row(
+                      children: [
+                        user.userimg != null
+                            ? CircleAvatar(
+                                foregroundImage: NetworkImage(avatarUrl),
+                                radius: 30,
+                                backgroundImage: R.image.logo_150_jpg())
+                            : CircleAvatar(
+                                foregroundImage: R.image.logo_150_jpg(),
+                                radius: 30),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(user.name!,
+                                  style: const TextStyle(
+                                      color: Color(0xfffafafa))),
+                              const SizedBox(height: 5),
+                              Text(user.email!,
+                                  style: const TextStyle(
+                                      color: Color(0xfffafafa))),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            _AccountBlock(children: [
-              _SettingTile(
-                  iconData: Icons.remember_me,
-                  title: '修改頭像',
-                  subtitle: '外連至 Gravator 更換大頭貼相片',
-                  color: _SettingTileColor.green,
-                  onTap: () {
-                    launchUrlString('https://en.gravatar.com/',
-                        mode: LaunchMode.externalApplication);
-                  }),
-              _SettingTile(
-                  iconData: Icons.rss_feed,
-                  title: '多元付款設定',
-                  subtitle: 'X50MGS 多元付款喜好設定',
-                  color: _SettingTileColor.blue,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return QuickPayDialog(viewModel);
-                    }));
-                  }),
-              _SettingTile(
-                  iconData: Icons.badge_outlined,
-                  title: 'QuiC Pay 設定',
-                  subtitle: 'QuiC 喜愛選項設定',
-                  color: _SettingTileColor.blue,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return QuiCPayPrefDialog(viewModel);
-                    }));
-                  }),
-              _SettingTile(
-                  iconData: Icons.tablet_mac,
-                  title: '線上排隊設定',
-                  subtitle: 'X50Pad 西門線上排隊系統偏好設定',
-                  color: _SettingTileColor.blue,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return PadPrefDialog(viewModel);
-                    }));
-                  }),
-            ]),
-            _AccountBlock(children: [
-              _SettingTile(
-                  iconData: Icons.key,
-                  title: '更改密碼',
-                  subtitle: '密碼不夠安全嗎？點我更改！',
-                  color: _SettingTileColor.red,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return ChangePasswordDialog(viewModel);
-                    }));
-                  }),
-              _SettingTile(
-                  iconData: Icons.email_outlined,
-                  title: '更改信箱',
-                  subtitle: '換信箱了嗎，點我修改信箱。',
-                  color: _SettingTileColor.white,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return ChangeEmailDialog(viewModel);
-                    }));
-                  }),
-              _SettingTile(
-                  iconData: Icons.call,
-                  title: '更改手機',
-                  subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
-                  color: _SettingTileColor.white,
-                  onTap: () async {
-                    if (user.tphone != 0 && !user.phoneactive!) {
+              _AccountBlock(children: [
+                _SettingTile(
+                    iconData: Icons.remember_me,
+                    title: '修改頭像',
+                    subtitle: '外連至 Gravator 更換大頭貼相片',
+                    color: _SettingTileColor.green,
+                    onTap: () {
+                      launchUrlString('https://en.gravatar.com/',
+                          mode: LaunchMode.externalApplication);
+                    }),
+                _SettingTile(
+                    iconData: Icons.rss_feed,
+                    title: '多元付款設定',
+                    subtitle: 'X50MGS 多元付款喜好設定',
+                    color: _SettingTileColor.blue,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return QuickPayDialog(viewModel);
+                      }));
+                    }),
+                _SettingTile(
+                    iconData: Icons.badge_outlined,
+                    title: 'QuiC Pay 設定',
+                    subtitle: 'QuiC 喜愛選項設定',
+                    color: _SettingTileColor.blue,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return QuiCPayPrefDialog(viewModel);
+                      }));
+                    }),
+                _SettingTile(
+                    iconData: Icons.tablet_mac,
+                    title: '線上排隊設定',
+                    subtitle: 'X50Pad 西門線上排隊系統偏好設定',
+                    color: _SettingTileColor.blue,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return PadPrefDialog(viewModel);
+                      }));
+                    }),
+              ]),
+              _AccountBlock(children: [
+                _SettingTile(
+                    iconData: Icons.key,
+                    title: '更改密碼',
+                    subtitle: '密碼不夠安全嗎？點我更改！',
+                    color: _SettingTileColor.red,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return ChangePasswordDialog(viewModel);
+                      }));
+                    }),
+                _SettingTile(
+                    iconData: Icons.email_outlined,
+                    title: '更改信箱',
+                    subtitle: '換信箱了嗎，點我修改信箱。',
+                    color: _SettingTileColor.white,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return ChangeEmailDialog(viewModel);
+                      }));
+                    }),
+                _SettingTile(
+                    iconData: Icons.call,
+                    title: '更改手機',
+                    subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
+                    color: _SettingTileColor.white,
+                    onTap: () async {
+                      if (user.tphone != 0 && !user.phoneactive!) {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) => _ChangePhoneConfirmedDialog(
+                                viewModel, context));
+                      }
                       showDialog(
                           barrierDismissible: false,
                           context: context,
-                          builder: (context) =>
-                              _ChangePhoneConfirmedDialog(viewModel, context));
-                    }
-                    showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return ChangePhoneDialog(
-                            viewModel,
-                            callback: (isOk) async {
-                              Navigator.of(context).pop();
-                              if (isOk) {
-                                showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) =>
-                                        _ChangePhoneConfirmedDialog(
-                                            viewModel, context));
-                              } else {
-                                await EasyLoading.showError(
-                                    '伺服器錯誤，請嘗試重新整理或回報X50',
-                                    dismissOnTap: false,
-                                    duration: const Duration(seconds: 2));
-                              }
-                            },
-                          );
-                        });
-                  }),
-            ]),
-            _AccountBlock(children: [
-              _SettingTile(
-                  iconData: Icons.local_atm,
-                  title: '儲值紀錄',
-                  subtitle: '查詢加值相關記錄。',
-                  color: _SettingTileColor.yellow,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return _BidRecord(viewModel);
-                    }));
-                  }),
-              _SettingTile(
-                  iconData: Icons.redeem,
-                  title: '獲券紀錄',
-                  subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
-                  color: _SettingTileColor.yellow,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return _TicketRecord(viewModel);
-                    }));
-                  }),
-              _SettingTile(
-                  iconData: Icons.format_list_bulleted,
-                  title: '付費明細',
-                  subtitle: '查詢點數付款明細。',
-                  color: _SettingTileColor.yellow,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return _PlayRecord(viewModel);
-                    }));
-                  }),
-              _SettingTile(
-                  iconData: Icons.confirmation_num,
-                  title: '扣券明細',
-                  subtitle: '查詢遊玩券使用明細。',
-                  color: _SettingTileColor.yellow,
-                  onTap: () async {
-                    Navigator.of(context)
-                        .push(CupertinoPageRoute(builder: (context) {
-                      return _TicketUsedRecord(viewModel);
-                    }));
-                  }),
-            ]),
-            _AccountBlock(children: [
-              _SettingTile(
-                  iconData: Icons.home,
-                  title: '西門一店開門',
-                  subtitle: '就是個一店開門按鈕',
-                  color: _SettingTileColor.white,
-                  onTap: () {
-                    checkRemoteOpen(shop: RemoteOpenShop.firstShop);
-                  }),
-              _SettingTile(
-                  iconData: Icons.home,
-                  title: '西門二店開門',
-                  subtitle: '就是個二店開門按鈕',
-                  color: _SettingTileColor.white,
-                  onTap: () {
-                    checkRemoteOpen(shop: RemoteOpenShop.secondShop);
-                  }),
-              _SettingTile(
-                  iconData: Icons.logout,
-                  title: '登出帳號',
-                  subtitle: '就是個登出',
-                  color: _SettingTileColor.white,
-                  onTap: () async {
-                    showDialog(
-                        context: context, builder: (context) => askLogout());
-                  }),
-            ]),
-          ],
+                          builder: (context) {
+                            return ChangePhoneDialog(
+                              viewModel,
+                              callback: (isOk) async {
+                                Navigator.of(context).pop();
+                                if (isOk) {
+                                  showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (context) =>
+                                          _ChangePhoneConfirmedDialog(
+                                              viewModel, context));
+                                } else {
+                                  await EasyLoading.showError(
+                                      '伺服器錯誤，請嘗試重新整理或回報X50',
+                                      dismissOnTap: false,
+                                      duration: const Duration(seconds: 2));
+                                }
+                              },
+                            );
+                          });
+                    }),
+              ]),
+              _AccountBlock(children: [
+                _SettingTile(
+                    iconData: Icons.local_atm,
+                    title: '儲值紀錄',
+                    subtitle: '查詢加值相關記錄。',
+                    color: _SettingTileColor.yellow,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return _BidRecord(viewModel);
+                      }));
+                    }),
+                _SettingTile(
+                    iconData: Icons.redeem,
+                    title: '獲券紀錄',
+                    subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
+                    color: _SettingTileColor.yellow,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return _TicketRecord(viewModel);
+                      }));
+                    }),
+                _SettingTile(
+                    iconData: Icons.format_list_bulleted,
+                    title: '付費明細',
+                    subtitle: '查詢點數付款明細。',
+                    color: _SettingTileColor.yellow,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return _PlayRecord(viewModel);
+                      }));
+                    }),
+                _SettingTile(
+                    iconData: Icons.confirmation_num,
+                    title: '扣券明細',
+                    subtitle: '查詢遊玩券使用明細。',
+                    color: _SettingTileColor.yellow,
+                    onTap: () async {
+                      Navigator.of(context)
+                          .push(CupertinoPageRoute(builder: (context) {
+                        return _TicketUsedRecord(viewModel);
+                      }));
+                    }),
+              ]),
+              _AccountBlock(children: [
+                _SettingTile(
+                    iconData: Icons.home,
+                    title: '西門一店開門',
+                    subtitle: '就是個一店開門按鈕',
+                    color: _SettingTileColor.white,
+                    onTap: () {
+                      checkRemoteOpen(shop: RemoteOpenShop.firstShop);
+                    }),
+                _SettingTile(
+                    iconData: Icons.home,
+                    title: '西門二店開門',
+                    subtitle: '就是個二店開門按鈕',
+                    color: _SettingTileColor.white,
+                    onTap: () {
+                      checkRemoteOpen(shop: RemoteOpenShop.secondShop);
+                    }),
+                _SettingTile(
+                    iconData: Icons.logout,
+                    title: '登出帳號',
+                    subtitle: '就是個登出',
+                    color: _SettingTileColor.white,
+                    onTap: () async {
+                      showDialog(
+                          context: context, builder: (context) => askLogout());
+                    }),
+              ]),
+            ],
+          ),
         ),
       ),
     );
