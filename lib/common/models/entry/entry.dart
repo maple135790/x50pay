@@ -130,7 +130,8 @@ class EntryHistory {
 @JsonSerializable()
 class QuestCampaign {
   final String couid;
-  final String lpic;
+  @JsonKey(name: 'lpic')
+  final String rawLpic;
   final bool lpicshow;
   final List<String> mid;
   final String spic;
@@ -139,7 +140,7 @@ class QuestCampaign {
 
   QuestCampaign({
     required this.couid,
-    required this.lpic,
+    required this.rawLpic,
     required this.lpicshow,
     required this.mid,
     required this.spic,
@@ -149,4 +150,6 @@ class QuestCampaign {
   factory QuestCampaign.fromJson(Map<String, dynamic> json) =>
       _$QuestCampaignFromJson(json);
   Map<String, dynamic> toJson() => _$QuestCampaignToJson(this);
+
+  String get lpic => "https://pay.x50.fun$rawLpic";
 }

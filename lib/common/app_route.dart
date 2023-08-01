@@ -17,7 +17,7 @@ typedef RouteProperty = ({String routeName, String path});
 
 class AppRoutes {
   static const login = (routeName: 'login', path: '/login');
-  static const home = (routeName: 'home', path: '/home');
+  static const home = (routeName: 'home', path: '/');
   static const forgotPassword = (routeName: 'forgotPassword', path: '/iforgot');
   static const license = (routeName: 'license', path: '/lic');
   static const signUp = (routeName: 'signUp', path: '/signUp');
@@ -25,8 +25,9 @@ class AppRoutes {
   static const settings = (routeName: 'setting', path: '/setting');
   static const game = (routeName: 'game', path: '/game');
   static const gameStore = (routeName: 'gameStore', path: 'store');
-  static const gameCabs = (routeName: 'gameCabs', path: 'cabs');
-  static const account = (routeName: 'account', path: '/account');
+  static const gameCabs = (routeName: 'gameCabs', path: 'cabs/:storeName');
   static const gift = (routeName: 'gift', path: '/gift');
   static const collab = (routeName: 'collab', path: '/collab');
+  static const questCampaign =
+      (routeName: 'questCampaign', path: '/questCampaign/:couid');
 }

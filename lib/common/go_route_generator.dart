@@ -1,125 +1,75 @@
-import 'dart:async';
-import 'dart:developer';
+part of '../main.dart';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/models/gamelist/gamelist.dart';
-import 'package:x50pay/common/navigator_keys.dart';
-import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/collab/collab.dart';
-import 'package:x50pay/page/pages.dart';
-import 'package:x50pay/r.g.dart';
-
-class AppRouterConfig {
-  static GoRoute _route(
-    RouteProperty rp,
-    Widget Function(BuildContext, GoRouterState)? builder, {
-    GlobalKey<NavigatorState>? parentNavKey,
-    List<RouteBase>? innerRoutes,
-    FutureOr<String?> Function(BuildContext context, GoRouterState state)?
-        redirect,
-  }) {
-    return GoRoute(
-      parentNavigatorKey: parentNavKey ?? NavigatorKeys.shell,
-      path: rp.path,
-      name: rp.routeName,
-      routes: innerRoutes ?? [],
-      builder: builder,
-      redirect: redirect,
-    );
-  }
-
-  static final RouterConfig<Object> goRouteConfig = GoRouter(
-    initialLocation: AppRoutes.home.path,
-    navigatorKey: NavigatorKeys.root,
-    debugLogDiagnostics: true,
-    routes: [
-      _route(
-        AppRoutes.login,
-        (_, __) => const Login(),
-        parentNavKey: NavigatorKeys.root,
-      ),
-      ShellRoute(
-        navigatorKey: NavigatorKeys.shell,
-        routes: [
-          _route(AppRoutes.game, (_, __) => const Game(), innerRoutes: [
-            _route(AppRoutes.gameCabs, (_, state) {
-              final gameList = state.extra as Gamelist?;
-              if (gameList == null) return Home();
-              return Account();
-            }),
-            _route(AppRoutes.gameStore, (_, state) => const Home()),
-          ]),
-          _route(AppRoutes.settings, (_, __) => const Account()),
-          _route(AppRoutes.home, (_, __) => const Home(), innerRoutes: [
-            _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
-          ]),
-          _route(AppRoutes.gift, (_, __) => const GiftSystem()),
-          _route(AppRoutes.collab, (_, __) => const Collab()),
-        ],
-        builder: (context, state, child) {
-          return ScaffoldWithNavBarSR(body: child);
-        },
-      ),
-      // StatefulShellRoute.indexedStack(
-      //   pageBuilder: (context, state, navigationShell) {
-      //     return CupertinoPage<void>(
-      //         child: ScaffoldWithNavBar(navigationShell: navigationShell));
-      //   },
-      //   branches: [
-      //     StatefulShellBranch(
-      //       navigatorKey: NavigatorKeys.game,
-      //       routes: [
-      //         _route(AppRoutes.game, (_, __) => const Game(), innerRoutes: [
-      //           _route(AppRoutes.gameCabs, (_, __) => const Account()),
-      //           _route(AppRoutes.gameStore, (_, __) => const Home()),
-      //         ])
-      //       ],
-      //     ),
-      //     StatefulShellBranch(
-      //       navigatorKey: NavigatorKeys.settings,
-      //       routes: [
-      //         _route(AppRoutes.settings, (_, __) => const Account()),
-      //       ],
-      //     ),
-      //     StatefulShellBranch(
-      //       navigatorKey: NavigatorKeys.home,
-      //       routes: [
-      //         _route(AppRoutes.home, (_, __) => const Home(), innerRoutes: [
-      //           _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
-      //         ])
-      //       ],
-      //     ),
-      //     StatefulShellBranch(
-      //       navigatorKey: NavigatorKeys.gift,
-      //       routes: [_route(AppRoutes.gift, (_, __) => const GiftSystem())],
-      //     ),
-      //     StatefulShellBranch(
-      //       navigatorKey: NavigatorKeys.collab,
-      //       routes: [_route(AppRoutes.collab, (_, __) => const Collab())],
-      //     ),
-      //   ],
-      // ),
-    ],
+GoRoute _route(
+  RouteProperty rp,
+  Widget Function(BuildContext, GoRouterState)? builder, {
+  List<RouteBase>? innerRoutes,
+  GoRouterRedirect? redirect,
+}) {
+  return GoRoute(
+    path: rp.path,
+    name: rp.routeName,
+    routes: innerRoutes ?? [],
+    builder: builder,
+    redirect: redirect,
   );
 }
 
-class ScaffoldWithNavBarSR extends StatefulWidget {
+final debugRoute = AppRoutes.login.path;
+
+RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
+      initialLocation:
+          !GlobalSingleton.instance.devIsServiceOnline && kDebugMode
+              ? debugRoute
+              : isLogin
+                  ? AppRoutes.home.path
+                  : AppRoutes.login.path,
+      debugLogDiagnostics: true,
+      routes: [
+        ShellRoute(
+          routes: [
+            GoRoute(
+              path: AppRoutes.login.path,
+              name: AppRoutes.login.routeName,
+              builder: (context, state) => const Login(),
+            ),
+            _route(AppRoutes.game, (_, state) {
+              final shouldRebuild = state.extra as bool?;
+              if (shouldRebuild == true) {
+                return Game(
+                    key: ValueKey(DateTime.now().millisecondsSinceEpoch));
+              }
+              return const Game();
+            }),
+            _route(AppRoutes.settings, (_, __) => const Account()),
+            _route(AppRoutes.home, (_, __) => const Home(), innerRoutes: [
+              _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
+            ]),
+            _route(AppRoutes.gift, (_, __) => const GiftSystem()),
+            _route(AppRoutes.collab, (_, __) => const Collab()),
+          ],
+          builder: (context, state, child) {
+            log('state.uri.toString() ${state.uri.toString()}', name: 'uri');
+
+            if (state.uri.toString().contains(AppRoutes.login.path)) {
+              return child;
+            }
+            return ScaffoldWithNavBar(body: child);
+          },
+        ),
+      ],
+    );
+
+class ScaffoldWithNavBar extends StatefulWidget {
   final Widget body;
 
-  const ScaffoldWithNavBarSR({super.key, required this.body});
+  const ScaffoldWithNavBar({super.key, required this.body});
 
   @override
-  State<ScaffoldWithNavBarSR> createState() => _ScaffoldWithNavBarSRState();
+  State<ScaffoldWithNavBar> createState() => _ScaffoldWithNavBarState();
 }
 
-class _ScaffoldWithNavBarSRState extends State<ScaffoldWithNavBarSR> {
+class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
   late int selectedIndex = _menus.indexWhere((element) =>
       GoRouterState.of(context).path?.contains(element.route.path) ?? false);
 
@@ -130,6 +80,35 @@ class _ScaffoldWithNavBarSRState extends State<ScaffoldWithNavBarSR> {
     (icon: Icons.redeem_rounded, label: '禮物', route: AppRoutes.gift),
     (icon: Icons.handshake_rounded, label: '合作', route: AppRoutes.collab),
   ];
+
+  Future<bool?> confirmPopup() {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title:
+              const Text('確認離開 ?', style: TextStyle(color: Color(0xfffafafa))),
+          actions: [
+            TextButton(
+              style: Themes.severe(isV4: true),
+              onPressed: () {
+                SystemNavigator.pop();
+              },
+              child: const Text('是'),
+            ),
+            TextButton(
+              style: Themes.pale(),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text('否'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   initState() {
     super.initState();
@@ -138,66 +117,32 @@ class _ScaffoldWithNavBarSRState extends State<ScaffoldWithNavBarSR> {
 
   @override
   Widget build(BuildContext context) {
-    log('hello');
-    return Scaffold(
-      appBar: _LoadedAppBar(selectedIndex),
-      body: widget.body,
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-            border:
-                Border(top: BorderSide(width: 1, color: Color(0xff3e3e3e)))),
-        child: NavigationBar(
-          selectedIndex: selectedIndex,
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-          onDestinationSelected: (index) async {
-            selectedIndex = index;
-            context.goNamed(_menus[index].route.routeName);
-            setState(() {});
-          },
-          destinations: _menus
-              .map((menu) => NavigationDestination(
-                    icon: Icon(menu.icon, color: const Color(0xffb4b4b4)),
-                    label: menu.label,
-                    selectedIcon:
-                        Icon(menu.icon, color: const Color(0xfffafafa)),
-                  ))
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
-
-class ScaffoldWithNavBar extends StatelessWidget {
-  final StatefulNavigationShell navigationShell;
-
-  const ScaffoldWithNavBar({super.key, required this.navigationShell});
-
-  static const _menus = [
-    (icon: Icons.sports_esports, label: '投幣'),
-    (icon: Icons.settings, label: '設定'),
-    (icon: Icons.home_rounded, label: 'Me'),
-    (icon: Icons.redeem_rounded, label: '禮物'),
-    (icon: Icons.handshake_rounded, label: '合作'),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    log('ScaffoldWithNavBar');
-    return Scaffold(
-      appBar: _LoadedAppBar(navigationShell.currentIndex),
-      body: navigationShell,
-      bottomNavigationBar: Container(
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await confirmPopup();
+        return shouldPop!;
+      },
+      child: Scaffold(
+        appBar: _LoadedAppBar(selectedIndex),
+        // floatingActionButton: FloatingActionButton(onPressed: () {
+        //   Navigator.of(context).push(
+        //     MaterialPageRoute(
+        //       builder: (context) => const SharedPreferencesDebugPage(),
+        //     ),
+        //   );
+        // }),
+        body: widget.body,
+        bottomNavigationBar: Container(
           decoration: const BoxDecoration(
-            border: Border(
-              top: BorderSide(width: 1, color: Color(0xff3e3e3e)),
-            ),
-          ),
+              border:
+                  Border(top: BorderSide(width: 1, color: Color(0xff3e3e3e)))),
           child: NavigationBar(
-            selectedIndex: navigationShell.currentIndex,
+            selectedIndex: selectedIndex,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
             onDestinationSelected: (index) async {
-              return navigationShell.goBranch(index, initialLocation: true);
+              selectedIndex = index;
+              context.goNamed(_menus[index].route.routeName);
+              setState(() {});
             },
             destinations: _menus
                 .map((menu) => NavigationDestination(
@@ -207,7 +152,9 @@ class ScaffoldWithNavBar extends StatelessWidget {
                           Icon(menu.icon, color: const Color(0xfffafafa)),
                     ))
                 .toList(),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -218,7 +165,7 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(50);
-  int? get point => GlobalSingleton.instance.user?.point?.toInt();
+  // int? get point => GlobalSingleton.instance.user?.point?.toInt();
 
   double getFunctionalHeaderHeight(int menuIndex) =>
       menuIndex == 2 ? 0 : preferredSize.height + 2;
@@ -274,12 +221,20 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ],
                   color: const Color(0xff3e3e3e),
                   borderRadius: BorderRadius.circular(5)),
-              child: Text('$point P',
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelLarge!.fontSize,
-                    color: const Color(0xfffafafa),
-                    fontWeight: FontWeight.bold,
-                  ))),
+              child: ValueListenableBuilder<UserModel?>(
+                valueListenable: GlobalSingleton.instance.userNotifier,
+                builder: (context, value, child) {
+                  final point = value?.point?.toInt() ?? -87;
+
+                  return Text('$point P',
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.labelLarge!.fontSize,
+                        color: const Color(0xfffafafa),
+                        fontWeight: FontWeight.bold,
+                      ));
+                },
+              )),
         ),
         actions: [
           InkWell(

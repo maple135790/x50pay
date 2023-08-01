@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -32,6 +33,7 @@ class Game extends StatefulWidget {
 class _GameState extends BaseStatefulState<Game> {
   final viewModel = GameViewModel();
   late Future<StoreModel?> _getStoreData;
+  late Future<void> init;
 
   @override
   void didChangeDependencies() async {
@@ -39,9 +41,10 @@ class _GameState extends BaseStatefulState<Game> {
     await GlobalSingleton.instance.checkUser(force: false);
   }
 
-  void init({
+  Future<void> routing({
     required void Function(StoreModel? storeData) onNoRecentStore,
-    required void Function(Gamelist? gameList) onHasRecentStore,
+    required void Function(Gamelist? gameList, String storeName)
+        onHasRecentStore,
   }) async {
     // 先查有沒有選擇過店家
     // 有的話就直接跳到選擇機台
@@ -53,24 +56,25 @@ class _GameState extends BaseStatefulState<Game> {
       return;
     }
     final gameList = await viewModel.getGamelist();
-    onHasRecentStore.call(gameList);
+    final storeName = viewModel.storeName!;
+    onHasRecentStore.call(gameList, storeName);
   }
 
   @override
   void initState() {
     super.initState();
     _getStoreData = viewModel.getStoreData();
-
-    // init(
+    // init = routing(
     //   onNoRecentStore: (StoreModel? storeData) {
     //     GoRouter.of(context).pushNamed(
     //       AppRoutes.gameStore.routeName,
     //       extra: storeData,
     //     );
     //   },
-    //   onHasRecentStore: (gameList) {
+    //   onHasRecentStore: (gameList, storeName) {
     //     GoRouter.of(context).pushNamed(
     //       AppRoutes.gameCabs.routeName,
+    //       pathParameters: {'storeName': storeName},
     //       extra: gameList,
     //     );
     //   },
@@ -130,16 +134,13 @@ class _GameState extends BaseStatefulState<Game> {
 class _GameStoreLoaded extends StatelessWidget {
   final StoreModel stores;
   const _GameStoreLoaded(this.stores, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final List<Storelist> storeList = stores.storelist!;
 
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: storeList.length,
-      shrinkWrap: true,
-      itemBuilder: (context, index) =>
-          _StoreItem(storeList[index], stores.prefix!),
+    return Column(
+      children: storeList.map((e) => _StoreItem(e, stores.prefix!)).toList(),
     );
   }
 }
@@ -180,7 +181,15 @@ class _StoreItem extends StatelessWidget {
     await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
         duration: const Duration(seconds: 2));
     await Future.delayed(const Duration(seconds: 2));
-    router.pushNamed(AppRoutes.game.routeName);
+    // router.goNamed(
+    //   AppRoutes.gameCabs.routeName,
+    //   pathParameters: {'storeName': store.name!},
+    //   extra: gameList,
+    // );
+    router.goNamed(
+      AppRoutes.game.routeName,
+      extra: true,
+    );
     // Navigator.of(context).pushReplacement(
     // CupertinoPageRoute(builder: (context) => const Game()));
   }
@@ -210,7 +219,8 @@ class _StoreItem extends StatelessWidget {
                     top: -100,
                     child: Image(
                       image: _getStoreImage(store.sid!,
-                          isOnline: GlobalSingleton.instance.isOnline),
+                          isOnline:
+                              GlobalSingleton.instance.devIsServiceOnline),
                       fit: BoxFit.fitWidth,
                       colorBlendMode: BlendMode.modulate,
                     )),
@@ -329,6 +339,16 @@ ImageProvider _getGameCabImageFallback(String gameId) {
 
 ImageProvider _getGameCabImage(String gameId, {bool isOnline = false}) {
   return NetworkImage('https://pay.x50.fun/static/gamesimg/$gameId.png?v1.1');
+}
+
+String getMachineIcon(String machineId) {
+  switch (machineId) {
+    case 'mmdx':
+    case '2mmdx':
+      return 'https://pay.x50.fun/static/machineicon/mmdx.png';
+    default:
+      return 'https://pay.x50.fun/static/machineicon/$machineId.png';
+  }
 }
 
 enum _Machine {

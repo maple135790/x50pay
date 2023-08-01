@@ -13,7 +13,7 @@ class DressRoomViewModel extends ChangeNotifier {
   List<Avatar> avatars = [];
   final client = http.Client();
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.isOnline;
+  final isForce = GlobalSingleton.instance.devIsServiceOnline;
 
   Future<List<Avatar>> init() async {
     const parentSelector = 'body > div > div > div';

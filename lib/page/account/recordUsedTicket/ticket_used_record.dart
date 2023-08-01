@@ -9,15 +9,8 @@ class _TicketUsedRecord extends StatefulWidget {
   State<_TicketUsedRecord> createState() => __TicketUsedRecordState();
 }
 
-class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord>
-    with BaseLoaded {
+class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord> {
   late AccountViewModel model;
-
-  @override
-  BaseViewModel? baseViewModel() => widget.viewModel;
-
-  @override
-  bool get disableBottomNavigationBar => true;
 
   @override
   void initState() {
@@ -26,7 +19,7 @@ class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord>
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: model.getTicUsedLog(),
       builder: (context, snapshot) {

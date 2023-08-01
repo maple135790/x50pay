@@ -1,31 +1,45 @@
 part of "game.dart";
 
-class _CabDetail extends StatefulWidget {
-  final String machineId;
-  const _CabDetail(this.machineId, {Key? key}) : super(key: key);
-
-  @override
-  State<_CabDetail> createState() => __CabDetailState();
+extension on Color {
+  Color invert(double value) {
+    assert(value >= 0 && value <= 1, 'value must be between 0 and 1');
+    final intensity = value * 255;
+    final r = (intensity - red).abs();
+    final g = (intensity - green).abs();
+    final b = (intensity - blue).abs();
+    return Color.fromARGB(alpha, r.toInt(), g.toInt(), b.toInt());
+  }
 }
 
-class __CabDetailState extends BaseStatefulState<_CabDetail> {
+class CabDetail extends StatefulWidget {
+  final String machineId;
+  const CabDetail(this.machineId, {Key? key}) : super(key: key);
+
+  @override
+  State<CabDetail> createState() => _CabDetailState();
+}
+
+class _CabDetailState extends BaseStatefulState<CabDetail> {
   final viewModel = CabDatailViewModel();
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: viewModel.getSelGame(widget.machineId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const SizedBox();
-        }
-        if (snapshot.data == true) {
-          final cabDetail = viewModel.cabinetModel!;
-          return cabDetailLoaded(cabDetail);
-        } else {
-          return const Text('failed');
-        }
-      },
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: FutureBuilder(
+        future: viewModel.getSelGameCab(widget.machineId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const SizedBox();
+          }
+          if (snapshot.data == true) {
+            final cabDetail = viewModel.cabinetModel!;
+            return cabDetailLoaded(cabDetail);
+          } else {
+            return const Text('failed');
+          }
+        },
+      ),
     );
   }
 
@@ -91,7 +105,7 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> {
           ..add(Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: SizedBox(
-              height: 100,
+              height: 110,
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: _buildChildren(
@@ -125,7 +139,8 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> {
                         borderRadius: BorderRadius.circular(8)),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: const Icon(Icons.tablet_mac),
+                    child:
+                        const Icon(Icons.tablet_mac, color: Color(0xff1e1e1e)),
                   ))
             ],
           ));
@@ -223,10 +238,11 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> {
                 child: Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
-                        colors: [Colors.transparent, Colors.black],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [0.1, 1]),
+                      begin: Alignment.bottomLeft,
+                      colors: [Colors.black, Colors.transparent],
+                      transform: GradientRotation(12),
+                      stops: [0, 0.6],
+                    ),
                   ),
                 ),
               ),
@@ -320,27 +336,52 @@ class __CabDetailState extends BaseStatefulState<_CabDetail> {
                     modes: cab.mode,
                   ));
         },
-        child: Container(
-          margin: EdgeInsets.zero,
-          decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Themes.borderColor, width: 1)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(cab.num.toString(), style: const TextStyle(fontSize: 34)),
-              const SizedBox(height: 5),
-              Text(cab.notice,
-                  style:
-                      const TextStyle(color: Color(0xff808080), fontSize: 12)),
-              const SizedBox(height: 4),
-              Text('${cab.nbusy}/$isPaid',
-                  style:
-                      const TextStyle(color: Color(0xfffafafa), fontSize: 12)),
-            ],
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraint) {
+            final top = constraint.biggest.height * 0.25;
+            final right = constraint.biggest.width * 0.05 * -1;
+
+            return Stack(
+              children: [
+                Positioned(
+                    right: right,
+                    top: top,
+                    child: CachedNetworkImage(
+                      imageUrl: getMachineIcon(widget.machineId),
+                      errorWidget: (context, url, error) => const SizedBox(),
+                      height: 95,
+                      color: Colors.white.withOpacity(0.15).invert(0.28),
+                    )),
+                Positioned.fill(
+                  child: Container(
+                    margin: EdgeInsets.zero,
+                    decoration: BoxDecoration(
+                        // color: Theme.of(context).scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(5),
+                        border:
+                            Border.all(color: Themes.borderColor, width: 1)),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(cab.num.toString(),
+                            style: const TextStyle(fontSize: 34)),
+                        const SizedBox(height: 5),
+                        Text(cab.notice,
+                            style: const TextStyle(
+                                color: Color(0xff808080), fontSize: 12)),
+                        const SizedBox(height: 4),
+                        Text('${cab.nbusy}/$isPaid',
+                            style: const TextStyle(
+                                color: Color(0xfffafafa), fontSize: 12)),
+                        const SizedBox(height: 5),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       )));
       if (cab != cabs.last) children.add(const SizedBox(width: 8));
@@ -430,7 +471,7 @@ class _CabSelectState extends State<_CabSelect> {
                 Expanded(
                   child: TextButton(
                       onPressed: () async {
-                        final nav = Navigator.of(context);
+                        final router = GoRouter.of(context);
                         final isInsertSuccess = await widget.viewModel.doInsert(
                             id: widget.caboid,
                             machineNum: widget.machineIndex - 1,
@@ -489,7 +530,12 @@ class _CabSelectState extends State<_CabSelect> {
                         }
                         await Future.delayed(const Duration(seconds: 2));
                         await GlobalSingleton.instance.checkUser(force: true);
-                        nav.popUntil(ModalRoute.withName(AppRoute.game));
+                        router
+                          ..pop()
+                          ..goNamed(
+                            AppRoutes.game.routeName,
+                            extra: true,
+                          );
                       },
                       style: Themes.severe(isV4: true),
                       child: const Text('確認')),
@@ -521,10 +567,11 @@ class _CabSelectState extends State<_CabSelect> {
                   child: Container(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                          colors: [Colors.transparent, Colors.black],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.1, 1]),
+                        begin: Alignment.bottomLeft,
+                        colors: [Colors.black, Colors.transparent],
+                        transform: GradientRotation(12),
+                        stops: [0, 0.6],
+                      ),
                     ),
                   ),
                 ),
@@ -535,42 +582,48 @@ class _CabSelectState extends State<_CabSelect> {
                         onTap: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Icon(
-                          Icons.cancel,
-                          color: Color(0xffdcdcdc),
-                          shadows: [
-                            Shadow(
-                                blurRadius: 7,
-                                color: Colors.black,
-                                offset: Offset(2, 3))
-                          ],
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0xffdcdcdc),
+                          ),
+                          child: const Icon(
+                            Icons.close_rounded,
+                            size: 14,
+                            color: Color(0xff2a2a2a),
+                          ),
                         ))),
                 Positioned(
-                  bottom: 15,
-                  left: 15,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(widget.label,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              shadows: [
-                                Shadow(color: Colors.black, blurRadius: 18)
-                              ])),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text('${widget.machineIndex}號機',
-                                style: const TextStyle(
-                                    color: Color(0xffbcbfbf),
-                                    fontSize: 16,
-                                    shadows: [
-                                      Shadow(
-                                          color: Colors.black, blurRadius: 15)
-                                    ])),
-                          ]),
-                    ],
+                  bottom: 0,
+                  left: 0,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.label,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                shadows: [
+                                  Shadow(color: Colors.black, blurRadius: 18)
+                                ])),
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text('${widget.machineIndex}號機',
+                                  style: const TextStyle(
+                                      color: Color(0xffbcbfbf),
+                                      fontSize: 16,
+                                      shadows: [
+                                        Shadow(
+                                            color: Colors.black, blurRadius: 15)
+                                      ])),
+                            ]),
+                      ],
+                    ),
                   ),
                 ),
               ],

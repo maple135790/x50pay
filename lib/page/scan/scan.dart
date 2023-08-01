@@ -1,4 +1,13 @@
-part of "../../common/base/base_loaded.dart";
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/repository/repository.dart';
 
 class ScanQRCode extends StatefulWidget {
   final bool hasPermissions;
@@ -107,18 +116,11 @@ class ScanQRCodeV2 extends StatefulWidget {
   State<ScanQRCodeV2> createState() => _ScanQRCodeV2State();
 }
 
-class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2>
-    with BaseLoaded {
+class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? qrViewController;
   Barcode? result, lastEvent;
   bool isBusy = false;
-
-  @override
-  Color? get customBackgroundColor => Colors.white;
-
-  @override
-  BaseViewModel? baseViewModel() => BaseViewModel();
 
   @override
   void dispose() {
@@ -137,7 +139,7 @@ class _ScanQRCodeV2State extends BaseStatefulState<ScanQRCodeV2>
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(14),
       child: Column(

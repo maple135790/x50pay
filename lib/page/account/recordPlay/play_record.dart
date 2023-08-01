@@ -9,14 +9,8 @@ class _PlayRecord extends StatefulWidget {
   State<_PlayRecord> createState() => __PlayRecordState();
 }
 
-class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
+class __PlayRecordState extends BaseStatefulState<_PlayRecord> {
   late AccountViewModel model;
-
-  @override
-  BaseViewModel? baseViewModel() => widget.viewModel;
-
-  @override
-  bool get disableBottomNavigationBar => true;
 
   @override
   void initState() {
@@ -25,7 +19,7 @@ class __PlayRecordState extends BaseStatefulState<_PlayRecord> with BaseLoaded {
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: model.getPlayRecord(),
       builder: (context, snapshot) {

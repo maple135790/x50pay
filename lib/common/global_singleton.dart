@@ -1,16 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class GlobalSingleton {
-  final isOnline = false;
+  final ValueNotifier<UserModel?> userNotifier = ValueNotifier(null);
+  final devIsServiceOnline = true;
   final _costEnabled = false;
   UserModel? user;
   int _lastChkMe = -1;
   double _point = 220;
+  bool isLogin = false;
   static GlobalSingleton? _instance;
 
   GlobalSingleton._();
@@ -19,6 +20,7 @@ class GlobalSingleton {
 
   void clearUser() {
     user = null;
+    userNotifier.value = null;
   }
 
   Future<bool> checkUser({bool force = false}) async {
@@ -30,15 +32,18 @@ class GlobalSingleton {
       if (isLess30Sec && !force) return false;
       final repo = Repository();
       _lastChkMe = DateTime.now().millisecondsSinceEpoch;
-      if (!kDebugMode || isOnline) {
+      if (!kDebugMode || devIsServiceOnline) {
         user = await repo.getUser();
+        userNotifier.value = user;
         // 未回傳UserModel
         if (user == null) return false;
         // 回傳UserModel, 驗證失敗或是伺服器錯誤
         if (user!.code != 200) return false;
         return true;
       } else {
-        if (_costEnabled) _point -= 20;
+        if (_costEnabled) {
+          _point -= 20;
+        }
         final customMap = {
           "point": _point,
           "email": "testUser@testUser",
@@ -49,7 +54,7 @@ class GlobalSingleton {
             as Map<String, dynamic>
           ..addAll(customMap);
         user = UserModel.fromJson(rawUserJson);
-
+        userNotifier.value = user;
         return true;
       }
     } on Exception catch (_) {

@@ -64,10 +64,10 @@ abstract class Api {
           headers: getHeaders(),
           encoding: Encoding.getByName('utf-8'),
         );
-        log("url: ${response.request!.url}", name: 'makeRequest url');
-        log("header: ${response.request!.headers}", name: 'makeRequest header');
+        log("url: ${response.request!.url}", name: 'request url');
+        log("header: ${response.request!.headers}", name: 'request header');
         log("response: ${response.body.length > 5000 ? 'too long' : response.body}",
-            name: 'makeRequest response');
+            name: 'request response');
 
         if (response.statusCode == 200) {
           isResponseString

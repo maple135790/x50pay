@@ -200,18 +200,22 @@ class _Indicator extends StatelessWidget {
     required this.status,
   });
 
+  bool get hasBackgound => status != null;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      // margin: const EdgeInsets.all(50.0),
-      // decoration: BoxDecoration(
-      //   // color: EasyLoadingTheme.backgroundColor,
-      //   color: Colors.transparent,
-      //   borderRadius: BorderRadius.circular(
-      //     EasyLoadingTheme.radius,
-      //   ),
-      //   boxShadow: EasyLoadingTheme.boxShadow,
-      // ),
+      width: double.maxFinite,
+      margin: const EdgeInsets.symmetric(horizontal: 25),
+      decoration: hasBackgound
+          ? BoxDecoration(
+              color: EasyLoadingTheme.backgroundColor,
+              borderRadius: BorderRadius.circular(
+                EasyLoadingTheme.radius,
+              ),
+              boxShadow: EasyLoadingTheme.boxShadow,
+            )
+          : null,
       padding: EasyLoadingTheme.contentPadding,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

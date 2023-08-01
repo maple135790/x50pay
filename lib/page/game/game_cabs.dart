@@ -1,15 +1,28 @@
 part of 'game.dart';
 
-class GameCabs extends StatelessWidget {
+class GameCabs extends StatefulWidget {
   final Gamelist games;
   final String storeName;
 
   const GameCabs({required this.games, required this.storeName, super.key});
 
   @override
-  Widget build(BuildContext context) {
-    List<Machine> machine = games.machine!;
+  State<GameCabs> createState() => _GameCabsState();
+}
 
+class _GameCabsState extends State<GameCabs> {
+  late List<Machine> machine = widget.games.machine!;
+
+  void onChangeStoreTap() async {
+    final router = GoRouter.of(context);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('store_name');
+    await prefs.remove('store_id');
+    router.goNamed(AppRoutes.game.routeName, extra: true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -24,17 +37,11 @@ class GameCabs extends StatelessWidget {
                 children: [
                   const Icon(Icons.push_pin,
                       color: Color(0xfffafafa), size: 16),
-                  Text('  目前所在「 $storeName 」',
+                  Text('  目前所在「 ${widget.storeName} 」',
                       style: const TextStyle(color: Color(0xfffafafa))),
                   const Spacer(),
                   GestureDetector(
-                    onTap: () async {
-                      final router = GoRouter.of(context);
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.remove('store_name');
-                      await prefs.remove('store_id');
-                      router.pushNamed(AppRoutes.game.routeName);
-                    },
+                    onTap: onChangeStoreTap,
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
@@ -48,11 +55,8 @@ class GameCabs extends StatelessWidget {
                   ),
                 ],
               )),
-          ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: machine.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) => _GameCabItem(machine[index]),
+          Column(
+            children: machine.map((e) => _GameCabItem(e)).toList(),
           ),
           Stack(
             children: [
@@ -119,10 +123,13 @@ class _GameCabItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () async {
           final nav = Navigator.of(context);
-          await nav.push(CupertinoPageRoute(
-              builder: (context) => _CabDetail(machine.id!),
-              settings: const RouteSettings(name: AppRoute.game)));
-          nav.pushReplacementNamed(AppRoute.game);
+          final router = GoRouter.of(context);
+          await nav.push(
+              CupertinoPageRoute(builder: (context) => CabDetail(machine.id!)));
+          router.goNamed(
+            AppRoutes.game.routeName,
+            extra: true,
+          );
         },
         child: Container(
           decoration: BoxDecoration(
@@ -136,7 +143,7 @@ class _GameCabItem extends StatelessWidget {
                 Positioned.fill(
                     child: Image(
                   image: _getGameCabImage(machine.id!,
-                      isOnline: GlobalSingleton.instance.isOnline),
+                      isOnline: GlobalSingleton.instance.devIsServiceOnline),
                   color: const Color.fromARGB(35, 0, 0, 0),
                   colorBlendMode: BlendMode.srcATop,
                   fit: BoxFit.fitWidth,

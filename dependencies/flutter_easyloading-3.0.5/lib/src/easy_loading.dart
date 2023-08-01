@@ -367,6 +367,19 @@ class EasyLoading {
     );
   }
 
+  static Future<void> showInfoWithBackground(
+    String status, {
+    Duration? duration,
+    EasyLoadingMaskType? maskType,
+    bool? dismissOnTap,
+  }) =>
+      showInfo(
+        status,
+        duration: duration,
+        maskType: maskType,
+        dismissOnTap: dismissOnTap,
+      );
+
   /// showToast [status] [duration] [toastPosition] [maskType]
   static Future<void> showToast(
     String status, {

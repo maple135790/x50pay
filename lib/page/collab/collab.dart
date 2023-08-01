@@ -6,6 +6,7 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/page/giftSystem/gift_system_view_model.dart';
+import 'package:x50pay/page/pages.dart';
 
 part 'collab_shop_list.dart';
 

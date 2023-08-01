@@ -12,7 +12,7 @@ import 'package:x50pay/repository/repository.dart';
 class GiftSystemViewModel extends BaseViewModel {
   final repo = Repository();
 
-  bool get isForce => GlobalSingleton.instance.isOnline;
+  bool get isForce => GlobalSingleton.instance.devIsServiceOnline;
   GiftBoxModel? giftBoxModel;
   LotteListModel? lotteListModel;
 

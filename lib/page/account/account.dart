@@ -103,7 +103,9 @@ class _AccountState extends State<Account> {
   Color get bgColor => Theme.of(context).scaffoldBackgroundColor;
 
   void onLogout() {
-    GoRouter.of(context).goNamed(AppRoutes.login.routeName);
+    context
+      ..pop()
+      ..goNamed(AppRoutes.login.routeName);
   }
 
   void checkRemoteOpen({required RemoteOpenShop shop}) async {

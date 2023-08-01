@@ -12,13 +12,14 @@ import 'package:x50pay/repository/repository.dart';
 
 class CabDatailViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.isOnline;
+  final isForce = GlobalSingleton.instance.devIsServiceOnline;
   CabinetModel? cabinetModel;
   BasicResponse? response;
   int lineupCount = -1;
 
-  Future<bool> getSelGame(String machineId, {int debugFlag = 200}) async {
+  Future<bool> getSelGameCab(String machineId, {int debugFlag = 200}) async {
     try {
+      log('machineId: $machineId', name: 'getSelGame');
       await EasyLoading.show();
       await Future.delayed(const Duration(milliseconds: 100));
       final prefs = await SharedPreferences.getInstance();
@@ -113,6 +114,8 @@ class CabDatailViewModel extends BaseViewModel {
         return '''{"message":"done","code":200,"re":[],"note":[1,"\u9760\u5f8c","\u9760\u524d",false,"two"],"cabinet":[{"num":1,"id":"nvsv","lable":"[\u897f\u9580\u4e00\u5e97] SDVX Valkyrie Model","mode":[[0,"Light/Arena/Mega",34],[1,"Standard (\u8a08\u5169\u9053)",43],[2,"Blaster/Premium (\u8a08\u5169\u9053)",51]],"card":false,"bool":true,"vipbool":true,"notice":"(\u5de6\u53f0)","busy":"<i style='margin-left:3px; color:white;' class='user circle icon'></i>\u7a7a\u9592","nbusy":"\u7a7a\u9592","pcl":true},{"num":2,"id":"nvsv","lable":"[\u897f\u9580\u4e00\u5e97] SDVX Valkyrie Model","mode":[[0,"Light/Arena/Mega",34],[1,"Standard (\u8a08\u5169\u9053)",43],[2,"Blaster/Premium (\u8a08\u5169\u9053)",51]],"card":false,"bool":true,"vipbool":true,"notice":"(\u53f3\u53f0)","busy":"<i style='color:blue; margin-left:3px;' class='user icon'></i>\u9069\u4e2d","nbusy":"\u9069\u4e2d","pcl":true},{"num":3,"id":"nvsv","lable":"[\u897f\u9580\u4e00\u5e97] SDVX Valkyrie Model","mode":[[0,"Light/Arena/Mega",34],[1,"Standard (\u8a08\u5169\u9053)",43],[2,"Blaster/Premium (\u8a08\u5169\u9053)",51]],"card":false,"bool":true,"vipbool":true,"notice":"(\u53f3\u53f0\u5f8c)","busy":"<i style='color:blue; margin-left:3px;' class='user icon'></i>\u9069\u4e2d","nbusy":"\u9069\u4e2d","pcl":false},{"num":4,"id":"nvsv","lable":"[\u897f\u9580\u4e00\u5e97] SDVX Valkyrie Model","mode":[[0,"Light/Arena/Mega",34],[1,"Standard (\u8a08\u5169\u9053)",43],[2,"Blaster/Premium (\u8a08\u5169\u9053)",51]],"card":false,"bool":true,"vipbool":true,"notice":"(\u5de6\u53f0\u5f8c)","busy":"<i style='margin-left:3px; color:white;' class='user circle icon'></i>\u7a7a\u9592","nbusy":"\u7a7a\u9592","pcl":false}],"caboid":"60543eb21145222624eeb860","spic":["/static/live/sdvxlive.png"],"surl":["'https://www.youtube.com/watch?v=2EreKn7UKgg'"],"pad":true,"padmid":"50Pad04","padlid":"nvsv"}''';
       case 'iidx':
         return '''{"message":"done","code":200,"re":[],"note":[1,"\u4e00\u56de\u5236",false,"one"],"cabinet":[{"num":1,"id":"iidx","lable":"[\u897f\u9580\u4e00\u5e97] Beatmania IIDX","mode":[[0,"Standard",24.0],[1,"Premium Free",40.0]],"card":false,"bool":true,"vipbool":true,"notice":"\u820a\u6846\u9ad4","busy":"<i style='margin-left:3px; color:white;' class='user circle icon'></i>\u7a7a\u9592","nbusy":"\u7a7a\u9592","pcl":false}],"caboid":"635c31b9a1ea2037ec289594","pad":false,"padmid":"","padlid":""}''';
+      case '2diva':
+        return '''{"message":"done","code":200,"re":[],"note":[0,"B1F",false,"one"],"cabinet":[{"num":1,"id":"2diva","lable":"[\u897f\u9580\u4e8c\u5e97] Project Diva Arcade","mode":[[0,"3\u66f2",20]],"card":false,"bool":false,"vipbool":false,"notice":"Nos \u65c1","busy":"<i style='margin-left:3px; color:white;' class='user circle icon'></i>\u7a7a\u9592","nbusy":"\u7a7a\u9592","pcl":false}],"caboid":"64bd3214c985961c58ab207c","pad":false,"padmid":"","padlid":""}''';
       default:
         log("", name: 'err testSelGame', error: 'no $mid testdata');
         return '';

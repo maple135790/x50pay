@@ -9,14 +9,8 @@ class _BidRecord extends StatefulWidget {
   State<_BidRecord> createState() => __BidRecordState();
 }
 
-class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
+class __BidRecordState extends BaseStatefulState<_BidRecord> {
   late AccountViewModel model;
-
-  @override
-  BaseViewModel? baseViewModel() => widget.viewModel;
-
-  @override
-  bool get disableBottomNavigationBar => true;
 
   @override
   void initState() {
@@ -25,7 +19,7 @@ class __BidRecordState extends BaseStatefulState<_BidRecord> with BaseLoaded {
   }
 
   @override
-  Widget body() {
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: model.getBidLog(),
       builder: (context, snapshot) {

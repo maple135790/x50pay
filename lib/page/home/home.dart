@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -15,6 +16,7 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
+import 'package:x50pay/page/pages.dart';
 import 'package:x50pay/r.g.dart';
 
 part "grade_box_popup.dart";
@@ -61,14 +63,14 @@ class _HomeLoaded extends StatefulWidget {
 }
 
 class _HomeLoadedState extends State<_HomeLoaded> {
-  Widget divider() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 13, vertical: 14),
+  Widget divider(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
       child: Row(
         children: [
-          Expanded(child: Divider(color: Color(0xff3e3e3e))),
-          Text(' 官方資訊 '),
-          Expanded(child: Divider(color: Color(0xff3e3e3e))),
+          const Expanded(child: Divider(color: Color(0xff3e3e3e))),
+          Text(' $title '),
+          const Expanded(child: Divider(color: Color(0xff3e3e3e))),
         ],
       ),
     );
@@ -77,74 +79,43 @@ class _HomeLoadedState extends State<_HomeLoaded> {
   @override
   Widget build(BuildContext context) {
     final user = widget.user;
+    final recentQuests = widget.viewModel.entry!.questCampaign;
 
-    return WillPopScope(
-      onWillPop: () async {
-        final shouldPop = await confirmPopup();
-        return shouldPop!;
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 10),
-          _TopInfo(user: user),
-          _TicketInfo(user: user),
-          _MariInfo(isVip: user.vip!, viewModel: widget.viewModel),
-          divider(),
-          _EventInfo(widget.viewModel.entry!.evlist),
-          Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-              child: GestureDetector(
-                  onTap: () {
-                    launchUrlString(
-                        'https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ',
-                        mode: LaunchMode.externalNonBrowserApplication);
-                  },
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image(image: R.image.vts())))),
-          Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-              child: GestureDetector(
-                  onTap: () {
-                    launchUrlString(
-                        'https://www.youtube.com/c/X50MusicGameStation-onAir',
-                        mode: LaunchMode.externalNonBrowserApplication);
-                  },
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image(image: R.image.top())))),
-          const SizedBox(height: 25),
-        ],
-      ),
-    );
-  }
-
-  Future<bool?> confirmPopup() {
-    return showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title:
-              const Text('確認離開 ?', style: TextStyle(color: Color(0xfffafafa))),
-          actions: [
-            TextButton(
-              style: Themes.severe(isV4: true),
-              onPressed: () {
-                SystemNavigator.pop();
-              },
-              child: const Text('是'),
-            ),
-            TextButton(
-              style: Themes.pale(),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: const Text('否'),
-            ),
-          ],
-        );
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: 10),
+        _TopInfo(user: user),
+        _TicketInfo(user: user),
+        _MariInfo(isVip: user.vip!, viewModel: widget.viewModel),
+        if (recentQuests != null) divider('最新活動'),
+        if (recentQuests != null) _RecentQuests(quests: recentQuests),
+        divider('官方資訊'),
+        _EventInfo(widget.viewModel.entry!.evlist),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+            child: GestureDetector(
+                onTap: () {
+                  launchUrlString(
+                      'https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ',
+                      mode: LaunchMode.externalNonBrowserApplication);
+                },
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image(image: R.image.vts())))),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+            child: GestureDetector(
+                onTap: () {
+                  launchUrlString(
+                      'https://www.youtube.com/c/X50MusicGameStation-onAir',
+                      mode: LaunchMode.externalNonBrowserApplication);
+                },
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image(image: R.image.top())))),
+        const SizedBox(height: 25),
+      ],
     );
   }
 }
@@ -223,6 +194,40 @@ class _TicketInfo extends StatelessWidget {
           ),
         ),
       ]),
+    );
+  }
+}
+
+class _RecentQuests extends StatelessWidget {
+  final List<QuestCampaign> quests;
+  const _RecentQuests({required this.quests});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: quests
+          .map((q) => GestureDetector(
+                onTap: () {
+                  context.goNamed(AppRoutes.questCampaign.routeName,
+                      pathParameters: {'couid': q.couid});
+                },
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xff505050)),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: q.lpic,
+                    fit: BoxFit.fitWidth,
+                    height: 55,
+                  ),
+                ),
+              ))
+          .toList(),
     );
   }
 }

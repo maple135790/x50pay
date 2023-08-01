@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences_debugger/shared_preferences_debugger.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
@@ -25,6 +26,11 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   void Function()? get debugFunction => () {
         email.text = 'test';
         password.text = 'test';
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const SharedPreferencesDebugPage(),
+          ),
+        );
       };
 
   @override
@@ -66,7 +72,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
         setState(() {});
       } else if (code == 200) {
         await GlobalSingleton.instance.checkUser(force: true);
-        nav.pushReplacementNamed(AppRoutes.home.routeName);
+        nav.goNamed(AppRoutes.home.routeName);
       }
     }
   }
