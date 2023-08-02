@@ -169,19 +169,19 @@ class _GradeBoxPopup extends StatelessWidget {
                   child: const Text('取消')),
               TextButton(
                   onPressed: () async {
-                    var nav = Navigator.of(context);
+                    var nav = GoRouter.of(context);
                     if (await onChangeGrade(gid: gid, grid: grid)) {
                       await EasyLoading.showSuccess('成功兌換,將會回到首頁',
                           duration: const Duration(milliseconds: 1500));
                       await Future.delayed(const Duration(milliseconds: 1500));
 
-                      nav.popUntil(ModalRoute.withName(AppRoute.home));
+                      nav.goNamed(AppRoutes.home.routeName);
                     } else {
                       await EasyLoading.showError('兌換失敗,將會回到首頁',
                           duration: const Duration(milliseconds: 1500));
                       await Future.delayed(const Duration(milliseconds: 1500));
 
-                      nav.popUntil(ModalRoute.withName(AppRoute.home));
+                      nav.goNamed(AppRoutes.home.routeName);
                     }
                   },
                   style: Themes.severe(isV4: true),

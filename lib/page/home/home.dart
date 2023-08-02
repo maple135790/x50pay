@@ -15,7 +15,6 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
-import 'package:x50pay/page/scan/scan.dart';
 import 'package:x50pay/r.g.dart';
 
 part "grade_box_popup.dart";
@@ -628,10 +627,10 @@ class _TopInfo extends StatelessWidget {
                         var status = await Permission.camera.status;
                         if (status.isDenied) await Permission.camera.request();
                         if (context.mounted) {
-                          showDialog(
-                              context: context,
-                              builder: (context) => ScanQRCode(
-                                  status == PermissionStatus.granted));
+                          context.pushNamed(
+                            AppRoutes.scanQRCode.routeName,
+                            extra: status,
+                          );
                         }
                       },
                       child: const Icon(Icons.qr_code_rounded,

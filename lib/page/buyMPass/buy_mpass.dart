@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -84,104 +85,108 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
     Color bgColor = Theme.of(context).scaffoldBackgroundColor;
 
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Icon(Icons.calendar_today,
-                size: 51, color: Color(0xfffafafa)),
-            const SizedBox(height: 5),
-            const Align(
-                alignment: Alignment.center,
-                child: Text('月票 Pass', style: TextStyle(fontSize: 17))),
-            const SizedBox(height: 45),
-            IntrinsicWidth(
-              child: Row(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                              color: Color(0xfffafafa), shape: BoxShape.circle),
-                          child: currentState.step > 1
-                              ? Icon(Icons.check, size: 20, color: bgColor)
-                              : Icon(Icons.format_list_bulleted,
-                                  size: 20, color: bgColor)),
-                      const SizedBox(width: 5),
-                      const Text('讀條款'),
-                      const SizedBox(width: 5),
-                    ],
-                  ),
-                  const Expanded(child: Divider(thickness: 2)),
-                  const SizedBox(width: 10),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: stateIndex >= 2
-                                  ? const Color(0xfffafafa)
-                                  : null,
-                              border: stateIndex >= 2
-                                  ? null
-                                  : Border.all(
-                                      color: const Color(0xff3e3e3e),
-                                      width: 2)),
-                          child: currentState.step > 2
-                              ? Icon(Icons.check, size: 20, color: bgColor)
-                              : Icon(Icons.badge,
-                                  size: 20,
-                                  color: stateIndex >= 2
-                                      ? bgColor
-                                      : const Color(0xfffafafa))),
-                      const SizedBox(width: 5),
-                      const Text('選方案'),
-                      const SizedBox(width: 5),
-                    ],
-                  ),
-                  const Expanded(child: Divider(thickness: 2)),
-                  const SizedBox(width: 10),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              color: stateIndex >= 3
-                                  ? const Color(0xfffafafa)
-                                  : null,
-                              shape: BoxShape.circle,
-                              border: stateIndex >= 3
-                                  ? null
-                                  : Border.all(
-                                      color: const Color(0xff3e3e3e),
-                                      width: 2)),
-                          child: Icon(Icons.shopping_cart,
-                              size: 20,
-                              color: stateIndex >= 3
-                                  ? bgColor
-                                  : const Color(0xfffafafa))),
-                      const SizedBox(width: 5),
-                      const Text('買買買'),
-                      const SizedBox(width: 5),
-                    ],
-                  ),
-                ],
+      child: Container(
+        color: bgColor,
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Icon(Icons.calendar_today,
+                  size: 51, color: Color(0xfffafafa)),
+              const SizedBox(height: 5),
+              const Align(
+                  alignment: Alignment.center,
+                  child: Text('月票 Pass', style: TextStyle(fontSize: 17))),
+              const SizedBox(height: 45),
+              IntrinsicWidth(
+                child: Row(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                                color: Color(0xfffafafa),
+                                shape: BoxShape.circle),
+                            child: currentState.step > 1
+                                ? Icon(Icons.check, size: 20, color: bgColor)
+                                : Icon(Icons.format_list_bulleted,
+                                    size: 20, color: bgColor)),
+                        const SizedBox(width: 5),
+                        const Text('讀條款'),
+                        const SizedBox(width: 5),
+                      ],
+                    ),
+                    const Expanded(child: Divider(thickness: 2)),
+                    const SizedBox(width: 10),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: stateIndex >= 2
+                                    ? const Color(0xfffafafa)
+                                    : null,
+                                border: stateIndex >= 2
+                                    ? null
+                                    : Border.all(
+                                        color: const Color(0xff3e3e3e),
+                                        width: 2)),
+                            child: currentState.step > 2
+                                ? Icon(Icons.check, size: 20, color: bgColor)
+                                : Icon(Icons.badge,
+                                    size: 20,
+                                    color: stateIndex >= 2
+                                        ? bgColor
+                                        : const Color(0xfffafafa))),
+                        const SizedBox(width: 5),
+                        const Text('選方案'),
+                        const SizedBox(width: 5),
+                      ],
+                    ),
+                    const Expanded(child: Divider(thickness: 2)),
+                    const SizedBox(width: 10),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                                color: stateIndex >= 3
+                                    ? const Color(0xfffafafa)
+                                    : null,
+                                shape: BoxShape.circle,
+                                border: stateIndex >= 3
+                                    ? null
+                                    : Border.all(
+                                        color: const Color(0xff3e3e3e),
+                                        width: 2)),
+                            child: Icon(Icons.shopping_cart,
+                                size: 20,
+                                color: stateIndex >= 3
+                                    ? bgColor
+                                    : const Color(0xfffafafa))),
+                        const SizedBox(width: 5),
+                        const Text('買買買'),
+                        const SizedBox(width: 5),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 45),
-            currentState == _MpassProgressState.info
-                ? _previlleges()
-                : _plans(),
-          ],
+              const SizedBox(height: 45),
+              currentState == _MpassProgressState.info
+                  ? _previlleges()
+                  : _plans(),
+            ],
+          ),
         ),
       ),
     );
@@ -522,7 +527,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
 
   void doBuyVip() async {
     final repo = Repository();
-    final nav = Navigator.of(context);
+    final nav = GoRouter.of(context);
 
     switch (widget.program) {
       case _MpassProgram.loner:
@@ -558,8 +563,9 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
         break;
     }
     await Future.delayed(const Duration(seconds: 2)).then((_) {
-      nav.pushNamedAndRemoveUntil(
-          AppRoute.home, (route) => AppRoute.home == route.settings.name);
+      nav
+        ..pop()
+        ..goNamed(AppRoutes.home.routeName);
     });
   }
 

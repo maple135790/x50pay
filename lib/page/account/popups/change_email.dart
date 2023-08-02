@@ -21,7 +21,7 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
   }
 
   void changeEmail() async {
-    final nav = Navigator.of(context);
+    final nav = GoRouter.of(context);
     if (await viewModel.changeEmail(email: newEmail.text, debugFlag: 200)) {
       switch (viewModel.response!.code) {
         case 200:
@@ -30,7 +30,7 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
               dismissOnTap: false, duration: const Duration(seconds: 2));
           await Future.delayed(const Duration(seconds: 2));
           await EasyLoading.show(dismissOnTap: false);
-          nav.pushNamedAndRemoveUntil(AppRoute.login, (route) => false);
+          nav.goNamed(AppRoutes.login.routeName);
           break;
         case 700:
           setState(() {

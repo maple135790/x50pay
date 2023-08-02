@@ -29,7 +29,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
       padding: EdgeInsets.zero,
       onPressed: isEnabled
           ? () async {
-              final nav = Navigator.of(context);
+              final nav = GoRouter.of(context);
               if (await viewModel.changePassword(
                   oldPwd: oldPwd.text, pwd: newPwd.text, debugFlag: 200)) {
                 switch (viewModel.response!.code) {
@@ -40,8 +40,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                         duration: const Duration(seconds: 2));
                     await Future.delayed(const Duration(seconds: 2));
                     await EasyLoading.show(dismissOnTap: false);
-                    nav.pushNamedAndRemoveUntil(
-                        AppRoute.login, (route) => false);
+                    nav.goNamed(AppRoutes.login.routeName);
                     break;
                   case 700:
                     setState(() {

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -185,7 +186,7 @@ class _Footer extends StatelessWidget {
                   style: const TextStyle(color: Colors.blue),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      Navigator.of(context).pushNamed(AppRoute.license);
+                      context.pushNamed(AppRoutes.license.routeName);
                     })
             ]))
       ],

@@ -596,7 +596,7 @@ class _CabSelectState extends State<_CabSelect> {
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Color(0xffdcdcdc),
                           ),

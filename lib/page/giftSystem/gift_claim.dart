@@ -128,7 +128,7 @@ class _ConfirmChangeDialog extends StatelessWidget {
                 Expanded(
                   child: TextButton(
                       onPressed: () async {
-                        final nav = Navigator.of(context);
+                        final nav = GoRouter.of(context);
                         kDebugMode
                             ? null
                             : await Repository().giftExchange(gid);
@@ -136,7 +136,7 @@ class _ConfirmChangeDialog extends StatelessWidget {
                             duration: const Duration(milliseconds: 800));
                         await Future.delayed(const Duration(milliseconds: 800));
 
-                        nav.popUntil(ModalRoute.withName(AppRoute.home));
+                        nav.goNamed(AppRoutes.home.routeName);
                       },
                       style: Themes.severe(isV4: true),
                       child: const Text('確認')),

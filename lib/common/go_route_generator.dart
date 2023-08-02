@@ -15,7 +15,7 @@ GoRoute _route(
   );
 }
 
-final debugRoute = AppRoutes.login.path;
+final debugRoute = AppRoutes.home.path;
 
 RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
       initialLocation:
@@ -51,6 +51,14 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
               }
               return const Game();
             }),
+            GoRoute(
+              path: AppRoutes.scanQRCode.path,
+              name: AppRoutes.scanQRCode.routeName,
+              builder: (context, state) {
+                return ScanQRCode(state.extra as PermissionStatus);
+              },
+            ),
+            _route(AppRoutes.license, (_, __) => const License()),
             _route(AppRoutes.settings, (_, __) => const Account()),
             _route(AppRoutes.home, (_, __) => const Home(), innerRoutes: [
               _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
@@ -264,10 +272,10 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
                 var status = await Permission.camera.status;
                 if (status.isDenied) await Permission.camera.request();
                 if (context.mounted) {
-                  showDialog(
-                      context: context,
-                      builder: (context) =>
-                          ScanQRCode(status == PermissionStatus.granted));
+                  context.pushNamed(
+                    AppRoutes.scanQRCode.routeName,
+                    extra: status,
+                  );
                 }
               },
               splashFactory: NoSplash.splashFactory,

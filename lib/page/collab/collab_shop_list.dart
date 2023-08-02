@@ -12,9 +12,10 @@ class __CollabShopListState extends State<_CollabShopList> {
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
     if (context.mounted) {
-      showDialog(
-          context: context,
-          builder: (context) => ScanQRCode(status == PermissionStatus.granted));
+      context.pushNamed(
+        AppRoutes.scanQRCode.routeName,
+        extra: status,
+      );
     }
   }
 

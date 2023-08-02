@@ -30,6 +30,7 @@ class AppRoutes {
   static const gameCabs = (routeName: 'gameCabs', path: 'cabs/:storeName');
   static const gift = (routeName: 'gift', path: '/gift');
   static const collab = (routeName: 'collab', path: '/collab');
+  static const scanQRCode = (routeName: 'scanQRCode', path: '/scanQRCode');
   static const questCampaign =
       (routeName: 'questCampaign', path: 'questCampaign/:couid');
 }
