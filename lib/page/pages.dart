@@ -8,5 +8,6 @@ export 'giftSystem/gift_system.dart';
 export 'home/home.dart';
 export 'license/license.dart';
 export 'login/login.dart';
-export 'signUp/sign_up.dart';
+export 'quest_campaign/quest_campaign.dart';
 export 'scan/scan.dart';
+export 'signUp/sign_up.dart';

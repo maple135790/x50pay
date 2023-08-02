@@ -43,8 +43,10 @@ class _GiftClaim extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             visualDensity: VisualDensity.comfortable,
             leading: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: Image(image: NetworkImage(canChangeList[index].pic))),
+              borderRadius: BorderRadius.circular(4),
+              child: CachedNetworkImage(
+                  imageUrl: canChangeList[index].pic, width: 50),
+            ),
             title: Text(canChangeList[index].name,
                 style: const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
             subtitle: Column(

@@ -8,7 +8,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences_debugger/shared_preferences_debugger.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';

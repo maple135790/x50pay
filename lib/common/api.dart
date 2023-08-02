@@ -114,7 +114,7 @@ abstract class Api {
       // ignore: avoid_print
       print('response:');
       // ignore: avoid_print
-      print(response.body);
+      debugPrint(response.body);
     }
     return response;
   }

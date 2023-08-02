@@ -154,7 +154,7 @@ class _StoreItem extends StatelessWidget {
     late _X50Store store;
 
     if (isOnline) {
-      return NetworkImage(
+      return CachedNetworkImageProvider(
           "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
     }
     for (var s in _X50Store.values) {
@@ -338,7 +338,9 @@ ImageProvider _getGameCabImageFallback(String gameId) {
 }
 
 ImageProvider _getGameCabImage(String gameId, {bool isOnline = false}) {
-  return NetworkImage('https://pay.x50.fun/static/gamesimg/$gameId.png?v1.1');
+  return CachedNetworkImageProvider(
+    'https://pay.x50.fun/static/gamesimg/$gameId.png?v1.1',
+  );
 }
 
 String getMachineIcon(String machineId) {

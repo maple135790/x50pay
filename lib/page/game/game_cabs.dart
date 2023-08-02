@@ -147,7 +147,7 @@ class _GameCabItem extends StatelessWidget {
                   color: const Color.fromARGB(35, 0, 0, 0),
                   colorBlendMode: BlendMode.srcATop,
                   fit: BoxFit.fitWidth,
-                  alignment: Alignment.center,
+                  alignment: const Alignment(0, -0.25),
                 )),
                 Positioned.fill(
                   child: Container(

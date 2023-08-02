@@ -128,7 +128,7 @@ Map<String, dynamic> _$EntryHistoryToJson(EntryHistory instance) =>
 
 QuestCampaign _$QuestCampaignFromJson(Map<String, dynamic> json) =>
     QuestCampaign(
-      couid: json['couid'] as String,
+      rawCouid: json['couid'] as String,
       rawLpic: json['lpic'] as String,
       lpicshow: json['lpicshow'] as bool,
       mid: (json['mid'] as List<dynamic>).map((e) => e as String).toList(),
@@ -140,7 +140,7 @@ QuestCampaign _$QuestCampaignFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$QuestCampaignToJson(QuestCampaign instance) =>
     <String, dynamic>{
-      'couid': instance.couid,
+      'couid': instance.rawCouid,
       'lpic': instance.rawLpic,
       'lpicshow': instance.lpicshow,
       'mid': instance.mid,

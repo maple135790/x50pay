@@ -545,4 +545,26 @@ class Repository extends Api {
 
     return response;
   }
+
+  Future<String> getCampaignDocument(String cid) async {
+    final response = await Api.makeRequest(
+      dest: '',
+      customDest: 'https://pay.x50.fun/coupon/$cid',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+    );
+    return response.body;
+  }
+
+  Future<void> addCampaignStampRow(String cid) async {
+    await Api.makeRequest(
+      dest: '',
+      customDest: 'https://pay.x50.fun/li/ev/$cid',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+    );
+    return;
+  }
 }

@@ -104,7 +104,9 @@ flutter:
   - assets/images/login/login_banner.jpg
   - assets/texts/avater.txt
   - assets/texts/license.txt
-  - assets/test_json/entry.json
+  - assets/tests/entry.json
+  - assets/tests/rqc_bpl.html
+  - assets/tests/rpc_chusp08.html
   fonts:
   - family: NotoSansJP
     fonts:

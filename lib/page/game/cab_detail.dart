@@ -202,7 +202,6 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
               price: price,
               tagName: tagLabel,
               cabLabel: model.cabinets.first.label),
-          const SizedBox(height: 15),
           ...buildStreamPic(model.spic, model.surl),
           ...buildCabBlock(caboid: model.caboid)
         ],
@@ -225,13 +224,15 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
               Positioned.fill(
                   child: Image(
                 image: _getGameCabImage(widget.machineId),
+                alignment: const Alignment(0, -0.25),
                 fit: BoxFit.fitWidth,
                 errorBuilder: (context, error, stackTrace) {
                   log('',
                       name: 'err cabDetailLoaded',
                       error: 'error loading gamecab image: $error');
                   return Image(
-                      image: _getGameCabImageFallback(widget.machineId));
+                    image: _getGameCabImageFallback(widget.machineId),
+                  );
                 },
               )),
               Positioned.fill(
@@ -308,9 +309,18 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
               launchUrlString(surl[i].replaceAll('\'', ''),
                   mode: LaunchMode.externalNonBrowserApplication);
             },
-            child: Image(
-                image:
-                    NetworkImage('https://pay.x50.fun${spic[i]}', scale: 1))),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              margin: const EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xff505050)),
+                  borderRadius: BorderRadius.circular(6)),
+              child: CachedNetworkImage(
+                imageUrl: 'https://pay.x50.fun${spic[i]}',
+                height: 55,
+                fit: BoxFit.fill,
+              ),
+            )),
       ));
     }
 
@@ -562,6 +572,7 @@ class _CabSelectState extends State<_CabSelect> {
                 Positioned.fill(
                     child: Image(
                         image: _getGameCabImage(widget.id),
+                        alignment: const Alignment(0, -0.25),
                         fit: BoxFit.fitWidth)),
                 Positioned.fill(
                   child: Container(

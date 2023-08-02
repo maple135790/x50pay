@@ -2,11 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
@@ -23,27 +20,6 @@ class GameViewModel extends BaseViewModel {
   Gamelist? gamelist;
   CabinetModel? cabinetModel;
   // UserModel? user;
-
-  FutureOr<String?> gamePageRedirect(
-    BuildContext context,
-    GoRouterState state,
-  ) async {
-    final router = GoRouter.of(context);
-    final hasStore = await hasRecentStore();
-    if (!hasStore) {
-      final storeData = await getStoreData();
-      router.pushNamed(
-        AppRoutes.gameStore.routeName,
-        extra: storeData,
-      );
-    }
-    final gameList = await getGamelist();
-    router.pushNamed(
-      AppRoutes.gameCabs.routeName,
-      pathParameters: {'storeName': storeName!},
-      extra: gameList,
-    );
-  }
 
   Future<StoreModel?> getStoreData({
     int debugFlag = 200,

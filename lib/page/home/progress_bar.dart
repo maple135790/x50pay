@@ -75,7 +75,10 @@ class _ProgressBarState extends State<ProgressBar>
             child: CustomPaint(
               painter: ProgressBackgroundPainter(dx: animation.value),
               foregroundPainter: ProgressPainter(
-                  iconPath: heartPath, progress: widget.currentValue),
+                iconPath: heartPath,
+                progress: widget.currentValue,
+                iconSize: heartPath.getBounds().size,
+              ),
               size: const Size(double.maxFinite, 24),
               willChange: true,
             ),
@@ -89,15 +92,22 @@ class _ProgressBarState extends State<ProgressBar>
 class ProgressPainter extends CustomPainter {
   final double progress;
   final Path iconPath;
-  final imagePadding = 8.5;
-  final progressBarHeight = 24.0;
+  final Size iconSize;
+  static const imagePadding = 8.5;
+  static const progressBarHeight = 24.0;
 
-  const ProgressPainter({required this.progress, required this.iconPath});
+  const ProgressPainter({
+    required this.progress,
+    required this.iconPath,
+    required this.iconSize,
+  });
+
+  // Size get iconSize => iconPath.getBounds().size;
+
   @override
   void paint(Canvas canvas, Size size) {
     final width =
         min(size.width * ((progress < 8 ? 8 : progress) / 100), size.width);
-    final iconSize = iconPath.getBounds().size;
     final xScale = 12 / iconSize.width * iconSize.aspectRatio;
     final yScale = 12 / iconSize.height;
     final offsetX = width - 12 - imagePadding;

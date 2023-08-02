@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:math' as math;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -224,7 +225,8 @@ class _AccountState extends State<Account> {
                       children: [
                         user.userimg != null
                             ? CircleAvatar(
-                                foregroundImage: NetworkImage(avatarUrl),
+                                foregroundImage:
+                                    CachedNetworkImageProvider(avatarUrl),
                                 radius: 30,
                                 backgroundImage: R.image.logo_150_jpg())
                             : CircleAvatar(

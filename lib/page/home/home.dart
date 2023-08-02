@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,7 +15,7 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
-import 'package:x50pay/page/pages.dart';
+import 'package:x50pay/page/scan/scan.dart';
 import 'package:x50pay/r.g.dart';
 
 part "grade_box_popup.dart";
@@ -571,7 +570,7 @@ class _TopInfo extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: user.userimg != null
                       ? DecorationImage(
-                          image: NetworkImage(user.userimg! +
+                          image: CachedNetworkImageProvider(user.userimg! +
                               r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg"),
                           fit: BoxFit.fill)
                       : DecorationImage(

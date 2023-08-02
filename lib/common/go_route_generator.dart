@@ -44,6 +44,18 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
             _route(AppRoutes.settings, (_, __) => const Account()),
             _route(AppRoutes.home, (_, __) => const Home(), innerRoutes: [
               _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
+              _route(AppRoutes.questCampaign, (_, state) {
+                final shouldRebuild = state.extra as bool?;
+                if (shouldRebuild == true) {
+                  return QuestCampaign(
+                    key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                    campaignId: state.pathParameters['couid']!,
+                  );
+                }
+                return QuestCampaign(
+                  campaignId: state.pathParameters['couid']!,
+                );
+              }),
             ]),
             _route(AppRoutes.gift, (_, __) => const GiftSystem()),
             _route(AppRoutes.collab, (_, __) => const Collab()),
@@ -203,10 +215,11 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: preferredSize.height,
-        elevation: 4,
+        elevation: 15,
+        scrolledUnderElevation: 15,
         surfaceTintColor: Colors.transparent,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        shadowColor: Colors.black54,
+        shadowColor: Colors.black87,
         title: Align(
           alignment: Alignment.topRight,
           child: Container(
@@ -224,7 +237,7 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: ValueListenableBuilder<UserModel?>(
                 valueListenable: GlobalSingleton.instance.userNotifier,
                 builder: (context, value, child) {
-                  final point = value?.point?.toInt() ?? -87;
+                  final point = value?.point?.toInt() ?? -1;
 
                   return Text('$point P',
                       style: TextStyle(
@@ -271,7 +284,7 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
                 buildFixedHeader(context),
                 AnimatedPositioned(
                   height: getFunctionalHeaderHeight(menuIndex),
-                  duration: const Duration(milliseconds: 200),
+                  duration: const Duration(milliseconds: 400),
                   curve: Curves.easeInOutExpo,
                   top: 0,
                   child: buildFunctionalHeader(context),

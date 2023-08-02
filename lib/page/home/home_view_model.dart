@@ -41,7 +41,7 @@ class HomeViewModel extends BaseViewModel {
       } else {
         entry = await compute<String, EntryModel>(
           _decodeAndParseJson,
-          await rootBundle.loadString('assets/test_json/entry.json'),
+          await rootBundle.loadString('assets/tests/entry.json'),
         );
       }
       user = GlobalSingleton.instance.user;

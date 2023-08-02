@@ -29,5 +29,5 @@ class AppRoutes {
   static const gift = (routeName: 'gift', path: '/gift');
   static const collab = (routeName: 'collab', path: '/collab');
   static const questCampaign =
-      (routeName: 'questCampaign', path: '/questCampaign/:couid');
+      (routeName: 'questCampaign', path: 'questCampaign/:couid');
 }

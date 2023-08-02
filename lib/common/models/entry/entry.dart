@@ -129,7 +129,8 @@ class EntryHistory {
 
 @JsonSerializable()
 class QuestCampaign {
-  final String couid;
+  @JsonKey(name: 'couid')
+  final String rawCouid;
   @JsonKey(name: 'lpic')
   final String rawLpic;
   final bool lpicshow;
@@ -139,7 +140,7 @@ class QuestCampaign {
   final UnderscoreId? underscoreId;
 
   QuestCampaign({
-    required this.couid,
+    required this.rawCouid,
     required this.rawLpic,
     required this.lpicshow,
     required this.mid,
@@ -152,4 +153,6 @@ class QuestCampaign {
   Map<String, dynamic> toJson() => _$QuestCampaignToJson(this);
 
   String get lpic => "https://pay.x50.fun$rawLpic";
+  String get couid =>
+      rawCouid.contains('\'') ? rawCouid.replaceAll('\'', '') : rawCouid;
 }
