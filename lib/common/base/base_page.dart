@@ -88,13 +88,14 @@ class _Header extends StatelessWidget {
         assert(isBackType != false || title != null,
             'floatHeaderText must be set'),
         super(key: key);
+  String get _title => 'X50 Pay - $title';
 
   @override
   Widget build(BuildContext context) {
     switch (_type) {
       case HeaderType.normal:
         return Container(
-          color: isDark ? const Color(0xff1e1e1e) : Colors.white,
+          color: const Color(0xff1e1e1e),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
@@ -112,7 +113,7 @@ class _Header extends StatelessWidget {
         return Card(
           margin: const EdgeInsets.all(10),
           elevation: 1,
-          color: isDark ? const Color(0xff1e1e1e) : Colors.white,
+          color: const Color(0xff1e1e1e),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
@@ -139,6 +140,8 @@ class _Header extends StatelessWidget {
                       CircleAvatar(
                           backgroundImage: R.image.header_icon_rsz(),
                           backgroundColor: const Color(0xff5a5a5a)),
+                      const SizedBox(width: 15),
+                      Text(_title),
                     ],
             ),
           ),

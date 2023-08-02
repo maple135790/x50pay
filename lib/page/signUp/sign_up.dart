@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
@@ -119,10 +121,9 @@ class _SignUpState extends BaseStatefulState<SignUp> with BasePage {
                             ? () {
                                 if (true) {
                                   // if (_formKey.currentState!.validate()) {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              _EmailSent(email.text)));
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          _EmailSent(email.text)));
                                 }
                               }
                             : null,
@@ -140,7 +141,7 @@ class _SignUpState extends BaseStatefulState<SignUp> with BasePage {
     return RichText(
         text: TextSpan(
             text: text,
-            style: const TextStyle(color: Colors.black),
+            style: const TextStyle(color: Color(0xfffafafa)),
             children: [
           isOptional
               ? const TextSpan(text: ' (選填)')
@@ -161,15 +162,15 @@ class __EmailSentState extends BaseStatefulState<_EmailSent> with BasePage {
   @override
   BaseViewModel? baseViewModel() => BaseViewModel()
     ..isFloatHeader = true
-    ..floatHeaderText = ''
+    ..floatHeaderText = '驗證郵件寄出'
     ..isShowFooter = true;
 
   @override
   void initState() {
-    Timer(const Duration(seconds: 5), () {
-      Navigator.of(context).pop();
-    });
     super.initState();
+    Timer(const Duration(seconds: 5), () {
+      context.goNamed(AppRoutes.login.routeName);
+    });
   }
 
   @override

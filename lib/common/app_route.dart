@@ -16,6 +16,8 @@ class AppRoute {
 typedef RouteProperty = ({String routeName, String path});
 
 class AppRoutes {
+  static const noLoginPages = [login, forgotPassword, signUp, license];
+
   static const login = (routeName: 'login', path: '/login');
   static const home = (routeName: 'home', path: '/');
   static const forgotPassword = (routeName: 'forgotPassword', path: '/iforgot');

@@ -29,6 +29,16 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
         ShellRoute(
           routes: [
             GoRoute(
+              path: AppRoutes.forgotPassword.path,
+              name: AppRoutes.forgotPassword.routeName,
+              builder: (context, state) => const ForgotPassword(),
+            ),
+            GoRoute(
+              path: AppRoutes.signUp.path,
+              name: AppRoutes.signUp.routeName,
+              builder: (context, state) => const SignUp(),
+            ),
+            GoRoute(
               path: AppRoutes.login.path,
               name: AppRoutes.login.routeName,
               builder: (context, state) => const Login(),
@@ -61,9 +71,8 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
             _route(AppRoutes.collab, (_, __) => const Collab()),
           ],
           builder: (context, state, child) {
-            log('state.uri.toString() ${state.uri.toString()}', name: 'uri');
-
-            if (state.uri.toString().contains(AppRoutes.login.path)) {
+            if (AppRoutes.noLoginPages
+                .any((p) => p.path == state.uri.toString())) {
               return child;
             }
             return ScaffoldWithNavBar(body: child);
@@ -275,23 +284,18 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
       child: SafeArea(
-        child: SizedBox(
-          child: Container(
-            color: Colors.blue,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                buildFixedHeader(context),
-                AnimatedPositioned(
-                  height: getFunctionalHeaderHeight(menuIndex),
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeInOutExpo,
-                  top: 0,
-                  child: buildFunctionalHeader(context),
-                ),
-              ],
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            buildFixedHeader(context),
+            AnimatedPositioned(
+              height: getFunctionalHeaderHeight(menuIndex),
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOutExpo,
+              top: 0,
+              child: buildFunctionalHeader(context),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences_debugger/shared_preferences_debugger.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
@@ -167,8 +168,12 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                               text: '忘記密碼嗎 ? ',
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.of(context)
-                                      .pushNamed(AppRoute.forgotPassword);
+                                  // context.pushNamed(
+                                  //     AppRoutes.forgotPassword.routeName);
+                                  launchUrlString(
+                                    'https://pay.x50.fun/iforgot',
+                                    mode: LaunchMode.externalApplication,
+                                  );
                                 },
                               style: const TextStyle(
                                   color: Color(0xfffafafa),
@@ -196,7 +201,11 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                           type: MaterialType.transparency,
                           child: OutlinedButton(
                               onPressed: () async {
-                                await signUpDialog(context);
+                                // await signUpDialog(context);
+                                launchUrlString(
+                                  'https://pay.x50.fun/reg',
+                                  mode: LaunchMode.externalApplication,
+                                );
                               },
                               style: Themes.severe(isV4: true),
                               child: const Text('註冊')),
@@ -269,8 +278,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              // Navigator.of(context).pushNamed(AppRoute.license);
-                              GoRouter.of(context).goNamed(AppRoute.license);
+                              context.pushNamed(AppRoutes.license.routeName);
                             }),
                     )
                   ],
@@ -285,7 +293,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                     child: const Text('取消')),
                 TextButton(
                     onPressed: () {
-                      Navigator.of(context).popAndPushNamed(AppRoute.signUp);
+                      Navigator.of(context).pop();
+                      context.pushNamed(AppRoutes.signUp.routeName);
                     },
                     style: Themes.confirm(),
                     child: const Text('確認'))

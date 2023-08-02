@@ -32,7 +32,7 @@ class _ForgotPasswordState extends BaseStatefulState<ForgotPassword>
           RichText(
               text: const TextSpan(
                   text: '電子郵件',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Color(0xfffafafa)),
                   children: [
                 TextSpan(text: '*', style: TextStyle(color: Colors.red))
               ])),
