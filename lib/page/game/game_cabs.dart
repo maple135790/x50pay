@@ -122,14 +122,21 @@ class _GameCabItem extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
       child: GestureDetector(
         onTap: () async {
-          final nav = Navigator.of(context);
           final router = GoRouter.of(context);
-          await nav.push(
-              CupertinoPageRoute(builder: (context) => CabDetail(machine.id!)));
-          router.goNamed(
-            AppRoutes.game.routeName,
-            extra: true,
+          final bool? isTokenInserted = await router.pushNamed(
+            AppRoutes.gameCab.routeName,
+            pathParameters: {'mid': machine.id!},
           );
+          // final bool? isTokenInserted = await nav.push(
+          //   CupertinoPageRoute(builder: (context) => CabDetail(machine.id!)),
+          // );
+          if (isTokenInserted == true) {
+            log('isTokenInserted: $isTokenInserted');
+            router.goNamed(
+              AppRoutes.game.routeName,
+              extra: true,
+            );
+          }
         },
         child: Container(
           decoration: BoxDecoration(

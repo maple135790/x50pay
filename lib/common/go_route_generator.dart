@@ -50,7 +50,12 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
                     key: ValueKey(DateTime.now().millisecondsSinceEpoch));
               }
               return const Game();
-            }),
+            }, innerRoutes: [
+              _route(AppRoutes.gameCab, (_, state) {
+                final machineId = state.pathParameters['mid']!;
+                return CabDetail(machineId);
+              }),
+            ]),
             GoRoute(
               path: AppRoutes.scanQRCode.path,
               name: AppRoutes.scanQRCode.routeName,

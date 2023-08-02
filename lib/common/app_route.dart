@@ -27,7 +27,7 @@ class AppRoutes {
   static const settings = (routeName: 'setting', path: '/setting');
   static const game = (routeName: 'game', path: '/game');
   static const gameStore = (routeName: 'gameStore', path: 'store');
-  static const gameCabs = (routeName: 'gameCabs', path: 'cabs/:storeName');
+  static const gameCab = (routeName: 'gameCab', path: 'cabs/:mid');
   static const gift = (routeName: 'gift', path: '/gift');
   static const collab = (routeName: 'collab', path: '/collab');
   static const scanQRCode = (routeName: 'scanQRCode', path: '/scanQRCode');

@@ -487,6 +487,7 @@ class _CabSelectState extends State<_CabSelect> {
                             machineNum: widget.machineIndex - 1,
                             isTicket: paymentType == 'ticket',
                             mode: widget.modes[0].first);
+                        router.pop();
                         if (isInsertSuccess) {
                           final code = widget.viewModel.response!.code;
                           String msg = '';
@@ -540,12 +541,7 @@ class _CabSelectState extends State<_CabSelect> {
                         }
                         await Future.delayed(const Duration(seconds: 2));
                         await GlobalSingleton.instance.checkUser(force: true);
-                        router
-                          ..pop()
-                          ..goNamed(
-                            AppRoutes.game.routeName,
-                            extra: true,
-                          );
+                        router.pop(true);
                       },
                       style: Themes.severe(isV4: true),
                       child: const Text('確認')),
