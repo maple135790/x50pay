@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -64,21 +63,6 @@ class _GameState extends BaseStatefulState<Game> {
   void initState() {
     super.initState();
     _getStoreData = viewModel.getStoreData();
-    // init = routing(
-    //   onNoRecentStore: (StoreModel? storeData) {
-    //     GoRouter.of(context).pushNamed(
-    //       AppRoutes.gameStore.routeName,
-    //       extra: storeData,
-    //     );
-    //   },
-    //   onHasRecentStore: (gameList, storeName) {
-    //     GoRouter.of(context).pushNamed(
-    //       AppRoutes.gameCabs.routeName,
-    //       pathParameters: {'storeName': storeName},
-    //       extra: gameList,
-    //     );
-    //   },
-    // );
   }
 
   @override
@@ -181,17 +165,10 @@ class _StoreItem extends StatelessWidget {
     await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
         duration: const Duration(seconds: 2));
     await Future.delayed(const Duration(seconds: 2));
-    // router.goNamed(
-    //   AppRoutes.gameCabs.routeName,
-    //   pathParameters: {'storeName': store.name!},
-    //   extra: gameList,
-    // );
     router.goNamed(
       AppRoutes.game.routeName,
       extra: true,
     );
-    // Navigator.of(context).pushReplacement(
-    // CupertinoPageRoute(builder: (context) => const Game()));
   }
 
   @override

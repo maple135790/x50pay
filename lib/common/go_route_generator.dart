@@ -15,7 +15,7 @@ GoRoute _route(
   );
 }
 
-final debugRoute = AppRoutes.home.path;
+final debugRoute = AppRoutes.login.path;
 
 RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
       initialLocation:

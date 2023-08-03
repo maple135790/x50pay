@@ -147,72 +147,76 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                     border:
                         Border.all(color: const Color(0xff3e3e3e), width: 1),
                     borderRadius: BorderRadius.circular(5)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('電子郵件'),
-                    const SizedBox(height: 12),
-                    TextField(
-                        controller: email,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.person))),
-                    const SizedBox(height: 15),
-                    RichText(
-                        text: TextSpan(
-                            text: '密碼 ',
-                            style: const TextStyle(color: Color(0xfffafafa)),
-                            children: [
-                          const TextSpan(text: '( '),
-                          TextSpan(
-                              text: '忘記密碼嗎 ? ',
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  // context.pushNamed(
-                                  //     AppRoutes.forgotPassword.routeName);
+                child: AutofillGroup(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('電子郵件'),
+                      const SizedBox(height: 12),
+                      TextField(
+                          controller: email,
+                          autofillHints: const [AutofillHints.username],
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.person))),
+                      const SizedBox(height: 15),
+                      RichText(
+                          text: TextSpan(
+                              text: '密碼 ',
+                              style: const TextStyle(color: Color(0xfffafafa)),
+                              children: [
+                            const TextSpan(text: '( '),
+                            TextSpan(
+                                text: '忘記密碼嗎 ? ',
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // context.pushNamed(
+                                    //     AppRoutes.forgotPassword.routeName);
+                                    launchUrlString(
+                                      'https://pay.x50.fun/iforgot',
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  },
+                                style: const TextStyle(
+                                    color: Color(0xfffafafa),
+                                    decoration: TextDecoration.underline)),
+                            const TextSpan(text: ' )')
+                          ])),
+                      const SizedBox(height: 12),
+                      TextField(
+                          controller: password,
+                          obscureText: true,
+                          autofillHints: const [AutofillHints.password],
+                          decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.lock))),
+                      const SizedBox(height: 10),
+                      const Divider(color: Colors.white60),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TextButton(
+                            onPressed: doLogin,
+                            style: Themes.pale(),
+                            child: const Text('登入'),
+                          ),
+                          const SizedBox(width: 5),
+                          Material(
+                            type: MaterialType.transparency,
+                            child: OutlinedButton(
+                                onPressed: () async {
+                                  // await signUpDialog(context);
                                   launchUrlString(
-                                    'https://pay.x50.fun/iforgot',
+                                    'https://pay.x50.fun/reg',
                                     mode: LaunchMode.externalApplication,
                                   );
                                 },
-                              style: const TextStyle(
-                                  color: Color(0xfffafafa),
-                                  decoration: TextDecoration.underline)),
-                          const TextSpan(text: ' )')
-                        ])),
-                    const SizedBox(height: 12),
-                    TextField(
-                        controller: password,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.lock))),
-                    const SizedBox(height: 10),
-                    const Divider(color: Colors.white60),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TextButton(
-                          onPressed: doLogin,
-                          style: Themes.pale(),
-                          child: const Text('登入'),
-                        ),
-                        const SizedBox(width: 5),
-                        Material(
-                          type: MaterialType.transparency,
-                          child: OutlinedButton(
-                              onPressed: () async {
-                                // await signUpDialog(context);
-                                launchUrlString(
-                                  'https://pay.x50.fun/reg',
-                                  mode: LaunchMode.externalApplication,
-                                );
-                              },
-                              style: Themes.severe(isV4: true),
-                              child: const Text('註冊')),
-                        ),
-                      ],
-                    ),
-                  ],
+                                style: Themes.severe(isV4: true),
+                                child: const Text('註冊')),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
