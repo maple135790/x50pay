@@ -1,15 +1,15 @@
 part of "../account.dart";
 
-class _PlayRecord extends StatefulWidget {
+class PlayRecords extends StatefulWidget {
   final AccountViewModel viewModel;
 
-  const _PlayRecord(this.viewModel, {Key? key}) : super(key: key);
+  const PlayRecords(this.viewModel, {Key? key}) : super(key: key);
 
   @override
-  State<_PlayRecord> createState() => __PlayRecordState();
+  State<PlayRecords> createState() => _PlayRecordsState();
 }
 
-class __PlayRecordState extends BaseStatefulState<_PlayRecord> {
+class _PlayRecordsState extends BaseStatefulState<PlayRecords> {
   late AccountViewModel model;
 
   @override

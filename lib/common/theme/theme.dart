@@ -69,6 +69,10 @@ class AppThemeData {
           return const IconThemeData(color: Color(0xffb4b4b4));
         }),
       ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+      ),
       textSelectionTheme:
           const TextSelectionThemeData(cursorColor: Colors.white),
       inputDecorationTheme: const InputDecorationTheme(
@@ -90,7 +94,7 @@ class AppThemeData {
 }
 
 class Themes {
-  static const borderColor = Color(0xff3e3e3e);
+  static const borderColor = Color(0xff505050);
   static ButtonStyle pale({EdgeInsetsGeometry? padding, VisualDensity? vd}) {
     return ButtonStyle(
       padding: MaterialStateProperty.all(padding),

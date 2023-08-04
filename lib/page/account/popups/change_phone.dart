@@ -160,52 +160,56 @@ class _ChangePhoneConfirmedDialogState
   @override
   Widget build(BuildContext context) {
     return _Dialog(
-      onConfirm: () async {
-        if (isEnteredNewPhone) {
-          _smsActivate();
-        } else {
-          bool isCorrectPhone = RegExp("^09\\d{2}-?\\d{3}-?\\d{3}\$")
-              .hasMatch(textController.text);
-          if (!isCorrectPhone) {
-            _errorText = '手機號碼格式錯誤';
-            setState(() {});
+        onConfirm: () async {
+          if (isEnteredNewPhone) {
+            _smsActivate();
           } else {
-            _errorText = null;
-            FocusManager.instance.primaryFocus?.unfocus();
-            _doChangePhone();
+            bool isCorrectPhone = RegExp("^09\\d{2}-?\\d{3}-?\\d{3}\$")
+                .hasMatch(textController.text);
+            if (!isCorrectPhone) {
+              _errorText = '手機號碼格式錯誤';
+              setState(() {});
+            } else {
+              _errorText = null;
+              FocusManager.instance.primaryFocus?.unfocus();
+              _doChangePhone();
+            }
           }
-        }
-      },
-      content: _DialogBody(
-        title: '更改手機',
-        children: [
-          const Text('請注意！只能發送一次簡訊驗證碼。若手機號碼輸入錯誤或30分鐘仍未收到請聯絡粉絲專頁',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 15),
-          _DialogWidget(
-            titleIcon: isEnteredNewPhone ? Icons.email : Icons.phone,
-            title: isEnteredNewPhone ? '請輸入您的簡訊認證碼' : '請欲更改的手機號碼',
-            isRequired: true,
-            child: Row(children: [
-              Expanded(
-                  child: TextFormField(
-                maxLength: isEnteredNewPhone ? 6 : null,
-                buildCounter: (context,
-                        {currentLength = 0, isFocused = true, maxLength}) =>
-                    null,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.phone,
-                controller: textController,
-                decoration: InputDecoration(
-                    hintText: isEnteredNewPhone ? '六位數字' : '送出後，我們將會寄送簡訊驗證'),
-              ))
-            ]),
-          ),
-          _errorText != null
-              ? Text(_errorText!, style: const TextStyle(color: Colors.red))
-              : const SizedBox(),
-        ],
-      ),
-    );
+        },
+        content: (showButtonBar) => _DialogBody(
+              title: '更改手機',
+              children: [
+                const Text('請注意！只能發送一次簡訊驗證碼。若手機號碼輸入錯誤或30分鐘仍未收到請聯絡粉絲專頁',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 15),
+                _DialogWidget(
+                  titleIcon: isEnteredNewPhone ? Icons.email : Icons.phone,
+                  title: isEnteredNewPhone ? '請輸入您的簡訊認證碼' : '請欲更改的手機號碼',
+                  isRequired: true,
+                  child: Row(children: [
+                    Expanded(
+                        child: TextFormField(
+                      maxLength: isEnteredNewPhone ? 6 : null,
+                      buildCounter: (context,
+                              {currentLength = 0,
+                              isFocused = true,
+                              maxLength}) =>
+                          null,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: TextInputType.phone,
+                      controller: textController,
+                      decoration: InputDecoration(
+                          hintText:
+                              isEnteredNewPhone ? '六位數字' : '送出後，我們將會寄送簡訊驗證'),
+                    ))
+                  ]),
+                ),
+                _errorText != null
+                    ? Text(_errorText!,
+                        style: const TextStyle(color: Colors.red))
+                    : const SizedBox(),
+              ],
+            ));
   }
 }

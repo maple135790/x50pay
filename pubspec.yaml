@@ -20,7 +20,7 @@ dependencies:
   flutter_native_splash: ^2.2.7
   flutter_svg: ^1.1.6
   fluttertoast: ^8.2.2
-  go_router: ^10.0.0
+  go_router: ^9.1.1
   html: ^0.15.3
   http: ^0.13.4
   json_annotation: ^4.8.1
@@ -105,8 +105,8 @@ flutter:
   - assets/texts/avater.txt
   - assets/texts/license.txt
   - assets/tests/entry.json
-  - assets/tests/rqc_bpl.html
   - assets/tests/rpc_chusp08.html
+  - assets/tests/rqc_bpl.html
   fonts:
   - family: NotoSansJP
     fonts:

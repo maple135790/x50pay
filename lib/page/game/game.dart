@@ -40,25 +40,6 @@ class _GameState extends BaseStatefulState<Game> {
     await GlobalSingleton.instance.checkUser(force: false);
   }
 
-  Future<void> routing({
-    required void Function(StoreModel? storeData) onNoRecentStore,
-    required void Function(Gamelist? gameList, String storeName)
-        onHasRecentStore,
-  }) async {
-    // 先查有沒有選擇過店家
-    // 有的話就直接跳到選擇機台
-    // 沒有的話就跳到選擇店家
-    final hasRecentStore = await viewModel.hasRecentStore();
-    if (!hasRecentStore) {
-      final storeData = await viewModel.getStoreData();
-      onNoRecentStore.call(storeData);
-      return;
-    }
-    final gameList = await viewModel.getGamelist();
-    final storeName = viewModel.storeName!;
-    onHasRecentStore.call(gameList, storeName);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -123,8 +104,10 @@ class _GameStoreLoaded extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Storelist> storeList = stores.storelist!;
 
-    return Column(
-      children: storeList.map((e) => _StoreItem(e, stores.prefix!)).toList(),
+    return SingleChildScrollView(
+      child: Column(
+        children: storeList.map((e) => _StoreItem(e, stores.prefix!)).toList(),
+      ),
     );
   }
 }

@@ -46,7 +46,8 @@ class _FlutterEasyLoadingState extends State<FlutterEasyLoading> {
   void initState() {
     super.initState();
     _overlayEntry = EasyLoadingOverlayEntry(
-      builder: (BuildContext context) => EasyLoading.instance.w ?? Container(),
+      builder: (BuildContext context) =>
+          EasyLoading.instance.w ?? const SizedBox(),
     );
     EasyLoading.instance.overlayEntry = _overlayEntry;
   }

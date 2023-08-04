@@ -25,8 +25,17 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   }
 
   Widget confirmButton() {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
+    return TextButton(
+      style: ButtonStyle(
+        shape: MaterialStatePropertyAll(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
+        backgroundColor: MaterialStateColor.resolveWith((states) {
+          if (states.isDisabled) {
+            return const Color(0xfffafafa).withOpacity(0.5);
+          }
+          return const Color(0xfffafafa);
+        }),
+      ),
       onPressed: isEnabled
           ? () async {
               final nav = GoRouter.of(context);
@@ -63,82 +72,84 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
               }
             }
           : null,
-      child: Text(buttonText),
+      child: Text(buttonText, style: const TextStyle(color: Color(0xff1e1e1e))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return _Dialog.ios(
-      title: '密碼變更',
-      scrollable: true,
-      customConfirmButton: confirmButton(),
-      content: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
-          child: CupertinoFormSection.insetGrouped(
-            footer: Text(_errorText ?? '',
-                style: const TextStyle(color: CupertinoColors.destructiveRed)),
-            key: _formKey,
-            children: [
-              CupertinoTextFormFieldRow(
-                controller: oldPwd,
-                prefix: const Text('您的舊密碼'),
-                placeholder: '請輸入舊的密碼以確認身分',
-                obscureText: true,
+    return AccountDialog.ios(
+        title: '密碼變更',
+        customConfirmButton: confirmButton(),
+        content: (showButtonBar) {
+          showButtonBar(true);
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
+              child: CupertinoFormSection.insetGrouped(
+                footer: Text(_errorText ?? '',
+                    style:
+                        const TextStyle(color: CupertinoColors.destructiveRed)),
+                key: _formKey,
+                children: [
+                  CupertinoTextFormFieldRow(
+                    controller: oldPwd,
+                    prefix: const Text('您的舊密碼'),
+                    placeholder: '請輸入舊的密碼以確認身分',
+                    obscureText: true,
+                  ),
+                  CupertinoTextFormFieldRow(
+                    controller: newPwd,
+                    prefix: const Text('新密碼'),
+                    placeholder: '請輸入密碼',
+                    obscureText: true,
+                    onChanged: (s) {
+                      if (s.isEmpty) {
+                        setState(() {
+                          buttonText = '請輸入密碼';
+                          isEnabled = false;
+                        });
+                      } else if (s != renewPwd.text) {
+                        setState(() {
+                          buttonText = '兩次輸入的密碼不同';
+                          isEnabled = false;
+                        });
+                      } else {
+                        setState(() {
+                          buttonText = '送出';
+                          isEnabled = true;
+                        });
+                      }
+                    },
+                  ),
+                  CupertinoTextFormFieldRow(
+                    controller: renewPwd,
+                    prefix: const Text('再次輸入一次'),
+                    placeholder: '請重複輸入密碼',
+                    obscureText: true,
+                    onChanged: (s) {
+                      if (s.isEmpty) {
+                        setState(() {
+                          buttonText = '請輸入密碼';
+                          isEnabled = false;
+                        });
+                      } else if (s != newPwd.text) {
+                        setState(() {
+                          buttonText = '兩次輸入的密碼不同';
+                          isEnabled = false;
+                        });
+                      } else {
+                        setState(() {
+                          buttonText = '送出';
+                          isEnabled = true;
+                        });
+                      }
+                    },
+                  ),
+                ],
               ),
-              CupertinoTextFormFieldRow(
-                controller: newPwd,
-                prefix: const Text('新密碼'),
-                placeholder: '請輸入密碼',
-                obscureText: true,
-                onChanged: (s) {
-                  if (s.isEmpty) {
-                    setState(() {
-                      buttonText = '請輸入密碼';
-                      isEnabled = false;
-                    });
-                  } else if (s != renewPwd.text) {
-                    setState(() {
-                      buttonText = '兩次輸入的密碼不同';
-                      isEnabled = false;
-                    });
-                  } else {
-                    setState(() {
-                      buttonText = '送出';
-                      isEnabled = true;
-                    });
-                  }
-                },
-              ),
-              CupertinoTextFormFieldRow(
-                controller: renewPwd,
-                prefix: const Text('再次輸入一次'),
-                placeholder: '請重複輸入密碼',
-                obscureText: true,
-                onChanged: (s) {
-                  if (s.isEmpty) {
-                    setState(() {
-                      buttonText = '請輸入密碼';
-                      isEnabled = false;
-                    });
-                  } else if (s != newPwd.text) {
-                    setState(() {
-                      buttonText = '兩次輸入的密碼不同';
-                      isEnabled = false;
-                    });
-                  } else {
-                    setState(() {
-                      buttonText = '送出';
-                      isEnabled = true;
-                    });
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 }

@@ -1,15 +1,15 @@
 part of "../account.dart";
 
-class _BidRecord extends StatefulWidget {
+class BidRecords extends StatefulWidget {
   final AccountViewModel viewModel;
 
-  const _BidRecord(this.viewModel, {Key? key}) : super(key: key);
+  const BidRecords(this.viewModel, {Key? key}) : super(key: key);
 
   @override
-  State<_BidRecord> createState() => __BidRecordState();
+  State<BidRecords> createState() => _BidRecordsState();
 }
 
-class __BidRecordState extends BaseStatefulState<_BidRecord> {
+class _BidRecordsState extends BaseStatefulState<BidRecords> {
   late AccountViewModel model;
 
   @override

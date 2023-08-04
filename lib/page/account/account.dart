@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:math' as math;
 
@@ -23,11 +24,10 @@ import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/main.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/page/account/popups/popup_dialog.dart';
 import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
 
-part 'popups/quick_pay.dart';
-part 'popups/quiC_pay_pref.dart';
 part 'popups/pad_pref.dart';
 part 'popups/change_password.dart';
 part 'popups/change_email.dart';
@@ -75,20 +75,6 @@ enum DefaultCabPayment {
   const DefaultCabPayment(this.name, this.value);
 }
 
-// class Account extends StatefulWidget {
-//   const Account({Key? key}) : super(key: key);
-
-//   @override
-//   State<Account> createState() => _AccountState();
-// }
-
-// class _AccountState extends BaseStatefulState<Account> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return _AccountLoaded();
-//   }
-// }
-
 class Account extends StatefulWidget {
   const Account({super.key});
 
@@ -102,6 +88,112 @@ class _AccountState extends State<Account> {
   final user = GlobalSingleton.instance.user!;
 
   Color get bgColor => Theme.of(context).scaffoldBackgroundColor;
+
+  void onQuicPayPrefPressed() {
+    context.pushNamed(
+      AppRoutes.quicPayPref.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onPaymentPrefPressed() async {
+    context.pushNamed(
+      AppRoutes.paymentPref.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onPadPrefPressed() async {
+    context.pushNamed(
+      AppRoutes.padPref.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onChangePasswordPressed() async {
+    context.pushNamed(
+      AppRoutes.changePassword.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onChangeEmailPressed() async {
+    context.pushNamed(
+      AppRoutes.changeEmail.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onChangePhonePressed() async {
+    if (user.tphone != 0 && !user.phoneactive!) {
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) =>
+              _ChangePhoneConfirmedDialog(viewModel, context));
+    }
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return ChangePhoneDialog(
+            viewModel,
+            callback: (isOk) async {
+              Navigator.of(context).pop();
+              if (isOk) {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) =>
+                        _ChangePhoneConfirmedDialog(viewModel, context));
+              } else {
+                await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
+                    dismissOnTap: false, duration: const Duration(seconds: 2));
+              }
+            },
+          );
+        });
+  }
+
+  void onBidRecordPressed() async {
+    context.pushNamed(
+      AppRoutes.bidRecords.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onTicketRecordPressed() async {
+    context.pushNamed(
+      AppRoutes.ticketRecords.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onPlayRecordPressed() async {
+    context.pushNamed(
+      AppRoutes.playRecords.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onTicketUseRecordPressed() async {
+    context.pushNamed(
+      AppRoutes.ticketUsedRecords.routeName,
+      extra: viewModel,
+    );
+  }
+
+  void onXimen1OpenPressed() {
+    checkRemoteOpen(shop: RemoteOpenShop.firstShop);
+  }
+
+  void onXimen2OpenPressed() {
+    checkRemoteOpen(shop: RemoteOpenShop.secondShop);
+  }
+
+  void onLogoutPressed() async {
+    showDialog(context: context, builder: (context) => askLogout());
+  }
 
   void onLogout() {
     context
@@ -224,11 +316,16 @@ class _AccountState extends State<Account> {
                     child: Row(
                       children: [
                         user.userimg != null
-                            ? CircleAvatar(
-                                foregroundImage:
-                                    CachedNetworkImageProvider(avatarUrl),
-                                radius: 30,
-                                backgroundImage: R.image.logo_150_jpg())
+                            ? CachedNetworkImage(
+                                imageUrl: avatarUrl,
+                                width: 60,
+                                height: 60,
+                                imageBuilder: (context, imageProvider) =>
+                                    CircleAvatar(
+                                  backgroundImage: imageProvider,
+                                  radius: 30,
+                                ),
+                              )
                             : CircleAvatar(
                                 foregroundImage: R.image.logo_150_jpg(),
                                 radius: 30),
@@ -264,173 +361,102 @@ class _AccountState extends State<Account> {
                           mode: LaunchMode.externalApplication);
                     }),
                 _SettingTile(
-                    iconData: Icons.rss_feed,
-                    title: '多元付款設定',
-                    subtitle: 'X50MGS 多元付款喜好設定',
-                    color: _SettingTileColor.blue,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return QuickPayDialog(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.rss_feed,
+                  title: '多元付款設定',
+                  subtitle: 'X50MGS 多元付款喜好設定',
+                  color: _SettingTileColor.blue,
+                  onTap: onPaymentPrefPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.badge_outlined,
-                    title: 'QuiC Pay 設定',
-                    subtitle: 'QuiC 喜愛選項設定',
-                    color: _SettingTileColor.blue,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return QuiCPayPrefDialog(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.badge_outlined,
+                  title: 'QuiC Pay 設定',
+                  subtitle: 'QuiC 喜愛選項設定',
+                  color: _SettingTileColor.blue,
+                  onTap: onQuicPayPrefPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.tablet_mac,
-                    title: '線上排隊設定',
-                    subtitle: 'X50Pad 西門線上排隊系統偏好設定',
-                    color: _SettingTileColor.blue,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return PadPrefDialog(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.tablet_mac,
+                  title: '線上排隊設定',
+                  subtitle: 'X50Pad 西門線上排隊系統偏好設定',
+                  color: _SettingTileColor.blue,
+                  onTap: onPadPrefPressed,
+                ),
               ]),
               _AccountBlock(children: [
                 _SettingTile(
-                    iconData: Icons.key,
-                    title: '更改密碼',
-                    subtitle: '密碼不夠安全嗎？點我更改！',
-                    color: _SettingTileColor.red,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return ChangePasswordDialog(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.key,
+                  title: '更改密碼',
+                  subtitle: '密碼不夠安全嗎？點我更改！',
+                  color: _SettingTileColor.red,
+                  onTap: onChangePasswordPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.email_outlined,
-                    title: '更改信箱',
-                    subtitle: '換信箱了嗎，點我修改信箱。',
-                    color: _SettingTileColor.white,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return ChangeEmailDialog(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.email_outlined,
+                  title: '更改信箱',
+                  subtitle: '換信箱了嗎，點我修改信箱。',
+                  color: _SettingTileColor.white,
+                  onTap: onChangeEmailPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.call,
-                    title: '更改手機',
-                    subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
-                    color: _SettingTileColor.white,
-                    onTap: () async {
-                      if (user.tphone != 0 && !user.phoneactive!) {
-                        showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) => _ChangePhoneConfirmedDialog(
-                                viewModel, context));
-                      }
-                      showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return ChangePhoneDialog(
-                              viewModel,
-                              callback: (isOk) async {
-                                Navigator.of(context).pop();
-                                if (isOk) {
-                                  showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (context) =>
-                                          _ChangePhoneConfirmedDialog(
-                                              viewModel, context));
-                                } else {
-                                  await EasyLoading.showError(
-                                      '伺服器錯誤，請嘗試重新整理或回報X50',
-                                      dismissOnTap: false,
-                                      duration: const Duration(seconds: 2));
-                                }
-                              },
-                            );
-                          });
-                    }),
+                  iconData: Icons.call,
+                  title: '更改手機',
+                  subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
+                  color: _SettingTileColor.white,
+                  onTap: onChangePhonePressed,
+                ),
               ]),
               _AccountBlock(children: [
                 _SettingTile(
-                    iconData: Icons.local_atm,
-                    title: '儲值紀錄',
-                    subtitle: '查詢加值相關記錄。',
-                    color: _SettingTileColor.yellow,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return _BidRecord(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.local_atm,
+                  title: '儲值紀錄',
+                  subtitle: '查詢加值相關記錄。',
+                  color: _SettingTileColor.yellow,
+                  onTap: onBidRecordPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.redeem,
-                    title: '獲券紀錄',
-                    subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
-                    color: _SettingTileColor.yellow,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return _TicketRecord(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.redeem,
+                  title: '獲券紀錄',
+                  subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
+                  color: _SettingTileColor.yellow,
+                  onTap: onTicketRecordPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.format_list_bulleted,
-                    title: '付費明細',
-                    subtitle: '查詢點數付款明細。',
-                    color: _SettingTileColor.yellow,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return _PlayRecord(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.format_list_bulleted,
+                  title: '付費明細',
+                  subtitle: '查詢點數付款明細。',
+                  color: _SettingTileColor.yellow,
+                  onTap: onPlayRecordPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.confirmation_num,
-                    title: '扣券明細',
-                    subtitle: '查詢遊玩券使用明細。',
-                    color: _SettingTileColor.yellow,
-                    onTap: () async {
-                      Navigator.of(context)
-                          .push(CupertinoPageRoute(builder: (context) {
-                        return _TicketUsedRecord(viewModel);
-                      }));
-                    }),
+                  iconData: Icons.confirmation_num,
+                  title: '扣券明細',
+                  subtitle: '查詢遊玩券使用明細。',
+                  color: _SettingTileColor.yellow,
+                  onTap: onTicketUseRecordPressed,
+                ),
               ]),
               _AccountBlock(children: [
                 _SettingTile(
-                    iconData: Icons.home,
-                    title: '西門一店開門',
-                    subtitle: '就是個一店開門按鈕',
-                    color: _SettingTileColor.white,
-                    onTap: () {
-                      checkRemoteOpen(shop: RemoteOpenShop.firstShop);
-                    }),
+                  iconData: Icons.home,
+                  title: '西門一店開門',
+                  subtitle: '就是個一店開門按鈕',
+                  color: _SettingTileColor.white,
+                  onTap: onXimen1OpenPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.home,
-                    title: '西門二店開門',
-                    subtitle: '就是個二店開門按鈕',
-                    color: _SettingTileColor.white,
-                    onTap: () {
-                      checkRemoteOpen(shop: RemoteOpenShop.secondShop);
-                    }),
+                  iconData: Icons.home,
+                  title: '西門二店開門',
+                  subtitle: '就是個二店開門按鈕',
+                  color: _SettingTileColor.white,
+                  onTap: onXimen2OpenPressed,
+                ),
                 _SettingTile(
-                    iconData: Icons.logout,
-                    title: '登出帳號',
-                    subtitle: '就是個登出',
-                    color: _SettingTileColor.white,
-                    onTap: () async {
-                      showDialog(
-                          context: context, builder: (context) => askLogout());
-                    }),
+                  iconData: Icons.logout,
+                  title: '登出帳號',
+                  subtitle: '就是個登出',
+                  color: _SettingTileColor.white,
+                  onTap: onLogoutPressed,
+                ),
               ]),
             ],
           ),
@@ -444,6 +470,24 @@ class _AccountBlock extends StatelessWidget {
   final List<_SettingTile> children;
   const _AccountBlock({required this.children, Key? key}) : super(key: key);
 
+  List<Widget> get _children {
+    final list = <Widget>[];
+    for (var i = 0; i < children.length; i++) {
+      list.add(_SettingTile(
+        iconData: children[i].iconData,
+        title: children[i].title,
+        subtitle: children[i].subtitle,
+        color: children[i].color,
+        onTap: children[i].onTap,
+      ));
+      if (i != children.length - 1) {
+        list.add(
+            const Divider(thickness: 1, height: 1, color: Themes.borderColor));
+      }
+    }
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -454,23 +498,7 @@ class _AccountBlock extends StatelessWidget {
             border: Border.all(color: Themes.borderColor, width: 1),
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
-          child: ListView.separated(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: children.length,
-            separatorBuilder: (context, index) => const Divider(
-                thickness: 1, height: 1, color: Themes.borderColor),
-            itemBuilder: (context, index) {
-              final tile = children[index];
-              return _SettingTile(
-                iconData: tile.iconData,
-                title: tile.title,
-                subtitle: tile.subtitle,
-                color: tile.color,
-                onTap: tile.onTap,
-              );
-            },
-          ),
+          child: Column(children: _children),
         ),
         const SizedBox(height: 20),
       ],
@@ -537,62 +565,60 @@ class _SettingTile extends StatelessWidget {
   }
 }
 
-class _Dialog extends StatelessWidget {
-  final Widget content;
+class _Dialog extends StatefulWidget {
+  final Widget Function(void Function(bool isShow) showButtonBar) content;
   final bool scrollable;
   final void Function()? onConfirm;
   final Widget? customConfirmButton;
-  final bool _iosLike;
   final String title;
 
   const _Dialog({
     required this.content,
     required this.onConfirm,
-  })  : _iosLike = false,
-        customConfirmButton = null,
+  })  : customConfirmButton = null,
         scrollable = false,
         title = '';
 
-  const _Dialog.ios({
-    required this.content,
-    required this.title,
-    this.onConfirm,
-    this.customConfirmButton,
-    this.scrollable = false,
-  }) : _iosLike = true;
+  @override
+  State<_Dialog> createState() => _DialogState();
+}
 
+class _DialogState extends State<_Dialog> {
+  static const _kMaxBottomSheetHeight = 80.0;
+  ValueNotifier<Offset> offsetNotifier =
+      ValueNotifier(const Offset(0, _kMaxBottomSheetHeight));
+
+  void showButtonBar(bool isShow) async {
+    await Future.delayed(const Duration(milliseconds: 50));
+    if (isShow) {
+      offsetNotifier.value = Offset.zero;
+    } else {
+      offsetNotifier.value = const Offset(0, 1);
+    }
+  }
+
+  final buttonStyle = ButtonStyle(
+    shape: MaterialStatePropertyAll(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
+    backgroundColor: MaterialStateColor.resolveWith((states) {
+      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
+      return const Color(0xfffafafa);
+    }),
+  );
   @override
   Widget build(BuildContext context) {
-    if (_iosLike) {
-      return CupertinoPageScaffold(
-        backgroundColor: CupertinoColors.systemGroupedBackground,
-        navigationBar: CupertinoNavigationBar(
-            previousPageTitle: '設定',
-            middle: Text(title),
-            trailing: customConfirmButton ??
-                (onConfirm != null
-                    ? CupertinoButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: onConfirm,
-                        child: const Text('保存',
-                            style:
-                                TextStyle(color: CupertinoColors.activeBlue)),
-                      )
-                    : null)),
-        child: content,
-      );
-    }
     return AlertDialog(
-      scrollable: scrollable,
+      scrollable: widget.scrollable,
       contentPadding:
           const EdgeInsets.only(top: 28, left: 28, right: 28, bottom: 14),
       actionsPadding:
           const EdgeInsets.only(top: 0, left: 28, right: 28, bottom: 28),
       content: GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: content),
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: widget.content.call(showButtonBar),
+      ),
       actionsAlignment: MainAxisAlignment.start,
       actions: [
         TextButton(
@@ -601,12 +627,12 @@ class _Dialog extends StatelessWidget {
             },
             style: Themes.pale(),
             child: const Text('取消')),
-        customConfirmButton == null
+        widget.customConfirmButton == null
             ? TextButton(
-                onPressed: onConfirm,
+                onPressed: widget.onConfirm,
                 style: Themes.severe(isV4: true),
                 child: const Text('保存'))
-            : customConfirmButton!
+            : widget.customConfirmButton!
       ],
     );
   }
@@ -631,180 +657,6 @@ class _DialogBody extends StatelessWidget {
           const SizedBox(height: 30),
           ...children,
         ]));
-  }
-}
-
-class _DialogSwitch extends StatefulWidget {
-  final bool value;
-  final String title;
-  final bool _iosLike;
-  final void Function(bool value)? onChanged;
-  const _DialogSwitch({required this.value, required this.title})
-      : _iosLike = false,
-        onChanged = null;
-  const _DialogSwitch.ios(
-      {required this.value, required this.title, required this.onChanged})
-      : _iosLike = true;
-
-  @override
-  State<_DialogSwitch> createState() => _DialogSwitchState();
-}
-
-class _DialogSwitchState extends State<_DialogSwitch> {
-  bool v = false;
-
-  @override
-  void initState() {
-    v = widget.value;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget._iosLike) {
-      return CupertinoListTile.notched(
-        title: Text(widget.title),
-        trailing: CupertinoSwitch(
-            activeColor: const Color(0xff005eb0),
-            value: v,
-            onChanged: (newValue) {
-              v = newValue;
-              setState(() {});
-              widget.onChanged?.call(newValue);
-            }),
-      );
-    }
-    return Row(
-      children: [
-        CupertinoSwitch(
-            activeColor: const Color(0xff005eb0),
-            value: v,
-            onChanged: (newValue) {
-              setState(() {
-                v = newValue;
-              });
-            }),
-        if (!widget._iosLike) const SizedBox(width: 15),
-        if (!widget._iosLike) Text(widget.title),
-      ],
-    );
-  }
-}
-
-class _DialogDropdown<T> extends StatefulWidget {
-  final String title;
-  final T? value;
-  final List<T> avaliList;
-  final bool _ios;
-  final void Function(T value)? onChanged;
-  const _DialogDropdown(
-      {required this.title, required this.value, required this.avaliList})
-      : _ios = false,
-        onChanged = null;
-  const _DialogDropdown.ios(
-      {required this.title,
-      required this.value,
-      required this.avaliList,
-      required this.onChanged})
-      : _ios = true;
-
-  @override
-  State<_DialogDropdown<T>> createState() => _DialogDropdownState<T>();
-}
-
-class _DialogDropdownState<T> extends State<_DialogDropdown<T>> {
-  T? v;
-  @override
-  void initState() {
-    v = widget.value;
-    super.initState();
-  }
-
-  Widget buildCupertinoPicker() {
-    return CupertinoPicker.builder(
-      childCount: widget.avaliList.length,
-      magnification: 1.22,
-      squeeze: 1.2,
-      useMagnifier: true,
-      itemExtent: 32,
-      scrollController: FixedExtentScrollController(
-        initialItem: v == null ? 0 : widget.avaliList.indexOf(v as T),
-      ),
-      onSelectedItemChanged: (int selectedItem) {
-        v = widget.avaliList[selectedItem];
-        HapticFeedback.mediumImpact();
-        setState(() {});
-        widget.onChanged?.call(v as T);
-      },
-      itemBuilder: (context, index) => Center(
-          child: Text(widget.avaliList[index].toString().split('.').last)),
-    );
-  }
-
-  void _showCupertinoPickerDialog() {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => Container(
-        height: 216,
-        padding: const EdgeInsets.only(top: 6.0),
-        margin:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        child: SafeArea(
-          top: false,
-          child: buildCupertinoPicker(),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget._ios) {
-      return CupertinoListTile.notched(
-        title: Text(widget.title),
-        onTap: _showCupertinoPickerDialog,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              v.toString().split('.').last,
-              style: const TextStyle(
-                  color: CupertinoColors.systemGrey,
-                  fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(width: 10),
-            const CupertinoListTileChevron(),
-          ],
-        ),
-      );
-    }
-    return Column(
-      children: [
-        Align(alignment: Alignment.centerLeft, child: Text(widget.title)),
-        const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffd9d9d9)),
-              borderRadius: BorderRadius.circular(5)),
-          child: DropdownButtonHideUnderline(
-              child: DropdownButton<T>(
-            value: v,
-            isExpanded: true,
-            onChanged: (newValue) {
-              v = newValue;
-              setState(() {});
-            },
-            items: widget.avaliList
-                .map((e) => DropdownMenuItem<T>(
-                    value: e,
-                    alignment: Alignment.centerLeft,
-                    child: Text("   ${e.toString().split('.').last}")))
-                .toList(),
-          )),
-        ),
-      ],
-    );
   }
 }
 

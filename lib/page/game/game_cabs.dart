@@ -55,9 +55,7 @@ class _GameCabsState extends State<GameCabs> {
                   ),
                 ],
               )),
-          Column(
-            children: machine.map((e) => _GameCabItem(e)).toList(),
-          ),
+          Column(children: machine.map((e) => _GameCabItem(e)).toList()),
           Stack(
             children: [
               Container(
@@ -97,6 +95,7 @@ class _GameCabsState extends State<GameCabs> {
               )
             ],
           ),
+          const SizedBox(height: 12),
         ],
       ),
     );
@@ -127,9 +126,6 @@ class _GameCabItem extends StatelessWidget {
             AppRoutes.gameCab.routeName,
             pathParameters: {'mid': machine.id!},
           );
-          // final bool? isTokenInserted = await nav.push(
-          //   CupertinoPageRoute(builder: (context) => CabDetail(machine.id!)),
-          // );
           if (isTokenInserted == true) {
             log('isTokenInserted: $isTokenInserted');
             router.goNamed(
@@ -141,7 +137,9 @@ class _GameCabItem extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Themes.borderColor)),
+              border: Border.all(
+                  color: Themes.borderColor,
+                  strokeAlign: BorderSide.strokeAlignOutside)),
           height: 155,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
@@ -159,14 +157,12 @@ class _GameCabItem extends StatelessWidget {
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(
-                      gradient: RadialGradient(
-                          colors: [Colors.black54, Colors.transparent],
-                          // colors: [Colors.red, Colors.transparent],
-                          radius: 1,
-                          focalRadius: 15,
-                          // center: Alignment(-1, 1.8),
-                          center: Alignment.bottomLeft,
-                          stops: [0.3, 1]),
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        colors: [Colors.black, Colors.transparent],
+                        transform: GradientRotation(12),
+                        stops: [0, 0.6],
+                      ),
                     ),
                   ),
                 ),

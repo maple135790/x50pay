@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_string_escapes
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -47,7 +48,8 @@ class HomeViewModel extends BaseViewModel {
       user = GlobalSingleton.instance.user;
       await EasyLoading.dismiss();
       return true;
-    } on Exception catch (_) {
+    } catch (e) {
+      log('', error: e, name: 'home init');
       await EasyLoading.dismiss();
       return false;
     }

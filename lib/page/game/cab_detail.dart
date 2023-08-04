@@ -22,6 +22,24 @@ class CabDetail extends StatefulWidget {
 class _CabDetailState extends BaseStatefulState<CabDetail> {
   final viewModel = CabDatailViewModel();
 
+  void onCabSelect({
+    required String caboid,
+    required String label,
+    required int index,
+    required List<List<dynamic>> mode,
+  }) {
+    showDialog(
+        context: context,
+        builder: (context) => _CabSelect(
+              viewModel,
+              caboid: caboid,
+              label: label,
+              id: widget.machineId,
+              machineIndex: index,
+              modes: mode,
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -108,8 +126,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
               height: 110,
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: _buildChildren(
-                      divIndex == 0 ? cabGroup1 : cabGroup2!,
+                  children: _buildCabs(divIndex == 0 ? cabGroup1 : cabGroup2!,
                       caboid: caboid)),
             ),
           ));
@@ -203,7 +220,8 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
               tagName: tagLabel,
               cabLabel: model.cabinets.first.label),
           ...buildStreamPic(model.spic, model.surl),
-          ...buildCabBlock(caboid: model.caboid)
+          ...buildCabBlock(caboid: model.caboid),
+          const SizedBox(height: 12),
         ],
       ),
     );
@@ -213,82 +231,86 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
       {required double price,
       required String tagName,
       required String cabLabel}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: SizedBox(
-        height: 150,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                  child: Image(
-                image: _getGameCabImage(widget.machineId),
-                alignment: const Alignment(0, -0.25),
-                fit: BoxFit.fitWidth,
-                errorBuilder: (context, error, stackTrace) {
-                  log('',
-                      name: 'err cabDetailLoaded',
-                      error: 'error loading gamecab image: $error');
-                  return Image(
-                    image: _getGameCabImageFallback(widget.machineId),
-                  );
-                },
-              )),
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      colors: [Colors.black, Colors.transparent],
-                      transform: GradientRotation(12),
-                      stops: [0, 0.6],
-                    ),
-                  ),
+    return Container(
+      height: 150,
+      clipBehavior: Clip.antiAlias,
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+            color: const Color(0xff505050),
+            strokeAlign: BorderSide.strokeAlignOutside),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+              child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Image(
+              image: _getGameCabImage(widget.machineId),
+              alignment: const Alignment(0, -0.25),
+              fit: BoxFit.fitWidth,
+              errorBuilder: (context, error, stackTrace) {
+                log('',
+                    name: 'err cabDetailLoaded',
+                    error: 'error loading gamecab image: $error');
+                return Image(
+                  image: _getGameCabImageFallback(widget.machineId),
+                );
+              },
+            ),
+          )),
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  colors: [Colors.black, Colors.transparent],
+                  transform: GradientRotation(12),
+                  stops: [0, 0.6],
                 ),
               ),
-              Positioned(
-                bottom: 15,
-                left: 15,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(cabLabel,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            shadows: [
-                              Shadow(color: Colors.black, blurRadius: 18)
-                            ])),
-                    Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                      const Icon(Icons.sell,
-                          size: 18, color: Color(0xe6ffffff)),
-                      Text('  $tagName',
-                          style: const TextStyle(
-                              height: 0,
-                              color: Color(0xffbcbfbf),
-                              fontSize: 16,
-                              shadows: [
-                                Shadow(color: Colors.black, blurRadius: 15)
-                              ])),
-                      const SizedBox(width: 5),
-                      const Icon(Icons.attach_money,
-                          size: 18, color: Color(0xe6ffffff)),
-                      Text('${price.toInt()}P',
-                          style: const TextStyle(
-                              height: 0,
-                              color: Color(0xffbcbfbf),
-                              fontSize: 16,
-                              shadows: [
-                                Shadow(color: Colors.black, blurRadius: 15)
-                              ]))
-                    ]),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            bottom: 6,
+            left: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(cabLabel,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        shadows: [
+                          Shadow(color: Colors.black, blurRadius: 18)
+                        ])),
+                Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                  const Icon(Icons.sell, size: 18, color: Color(0xe6ffffff)),
+                  Text('  $tagName',
+                      style: const TextStyle(
+                          height: 0,
+                          color: Color(0xffbcbfbf),
+                          fontSize: 16,
+                          shadows: [
+                            Shadow(color: Colors.black, blurRadius: 15)
+                          ])),
+                  const SizedBox(width: 5),
+                  const Icon(Icons.attach_money,
+                      size: 18, color: Color(0xe6ffffff)),
+                  Text('${price.toInt()}P',
+                      style: const TextStyle(
+                          height: 0,
+                          color: Color(0xffbcbfbf),
+                          fontSize: 16,
+                          shadows: [
+                            Shadow(color: Colors.black, blurRadius: 15)
+                          ]))
+                ]),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -302,32 +324,32 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
     }
     var list = <Widget>[];
     for (var i = 0; i < surl.length; i++) {
-      list.add(Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: GestureDetector(
-            onTap: () {
-              launchUrlString(surl[i].replaceAll('\'', ''),
-                  mode: LaunchMode.externalNonBrowserApplication);
-            },
-            child: Container(
-              clipBehavior: Clip.antiAlias,
-              margin: const EdgeInsets.only(top: 10),
-              decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xff505050)),
-                  borderRadius: BorderRadius.circular(6)),
-              child: CachedNetworkImage(
-                imageUrl: 'https://pay.x50.fun${spic[i]}',
-                height: 55,
-                fit: BoxFit.fill,
-              ),
-            )),
-      ));
+      list.add(GestureDetector(
+          onTap: () {
+            launchUrlString(surl[i].replaceAll('\'', ''),
+                mode: LaunchMode.externalNonBrowserApplication);
+          },
+          child: Container(
+            width: double.maxFinite,
+            clipBehavior: Clip.antiAlias,
+            margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: const Color(0xff505050),
+                    strokeAlign: BorderSide.strokeAlignOutside),
+                borderRadius: BorderRadius.circular(6)),
+            child: CachedNetworkImage(
+              imageUrl: 'https://pay.x50.fun${spic[i]}',
+              height: 55,
+              fit: BoxFit.fill,
+            ),
+          )));
     }
 
     return list;
   }
 
-  List<Widget> _buildChildren(List<Cabinet> cabs, {required String caboid}) {
+  List<Widget> _buildCabs(List<Cabinet> cabs, {required String caboid}) {
     List<Widget> children = [];
 
     for (Cabinet cab in cabs) {
@@ -335,41 +357,37 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
       children.add(Expanded(
           child: GestureDetector(
         onTap: () {
-          showDialog(
-              context: context,
-              builder: (context) => _CabSelect(
-                    viewModel,
-                    caboid: caboid,
-                    label: cab.label,
-                    id: widget.machineId,
-                    machineIndex: cab.num,
-                    modes: cab.mode,
-                  ));
+          onCabSelect(
+            caboid: caboid,
+            label: cab.label,
+            index: cab.num,
+            mode: cab.mode,
+          );
         },
         child: LayoutBuilder(
           builder: (context, constraint) {
             final top = constraint.biggest.height * 0.25;
             final right = constraint.biggest.width * 0.05 * -1;
 
-            return Stack(
-              children: [
-                Positioned(
-                    right: right,
-                    top: top,
-                    child: CachedNetworkImage(
-                      imageUrl: getMachineIcon(widget.machineId),
-                      errorWidget: (context, url, error) => const SizedBox(),
-                      height: 95,
-                      color: Colors.white.withOpacity(0.15).invert(0.28),
-                    )),
-                Positioned.fill(
-                  child: Container(
-                    margin: EdgeInsets.zero,
-                    decoration: BoxDecoration(
-                        // color: Theme.of(context).scaffoldBackgroundColor,
-                        borderRadius: BorderRadius.circular(5),
-                        border:
-                            Border.all(color: Themes.borderColor, width: 1)),
+            return Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                      color: Themes.borderColor,
+                      strokeAlign: BorderSide.strokeAlignOutside)),
+              child: Stack(
+                children: [
+                  Positioned(
+                      right: right,
+                      top: top,
+                      child: CachedNetworkImage(
+                        imageUrl: getMachineIcon(widget.machineId),
+                        errorWidget: (context, url, error) => const SizedBox(),
+                        height: 95,
+                        color: Colors.white.withOpacity(0.15).invert(0.28),
+                      )),
+                  Positioned.fill(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -388,8 +406,8 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),

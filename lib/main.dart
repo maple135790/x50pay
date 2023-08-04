@@ -1,17 +1,20 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/page/account/popups/quiC_pay_pref.dart';
+import 'package:x50pay/page/account/popups/quick_pay.dart';
 import 'package:x50pay/page/pages.dart';
 import 'package:x50pay/r.g.dart';
 

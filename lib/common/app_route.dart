@@ -25,6 +25,18 @@ class AppRoutes {
   static const signUp = (routeName: 'signUp', path: '/signUp');
   static const buyMPass = (routeName: 'buyMPass', path: 'buyMPass');
   static const settings = (routeName: 'setting', path: '/setting');
+  static const quicPayPref = (routeName: 'quicPayPref', path: 'quicPayPref');
+  static const paymentPref = (routeName: 'paymentPref', path: 'paymentPref');
+  static const padPref = (routeName: 'padPref', path: 'padPref');
+  static const changePassword =
+      (routeName: 'changePassword', path: 'changePassword');
+  static const changeEmail = (routeName: 'changeEmail', path: 'changeEmail');
+  static const bidRecords = (routeName: 'bidRecords', path: 'bidRecords');
+  static const ticketRecords =
+      (routeName: 'ticketRecords', path: 'ticketRecords');
+  static const playRecords = (routeName: 'playRecords', path: 'playRecords');
+  static const ticketUsedRecords =
+      (routeName: 'ticketUsedRecords', path: 'ticketUsedRecords');
   static const game = (routeName: 'game', path: '/game');
   static const gameStore = (routeName: 'gameStore', path: 'store');
   static const gameCab = (routeName: 'gameCab', path: 'cabs/:mid');

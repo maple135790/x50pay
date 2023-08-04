@@ -1,15 +1,15 @@
 part of "../account.dart";
 
-class _TicketUsedRecord extends StatefulWidget {
+class TicketUsedRecords extends StatefulWidget {
   final AccountViewModel viewModel;
 
-  const _TicketUsedRecord(this.viewModel, {Key? key}) : super(key: key);
+  const TicketUsedRecords(this.viewModel, {Key? key}) : super(key: key);
 
   @override
-  State<_TicketUsedRecord> createState() => __TicketUsedRecordState();
+  State<TicketUsedRecords> createState() => _TicketUsedRecordsState();
 }
 
-class __TicketUsedRecordState extends BaseStatefulState<_TicketUsedRecord> {
+class _TicketUsedRecordsState extends BaseStatefulState<TicketUsedRecords> {
   late AccountViewModel model;
 
   @override

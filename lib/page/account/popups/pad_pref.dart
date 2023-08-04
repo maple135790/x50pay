@@ -31,11 +31,10 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return _Dialog.ios(
+    return AccountDialog.ios(
       title: 'X50Pad 西門排隊平板偏好選項',
-      scrollable: true,
       onConfirm: savePadPref,
-      content: FutureBuilder(
+      content: (showButtonBar) => FutureBuilder(
           future: getPadSettings,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
@@ -48,6 +47,8 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
                   ? const Center(child: Text('failed'))
                   : const SizedBox();
             } else {
+              showButtonBar(true);
+
               gotModel = true;
               return _PadPrefLoaded(
                 model: widget.viewModel.padSettingsModel!,
@@ -96,23 +97,28 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
           nameController.dispose();
           return true;
         },
-        child: _Dialog.ios(
+        child: AccountDialog.ios(
           title: '平板上顯示不同暱稱',
-          content: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-            child: CupertinoTextField(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-              decoration: BoxDecoration(
-                color: const Color(0xff1c1c1e),
-                borderRadius: BorderRadius.circular(11),
+          content: (showButtonBar) {
+            showButtonBar(true);
+
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+              child: CupertinoTextField(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                decoration: BoxDecoration(
+                  color: const Color(0xff1c1c1e),
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                placeholder: nickname,
+                controller: nameController,
+                autofocus: true,
+                style: const TextStyle(
+                    color: CupertinoColors.white, fontWeight: FontWeight.w500),
               ),
-              placeholder: nickname,
-              controller: nameController,
-              autofocus: true,
-              style: const TextStyle(
-                  color: CupertinoColors.white, fontWeight: FontWeight.w500),
-            ),
-          ),
+            );
+          },
         ),
       ),
     ));
@@ -166,7 +172,7 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
       children: [
         CupertinoListSection.insetGrouped(
           children: [
-            _DialogSwitch.ios(
+            DialogSwitch.ios(
               value: isNameShown,
               title: '不顯示暱稱',
               onChanged: (value) {

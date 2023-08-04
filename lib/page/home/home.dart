@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class _HomeState extends BaseStatefulState<Home> {
       key: ValueKey(viewModel.entry),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
+          log('home not done');
           return const SizedBox();
         }
         if (snapshot.data == false) {

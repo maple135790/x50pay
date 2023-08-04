@@ -62,11 +62,11 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return _Dialog.ios(
+    return AccountDialog.ios(
       title: '更改信箱',
       onConfirm: changeEmail,
       customConfirmButton: confirmButton(),
-      content: CupertinoListSection.insetGrouped(
+      content: (showButtonBar) => CupertinoListSection.insetGrouped(
         footer:
             Text(_errorText ?? '', style: const TextStyle(color: Colors.red)),
         children: [
