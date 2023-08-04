@@ -567,4 +567,14 @@ class Repository extends Api {
     );
     return;
   }
+
+  Future<String> getSponserDocument() async {
+    final response = await Api.makeRequest(
+      dest: '',
+      customDest: 'https://pay.x50.fun/static/templates-v4/sponser.html?v1.1',
+      method: HttpMethod.get,
+      body: {},
+    );
+    return response.body;
+  }
 }

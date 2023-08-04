@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -7,7 +10,9 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
+import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
 import 'package:x50pay/page/giftSystem/gift_system_view_model.dart';
+import 'package:x50pay/r.g.dart';
 
 part 'collab_shop_list.dart';
 
@@ -63,7 +68,6 @@ class _CollabLoaded extends StatefulWidget {
 }
 
 class _CollabLoadedState extends State<_CollabLoaded> {
-  // final viewModel = GiftSystemViewModel();
   static const titleImageUrl = 'https://pay.x50.fun/static/giftcenter.png';
   final tabs = const <Widget>[Tab(text: '商家清單 / 兌換')];
 
@@ -75,12 +79,12 @@ class _CollabLoadedState extends State<_CollabLoaded> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Stack(children: [
-            Positioned(
+            const Positioned(
                 right: 0,
-                child: Image.network(
-                  titleImageUrl,
+                child: Image(
+                  image: CachedNetworkImageProvider(titleImageUrl),
                   height: 135,
-                  opacity: const AlwaysStoppedAnimation(80),
+                  opacity: AlwaysStoppedAnimation(0.8),
                 )),
             SizedBox(
               child: Column(

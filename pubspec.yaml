@@ -51,6 +51,7 @@ flutter:
   assets:
   - assets/images/appIcon/appstore.png
   - assets/images/appIcon/playstore.png
+  - assets/images/collab/shop-solid.svg
   - assets/images/common/header_float_icon.jpg
   - assets/images/common/header_icon.png
   - assets/images/common/header_icon_rsz.png
@@ -108,6 +109,7 @@ flutter:
   - assets/tests/entry.json
   - assets/tests/rpc_chusp08.html
   - assets/tests/rqc_bpl.html
+  - assets/tests/sponser.html
   fonts:
   - family: NotoSansJP
     fonts:

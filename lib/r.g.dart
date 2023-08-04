@@ -238,6 +238,9 @@
     class _R_Svg_AssetResource {
       const _R_Svg_AssetResource();
     
+  /// asset: assets/images/collab/shop-solid.svg
+      // ignore: non_constant_identifier_names
+      final shop_solid = const AssetResource("assets/images/collab/shop-solid.svg", packageName: null);
   /// asset: assets/images/common/spinner-solid.svg
       // ignore: non_constant_identifier_names
       final spinner_solid = const AssetResource("assets/images/common/spinner-solid.svg", packageName: null);
@@ -521,6 +524,12 @@
     
       final asset = const _R_Svg_AssetResource();
     
+  /// asset: assets/images/collab/shop-solid.svg
+      // ignore: non_constant_identifier_names
+      AssetSvg shop_solid({required double width, required double height}) {
+        final imageProvider = AssetSvg(asset.shop_solid.keyName, width: width, height: height);
+        return imageProvider;
+      }
   /// asset: assets/images/common/spinner-solid.svg
       // ignore: non_constant_identifier_names
       AssetSvg spinner_solid({required double width, required double height}) {
