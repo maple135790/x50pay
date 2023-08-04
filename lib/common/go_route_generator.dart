@@ -30,7 +30,7 @@ final debugRoute = AppRoutes.login.path;
 
 RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
       initialLocation:
-          !GlobalSingleton.instance.devIsServiceOnline && kDebugMode
+          kDebugMode && !GlobalSingleton.instance.isServiceOnline
               ? debugRoute
               : isLogin
                   ? AppRoutes.home.path

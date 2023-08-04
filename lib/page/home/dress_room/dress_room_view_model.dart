@@ -3,24 +3,23 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
-import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
 import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
 
-class DressRoomViewModel extends ChangeNotifier {
+class DressRoomViewModel extends BaseViewModel {
   static const avatarUrl = 'https://pay.x50.fun/api/v1/list/avater';
   List<Avatar> avatars = [];
   final client = http.Client();
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.devIsServiceOnline;
 
   Future<List<Avatar>> init() async {
     const parentSelector = 'body > div > div > div';
 
     try {
       late String rawDoc;
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         final response = await repo.getAvatar();
         if (response.statusCode != 200) {
           throw Exception('statusCode: ${response.statusCode}');
@@ -48,7 +47,7 @@ class DressRoomViewModel extends ChangeNotifier {
 
   Future<String> setAvatar(String id) async {
     String text = '';
-    if (!kDebugMode || isForce) {
+    if (!kDebugMode || isForceFetch) {
       final response = await repo.setAvatar(id);
       text = response.body;
     } else {

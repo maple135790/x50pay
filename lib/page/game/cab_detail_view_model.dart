@@ -5,14 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class CabDatailViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.devIsServiceOnline;
   CabinetModel? cabinetModel;
   BasicResponse? response;
   int lineupCount = -1;
@@ -27,7 +25,7 @@ class CabDatailViewModel extends BaseViewModel {
 
       if (sid == null) return false;
 
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         cabinetModel = await repo.selGame(machineId);
       } else {
         cabinetModel =
@@ -43,7 +41,7 @@ class CabDatailViewModel extends BaseViewModel {
   }
 
   Future<int> getPadLineup(CabinetModel model) async {
-    if (!kDebugMode || isForce) {
+    if (!kDebugMode || isForceFetch) {
       lineupCount = await repo.getPadLineup(model.padmid, model.padlid);
     } else {
       lineupCount = 0;
@@ -62,7 +60,7 @@ class CabDatailViewModel extends BaseViewModel {
       await Future.delayed(const Duration(milliseconds: 100));
       final prefs = await SharedPreferences.getInstance();
       final sid = prefs.getString('store_id');
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         response = await repo.doInsert(isTicket, '$id/$sid$machineNum', mode);
       } else {
         response =

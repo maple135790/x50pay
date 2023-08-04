@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -12,7 +11,6 @@ import 'package:x50pay/repository/repository.dart';
 class GiftSystemViewModel extends BaseViewModel {
   final repo = Repository();
 
-  bool get isForce => GlobalSingleton.instance.devIsServiceOnline;
   GiftBoxModel? giftBoxModel;
   LotteListModel? lotteListModel;
 
@@ -33,7 +31,7 @@ class GiftSystemViewModel extends BaseViewModel {
 
   Future<bool> _getLotteList() async {
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         lotteListModel = await repo.getLotteList();
       } else {
         lotteListModel = LotteListModel.fromJson(jsonDecode(testLotteList));
@@ -47,7 +45,7 @@ class GiftSystemViewModel extends BaseViewModel {
 
   Future<bool> _getGiftBox() async {
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         giftBoxModel = await repo.getGiftBox();
       } else {
         giftBoxModel = GiftBoxModel.fromJson(jsonDecode(testGiftBox));

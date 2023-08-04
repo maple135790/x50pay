@@ -531,7 +531,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
 
     switch (widget.program) {
       case _MpassProgram.loner:
-        if (GlobalSingleton.instance.devIsServiceOnline) {
+        if (GlobalSingleton.instance.isServiceOnline) {
           final rawResponse = await repo.buyVipOne();
           parseResponse(rawResponse);
         } else {
@@ -546,7 +546,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
           emailList.add(email.text);
         }
         log("email: $emailList", name: "doBuyVip");
-        if (GlobalSingleton.instance.devIsServiceOnline) {
+        if (GlobalSingleton.instance.isServiceOnline) {
           final rawResponse = await repo.buyVipMany(emailList);
           parseResponse(rawResponse);
         } else {
@@ -554,7 +554,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
         }
         break;
       case _MpassProgram.monthlyRaising:
-        if (GlobalSingleton.instance.devIsServiceOnline) {
+        if (GlobalSingleton.instance.isServiceOnline) {
           final rawResponse = await repo.buyVipGradeOne();
           parseResponse(rawResponse);
         } else {

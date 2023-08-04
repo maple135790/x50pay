@@ -256,6 +256,9 @@
   /// asset: assets/images/home/shirt-solid.svg
       // ignore: non_constant_identifier_names
       final shirt_solid = const AssetResource("assets/images/home/shirt-solid.svg", packageName: null);
+  /// asset: assets/images/quest/stamp.svg
+      // ignore: non_constant_identifier_names
+      final stamp = const AssetResource("assets/images/quest/stamp.svg", packageName: null);
     }
 // ignore: camel_case_types
     class _R_Text_AssetResource {
@@ -552,6 +555,12 @@
       // ignore: non_constant_identifier_names
       AssetSvg shirt_solid({required double width, required double height}) {
         final imageProvider = AssetSvg(asset.shirt_solid.keyName, width: width, height: height);
+        return imageProvider;
+      }
+  /// asset: assets/images/quest/stamp.svg
+      // ignore: non_constant_identifier_names
+      AssetSvg stamp({required double width, required double height}) {
+        final imageProvider = AssetSvg(asset.stamp.keyName, width: width, height: height);
         return imageProvider;
       }
     }

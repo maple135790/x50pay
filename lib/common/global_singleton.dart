@@ -6,7 +6,7 @@ import 'package:x50pay/repository/repository.dart';
 
 class GlobalSingleton {
   final ValueNotifier<UserModel?> userNotifier = ValueNotifier(null);
-  final devIsServiceOnline = false;
+  final isServiceOnline = kReleaseMode || false;
   final _costEnabled = false;
   UserModel? user;
   int _lastChkMe = -1;
@@ -32,7 +32,7 @@ class GlobalSingleton {
       if (isLess30Sec && !force) return false;
       final repo = Repository();
       _lastChkMe = DateTime.now().millisecondsSinceEpoch;
-      if (!kDebugMode || devIsServiceOnline) {
+      if (!kDebugMode || isServiceOnline) {
         user = await repo.getUser();
         userNotifier.value = user;
         // 未回傳UserModel

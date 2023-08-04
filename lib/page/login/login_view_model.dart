@@ -3,13 +3,11 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class LoginViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.devIsServiceOnline;
   BasicResponse? response;
 
   Future<bool> login(
@@ -20,7 +18,7 @@ class LoginViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         response = await repo.login(email: email, password: password);
       } else {
         response =

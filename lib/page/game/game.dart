@@ -118,27 +118,8 @@ class _StoreItem extends StatelessWidget {
   const _StoreItem(this.store, this.prefix, {Key? key}) : super(key: key);
 
   ImageProvider _getStoreImage(int storeId, {bool isOnline = false}) {
-    late _X50Store store;
-
-    if (isOnline) {
-      return CachedNetworkImageProvider(
-          "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
-    }
-    for (var s in _X50Store.values) {
-      if (s.sid == storeId) {
-        store = s;
-        break;
-      }
-    }
-
-    switch (store) {
-      case _X50Store.ximen1:
-        return R.image.a37656_jpg();
-      case _X50Store.shilin:
-        return R.image.a37657_jpg();
-      case _X50Store.ximen2:
-        return R.image.a37658_jpg();
-    }
+    return CachedNetworkImageProvider(
+        "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
   }
 
   void onStoreSelected(GoRouter router) async {
@@ -180,7 +161,7 @@ class _StoreItem extends StatelessWidget {
                     child: Image(
                       image: _getStoreImage(store.sid!,
                           isOnline:
-                              GlobalSingleton.instance.devIsServiceOnline),
+                              GlobalSingleton.instance.isServiceOnline),
                       fit: BoxFit.fitWidth,
                       colorBlendMode: BlendMode.modulate,
                     )),
@@ -232,15 +213,6 @@ class _StoreItem extends StatelessWidget {
       ),
     );
   }
-}
-
-enum _X50Store {
-  ximen1(37656),
-  shilin(37657),
-  ximen2(37658);
-
-  final int sid;
-  const _X50Store(this.sid);
 }
 
 ImageProvider _getGameCabImageFallback(String gameId) {
@@ -297,7 +269,7 @@ ImageProvider _getGameCabImageFallback(String gameId) {
   }
 }
 
-ImageProvider _getGameCabImage(String gameId, {bool isOnline = false}) {
+ImageProvider _getGameCabImage(String gameId) {
   return CachedNetworkImageProvider(
     'https://pay.x50.fun/static/gamesimg/$gameId.png?v1.1',
   );

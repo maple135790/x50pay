@@ -147,8 +147,7 @@ class _GameCabItem extends StatelessWidget {
               children: [
                 Positioned.fill(
                     child: Image(
-                  image: _getGameCabImage(machine.id!,
-                      isOnline: GlobalSingleton.instance.devIsServiceOnline),
+                  image: _getGameCabImage(machine.id!),
                   color: const Color.fromARGB(35, 0, 0, 0),
                   colorBlendMode: BlendMode.srcATop,
                   fit: BoxFit.fitWidth,

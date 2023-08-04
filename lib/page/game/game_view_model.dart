@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
@@ -13,7 +12,6 @@ import 'package:x50pay/repository/repository.dart';
 
 class GameViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.devIsServiceOnline;
 
   StoreModel? stores;
   String? storeName;
@@ -27,14 +25,11 @@ class GameViewModel extends BaseViewModel {
     try {
       await EasyLoading.show();
       await Future.delayed(const Duration(milliseconds: 100));
-      if (!kDebugMode || isForce) {
-        // user ??= await repo.getUser();
+      if (!kDebugMode || isForceFetch) {
         stores = await repo.getStores();
       } else {
-        // user = UserModel.fromJson(jsonDecode(testUser(code: debugFlag)));
         stores = StoreModel.fromJson(jsonDecode(testStorelist));
       }
-      // GlobalSingleton.instance.user = user;
       await EasyLoading.dismiss();
       return stores;
     } on Exception catch (_) {
@@ -55,7 +50,7 @@ class GameViewModel extends BaseViewModel {
 
       if (sid == null) return null;
 
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         gamelist = await repo.getGameList(storeId: sid);
         storeName = prefs.getString('store_name');
       } else {

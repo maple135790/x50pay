@@ -102,6 +102,7 @@ flutter:
   - assets/images/home/top.png
   - assets/images/home/vts.png
   - assets/images/login/login_banner.jpg
+  - assets/images/quest/stamp.svg
   - assets/texts/avater.txt
   - assets/texts/license.txt
   - assets/tests/entry.json

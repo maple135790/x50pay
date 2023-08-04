@@ -9,6 +9,7 @@ import 'package:x50pay/common/models/quest_campaign/campaign.dart';
 import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/quest_campaign/quest_campaign_view_model.dart';
+import 'package:x50pay/r.g.dart';
 
 class QuestCampaign extends StatefulWidget {
   final String campaignId;
@@ -73,42 +74,58 @@ class _QuestCampaignState extends State<QuestCampaign> {
     ));
   }
 
-  Widget buildStampRow(int stampRowCounts) {
+  Widget buildStampRow(int stampRowCounts, {required int stampCounts}) {
     return Column(
       children: [
         SizedBox(
             height: ((35 + 16) * stampRowCounts).toDouble(),
             child: Column(
-              children: List.filled(
+              children: List.generate(
+                growable: false,
                 stampRowCounts,
-                Column(
+                (rowIndex) => Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Icon(
-                          Icons.circle_rounded,
-                          size: 35,
-                          color: const Color(0xfffafafa).withOpacity(0.2),
-                        ),
-                        ...List.filled(
-                            5,
-                            Container(
-                              margin: const EdgeInsets.only(left: 7.5),
-                              padding: const EdgeInsets.only(left: 15),
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                    left: BorderSide(color: Color(0xff5a5a5a))),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.circle_rounded,
-                                  size: 35,
-                                  color:
-                                      const Color(0xfffafafa).withOpacity(0.2),
-                                ),
-                              ),
-                            ))
+                        ...List.generate(6, (colIndex) {
+                          final hasStamp =
+                              (rowIndex * 6 + colIndex + 1 > stampCounts);
+
+                          return Container(
+                            margin: colIndex != 0
+                                ? const EdgeInsets.only(left: 7.5)
+                                : null,
+                            padding: colIndex != 0
+                                ? const EdgeInsets.only(left: 15)
+                                : null,
+                            decoration: colIndex != 0
+                                ? const BoxDecoration(
+                                    border: Border(
+                                        left: BorderSide(
+                                      color: Color(0xff5a5a5a),
+                                    )),
+                                  )
+                                : null,
+                            child: Center(
+                              child: hasStamp
+                                  ? Icon(
+                                      Icons.circle_rounded,
+                                      size: 35,
+                                      color: const Color(0xfffafafa)
+                                          .withOpacity(0.2),
+                                    )
+                                  : SizedBox.fromSize(
+                                      size: const Size.square(35),
+                                      child: Image(
+                                        image:
+                                            R.svg.stamp(width: 25, height: 25),
+                                        color: const Color(0xfffafafa),
+                                      ),
+                                    ),
+                            ),
+                          );
+                        })
                       ],
                     ),
                     divider(),
@@ -285,7 +302,10 @@ class _QuestCampaignState extends State<QuestCampaign> {
               border: Border.all(color: const Color(0xff3e3e3e)),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: buildStampRow(data.stampRowCounts ?? 1),
+            child: buildStampRow(
+              data.stampRowCounts ?? 1,
+              stampCounts: data.ownedPoints,
+            ),
           ),
           divider(),
           Center(
@@ -322,6 +342,7 @@ class _RedeemItemDetail extends StatefulWidget {
 
 class _RedeemItemDetailState extends State<_RedeemItemDetail> {
   static const _kMaxBottomSheetHeight = 80.0;
+  Offset _offset = const Offset(0, 1);
   double bottomSheetHeight = 0;
 
   @override
@@ -329,6 +350,7 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
     super.initState();
     Timer(const Duration(milliseconds: 450), () {
       bottomSheetHeight = _kMaxBottomSheetHeight;
+      _offset = const Offset(0, 0);
       setState(() {});
     });
   }
@@ -347,41 +369,44 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
     return Scaffold(
       bottomSheet: BottomSheet(
           onClosing: () {},
-          backgroundColor: const Color(0xff2a2a2a),
           enableDrag: false,
+          dragHandleSize: Size.zero,
           shape: const RoundedRectangleBorder(),
-          builder: (context) => AnimatedContainer(
-                height: bottomSheetHeight,
-                curve: Curves.easeOutCubic,
+          builder: (context) => AnimatedSlide(
+                offset: _offset,
+                curve: Curves.easeOutExpo,
                 duration: const Duration(milliseconds: 300),
-                padding: const EdgeInsets.all(15),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Color(0xff3e3e3e)),
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: const BoxDecoration(
+                    color: Color(0xff2a2a2a),
+                    border: Border(
+                      top: BorderSide(color: Color(0xff3e3e3e)),
+                    ),
                   ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                          onPressed: null,
-                          style: buttonStyle,
-                          child: const Text('點數不足',
-                              style: TextStyle(color: Color(0xff1e1e1e)))),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          style: buttonStyle,
-                          child: const Text('思考一下',
-                              style: TextStyle(color: Color(0xff1e1e1e)))),
-                    ),
-                  ],
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                            onPressed: null,
+                            style: buttonStyle,
+                            child: const Text('點數不足',
+                                style: TextStyle(color: Color(0xff1e1e1e)))),
+                      ),
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: buttonStyle,
+                            child: const Text('思考一下',
+                                style: TextStyle(color: Color(0xff1e1e1e)))),
+                      ),
+                    ],
+                  ),
                 ),
               )),
       body: SingleChildScrollView(

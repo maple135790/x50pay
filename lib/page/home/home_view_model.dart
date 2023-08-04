@@ -15,7 +15,6 @@ import 'package:x50pay/repository/repository.dart';
 
 class HomeViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.devIsServiceOnline;
   UserModel? user;
   EntryModel? _entry;
   EntryModel? get entry => _entry;
@@ -37,7 +36,7 @@ class HomeViewModel extends BaseViewModel {
 
     try {
       await GlobalSingleton.instance.checkUser(force: true);
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         entry = await repo.getEntry();
       } else {
         entry = await compute<String, EntryModel>(
@@ -62,7 +61,7 @@ class HomeViewModel extends BaseViewModel {
 
     try {
       await GlobalSingleton.instance.checkUser(force: true);
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         response = await repo.chgGradev2(gid: gid, grid: grid);
       }
       await EasyLoading.dismiss();

@@ -102,7 +102,7 @@ class QuestCampaignViewModel extends BaseViewModel {
   }
 
   Future<void> onAddStampRowTap({required String campaignId}) async {
-    repo.addCampaignStampRow(campaignId);
+    if (!kDebugMode || isForceFetch) repo.addCampaignStampRow(campaignId);
     return;
   }
 }

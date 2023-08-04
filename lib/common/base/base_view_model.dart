@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:x50pay/common/global_singleton.dart';
 
 class BaseViewModel extends ChangeNotifier {
-  final isForceFetch = GlobalSingleton.instance.devIsServiceOnline;
+  final isForceFetch = GlobalSingleton.instance.isServiceOnline;
 
   bool _isFunctionalHeader = true;
   bool get isFunctionalHeader => _isFunctionalHeader;

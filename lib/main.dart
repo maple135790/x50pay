@@ -25,7 +25,6 @@ final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 Future<bool> _checkLogin() async {
   final pref = await SharedPreferences.getInstance();
   final sess = pref.getString('session');
-  log('sess: $sess', name: '_checkLogin');
   if (sess == null) return false;
   return await GlobalSingleton.instance.checkUser();
 }
@@ -33,7 +32,7 @@ Future<bool> _checkLogin() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final islogin = await _checkLogin();
-  log('devIsServiceOnline: ${GlobalSingleton.instance.devIsServiceOnline}',
+  log('isServiceOnline: ${GlobalSingleton.instance.isServiceOnline}',
       name: 'main');
   log('islogin: $islogin', name: 'main');
   configLoadingStyle();

@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
 import 'package:x50pay/common/models/padSettings/pad_settings.dart';
@@ -17,7 +16,6 @@ import 'package:x50pay/repository/repository.dart';
 
 class AccountViewModel extends BaseViewModel {
   final repo = Repository();
-  final isForce = GlobalSingleton.instance.devIsServiceOnline;
 
   QuicSettingsModel? quicSettingModel;
   PadSettingsModel? padSettingsModel;
@@ -37,7 +35,7 @@ class AccountViewModel extends BaseViewModel {
     late http.Response httpResponse;
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         httpResponse = await repo.quicConfirm(atq: autoQuic, atql: autoQlock);
       } else {
         httpResponse = http.Response(testResponse(), 200);
@@ -63,7 +61,7 @@ class AccountViewModel extends BaseViewModel {
     late http.Response httpResponse;
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         httpResponse = await repo.setPadSettings(
           shname: nickname,
           shid: isNicknameShown,
@@ -103,7 +101,7 @@ class AccountViewModel extends BaseViewModel {
     late http.Response httpResponse;
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         httpResponse = await repo.autoConfirm(
             atc: autoTicket,
             atn: autoNVSV,
@@ -129,7 +127,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         quicSettingModel = await repo.getQuicSettings();
       } else {
         quicSettingModel =
@@ -149,7 +147,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         padSettingsModel = await repo.getPadSettings();
       } else {
         padSettingsModel =
@@ -173,7 +171,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         response = await repo.changePassword(oldPwd: oldPwd, pwd: pwd);
       } else {
         if (debugFlag == 700) {
@@ -203,7 +201,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         response = await repo.changeEmail(remail: email);
       } else {
         if (debugFlag == 700) {
@@ -232,7 +230,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         response = await repo.changePhone();
       } else {
         if (debugFlag == 700) {
@@ -262,7 +260,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         response = await repo.doChangePhone(phone: phone);
       } else {
         if (debugFlag == 700) {
@@ -292,7 +290,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         response = await repo.smsActivate(sms: smsCode);
       } else {
         if (debugFlag == 700) {
@@ -321,7 +319,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         bidModel = await repo.getBidLog();
       } else {
         if (debugFlag != 200) {
@@ -346,7 +344,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         ticDateLogModel = await repo.getTicDateLog();
       } else {
         if (debugFlag != 200) {
@@ -373,7 +371,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         playRecordModel = await repo.getPlayLog();
       } else {
         if (debugFlag != 200) {
@@ -400,7 +398,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         ticUsedModel = await repo.getTicUsedLog();
       } else {
         if (debugFlag != 200) {
@@ -426,7 +424,7 @@ class AccountViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForce) {
+      if (!kDebugMode || isForceFetch) {
         await repo.logout();
       } else {
         if (debugFlag != 200) {
