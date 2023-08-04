@@ -79,8 +79,8 @@ class __CollabShopListState extends State<_CollabShopList> {
         future: viewModel.init(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            log('loading');
-            return const SizedBox();
+            log('loading', name: '_CollabShopList');
+            return const Center(child: CircularProgressIndicator());
           }
 
           final data = snapshot.data!;

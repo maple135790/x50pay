@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
@@ -575,6 +576,6 @@ class Repository extends Api {
       method: HttpMethod.get,
       body: {},
     );
-    return response.body;
+    return const Utf8Decoder().convert(response.bodyBytes);
   }
 }

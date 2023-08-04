@@ -44,7 +44,6 @@ class CollabShopListViewModel extends BaseViewModel {
       } else {
         rawDocument = await rootBundle.loadString('assets/tests/sponser.html');
       }
-
       final document = parse(rawDocument);
       final rawSponserItems =
           document.querySelector('div > div.ts-menu.is-fluid')?.children ?? [];
