@@ -34,9 +34,11 @@ class CabDatailViewModel extends BaseViewModel {
       if (cabinetModel!.pad) await getPadLineup(cabinetModel!);
       await EasyLoading.dismiss();
       return true;
-    } on Exception catch (_) {
-      await EasyLoading.dismiss();
+    } catch (e) {
+      log('', error: '$e', name: 'getSelGameCab');
       return false;
+    } finally {
+      await EasyLoading.dismiss();
     }
   }
 

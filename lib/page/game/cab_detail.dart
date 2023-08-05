@@ -1,4 +1,16 @@
-part of "game.dart";
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/models/cabinet/cabinet.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/game/cab_detail_view_model.dart';
+import 'package:x50pay/page/game/game_mixin.dart';
 
 extension on Color {
   Color invert(double value) {
@@ -19,8 +31,9 @@ class CabDetail extends StatefulWidget {
   State<CabDetail> createState() => _CabDetailState();
 }
 
-class _CabDetailState extends BaseStatefulState<CabDetail> {
+class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
   final viewModel = CabDatailViewModel();
+  late Future<bool> cabInit;
 
   void onCabSelect({
     required String caboid,
@@ -41,15 +54,23 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    cabInit = viewModel.getSelGameCab(widget.machineId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: FutureBuilder(
-        future: viewModel.getSelGameCab(widget.machineId),
+        future: cabInit,
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            log('loading', name: 'CabDetail');
             return const SizedBox();
           }
+
           if (snapshot.data == true) {
             final cabDetail = viewModel.cabinetModel!;
             return cabDetailLoaded(cabDetail);
@@ -247,7 +268,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
               child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Image(
-              image: _getGameCabImage(widget.machineId),
+              image: getGameCabImage(widget.machineId),
               alignment: const Alignment(0, -0.25),
               fit: BoxFit.fitWidth,
               errorBuilder: (context, error, stackTrace) {
@@ -255,7 +276,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> {
                     name: 'err cabDetailLoaded',
                     error: 'error loading gamecab image: $error');
                 return Image(
-                  image: _getGameCabImageFallback(widget.machineId),
+                  image: getGameCabImageFallback(widget.machineId),
                 );
               },
             ),
@@ -438,7 +459,7 @@ class _CabSelect extends StatefulWidget {
   State<_CabSelect> createState() => _CabSelectState();
 }
 
-class _CabSelectState extends State<_CabSelect> {
+class _CabSelectState extends State<_CabSelect> with GameMixin {
   bool isSelectPayment = false;
   String paymentType = '';
 
@@ -585,7 +606,7 @@ class _CabSelectState extends State<_CabSelect> {
               children: [
                 Positioned.fill(
                     child: Image(
-                        image: _getGameCabImage(widget.id),
+                        image: getGameCabImage(widget.id),
                         alignment: const Alignment(0, -0.25),
                         fit: BoxFit.fitWidth)),
                 Positioned.fill(

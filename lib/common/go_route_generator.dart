@@ -4,12 +4,14 @@ GoRoute _route(
   RouteProperty rp,
   Widget Function(BuildContext, GoRouterState)? builder, {
   List<RouteBase>? innerRoutes,
+  GoRouterRedirect? redirect,
 }) {
   return GoRoute(
     path: rp.path,
     name: rp.routeName,
     routes: innerRoutes ?? [],
     builder: builder,
+    redirect: redirect,
   );
 }
 
@@ -17,24 +19,25 @@ GoRoute _routeTransition(
   RouteProperty rp,
   Page<dynamic> Function(BuildContext, GoRouterState)? pageBuilder, {
   List<RouteBase>? innerRoutes,
+  GoRouterRedirect? redirect,
 }) {
   return GoRoute(
     path: rp.path,
     name: rp.routeName,
     routes: innerRoutes ?? [],
     pageBuilder: pageBuilder,
+    redirect: redirect,
   );
 }
 
 final debugRoute = AppRoutes.login.path;
 
 RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
-      initialLocation:
-          kDebugMode && !GlobalSingleton.instance.isServiceOnline
-              ? debugRoute
-              : isLogin
-                  ? AppRoutes.home.path
-                  : AppRoutes.login.path,
+      initialLocation: kDebugMode && !GlobalSingleton.instance.isServiceOnline
+          ? debugRoute
+          : isLogin
+              ? AppRoutes.home.path
+              : AppRoutes.login.path,
       debugLogDiagnostics: true,
       routes: [
         ShellRoute(
@@ -42,13 +45,18 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
             _route(AppRoutes.forgotPassword, (_, __) => const ForgotPassword()),
             _route(AppRoutes.signUp, (_, __) => const SignUp()),
             _route(AppRoutes.login, (_, __) => const Login()),
-            _route(AppRoutes.game, (_, state) {
+            _route(
+              AppRoutes.gameStore,
+              (_, __) => const GameStore(),
+              redirect: gameStoreRedirect,
+            ),
+            _route(AppRoutes.gameCabs, (_, state) {
               final shouldRebuild = state.extra as bool?;
-              if (shouldRebuild == true) {
-                return Game(
+              if (shouldRebuild ?? false) {
+                return GameCabs(
                     key: ValueKey(DateTime.now().millisecondsSinceEpoch));
               }
-              return const Game();
+              return const GameCabs();
             }, innerRoutes: [
               _route(AppRoutes.gameCab, (_, state) {
                 final machineId = state.pathParameters['mid']!;
@@ -148,3 +156,11 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
         ),
       ],
     );
+
+FutureOr<String?> gameStoreRedirect(context, state) async {
+  final prefs = await SharedPreferences.getInstance();
+  final shouldRedirect = prefs.getString('store_id') != null ||
+      prefs.getString('store_name') != null;
+  if (shouldRedirect) return AppRoutes.gameCabs.path;
+  return null;
+}

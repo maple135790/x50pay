@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'gamelist.g.dart';
 
 @JsonSerializable()
-class Gamelist {
+class GameList {
   final String? message;
   final int? code;
   @JsonKey(name: "machinelist")
@@ -12,7 +12,7 @@ class Gamelist {
   final String? payLid;
   final String? payCid;
 
-  const Gamelist(
+  const GameList(
       {this.message,
       this.code,
       this.machine,
@@ -20,7 +20,7 @@ class Gamelist {
       this.payLid,
       this.payCid});
 
-  factory Gamelist.fromJson(Map<String, dynamic> json) =>
+  factory GameList.fromJson(Map<String, dynamic> json) =>
       _$GamelistFromJson(json);
 
   Map<String, dynamic> toJson() => _$GamelistToJson(this);

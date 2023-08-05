@@ -37,9 +37,10 @@ class AppRoutes {
   static const playRecords = (routeName: 'playRecords', path: 'playRecords');
   static const ticketUsedRecords =
       (routeName: 'ticketUsedRecords', path: 'ticketUsedRecords');
-  static const game = (routeName: 'game', path: '/game');
-  static const gameStore = (routeName: 'gameStore', path: 'store');
-  static const gameCab = (routeName: 'gameCab', path: 'cabs/:mid');
+  // static const game = (routeName: 'game', path: '/game');
+  static const gameStore = (routeName: 'gameStore', path: '/game/store');
+  static const gameCabs = (routeName: 'gameCabs', path: '/game/cabs');
+  static const gameCab = (routeName: 'gameCab', path: ':mid');
   static const gift = (routeName: 'gift', path: '/gift');
   static const collab = (routeName: 'collab', path: '/collab');
   static const scanQRCode = (routeName: 'scanQRCode', path: '/scanQRCode');

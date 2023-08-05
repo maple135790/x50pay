@@ -1,24 +1,77 @@
-part of 'game.dart';
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/models/gamelist/gamelist.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/game/game_cabs_view_model.dart';
+import 'package:x50pay/page/game/game_mixin.dart';
 
 class GameCabs extends StatefulWidget {
-  final Gamelist games;
-  final String storeName;
-
-  const GameCabs({required this.games, required this.storeName, super.key});
+  const GameCabs({super.key});
 
   @override
   State<GameCabs> createState() => _GameCabsState();
 }
 
 class _GameCabsState extends State<GameCabs> {
-  late List<Machine> machine = widget.games.machine!;
+  final viewModel = GameCabsViewModel();
+  late List<Machine> machine;
+  late Future<GameList?> gameCabsInit;
+  // late List<Machine> machine = widget.games.machine!;
+
+  @override
+  void initState() {
+    super.initState();
+    gameCabsInit = viewModel.getGamelist();
+  }
+
+  @override
+  void dispose() {
+    log('GameCabs disposed', name: 'GameCabs');
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<GameList?>(
+        future: gameCabsInit,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const SizedBox();
+          }
+          if (snapshot.data == null) {
+            return const SizedBox(child: Text('failed'));
+          } else {
+            return _GameCabsLoaded(
+              viewModel.storeName,
+              games: snapshot.data!,
+            );
+          }
+        });
+  }
+}
+
+class _GameCabsLoaded extends StatefulWidget {
+  final String storeName;
+  final GameList games;
+  const _GameCabsLoaded(this.storeName, {required this.games});
+
+  @override
+  State<_GameCabsLoaded> createState() => _GameCabsLoadedState();
+}
+
+class _GameCabsLoadedState extends State<_GameCabsLoaded> {
+  late final machine = widget.games.machine!;
 
   void onChangeStoreTap() async {
     final router = GoRouter.of(context);
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('store_name');
     await prefs.remove('store_id');
-    router.goNamed(AppRoutes.game.routeName, extra: true);
+    router.goNamed(AppRoutes.gameStore.routeName, extra: true);
   }
 
   @override
@@ -102,7 +155,7 @@ class _GameCabsState extends State<GameCabs> {
   }
 }
 
-class _GameCabItem extends StatelessWidget {
+class _GameCabItem extends StatelessWidget with GameMixin {
   final Machine machine;
   const _GameCabItem(this.machine, {Key? key}) : super(key: key);
 
@@ -121,18 +174,10 @@ class _GameCabItem extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
       child: GestureDetector(
         onTap: () async {
-          final router = GoRouter.of(context);
-          final bool? isTokenInserted = await router.pushNamed(
+          GoRouter.of(context).pushNamed(
             AppRoutes.gameCab.routeName,
             pathParameters: {'mid': machine.id!},
           );
-          if (isTokenInserted == true) {
-            log('isTokenInserted: $isTokenInserted');
-            router.goNamed(
-              AppRoutes.game.routeName,
-              extra: true,
-            );
-          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -147,7 +192,7 @@ class _GameCabItem extends StatelessWidget {
               children: [
                 Positioned.fill(
                     child: Image(
-                  image: _getGameCabImage(machine.id!),
+                  image: getGameCabImage(machine.id!),
                   color: const Color.fromARGB(35, 0, 0, 0),
                   colorBlendMode: BlendMode.srcATop,
                   fit: BoxFit.fitWidth,

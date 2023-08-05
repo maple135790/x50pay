@@ -94,8 +94,8 @@ class Repository extends Api {
     return store;
   }
 
-  Future<Gamelist> getGameList({required String storeId}) async {
-    late Gamelist gameList;
+  Future<GameList> getGameList({required String storeId}) async {
+    late GameList gameList;
 
     await Api.makeRequest(
       dest: '/gamelist',
@@ -103,7 +103,7 @@ class Repository extends Api {
       withSession: true,
       body: {'sid': storeId},
       onSuccess: (json) {
-        gameList = Gamelist.fromJson(json);
+        gameList = GameList.fromJson(json);
       },
     );
     return gameList;

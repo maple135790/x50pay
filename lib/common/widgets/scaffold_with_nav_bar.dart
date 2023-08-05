@@ -24,7 +24,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
       GoRouterState.of(context).path?.contains(element.route.path) ?? false);
 
   final _menus = [
-    (icon: Icons.sports_esports, label: '投幣', route: AppRoutes.game),
+    (icon: Icons.sports_esports, label: '投幣', route: AppRoutes.gameStore),
     (icon: Icons.settings, label: '設定', route: AppRoutes.settings),
     (icon: Icons.home_rounded, label: 'Me', route: AppRoutes.home),
     (icon: Icons.redeem_rounded, label: '禮物', route: AppRoutes.gift),
