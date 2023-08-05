@@ -41,7 +41,7 @@ class _PaymentPrefDialogState extends State<PaymentPrefDialog> {
               future: widget.viewModel.getQuicSettings(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(child: Text('loading'));
+                  return const SizedBox();
                 }
                 if (snapshot.data != true) {
                   EasyLoading.dismiss();

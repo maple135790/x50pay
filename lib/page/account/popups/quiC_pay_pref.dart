@@ -39,7 +39,7 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
           future: widget.viewModel.getQuicSettings(),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: Text('loading'));
+              return const SizedBox();
             }
             if (snapshot.data != true) {
               return const Center(child: Text('failed'));

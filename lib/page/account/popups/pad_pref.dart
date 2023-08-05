@@ -38,14 +38,10 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
           future: getPadSettings,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
-              return kDebugMode
-                  ? const Center(child: Text('loading'))
-                  : const SizedBox();
+              return const SizedBox();
             }
             if (snapshot.data == null) {
-              return kDebugMode
-                  ? const Center(child: Text('failed'))
-                  : const SizedBox();
+              return const Center(child: Text('failed'));
             } else {
               showButtonBar(true);
 
