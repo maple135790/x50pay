@@ -23,6 +23,14 @@ extension on Color {
   }
 }
 
+enum PaymentType {
+  point('點數'),
+  ticket('遊玩券');
+
+  final String text;
+  const PaymentType(this.text);
+}
+
 class CabDetail extends StatefulWidget {
   final String machineId;
   const CabDetail(this.machineId, {Key? key}) : super(key: key);
@@ -461,7 +469,7 @@ class _CabSelect extends StatefulWidget {
 
 class _CabSelectState extends State<_CabSelect> with GameMixin {
   bool isSelectPayment = false;
-  String paymentType = '';
+  late PaymentType paymentType;
 
   @override
   Widget build(BuildContext context) {
@@ -477,8 +485,6 @@ class _CabSelectState extends State<_CabSelect> with GameMixin {
   }
 
   Column confirmPayment() {
-    paymentType = paymentType == 'point' ? '點數' : '遊玩券';
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -492,7 +498,8 @@ class _CabSelectState extends State<_CabSelect> with GameMixin {
               Text('機種：${widget.label}', style: const TextStyle(fontSize: 18)),
               Text('編號：${widget.machineIndex}號機',
                   style: const TextStyle(fontSize: 18)),
-              Text('消費：$paymentType', style: const TextStyle(fontSize: 18)),
+              Text('消費：${paymentType.text}',
+                  style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 12.6),
               const Text('請勿影響他人權益。如投幣扣點後機台無動作請聯絡粉專！請勿再次點擊',
                   textAlign: TextAlign.center, style: TextStyle(fontSize: 13)),
@@ -524,7 +531,7 @@ class _CabSelectState extends State<_CabSelect> with GameMixin {
                         final isInsertSuccess = await widget.viewModel.doInsert(
                             id: widget.caboid,
                             machineNum: widget.machineIndex - 1,
-                            isTicket: paymentType == 'ticket',
+                            isTicket: paymentType == PaymentType.ticket,
                             mode: widget.modes[0].first);
                         router.pop();
                         if (isInsertSuccess) {
@@ -696,7 +703,7 @@ class _CabSelectState extends State<_CabSelect> with GameMixin {
             TextButton(
                 onPressed: () {
                   isSelectPayment = true;
-                  paymentType = 'point';
+                  paymentType = PaymentType.point;
                   setState(() {});
                 },
                 style: Themes.severe(isV4: true),
@@ -704,7 +711,7 @@ class _CabSelectState extends State<_CabSelect> with GameMixin {
             TextButton(
                 onPressed: () {
                   isSelectPayment = true;
-                  paymentType = 'ticket';
+                  paymentType = PaymentType.ticket;
                   setState(() {});
                 },
                 style: Themes.pale(),

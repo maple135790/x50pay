@@ -58,6 +58,8 @@ class CabDatailViewModel extends BaseViewModel {
       required num mode,
       int debugFlag = 200}) async {
     try {
+      log('id: $id, machineNum: $machineNum, isTicket: $isTicket, mode: $mode',
+          name: 'doInsert');
       await EasyLoading.show();
       await Future.delayed(const Duration(milliseconds: 100));
       final prefs = await SharedPreferences.getInstance();
@@ -71,10 +73,11 @@ class CabDatailViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
-      await EasyLoading.dismiss();
-
+    } catch (e) {
+      log('', error: '$e', name: 'doInsert');
       return false;
+    } finally {
+      await EasyLoading.dismiss();
     }
   }
 
