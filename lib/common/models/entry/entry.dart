@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:x50pay/common/models/common.dart';
 
@@ -25,6 +28,18 @@ class EntryModel {
   factory EntryModel.fromJson(Map<String, dynamic> json) =>
       _$EntryModelFromJson(json);
   Map<String, dynamic> toJson() => _$EntryModelToJson(this);
+
+  String get gradeLv => gr2[0].toString();
+  String get gr2HowMuch => gr2[1].toInt().toString();
+  String get gr2Limit => gr2[2].toInt().toString();
+  String get gr2Next => gr2[3].toString();
+  String get gr2Day => gr2[4].toString();
+  String get gr2Date => gr2[5].toString();
+  String get gr2GradeBoxContent => gr2[6].toString();
+  String get _rawAva => gr2[7].toString().split(',').last;
+  Uint8List get ava => base64Decode(_rawAva);
+  String get gr2VDay => gr2[9].toString();
+  double get gr2Progress => gr2[0] / 15;
 }
 
 @JsonSerializable()

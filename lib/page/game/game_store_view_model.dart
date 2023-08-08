@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/repository/repository.dart';

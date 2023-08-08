@@ -19,7 +19,7 @@ class AppRoutes {
   static const noLoginPages = [login, forgotPassword, signUp, license];
 
   static const login = (routeName: 'login', path: '/login');
-  static const home = (routeName: 'home', path: '/');
+  static const home = (routeName: 'home', path: '/home');
   static const forgotPassword = (routeName: 'forgotPassword', path: '/iforgot');
   static const license = (routeName: 'license', path: '/lic');
   static const signUp = (routeName: 'signUp', path: '/signUp');
@@ -42,6 +42,7 @@ class AppRoutes {
   static const gameCabs = (routeName: 'gameCabs', path: '/game/cabs');
   static const gameCab = (routeName: 'gameCab', path: ':mid');
   static const gift = (routeName: 'gift', path: '/gift');
+  static const gradeBox = (routeName: 'gradeBox', path: '/gift/gradeBox');
   static const collab = (routeName: 'collab', path: '/collab');
   static const scanQRCode = (routeName: 'scanQRCode', path: '/scanQRCode');
   static const questCampaign =
