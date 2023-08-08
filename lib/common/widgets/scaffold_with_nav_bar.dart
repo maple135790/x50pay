@@ -63,9 +63,10 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
   void didUpdateWidget(covariant oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.body != widget.body) {
-      selectedIndex = _menus.indexWhere((element) => GoRouterState.of(context)
-          .matchedLocation
-          .contains(element.route.path));
+      final currentLocation = GoRouterState.of(context).matchedLocation;
+      selectedIndex = _menus.indexWhere((element) {
+        return currentLocation.contains(element.route.path.split('/')[1]);
+      });
       setState(() {});
     }
   }
