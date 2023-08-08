@@ -52,19 +52,26 @@ abstract class Api {
       return headers;
     }
 
+    String requestStringBody() {
+      if (isEmptyBody) return '';
+      return jsonEncode(body);
+    }
+
+    Object buildBody() {
+      if (contentType == ContentType.json) return requestStringBody();
+      return body;
+    }
+
     switch (method) {
       case HttpMethod.post:
         response = await http.post(
           customDest != null ? Uri.parse(customDest) : destURL(dest),
-          body: isEmptyBody
-              ? ''
-              : contentType == ContentType.json
-                  ? jsonEncode(body)
-                  : body,
+          body: buildBody(),
           headers: getHeaders(),
           encoding: Encoding.getByName('utf-8'),
         );
         log("url: ${response.request!.url}", name: 'request url');
+        log("payload: ${buildBody()}", name: 'request url');
         log("header: ${response.request!.headers}", name: 'request header');
         log("response: ${response.body.length > 5000 ? 'too long' : response.body}",
             name: 'request response');

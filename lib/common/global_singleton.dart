@@ -6,7 +6,7 @@ import 'package:x50pay/repository/repository.dart';
 
 class GlobalSingleton {
   final ValueNotifier<UserModel?> userNotifier = ValueNotifier(null);
-  final isServiceOnline = kReleaseMode || true;
+  final isServiceOnline = kReleaseMode || false;
   final _costEnabled = false;
   UserModel? user;
   int _lastChkMe = -1;

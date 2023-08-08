@@ -30,7 +30,7 @@ GoRoute _routeTransition(
   );
 }
 
-final debugRoute = AppRoutes.login.path;
+final debugRoute = AppRoutes.home.path;
 
 RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
       initialLocation: kDebugMode && !GlobalSingleton.instance.isServiceOnline
@@ -144,6 +144,7 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
               }),
             ]),
             _route(AppRoutes.gift, (_, __) => const GiftSystem()),
+            _route(AppRoutes.gradeBox, (_, __) => const GradeBox()),
             _route(AppRoutes.collab, (_, __) => const Collab()),
           ],
           builder: (context, state, child) {

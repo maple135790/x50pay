@@ -6,7 +6,7 @@ part of 'gamelist.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GameList _$GamelistFromJson(Map<String, dynamic> json) => GameList(
+GameList _$GameListFromJson(Map<String, dynamic> json) => GameList(
       message: json['message'] as String?,
       code: json['code'] as int?,
       machine: (json['machinelist'] as List<dynamic>?)
@@ -17,7 +17,7 @@ GameList _$GamelistFromJson(Map<String, dynamic> json) => GameList(
       payCid: json['payCid'] as String?,
     );
 
-Map<String, dynamic> _$GamelistToJson(GameList instance) => <String, dynamic>{
+Map<String, dynamic> _$GameListToJson(GameList instance) => <String, dynamic>{
       'message': instance.message,
       'code': instance.code,
       'machinelist': instance.machine,

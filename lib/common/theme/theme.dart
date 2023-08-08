@@ -149,25 +149,35 @@ class Themes {
 
   static ButtonStyle severe(
       {bool isV4 = false,
+      bool isRRect = false,
       EdgeInsetsGeometry? padding,
       OutlinedBorder? outlinedBorder}) {
     return isV4
-        ? ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            padding: MaterialStateProperty.all(padding),
-            shape: MaterialStateProperty.all(outlinedBorder),
-            // foregroundColor: MaterialStateProperty.all(const Color(0xfffafafa)),
-            foregroundColor: MaterialStateProperty.resolveWith((states) {
-              if (states.isDisabled) return const Color(0xff8e8e8e);
-              return const Color(0xfffafafa);
-            }),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: MaterialStateProperty.resolveWith((states) {
-              if (states.isPressed) return const Color(0xff8a3145);
-              if (states.isDisabled) return const Color(0xff892025);
-              return const Color(0xffF5222D);
-            }),
-          )
+        ? isRRect
+            ? ButtonStyle(
+                foregroundColor:
+                    const MaterialStatePropertyAll(Color(0xfffafafa)),
+                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6))),
+                backgroundColor: MaterialStateColor.resolveWith((states) {
+                  return const Color(0xffF5222D);
+                }),
+              )
+            : ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                padding: MaterialStateProperty.all(padding),
+                shape: MaterialStateProperty.all(outlinedBorder),
+                foregroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.isDisabled) return const Color(0xff8e8e8e);
+                  return const Color(0xfffafafa);
+                }),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.isPressed) return const Color(0xff8a3145);
+                  if (states.isDisabled) return const Color(0xff892025);
+                  return const Color(0xffF5222D);
+                }),
+              )
         : ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             foregroundColor: MaterialStateProperty.all(const Color(0xfffafafa)),

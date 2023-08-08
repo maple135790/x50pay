@@ -380,21 +380,21 @@ class Repository extends Api {
     return result;
   }
 
-  Future<BasicResponse> chgGradev2(
-      {required String gid, required String grid}) async {
-    late BasicResponse basicResponse;
+  // Future<BasicResponse> chgGradev2(
+  //     {required String gid, required String grid}) async {
+  //   late BasicResponse basicResponse;
 
-    await Api.makeRequest(
-      dest: '/change/Gradev2',
-      method: HttpMethod.post,
-      withSession: true,
-      body: {'grid': grid, 'gid': gid},
-      onSuccess: (json) {
-        basicResponse = BasicResponse.fromJson(json);
-      },
-    );
-    return basicResponse;
-  }
+  //   await Api.makeRequest(
+  //     dest: '/change/Gradev2',
+  //     method: HttpMethod.post,
+  //     withSession: true,
+  //     body: {'grid': grid, 'gid': gid},
+  //     onSuccess: (json) {
+  //       basicResponse = BasicResponse.fromJson(json);
+  //     },
+  //   );
+  //   return basicResponse;
+  // }
 
   Future<GiftBoxModel> getGiftBox() async {
     late GiftBoxModel giftBoxModel;
@@ -577,5 +577,29 @@ class Repository extends Api {
       body: {},
     );
     return const Utf8Decoder().convert(response.bodyBytes);
+  }
+
+  Future<String> fetchGradeBox() async {
+    final response = await Api.makeRequest(
+      dest: '/grade/box',
+      method: HttpMethod.post,
+      body: {},
+      withSession: true,
+      contentType: ContentType.json,
+    );
+    return response.body;
+  }
+
+  Future<String> chgGradev2(String gid, String grid) async {
+    final response = await Api.makeRequest(
+        dest: '/grade/change',
+        body: {
+          'gid': gid,
+          'grid': grid,
+        },
+        method: HttpMethod.post,
+        withSession: true,
+        contentType: ContentType.json);
+    return response.body;
   }
 }

@@ -21,9 +21,9 @@ class GameList {
       this.payCid});
 
   factory GameList.fromJson(Map<String, dynamic> json) =>
-      _$GamelistFromJson(json);
+      _$GameListFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GamelistToJson(this);
+  Map<String, dynamic> toJson() => _$GameListToJson(this);
 }
 
 @JsonSerializable()

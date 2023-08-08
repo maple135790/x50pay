@@ -17,7 +17,7 @@ import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
 
-part "grade_box_popup.dart";
+// part "grade_box_popup.dart";
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -86,11 +86,9 @@ class _HomeLoadedState extends State<_HomeLoaded> {
         const SizedBox(height: 10),
         _TopInfo(user: user),
         _TicketInfo(user: user),
-        _MariInfo(
-          isVip: user.vip!,
-          entryData: widget.viewModel.entry!,
-          onChangeGrade: widget.viewModel.chgGradev2,
-        ),
+        _MariInfo(isVip: user.vip!, entryData: widget.viewModel.entry!
+            // onChangeGrade: widget.viewModel.chgGradev2,
+            ),
         if (recentQuests != null) divider('最新活動'),
         if (recentQuests != null) _RecentQuests(quests: recentQuests),
         divider('官方資訊'),
@@ -237,13 +235,10 @@ class _RecentQuests extends StatelessWidget {
 
 class _MariInfo extends StatefulWidget {
   final bool isVip;
-  final Future<bool> Function(
-      {int debugFlag, required String gid, required String grid}) onChangeGrade;
   final EntryModel entryData;
 
   const _MariInfo({
     required this.isVip,
-    required this.onChangeGrade,
     required this.entryData,
   });
 
@@ -255,14 +250,7 @@ class _MariInfoState extends State<_MariInfo> {
   late final entry = widget.entryData;
 
   void onGradeBoxPressed() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return _GradeBoxPopup(
-            gradeBox: entry.gr2GradeBoxContent,
-            onChangeGrade: widget.onChangeGrade,
-          );
-        });
+    context.goNamed(AppRoutes.gradeBox.routeName);
   }
 
   void onDressRoomPressed() {
@@ -302,7 +290,6 @@ class _MariInfoState extends State<_MariInfo> {
                     child: Image.memory(entry.ava,
                         alignment: Alignment.center,
                         fit: BoxFit.contain,
-                        filterQuality: FilterQuality.medium,
                         gaplessPlayback: true,
                         height: 270,
                         cacheHeight: (270 * pixelRatio).toInt()),
