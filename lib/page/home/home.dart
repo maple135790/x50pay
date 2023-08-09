@@ -337,7 +337,7 @@ class _MariInfoState extends State<_MariInfo> {
                             message: widget.isVip ? '月票：當日前12道加成' : '當日前10道加成',
                             child: Container(
                                 decoration: BoxDecoration(
-                                    color: const Color(0xff2f2f2f),
+                                    color: const Color(0xff2282e9),
                                     borderRadius: BorderRadius.circular(5)),
                                 child: Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -349,10 +349,10 @@ class _MariInfoState extends State<_MariInfo> {
                                         child: Image(
                                             image: R.svg.bolt_solid(
                                                 width: 9, height: 13),
-                                            height: 10,
+                                            height: 13,
                                             color: Colors.white),
                                       ),
-                                      const Text('3'),
+                                      Text(entry.gr2BounsLeft),
                                       const SizedBox(width: 3)
                                     ])),
                           )

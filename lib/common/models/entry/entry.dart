@@ -39,6 +39,7 @@ class EntryModel {
   String get _rawAva => gr2[7].toString().split(',').last;
   Uint8List get ava => base64Decode(_rawAva);
   String get gr2VDay => gr2[9].toString();
+  String get gr2BounsLeft => gr2[10].toString();
   double get gr2Progress => gr2[0] / 15;
 }
 
