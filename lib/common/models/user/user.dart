@@ -41,6 +41,10 @@ class UserModel {
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
+  bool get hasTicket => ticketint != null && ticketint! > 0;
+  bool get isStaff => uid != null && uid!.startsWith('X');
+  bool get isInsertGod => uid != null && uid!.startsWith('v');
+
   @override
   String toString() {
     return 'UserModel(message: $message, code: $code, userimg: $userimg, email: $email, uid: $uid, point: $point, name: $name, ticketint: $ticketint, phoneactive: $phoneactive, vip: $vip, vipdate: $vipdate, sid: $sid, sixn: $sixn, tphone: $tphone, doorpwd: $doorpwd)';

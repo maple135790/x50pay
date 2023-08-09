@@ -51,38 +51,6 @@ class CabDatailViewModel extends BaseViewModel {
     return lineupCount;
   }
 
-  Future<bool> doInsert(
-      {required bool isTicket,
-      required String id,
-      required int machineNum,
-      required num mode,
-      int debugFlag = 200}) async {
-    try {
-      log('id: $id, machineNum: $machineNum, isTicket: $isTicket, mode: $mode',
-          name: 'doInsert');
-      await EasyLoading.show();
-      await Future.delayed(const Duration(milliseconds: 100));
-      final prefs = await SharedPreferences.getInstance();
-      final sid = prefs.getString('store_id');
-      if (!kDebugMode || isForceFetch) {
-        response = await repo.doInsert(isTicket, '$id/$sid$machineNum', mode);
-      } else {
-        response =
-            BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
-      }
-      await EasyLoading.dismiss();
-
-      return true;
-    } catch (e) {
-      log('', error: '$e', name: 'doInsert');
-      return false;
-    } finally {
-      await EasyLoading.dismiss();
-    }
-  }
-
-  String testResponse({int code = 200}) =>
-      '''{"code":$code,"message":"smth"}''';
   String testSelGame(String mid) {
     switch (mid) {
       case '2tko':

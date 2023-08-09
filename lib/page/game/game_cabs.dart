@@ -1,11 +1,14 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/game_cabs_view_model.dart';
 import 'package:x50pay/page/game/game_mixin.dart';
 
@@ -64,7 +67,23 @@ class _GameCabsLoaded extends StatefulWidget {
 }
 
 class _GameCabsLoadedState extends State<_GameCabsLoaded> {
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   late final machine = widget.games.machine!;
+
+  @override
+  void dispose() {
+    GlobalSingleton.instance.recentPlayedCabinetData = null;
+    _scaffoldMessengerKey.currentState?.clearSnackBars();
+    super.dispose();
+  }
+
+  void clearSnackBar() {
+    _scaffoldMessengerKey.currentState!.clearSnackBars();
+  }
+
+  void reloadSnackBar() {
+    setState(() {});
+  }
 
   void onChangeStoreTap() async {
     final router = GoRouter.of(context);
@@ -74,90 +93,144 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded> {
     router.goNamed(AppRoutes.gameStore.routeName, extra: true);
   }
 
+  void showCabSelectDialog() {
+    final recentPlayData = GlobalSingleton.instance.recentPlayedCabinetData!;
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => CabSelect(
+              caboid: recentPlayData.caboid,
+              cabinetData: recentPlayData.cabinet,
+            )).then((_) {
+      setState(() {});
+    });
+  }
+
+  void showPlayAgainSnackBar() async {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _scaffoldMessengerKey.currentState!
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(
+          backgroundColor: const Color(0xff373737),
+          width: 210,
+          dismissDirection: DismissDirection.horizontal,
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(
+              label: '玩',
+              onPressed: showCabSelectDialog,
+              textColor: const Color(0xfff5222d)),
+          duration: const Duration(days: 1),
+          content:
+              const Text('再一道？', style: TextStyle(color: Color(0xfffafafa))),
+        ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-              margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-              padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border.all(color: Themes.borderColor, width: 1),
-                  borderRadius: BorderRadius.circular(5)),
-              child: Row(
-                children: [
-                  const Icon(Icons.push_pin,
-                      color: Color(0xfffafafa), size: 16),
-                  Text('  目前所在「 ${widget.storeName} 」',
-                      style: const TextStyle(color: Color(0xfffafafa))),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: onChangeStoreTap,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: const Color(0xfffafafa)),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 8),
-                      child: Icon(Icons.sync,
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          size: 26),
-                    ),
-                  ),
-                ],
-              )),
-          Column(children: machine.map((e) => _GameCabItem(e)).toList()),
-          Stack(
+    if (GlobalSingleton.instance.recentPlayedCabinetData != null) {
+      showPlayAgainSnackBar();
+    }
+    return ScaffoldMessenger(
+      key: _scaffoldMessengerKey,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
             children: [
               Container(
-                width: double.infinity,
-                height: 80,
-                margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                padding: const EdgeInsets.only(bottom: 10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Themes.borderColor, width: 1),
-                    borderRadius: BorderRadius.circular(5),
-                    shape: BoxShape.rectangle),
-              ),
-              Positioned(
-                  left: 35,
-                  top: 12,
-                  child: Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: const Text('離峰時段',
-                        style:
-                            TextStyle(color: Color(0xfffafafa), fontSize: 13)),
+                  margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                  padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      border: Border.all(color: Themes.borderColor, width: 1),
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.push_pin,
+                          color: Color(0xfffafafa), size: 16),
+                      Text('  目前所在「 ${widget.storeName} 」',
+                          style: const TextStyle(color: Color(0xfffafafa))),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: onChangeStoreTap,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: const Color(0xfffafafa)),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 8),
+                          child: Icon(Icons.sync,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              size: 26),
+                        ),
+                      ),
+                    ],
                   )),
-              const Positioned(
-                top: 40,
-                left: 35,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('●   部分機種不提供離峰方案',
-                        style: TextStyle(color: Color(0xfffafafa))),
-                    SizedBox(height: 5),
-                    Text('●   詳情請見粉絲專業更新貼文',
-                        style: TextStyle(color: Color(0xfffafafa))),
-                  ],
-                ),
-              )
+              Column(
+                  children: machine
+                      .map((e) => _GameCabItem(
+                            e,
+                            onCoinInserted: reloadSnackBar,
+                            onItemPressed: clearSnackBar,
+                          ))
+                      .toList()),
+              Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 80,
+                    margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                    padding: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Themes.borderColor, width: 1),
+                        borderRadius: BorderRadius.circular(5),
+                        shape: BoxShape.rectangle),
+                  ),
+                  Positioned(
+                      left: 35,
+                      top: 12,
+                      child: Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: const Text('離峰時段',
+                            style: TextStyle(
+                                color: Color(0xfffafafa), fontSize: 13)),
+                      )),
+                  const Positioned(
+                    top: 40,
+                    left: 35,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('●   部分機種不提供離峰方案',
+                            style: TextStyle(color: Color(0xfffafafa))),
+                        SizedBox(height: 5),
+                        Text('●   詳情請見粉絲專業更新貼文',
+                            style: TextStyle(color: Color(0xfffafafa))),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 12),
             ],
           ),
-          const SizedBox(height: 12),
-        ],
+        ),
       ),
     );
   }
 }
 
 class _GameCabItem extends StatelessWidget with GameMixin {
+  final VoidCallback onCoinInserted;
+  final VoidCallback onItemPressed;
   final Machine machine;
-  const _GameCabItem(this.machine, {Key? key}) : super(key: key);
+
+  const _GameCabItem(
+    this.machine, {
+    required this.onCoinInserted,
+    required this.onItemPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -170,14 +243,18 @@ class _GameCabItem extends StatelessWidget with GameMixin {
             ? " [假日]"
             : " [平日]";
 
+    onItemPressed.call();
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
       child: GestureDetector(
         onTap: () async {
-          GoRouter.of(context).pushNamed(
+          final isInsertToken = await GoRouter.of(context).pushNamed<bool>(
             AppRoutes.gameCab.routeName,
             pathParameters: {'mid': machine.id!},
           );
+          if (isInsertToken == true) {
+            onCoinInserted.call();
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -216,7 +293,7 @@ class _GameCabItem extends StatelessWidget with GameMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(machine.lable!,
+                      Text(machine.label!,
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,

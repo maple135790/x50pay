@@ -52,7 +52,7 @@ Machine _$MachineFromJson(Map<String, dynamic> json) => Machine(
     );
 
 Map<String, dynamic> _$MachineToJson(Machine instance) => <String, dynamic>{
-      'lable': instance.lable,
+      'lable': instance.label,
       'price': instance.price,
       'discount': instance.discount,
       'downprice': instance.downPrice,

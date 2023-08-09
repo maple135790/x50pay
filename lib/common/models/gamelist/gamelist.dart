@@ -28,7 +28,8 @@ class GameList {
 
 @JsonSerializable()
 class Machine {
-  final String? lable;
+  @JsonKey(name: "lable")
+  final String? label;
   final double? price;
   final num? discount;
   @JsonKey(name: "downprice")
@@ -50,7 +51,7 @@ class Machine {
   final bool? vipb;
 
   const Machine(
-      this.lable,
+      this.label,
       this.price,
       this.discount,
       this.downPrice,
