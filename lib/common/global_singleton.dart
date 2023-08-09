@@ -41,6 +41,8 @@ class GlobalSingleton {
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid})? recentPlayedCabinetData;
 
+  bool isInCameraPage = false;
+
   static GlobalSingleton? _instance;
 
   GlobalSingleton._();

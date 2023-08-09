@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/repository/repository.dart';
 
@@ -33,6 +34,13 @@ class _ScanQRCodeState extends State<ScanQRCode> {
       qrViewController?.resumeCamera();
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    GlobalSingleton.instance.isInCameraPage = false;
+    qrViewController?.dispose();
+    super.dispose();
   }
 
   Widget buildQrView() {

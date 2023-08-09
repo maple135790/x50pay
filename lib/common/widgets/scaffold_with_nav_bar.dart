@@ -63,7 +63,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
   void didUpdateWidget(covariant oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.body != widget.body) {
-      final currentLocation = GoRouterState.of(context).matchedLocation;
+      final currentLocation = GoRouterState.of(context).location;
       selectedIndex = _menus.indexWhere((element) {
         return currentLocation.contains(element.route.path.split('/')[1]);
       });
@@ -124,15 +124,23 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
   }
 }
 
-class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
+class _LoadedAppBar extends StatefulWidget implements PreferredSizeWidget {
   final int menuIndex;
+
   const _LoadedAppBar(this.menuIndex);
 
   @override
   Size get preferredSize => const Size.fromHeight(50);
 
+  @override
+  State<_LoadedAppBar> createState() => _LoadedAppBarState();
+}
+
+class _LoadedAppBarState extends State<_LoadedAppBar> {
+  String get currentLocation => GoRouterState.of(context).matchedLocation;
+
   double get functionalHeaderHeight =>
-      menuIndex == 2 ? 0 : preferredSize.height + 2;
+      widget.menuIndex == 2 ? 0 : widget.preferredSize.height + 2;
 
   Widget buildFixedHeader(BuildContext context) {
     return Column(
@@ -166,7 +174,7 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       child: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: preferredSize.height,
+        toolbarHeight: widget.preferredSize.height,
         elevation: 15,
         scrolledUnderElevation: 15,
         surfaceTintColor: Colors.transparent,
@@ -203,16 +211,19 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         actions: [
           InkWell(
-              onTap: () async {
-                var status = await Permission.camera.status;
-                if (status.isDenied) await Permission.camera.request();
-                if (context.mounted) {
-                  context.pushNamed(
-                    AppRoutes.scanQRCode.routeName,
-                    extra: status,
-                  );
-                }
-              },
+              onTap: !GlobalSingleton.instance.isInCameraPage
+                  ? () async {
+                      var status = await Permission.camera.status;
+                      if (status.isDenied) await Permission.camera.request();
+                      if (context.mounted) {
+                        GlobalSingleton.instance.isInCameraPage = true;
+                        context.pushNamed(
+                          AppRoutes.scanQRCode.routeName,
+                          extra: status,
+                        );
+                      }
+                    }
+                  : null,
               splashFactory: NoSplash.splashFactory,
               child: const Icon(Icons.qr_code,
                   size: 28, color: Color(0xfffafafa))),
@@ -220,6 +231,11 @@ class _LoadedAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
