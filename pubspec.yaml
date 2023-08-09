@@ -13,10 +13,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_easyloading:
     path: ./dependencies/flutter_easyloading-3.0.5/
-  flutter_launcher_icons:
-    git:
-      url: 'https://github.com/Davenchy/flutter_launcher_icons.git'
-      ref: fixMinSdkParseFlutter2.8
+  flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.2.7
   flutter_svg: ^1.1.6
   fluttertoast: ^8.2.2
