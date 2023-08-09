@@ -129,6 +129,7 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
               ],
             ),
             _route(AppRoutes.home, (_, __) => const Home(), innerRoutes: [
+              _route(AppRoutes.ecPay, (_, state) => const EcPay()),
               _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
               _route(AppRoutes.questCampaign, (_, state) {
                 final shouldRebuild = state.extra as bool?;

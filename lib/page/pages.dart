@@ -13,5 +13,6 @@ export 'home/home.dart';
 export 'license/license.dart';
 export 'login/login.dart';
 export 'quest_campaign/quest_campaign.dart';
+export 'scan/ec_pay.dart';
 export 'scan/scan.dart';
 export 'signUp/sign_up.dart';
