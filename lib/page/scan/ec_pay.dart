@@ -73,7 +73,7 @@ class _EcPayState extends State<EcPay> {
         paymentTile(point: "291", price: "300"),
         paymentTile(point: "485", price: "500"),
         paymentTile(point: "970", price: "1000"),
-        const Text('1. 如付款成功無加植成功請聯絡粉絲專頁\n2. 付款由 ECPay 金流進行',
+        const Text('1. 如付款成功無加值成功請聯絡粉絲專頁\n2. 付款由 ECPay 金流進行',
             textAlign: TextAlign.left)
       ],
     );
