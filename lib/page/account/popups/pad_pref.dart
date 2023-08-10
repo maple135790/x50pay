@@ -95,6 +95,10 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
         },
         child: AccountDialog.ios(
           title: '平板上顯示不同暱稱',
+          onConfirm: () {
+            Navigator.of(context)
+                .pop(nameController.text.isEmpty ? null : nameController.text);
+          },
           content: (showButtonBar) {
             showButtonBar(true);
 
@@ -207,11 +211,17 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(nickname,
-                      style: const TextStyle(
-                        color: CupertinoColors.systemGrey,
-                        fontWeight: FontWeight.w500,
-                      )),
+                  LimitedBox(
+                    maxWidth: 120,
+                    child: Text(nickname,
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: CupertinoColors.systemGrey,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ),
                   const SizedBox(width: 10),
                   const CupertinoListTileChevron(),
                 ],
