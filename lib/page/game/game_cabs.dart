@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -205,7 +206,7 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded> {
                         Text('●   部分機種不提供離峰方案',
                             style: TextStyle(color: Color(0xfffafafa))),
                         SizedBox(height: 5),
-                        Text('●   詳情請見粉絲專業更新貼文',
+                        Text('●   詳情請見粉絲專頁更新貼文',
                             style: TextStyle(color: Color(0xfffafafa))),
                       ],
                     ),
@@ -268,8 +269,8 @@ class _GameCabItem extends StatelessWidget with GameMixin {
             child: Stack(
               children: [
                 Positioned.fill(
-                    child: Image(
-                  image: getGameCabImage(machine.id!),
+                    child: CachedNetworkImage(
+                  imageUrl: getGameCabImage(machine.id!),
                   color: const Color.fromARGB(35, 0, 0, 0),
                   colorBlendMode: BlendMode.srcATop,
                   fit: BoxFit.fitWidth,

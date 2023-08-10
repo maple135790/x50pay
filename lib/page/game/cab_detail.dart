@@ -260,11 +260,11 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
           Positioned.fill(
               child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
-            child: Image(
-              image: getGameCabImage(widget.machineId),
+            child: CachedNetworkImage(
+              imageUrl: getGameCabImage(widget.machineId),
               alignment: const Alignment(0, -0.25),
               fit: BoxFit.fitWidth,
-              errorBuilder: (context, error, stackTrace) {
+              errorWidget: (context, url, error) {
                 log('',
                     name: 'err cabDetailLoaded',
                     error: 'error loading gamecab image: $error');

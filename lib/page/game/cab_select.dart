@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
@@ -190,8 +191,8 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
             child: Stack(
               children: [
                 Positioned.fill(
-                    child: Image(
-                        image: getGameCabImage(cabData.id),
+                    child: CachedNetworkImage(
+                        imageUrl: getGameCabImage(cabData.id),
                         alignment: const Alignment(0, -0.25),
                         fit: BoxFit.fitWidth)),
                 Positioned.fill(

@@ -5,7 +5,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
@@ -64,9 +63,8 @@ class _StoreItem extends StatelessWidget {
   final String prefix;
   const _StoreItem(this.store, this.prefix, {Key? key}) : super(key: key);
 
-  ImageProvider _getStoreImage(int storeId, {bool isOnline = false}) {
-    return CachedNetworkImageProvider(
-        "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2");
+  String getStoreImage(int storeId) {
+    return "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2";
   }
 
   void onStoreSelected(GoRouter router) async {
@@ -96,27 +94,25 @@ class _StoreItem extends StatelessWidget {
             onStoreSelected(router);
           },
           child: SizedBox(
-            width: double.infinity,
+            width: double.maxFinite,
             height: 180,
             child: Stack(
               children: [
-                Positioned(
-                    width: 400,
-                    top: -100,
-                    child: Image(
-                      image: _getStoreImage(store.sid!,
-                          isOnline: GlobalSingleton.instance.isServiceOnline),
-                      fit: BoxFit.fitWidth,
-                      colorBlendMode: BlendMode.modulate,
-                    )),
+                Positioned.fill(
+                    child: CachedNetworkImage(
+                        imageUrl: getStoreImage(store.sid!),
+                        alignment: const Alignment(0, -0.25),
+                        fit: BoxFit.fitWidth,
+                        colorBlendMode: BlendMode.modulate)),
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                          colors: [Colors.transparent, Colors.black54],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.1, 1]),
+                        begin: Alignment.bottomLeft,
+                        colors: [Colors.black, Colors.transparent],
+                        transform: GradientRotation(12),
+                        stops: [0, 0.6],
+                      ),
                     ),
                   ),
                 ),

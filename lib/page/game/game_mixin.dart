@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:x50pay/r.g.dart';
 
 mixin GameMixin {
   ImageProvider getGameCabImageFallback(String gameId) {
-    final machine = StoreMachine.values.firstWhereOrNull((m) => m.gameId == gameId);
+    final machine =
+        StoreMachine.values.firstWhereOrNull((m) => m.gameId == gameId);
 
     switch (machine) {
       case StoreMachine.chu:
@@ -60,10 +60,8 @@ mixin GameMixin {
     }
   }
 
-  ImageProvider getGameCabImage(String gameId) {
-    return CachedNetworkImageProvider(
-      'https://pay.x50.fun/static/gamesimg/$gameId.png?v1.1',
-    );
+  String getGameCabImage(String gameId) {
+    return 'https://pay.x50.fun/static/gamesimg/$gameId.png?v1.1';
   }
 
   String getMachineIcon(String machineId) {
