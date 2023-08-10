@@ -58,9 +58,9 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
               }
               return const GameCabs();
             }, innerRoutes: [
-              _route(AppRoutes.gameCab, (_, state) {
+              _routeTransition(AppRoutes.gameCab, (_, state) {
                 final machineId = state.pathParameters['mid']!;
-                return CabDetail(machineId);
+                return CupertinoPage(child: CabDetail(machineId));
               }),
             ]),
             _route(
