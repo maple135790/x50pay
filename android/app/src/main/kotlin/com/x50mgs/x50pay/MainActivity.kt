@@ -1,4 +1,4 @@
-package com.example.x50pay
+package com.x50mgs.x50pay
 
 import io.flutter.embedding.android.FlutterActivity
 
