@@ -139,9 +139,9 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
             ),
             errorNotice(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.all(12),
               child: Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     border:
@@ -190,7 +190,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                           decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.lock))),
                       const SizedBox(height: 10),
-                      const Divider(color: Colors.white60),
+                      const Divider(color: Color(0xff3e3e3e)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
