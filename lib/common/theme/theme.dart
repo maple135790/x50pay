@@ -29,7 +29,7 @@ class AppThemeData {
         headingRowColor: MaterialStateProperty.all(const Color(0xff2a2a2a)),
         decoration: BoxDecoration(
             color: const Color(0xff1e1e1e),
-            border: Border.all(color: Themes.borderColor, width: 1)),
+            border: Border.all(color: Themes.borderColor)),
       ),
       pageTransitionsTheme: const PageTransitionsTheme(builders: {
         TargetPlatform.android: ZoomPageTransitionsBuilder(),

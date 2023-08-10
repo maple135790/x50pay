@@ -67,42 +67,42 @@ class _TicketRecordsState extends BaseStatefulState<TicketRecords> {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(color: Themes.borderColor, width: 1)),
-            child: Row(
-              children: [
-                CircleAvatar(
-                    foregroundImage: R.image.logo_150_jpg(), radius: 29),
-                const SizedBox(width: 16.8),
-                const Text('以下是您尚未使用的遊玩券記錄', style: TextStyle(fontSize: 18))
-              ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border.all(color: Themes.borderColor, width: 1)),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                      foregroundImage: R.image.logo_150_jpg(), radius: 29),
+                  const SizedBox(width: 16.8),
+                  const Text('以下是您尚未使用的遊玩券記錄', style: TextStyle(fontSize: 18))
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          hasData
-              ? SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: DataTable(
-                      border: TableBorder.all(color: Themes.borderColor),
-                      dataRowMaxHeight: 60,
-                      columns: ['活動名稱', '過期日', '剩餘張數', '詳情']
-                          .map((e) => DataColumn(label: Text(e)))
-                          .toList(),
-                      rows: buildRows(),
-                    ),
-                  ),
-                )
-              : const Text('無資料'),
-        ],
+            const SizedBox(height: 12),
+            hasData
+                ? DataTable(
+                    border: TableBorder.all(color: Themes.borderColor),
+                    dataRowMaxHeight: 60,
+                    horizontalMargin: 12,
+                    columnSpacing: 25,
+                    columns: ['活動名稱', '過期日', '剩餘張數', '詳情']
+                        .map((e) => DataColumn(
+                            label: Expanded(child: Text(e, softWrap: true))))
+                        .toList(),
+                    rows: buildRows(),
+                  )
+                : const Center(child: Text('無資料')),
+          ],
+        ),
       ),
     );
   }

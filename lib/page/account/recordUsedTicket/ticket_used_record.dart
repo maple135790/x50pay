@@ -49,9 +49,16 @@ class _TicketUsedRecordsState extends BaseStatefulState<TicketUsedRecords> {
     List<DataRow> buildRows() {
       List<DataRow> rows = [];
       for (TicUsedLog log in model.logs) {
+        String cab = '${log.mid}-${log.cid}號機';
+        if (cab.length > 20) cab = '${log.mid}-\n${log.cid}號機';
         rows.add(DataRow(cells: [
           DataCell(Text(log.time)),
-          DataCell(Text('${log.mid}-${log.cid}號機')),
+          DataCell(
+            Text(
+              cab,
+              textScaleFactor: cab.length > 20 ? 0.9 : 1,
+            ),
+          ),
           const DataCell(Text('1張')),
         ]));
       }
@@ -59,42 +66,42 @@ class _TicketUsedRecordsState extends BaseStatefulState<TicketUsedRecords> {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(color: Themes.borderColor, width: 1)),
-            child: Row(
-              children: [
-                CircleAvatar(
-                    foregroundImage: R.image.logo_150_jpg(), radius: 29),
-                const SizedBox(width: 16.8),
-                const Text('近兩個月的遊玩券使用明細如下', style: TextStyle(fontSize: 18))
-              ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border.all(color: Themes.borderColor, width: 1)),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                      foregroundImage: R.image.logo_150_jpg(), radius: 29),
+                  const SizedBox(width: 16.8),
+                  const Text('近兩個月的遊玩券使用明細如下', style: TextStyle(fontSize: 18))
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          hasData
-              ? SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: DataTable(
-                      border: TableBorder.all(color: Themes.borderColor),
-                      dataRowMaxHeight: 60,
-                      columns: ['日期', '機台', '消耗']
-                          .map((e) => DataColumn(label: Text(e)))
-                          .toList(),
-                      rows: buildRows(),
-                    ),
-                  ),
-                )
-              : const Center(child: Text('無資料')),
-        ],
+            const SizedBox(height: 12),
+            hasData
+                ? DataTable(
+                    border: TableBorder.all(color: Themes.borderColor),
+                    dataRowMaxHeight: 60,
+                    horizontalMargin: 12,
+                    columnSpacing: 25,
+                    columns: ['日期', '機台', '消耗']
+                        .map((e) => DataColumn(
+                            label: Expanded(child: Text(e, softWrap: true))))
+                        .toList(),
+                    rows: buildRows(),
+                  )
+                : const Center(child: Text('無資料')),
+          ],
+        ),
       ),
     );
   }

@@ -58,38 +58,41 @@ class _BidRecordsState extends BaseStatefulState<BidRecords> {
     }
 
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(color: Themes.borderColor, width: 1)),
-            child: Row(
-              children: [
-                CircleAvatar(
-                    foregroundImage: R.image.logo_150_jpg(), radius: 29),
-                const SizedBox(width: 16.8),
-                const Text('近兩個月的儲值紀錄如下', style: TextStyle(fontSize: 18))
-              ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border.all(color: Themes.borderColor, width: 1)),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                      foregroundImage: R.image.logo_150_jpg(), radius: 29),
+                  const SizedBox(width: 16.8),
+                  const Text('近兩個月的儲值紀錄如下', style: TextStyle(fontSize: 18))
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          hasData
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: DataTable(
+            const SizedBox(height: 12),
+            hasData
+                ? DataTable(
                     border: TableBorder.all(color: Themes.borderColor),
+                    dataRowMaxHeight: 60,
+                    horizontalMargin: 12,
+                    columnSpacing: 25,
                     columns: ['時間', '儲值金額']
                         .map((e) => DataColumn(label: Text(e)))
                         .toList(),
                     rows: buildRows(),
-                  ),
-                )
-              : const Text('無資料'),
-        ],
+                  )
+                : const Center(child: Text('無資料')),
+          ],
+        ),
       ),
     );
   }
