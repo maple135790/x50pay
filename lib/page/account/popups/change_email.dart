@@ -52,9 +52,21 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
     }
   }
 
+  final buttonStyle = ButtonStyle(
+    shape: MaterialStatePropertyAll(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
+    foregroundColor: MaterialStateColor.resolveWith((states) {
+      return const Color(0xff1e1e1e);
+    }),
+    backgroundColor: MaterialStateColor.resolveWith((states) {
+      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
+      return const Color(0xfffafafa);
+    }),
+  );
+
   Widget confirmButton() {
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
+    return TextButton(
+      style: buttonStyle,
       onPressed: isEnabled ? changeEmail : null,
       child: isEnabled ? const Text('確認') : const Text('請輸入信箱'),
     );
@@ -66,21 +78,25 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
       title: '更改信箱',
       onConfirm: changeEmail,
       customConfirmButton: confirmButton(),
-      content: (showButtonBar) => CupertinoListSection.insetGrouped(
-        footer:
-            Text(_errorText ?? '', style: const TextStyle(color: Colors.red)),
-        children: [
-          CupertinoTextFormFieldRow(
-            prefix: const Text('新的 Email'),
-            controller: newEmail,
-            placeholder: '請輸入欲更改的 Email 信箱地址',
-            onChanged: (value) {
-              isEnabled = newEmail.text.isNotEmpty;
-              setState(() {});
-            },
-          ),
-        ],
-      ),
+      content: (showButtonBar) {
+        showButtonBar(true);
+
+        return CupertinoListSection.insetGrouped(
+          footer:
+              Text(_errorText ?? '', style: const TextStyle(color: Colors.red)),
+          children: [
+            CupertinoTextFormFieldRow(
+              prefix: const Text('新的 Email'),
+              controller: newEmail,
+              placeholder: '請輸入欲更改的 Email 信箱地址',
+              onChanged: (value) {
+                isEnabled = newEmail.text.isNotEmpty;
+                setState(() {});
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
