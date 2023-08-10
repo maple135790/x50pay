@@ -295,8 +295,8 @@ class _AccountState extends State<Account> {
       avatarUrl =
           '${user.rawUserImgUrl!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
     } else {
-      avatarUrl =
-          user.rawUserImgUrl! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+      avatarUrl = user.rawUserImgUrl! +
+          r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
     }
   }
 
