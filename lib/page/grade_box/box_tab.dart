@@ -76,6 +76,11 @@ class __BoxTabState extends State<_BoxTab> {
                 borderRadius: BorderRadius.circular(6),
                 child: CachedNetworkImage(
                   imageUrl: item.rawPicUrl,
+                  placeholder: (_, __) => const Icon(
+                    Icons.broken_image_rounded,
+                    size: 35,
+                    color: Color(0xff303030),
+                  ),
                   errorWidget: (_, __, ___) => const Icon(
                       Icons.broken_image_rounded,
                       size: 35,

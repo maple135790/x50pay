@@ -5,7 +5,8 @@ part 'user.g.dart';
 class UserModel {
   final String message;
   final int code;
-  final String? userimg;
+  @JsonKey(name: "userimg")
+  final String? rawUserImgUrl;
   final String? email;
   final String? uid;
   final double? point;
@@ -22,7 +23,7 @@ class UserModel {
   UserModel(
       {required this.message,
       required this.code,
-      this.userimg,
+      this.rawUserImgUrl,
       this.email,
       this.uid,
       this.point,
@@ -41,13 +42,16 @@ class UserModel {
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
+  String get userImageUrl => rawUserImgUrl == null
+      ? "https://pay.x50.fun/static/logo.jpg"
+      : "$rawUserImgUrl&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
   bool get hasTicket => ticketint != null && ticketint! > 0;
   bool get isStaff => uid != null && uid!.startsWith('X');
   bool get isInsertGod => uid != null && uid!.startsWith('v');
 
   @override
   String toString() {
-    return 'UserModel(message: $message, code: $code, userimg: $userimg, email: $email, uid: $uid, point: $point, name: $name, ticketint: $ticketint, phoneactive: $phoneactive, vip: $vip, vipdate: $vipdate, sid: $sid, sixn: $sixn, tphone: $tphone, doorpwd: $doorpwd)';
+    return 'UserModel(message: $message, code: $code, userimg: $rawUserImgUrl, email: $email, uid: $uid, point: $point, name: $name, ticketint: $ticketint, phoneactive: $phoneactive, vip: $vip, vipdate: $vipdate, sid: $sid, sixn: $sixn, tphone: $tphone, doorpwd: $doorpwd)';
   }
 }
 

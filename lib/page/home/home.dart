@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -86,9 +87,7 @@ class _HomeLoadedState extends State<_HomeLoaded> {
         const SizedBox(height: 10),
         _TopInfo(user: user),
         _TicketInfo(user: user),
-        _MariInfo(isVip: user.vip!, entryData: widget.viewModel.entry!
-            // onChangeGrade: widget.viewModel.chgGradev2,
-            ),
+        _MariInfo(isVip: user.vip!, entryData: widget.viewModel.entry!),
         if (recentQuests != null) divider('最新活動'),
         if (recentQuests != null) _RecentQuests(quests: recentQuests),
         divider('官方資訊'),
@@ -248,6 +247,13 @@ class _MariInfo extends StatefulWidget {
 
 class _MariInfoState extends State<_MariInfo> {
   late final entry = widget.entryData;
+  final progressBarNotifier = ValueNotifier(false);
+
+  void onProgressBarCreated() async {
+    await Future.delayed(const Duration(milliseconds: 150), () {
+      progressBarNotifier.value = true;
+    });
+  }
 
   void onGradeBoxPressed() {
     context.goNamed(AppRoutes.gradeBox.routeName);
@@ -262,8 +268,6 @@ class _MariInfoState extends State<_MariInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final pixelRatio = MediaQuery.of(context).devicePixelRatio;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       child: LayoutBuilder(
@@ -287,12 +291,17 @@ class _MariInfoState extends State<_MariInfo> {
                 children: [
                   Flexible(
                     flex: 1,
-                    child: Image.memory(entry.ava,
-                        alignment: Alignment.center,
+                    child: SizedBox(
+                      width: double.maxFinite,
+                      child: FadeInImage(
+                        image: MemoryImage(entry.ava),
+                        placeholder: MemoryImage(kTransparentImage),
+                        fadeInDuration: const Duration(milliseconds: 150),
                         fit: BoxFit.contain,
-                        gaplessPlayback: true,
+                        alignment: Alignment.center,
                         height: 270,
-                        cacheHeight: (270 * pixelRatio).toInt()),
+                      ),
+                    ),
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -322,6 +331,8 @@ class _MariInfoState extends State<_MariInfo> {
                       children: [
                         Row(children: [
                           Image(
+                              width: 17,
+                              height: 17,
                               image: R.svg.heart_solid(width: 17, height: 17),
                               color: const Color(0xbfff1100)),
                           const SizedBox(width: 5),
@@ -349,6 +360,7 @@ class _MariInfoState extends State<_MariInfo> {
                                         child: Image(
                                             image: R.svg.bolt_solid(
                                                 width: 9, height: 13),
+                                            width: 9,
                                             height: 13,
                                             color: Colors.white),
                                       ),
@@ -358,10 +370,29 @@ class _MariInfoState extends State<_MariInfo> {
                           )
                         ]),
                         const SizedBox(height: 5),
-                        ProgressBar(
-                            currentValue: entry.gr2Progress <= 20
-                                ? 20
-                                : entry.gr2Progress),
+                        ValueListenableBuilder(
+                          valueListenable: progressBarNotifier,
+                          builder: (context, isProgressBarCreated, child) =>
+                              AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 150),
+                            alignment: Alignment.center,
+                            crossFadeState: isProgressBarCreated
+                                ? CrossFadeState.showSecond
+                                : CrossFadeState.showFirst,
+                            secondCurve: Curves.easeInOutExpo,
+                            firstChild: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child:
+                                  SizedBox(height: 24, width: double.maxFinite),
+                            ),
+                            secondChild: ProgressBar(
+                              onProgressBarCreated: onProgressBarCreated,
+                              currentValue: entry.gr2Progress <= 20
+                                  ? 20
+                                  : entry.gr2Progress,
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 12),
                         Flexible(
                           child: Column(
@@ -565,17 +596,16 @@ class _TopInfo extends StatelessWidget {
       child: Row(
         children: [
           Container(
-              width: 88,
-              height: 88,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: user.userimg != null
-                      ? DecorationImage(
-                          image: CachedNetworkImageProvider(user.userimg! +
-                              r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg"),
-                          fit: BoxFit.fill)
-                      : DecorationImage(
-                          image: R.image.logo_150_jpg(), fit: BoxFit.fill))),
+            width: 88,
+            height: 88,
+            clipBehavior: Clip.antiAlias,
+            decoration: const BoxDecoration(shape: BoxShape.circle),
+            child: CachedNetworkImage(
+              imageUrl: user.userImageUrl,
+              alignment: Alignment.center,
+              fit: BoxFit.fill,
+            ),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Container(

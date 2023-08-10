@@ -291,12 +291,12 @@ class _AccountState extends State<Account> {
   @override
   void initState() {
     super.initState();
-    if (user.userimg!.contains('size')) {
+    if (user.rawUserImgUrl!.contains('size')) {
       avatarUrl =
-          '${user.userimg!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
+          '${user.rawUserImgUrl!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
     } else {
       avatarUrl =
-          user.userimg! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+          user.rawUserImgUrl! + r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
     }
   }
 
@@ -321,7 +321,7 @@ class _AccountState extends State<Account> {
                         vertical: 12, horizontal: 16),
                     child: Row(
                       children: [
-                        user.userimg != null
+                        user.rawUserImgUrl != null
                             ? CachedNetworkImage(
                                 imageUrl: avatarUrl,
                                 width: 60,

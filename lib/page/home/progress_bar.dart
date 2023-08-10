@@ -10,7 +10,11 @@ import 'package:xml/xml.dart';
 
 class ProgressBar extends StatefulWidget {
   final double currentValue;
-  const ProgressBar({super.key, required this.currentValue});
+  final VoidCallback onProgressBarCreated;
+  const ProgressBar(
+      {super.key,
+      required this.currentValue,
+      required this.onProgressBarCreated});
 
   @override
   State<ProgressBar> createState() => _ProgressBarState();
@@ -44,6 +48,7 @@ class _ProgressBarState extends State<ProgressBar>
         }
       });
     controller.forward();
+    widget.onProgressBarCreated.call();
   }
 
   @override
@@ -63,15 +68,15 @@ class _ProgressBarState extends State<ProgressBar>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: loadImageInit,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const SizedBox();
-        }
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: RepaintBoundary(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: FutureBuilder<void>(
+        future: loadImageInit,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const SizedBox(height: 24, width: double.maxFinite);
+          }
+          return RepaintBoundary(
             child: CustomPaint(
               painter: ProgressBackgroundPainter(dx: animation.value),
               foregroundPainter: ProgressPainter(
@@ -82,9 +87,9 @@ class _ProgressBarState extends State<ProgressBar>
               size: const Size(double.maxFinite, 24),
               willChange: true,
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

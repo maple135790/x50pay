@@ -44,7 +44,14 @@ class _ClaimedGift extends StatelessWidget {
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: CachedNetworkImage(
-                  imageUrl: claimedList[index].pic, width: 50),
+                imageUrl: claimedList[index].pic,
+                errorWidget: (context, url, error) => Icon(
+                    Icons.broken_image_rounded,
+                    color: const Color(0xff505050).withOpacity(0.7)),
+                placeholder: (context, url) => Icon(Icons.hourglass_top_rounded,
+                    color: const Color(0xff505050).withOpacity(0.7)),
+                width: 50,
+              ),
             ),
             title: Text(claimedList[index].name,
                 style: const TextStyle(color: Color(0xfffafafa), fontSize: 14)),

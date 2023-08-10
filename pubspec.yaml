@@ -33,7 +33,7 @@ dependencies:
       url: 'https://github.com/YK-Unit/r_dart_library.git'
       ref: 0.4.1
   shared_preferences: ^2.0.15
-  transparent_image: ^2.0.0
+  transparent_image: ^2.0.1
   url_launcher: ^6.1.3
   xml: ^6.3.0
   shared_preferences_debugger: ^0.1.0
