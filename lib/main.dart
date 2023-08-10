@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -31,6 +32,11 @@ Future<bool> _checkLogin() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final packageInfo = await PackageInfo.fromPlatform();
+  GlobalSingleton.instance.appVersion =
+      "X50Pay app v${packageInfo.version}+${packageInfo.buildNumber}";
+
   final islogin = await _checkLogin();
   log('isServiceOnline: ${GlobalSingleton.instance.isServiceOnline}',
       name: 'main');

@@ -41,6 +41,14 @@ class GlobalSingleton {
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid})? recentPlayedCabinetData;
 
+  /// App 版本，例如 X50Pay app v1.0.0 + 1
+  ///
+  /// 會在main() 中初始化。
+  late String appVersion;
+
+  /// 是否在掃描QRCode頁面的旗標
+  ///
+  /// 由於go_router 在pushNamed 無法取得location，因此使用此旗標來判斷是否在掃描QRCode頁面。
   bool isInCameraPage = false;
 
   static GlobalSingleton? _instance;

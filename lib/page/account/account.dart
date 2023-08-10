@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:vibration/vibration.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
@@ -87,6 +89,11 @@ class _AccountState extends State<Account> {
   final user = GlobalSingleton.instance.user!;
 
   Color get bgColor => Theme.of(context).scaffoldBackgroundColor;
+
+  void showEasterEgg() {
+    Vibration.vibrate(duration: 50, amplitude: 128);
+    Fluttertoast.showToast(msg: ' 🥳 ');
+  }
 
   void onQuicPayPrefPressed() {
     context.pushNamed(
@@ -457,6 +464,15 @@ class _AccountState extends State<Account> {
                   onTap: onLogoutPressed,
                 ),
               ]),
+              GestureDetector(
+                onLongPress: showEasterEgg,
+                child: Center(
+                  child: Text(GlobalSingleton.instance.appVersion,
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                          color: const Color(0xff505050).withOpacity(0.7))),
+                ),
+              ),
+              const SizedBox(height: 15),
             ],
           ),
         ),
