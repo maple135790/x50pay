@@ -378,8 +378,11 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                 Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                   const Icon(Icons.sell, size: 18, color: Color(0xe6ffffff)),
                   Text('  $tagName',
+                      textHeightBehavior: const TextHeightBehavior(
+                        applyHeightToFirstAscent: false,
+                        applyHeightToLastDescent: false,
+                      ),
                       style: const TextStyle(
-                          height: 0,
                           color: Color(0xffbcbfbf),
                           fontSize: 16,
                           shadows: [
@@ -389,8 +392,11 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                   const Icon(Icons.attach_money,
                       size: 18, color: Color(0xe6ffffff)),
                   Text('${price.toInt()}P',
+                      textHeightBehavior: const TextHeightBehavior(
+                        applyHeightToFirstAscent: false,
+                        applyHeightToLastDescent: false,
+                      ),
                       style: const TextStyle(
-                          height: 0,
                           color: Color(0xffbcbfbf),
                           fontSize: 16,
                           shadows: [
