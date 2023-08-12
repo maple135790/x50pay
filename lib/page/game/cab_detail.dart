@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/theme.dart';
@@ -239,7 +241,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
               price: price,
               tagName: tagLabel,
               cabLabel: model.cabinets.first.label),
-          ...buildStreamPic(model.spic, model.surl),
+          ...buildEventPic(model.spic, model.surl),
           ...buildCabBlock(caboid: model.caboid),
           const SizedBox(height: 12),
         ],
@@ -335,7 +337,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
     );
   }
 
-  List<Widget> buildStreamPic(List<String>? spic, List<String>? surl) {
+  List<Widget> buildEventPic(List<String>? spic, List<String>? surl) {
     if (spic == null || surl == null) return [const SizedBox()];
     if (spic.length != surl.length) {
       log('',
@@ -346,8 +348,13 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
     for (var i = 0; i < surl.length; i++) {
       list.add(GestureDetector(
           onTap: () {
-            launchUrlString(surl[i].replaceAll('\'', ''),
-                mode: LaunchMode.externalNonBrowserApplication);
+            if (surl[i].startsWith('http')) {
+              launchUrlString(surl[i].replaceAll('\'', ''),
+                  mode: LaunchMode.externalNonBrowserApplication);
+              return;
+            }
+            context.pushNamed(AppRoutes.questCampaign.routeName,
+                pathParameters: {'couid': surl[i].replaceAll('\'', '')});
           },
           child: Container(
             width: double.maxFinite,
