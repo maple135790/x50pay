@@ -349,6 +349,14 @@ class Repository extends Api {
     return lineupCount;
   }
 
+  Future<void> confirmPadCheck(String padmid, String padlid) async {
+    await Api.makeRequest(
+      dest: '/pad/onCheck/$padmid/$padlid',
+      method: HttpMethod.post,
+      body: {},
+    );
+  }
+
   Future<String> qrDecryt(String rawText) async {
     String result = '';
     await Api.makeRequest(

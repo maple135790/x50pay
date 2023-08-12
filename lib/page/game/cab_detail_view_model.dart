@@ -31,7 +31,9 @@ class CabDatailViewModel extends BaseViewModel {
         cabinetModel =
             CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
       }
-      if (cabinetModel!.pad) await getPadLineup(cabinetModel!);
+      if (cabinetModel!.pad) {
+        await getPadLineup(cabinetModel!.padmid, cabinetModel!.padlid);
+      }
       await EasyLoading.dismiss();
       return true;
     } catch (e) {
@@ -42,9 +44,16 @@ class CabDatailViewModel extends BaseViewModel {
     }
   }
 
-  Future<int> getPadLineup(CabinetModel model) async {
+  Future<void> confirmPadCheck(String padmid, String padlid) async {
     if (!kDebugMode || isForceFetch) {
-      lineupCount = await repo.getPadLineup(model.padmid, model.padlid);
+      await repo.getPadLineup(padmid, padlid);
+    } else {}
+    return;
+  }
+
+  Future<int> getPadLineup(String padmid, String padlid) async {
+    if (!kDebugMode || isForceFetch) {
+      lineupCount = await repo.getPadLineup(padmid, padlid);
     } else {
       lineupCount = 0;
     }

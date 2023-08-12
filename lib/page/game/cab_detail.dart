@@ -79,6 +79,72 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
     );
   }
 
+  void onLineupPressed(String padmid, String padlid) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        clipBehavior: Clip.hardEdge,
+        contentPadding: const EdgeInsets.only(top: 15),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error, size: 50, color: Color(0xfffafafa)),
+            const Text('注意 請確認是否在平板前', style: TextStyle(fontSize: 17)),
+            const SizedBox(height: 15),
+            Container(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+                child: const Text.rich(TextSpan(
+                  text: '請確認本人',
+                  children: [
+                    TextSpan(
+                      text: '在平板前',
+                      style: TextStyle(color: Colors.red),
+                      children: [
+                        TextSpan(
+                            text: ' 平板會跳出排隊確認請於 180 秒內確認，如接受再點 ',
+                            style: TextStyle(color: Colors.white),
+                            children: [
+                              TextSpan(
+                                text: '『排隊』',
+                                style: TextStyle(color: Colors.red),
+                              )
+                            ])
+                      ],
+                    )
+                  ],
+                ))),
+            const Divider(thickness: 1, height: 0),
+            Container(
+              color: const Color(0xff2a2a2a),
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: Themes.cancel(),
+                        child: const Text('取消')),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: TextButton(
+                        onPressed: () {
+                          viewModel.confirmPadCheck(padmid, padlid);
+                        },
+                        style: Themes.severe(isV4: true),
+                        child: const Text('排隊')),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget cabDetailLoaded(CabinetModel model) {
     List<Cabinet> cabs = model.cabinets;
     final tagLabel = model.cabinets.first.isBool == true
@@ -171,7 +237,9 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                   style: const TextStyle(color: Color(0xfffafafa))),
               const Spacer(),
               GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    onLineupPressed(model.padmid, model.padlid);
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                         color: const Color(0xfffafafa),
