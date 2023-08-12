@@ -157,10 +157,11 @@ class Repository extends Api {
   Future<http.Response> quicConfirm(
       {required bool atq, required String atql}) async {
     final response = await Api.makeRequest(
-      dest: '/settingPadConfirm',
+      dest: '/quicConfirm',
       method: HttpMethod.post,
+      contentType: ContentType.json,
       withSession: true,
-      body: {'atq': atq, 'atq1': atql},
+      body: {'atq': atq, 'atql': atql},
     );
     return response;
   }

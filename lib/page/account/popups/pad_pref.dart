@@ -25,7 +25,7 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
     widget.viewModel.setPadSettings(
       isNicknameShown: modalValue!.isNameShown,
       nickname: modalValue!.nickname,
-      showColor: modalValue!.showColor,
+      showColor: "#${modalValue!.showColor}",
     );
   }
 

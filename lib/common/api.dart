@@ -82,6 +82,8 @@ abstract class Api {
               : onSuccess?.call(jsonDecode(response.body));
         } else {
           onError?.call(response.statusCode, response.body);
+          log('',
+              error: 'statusCode: ${response.statusCode},\n${response.body}');
           throw Exception([
             'response code: ',
             response.statusCode,

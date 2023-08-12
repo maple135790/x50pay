@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/page/account/popups/popup_dialog.dart';
@@ -23,11 +25,12 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
     "0": "不限制"
   };
 
-  void sendQuicConfirm() {
-    widget.viewModel.quicConfirm(
+  void sendQuicConfirm() async {
+    final isSuccess = await widget.viewModel.quicConfirm(
       autoQlock: nfcQlock,
       autoQuic: isQuiCPayEnabled,
     );
+    log('isSuccess: $isSuccess', name: 'sendQuicConfirm');
   }
 
   @override
