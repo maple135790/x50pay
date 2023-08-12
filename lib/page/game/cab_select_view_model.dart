@@ -14,19 +14,22 @@ class CabSelectViewModel extends BaseViewModel {
   Future<BasicResponse?> doInsert(
       {required bool isTicket,
       required String id,
-      required int machineNum,
+      required int index,
       required num mode,
       int debugFlag = 200}) async {
     try {
-      log('id: $id, machineNum: $machineNum, isTicket: $isTicket, mode: $mode',
-          name: 'doInsert');
       await EasyLoading.show();
       await Future.delayed(const Duration(milliseconds: 100));
       late final BasicResponse response;
       final prefs = await SharedPreferences.getInstance();
       final sid = prefs.getString('store_id');
+      log(
+        'index: $index, id: $id/$sid$index, mode: $mode, isTicket: $isTicket',
+        name: 'doInsert',
+      );
+
       if (!kDebugMode || isForceFetch) {
-        response = await repo.doInsert(isTicket, '$id/$sid$machineNum', mode);
+        response = await repo.doInsert(isTicket, '$id/$sid$index', mode);
       } else {
         response =
             BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));

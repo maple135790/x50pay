@@ -36,12 +36,14 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
 
   void onCabSelect({
     required String caboid,
+    required int cabIndex,
     required Cabinet cabData,
   }) {
     showCupertinoDialog(
         context: context,
         builder: (context) => CabSelect.fromCabDetail(
               caboid: caboid,
+              cabIndex: cabIndex,
               cabinetData: cabData,
             ));
   }
@@ -140,8 +142,12 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
               height: 110,
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: _buildCabs(divIndex == 0 ? cabGroup1 : cabGroup2!,
-                      caboid: caboid)),
+                  children: _buildCabs(
+                    divIndex == 0 ? cabGroup1 : cabGroup2!,
+                    group1Length: cabGroup1.length,
+                    isGroup1: divIndex == 0,
+                    caboid: caboid,
+                  )),
             ),
           ));
       }
@@ -363,16 +369,23 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
     return list;
   }
 
-  List<Widget> _buildCabs(List<Cabinet> cabs, {required String caboid}) {
+  List<Widget> _buildCabs(
+    List<Cabinet> cabs, {
+    required String caboid,
+    required int group1Length,
+    required bool isGroup1,
+  }) {
     List<Widget> children = [];
+    for (int i = 0; i < cabs.length; i++) {
+      Cabinet cab = cabs[i];
 
-    for (Cabinet cab in cabs) {
       String isPaid = cab.pcl == true ? '已投幣' : '未投幣';
       children.add(Expanded(
           child: GestureDetector(
         onTap: () {
           onCabSelect(
             caboid: caboid,
+            cabIndex: isGroup1 ? i : group1Length + i,
             cabData: cab,
           );
         },

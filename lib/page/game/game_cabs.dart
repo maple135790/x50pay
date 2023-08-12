@@ -100,6 +100,7 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded> {
         context: context,
         builder: (_) => CabSelect(
               caboid: recentPlayData.caboid,
+              cabIndex: recentPlayData.cabIndex,
               cabinetData: recentPlayData.cabinet,
             )).then((_) {
       setState(() {});

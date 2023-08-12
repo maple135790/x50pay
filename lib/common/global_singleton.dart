@@ -39,7 +39,7 @@ class GlobalSingleton {
   bool isLogin = false;
 
   /// 最近遊玩的機台資料
-  ({Cabinet cabinet, String caboid})? recentPlayedCabinetData;
+  ({Cabinet cabinet, String caboid, int cabIndex})? recentPlayedCabinetData;
 
   /// App 版本，例如 X50Pay app v1.0.0 + 1
   ///

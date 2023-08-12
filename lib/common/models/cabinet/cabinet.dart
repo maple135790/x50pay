@@ -72,4 +72,9 @@ class Cabinet {
   factory Cabinet.fromJson(Map<String, dynamic> json) =>
       _$CabinetFromJson(json);
   Map<String, dynamic> toJson() => _$CabinetToJson(this);
+
+  @override
+  String toString() {
+    return """Cabinet(num: $num, id: $id, label: $label, mode: $mode, card: $card, isBool: $isBool, vipbool: $vipbool, notice: $notice, busy: $busy, nbusy: $nbusy, pcl: $pcl)\n""";
+  }
 }

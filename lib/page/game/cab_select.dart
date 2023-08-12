@@ -20,17 +20,20 @@ enum PaymentType {
 class CabSelect extends StatefulWidget {
   final String caboid;
   final Cabinet cabinetData;
+  final int cabIndex;
   final bool _isFromCabDetail;
 
   const CabSelect({
     super.key,
     required this.caboid,
+    required this.cabIndex,
     required this.cabinetData,
   }) : _isFromCabDetail = false;
 
   const CabSelect.fromCabDetail({
     super.key,
     required this.caboid,
+    required this.cabIndex,
     required this.cabinetData,
   }) : _isFromCabDetail = true;
 
@@ -43,6 +46,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
   late final cabData = widget.cabinetData;
   late PaymentType paymentType;
   bool isSelectPayment = false;
+  List? selectedMode;
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +106,10 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
                         final router = GoRouter.of(context);
                         final serverResponse = await viewModel.doInsert(
                           id: widget.caboid,
-                          machineNum: cabData.num - 1,
+                          index: widget.cabIndex,
                           isTicket: paymentType == PaymentType.ticket,
                           mode: paymentType != PaymentType.reloadCoin
-                              ? cabData.mode[0].first
+                              ? selectedMode!.first
                               : 9999,
                         );
                         if (widget._isFromCabDetail) router.pop();
@@ -121,6 +125,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
                               GlobalSingleton.instance.recentPlayedCabinetData =
                                   (
                                 cabinet: widget.cabinetData,
+                                cabIndex: widget.cabIndex,
                                 caboid: widget.caboid
                               );
                               break;
@@ -281,6 +286,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
           children: [
             TextButton(
                 onPressed: () {
+                  selectedMode = mode;
                   isSelectPayment = true;
                   paymentType = PaymentType.point;
                   setState(() {});
@@ -293,6 +299,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
                 return TextButton(
                     onPressed: user?.hasTicket ?? false
                         ? () {
+                            selectedMode = mode;
                             isSelectPayment = true;
                             paymentType = PaymentType.ticket;
                             setState(() {});
