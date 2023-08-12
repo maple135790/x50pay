@@ -263,7 +263,7 @@ class _AccountState extends State<Account> {
       actions: [
         TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              context.pop();
             },
             style: Themes.grey(),
             child: const Text('取消')),
