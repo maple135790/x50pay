@@ -70,7 +70,11 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
             _route(AppRoutes.license, (_, __) => const License()),
             _route(
               AppRoutes.settings,
-              (_, __) => const Account(),
+              (_, state) {
+                final shouldGoPhone = state.queryParameters['goPhone'];
+                return Account(
+                    shouldGoPhone: bool.tryParse(shouldGoPhone ?? ''));
+              },
               innerRoutes: [
                 _routeTransition(AppRoutes.padPref, (_, state) {
                   final viewModel = state.extra as AccountViewModel;

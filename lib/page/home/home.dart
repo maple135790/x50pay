@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
@@ -627,7 +628,22 @@ class _TopInfo extends StatelessWidget {
                               child: Icon(Icons.person_rounded,
                                   color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
-                          TextSpan(text: user.name!)
+                          TextSpan(
+                              text: user.name!,
+                              children: user.phoneactive!
+                                  ? null
+                                  : [
+                                      TextSpan(
+                                          text: ' (未驗證)',
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              context.goNamed(
+                                                  AppRoutes.settings.routeName,
+                                                  queryParameters: {
+                                                    'goPhone': 'true'
+                                                  });
+                                            })
+                                    ])
                         ])),
                         const SizedBox(height: 5),
                         RichText(

@@ -77,7 +77,8 @@ enum DefaultCabPayment {
 }
 
 class Account extends StatefulWidget {
-  const Account({super.key});
+  final bool? shouldGoPhone;
+  const Account({super.key, this.shouldGoPhone});
 
   @override
   State<Account> createState() => _AccountState();
@@ -137,31 +138,32 @@ class _AccountState extends State<Account> {
           context: context,
           builder: (context) =>
               _ChangePhoneConfirmedDialog(viewModel, context));
+    } else {
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) {
+            return ChangePhoneDialog(
+              viewModel,
+              callback: (isOk) async {
+                Navigator.of(context).pop();
+                if (isOk) {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) =>
+                          _ChangePhoneConfirmedDialog(viewModel, context));
+                } else {
+                  await EasyLoading.showError(
+                    '伺服器錯誤，請嘗試重新整理或回報X50',
+                    dismissOnTap: false,
+                    duration: const Duration(seconds: 2),
+                  );
+                }
+              },
+            );
+          });
     }
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return ChangePhoneDialog(
-            viewModel,
-            callback: (isOk) async {
-              Navigator.of(context).pop();
-              if (isOk) {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) =>
-                        _ChangePhoneConfirmedDialog(viewModel, context));
-              } else {
-                await EasyLoading.showError(
-                  '伺服器錯誤，請嘗試重新整理或回報X50',
-                  dismissOnTap: false,
-                  duration: const Duration(seconds: 2),
-                );
-              }
-            },
-          );
-        });
   }
 
   void onBidRecordPressed() async {
@@ -300,6 +302,12 @@ class _AccountState extends State<Account> {
     } else {
       avatarUrl = user.rawUserImgUrl! +
           r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+    }
+
+    if (widget.shouldGoPhone ?? false) {
+      Future.delayed(const Duration(milliseconds: 350), () {
+        onChangePhonePressed.call();
+      });
     }
   }
 
