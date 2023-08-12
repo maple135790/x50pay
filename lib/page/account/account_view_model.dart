@@ -223,9 +223,7 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> detachPhone({
-    int debugFlag = 200,
-  }) async {
+  Future<bool> detachPhone() async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
@@ -233,15 +231,7 @@ class AccountViewModel extends BaseViewModel {
       if (!kDebugMode || isForceFetch) {
         response = await repo.changePhone();
       } else {
-        if (debugFlag == 700) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
-        } else if (debugFlag == 701) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
-        } else {
-          response = BasicResponse.fromJson(jsonDecode(testResponse()));
-        }
+        response = BasicResponse.fromJson(jsonDecode(testResponse()));
       }
       await EasyLoading.dismiss();
 
@@ -252,10 +242,7 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> doChangePhone({
-    required String phone,
-    int debugFlag = 200,
-  }) async {
+  Future<bool> doChangePhone({required String phone}) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
@@ -263,15 +250,7 @@ class AccountViewModel extends BaseViewModel {
       if (!kDebugMode || isForceFetch) {
         response = await repo.doChangePhone(phone: phone);
       } else {
-        if (debugFlag == 700) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
-        } else if (debugFlag == 701) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
-        } else {
-          response = BasicResponse.fromJson(jsonDecode(testResponse()));
-        }
+        response = BasicResponse.fromJson(jsonDecode(testResponse()));
       }
       await EasyLoading.dismiss();
 
@@ -282,10 +261,7 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> smsActivate({
-    required String smsCode,
-    int debugFlag = 200,
-  }) async {
+  Future<bool> smsActivate({required String smsCode}) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
@@ -293,15 +269,7 @@ class AccountViewModel extends BaseViewModel {
       if (!kDebugMode || isForceFetch) {
         response = await repo.smsActivate(sms: smsCode);
       } else {
-        if (debugFlag == 700) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
-        } else if (debugFlag == 701) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
-        } else {
-          response = BasicResponse.fromJson(jsonDecode(testResponse()));
-        }
+        response = BasicResponse.fromJson(jsonDecode(testResponse()));
       }
       await EasyLoading.dismiss();
 

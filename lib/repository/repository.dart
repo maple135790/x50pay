@@ -206,6 +206,7 @@ class Repository extends Api {
       method: HttpMethod.post,
       withSession: true,
       body: {},
+      contentType: ContentType.json,
       onSuccess: (json) {
         res = BasicResponse.fromJson(json);
       },
@@ -220,7 +221,8 @@ class Repository extends Api {
       dest: '/setting/activePhone',
       method: HttpMethod.post,
       withSession: true,
-      body: {'chg_phone': phone},
+      contentType: ContentType.json,
+      body: {'phone': phone},
       onSuccess: (json) {
         res = BasicResponse.fromJson(json);
       },

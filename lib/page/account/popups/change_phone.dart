@@ -73,7 +73,10 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
                 Expanded(
                   child: TextButton(
                       onPressed: () async {
-                        widget.callback(await model.detachPhone());
+                        final isDetached = await model.detachPhone();
+                        log('isDetached: $isDetached',
+                            name: 'ChangePhoneDialog');
+                        widget.callback(isDetached);
                       },
                       style: Themes.severe(isV4: true),
                       child: const Text('確認')),
@@ -83,8 +86,6 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
           ),
         ],
       ),
-      // actionsAlignment: MainAxisAlignment.spaceBetween,
-      // actions:,
     );
   }
 }
@@ -115,11 +116,11 @@ class _ChangePhoneConfirmedDialogState
   void _doChangePhone() async {
     final nav = Navigator.of(context);
     final model = widget.viewModel;
-    if (await model.doChangePhone(phone: textController.text)) {
+    final gotResponse = await model.doChangePhone(phone: textController.text);
+    if (gotResponse) {
       switch (model.response!.code) {
         case 200:
-          scaffoldKey.currentState!
-              .showSnackBar(const SnackBar(content: Text('資料已送出，等候簡訊驗證')));
+          EasyLoading.showSuccess('資料已送出，等候簡訊驗證');
           isEnteredNewPhone = true;
           textController.clear();
           setState(() {});
@@ -130,13 +131,20 @@ class _ChangePhoneConfirmedDialogState
           await Future.delayed(const Duration(seconds: 2));
           nav.pop();
       }
+    } else {
+      await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
+          duration: const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
+      nav.pop();
     }
   }
 
   void _smsActivate() async {
     final model = widget.viewModel;
     final nav = Navigator.of(context);
-    if (await model.smsActivate(smsCode: textController.text)) {
+
+    final gotResponse = await model.smsActivate(smsCode: textController.text);
+    if (gotResponse) {
       switch (model.response!.code) {
         case 200:
           await EasyLoading.showSuccess('簡訊驗證成功！',
@@ -154,6 +162,11 @@ class _ChangePhoneConfirmedDialogState
           await Future.delayed(const Duration(seconds: 2));
           nav.pop();
       }
+    } else {
+      await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
+          duration: const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
+      nav.pop();
     }
   }
 
@@ -162,6 +175,7 @@ class _ChangePhoneConfirmedDialogState
     return _Dialog(
         onConfirm: () async {
           if (isEnteredNewPhone) {
+            FocusManager.instance.primaryFocus?.unfocus();
             _smsActivate();
           } else {
             bool isCorrectPhone = RegExp("^09\\d{2}-?\\d{3}-?\\d{3}\$")

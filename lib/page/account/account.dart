@@ -153,8 +153,11 @@ class _AccountState extends State<Account> {
                     builder: (context) =>
                         _ChangePhoneConfirmedDialog(viewModel, context));
               } else {
-                await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-                    dismissOnTap: false, duration: const Duration(seconds: 2));
+                await EasyLoading.showError(
+                  '伺服器錯誤，請嘗試重新整理或回報X50',
+                  dismissOnTap: false,
+                  duration: const Duration(seconds: 2),
+                );
               }
             },
           );
