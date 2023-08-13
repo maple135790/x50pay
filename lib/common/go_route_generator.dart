@@ -71,9 +71,17 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
             _route(
               AppRoutes.settings,
               (_, state) {
-                final shouldGoPhone = state.queryParameters['goPhone'];
+                final shouldGoPhone =
+                    state.queryParameters['goTo'] == 'phoneChange';
+                final shouldGoTicketRecord =
+                    state.queryParameters['goTo'] == 'ticketRecord';
+
+                log('shouldGoPhone: $shouldGoPhone');
+                log('shouldGoTicketRecord: $shouldGoTicketRecord');
                 return Account(
-                    shouldGoPhone: bool.tryParse(shouldGoPhone ?? ''));
+                  shouldGoPhone: shouldGoPhone,
+                  shouldGoTicketRecord: shouldGoTicketRecord,
+                );
               },
               innerRoutes: [
                 _routeTransition(AppRoutes.padPref, (_, state) {

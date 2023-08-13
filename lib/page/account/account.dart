@@ -78,7 +78,9 @@ enum DefaultCabPayment {
 
 class Account extends StatefulWidget {
   final bool? shouldGoPhone;
-  const Account({super.key, this.shouldGoPhone});
+  final bool? shouldGoTicketRecord;
+
+  const Account({super.key, this.shouldGoPhone, this.shouldGoTicketRecord});
 
   @override
   State<Account> createState() => _AccountState();
@@ -307,6 +309,10 @@ class _AccountState extends State<Account> {
     if (widget.shouldGoPhone ?? false) {
       Future.delayed(const Duration(milliseconds: 350), () {
         onChangePhonePressed.call();
+      });
+    } else if (widget.shouldGoTicketRecord ?? false) {
+      Future.delayed(const Duration(milliseconds: 350), () {
+        onTicketRecordPressed.call();
       });
     }
   }

@@ -19,8 +19,6 @@ import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
 
-// part "grade_box_popup.dart";
-
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -131,6 +129,13 @@ class _TicketInfo extends StatelessWidget {
     return '${date.month}/${date.day} ${date.hour}:${date.minute}';
   }
 
+  void onTicketInfoPressed(BuildContext context) {
+    context.goNamed(
+      AppRoutes.settings.routeName,
+      queryParameters: {'goTo': "ticketRecord"},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -153,7 +158,6 @@ class _TicketInfo extends StatelessWidget {
                     onTap: () {
                       GoRouter.of(context)
                           .pushNamed(AppRoutes.buyMPass.routeName);
-                      // Navigator.of(context).pushNamed(AppRoute.buyMPass);
                     },
                     child: const Icon(Icons.confirmation_number_rounded,
                         color: Color(0xff237804), size: 50)),
@@ -161,34 +165,46 @@ class _TicketInfo extends StatelessWidget {
                 const VerticalDivider(
                     thickness: 1, width: 0, color: Color(0xff3e3e3e)),
                 const SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                        text: TextSpan(children: [
-                      const TextSpan(text: '券量 : '),
-                      const WidgetSpan(child: SizedBox(width: 5)),
-                      TextSpan(text: user.ticketint!.toString()),
-                      const TextSpan(text: '張'),
-                    ])),
-                    const SizedBox(height: 5),
-                    RichText(
-                        text: TextSpan(children: [
-                      const TextSpan(text: '月票 : '),
-                      const WidgetSpan(child: SizedBox(width: 5)),
-                      TextSpan(
-                          text: user.vip! ? '已購買' : '未購買',
-                          style: TextStyle(
-                              color: user.vip! == false ? Colors.red : null))
-                    ])),
-                    const SizedBox(height: 5),
-                    RichText(
-                        text: TextSpan(children: [
-                      const TextSpan(text: '期限 : '),
-                      const WidgetSpan(child: SizedBox(width: 5)),
-                      TextSpan(text: user.vip! ? vipExpDate() : '點左側票卷圖樣立刻購買')
-                    ])),
-                  ],
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      onTicketInfoPressed(context);
+                    },
+                    child: SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              text: TextSpan(children: [
+                            const TextSpan(text: '券量 : '),
+                            const WidgetSpan(child: SizedBox(width: 5)),
+                            TextSpan(text: user.ticketint!.toString()),
+                            const TextSpan(text: '張'),
+                          ])),
+                          const SizedBox(height: 5),
+                          RichText(
+                              text: TextSpan(children: [
+                            const TextSpan(text: '月票 : '),
+                            const WidgetSpan(child: SizedBox(width: 5)),
+                            TextSpan(
+                                text: user.vip! ? '已購買' : '未購買',
+                                style: TextStyle(
+                                    color:
+                                        user.vip! == false ? Colors.red : null))
+                          ])),
+                          const SizedBox(height: 5),
+                          RichText(
+                              text: TextSpan(children: [
+                            const TextSpan(text: '期限 : '),
+                            const WidgetSpan(child: SizedBox(width: 5)),
+                            TextSpan(
+                                text: user.vip! ? vipExpDate() : '點左側票卷圖樣立刻購買')
+                          ])),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -640,7 +656,7 @@ class _TopInfo extends StatelessWidget {
                                               context.goNamed(
                                                   AppRoutes.settings.routeName,
                                                   queryParameters: {
-                                                    'goPhone': 'true'
+                                                    'goTo': 'phoneChange'
                                                   });
                                             })
                                     ])
