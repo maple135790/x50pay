@@ -20,6 +20,7 @@ class AppRoutes {
 
   static const login = (routeName: 'login', path: '/login');
   static const home = (routeName: 'home', path: '/home');
+  static const dressRoom = (routeName: 'dressRoom', path: 'dressRoom');
   static const forgotPassword = (routeName: 'forgotPassword', path: '/iforgot');
   static const license = (routeName: 'license', path: '/lic');
   static const signUp = (routeName: 'signUp', path: '/signUp');

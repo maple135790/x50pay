@@ -1,10 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
+import 'package:x50pay/page/home/dress_room/dress_room.dart';
 import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
 
@@ -36,7 +37,8 @@ class DressRoomViewModel extends BaseViewModel {
               .split('data:image/webp;base64,')
               .last,
           id: parent.children[0].attributes['onclick']?.split("'")[1],
-          badgeText: parent.children[1].querySelector('div > div > div')!.text
+          badgeText:
+              parent.children[1].querySelector('div > div > div')!.text.trim(),
         ));
       }
     } catch (e) {
@@ -47,12 +49,15 @@ class DressRoomViewModel extends BaseViewModel {
 
   Future<String> setAvatar(String id) async {
     String text = '';
+    EasyLoading.show();
     if (!kDebugMode || isForceFetch) {
       final response = await repo.setAvatar(id);
       text = response.body;
     } else {
       text = '成功更換衣裝';
     }
+    EasyLoading.dismiss();
+
     return text;
   }
 }

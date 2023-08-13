@@ -9,6 +9,7 @@ export 'game/game_cabs.dart';
 export 'game/game_store.dart';
 export 'giftSystem/gift_system.dart';
 export 'grade_box/grade_box.dart';
+export 'home/dress_room/dress_room.dart';
 export 'home/home.dart';
 export 'license/license.dart';
 export 'login/login.dart';

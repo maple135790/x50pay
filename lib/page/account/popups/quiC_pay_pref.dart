@@ -35,7 +35,7 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AccountDialog.ios(
+    return PageDialog.ios(
       title: 'QuiC 快速付款偏好設定',
       onConfirm: sendQuicConfirm,
       content: (showButtonBar) => FutureBuilder(

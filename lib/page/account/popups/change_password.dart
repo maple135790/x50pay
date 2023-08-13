@@ -78,7 +78,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AccountDialog.ios(
+    return PageDialog.ios(
         title: '密碼變更',
         customConfirmButton: confirmButton(),
         content: (showButtonBar) {

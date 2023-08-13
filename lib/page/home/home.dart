@@ -14,13 +14,12 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -276,11 +275,8 @@ class _MariInfoState extends State<_MariInfo> {
     context.goNamed(AppRoutes.gradeBox.routeName);
   }
 
-  void onDressRoomPressed() {
-    showDialog(
-      context: context,
-      builder: (context) => const DressRoomPopup(),
-    );
+  void onDressRoomPressed() async {
+    context.goNamed(AppRoutes.dressRoom.routeName);
   }
 
   @override

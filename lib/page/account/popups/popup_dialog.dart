@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x50pay/common/theme/theme.dart';
 
-class AccountDialog extends StatefulWidget {
+class PageDialog extends StatefulWidget {
   final Widget Function(void Function(bool isShow) showButtonBar) content;
   final void Function()? onConfirm;
   final Widget? customConfirmButton;
   final String title;
 
-  const AccountDialog.ios({
+  const PageDialog.ios({
     super.key,
     required this.content,
     required this.title,
@@ -18,10 +18,10 @@ class AccountDialog extends StatefulWidget {
   });
 
   @override
-  State<AccountDialog> createState() => _AccountDialogState();
+  State<PageDialog> createState() => _PageDialogState();
 }
 
-class _AccountDialogState extends State<AccountDialog> {
+class _PageDialogState extends State<PageDialog> {
   static const _kMaxBottomSheetHeight = 80.0;
   ValueNotifier<Offset> offsetNotifier =
       ValueNotifier(const Offset(0, _kMaxBottomSheetHeight));
@@ -57,7 +57,7 @@ class _AccountDialogState extends State<AccountDialog> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          widget.content.call(showButtonBar),
+          Expanded(child: widget.content.call(showButtonBar)),
         ],
       ),
       bottomSheet: ValueListenableBuilder(

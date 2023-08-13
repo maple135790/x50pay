@@ -140,22 +140,35 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
                 }),
               ],
             ),
-            _route(AppRoutes.home, (_, __) => const Home(), innerRoutes: [
-              _route(AppRoutes.ecPay, (_, state) => const EcPay()),
-              _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
-              _route(AppRoutes.questCampaign, (_, state) {
+            _route(
+              AppRoutes.home,
+              (_, state) {
                 final shouldRebuild = state.extra as bool?;
                 if (shouldRebuild == true) {
+                  return Home(
+                      key: ValueKey(DateTime.now().millisecondsSinceEpoch));
+                }
+                return const Home();
+              },
+              innerRoutes: [
+                _route(AppRoutes.ecPay, (_, state) => const EcPay()),
+                _routeTransition(AppRoutes.dressRoom,
+                    (_, __) => const CupertinoPage(child: DressRoom())),
+                _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
+                _route(AppRoutes.questCampaign, (_, state) {
+                  final shouldRebuild = state.extra as bool?;
+                  if (shouldRebuild == true) {
+                    return QuestCampaign(
+                      key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                      campaignId: state.pathParameters['couid']!,
+                    );
+                  }
                   return QuestCampaign(
-                    key: ValueKey(DateTime.now().millisecondsSinceEpoch),
                     campaignId: state.pathParameters['couid']!,
                   );
-                }
-                return QuestCampaign(
-                  campaignId: state.pathParameters['couid']!,
-                );
-              }),
-            ]),
+                }),
+              ],
+            ),
             _route(AppRoutes.gift, (_, __) => const GiftSystem()),
             _route(AppRoutes.gradeBox, (_, __) => const GradeBox()),
             _route(AppRoutes.collab, (_, __) => const Collab()),

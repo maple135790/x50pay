@@ -31,7 +31,7 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AccountDialog.ios(
+    return PageDialog.ios(
       title: 'X50Pad 西門排隊平板偏好選項',
       onConfirm: savePadPref,
       content: (showButtonBar) => FutureBuilder(
@@ -93,7 +93,7 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
           nameController.dispose();
           return true;
         },
-        child: AccountDialog.ios(
+        child: PageDialog.ios(
           title: '平板上顯示不同暱稱',
           onConfirm: () {
             Navigator.of(context)

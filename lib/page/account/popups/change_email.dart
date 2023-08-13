@@ -74,7 +74,7 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AccountDialog.ios(
+    return PageDialog.ios(
       title: '更改信箱',
       onConfirm: changeEmail,
       customConfirmButton: confirmButton(),
