@@ -132,6 +132,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                     child: TextButton(
                         onPressed: () {
                           viewModel.confirmPadCheck(padmid, padlid);
+                          Navigator.of(context).pop();
                         },
                         style: Themes.severe(isV4: true),
                         child: const Text('排隊')),

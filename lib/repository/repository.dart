@@ -355,6 +355,7 @@ class Repository extends Api {
     await Api.makeRequest(
       dest: '/pad/onCheck/$padmid/$padlid',
       method: HttpMethod.post,
+      withSession: true,
       body: {},
     );
   }

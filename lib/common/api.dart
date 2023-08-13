@@ -70,11 +70,6 @@ abstract class Api {
           headers: getHeaders(),
           encoding: Encoding.getByName('utf-8'),
         );
-        log("url: ${response.request!.url}", name: 'request url');
-        log("payload: ${buildBody()}", name: 'request url');
-        log("header: ${response.request!.headers}", name: 'request header');
-        log("response: ${response.body.length > 5000 ? 'too long' : response.body}",
-            name: 'request response');
 
         if (response.statusCode == 200) {
           isResponseString
@@ -116,14 +111,10 @@ abstract class Api {
         break;
     }
     if (verbose && kDebugMode) {
-      // ignore: avoid_print
-      print('request:');
-      // ignore: avoid_print
-      print(response.request);
-      // ignore: avoid_print
-      print('response:');
-      // ignore: avoid_print
-      debugPrint(response.body);
+      log('request:', name: 'Api');
+      log("${response.request}", name: 'Api');
+      log('response:', name: 'Api');
+      log(response.body, name: 'Api');
     }
     return response;
   }

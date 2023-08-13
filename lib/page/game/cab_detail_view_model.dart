@@ -46,7 +46,7 @@ class CabDatailViewModel extends BaseViewModel {
 
   Future<void> confirmPadCheck(String padmid, String padlid) async {
     if (!kDebugMode || isForceFetch) {
-      await repo.getPadLineup(padmid, padlid);
+      await repo.confirmPadCheck(padmid, padlid);
     } else {}
     return;
   }
