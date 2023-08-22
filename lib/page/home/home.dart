@@ -358,7 +358,10 @@ class _MariInfoState extends State<_MariInfo> {
                             decoration: BoxDecoration(
                                 color: const Color(0x33fefefe),
                                 borderRadius: BorderRadius.circular(8)),
-                            message: widget.isVip ? '月票：當日前12道加成' : '當日前10道加成',
+                            message: widget.isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
+                            textStyle: Theme.of(context).textTheme.labelMedium,
+                            
+                            verticalOffset: 25,
                             child: Container(
                                 decoration: BoxDecoration(
                                     color: const Color(0xff2282e9),
