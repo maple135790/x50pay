@@ -1,5 +1,6 @@
 part of '../main.dart';
 
+/// GoRouter 路由wrapper
 GoRoute _route(
   RouteProperty rp,
   Widget Function(BuildContext, GoRouterState)? builder, {
@@ -15,6 +16,9 @@ GoRoute _route(
   );
 }
 
+/// GoRouter 路由wrapper
+///
+/// 包含跳轉時的轉場動畫
 GoRoute _routeTransition(
   RouteProperty rp,
   Page<dynamic> Function(BuildContext, GoRouterState)? pageBuilder, {
@@ -30,8 +34,10 @@ GoRoute _routeTransition(
   );
 }
 
-final debugRoute = AppRoutes.login.path;
+/// 開發用，設定初始路由
+final debugRoute = AppRoutes.home.path;
 
+/// 路由設定
 RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
       initialLocation: kDebugMode && !GlobalSingleton.instance.isServiceOnline
           ? debugRoute
@@ -184,6 +190,13 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
       ],
     );
 
+/// 遊戲頁面的重新導向邏輯
+///
+/// 使用者選店時，會將 [store_id] 和 [store_name] 存入 [SharedPreferences] 中。
+///
+/// 如果使用者有設定 [store_id] 或 [store_name]，則導向遊戲商店頁面。
+///
+/// 若判定為須導向至遊戲商店頁面，則回傳 [AppRoutes.gameCabs.path]，若判定為不須導向，則回傳 null。
 FutureOr<String?> gameStoreRedirect(context, state) async {
   final prefs = await SharedPreferences.getInstance();
   final shouldRedirect = prefs.getString('store_id') != null ||

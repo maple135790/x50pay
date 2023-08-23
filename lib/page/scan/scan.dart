@@ -10,6 +10,7 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/repository/repository.dart';
 
+/// 掃描QRCode 頁面
 class ScanQRCode extends StatefulWidget {
   final PermissionStatus permission;
   const ScanQRCode(this.permission, {Key? key}) : super(key: key);
