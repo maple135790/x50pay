@@ -69,7 +69,7 @@ class Account extends StatefulWidget {
 class _AccountState extends State<Account> {
   late final String avatarUrl;
   final viewModel = AccountViewModel();
-  final user = GlobalSingleton.instance.user!;
+  final user = GlobalSingleton.instance.userNotifier.value!;
 
   Color get bgColor => Theme.of(context).scaffoldBackgroundColor;
 

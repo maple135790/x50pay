@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -18,6 +17,7 @@ import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
 
+/// 首頁
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -30,31 +30,29 @@ class _HomeState extends BaseStatefulState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: viewModel.initHome(),
-      key: ValueKey(viewModel.entry),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          log('home not done');
-          return const SizedBox();
-        }
-        if (snapshot.data == false) {
-          EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
-          return const SizedBox(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
-        } else {
-          return SingleChildScrollView(
-              child: _HomeLoaded(GlobalSingleton.instance.user!, viewModel));
-        }
-      },
+    return ChangeNotifierProvider.value(
+      value: viewModel,
+      builder: (context, child) => FutureBuilder<bool>(
+        future: viewModel.initHome(),
+        key: ValueKey(viewModel.entry),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const SizedBox();
+          }
+          if (snapshot.data == false) {
+            EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
+            return const SizedBox(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+          } else {
+            return const SingleChildScrollView(child: _HomeLoaded());
+          }
+        },
+      ),
     );
   }
 }
 
 class _HomeLoaded extends StatefulWidget {
-  final HomeViewModel viewModel;
-  final UserModel user;
-
-  const _HomeLoaded(this.user, this.viewModel, {Key? key}) : super(key: key);
+  const _HomeLoaded();
 
   @override
   State<_HomeLoaded> createState() => _HomeLoadedState();
@@ -76,20 +74,40 @@ class _HomeLoadedState extends State<_HomeLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    final user = widget.user;
-    final recentQuests = widget.viewModel.entry!.questCampaign;
+    return Consumer<HomeViewModel>(
+      builder: (context, vm, child) {
+        final recentQuests = vm.entry!.questCampaign;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 10),
+            _TopInfo(),
+            _TicketInfo(),
+            _MariInfo(entryData: vm.entry!),
+            if (recentQuests != null) divider('最新活動'),
+            if (recentQuests != null) _RecentQuests(quests: recentQuests),
+            divider('官方資訊'),
+            const _OfficialInfo(),
+            const SizedBox(height: 25),
+          ],
+        );
+      },
+    );
+  }
+}
 
+/// 官方資訊區
+///
+/// 包含官方資訊的圖片，點擊圖片後會跳轉到該活動的頁面
+/// 通常是真璃的 youtube 頻道，及 X50 的 youtube 頻道
+class _OfficialInfo extends StatelessWidget {
+  const _OfficialInfo();
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(height: 10),
-        _TopInfo(user: user),
-        _TicketInfo(user: user),
-        _MariInfo(isVip: user.vip!, entryData: widget.viewModel.entry!),
-        if (recentQuests != null) divider('最新活動'),
-        if (recentQuests != null) _RecentQuests(quests: recentQuests),
-        divider('官方資訊'),
-        _EventInfo(widget.viewModel.entry!.evlist),
         Padding(
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
             child: GestureDetector(
@@ -111,17 +129,17 @@ class _HomeLoadedState extends State<_HomeLoaded> {
                 },
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image(image: R.image.top())))),
-        const SizedBox(height: 25),
+                    child: Image(image: R.image.top()))))
       ],
     );
   }
 }
 
+/// 票券資訊
+///
+/// 包含券量、月票、月票期限
 class _TicketInfo extends StatelessWidget {
-  final UserModel user;
-
-  const _TicketInfo({Key? key, required this.user}) : super(key: key);
+  final UserModel user = GlobalSingleton.instance.userNotifier.value!;
 
   String vipExpDate() {
     final date = DateTime.fromMillisecondsSinceEpoch(user.vipdate!.date);
@@ -214,6 +232,9 @@ class _TicketInfo extends StatelessWidget {
   }
 }
 
+/// 最新活動區塊
+///
+/// 包含最新活動的圖片，點擊圖片後會跳轉到該活動的頁面
 class _RecentQuests extends StatelessWidget {
   final List<QuestCampaign> quests;
   const _RecentQuests({required this.quests});
@@ -248,14 +269,13 @@ class _RecentQuests extends StatelessWidget {
   }
 }
 
+/// 真璃養成點數資訊
+///
+/// 包含等級、養成點數、養成點數進度條、養成點數商城按鈕等
 class _MariInfo extends StatefulWidget {
-  final bool isVip;
   final EntryModel entryData;
 
-  const _MariInfo({
-    required this.isVip,
-    required this.entryData,
-  });
+  const _MariInfo({required this.entryData});
 
   @override
   State<_MariInfo> createState() => _MariInfoState();
@@ -263,6 +283,7 @@ class _MariInfo extends StatefulWidget {
 
 class _MariInfoState extends State<_MariInfo> {
   late final entry = widget.entryData;
+  final isVip = GlobalSingleton.instance.userNotifier.value?.vip ?? false;
   final progressBarNotifier = ValueNotifier(false);
 
   void onProgressBarCreated() async {
@@ -358,9 +379,8 @@ class _MariInfoState extends State<_MariInfo> {
                             decoration: BoxDecoration(
                                 color: const Color(0x33fefefe),
                                 borderRadius: BorderRadius.circular(8)),
-                            message: widget.isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
+                            message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
                             textStyle: Theme.of(context).textTheme.labelMedium,
-                            
                             verticalOffset: 25,
                             child: Container(
                                 decoration: BoxDecoration(
@@ -551,59 +571,12 @@ class _MariInfoState extends State<_MariInfo> {
   }
 }
 
-class _EventInfo extends StatelessWidget {
-  final List<Evlist>? evlist;
-  const _EventInfo(this.evlist, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (evlist == null) return const SizedBox();
-    if (evlist!.isEmpty) return const SizedBox();
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 80,
-          margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-          padding: const EdgeInsets.only(bottom: 10),
-          decoration: BoxDecoration(
-              border: Border.all(color: Themes.borderColor, width: 1),
-              borderRadius: BorderRadius.circular(5),
-              shape: BoxShape.rectangle),
-        ),
-        Positioned(
-            left: 35,
-            top: 12,
-            child: Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: const Text('優惠時段',
-                  style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
-            )),
-        const Positioned(
-          top: 40,
-          left: 35,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案',
-                  style: TextStyle(color: Color(0xfffafafa))),
-              SizedBox(height: 5),
-              Text('●   月票： 全日延長至 19:00 優惠時段',
-                  style: TextStyle(color: Color(0xfffafafa))),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-}
-
+/// 頁面頂部的個人資訊
+///
+/// 包含頭像、名稱、UID、P點、QRCode掃描按鈕
 class _TopInfo extends StatelessWidget {
-  const _TopInfo({Key? key, required this.user}) : super(key: key);
-
-  final UserModel user;
+  final UserModel user = GlobalSingleton.instance.userNotifier.value!;
+  _TopInfo();
 
   @override
   Widget build(BuildContext context) {

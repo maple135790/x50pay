@@ -27,11 +27,6 @@ class GlobalSingleton {
   /// 開發用，模擬所持點數
   double _devPoint = 220;
 
-  /// 使用者資料
-  ///
-  /// (之後將 deprecate 這個變數，改用 `userNotifier`)
-  UserModel? user;
-
   /// 上次檢查使用者資料的時間
   int _lastChkMe = -1;
 
@@ -59,7 +54,6 @@ class GlobalSingleton {
 
   /// 清除使用者資料
   void clearUser() {
-    user = null;
     userNotifier.value = null;
   }
 
@@ -79,12 +73,11 @@ class GlobalSingleton {
       final repo = Repository();
       _lastChkMe = DateTime.now().millisecondsSinceEpoch;
       if (!kDebugMode || isServiceOnline) {
-        user = await repo.getUser();
-        userNotifier.value = user;
+        userNotifier.value = await repo.getUser();
         // 未回傳UserModel
-        if (user == null) return false;
+        if (userNotifier.value == null) return false;
         // 回傳UserModel, 驗證失敗或是伺服器錯誤
-        if (user!.code != 200) return false;
+        if (userNotifier.value!.code != 200) return false;
         return true;
       } else {
         if (_devCostEnabled) _devPoint -= 20;
@@ -98,8 +91,7 @@ class GlobalSingleton {
                 r"""{"message":"done","code":200,"userimg":"https://secure.gravatar.com/avatar/6a4cbe004cdedee9738d82fe9670b326?size=250","ticketint":2,"phoneactive":true,"vip":true,"vipdate":{"$date":1685957759681},"sid":"","sixn":"842232","tphone":1,"doorpwd":"\u672c\u671f\u9580\u7981\u5bc6\u78bc\u7232 : 1743#"}""")
             as Map<String, dynamic>
           ..addAll(customMap);
-        user = UserModel.fromJson(rawUserJson);
-        userNotifier.value = user;
+        userNotifier.value = UserModel.fromJson(rawUserJson);
         return true;
       }
     } catch (e) {
