@@ -13,6 +13,7 @@ class CabSelectViewModel extends BaseViewModel {
 
   Future<BasicResponse?> doInsert(
       {required bool isTicket,
+      required bool isUseRewardPoint,
       required String id,
       required int index,
       required num mode,
@@ -29,8 +30,15 @@ class CabSelectViewModel extends BaseViewModel {
       );
 
       if (!kDebugMode || isForceFetch) {
-        response = await repo.doInsert(isTicket, '$id/$sid$index', mode);
+        response = await repo.doInsert(
+            isTicket, '$id/$sid$index', mode, isUseRewardPoint);
       } else {
+        String insertUrl = isTicket ? 'tic' : 'pay';
+        String url = '/$insertUrl/$id/${mode.toInt()}';
+        if (!isTicket) {
+          url += '/${isUseRewardPoint ? 1 : 0}';
+        }
+        log('url: $url', name: 'doInsert');
         response =
             BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
       }

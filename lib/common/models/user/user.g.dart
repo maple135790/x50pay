@@ -16,6 +16,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       name: json['name'] as String?,
       ticketint: json['ticketint'] as int?,
       phoneactive: json['phoneactive'] as bool?,
+      fpoint: json['fpoint'] as int?,
+      givebool: json['givebool'] as int?,
       vip: json['vip'] as bool?,
       vipdate: json['vipdate'] == null
           ? null
@@ -35,6 +37,8 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'point': instance.point,
       'name': instance.name,
       'ticketint': instance.ticketint,
+      'fpoint': instance.fpoint,
+      'givebool': instance.givebool,
       'phoneactive': instance.phoneactive,
       'vip': instance.vip,
       'vipdate': instance.vipdate,

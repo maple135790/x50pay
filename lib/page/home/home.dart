@@ -656,7 +656,11 @@ class _TopInfo extends StatelessWidget {
                                   color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
                           TextSpan(text: user.point!.toInt().toString()),
-                          const TextSpan(text: 'P')
+                          const TextSpan(text: ' + '),
+                          TextSpan(
+                              text: user.fpoint!.toInt().toString(),
+                              style: const TextStyle(color: Color(0xffd4b106))),
+                          const TextSpan(text: ' P')
                         ])),
                       ],
                     ),

@@ -45,9 +45,17 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
   final viewModel = CabSelectViewModel();
   late final cabData = widget.cabinetData;
   late PaymentType paymentType;
+  late bool isUseRewardPoint = isUseRewardPoint =
+      GlobalSingleton.instance.userNotifier.value?.givebool == 1;
   bool isSelectPayment = false;
   bool isPayPressed = false;
   List? selectedMode;
+
+  void onUseRewardPointChanged(bool? value) {
+    if (value == null) return;
+    isUseRewardPoint = value;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +67,25 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
           ? const EdgeInsets.only(top: 14)
           : const EdgeInsets.only(bottom: 20),
       content: isSelectPayment ? confirmPayment() : selectPayment(),
+    );
+  }
+
+  Widget buildUseRewardPointCheckBox() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Checkbox.adaptive(
+          value: isUseRewardPoint,
+          onChanged: onUseRewardPointChanged,
+          activeColor: const Color(0xff0e52a5),
+          checkColor: Colors.white,
+        ),
+        const Text.rich(TextSpan(text: '用回饋', children: [
+          TextSpan(
+              text: '(無法集計道數/參與部分活動)',
+              style: TextStyle(color: Color(0xffffec3d)))
+        ])),
+      ],
     );
   }
 
@@ -80,6 +107,8 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
               const SizedBox(height: 12.6),
               const Text('請勿影響他人權益。如投幣扣點後機台無動作請聯絡粉專！請勿再次點擊',
                   textAlign: TextAlign.center, style: TextStyle(fontSize: 13)),
+              if (paymentType != PaymentType.ticket)
+                buildUseRewardPointCheckBox(),
               const SizedBox(height: 16),
             ],
           ),
@@ -121,6 +150,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
     isPayPressed = true;
     setState(() {});
     final serverResponse = await viewModel.doInsert(
+      isUseRewardPoint: isUseRewardPoint,
       id: widget.caboid,
       index: widget.cabIndex,
       isTicket: paymentType == PaymentType.ticket,

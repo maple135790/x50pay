@@ -38,7 +38,7 @@ class GlobalSingleton {
 
   String _appVersion = '';
 
-  /// App 版本，例如 X50Pay app v1.0.0 + 1
+  /// App 版本，例如 `X50Pay app v1.0.0 + 1`
   String get appVersion => _appVersion;
 
   set setAppVersion(String value) {
@@ -47,7 +47,8 @@ class GlobalSingleton {
 
   /// 是否在掃描QRCode頁面的旗標
   ///
-  /// 由於go_router 在pushNamed 無法取得location，因此使用此旗標來判斷是否在掃描QRCode頁面。
+  /// 由於go_router 在pushNamed 無法取得location，
+  /// 因此使用此旗標來判斷是否在掃描QRCode頁面。
   bool isInCameraPage = false;
 
   static GlobalSingleton? _instance;
@@ -92,7 +93,7 @@ class GlobalSingleton {
           "uid": _devUserToStaff ? "X938" : "938",
         };
         var rawUserJson = jsonDecode(
-                r"""{"message":"done","code":200,"userimg":"https://secure.gravatar.com/avatar/6a4cbe004cdedee9738d82fe9670b326?size=250","ticketint":2,"phoneactive":true,"vip":true,"vipdate":{"$date":1685957759681},"sid":"","sixn":"842232","tphone":1,"doorpwd":"\u672c\u671f\u9580\u7981\u5bc6\u78bc\u7232 : 1743#"}""")
+                r"""{"message":"done","code":200,"userimg":"https://secure.gravatar.com/avatar/6a4cbe004cdedee9738d82fe9670b326?size=250","givebool":0,"ticketint":10,"phoneactive":true,"vip":false,"vipdate":{"$date":641865600000},"sid":"","sixn":"805349","tphone":1,"doorpwd":"\u672c\u671f\u9580\u7981\u5bc6\u78bc\u7232 : 1743#","fpoint":0}""")
             as Map<String, dynamic>
           ..addAll(customMap);
         userNotifier.value = UserModel.fromJson(rawUserJson);

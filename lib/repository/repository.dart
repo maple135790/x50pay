@@ -377,12 +377,21 @@ class Repository extends Api {
   /// 投幣API
   ///
   /// 需要傳入是否用券[isTicket]、機台編號[id]、投幣模式[mode]
-  Future<BasicResponse> doInsert(bool isTicket, String id, num mode) async {
+  Future<BasicResponse> doInsert(
+    bool isTicket,
+    String id,
+    num mode,
+    bool isUseRewardPoint,
+  ) async {
     late BasicResponse response;
     String insertUrl = isTicket ? 'tic' : 'pay';
+    String url = '/$insertUrl/$id/${mode.toInt()}';
+    if (!isTicket) {
+      url += '/${isUseRewardPoint ? 1 : 0}';
+    }
 
     await Api.makeRequest(
-      dest: '/$insertUrl/$id/${mode.toInt()}',
+      dest: url,
       method: HttpMethod.post,
       withSession: true,
       body: {},

@@ -12,7 +12,13 @@ class UserModel {
   final double? point;
   final String? name;
   final int? ticketint;
+  final int? fpoint;
+  final int? givebool;
+
+  /// 手機是否驗證
   final bool? phoneactive;
+
+  /// 是否有月票身分
   final bool? vip;
   final VipDate? vipdate;
   final String? sid;
@@ -30,6 +36,8 @@ class UserModel {
       this.name,
       this.ticketint,
       this.phoneactive,
+      this.fpoint,
+      this.givebool,
       this.vip,
       this.vipdate,
       this.sid,

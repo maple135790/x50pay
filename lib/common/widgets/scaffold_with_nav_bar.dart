@@ -196,16 +196,41 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
                   borderRadius: BorderRadius.circular(5)),
               child: ValueListenableBuilder<UserModel?>(
                 valueListenable: GlobalSingleton.instance.userNotifier,
-                builder: (context, value, child) {
-                  final point = value?.point?.toInt() ?? -1;
+                builder: (context, user, child) {
+                  final point = user?.point?.toInt() ?? -1;
+                  final fpoint = user?.fpoint?.toInt() ?? -1;
 
-                  return Text('$point P',
+                  return Text.rich(TextSpan(
+                      text: '$point + ',
                       style: TextStyle(
                         fontSize:
                             Theme.of(context).textTheme.labelLarge!.fontSize,
                         color: const Color(0xfffafafa),
                         fontWeight: FontWeight.bold,
-                      ));
+                      ),
+                      children: [
+                        TextSpan(
+                            text: '$fpoint',
+                            style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge!
+                                  .fontSize,
+                              color: const Color(0xffd4b106),
+                              fontWeight: FontWeight.bold,
+                            )),
+                        TextSpan(
+                          text: ' P',
+                          style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .fontSize,
+                            color: const Color(0xfffafafa),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ]));
                 },
               )),
         ),
