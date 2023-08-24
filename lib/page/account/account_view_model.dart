@@ -43,7 +43,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return httpResponse.statusCode == 200;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'quicConfirm', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -73,7 +74,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return httpResponse.statusCode == 200;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'setPadSettings', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -116,7 +118,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return httpResponse.statusCode == 200;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'confirmQuickPay', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -156,7 +159,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return padSettingsModel;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'getPadSettings', error: e);
       await EasyLoading.dismiss();
       return null;
     }
@@ -187,7 +191,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'changePassword', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -217,7 +222,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'changeEmail', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -236,7 +242,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'detachPhone', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -255,7 +262,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'doChangePhone', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -274,7 +282,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'smsActivate', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -299,7 +308,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'getBidLog', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -326,7 +336,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'getTicketLog', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -353,7 +364,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'getPlayRecord', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -379,7 +391,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'getTicUsedLog', error: e);
       await EasyLoading.dismiss();
       return false;
     }
@@ -405,7 +418,8 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'logout', error: e);
       await EasyLoading.dismiss();
       return false;
     }

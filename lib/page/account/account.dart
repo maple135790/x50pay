@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -15,28 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vibration/vibration.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/models/bid/bid.dart';
-import 'package:x50pay/common/models/padSettings/pad_settings.dart';
-import 'package:x50pay/common/models/play/play.dart';
-import 'package:x50pay/common/models/ticDate/tic_date.dart';
-import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/main.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/popups/popup_dialog.dart';
+import 'package:x50pay/page/account/popups/change_phone.dart';
 import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
-
-part 'popups/pad_pref.dart';
-part 'popups/change_password.dart';
-part 'popups/change_email.dart';
-part 'popups/change_phone.dart';
-part 'recordBid/bid_record.dart';
-part 'recordTicket/ticket_record.dart';
-part 'recordUsedTicket/ticket_used_record.dart';
-part 'recordPlay/play_record.dart';
 
 enum NVSVPayment {
   light('Light', '0'),
@@ -99,38 +79,39 @@ class _AccountState extends State<Account> {
   }
 
   void onQuicPayPrefPressed() {
-    context.pushNamed(
-      AppRoutes.quicPayPref.routeName,
-      extra: viewModel,
-    );
+    context.pushNamed(AppRoutes.quicPayPref.routeName);
   }
 
   void onPaymentPrefPressed() async {
-    context.pushNamed(
-      AppRoutes.paymentPref.routeName,
-      extra: viewModel,
-    );
+    context.pushNamed(AppRoutes.paymentPref.routeName);
   }
 
   void onPadPrefPressed() async {
-    context.pushNamed(
-      AppRoutes.padPref.routeName,
-      extra: viewModel,
-    );
+    context.pushNamed(AppRoutes.padPref.routeName);
   }
 
   void onChangePasswordPressed() async {
-    context.pushNamed(
-      AppRoutes.changePassword.routeName,
-      extra: viewModel,
-    );
+    context.pushNamed(AppRoutes.changePassword.routeName);
   }
 
   void onChangeEmailPressed() async {
-    context.pushNamed(
-      AppRoutes.changeEmail.routeName,
-      extra: viewModel,
-    );
+    context.pushNamed(AppRoutes.changeEmail.routeName);
+  }
+
+  void onBidRecordPressed() async {
+    context.pushNamed(AppRoutes.bidRecords.routeName);
+  }
+
+  void onTicketRecordPressed() async {
+    context.pushNamed(AppRoutes.ticketRecords.routeName);
+  }
+
+  void onPlayRecordPressed() async {
+    context.pushNamed(AppRoutes.playRecords.routeName);
+  }
+
+  void onTicketUseRecordPressed() async {
+    context.pushNamed(AppRoutes.ticketUsedRecords.routeName);
   }
 
   void onChangePhonePressed() async {
@@ -138,8 +119,7 @@ class _AccountState extends State<Account> {
       showDialog(
           barrierDismissible: false,
           context: context,
-          builder: (context) =>
-              _ChangePhoneConfirmedDialog(viewModel, context));
+          builder: (context) => ChangePhoneConfirmedDialog(viewModel, context));
     } else {
       showDialog(
           barrierDismissible: false,
@@ -154,7 +134,7 @@ class _AccountState extends State<Account> {
                       barrierDismissible: false,
                       context: context,
                       builder: (context) =>
-                          _ChangePhoneConfirmedDialog(viewModel, context));
+                          ChangePhoneConfirmedDialog(viewModel, context));
                 } else {
                   await EasyLoading.showError(
                     '伺服器錯誤，請嘗試重新整理或回報X50',
@@ -166,34 +146,6 @@ class _AccountState extends State<Account> {
             );
           });
     }
-  }
-
-  void onBidRecordPressed() async {
-    context.pushNamed(
-      AppRoutes.bidRecords.routeName,
-      extra: viewModel,
-    );
-  }
-
-  void onTicketRecordPressed() async {
-    context.pushNamed(
-      AppRoutes.ticketRecords.routeName,
-      extra: viewModel,
-    );
-  }
-
-  void onPlayRecordPressed() async {
-    context.pushNamed(
-      AppRoutes.playRecords.routeName,
-      extra: viewModel,
-    );
-  }
-
-  void onTicketUseRecordPressed() async {
-    context.pushNamed(
-      AppRoutes.ticketUsedRecords.routeName,
-      extra: viewModel,
-    );
   }
 
   void onXimen1OpenPressed() {
@@ -593,159 +545,6 @@ class _SettingTile extends StatelessWidget {
       title: Text(title, style: const TextStyle(fontSize: 18)),
       subtitle:
           Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
-    );
-  }
-}
-
-class _Dialog extends StatefulWidget {
-  final Widget Function(void Function(bool isShow) showButtonBar) content;
-  final bool scrollable;
-  final void Function()? onConfirm;
-  final Widget? customConfirmButton;
-  final String title;
-
-  const _Dialog({
-    required this.content,
-    required this.onConfirm,
-  })  : customConfirmButton = null,
-        scrollable = false,
-        title = '';
-
-  @override
-  State<_Dialog> createState() => _DialogState();
-}
-
-class _DialogState extends State<_Dialog> {
-  static const _kMaxBottomSheetHeight = 80.0;
-  ValueNotifier<Offset> offsetNotifier =
-      ValueNotifier(const Offset(0, _kMaxBottomSheetHeight));
-
-  void showButtonBar(bool isShow) async {
-    await Future.delayed(const Duration(milliseconds: 50));
-    if (isShow) {
-      offsetNotifier.value = Offset.zero;
-    } else {
-      offsetNotifier.value = const Offset(0, 1);
-    }
-  }
-
-  final buttonStyle = ButtonStyle(
-    shape: MaterialStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-    backgroundColor: MaterialStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
-      return const Color(0xfffafafa);
-    }),
-  );
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      scrollable: widget.scrollable,
-      contentPadding:
-          const EdgeInsets.only(top: 28, left: 28, right: 28, bottom: 14),
-      actionsPadding:
-          const EdgeInsets.only(top: 0, left: 28, right: 28, bottom: 28),
-      content: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: widget.content.call(showButtonBar),
-      ),
-      actionsAlignment: MainAxisAlignment.start,
-      actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            style: Themes.pale(),
-            child: const Text('取消')),
-        widget.customConfirmButton == null
-            ? TextButton(
-                onPressed: widget.onConfirm,
-                style: Themes.severe(isV4: true),
-                child: const Text('保存'))
-            : widget.customConfirmButton!
-      ],
-    );
-  }
-}
-
-class _DialogBody extends StatelessWidget {
-  final List<Widget> children;
-  final String title;
-  const _DialogBody({Key? key, required this.children, required this.title})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTextStyle(
-        style: const TextStyle(color: Color(0xff5a5a5a)),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Align(
-              alignment: Alignment.topLeft,
-              child: Text(title,
-                  style:
-                      const TextStyle(color: Color(0xffbfbfbf), fontSize: 12))),
-          const SizedBox(height: 30),
-          ...children,
-        ]));
-  }
-}
-
-class _DialogWidget extends StatefulWidget {
-  final String title;
-  final Widget child;
-  final IconData? titleIcon;
-  final bool isRequired;
-  const _DialogWidget(
-      {required this.title,
-      required this.child,
-      this.isRequired = false,
-      this.titleIcon});
-
-  @override
-  State<_DialogWidget> createState() => _DialogWidgetState();
-}
-
-class _DialogWidgetState extends State<_DialogWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-            alignment: Alignment.centerLeft,
-            child: RichText(
-                text: TextSpan(
-              style: const TextStyle(color: Color(0xfffafafa)),
-              children: widget.isRequired
-                  ? [
-                      widget.titleIcon == null
-                          ? const WidgetSpan(child: SizedBox())
-                          : WidgetSpan(
-                              child: Icon(widget.titleIcon!,
-                                  color: const Color(0xff5a5a5a), size: 18)),
-                      TextSpan(text: widget.title),
-                      const TextSpan(
-                          text: ' *', style: TextStyle(color: Colors.red))
-                    ]
-                  : [
-                      widget.titleIcon == null
-                          ? const WidgetSpan(child: SizedBox())
-                          : WidgetSpan(
-                              child: Icon(widget.titleIcon!,
-                                  color: const Color(0xff5a5a5a))),
-                      TextSpan(text: widget.title)
-                    ],
-            ))),
-        const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffd9d9d9)),
-              borderRadius: BorderRadius.circular(5)),
-          child: widget.child,
-        ),
-        const SizedBox(height: 22.4),
-      ],
     );
   }
 }

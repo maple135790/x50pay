@@ -90,58 +90,76 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
                 );
               },
               innerRoutes: [
-                _routeTransition(AppRoutes.padPref, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.padPref, (_, __) {
                   return CupertinoPage(
-                    child: PadPrefDialog(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const PadPrefDialog(),
+                    ),
                   );
                 }),
-                _routeTransition(AppRoutes.quicPayPref, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.quicPayPref, (_, __) {
                   return CupertinoPage(
-                    child: QuiCPayPrefDialog(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const QuiCPayPrefDialog(),
+                    ),
                   );
                 }),
-                _routeTransition(AppRoutes.paymentPref, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.paymentPref, (_, __) {
                   return CupertinoPage(
-                    child: PaymentPrefDialog(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const PaymentPrefDialog(),
+                    ),
                   );
                 }),
-                _routeTransition(AppRoutes.changeEmail, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.changePassword, (_, __) {
                   return CupertinoPage(
-                    child: ChangeEmailDialog(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const ChangePasswordDialog(),
+                    ),
                   );
                 }),
-                _routeTransition(AppRoutes.changePassword, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.changeEmail, (_, __) {
                   return CupertinoPage(
-                    child: ChangePasswordDialog(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const ChangeEmailDialog(),
+                    ),
                   );
                 }),
-                _routeTransition(AppRoutes.bidRecords, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.bidRecords, (_, __) {
                   return CupertinoPage(
-                    child: BidRecords(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const BidRecords(),
+                    ),
                   );
                 }),
-                _routeTransition(AppRoutes.playRecords, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.ticketRecords, (_, __) {
                   return CupertinoPage(
-                    child: PlayRecords(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const TicketRecords(),
+                    ),
                   );
                 }),
-                _routeTransition(AppRoutes.ticketRecords, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.playRecords, (_, __) {
                   return CupertinoPage(
-                    child: TicketRecords(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const PlayRecords(),
+                    ),
                   );
                 }),
-                _routeTransition(AppRoutes.ticketUsedRecords, (_, state) {
-                  final viewModel = state.extra as AccountViewModel;
+                _routeTransition(AppRoutes.ticketUsedRecords, (_, __) {
                   return CupertinoPage(
-                    child: TicketUsedRecords(viewModel),
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const TicketUsedRecords(),
+                    ),
                   );
                 }),
               ],

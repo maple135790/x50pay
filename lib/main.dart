@@ -8,20 +8,26 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/page/account/popups/change_email.dart';
+import 'package:x50pay/page/account/popups/change_password.dart';
+import 'package:x50pay/page/account/popups/pad_pref.dart';
 import 'package:x50pay/page/account/popups/quiC_pay_pref.dart';
 import 'package:x50pay/page/account/popups/quick_pay.dart';
+import 'package:x50pay/page/account/recordBid/bid_record.dart';
+import 'package:x50pay/page/account/recordPlay/play_record.dart';
+import 'package:x50pay/page/account/recordTicket/ticket_record.dart';
+import 'package:x50pay/page/account/recordUsedTicket/ticket_used_record.dart';
 import 'package:x50pay/page/pages.dart';
 import 'package:x50pay/r.g.dart';
 
 part 'common/go_route_generator.dart';
-
-final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
 Future<bool> _checkLogin() async {
   final pref = await SharedPreferences.getInstance();

@@ -1,4 +1,10 @@
-part of '../account.dart';
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
 
 class ChangePhoneDialog extends StatefulWidget {
   final AccountViewModel viewModel;
@@ -90,20 +96,20 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
   }
 }
 
-class _ChangePhoneConfirmedDialog extends StatefulWidget {
+class ChangePhoneConfirmedDialog extends StatefulWidget {
   final BuildContext context;
   final AccountViewModel viewModel;
 
-  const _ChangePhoneConfirmedDialog(this.viewModel, this.context, {Key? key})
+  const ChangePhoneConfirmedDialog(this.viewModel, this.context, {Key? key})
       : super(key: key);
 
   @override
-  State<_ChangePhoneConfirmedDialog> createState() =>
+  State<ChangePhoneConfirmedDialog> createState() =>
       _ChangePhoneConfirmedDialogState();
 }
 
 class _ChangePhoneConfirmedDialogState
-    extends State<_ChangePhoneConfirmedDialog> {
+    extends State<ChangePhoneConfirmedDialog> {
   final textController = TextEditingController();
   String? _errorText;
   bool isEnteredNewPhone = false;
@@ -225,5 +231,158 @@ class _ChangePhoneConfirmedDialogState
                     : const SizedBox(),
               ],
             ));
+  }
+}
+
+class _Dialog extends StatefulWidget {
+  final Widget Function(void Function(bool isShow) showButtonBar) content;
+  final bool scrollable;
+  final void Function()? onConfirm;
+  final Widget? customConfirmButton;
+  final String title;
+
+  const _Dialog({
+    required this.content,
+    required this.onConfirm,
+  })  : customConfirmButton = null,
+        scrollable = false,
+        title = '';
+
+  @override
+  State<_Dialog> createState() => _DialogState();
+}
+
+class _DialogState extends State<_Dialog> {
+  static const _kMaxBottomSheetHeight = 80.0;
+  ValueNotifier<Offset> offsetNotifier =
+      ValueNotifier(const Offset(0, _kMaxBottomSheetHeight));
+
+  void showButtonBar(bool isShow) async {
+    await Future.delayed(const Duration(milliseconds: 50));
+    if (isShow) {
+      offsetNotifier.value = Offset.zero;
+    } else {
+      offsetNotifier.value = const Offset(0, 1);
+    }
+  }
+
+  final buttonStyle = ButtonStyle(
+    shape: MaterialStatePropertyAll(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
+    backgroundColor: MaterialStateColor.resolveWith((states) {
+      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
+      return const Color(0xfffafafa);
+    }),
+  );
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      scrollable: widget.scrollable,
+      contentPadding:
+          const EdgeInsets.only(top: 28, left: 28, right: 28, bottom: 14),
+      actionsPadding:
+          const EdgeInsets.only(top: 0, left: 28, right: 28, bottom: 28),
+      content: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: widget.content.call(showButtonBar),
+      ),
+      actionsAlignment: MainAxisAlignment.start,
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: Themes.pale(),
+            child: const Text('取消')),
+        widget.customConfirmButton == null
+            ? TextButton(
+                onPressed: widget.onConfirm,
+                style: Themes.severe(isV4: true),
+                child: const Text('保存'))
+            : widget.customConfirmButton!
+      ],
+    );
+  }
+}
+
+class _DialogBody extends StatelessWidget {
+  final List<Widget> children;
+  final String title;
+  const _DialogBody({Key? key, required this.children, required this.title})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTextStyle(
+        style: const TextStyle(color: Color(0xff5a5a5a)),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Align(
+              alignment: Alignment.topLeft,
+              child: Text(title,
+                  style:
+                      const TextStyle(color: Color(0xffbfbfbf), fontSize: 12))),
+          const SizedBox(height: 30),
+          ...children,
+        ]));
+  }
+}
+
+class _DialogWidget extends StatefulWidget {
+  final String title;
+  final Widget child;
+  final IconData? titleIcon;
+  final bool isRequired;
+  const _DialogWidget(
+      {required this.title,
+      required this.child,
+      this.isRequired = false,
+      this.titleIcon});
+
+  @override
+  State<_DialogWidget> createState() => _DialogWidgetState();
+}
+
+class _DialogWidgetState extends State<_DialogWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Align(
+            alignment: Alignment.centerLeft,
+            child: RichText(
+                text: TextSpan(
+              style: const TextStyle(color: Color(0xfffafafa)),
+              children: widget.isRequired
+                  ? [
+                      widget.titleIcon == null
+                          ? const WidgetSpan(child: SizedBox())
+                          : WidgetSpan(
+                              child: Icon(widget.titleIcon!,
+                                  color: const Color(0xff5a5a5a), size: 18)),
+                      TextSpan(text: widget.title),
+                      const TextSpan(
+                          text: ' *', style: TextStyle(color: Colors.red))
+                    ]
+                  : [
+                      widget.titleIcon == null
+                          ? const WidgetSpan(child: SizedBox())
+                          : WidgetSpan(
+                              child: Icon(widget.titleIcon!,
+                                  color: const Color(0xff5a5a5a))),
+                      TextSpan(text: widget.title)
+                    ],
+            ))),
+        const SizedBox(height: 12),
+        Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xffd9d9d9)),
+              borderRadius: BorderRadius.circular(5)),
+          child: widget.child,
+        ),
+        const SizedBox(height: 22.4),
+      ],
+    );
   }
 }

@@ -1,45 +1,50 @@
-part of "../account.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/models/play/play.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/r.g.dart';
 
 class PlayRecords extends StatefulWidget {
-  final AccountViewModel viewModel;
-
-  const PlayRecords(this.viewModel, {Key? key}) : super(key: key);
+  const PlayRecords({super.key});
 
   @override
   State<PlayRecords> createState() => _PlayRecordsState();
 }
 
 class _PlayRecordsState extends BaseStatefulState<PlayRecords> {
-  late AccountViewModel model;
+  late AccountViewModel viewModel;
 
   @override
   void initState() {
     super.initState();
-    model = widget.viewModel;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: model.getPlayRecord(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const SizedBox();
-          }
-          if (snapshot.data == false) {
-            scaffoldKey.currentState!.showSnackBar(
-                const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
-            return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
-          }
-          if (model.playRecordModel!.code != 200) {
-            scaffoldKey.currentState!.showSnackBar(
-                const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
-            return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
-          }
-          return playRecordLoaded(model.playRecordModel!);
-        },
-      ),
+    return Consumer<AccountViewModel>(
+      builder: (context, vm, child) {
+        viewModel = vm;
+
+        return Material(
+          child: FutureBuilder(
+            future: viewModel.getPlayRecord(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const SizedBox();
+              }
+              if (snapshot.data == false) {
+                return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+              }
+              if (viewModel.playRecordModel!.code != 200) {
+                return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+              }
+              return playRecordLoaded(viewModel.playRecordModel!);
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -88,19 +93,22 @@ class _PlayRecordsState extends BaseStatefulState<PlayRecords> {
             ),
             const SizedBox(height: 12),
             hasData
-                ? DataTable(
-                    border:
-                        TableBorder.all(color: Themes.borderColor, width: 1),
-                    dataRowMaxHeight: 60,
-                    horizontalMargin: 12,
-                    columnSpacing: 25,
-                    columns: ['日期', '機台', '使用點數']
-                        .map((e) => DataColumn(
-                            label: Expanded(child: Text(e, softWrap: true))))
-                        .toList(),
-                    rows: buildRows(),
+                ? FittedBox(
+                    child: DataTable(
+                      border:
+                          TableBorder.all(color: Themes.borderColor, width: 1),
+                      dataRowMaxHeight: 60,
+                      horizontalMargin: 12,
+                      columnSpacing: 25,
+                      columns: ['日期', '機台', '使用點數']
+                          .map((e) => DataColumn(
+                              label: Expanded(child: Text(e, softWrap: true))))
+                          .toList(),
+                      rows: buildRows(),
+                    ),
                   )
                 : const Center(child: Text('無資料')),
+            const SizedBox(height: 12),
           ],
         ),
       ),

@@ -1,45 +1,45 @@
-part of "../account.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/models/ticDate/tic_date.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/r.g.dart';
 
 class TicketRecords extends StatefulWidget {
-  final AccountViewModel viewModel;
-
-  const TicketRecords(this.viewModel, {Key? key}) : super(key: key);
+  const TicketRecords({super.key});
 
   @override
   State<TicketRecords> createState() => _TicketRecordsState();
 }
 
 class _TicketRecordsState extends BaseStatefulState<TicketRecords> {
-  late AccountViewModel model;
-
-  @override
-  void initState() {
-    super.initState();
-    model = widget.viewModel;
-  }
+  late AccountViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: model.getTicketLog(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const SizedBox();
-          }
-          if (snapshot.data == false) {
-            scaffoldKey.currentState!.showSnackBar(
-                const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
-            return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
-          }
-          if (model.ticDateLogModel!.code != 200) {
-            scaffoldKey.currentState!.showSnackBar(
-                const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
-            return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
-          }
-          return ticketRecordLoaded(model.ticDateLogModel!);
-        },
-      ),
+    return Consumer<AccountViewModel>(
+      builder: (context, vm, child) {
+        viewModel = vm;
+
+        return Material(
+          child: FutureBuilder(
+            future: viewModel.getTicketLog(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const SizedBox();
+              }
+              if (snapshot.data == false) {
+                return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+              }
+              if (viewModel.ticDateLogModel!.code != 200) {
+                return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+              }
+              return ticketRecordLoaded(viewModel.ticDateLogModel!);
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -89,18 +89,21 @@ class _TicketRecordsState extends BaseStatefulState<TicketRecords> {
             ),
             const SizedBox(height: 12),
             hasData
-                ? DataTable(
-                    border: TableBorder.all(color: Themes.borderColor),
-                    dataRowMaxHeight: 60,
-                    horizontalMargin: 12,
-                    columnSpacing: 25,
-                    columns: ['活動名稱', '過期日', '剩餘張數', '詳情']
-                        .map((e) => DataColumn(
-                            label: Expanded(child: Text(e, softWrap: true))))
-                        .toList(),
-                    rows: buildRows(),
+                ? FittedBox(
+                    child: DataTable(
+                      border: TableBorder.all(color: Themes.borderColor),
+                      dataRowMaxHeight: 60,
+                      horizontalMargin: 12,
+                      columnSpacing: 25,
+                      columns: ['活動名稱', '過期日', '剩餘張數', '詳情']
+                          .map((e) => DataColumn(
+                              label: Expanded(child: Text(e, softWrap: true))))
+                          .toList(),
+                      rows: buildRows(),
+                    ),
                   )
                 : const Center(child: Text('無資料')),
+            const SizedBox(height: 12),
           ],
         ),
       ),

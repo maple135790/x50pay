@@ -1,45 +1,45 @@
-part of "../account.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/models/bid/bid.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/r.g.dart';
 
 class BidRecords extends StatefulWidget {
-  final AccountViewModel viewModel;
-
-  const BidRecords(this.viewModel, {Key? key}) : super(key: key);
+  const BidRecords({super.key});
 
   @override
   State<BidRecords> createState() => _BidRecordsState();
 }
 
 class _BidRecordsState extends BaseStatefulState<BidRecords> {
-  late AccountViewModel model;
-
-  @override
-  void initState() {
-    super.initState();
-    model = widget.viewModel;
-  }
+  late AccountViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: model.getBidLog(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const SizedBox();
-          }
-          if (snapshot.data == false) {
-            scaffoldKey.currentState!.showSnackBar(
-                const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
-            return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
-          }
-          if (model.bidModel!.code != 200) {
-            scaffoldKey.currentState!.showSnackBar(
-                const SnackBar(content: Text('伺服器錯誤，請嘗試重新整理或回報X50')));
-            return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
-          }
-          return bidRecordLoaded(model.bidModel!);
-        },
-      ),
+    return Consumer<AccountViewModel>(
+      builder: (context, vm, child) {
+        viewModel = vm;
+
+        return Material(
+          child: FutureBuilder(
+            future: viewModel.getBidLog(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const SizedBox();
+              }
+              if (snapshot.data == false) {
+                return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+              }
+              if (viewModel.bidModel!.code != 200) {
+                return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+              }
+              return bidRecordLoaded(viewModel.bidModel!);
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -91,6 +91,7 @@ class _BidRecordsState extends BaseStatefulState<BidRecords> {
                     rows: buildRows(),
                   )
                 : const Center(child: Text('無資料')),
+            const SizedBox(height: 12),
           ],
         ),
       ),

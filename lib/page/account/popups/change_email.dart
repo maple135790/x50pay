@@ -1,24 +1,25 @@
-part of '../account.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/page/account/popups/popup_dialog.dart';
 
 class ChangeEmailDialog extends StatefulWidget {
-  final AccountViewModel viewModel;
-  const ChangeEmailDialog(this.viewModel, {Key? key}) : super(key: key);
+  const ChangeEmailDialog({super.key});
 
   @override
   State<ChangeEmailDialog> createState() => _ChangeEmailDialogState();
 }
 
 class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
-  late AccountViewModel viewModel;
+  late final AccountViewModel viewModel;
   String? _errorText;
   bool isEnabled = false;
   final newEmail = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    viewModel = widget.viewModel;
-  }
 
   void changeEmail() async {
     final nav = GoRouter.of(context);
@@ -74,27 +75,33 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return PageDialog.ios(
-      title: '更改信箱',
-      onConfirm: changeEmail,
-      customConfirmButton: confirmButton(),
-      content: (showButtonBar) {
-        showButtonBar(true);
+    return Consumer<AccountViewModel>(
+      builder: (context, vm, child) {
+        viewModel = vm;
 
-        return CupertinoListSection.insetGrouped(
-          footer:
-              Text(_errorText ?? '', style: const TextStyle(color: Colors.red)),
-          children: [
-            CupertinoTextFormFieldRow(
-              prefix: const Text('新的 Email'),
-              controller: newEmail,
-              placeholder: '請輸入欲更改的 Email 信箱地址',
-              onChanged: (value) {
-                isEnabled = newEmail.text.isNotEmpty;
-                setState(() {});
-              },
-            ),
-          ],
+        return PageDialog.ios(
+          title: '更改信箱',
+          onConfirm: changeEmail,
+          customConfirmButton: confirmButton(),
+          content: (showButtonBar) {
+            showButtonBar(true);
+
+            return CupertinoListSection.insetGrouped(
+              footer: Text(_errorText ?? '',
+                  style: const TextStyle(color: Colors.red)),
+              children: [
+                CupertinoTextFormFieldRow(
+                  prefix: const Text('新的 Email'),
+                  controller: newEmail,
+                  placeholder: '請輸入欲更改的 Email 信箱地址',
+                  onChanged: (value) {
+                    isEnabled = newEmail.text.isNotEmpty;
+                    setState(() {});
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
     );

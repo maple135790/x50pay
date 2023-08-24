@@ -1,9 +1,14 @@
-part of '../account.dart';
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/models/padSettings/pad_settings.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/page/account/popups/popup_dialog.dart';
 
 class PadPrefDialog extends StatefulWidget {
-  final AccountViewModel viewModel;
-
-  const PadPrefDialog(this.viewModel, {Key? key}) : super(key: key);
+  const PadPrefDialog({super.key});
 
   @override
   State<PadPrefDialog> createState() => _PadPrefDialogState();
@@ -12,17 +17,10 @@ class PadPrefDialog extends StatefulWidget {
 class _PadPrefDialogState extends State<PadPrefDialog> {
   bool gotModel = false;
   _PadPrefModalValue? modalValue;
-  late Future<PadSettingsModel?> getPadSettings;
 
-  @override
-  void initState() {
-    getPadSettings = widget.viewModel.getPadSettings();
-    super.initState();
-  }
-
-  void savePadPref() {
+  void savePadPref(AccountViewModel viewModel) {
     if (gotModel == false || modalValue == null) return;
-    widget.viewModel.setPadSettings(
+    viewModel.setPadSettings(
       isNicknameShown: modalValue!.isNameShown,
       nickname: modalValue!.nickname,
       showColor: "#${modalValue!.showColor}",
@@ -31,10 +29,15 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return PageDialog.ios(
-      title: 'X50Pad 西門排隊平板偏好選項',
-      onConfirm: savePadPref,
-      content: (showButtonBar) => FutureBuilder(
+    return Consumer<AccountViewModel>(builder: (context, viewModel, child) {
+      final getPadSettings = viewModel.getPadSettings();
+
+      return PageDialog.ios(
+        title: 'X50Pad 西門排隊平板偏好選項',
+        onConfirm: () {
+          savePadPref(viewModel);
+        },
+        content: (showButtonBar) => FutureBuilder(
           future: getPadSettings,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
@@ -47,14 +50,16 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
 
               gotModel = true;
               return _PadPrefLoaded(
-                model: widget.viewModel.padSettingsModel!,
+                model: viewModel.padSettingsModel!,
                 getValues: (value) {
                   modalValue = value;
                 },
               );
             }
-          }),
-    );
+          },
+        ),
+      );
+    });
   }
 }
 
