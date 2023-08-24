@@ -10,6 +10,7 @@ import 'package:x50pay/repository/repository.dart';
 class GameStoreViewModel extends BaseViewModel {
   final repo = Repository();
 
+  /// 取得店家資料
   Future<StoreModel?> getStoreData({
     int debugFlag = 200,
   }) async {

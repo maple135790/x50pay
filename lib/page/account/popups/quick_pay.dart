@@ -16,6 +16,7 @@ class _PaymentPrefDialogState extends State<PaymentPrefDialog> {
   late bool isNfcAutoPayEnabled;
   late bool isQuiCPayEnabled;
   late bool isUseTicketEnabled;
+  late bool isUseRewardPoint;
   late NVSVPayment nvsvP;
   late SDVXPayment sdvxP;
   late DPPayment dpP;
@@ -23,13 +24,15 @@ class _PaymentPrefDialogState extends State<PaymentPrefDialog> {
 
   void confirmQuickPay(AccountViewModel viewModel) {
     viewModel.confirmQuickPay(
-        autoPay: isNfcAutoPayEnabled,
-        autoQuicPay: isQuiCPayEnabled,
-        autoTicket: isUseTicketEnabled,
-        autoTwo: dpP.value,
-        autoNVSV: nvsvP.value,
-        mtp: defaultCabP.value,
-        autoSDVX: sdvxP.value);
+      autoPay: isNfcAutoPayEnabled,
+      autoQuicPay: isQuiCPayEnabled,
+      autoTicket: isUseTicketEnabled,
+      autoTwo: dpP.value,
+      autoNVSV: nvsvP.value,
+      autoRewardPoint: isUseRewardPoint,
+      mtp: defaultCabP.value,
+      autoSDVX: sdvxP.value,
+    );
   }
 
   @override
@@ -41,7 +44,7 @@ class _PaymentPrefDialogState extends State<PaymentPrefDialog> {
             confirmQuickPay(viewModel);
           },
           content: (showButtonBar) => FutureBuilder<bool>(
-                future: viewModel.getQuicSettings(),
+                future: viewModel.getPaymentSettings(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return const SizedBox();
@@ -52,10 +55,11 @@ class _PaymentPrefDialogState extends State<PaymentPrefDialog> {
                   } else {
                     showButtonBar(true);
 
-                    final model = viewModel.quicSettingModel!;
+                    final model = viewModel.paymentSettingModel!;
                     isNfcAutoPayEnabled = model.nfcAuto;
                     isQuiCPayEnabled = model.nfcQuic;
                     isUseTicketEnabled = model.nfcTicket;
+                    isUseRewardPoint = model.aGV;
                     nvsvP = NVSVPayment.values.firstWhere(
                         (element) => element.value == model.nfcNVSV);
                     sdvxP = SDVXPayment.values.firstWhere(
@@ -70,13 +74,6 @@ class _PaymentPrefDialogState extends State<PaymentPrefDialog> {
                         CupertinoListSection.insetGrouped(
                           children: [
                             DialogSwitch.ios(
-                              title: '啟用 QuiC 靠卡扣款',
-                              value: isQuiCPayEnabled,
-                              onChanged: (value) {
-                                isQuiCPayEnabled = value;
-                              },
-                            ),
-                            DialogSwitch.ios(
                               title: '啟用 NFC 自動扣款',
                               value: isNfcAutoPayEnabled,
                               onChanged: (value) {
@@ -84,7 +81,21 @@ class _PaymentPrefDialogState extends State<PaymentPrefDialog> {
                               },
                             ),
                             DialogSwitch.ios(
-                              title: '啟用預設扣券',
+                              title: '啟用 QuiC 靠卡扣款',
+                              value: isQuiCPayEnabled,
+                              onChanged: (value) {
+                                isQuiCPayEnabled = value;
+                              },
+                            ),
+                            DialogSwitch.ios(
+                              title: '預設使用回饋點數',
+                              value: isUseRewardPoint,
+                              onChanged: (value) {
+                                isUseRewardPoint = value;
+                              },
+                            ),
+                            DialogSwitch.ios(
+                              title: '預設扣遊玩券',
                               value: isUseTicketEnabled,
                               onChanged: (value) {
                                 isUseTicketEnabled = value;

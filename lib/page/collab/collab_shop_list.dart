@@ -1,6 +1,7 @@
 part of "collab.dart";
 
 class _CollabShopList extends StatefulWidget {
+  /// 商家清單/兌換頁面
   const _CollabShopList();
 
   @override
@@ -116,52 +117,6 @@ class __CollabShopListState extends State<_CollabShopList> {
                 ),
                 const Divider(),
                 buildSponserTiles(data),
-                // Padding(
-                //   padding:
-                //       const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                //   child: Row(
-                //     children: [
-                //       ClipRRect(
-                //         borderRadius: BorderRadius.circular(8),
-                //         child: const Image(
-                //           image: CachedNetworkImageProvider(
-                //               'https://pay.x50.fun/static/gc/01.jpg'),
-                //           fit: BoxFit.fill,
-                //           width: 80,
-                //           height: 80,
-                //         ),
-                //       ),
-                //       const SizedBox(width: 25),
-                //       const Text('獅子林冰茶'),
-                //     ],
-                //   ),
-                //   // child: ListTile(
-                //   //   titleAlignment: ListTileTitleAlignment.titleHeight,
-                //   //   contentPadding: EdgeInsets.zero,
-                //   //   visualDensity: const VisualDensity(vertical: 4),
-                //   //   dense: false,
-                //   //   leading: ClipRRect(
-                //   //     borderRadius: BorderRadius.circular(8),
-                //   //     child: const Image(
-                //   //       image: CachedNetworkImageProvider(
-                //   //           'https://pay.x50.fun/static/gc/01.jpg'),
-                //   //       fit: BoxFit.fill,
-                //   //       width: 80,
-                //   //       height: 80,
-                //   //     ),
-                //   //   ),
-                //   //   subtitleTextStyle: const TextStyle(color: Color(0xfffafafa)),
-                //   //   isThreeLine: true,
-                //   //   title: const Row(mainAxisSize: MainAxisSize.min, children: [
-                //   //     Icon(Icons.store_mall_directory_rounded),
-                //   //     Text('獅子林冰茶')
-                //   //   ]),
-                //   //   subtitle: const Text(
-                //   //     '萬華區西寧南路36-1號\n每杯折抵5元',
-                //   //     style: TextStyle(color: Color(0xfffafafa)),
-                //   //   ),
-                //   // ),
-                // )
               ],
             ),
           );

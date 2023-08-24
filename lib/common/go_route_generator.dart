@@ -1,6 +1,19 @@
-part of '../main.dart';
+import 'dart:async';
+import 'dart:developer';
 
-/// GoRouter 路由wrapper
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/page/pages.dart';
+
+/// GoRouter 路由 wrapper
 GoRoute _route(
   RouteProperty rp,
   Widget Function(BuildContext, GoRouterState)? builder, {
@@ -16,9 +29,9 @@ GoRoute _route(
   );
 }
 
-/// GoRouter 路由wrapper
+/// GoRouter 路由 wrapper
 ///
-/// 包含跳轉時的轉場動畫
+/// 可提供跳轉時的轉場動畫
 GoRoute _routeTransition(
   RouteProperty rp,
   Page<dynamic> Function(BuildContext, GoRouterState)? pageBuilder, {

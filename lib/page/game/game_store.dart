@@ -10,6 +10,7 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
 
 class GameStore extends StatefulWidget {
+  /// 選店頁面
   const GameStore({super.key});
 
   @override
@@ -48,7 +49,7 @@ class _GameStoreLoaded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Storelist> storeList = stores.storelist!;
+    final List<Store> storeList = stores.storelist!;
 
     return SingleChildScrollView(
       child: Column(
@@ -59,8 +60,10 @@ class _GameStoreLoaded extends StatelessWidget {
 }
 
 class _StoreItem extends StatelessWidget {
-  final Storelist store;
+  final Store store;
   final String prefix;
+
+  /// 店家項目
   const _StoreItem(this.store, this.prefix, {Key? key}) : super(key: key);
 
   String getStoreImage(int storeId) {

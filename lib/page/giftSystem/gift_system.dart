@@ -16,6 +16,7 @@ part "gift_claim.dart";
 part "claimed_gift.dart";
 
 class GiftSystem extends StatefulWidget {
+  /// 禮物系統頁面
   const GiftSystem({Key? key}) : super(key: key);
 
   @override

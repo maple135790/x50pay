@@ -7,6 +7,7 @@ import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 class TicketRecords extends StatefulWidget {
+  /// 獲券紀錄頁面
   const TicketRecords({super.key});
 
   @override

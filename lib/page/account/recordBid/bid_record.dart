@@ -7,6 +7,7 @@ import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 class BidRecords extends StatefulWidget {
+  /// 儲值紀錄頁面
   const BidRecords({super.key});
 
   @override

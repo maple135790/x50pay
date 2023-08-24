@@ -1,7 +1,10 @@
 part of "gift_system.dart";
 
 class _GiftClaim extends StatelessWidget {
+  /// 可兌換禮物列表
   final List<CanChange> canChangeList;
+
+  /// 領取禮物頁面
   const _GiftClaim({Key? key, required this.canChangeList}) : super(key: key);
 
   @override

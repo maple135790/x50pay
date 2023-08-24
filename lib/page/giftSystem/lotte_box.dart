@@ -1,7 +1,10 @@
 part of "gift_system.dart";
 
 class _LotteBox extends StatelessWidget {
+  /// 養成抽獎箱資料
   final LotteListModel lotteList;
+
+  /// 養成抽獎箱頁面
   const _LotteBox({Key? key, required this.lotteList}) : super(key: key);
 
   @override

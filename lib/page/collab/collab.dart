@@ -1,73 +1,24 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/models/giftBox/gift_box.dart';
-import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
-import 'package:x50pay/page/giftSystem/gift_system_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 part 'collab_shop_list.dart';
 
 class Collab extends StatefulWidget {
+  /// 合作店家頁面
   const Collab({Key? key}) : super(key: key);
 
   @override
   State<Collab> createState() => _CollabState();
 }
 
-class _CollabState extends BaseStatefulState<Collab> {
-  final viewModel = GiftSystemViewModel();
-  late Future<bool> init;
-
-  @override
-  void initState() {
-    super.initState();
-    init = viewModel.giftSystemInit();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: init,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const SizedBox(child: kDebugMode ? Text('not done') : null);
-        }
-        if (snapshot.data != true) {
-          if (EasyLoading.isShow) EasyLoading.dismiss();
-          return const SizedBox(child: kDebugMode ? Text('not true') : null);
-        }
-        if (EasyLoading.isShow) EasyLoading.dismiss();
-        return _CollabLoaded(
-          giftBoxModel: viewModel.giftBoxModel!,
-          lotteListModel: viewModel.lotteListModel!,
-        );
-      },
-    );
-  }
-}
-
-class _CollabLoaded extends StatefulWidget {
-  final LotteListModel lotteListModel;
-  final GiftBoxModel giftBoxModel;
-
-  const _CollabLoaded(
-      {Key? key, required this.giftBoxModel, required this.lotteListModel})
-      : super(key: key);
-
-  @override
-  State<_CollabLoaded> createState() => _CollabLoadedState();
-}
-
-class _CollabLoadedState extends State<_CollabLoaded> {
+class _CollabState extends State<Collab> {
   static const titleImageUrl = 'https://pay.x50.fun/static/giftcenter.png';
   final tabs = const <Widget>[Tab(text: '商家清單 / 兌換')];
 

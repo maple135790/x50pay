@@ -15,6 +15,7 @@ class CabDatailViewModel extends BaseViewModel {
   BasicResponse? response;
   int lineupCount = -1;
 
+  /// 取得遊戲機台資料
   Future<bool> getSelGameCab(String machineId, {int debugFlag = 200}) async {
     try {
       log('machineId: $machineId', name: 'getSelGame');
@@ -32,7 +33,8 @@ class CabDatailViewModel extends BaseViewModel {
             CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
       }
       if (cabinetModel!.pad) {
-        await getPadLineup(cabinetModel!.padmid, cabinetModel!.padlid);
+        lineupCount =
+            await getPadLineup(cabinetModel!.padmid, cabinetModel!.padlid);
       }
       await EasyLoading.dismiss();
       return true;
@@ -44,6 +46,7 @@ class CabDatailViewModel extends BaseViewModel {
     }
   }
 
+  /// 確定平板排隊
   Future<void> confirmPadCheck(String padmid, String padlid) async {
     if (!kDebugMode || isForceFetch) {
       await repo.confirmPadCheck(padmid, padlid);
@@ -51,13 +54,15 @@ class CabDatailViewModel extends BaseViewModel {
     return;
   }
 
+  /// 取得排隊人數
   Future<int> getPadLineup(String padmid, String padlid) async {
+    late int count;
     if (!kDebugMode || isForceFetch) {
-      lineupCount = await repo.getPadLineup(padmid, padlid);
+      count = await repo.getPadLineup(padmid, padlid);
     } else {
-      lineupCount = 0;
+      count = 0;
     }
-    return lineupCount;
+    return count;
   }
 
   String testSelGame(String mid) {

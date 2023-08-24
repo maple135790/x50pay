@@ -15,6 +15,7 @@ import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
 part 'box_tab.dart';
 
 class GradeBox extends StatefulWidget {
+  /// 養成商場頁面
   const GradeBox({Key? key}) : super(key: key);
 
   @override

@@ -1,34 +1,19 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:go_router/go_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/go_route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/popups/change_email.dart';
-import 'package:x50pay/page/account/popups/change_password.dart';
-import 'package:x50pay/page/account/popups/pad_pref.dart';
-import 'package:x50pay/page/account/popups/quiC_pay_pref.dart';
-import 'package:x50pay/page/account/popups/quick_pay.dart';
-import 'package:x50pay/page/account/recordBid/bid_record.dart';
-import 'package:x50pay/page/account/recordPlay/play_record.dart';
-import 'package:x50pay/page/account/recordTicket/ticket_record.dart';
-import 'package:x50pay/page/account/recordUsedTicket/ticket_used_record.dart';
-import 'package:x50pay/page/pages.dart';
 import 'package:x50pay/r.g.dart';
 
-part 'common/go_route_generator.dart';
-
+/// 檢查是否有登入
+///
+/// 檢查 [SharedPreferences] 中是否有 [session] 的 key，
+/// 若有效則回傳 true，否則回傳 false
 Future<bool> _checkLogin() async {
   final pref = await SharedPreferences.getInstance();
   final sess = pref.getString('session');
@@ -40,17 +25,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final packageInfo = await PackageInfo.fromPlatform();
-  GlobalSingleton.instance.appVersion =
-      "X50Pay app v${packageInfo.version}+${packageInfo.buildNumber}";
-
   final islogin = await _checkLogin();
   log('isServiceOnline: ${GlobalSingleton.instance.isServiceOnline}',
       name: 'main');
   log('islogin: $islogin', name: 'main');
   configLoadingStyle();
+  GlobalSingleton.instance.setAppVersion =
+      "${packageInfo.version}+${packageInfo.buildNumber}";
   runApp(MyApp(isLogin: islogin));
 }
 
+/// [EasyLoading] 的設定
 void configLoadingStyle() {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
@@ -84,6 +69,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// 旋轉的圖示
+///
+/// 用於 [EasyLoading] 的 [indicatorWidget]
 class _Spinner extends StatefulWidget {
   const _Spinner();
 

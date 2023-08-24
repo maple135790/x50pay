@@ -4,11 +4,18 @@ part 'gift_box.g.dart';
 @JsonSerializable()
 class GiftBoxModel {
   final int code;
+
+  /// 已兌換的禮物列表
   @JsonKey(name: 'alchange')
   final List<AlChange> alChange;
+
+  /// 可兌換的禮物列表
   @JsonKey(name: 'canchange')
   final List<CanChange> canChange;
 
+  /// 禮物箱資料
+  ///
+  /// 用於禮物系統頁面
   const GiftBoxModel({
     required this.code,
     required this.alChange,

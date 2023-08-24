@@ -17,8 +17,8 @@ import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
 
-/// 首頁
 class Home extends StatefulWidget {
+  /// 首頁
   const Home({super.key});
 
   @override
@@ -96,11 +96,11 @@ class _HomeLoadedState extends State<_HomeLoaded> {
   }
 }
 
-/// 官方資訊區
-///
-/// 包含官方資訊的圖片，點擊圖片後會跳轉到該活動的頁面
-/// 通常是真璃的 youtube 頻道，及 X50 的 youtube 頻道
 class _OfficialInfo extends StatelessWidget {
+  /// 官方資訊區
+  ///
+  /// 包含官方資訊的圖片，點擊圖片後會跳轉到該活動的頁面
+  /// 通常是真璃的 youtube 頻道，及 X50 的 youtube 頻道
   const _OfficialInfo();
 
   @override
@@ -135,10 +135,12 @@ class _OfficialInfo extends StatelessWidget {
   }
 }
 
-/// 票券資訊
-///
-/// 包含券量、月票、月票期限
 class _TicketInfo extends StatelessWidget {
+  /// 票券資訊
+  ///
+  /// 包含券量、月票、月票期限
+  _TicketInfo();
+
   final UserModel user = GlobalSingleton.instance.userNotifier.value!;
 
   String vipExpDate() {
@@ -232,11 +234,13 @@ class _TicketInfo extends StatelessWidget {
   }
 }
 
-/// 最新活動區塊
-///
-/// 包含最新活動的圖片，點擊圖片後會跳轉到該活動的頁面
 class _RecentQuests extends StatelessWidget {
+  /// 活動列表
   final List<QuestCampaign> quests;
+
+  /// 最新活動區塊
+  ///
+  /// 包含最新活動的圖片，點擊圖片後會跳轉到該活動的頁面
   const _RecentQuests({required this.quests});
 
   @override
@@ -269,12 +273,13 @@ class _RecentQuests extends StatelessWidget {
   }
 }
 
-/// 真璃養成點數資訊
-///
-/// 包含等級、養成點數、養成點數進度條、養成點數商城按鈕等
 class _MariInfo extends StatefulWidget {
+  /// 首頁的資料模型
   final EntryModel entryData;
 
+  /// 真璃養成點數資訊
+  ///
+  /// 包含等級、養成點數、養成點數進度條、養成點數商城按鈕等
   const _MariInfo({required this.entryData});
 
   @override
@@ -571,12 +576,13 @@ class _MariInfoState extends State<_MariInfo> {
   }
 }
 
-/// 頁面頂部的個人資訊
-///
-/// 包含頭像、名稱、UID、P點、QRCode掃描按鈕
 class _TopInfo extends StatelessWidget {
-  final UserModel user = GlobalSingleton.instance.userNotifier.value!;
+  /// 頁面頂部的個人資訊
+  ///
+  /// 包含頭像、名稱、UID、P點、QRCode掃描按鈕
   _TopInfo();
+
+  final UserModel user = GlobalSingleton.instance.userNotifier.value!;
 
   @override
   Widget build(BuildContext context) {

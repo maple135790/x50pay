@@ -14,6 +14,10 @@ class GiftSystemViewModel extends BaseViewModel {
   GiftBoxModel? giftBoxModel;
   LotteListModel? lotteListModel;
 
+  /// 禮物系統頁面初始化
+  ///
+  /// 會依序取得禮物箱資料及養成抽獎箱列表資料，取得成功後
+  /// 回傳true，否則回傳false。
   Future<bool> giftSystemInit() async {
     try {
       await EasyLoading.show();
@@ -24,11 +28,13 @@ class GiftSystemViewModel extends BaseViewModel {
         }
       }
       return false;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      log('', name: 'err giftSystemInit', error: e);
       return false;
     }
   }
 
+  /// 取得養成抽獎箱
   Future<bool> _getLotteList() async {
     try {
       if (!kDebugMode || isForceFetch) {
@@ -43,6 +49,9 @@ class GiftSystemViewModel extends BaseViewModel {
     }
   }
 
+  /// 取得禮物箱資料
+  ///
+  /// 禮物箱包含可兌換及已兌換的禮物列表
   Future<bool> _getGiftBox() async {
     try {
       if (!kDebugMode || isForceFetch) {

@@ -17,7 +17,7 @@ import 'package:x50pay/repository/repository.dart';
 class AccountViewModel extends BaseViewModel {
   final repo = Repository();
 
-  QuicSettingsModel? quicSettingModel;
+  PaymentSettingsModel? paymentSettingModel;
   PadSettingsModel? padSettingsModel;
   BidLogModel? bidModel;
   TicDateLogModel? ticDateLogModel;
@@ -25,6 +25,7 @@ class AccountViewModel extends BaseViewModel {
   PlayRecordModel? playRecordModel;
   BasicResponse? response;
 
+  /// 設定 QuicPay 偏好
   Future<bool> quicConfirm(
       {required bool autoQuic, required String autoQlock}) async {
     log('autoQuic $autoQuic', name: 'quicConfirm');
@@ -50,6 +51,7 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
+  /// 設定排隊平板偏好
   Future<bool> setPadSettings({
     required bool isNicknameShown,
     required String showColor,
@@ -81,6 +83,7 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
+  /// 回傳快速付款偏好設定
   Future<bool> confirmQuickPay({
     required bool autoPay,
     required bool autoQuicPay,
@@ -89,6 +92,7 @@ class AccountViewModel extends BaseViewModel {
     required String autoNVSV,
     required int mtp,
     required String autoSDVX,
+    required bool autoRewardPoint,
   }) async {
     log('autoQuicPay $autoQuicPay', name: 'confirmQuickPay');
     log('autoPay $autoPay', name: 'confirmQuickPay');
@@ -111,6 +115,7 @@ class AccountViewModel extends BaseViewModel {
             atq: autoQuicPay,
             ats: autoSDVX,
             att: autoTwo,
+            agv: autoRewardPoint,
             mtp: mtp);
       } else {
         httpResponse = http.Response(testAutoConfirm, 200);
@@ -125,16 +130,17 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> getQuicSettings() async {
+  /// 取得快速付款偏好設定
+  Future<bool> getPaymentSettings() async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
       if (!kDebugMode || isForceFetch) {
-        quicSettingModel = await repo.getQuicSettings();
+        paymentSettingModel = await repo.getQuickPaySettings();
       } else {
-        quicSettingModel =
-            QuicSettingsModel.fromJson(jsonDecode(testQuicSettings));
+        paymentSettingModel =
+            PaymentSettingsModel.fromJson(jsonDecode(testPaymentSettings));
       }
       await EasyLoading.dismiss();
       return true;
@@ -289,6 +295,7 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
+  /// 取得儲值紀錄
   Future<bool> getBidLog({
     int debugFlag = 200,
   }) async {
@@ -315,6 +322,7 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
+  /// 取得獲券紀錄
   Future<bool> getTicketLog({
     int debugFlag = 200,
   }) async {
@@ -428,8 +436,8 @@ class AccountViewModel extends BaseViewModel {
   final testPadSettings =
       """{"shid": false, "shcolor": "#abb3ff", "shname": "SABA.KEN"}""";
 
-  String get testQuicSettings =>
-      """{"nfcAuto": true, "nfcTicket": false, "nfcTwo": "0", "nfcSDVX": "0", "nfcNVSV": "0", "nfcQuic": true, "nfcQlock": 0, "mtpMode": 1}""";
+  String get testPaymentSettings =>
+      """{"nfcAuto": true, "nfcTicket": true, "nfcTwo": "0", "nfcSDVX": "0", "nfcNVSV": "0", "nfcQuic": true, "aGV": false, "nfcQlock": 15, "mtpMode": 0}""";
 
   String testResponse({int? code = 200}) =>
       """{"code": $code,"message": "smth"}""";

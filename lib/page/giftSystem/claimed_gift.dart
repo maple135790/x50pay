@@ -1,7 +1,10 @@
 part of "gift_system.dart";
 
 class _ClaimedGift extends StatelessWidget {
+  /// 已領取禮物列表
   final List<AlChange> claimedList;
+
+  /// 已領取禮物頁面
   const _ClaimedGift({Key? key, required this.claimedList}) : super(key: key);
 
   @override

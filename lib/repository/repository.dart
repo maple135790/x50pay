@@ -19,9 +19,18 @@ import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/common/models/user/user.dart';
 
+/// 存放 Api 呼叫的地方
+///
+/// Api 呼叫細節請參考 [Api.makeRequest]
+/// [Repository] 只顯示使用呼叫，不顯示細節。
 class Repository extends Api {
-  Future<BasicResponse?> login(
-      {required String email, required String password}) async {
+  /// 登入API
+  ///
+  /// 需要傳入 [email] 和 [password]。
+  Future<BasicResponse?> login({
+    required String email,
+    required String password,
+  }) async {
     BasicResponse? res;
     await Api.makeRequest(
       dest: '/login',
@@ -39,8 +48,9 @@ class Repository extends Api {
     return res;
   }
 
+  /// 取得使用者資料API
   Future<UserModel?> getUser() async {
-    late UserModel? user;
+    UserModel? user;
 
     await Api.makeRequest(
       dest: '/me',
@@ -54,6 +64,7 @@ class Repository extends Api {
     return user;
   }
 
+  /// 取得首頁資料API
   Future<EntryModel> getEntry() async {
     late EntryModel entry;
 
@@ -69,6 +80,7 @@ class Repository extends Api {
     return entry;
   }
 
+  /// 登出API
   Future<void> logout() async {
     await Api.makeRequest(
       dest: '/fuckout',
@@ -79,6 +91,7 @@ class Repository extends Api {
     return;
   }
 
+  /// 取得店家資料API
   Future<StoreModel> getStores() async {
     late StoreModel store;
 
@@ -94,6 +107,9 @@ class Repository extends Api {
     return store;
   }
 
+  /// 取得該店家的遊戲列表API
+  ///
+  /// 需要傳入店家編號 [storeId]
   Future<GameList> getGameList({required String storeId}) async {
     late GameList gameList;
 
@@ -109,6 +125,7 @@ class Repository extends Api {
     return gameList;
   }
 
+  /// 取得排隊平板設定API
   Future<PadSettingsModel> getPadSettings() async {
     late PadSettingsModel padSettingsModel;
 
@@ -124,6 +141,7 @@ class Repository extends Api {
     return padSettingsModel;
   }
 
+  /// 設定排隊平板偏好API
   Future<http.Response> setPadSettings({
     required bool shid,
     required String shcolor,
@@ -139,8 +157,9 @@ class Repository extends Api {
     return response;
   }
 
-  Future<QuicSettingsModel> getQuicSettings() async {
-    late QuicSettingsModel quicSettingsModel;
+  /// 取得快速付款偏好設定API
+  Future<PaymentSettingsModel> getQuickPaySettings() async {
+    late PaymentSettingsModel quicSettingsModel;
 
     await Api.makeRequest(
       dest: '/nfc/getSettings',
@@ -148,14 +167,19 @@ class Repository extends Api {
       withSession: true,
       body: {},
       onSuccess: (json) {
-        quicSettingsModel = QuicSettingsModel.fromJson(json);
+        quicSettingsModel = PaymentSettingsModel.fromJson(json);
       },
     );
     return quicSettingsModel;
   }
 
-  Future<http.Response> quicConfirm(
-      {required bool atq, required String atql}) async {
+  /// 設定 Quic Pay 偏好API
+  ///
+  /// 需要傳入 [atq] 和 [atql]
+  Future<http.Response> quicConfirm({
+    required bool atq,
+    required String atql,
+  }) async {
     final response = await Api.makeRequest(
       dest: '/quicConfirm',
       method: HttpMethod.post,
@@ -166,8 +190,13 @@ class Repository extends Api {
     return response;
   }
 
-  Future<BasicResponse> changePassword(
-      {required String oldPwd, required String pwd}) async {
+  /// 變更密碼API
+  ///
+  /// 需要傳入舊密碼[oldPwd] 和 新密碼[pwd]
+  Future<BasicResponse> changePassword({
+    required String oldPwd,
+    required String pwd,
+  }) async {
     late BasicResponse res;
 
     await Api.makeRequest(
@@ -183,6 +212,9 @@ class Repository extends Api {
     return res;
   }
 
+  /// 變更電子郵件API
+  ///
+  /// 需要傳入新電子郵件[remail]
   Future<BasicResponse> changeEmail({required String remail}) async {
     late BasicResponse res;
 
@@ -198,6 +230,9 @@ class Repository extends Api {
     return res;
   }
 
+  /// 變更手機號碼API
+  ///
+  /// 用於取消綁定手機號碼
   Future<BasicResponse> changePhone() async {
     late BasicResponse res;
 
@@ -214,6 +249,9 @@ class Repository extends Api {
     return res;
   }
 
+  /// 變更手機號碼API
+  ///
+  /// 用於綁定新手機號碼，需要傳入新手機號碼 [phone]
   Future<BasicResponse> doChangePhone({required String phone}) async {
     late BasicResponse res;
 
@@ -230,6 +268,9 @@ class Repository extends Api {
     return res;
   }
 
+  /// 變更手機號碼API
+  ///
+  /// 用於驗證新手機號碼，需要傳入簡訊驗證碼 [sms]
   Future<BasicResponse> smsActivate({required String sms}) async {
     late BasicResponse res;
 
@@ -245,6 +286,9 @@ class Repository extends Api {
     return res;
   }
 
+  /// 取得獲券紀錄API
+  ///
+  /// 回傳獲券紀錄 [TicDateLogModel]
   Future<TicDateLogModel> getTicDateLog() async {
     late TicDateLogModel ticDateLogModel;
 
@@ -260,6 +304,9 @@ class Repository extends Api {
     return ticDateLogModel;
   }
 
+  /// 取得儲值紀錄API
+  ///
+  /// 回傳儲值紀錄 [PayLogModel]
   Future<BidLogModel> getBidLog() async {
     late BidLogModel bidLogModel;
 
@@ -275,6 +322,9 @@ class Repository extends Api {
     return bidLogModel;
   }
 
+  /// 取得P點付費明細API
+  ///
+  /// 回傳付費明細 [PayLogModel]
   Future<PlayRecordModel> getPlayLog() async {
     late PlayRecordModel playRecordModel;
 
@@ -290,6 +340,9 @@ class Repository extends Api {
     return playRecordModel;
   }
 
+  /// 取得扣券明細API
+  ///
+  /// 回傳扣券明細 [TicUsedModel]
   Future<TicUsedModel> getTicUsedLog() async {
     late TicUsedModel ticUsedModel;
 
@@ -305,6 +358,7 @@ class Repository extends Api {
     return ticUsedModel;
   }
 
+  /// 取得遊戲機台資料API
   Future<CabinetModel> selGame(String machineId) async {
     late CabinetModel cabinetModel;
 
@@ -320,6 +374,9 @@ class Repository extends Api {
     return cabinetModel;
   }
 
+  /// 投幣API
+  ///
+  /// 需要傳入是否用券[isTicket]、機台編號[id]、投幣模式[mode]
   Future<BasicResponse> doInsert(bool isTicket, String id, num mode) async {
     late BasicResponse response;
     String insertUrl = isTicket ? 'tic' : 'pay';
@@ -336,8 +393,11 @@ class Repository extends Api {
     return response;
   }
 
+  /// 取得排隊人數API
+  ///
+  /// 需要傳入 [padmid] 和 [padlid]
   Future<int> getPadLineup(String padmid, String padlid) async {
-    int lineupCount = -87;
+    int lineupCount = -1;
 
     await Api.makeRequest(
       dest: '/pad/getCount/$padmid/$padlid',
@@ -351,6 +411,9 @@ class Repository extends Api {
     return lineupCount;
   }
 
+  /// 確認平板排隊API
+  ///
+  /// 需要傳入 [padmid] 和 [padlid]
   Future<void> confirmPadCheck(String padmid, String padlid) async {
     await Api.makeRequest(
       dest: '/pad/onCheck/$padmid/$padlid',
@@ -360,6 +423,13 @@ class Repository extends Api {
     );
   }
 
+  /// QRCode 解析API
+  ///
+  /// 用於解析店內平板排隊 QRCode、儲值 QRCode
+  ///
+  /// 需要傳入QRCode解析後的String [rawText]
+  ///
+  /// 回傳解析結果 [String]
   Future<String> qrDecryt(String rawText) async {
     String result = '';
     await Api.makeRequest(
@@ -375,6 +445,9 @@ class Repository extends Api {
     return result;
   }
 
+  /// 開門按鈕API
+  ///
+  /// 需要傳入與店家距離 [distance]、店門名稱 [doorName]
   Future<String> remoteOpenDoor(double distance,
       {required String doorName}) async {
     String result = '';
@@ -408,6 +481,9 @@ class Repository extends Api {
   //   return basicResponse;
   // }
 
+  /// 取得禮物箱API
+  ///
+  /// 用於禮物系統頁面，回傳 [GiftBoxModel]
   Future<GiftBoxModel> getGiftBox() async {
     late GiftBoxModel giftBoxModel;
 
@@ -423,6 +499,9 @@ class Repository extends Api {
     return giftBoxModel;
   }
 
+  /// 取得養成抽獎箱API
+  ///
+  /// 用於禮物系統頁面，回傳 [LotteListModel]
   Future<LotteListModel> getLotteList() async {
     late LotteListModel lotteListModel;
 
@@ -438,6 +517,9 @@ class Repository extends Api {
     return lotteListModel;
   }
 
+  /// 選擇養成抽獎API
+  ///
+  /// 用於禮物系統頁面的養成抽獎箱
   Future<String> lotteSave() async {
     late String res;
 
@@ -453,6 +535,9 @@ class Repository extends Api {
     return res;
   }
 
+  /// 兌換禮物API
+  ///
+  /// 用於禮物系統頁面，需要傳入禮物編號 [gid]
   Future<void> giftExchange(String gid) async {
     await Api.makeRequest(
       dest: '/confirmGFID',
@@ -463,6 +548,7 @@ class Repository extends Api {
     return;
   }
 
+  /// 取得更衣室的所有衣服API
   Future<http.Response> getAvatar() async {
     final response = await Api.makeRequest(
       dest: '/list/avater',
@@ -473,6 +559,7 @@ class Repository extends Api {
     return response;
   }
 
+  /// 設定角色衣服API
   Future<http.Response> setAvatar(String id) async {
     final response = await Api.makeRequest(
       dest: '/cgAva/$id',
@@ -486,6 +573,9 @@ class Repository extends Api {
     return response;
   }
 
+  /// 月票人際帝方案的購買API
+  ///
+  /// 需要傳入參加人[applicants]
   Future<http.Response> buyVipMany(List<String>? applicants) async {
     Map<String, String> body = {};
 
@@ -507,6 +597,7 @@ class Repository extends Api {
     return response;
   }
 
+  /// 月票月養成方案的購買API
   Future<http.Response> buyVipGradeOne() async {
     final response = await Api.makeRequest(
       dest: '/vip/buygrdone',
@@ -519,6 +610,7 @@ class Repository extends Api {
     return response;
   }
 
+  /// 月票邊緣人方案的購買API
   Future<http.Response> buyVipOne() async {
     final response = await Api.makeRequest(
       dest: '/vip/buyone',
@@ -531,6 +623,16 @@ class Repository extends Api {
     return response;
   }
 
+  /// 回傳快速付款偏好設定API
+  ///
+  /// - [atc] 是否啟用預設扣券
+  /// - [atn] 女武神預設扣款模式
+  /// - [atp] 是否啟用 NFC 自動扣款
+  /// - [atq] 是否啟用 QuiC 靠卡扣款
+  /// - [ats] SDVX預設扣款模式 (已無作用)
+  /// - [att] 雙人遊玩機種預設扣款模式
+  /// - [mtp] 機台付款碼預設
+  /// - [agv] 是否預設使用回饋點數
   Future<http.Response> autoConfirm({
     required bool atc,
     required String atn,
@@ -539,6 +641,7 @@ class Repository extends Api {
     required String ats,
     required String att,
     required int mtp,
+    required bool agv,
   }) async {
     final response = await Api.makeRequest(
       dest: '/autoConfirm',
@@ -550,6 +653,7 @@ class Repository extends Api {
         'ats': ats,
         'att': att,
         'mtp': mtp,
+        'agv': agv,
       },
       method: HttpMethod.post,
       withSession: true,
@@ -559,6 +663,11 @@ class Repository extends Api {
     return response;
   }
 
+  /// 取得最新活動web document API
+  ///
+  /// 需要傳入活動編號 [cid]。
+  ///
+  /// 因目前還沒有最新活動的相關API，故使用此方式取得最新活動頁面的HTML。
   Future<String> getCampaignDocument(String cid) async {
     final response = await Api.makeRequest(
       dest: '',
@@ -570,6 +679,9 @@ class Repository extends Api {
     return response.body;
   }
 
+  /// 新增最新活動印章列API
+  ///
+  /// 需要傳入活動編號 [cid]。
   Future<void> addCampaignStampRow(String cid) async {
     await Api.makeRequest(
       dest: '',
@@ -581,6 +693,9 @@ class Repository extends Api {
     return;
   }
 
+  /// 取得贊助商web document API
+  ///
+  /// 因目前還沒有贊助商的相關API，故使用此方式取得贊助商頁面的HTML。
   Future<String> getSponserDocument() async {
     final response = await Api.makeRequest(
       dest: '',
@@ -591,6 +706,7 @@ class Repository extends Api {
     return const Utf8Decoder().convert(response.bodyBytes);
   }
 
+  /// 取得養成商場內，點數兌換商品資料API
   Future<String> fetchGradeBox() async {
     final response = await Api.makeRequest(
       dest: '/grade/box',
@@ -602,6 +718,9 @@ class Repository extends Api {
     return response.body;
   }
 
+  /// 兌換養成商場內商品API
+  ///
+  /// 需要傳入 [gid] 及 [grid]
   Future<String> chgGradev2(String gid, String grid) async {
     final response = await Api.makeRequest(
         dest: '/grade/change',

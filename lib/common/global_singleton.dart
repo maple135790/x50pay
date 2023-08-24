@@ -36,10 +36,14 @@ class GlobalSingleton {
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid, int cabIndex})? recentPlayedCabinetData;
 
+  String _appVersion = '';
+
   /// App 版本，例如 X50Pay app v1.0.0 + 1
-  ///
-  /// 會在main() 中初始化。
-  late String appVersion;
+  String get appVersion => _appVersion;
+
+  set setAppVersion(String value) {
+    _appVersion = 'X50Pay app v$value';
+  }
 
   /// 是否在掃描QRCode頁面的旗標
   ///

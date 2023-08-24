@@ -41,7 +41,7 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
           sendQuicConfirm(vm);
         },
         content: (showButtonBar) => FutureBuilder(
-            future: vm.getQuicSettings(),
+            future: vm.getPaymentSettings(),
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const SizedBox();
@@ -51,7 +51,7 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
               }
               showButtonBar(true);
 
-              final model = vm.quicSettingModel!;
+              final model = vm.paymentSettingModel!;
               isQuiCPayEnabled = model.nfcQuic;
               nfcQlock = model.nfcQlock.toString();
 
