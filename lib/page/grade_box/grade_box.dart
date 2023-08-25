@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,17 +32,16 @@ class _GradeBoxState extends BaseStatefulState<GradeBox> {
 
   @override
   Widget build(BuildContext context) {
-    log('path: ${GoRouterState.of(context).matchedLocation}', name: 'GradeBox');
     return ChangeNotifierProvider.value(
       value: viewModel,
       builder: (context, child) => FutureBuilder<GradeBoxModel>(
         future: init,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const SizedBox(child: kDebugMode ? Text('not done') : null);
+            return const Center(child: kDebugMode ? Text('not done') : null);
           }
           if (!snapshot.hasData) {
-            return const SizedBox(child: kDebugMode ? Text('not true') : null);
+            return Center(child: kDebugMode ? Text(serviceErrorText) : null);
           }
           final data = snapshot.data!;
           return _GradeBoxLoaded(model: data);

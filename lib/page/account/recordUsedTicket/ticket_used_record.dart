@@ -30,10 +30,10 @@ class _TicketUsedRecordsState extends BaseStatefulState<TicketUsedRecords> {
                 return const SizedBox();
               }
               if (snapshot.data == false) {
-                return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+                return Center(child: Text(serviceErrorText));
               }
               if (viewModel.ticUsedModel!.code != 200) {
-                return const Center(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+                return Center(child: Text(serviceErrorText));
               }
               return ticUsedRecordLoaded(viewModel.ticUsedModel!);
             },

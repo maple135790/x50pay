@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vibration/vibration.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
@@ -66,7 +67,7 @@ class Account extends StatefulWidget {
   State<Account> createState() => _AccountState();
 }
 
-class _AccountState extends State<Account> {
+class _AccountState extends BaseStatefulState<Account> {
   late final String avatarUrl;
   final viewModel = AccountViewModel();
   final user = GlobalSingleton.instance.userNotifier.value!;
@@ -136,11 +137,7 @@ class _AccountState extends State<Account> {
                       builder: (context) =>
                           ChangePhoneConfirmedDialog(viewModel, context));
                 } else {
-                  await EasyLoading.showError(
-                    '伺服器錯誤，請嘗試重新整理或回報X50',
-                    dismissOnTap: false,
-                    duration: const Duration(seconds: 2),
-                  );
+                  showServiceError();
                 }
               },
             );
@@ -237,8 +234,7 @@ class _AccountState extends State<Account> {
                 await Future.delayed(const Duration(seconds: 2));
                 onLogout();
               } else {
-                await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-                    dismissOnTap: false, duration: const Duration(seconds: 2));
+                showServiceError();
               }
             },
             style: Themes.severe(isV4: true),

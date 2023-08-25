@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -142,6 +143,33 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
   double get functionalHeaderHeight =>
       widget.menuIndex == 2 ? 0 : widget.preferredSize.height + 2;
 
+  Widget buildDebugStatus() {
+    String serviceStatus =
+        GlobalSingleton.instance.isServiceOnline ? 'ONLINE' : 'OFFLINE';
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(GlobalSingleton.instance.appVersion,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withOpacity(0.5),
+                fontWeight: FontWeight.bold,
+              )),
+          Text('Service $serviceStatus',
+              style: TextStyle(
+                color: (serviceStatus == 'ONLINE' ? Colors.green : Colors.grey)
+                    .withOpacity(0.5),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              )),
+        ],
+      ),
+    );
+  }
+
   Widget buildFixedHeader(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -154,14 +182,11 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
                   bottom: BorderSide(color: Themes.borderColor, width: 1))),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                    backgroundImage: R.image.header_icon_rsz(),
-                    backgroundColor: Colors.black,
-                    radius: 14),
-              ],
+            child: Center(
+              child: CircleAvatar(
+                  backgroundImage: R.image.header_icon_rsz(),
+                  backgroundColor: Colors.black,
+                  radius: 14),
             ),
           ),
         ),
@@ -279,6 +304,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
               top: 0,
               child: buildFunctionalHeader(context),
             ),
+            if (kDebugMode) buildDebugStatus(),
           ],
         ),
       ),

@@ -31,6 +31,8 @@ class GiftSystemViewModel extends BaseViewModel {
     } on Exception catch (e) {
       log('', name: 'err giftSystemInit', error: e);
       return false;
+    } finally {
+      await EasyLoading.dismiss();
     }
   }
 

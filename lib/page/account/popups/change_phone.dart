@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
 
@@ -109,7 +110,7 @@ class ChangePhoneConfirmedDialog extends StatefulWidget {
 }
 
 class _ChangePhoneConfirmedDialogState
-    extends State<ChangePhoneConfirmedDialog> {
+    extends BaseStatefulState<ChangePhoneConfirmedDialog> {
   final textController = TextEditingController();
   String? _errorText;
   bool isEnteredNewPhone = false;
@@ -132,15 +133,13 @@ class _ChangePhoneConfirmedDialogState
           setState(() {});
           break;
         default:
-          await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-              duration: const Duration(seconds: 2));
-          await Future.delayed(const Duration(seconds: 2));
+          showServiceError();
+          await Future.delayed(const Duration(milliseconds: 2300));
           nav.pop();
       }
     } else {
-      await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-          duration: const Duration(seconds: 2));
-      await Future.delayed(const Duration(seconds: 2));
+      showServiceError();
+      await Future.delayed(const Duration(milliseconds: 2300));
       nav.pop();
     }
   }
@@ -163,15 +162,13 @@ class _ChangePhoneConfirmedDialogState
               duration: const Duration(seconds: 2));
           break;
         default:
-          await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-              duration: const Duration(seconds: 2));
-          await Future.delayed(const Duration(seconds: 2));
+          showServiceError();
+          await Future.delayed(const Duration(milliseconds: 2300));
           nav.pop();
       }
     } else {
-      await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-          duration: const Duration(seconds: 2));
-      await Future.delayed(const Duration(seconds: 2));
+      showServiceError();
+      await Future.delayed(const Duration(milliseconds: 2300));
       nav.pop();
     }
   }

@@ -29,7 +29,6 @@ class HomeViewModel extends BaseViewModel {
   Future<bool> initHome({int debugFlag = 200}) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 100));
-
     try {
       await GlobalSingleton.instance.checkUser(force: true);
       if (!kDebugMode || isForceFetch) {

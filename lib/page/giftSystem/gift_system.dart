@@ -39,11 +39,11 @@ class _GiftSystemState extends BaseStatefulState<GiftSystem> {
       future: init,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const SizedBox(child: kDebugMode ? Text('not done') : null);
+          return const Center(child: kDebugMode ? Text('not done') : null);
         }
         if (snapshot.data != true) {
-          if (EasyLoading.isShow) EasyLoading.dismiss();
-          return const SizedBox(child: kDebugMode ? Text('not true') : null);
+          showServiceError();
+          return Center(child: Text(serviceErrorText));
         }
         if (EasyLoading.isShow) EasyLoading.dismiss();
         return _GiftBoxLoaded(

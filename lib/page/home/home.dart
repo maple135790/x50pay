@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -40,8 +39,8 @@ class _HomeState extends BaseStatefulState<Home> {
             return const SizedBox();
           }
           if (snapshot.data == false) {
-            EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
-            return const SizedBox(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
+            showServiceError();
+            return Center(child: Text(serviceErrorText));
           } else {
             return const SingleChildScrollView(child: _HomeLoaded());
           }
@@ -381,6 +380,7 @@ class _MariInfoState extends State<_MariInfo> {
                           const SizedBox(width: 5),
                           Tooltip(
                             preferBelow: false,
+                            triggerMode: TooltipTriggerMode.tap,
                             decoration: BoxDecoration(
                                 color: const Color(0x33fefefe),
                                 borderRadius: BorderRadius.circular(8)),

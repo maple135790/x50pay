@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/page/account/popups/popup_dialog.dart';
@@ -15,7 +16,8 @@ class ChangePasswordDialog extends StatefulWidget {
   State<ChangePasswordDialog> createState() => _ChangePasswordDialogState();
 }
 
-class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
+class _ChangePasswordDialogState
+    extends BaseStatefulState<ChangePasswordDialog> {
   final _formKey = GlobalKey<FormState>();
   final oldPwd = TextEditingController();
   final newPwd = TextEditingController();
@@ -62,13 +64,10 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                     });
                     break;
                   default:
-                    await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-                        dismissOnTap: false,
-                        duration: const Duration(seconds: 2));
+                    showServiceError();
                 }
               } else {
-                await EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50',
-                    dismissOnTap: false, duration: const Duration(seconds: 2));
+                showServiceError();
               }
             }
           : null,
