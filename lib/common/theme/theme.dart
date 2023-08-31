@@ -103,6 +103,7 @@ class Themes {
       overlayColor: MaterialStateProperty.all(Colors.transparent),
       foregroundColor: MaterialStateProperty.all(const Color(0xff1e1e1e)),
       backgroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
         return const Color(0xfffafafa);
       }),
     );

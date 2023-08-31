@@ -742,4 +742,27 @@ class Repository extends Api {
         contentType: ContentType.json);
     return response.body;
   }
+
+  Future<http.Response> getScanPayDocument(String url) async {
+    final response = await Api.makeRequest(
+      dest: '',
+      customDest: url,
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+    );
+    return response;
+    // return const Utf8Decoder().convert(response.bodyBytes);
+  }
+
+  Future<String> getNFCPayDocument(String url) async {
+    final response = await Api.makeRequest(
+      dest: '',
+      customDest: url,
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+    );
+    return const Utf8Decoder().convert(response.bodyBytes);
+  }
 }

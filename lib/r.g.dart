@@ -233,6 +233,12 @@
   /// asset: assets/images/login/login_banner.jpg
       // ignore: non_constant_identifier_names
       final login_banner_jpg = const AssetResource("assets/images/login/login_banner.jpg", packageName: null);
+  /// asset: assets/images/scanPay/jkopay_logo.png
+      // ignore: non_constant_identifier_names
+      final jkopay_logo = const AssetResource("assets/images/scanPay/jkopay_logo.png", packageName: null);
+  /// asset: assets/images/scanPay/linepay_logo.png
+      // ignore: non_constant_identifier_names
+      final linepay_logo = const AssetResource("assets/images/scanPay/linepay_logo.png", packageName: null);
       }
 // ignore: camel_case_types
     class _R_Svg_AssetResource {
@@ -262,6 +268,9 @@
   /// asset: assets/images/quest/stamp.svg
       // ignore: non_constant_identifier_names
       final stamp = const AssetResource("assets/images/quest/stamp.svg", packageName: null);
+  /// asset: assets/images/scanPay/p-solid.svg
+      // ignore: non_constant_identifier_names
+      final p_solid = const AssetResource("assets/images/scanPay/p-solid.svg", packageName: null);
     }
 // ignore: camel_case_types
     class _R_Text_AssetResource {
@@ -516,6 +525,16 @@
       AssetImage login_banner_jpg() {
         return AssetImage(asset.login_banner_jpg.keyName);
       }
+  /// asset: assets/images/scanPay/jkopay_logo.png
+      // ignore: non_constant_identifier_names
+      AssetImage jkopay_logo() {
+        return AssetImage(asset.jkopay_logo.keyName);
+      }
+  /// asset: assets/images/scanPay/linepay_logo.png
+      // ignore: non_constant_identifier_names
+      AssetImage linepay_logo() {
+        return AssetImage(asset.linepay_logo.keyName);
+      }
     }
 /// This `_R_Svg` class is generated and contains references to static svg type image asset resources.
     // ignore: camel_case_types
@@ -570,6 +589,12 @@
       // ignore: non_constant_identifier_names
       AssetSvg stamp({required double width, required double height}) {
         final imageProvider = AssetSvg(asset.stamp.keyName, width: width, height: height);
+        return imageProvider;
+      }
+  /// asset: assets/images/scanPay/p-solid.svg
+      // ignore: non_constant_identifier_names
+      AssetSvg p_solid({required double width, required double height}) {
+        final imageProvider = AssetSvg(asset.p_solid.keyName, width: width, height: height);
         return imageProvider;
       }
     }

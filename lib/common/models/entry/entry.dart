@@ -37,10 +37,14 @@ class EntryModel {
   String get gr2Date => gr2[5].toString();
   String get gr2GradeBoxContent => gr2[6].toString();
   String get _rawAva => gr2[7].toString().split(',').last;
-  Uint8List get ava => base64Decode(_rawAva);
+  bool get gr2ShouldShowBouns => gr2[8];
   String get gr2VDay => gr2[9].toString();
-  String get gr2BounsLeft => gr2[10].toString();
+  String get gr2BounsLimit => gr2[10].toString();
+  String get gr2Timer => gr2[12].toString();
+  String get gr2CountMuch => gr2[13].toString();
+  double get gr2ProgressV5 => gr2[13] / gr2[1];
   double get gr2Progress => gr2[0] / 15;
+  Uint8List get ava => base64Decode(_rawAva);
 }
 
 @JsonSerializable()

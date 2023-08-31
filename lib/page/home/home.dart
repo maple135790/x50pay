@@ -217,7 +217,7 @@ class _TicketInfo extends StatelessWidget {
                             const TextSpan(text: '期限 : '),
                             const WidgetSpan(child: SizedBox(width: 5)),
                             TextSpan(
-                                text: user.vip! ? vipExpDate() : '點左側票卷圖樣立刻購買')
+                                text: user.vip! ? vipExpDate() : '點左側票券圖樣立刻購買')
                           ])),
                         ],
                       ),
@@ -378,37 +378,39 @@ class _MariInfoState extends State<_MariInfo> {
                               style: const TextStyle(
                                   color: Color(0xff808080), fontSize: 30)),
                           const SizedBox(width: 5),
-                          Tooltip(
-                            preferBelow: false,
-                            triggerMode: TooltipTriggerMode.tap,
-                            decoration: BoxDecoration(
-                                color: const Color(0x33fefefe),
-                                borderRadius: BorderRadius.circular(8)),
-                            message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
-                            textStyle: Theme.of(context).textTheme.labelMedium,
-                            verticalOffset: 25,
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: const Color(0xff2282e9),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Image(
-                                            image: R.svg.bolt_solid(
-                                                width: 9, height: 13),
-                                            width: 9,
-                                            height: 13,
-                                            color: Colors.white),
-                                      ),
-                                      Text(entry.gr2BounsLeft),
-                                      const SizedBox(width: 3)
-                                    ])),
-                          )
+                          if (entry.gr2ShouldShowBouns)
+                            Tooltip(
+                              preferBelow: false,
+                              triggerMode: TooltipTriggerMode.tap,
+                              decoration: BoxDecoration(
+                                  color: const Color(0x33fefefe),
+                                  borderRadius: BorderRadius.circular(8)),
+                              message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
+                              textStyle:
+                                  Theme.of(context).textTheme.labelMedium,
+                              verticalOffset: 25,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xff2282e9),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Image(
+                                              image: R.svg.bolt_solid(
+                                                  width: 9, height: 13),
+                                              width: 9,
+                                              height: 13,
+                                              color: Colors.white),
+                                        ),
+                                        Text(entry.gr2BounsLimit),
+                                        const SizedBox(width: 3)
+                                      ])),
+                            )
                         ]),
                         const SizedBox(height: 5),
                         ValueListenableBuilder(
@@ -421,18 +423,58 @@ class _MariInfoState extends State<_MariInfo> {
                                 ? CrossFadeState.showSecond
                                 : CrossFadeState.showFirst,
                             secondCurve: Curves.easeInOutExpo,
-                            firstChild: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child:
-                                  SizedBox(height: 24, width: double.maxFinite),
-                            ),
+                            firstChild: const SizedBox(
+                                height: 24, width: double.maxFinite),
                             secondChild: ProgressBar(
+                              height: 24,
                               onProgressBarCreated: onProgressBarCreated,
-                              currentValue: entry.gr2Progress <= 20
-                                  ? 20
-                                  : entry.gr2Progress,
+                              currentValue: entry.gr2Progress,
                             ),
                           ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              child: ValueListenableBuilder(
+                                valueListenable: progressBarNotifier,
+                                builder:
+                                    (context, isProgressBarCreated, child) =>
+                                        AnimatedCrossFade(
+                                  duration: const Duration(milliseconds: 150),
+                                  alignment: Alignment.center,
+                                  crossFadeState: isProgressBarCreated
+                                      ? CrossFadeState.showSecond
+                                      : CrossFadeState.showFirst,
+                                  secondCurve: Curves.easeInOutExpo,
+                                  firstChild: const SizedBox(
+                                      height: 15, width: double.maxFinite),
+                                  secondChild: ProgressBar(
+                                    height: 15,
+                                    progressText:
+                                        '${entry.gr2CountMuch}/${entry.gr2HowMuch}P',
+                                    progressColor: const Color(0xffffde9b),
+                                    onProgressBarCreated: onProgressBarCreated,
+                                    currentValue: entry.gr2ProgressV5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 15,
+                              margin: const EdgeInsets.only(left: 9.25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 7.5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: const Color(0xffb0cf9e),
+                              ),
+                              child: Text(entry.gr2Timer,
+                                  style: const TextStyle(
+                                      fontSize: 10, color: Colors.black)),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 12),
                         Flexible(
@@ -452,11 +494,9 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 每 '),
-                                      TextSpan(text: entry.gr2HowMuch),
-                                      const TextSpan(text: ' 道贈 1 張，上限 '),
+                                      const TextSpan(text: ' 每日回饋 '),
                                       TextSpan(text: entry.gr2Limit),
-                                      const TextSpan(text: ' 張 '),
+                                      const TextSpan(text: ' 次 每次 25 P '),
                                     ])),
                               ),
                               Padding(

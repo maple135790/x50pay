@@ -111,6 +111,10 @@ class _AccountState extends BaseStatefulState<Account> {
     context.pushNamed(AppRoutes.playRecords.routeName);
   }
 
+  void onFreePointRecordPressed() async {
+    context.pushNamed(AppRoutes.freePointRecords.routeName);
+  }
+
   void onTicketUseRecordPressed() async {
     context.pushNamed(AppRoutes.ticketUsedRecords.routeName);
   }
@@ -397,6 +401,14 @@ class _AccountState extends BaseStatefulState<Account> {
                   subtitle: '查詢點數付款明細。',
                   color: _SettingTileColor.yellow,
                   onTap: onPlayRecordPressed,
+                ),
+                const _SettingTile(
+                  iconData: Icons.list_alt_rounded,
+                  title: '回饋明細',
+                  subtitle: '查看回饋點數明細。',
+                  color: _SettingTileColor.yellow,
+                  // TODO(kenneth): 等拿到 freeP api 內容後再開放
+                  onTap: null,
                 ),
                 _SettingTile(
                   iconData: Icons.confirmation_num,

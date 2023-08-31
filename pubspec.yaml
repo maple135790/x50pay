@@ -104,11 +104,15 @@ flutter:
   - assets/images/home/vts.png
   - assets/images/login/login_banner.jpg
   - assets/images/quest/stamp.svg
+  - assets/images/scanPay/jkopay_logo.png
+  - assets/images/scanPay/linepay_logo.png
+  - assets/images/scanPay/p-solid.svg
   - assets/texts/avater.txt
   - assets/texts/license.txt
   - assets/tests/entry.json
   - assets/tests/rpc_chusp08.html
   - assets/tests/rqc_bpl.html
+  - assets/tests/scan_pay.html
   - assets/tests/sponser.html
   fonts:
   - family: NotoSansJP
