@@ -96,7 +96,7 @@ class Repository extends Api {
     late StoreModel store;
 
     await Api.makeRequest(
-      dest: '/store/list',
+      dest: '/store/list/zh-tw',
       method: HttpMethod.post,
       withSession: true,
       body: {},
@@ -389,6 +389,24 @@ class Repository extends Api {
     if (!isTicket) {
       url += '/${isUseRewardPoint ? 1 : 0}';
     }
+
+    await Api.makeRequest(
+      dest: url,
+      method: HttpMethod.post,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        response = BasicResponse.fromJson(json);
+      },
+    );
+    return response;
+  }
+
+  /// 投幣API
+  ///
+  /// 需要傳入原始URL [url]，使用於 QRCode 掃描後 (ScanPay) 的投幣
+  Future<BasicResponse> doInsertRawUrl(String url) async {
+    late BasicResponse response;
 
     await Api.makeRequest(
       dest: url,

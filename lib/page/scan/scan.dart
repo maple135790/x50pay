@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/scan_pay_view_model.dart';
 import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -30,14 +31,14 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
   QRViewController? qrViewController;
   Barcode? result, lastEvent;
   bool isBusy = false;
-  bool isShowCameraPreview = true;
+  final ValueNotifier<bool> isShowCameraPreviewNotifier = ValueNotifier(true);
 
   void onRechargePressed() async {
     qrViewController?.pauseCamera();
-    isShowCameraPreview = false;
+    isShowCameraPreviewNotifier.value = false;
     setState(() {});
     context.pushNamed(AppRoutes.ecPay.routeName).then((_) {
-      isShowCameraPreview = true;
+      isShowCameraPreviewNotifier.value = true;
       qrViewController?.resumeCamera();
       setState(() {});
     });
@@ -79,6 +80,7 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
           } else {
             isBusy = true;
             final nav = GoRouter.of(context);
+            isShowCameraPreviewNotifier.value = false;
             await controller.pauseCamera();
             // ScanPay
             if (event.code!.startsWith('https://pay.x50.fun/mid/')) {
@@ -99,6 +101,7 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
             result = event;
             setState(() {});
             isBusy = false;
+            isShowCameraPreviewNotifier.value = true;
           }
         });
       },
@@ -119,8 +122,12 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
     );
   }
 
-  void showScanPayModal(QRViewController controller, String mid, String cid) {
-    showModalBottomSheet(
+  void showScanPayModal(
+    QRViewController controller,
+    String mid,
+    String cid,
+  ) {
+    showModalBottomSheet<bool>(
         isScrollControlled: true,
         isDismissible: false,
         context: context,
@@ -129,17 +136,17 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
         transitionAnimationController: animationController,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         builder: (context) => DraggableScrollableSheet(
-              maxChildSize: 0.85,
-              minChildSize: 0.25,
-              initialChildSize: 0.48,
+              initialChildSize: 0.8,
               snap: true,
-              snapSizes: [0.25, 0.48, 0.85],
+              snapSizes: const [0.5, 0.8],
               expand: false,
               builder: (context, controller) {
                 return ScanPayModal(
                     scrollController: controller, mid: mid, cid: cid);
               },
-            ));
+            )).then((_) {
+      controller.resumeCamera();
+    });
   }
 
   @override
@@ -148,10 +155,12 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(onPressed: debugScanPay),
       body: Column(
         children: [
-          Flexible(
-            flex: 9,
-            child:
-                isShowCameraPreview ? buildQrView() : const SizedBox.expand(),
+          ValueListenableBuilder(
+            valueListenable: isShowCameraPreviewNotifier,
+            builder: (context, isShowPreview, child) => Flexible(
+              flex: 9,
+              child: isShowPreview ? buildQrView() : const SizedBox.expand(),
+            ),
           ),
           Flexible(
             flex: 1,
@@ -183,16 +192,18 @@ class _ScanPayModalState extends BaseStatefulState<ScanPayModal> {
   late final viewModel = ScanPayViewModel(widget.mid, widget.cid);
 
   void onX50PayPressed() async {
-    final pref = await SharedPreferences.getInstance();
-    final session = pref.getString('session');
-    if (session == null || session.isEmpty) {
-      log('', name: 'onX50PayPressed', error: 'session is null');
-      return;
-    }
-    log('session: $session', name: 'onX50PayPressed');
-    log('url: ${viewModel.x50PayUrl}', name: 'onX50PayPressed');
-    final doc = await Repository().getNFCPayDocument(viewModel.x50PayUrl);
-    log(doc);
+    EasyLoading.show();
+
+    final data = await viewModel.getScanPayData();
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        EasyLoading.dismiss();
+        return CabSelect.fromScanPay(scanPayData: data);
+      },
+    );
   }
 
   void onLinePayPressed() {
@@ -266,66 +277,81 @@ class _ScanPayModalState extends BaseStatefulState<ScanPayModal> {
               ],
             ),
           ),
-          FutureBuilder(
-            future: init,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const Center(
-                    child: CircularProgressIndicator.adaptive());
-              }
-              if (snapshot.data == false) {
-                return Center(child: Text(serviceErrorText));
-              }
-              return Container(
-                margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: const Color(0xff3e3e3e))),
-                child: Column(
+          ChangeNotifierProvider.value(
+            value: viewModel,
+            builder: (context, child) => FutureBuilder(
+              future: init,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const Center(
+                      child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: CircularProgressIndicator.adaptive(),
+                  ));
+                }
+                if (snapshot.data == false) {
+                  return Center(child: Text(serviceErrorText));
+                }
+                if (!viewModel.hasLogined) {
+                  return const Center(child: Text('登入 Session 過期，請重新登入。'));
+                }
+                return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextButton(
-                      onPressed: onX50PayPressed,
-                      style: Themes.severe(isV4: true),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    Container(
+                      margin: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: const Color(0xff3e3e3e))),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.wallet_rounded),
-                          Image(
-                              image: R.svg.p_solid(width: 21, height: 15),
-                              color: Colors.white),
-                          const SizedBox(width: 7.5),
-                          const Text('X50Pay'),
+                          TextButton(
+                            onPressed: onX50PayPressed,
+                            style: Themes.severe(isV4: true),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.wallet_rounded),
+                                Image(
+                                    image: R.svg.p_solid(width: 21, height: 15),
+                                    color: Colors.white),
+                                const SizedBox(width: 7.5),
+                                const Text('X50Pay'),
+                              ],
+                            ),
+                          ),
+                          const Divider(color: Color(0xff3e3e3e), height: 30),
+                          TextButton(
+                            onPressed: onJKOPayPressed,
+                            style: Themes.pale(),
+                            child: Center(
+                                child: Image(
+                                    image: R.image.jkopay_logo(), height: 28)),
+                          ),
+                          const SizedBox(height: 15),
+                          TextButton(
+                            onPressed: viewModel.isLinePayAvailable
+                                ? onLinePayPressed
+                                : null,
+                            style: Themes.pale(),
+                            child: Center(
+                              child: ColorFiltered(
+                                  colorFilter: const ColorFilter.mode(
+                                      Colors.black54, BlendMode.srcATop),
+                                  child: Image(
+                                      image: R.image.linepay_logo(),
+                                      height: 20)),
+                            ),
+                          )
                         ],
                       ),
                     ),
-                    const Divider(color: Color(0xff3e3e3e), height: 30),
-                    TextButton(
-                      onPressed: onJKOPayPressed,
-                      style: Themes.pale(),
-                      child: Center(
-                          child:
-                              Image(image: R.image.jkopay_logo(), height: 28)),
-                    ),
-                    const SizedBox(height: 15),
-                    TextButton(
-                      onPressed: viewModel.isLinePayAvailable
-                          ? onLinePayPressed
-                          : null,
-                      style: Themes.pale(),
-                      child: Center(
-                        child: ColorFiltered(
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black54, BlendMode.srcATop),
-                            child: Image(
-                                image: R.image.linepay_logo(), height: 20)),
-                      ),
-                    )
                   ],
-                ),
-              );
-            },
+                );
+              },
+            ),
           )
         ],
       ),

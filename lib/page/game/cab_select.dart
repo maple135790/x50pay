@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/game/game_mixin.dart';
+import 'package:x50pay/page/scan/scan_pay_data.dart';
 
 enum PaymentType {
   point('點數'),
@@ -21,21 +23,37 @@ class CabSelect extends StatefulWidget {
   final String caboid;
   final Cabinet cabinetData;
   final int cabIndex;
+  final ScanPayData scanPayData;
   final bool _isFromCabDetail;
+  final bool _isFromScanPay;
+  static const _emptyScanPayData = ScanPayData.empty();
 
   const CabSelect({
     super.key,
     required this.caboid,
     required this.cabIndex,
     required this.cabinetData,
-  }) : _isFromCabDetail = false;
+  })  : _isFromCabDetail = false,
+        _isFromScanPay = false,
+        scanPayData = _emptyScanPayData;
 
   const CabSelect.fromCabDetail({
     super.key,
     required this.caboid,
     required this.cabIndex,
     required this.cabinetData,
-  }) : _isFromCabDetail = true;
+  })  : _isFromCabDetail = true,
+        _isFromScanPay = false,
+        scanPayData = _emptyScanPayData;
+
+  const CabSelect.fromScanPay({
+    super.key,
+    required this.scanPayData,
+  })  : _isFromCabDetail = false,
+        _isFromScanPay = true,
+        caboid = '',
+        cabIndex = -1,
+        cabinetData = const Cabinet.empty();
 
   @override
   State<CabSelect> createState() => _CabSelectState();
@@ -47,9 +65,23 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
   late PaymentType paymentType;
   late bool isUseRewardPoint = isUseRewardPoint =
       GlobalSingleton.instance.userNotifier.value?.givebool == 1;
+  String selectedRawPayUrl = '';
   bool isSelectPayment = false;
   bool isPayPressed = false;
   List? selectedMode;
+
+  String get gameCabImage => widget._isFromScanPay
+      ? widget.scanPayData.gameCabImageUrl
+      : getGameCabImage(cabData.id);
+
+  int get cabNum =>
+      widget._isFromScanPay ? widget.scanPayData.cabNum : cabData.num;
+
+  List<List<dynamic>> get cabModes =>
+      widget._isFromScanPay ? widget.scanPayData.mode : cabData.mode;
+
+  String get cabLabel =>
+      widget._isFromScanPay ? widget.scanPayData.cabLabel : cabData.label;
 
   void onUseRewardPointChanged(bool? value) {
     if (value == null) return;
@@ -80,11 +112,16 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
           activeColor: const Color(0xff0e52a5),
           checkColor: Colors.white,
         ),
-        const Text.rich(TextSpan(text: '用回饋', children: [
-          TextSpan(
-              text: '(無法集計道數/參與部分活動)',
-              style: TextStyle(color: Color(0xffffec3d)))
-        ])),
+        GestureDetector(
+          onTap: () {
+            onUseRewardPointChanged(!isUseRewardPoint);
+          },
+          child: const Text.rich(TextSpan(text: '用回饋', children: [
+            TextSpan(
+                text: '(無法集計道數/參與部分活動)',
+                style: TextStyle(color: Color(0xffffec3d)))
+          ])),
+        ),
       ],
     );
   }
@@ -100,8 +137,8 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
             children: [
               const Text('注意！請確認是否有玩家正在遊玩。', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 14),
-              Text('機種：${cabData.label}', style: const TextStyle(fontSize: 18)),
-              Text('編號：${cabData.num}號機', style: const TextStyle(fontSize: 18)),
+              Text('機種：$cabLabel', style: const TextStyle(fontSize: 18)),
+              Text('編號：$cabNum號機', style: const TextStyle(fontSize: 18)),
               Text('消費：${paymentType.text}',
                   style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 12.6),
@@ -149,13 +186,20 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
     final router = GoRouter.of(context);
     isPayPressed = true;
     setState(() {});
-    final serverResponse = await viewModel.doInsert(
-      isUseRewardPoint: isUseRewardPoint,
-      id: widget.caboid,
-      index: widget.cabIndex,
-      isTicket: paymentType == PaymentType.ticket,
-      mode: paymentType != PaymentType.reloadCoin ? selectedMode!.first : 9999,
-    );
+
+    late final BasicResponse? serverResponse;
+    if (widget._isFromScanPay) {
+      serverResponse = await viewModel.doInsertScanPay(url: selectedRawPayUrl);
+    } else {
+      serverResponse = await viewModel.doInsert(
+        isUseRewardPoint: isUseRewardPoint,
+        id: widget.caboid,
+        index: widget.cabIndex,
+        isTicket: paymentType == PaymentType.ticket,
+        mode:
+            paymentType != PaymentType.reloadCoin ? selectedMode!.first : 9999,
+      );
+    }
     if (widget._isFromCabDetail) router.pop();
     if (serverResponse != null) {
       String msg = '';
@@ -166,11 +210,13 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
           is200 = true;
           msg = '投幣成功，感謝您的惠顧！';
           describe = '請等候約三秒鐘，若機台仍無反應請盡速與X50粉絲專頁聯絡';
-          GlobalSingleton.instance.recentPlayedCabinetData = (
-            cabinet: widget.cabinetData,
-            cabIndex: widget.cabIndex,
-            caboid: widget.caboid
-          );
+          if (!widget._isFromScanPay) {
+            GlobalSingleton.instance.recentPlayedCabinetData = (
+              cabinet: widget.cabinetData,
+              cabIndex: widget.cabIndex,
+              caboid: widget.caboid
+            );
+          }
           break;
         case 601:
           msg = '機台鎖定中';
@@ -229,7 +275,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
               children: [
                 Positioned.fill(
                     child: CachedNetworkImage(
-                        imageUrl: getGameCabImage(cabData.id),
+                        imageUrl: gameCabImage,
                         alignment: const Alignment(0, -0.25),
                         fit: BoxFit.fitWidth)),
                 Positioned.fill(
@@ -272,7 +318,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(cabData.label,
+                        Text(cabLabel,
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -282,7 +328,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text('${cabData.num}號機',
+                              Text('$cabNum號機',
                                   style: const TextStyle(
                                       color: Color(0xffbcbfbf),
                                       fontSize: 16,
@@ -308,7 +354,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
   Widget _buildPlayMenu() {
     List<Widget> children = [];
 
-    for (List mode in cabData.mode) {
+    for (List mode in cabModes) {
       final double price = double.parse(mode.last.toString());
       children
         ..add(const SizedBox(height: 20))
@@ -318,6 +364,9 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
           children: [
             TextButton(
                 onPressed: () {
+                  if (widget._isFromScanPay) {
+                    selectedRawPayUrl = mode.first[0].toString();
+                  }
                   selectedMode = mode;
                   isSelectPayment = true;
                   paymentType = PaymentType.point;
@@ -331,6 +380,9 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
                 return TextButton(
                     onPressed: user?.hasTicket ?? false
                         ? () {
+                            if (widget._isFromScanPay) {
+                              selectedRawPayUrl = mode.first[1].toString();
+                            }
                             selectedMode = mode;
                             isSelectPayment = true;
                             paymentType = PaymentType.ticket;

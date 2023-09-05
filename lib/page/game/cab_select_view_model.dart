@@ -11,13 +11,42 @@ import 'package:x50pay/repository/repository.dart';
 class CabSelectViewModel extends BaseViewModel {
   final repo = Repository();
 
-  Future<BasicResponse?> doInsert(
-      {required bool isTicket,
-      required bool isUseRewardPoint,
-      required String id,
-      required int index,
-      required num mode,
-      int debugFlag = 200}) async {
+  Future<BasicResponse?> doInsertScanPay({
+    required String url,
+    int debugFlag = 200,
+  }) async {
+    try {
+      await EasyLoading.show();
+      await Future.delayed(const Duration(milliseconds: 100));
+      late final BasicResponse response;
+      log('url: $url', name: 'doInsertScanPay');
+
+      if (!kDebugMode || isForceFetch) {
+        response = await repo.doInsertRawUrl(url);
+      } else {
+        log('url: $url', name: 'doInsertScanPay');
+        response =
+            BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
+      }
+      await EasyLoading.dismiss();
+
+      return response;
+    } catch (e) {
+      log('', error: '$e', name: 'doInsertScanPay');
+      return null;
+    } finally {
+      await EasyLoading.dismiss();
+    }
+  }
+
+  Future<BasicResponse?> doInsert({
+    required bool isTicket,
+    required bool isUseRewardPoint,
+    required String id,
+    required int index,
+    required num mode,
+    int debugFlag = 200,
+  }) async {
     try {
       await EasyLoading.show();
       await Future.delayed(const Duration(milliseconds: 100));
