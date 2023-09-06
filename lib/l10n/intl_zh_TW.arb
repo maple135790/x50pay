@@ -1,0 +1,65 @@
+{
+  "@continuousDay": {
+    "placeholders": {
+      "continuousDay": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gatchaPoints": {
+    "placeholders": {
+      "gatchaPoints": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gr2Limit": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "continuous": " 已簽到 : {continuousDay} 天",
+  "dialogReturn": "返回",
+  "dialogSave": "保存",
+  "dressRoomTitle": "更換角色/衣裝",
+  "gameDiscountHour": "離峰時段",
+  "gameLocation": "目前所在",
+  "gameMPass": "月票",
+  "gameNormalHour": "通常時段",
+  "gameWeekday": "平日",
+  "gameWeekends": "假日",
+  "gatcha": " 抽獎券 : 再 {gatchaPoints} 點",
+  "gr2HeartBox": "養成點數商城",
+  "gr2Limit": " 每日回饋 {gr2LimitTimes} 次 每次 25 P ",
+  "gr2ResetDate": " 換季日: ",
+  "heart": " 親密度 ",
+  "infoNotify": "最新活動",
+  "loginEmail": "電子郵件",
+  "loginError": "登入錯誤",
+  "loginForgotPassword": "忘記密碼嗎?",
+  "loginLogin": "登入",
+  "loginPassword": "密碼",
+  "loginSignUp": "註冊",
+  "loginSub": "24Hr 年中無休",
+  "loginWelcome": "歡迎回來!",
+  "monthlyPass": "月票 : ",
+  "mpassInvalid": "未購買",
+  "mpassValid": "已購買",
+  "navCollab": "合作",
+  "navGame": "投幣",
+  "navGift": "禮物",
+  "navSettings": "設定",
+  "nextLv": "下一階 : ",
+  "officialNotify": "官方資訊",
+  "serviceError": "伺服器錯誤，請嘗試重新整理或回報X50",
+  "ticketBalance": "券量 : ",
+  "ticketUnit": "張",
+  "vipDate": "期限 : ",
+  "vipExpiredMsg": "點左側票券圖樣立刻購買",
+  "x50PayLanguage": "X50Pay 語言"
+}

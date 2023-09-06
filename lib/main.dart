@@ -3,11 +3,15 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/go_route_generator.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 /// 檢查是否有登入
@@ -21,9 +25,12 @@ Future<bool> _checkLogin() async {
   return await GlobalSingleton.instance.checkUser();
 }
 
+final languageViewModel = LanguageViewModel();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final appLocale = await languageViewModel.getUserPrefLocale();
   final packageInfo = await PackageInfo.fromPlatform();
   final islogin = await _checkLogin();
   log('isServiceOnline: ${GlobalSingleton.instance.isServiceOnline}',
@@ -32,6 +39,7 @@ void main() async {
   configLoadingStyle();
   GlobalSingleton.instance.setAppVersion =
       "${packageInfo.version}+${packageInfo.buildNumber}";
+  languageViewModel.currentLocale = appLocale;
   runApp(MyApp(isLogin: islogin));
 }
 
@@ -61,10 +69,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: AppThemeData().materialTheme,
-      builder: EasyLoading.init(),
-      routerConfig: goRouteConfig(isLogin),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: languageViewModel),
+      ],
+      child: Consumer<LanguageViewModel>(
+        builder: (context, vm, child) => MaterialApp.router(
+          theme: AppThemeData().materialTheme,
+          builder: EasyLoading.init(),
+          routerConfig: goRouteConfig(isLogin),
+          locale: vm.currentLocale,
+          supportedLocales: S.delegate.supportedLocales,
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+        ),
+      ),
     );
   }
 }

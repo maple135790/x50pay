@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
 
 class GameStore extends StatefulWidget {
@@ -24,7 +26,8 @@ class _GameStoreState extends State<GameStore> {
   @override
   void initState() {
     super.initState();
-    _getStoreData = viewModel.getStoreData();
+    final currentLocale = context.read<LanguageViewModel>().currentLocale;
+    _getStoreData = viewModel.getStoreData(currentLocale: currentLocale);
   }
 
   @override
@@ -132,20 +135,17 @@ class _StoreItem extends StatelessWidget {
                               shadows: [
                                 Shadow(color: Colors.black, blurRadius: 18)
                               ])),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const Icon(Icons.near_me,
-                                size: 15, color: Color(0xe6ffffff)),
-                            Text('  | ${store.address!}',
-                                style: const TextStyle(
-                                    color: Color(0xffbcbfbf),
-                                    fontSize: 13,
-                                    shadows: [
-                                      Shadow(
-                                          color: Colors.black, blurRadius: 15)
-                                    ]))
-                          ]),
+                      Row(children: [
+                        const Icon(Icons.near_me,
+                            size: 15, color: Color(0xe6ffffff)),
+                        Text('  | ${store.address!}',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.9),
+                                fontSize: 13,
+                                shadows: const [
+                                  Shadow(color: Colors.black, blurRadius: 15)
+                                ]))
+                      ]),
                     ],
                   ),
                 ),

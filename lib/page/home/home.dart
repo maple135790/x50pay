@@ -12,6 +12,7 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
@@ -73,6 +74,8 @@ class _HomeLoadedState extends State<_HomeLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    final i18n = S.of(context);
+
     return Consumer<HomeViewModel>(
       builder: (context, vm, child) {
         final recentQuests = vm.entry!.questCampaign;
@@ -83,9 +86,9 @@ class _HomeLoadedState extends State<_HomeLoaded> {
             _TopInfo(),
             _TicketInfo(),
             _MariInfo(entryData: vm.entry!),
-            if (recentQuests != null) divider('最新活動'),
+            if (recentQuests != null) divider(i18n.infoNotify),
             if (recentQuests != null) _RecentQuests(quests: recentQuests),
-            divider('官方資訊'),
+            divider(i18n.officialNotify),
             const _OfficialInfo(),
             const SizedBox(height: 25),
           ],
@@ -139,7 +142,6 @@ class _TicketInfo extends StatelessWidget {
   ///
   /// 包含券量、月票、月票期限
   _TicketInfo();
-
   final UserModel user = GlobalSingleton.instance.userNotifier.value!;
 
   String vipExpDate() {
@@ -156,6 +158,8 @@ class _TicketInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final i18n = S.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       child: Stack(children: [
@@ -195,29 +199,31 @@ class _TicketInfo extends StatelessWidget {
                         children: [
                           RichText(
                               text: TextSpan(children: [
-                            const TextSpan(text: '券量 : '),
+                            TextSpan(text: i18n.ticketBalance),
                             const WidgetSpan(child: SizedBox(width: 5)),
                             TextSpan(text: user.ticketint!.toString()),
-                            const TextSpan(text: '張'),
+                            TextSpan(text: i18n.ticketUnit),
                           ])),
                           const SizedBox(height: 5),
                           RichText(
                               text: TextSpan(children: [
-                            const TextSpan(text: '月票 : '),
+                            TextSpan(text: i18n.monthlyPass),
                             const WidgetSpan(child: SizedBox(width: 5)),
                             TextSpan(
-                                text: user.vip! ? '已購買' : '未購買',
-                                style: TextStyle(
-                                    color:
-                                        user.vip! == false ? Colors.red : null))
+                              text: user.vip!
+                                  ? i18n.mpassValid
+                                  : i18n.mpassInvalid,
+                            )
                           ])),
                           const SizedBox(height: 5),
                           RichText(
                               text: TextSpan(children: [
-                            const TextSpan(text: '期限 : '),
+                            TextSpan(text: i18n.vipDate),
                             const WidgetSpan(child: SizedBox(width: 5)),
                             TextSpan(
-                                text: user.vip! ? vipExpDate() : '點左側票券圖樣立刻購買')
+                                text: user.vip!
+                                    ? vipExpDate()
+                                    : i18n.vipExpiredMsg)
                           ])),
                         ],
                       ),
@@ -306,6 +312,8 @@ class _MariInfoState extends State<_MariInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final i18n = S.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       child: LayoutBuilder(
@@ -494,9 +502,8 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 每日回饋 '),
-                                      TextSpan(text: entry.gr2Limit),
-                                      const TextSpan(text: ' 次 每次 25 P '),
+                                      TextSpan(
+                                          text: i18n.gr2Limit(entry.gr2Limit)),
                                     ])),
                               ),
                               Padding(
@@ -512,9 +519,9 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 下一階: '),
+                                      TextSpan(text: i18n.nextLv),
                                       TextSpan(text: entry.gr2Next),
-                                      const TextSpan(text: ' 親密度 '),
+                                      TextSpan(text: i18n.heart),
                                     ])),
                               ),
                               Padding(
@@ -531,8 +538,8 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 已簽到: '),
-                                      TextSpan(text: entry.gr2Day),
+                                      TextSpan(
+                                          text: i18n.continuous(entry.gr2Day)),
                                     ])),
                               ),
                               Padding(
@@ -548,10 +555,7 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 抽獎券: '),
-                                      const TextSpan(text: ' 再 '),
-                                      TextSpan(text: entry.gr2VDay),
-                                      const TextSpan(text: ' 點 '),
+                                      TextSpan(text: i18n.gatcha(entry.gr2VDay))
                                     ])),
                               ),
                               Padding(
@@ -567,7 +571,7 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 換季日: '),
+                                      TextSpan(text: i18n.gr2ResetDate),
                                       TextSpan(text: entry.gr2Date),
                                     ])),
                               ),
@@ -597,7 +601,7 @@ class _MariInfoState extends State<_MariInfo> {
                                       return const Color(0x22f7f7f7);
                                     }),
                                   ),
-                                  child: const Text('養成點數商城'),
+                                  child: Text(i18n.gr2HeartBox),
                                 ),
                               )
                             ],

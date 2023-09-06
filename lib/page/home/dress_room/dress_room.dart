@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/page/account/popups/popup_dialog.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_view_model.dart';
 
@@ -18,7 +18,7 @@ class DressRoom extends StatefulWidget {
   State<DressRoom> createState() => _DressRoomState();
 }
 
-class _DressRoomState extends State<DressRoom> {
+class _DressRoomState extends BaseStatefulState<DressRoom> {
   final viewModel = DressRoomViewModel();
   String? selectedAvater;
   late Future<List<Avatar>> initDressRoom;
@@ -58,7 +58,7 @@ class _DressRoomState extends State<DressRoom> {
   @override
   Widget build(BuildContext context) {
     return PageDialog.ios(
-        title: '更換角色/衣裝',
+        title: i18n.dressRoomTitle,
         onConfirm: selectedAvater != null ? onConfirm : null,
         content: (showButtonBar) {
           return Column(
@@ -163,22 +163,10 @@ class _DressedAvatarState extends State<DressedAvatar> {
   bool get isChangable => widget.id != null;
   late Uint8List imageBytes;
 
-  // void doChangeAvatar() async {
-  //   final data = await widget.onTap.call(widget.id!);
-  //   Fluttertoast.showToast(
-  //       msg: data,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0);
-  // }
   @override
   void initState() {
     super.initState();
     imageBytes = base64Decode(widget.imageSrc);
-    log("widget.amount: ${widget.amount}");
   }
 
   @override

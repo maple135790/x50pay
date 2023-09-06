@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/api.dart';
@@ -18,6 +19,7 @@ import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/common/models/user/user.dart';
+import 'package:x50pay/extensions/locale_ext.dart';
 
 /// 存放 Api 呼叫的地方
 ///
@@ -92,11 +94,11 @@ class Repository extends Api {
   }
 
   /// 取得店家資料API
-  Future<StoreModel> getStores() async {
+  Future<StoreModel> getStores(Locale currentLocale) async {
     late StoreModel store;
 
     await Api.makeRequest(
-      dest: '/store/list/zh-tw',
+      dest: '/store/list/${currentLocale.tagName.toLowerCase()}',
       method: HttpMethod.post,
       withSession: true,
       body: {},

@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/game_cabs_view_model.dart';
 import 'package:x50pay/page/game/game_mixin.dart';
@@ -67,7 +69,7 @@ class _GameCabsLoaded extends StatefulWidget {
   State<_GameCabsLoaded> createState() => _GameCabsLoadedState();
 }
 
-class _GameCabsLoadedState extends State<_GameCabsLoaded> {
+class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   late final machine = widget.games.machine!;
 
@@ -149,7 +151,7 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded> {
                     children: [
                       const Icon(Icons.push_pin,
                           color: Color(0xfffafafa), size: 16),
-                      Text('  目前所在「 ${widget.storeName} 」',
+                      Text('  ${i18n.gameLocation}「 ${widget.storeName} 」',
                           style: const TextStyle(color: Color(0xfffafafa))),
                       const Spacer(),
                       GestureDetector(
@@ -171,6 +173,7 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded> {
                   children: machine
                       .map((e) => _GameCabItem(
                             e,
+                            storeName: widget.storeName,
                             onCoinInserted: reloadSnackBar,
                             onItemPressed: clearSnackBar,
                           ))
@@ -227,23 +230,30 @@ class _GameCabItem extends StatelessWidget with GameMixin {
   final VoidCallback onCoinInserted;
   final VoidCallback onItemPressed;
   final Machine machine;
+  final String storeName;
 
   const _GameCabItem(
     this.machine, {
+    required this.storeName,
     required this.onCoinInserted,
     required this.onItemPressed,
   });
 
   @override
   Widget build(BuildContext context) {
+    final i18n = S.of(context);
     final isWeekend =
         DateTime.now().weekday == 6 || DateTime.now().weekday == 7;
-    final time = machine.mode![0][3] == true ? "離峰時段" : "通常時段";
+    final time = machine.mode![0][3] == true
+        ? i18n.gameDiscountHour
+        : i18n.gameNormalHour;
     final addition = machine.vipb == true
-        ? " [月票]"
-        : isWeekend
-            ? " [假日]"
-            : " [平日]";
+        ? " [${i18n.gameMPass}]"
+        : time == i18n.gameNormalHour
+            ? ''
+            : isWeekend
+                ? " [${i18n.gameWeekends}]"
+                : " [${i18n.gameWeekday}]";
 
     onItemPressed.call();
     return Padding(
@@ -295,27 +305,24 @@ class _GameCabItem extends StatelessWidget with GameMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(machine.label!,
+                      Text("[$storeName] ${machine.label!}",
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,
                               shadows: [
                                 Shadow(color: Colors.black, blurRadius: 18)
                               ])),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const Icon(Icons.schedule,
-                                size: 15, color: Color(0xe6ffffff)),
-                            Text('  $time$addition',
-                                style: const TextStyle(
-                                    color: Color(0xffffffe6),
-                                    fontSize: 13,
-                                    shadows: [
-                                      Shadow(
-                                          color: Colors.black, blurRadius: 15)
-                                    ]))
-                          ]),
+                      Row(children: [
+                        const Icon(Icons.schedule,
+                            size: 15, color: Color(0xe6ffffff)),
+                        Text('  $time$addition',
+                            style: const TextStyle(
+                                color: Color(0xffffffe6),
+                                fontSize: 13,
+                                shadows: [
+                                  Shadow(color: Colors.black, blurRadius: 15)
+                                ]))
+                      ]),
                     ],
                   ),
                 ),

@@ -104,34 +104,26 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       ),
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     bottom: 15,
                     left: 15,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('歡迎回來！',
-                              style: TextStyle(shadows: [
+                          Text(i18n.loginWelcome,
+                              style: const TextStyle(shadows: [
                                 Shadow(color: Colors.black, blurRadius: 25)
                               ], fontSize: 17, color: Color(0xe6ffffff))),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Icon(Icons.schedule,
+                                const Icon(Icons.schedule,
                                     size: 12, color: Colors.white),
-                                Text(' 24Hr 年中無休',
-                                    style: TextStyle(
+                                Text(i18n.loginSub,
+                                    style: const TextStyle(
                                         fontSize: 13, color: Color(0xe6ffffff)))
                               ]),
-                          // Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                          //   Icon(Icons.pin_drop, size: 12, color: Colors.white),
-                          //   Text(' X50 ：萬華區武昌街二段134號1樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
-                          // ]),
-                          // Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                          //   Icon(Icons.restaurant, size: 12, color: Colors.white),
-                          //   Text(' X40 ：士林區大南路49號2樓', style: TextStyle(fontSize: 13, color: Color(0xe6ffffff)))
-                          // ]),
                         ]),
                   ),
                 ],
@@ -151,7 +143,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('電子郵件'),
+                      Text(i18n.loginEmail),
                       const SizedBox(height: 12),
                       TextField(
                           controller: email,
@@ -162,12 +154,12 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       const SizedBox(height: 15),
                       RichText(
                           text: TextSpan(
-                              text: '密碼 ',
+                              text: i18n.loginPassword,
                               style: const TextStyle(color: Color(0xfffafafa)),
                               children: [
                             const TextSpan(text: '( '),
                             TextSpan(
-                                text: '忘記密碼嗎 ? ',
+                                text: i18n.loginForgotPassword,
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     // context.pushNamed(
@@ -197,7 +189,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                           TextButton(
                             onPressed: doLogin,
                             style: Themes.pale(),
-                            child: const Text('登入'),
+                            child: Text(i18n.loginLogin),
                           ),
                           const SizedBox(width: 5),
                           Material(
@@ -211,7 +203,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                   );
                                 },
                                 style: Themes.severe(isV4: true),
-                                child: const Text('註冊')),
+                                child: Text(i18n.loginSignUp)),
                           ),
                         ],
                       ),
@@ -242,8 +234,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                   borderRadius: BorderRadius.circular(4), color: Colors.white),
               padding:
                   const EdgeInsets.symmetric(vertical: 4.5, horizontal: 7.5),
-              child:
-                  const Text('錯誤', style: TextStyle(color: Color(0xffcf1322)))),
+              child: Text(i18n.loginError,
+                  style: const TextStyle(color: Color(0xffcf1322)))),
           const SizedBox(width: 15),
           Text(errorMsg!),
         ],

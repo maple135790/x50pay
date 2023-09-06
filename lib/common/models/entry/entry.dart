@@ -33,7 +33,7 @@ class EntryModel {
   String get gr2HowMuch => gr2[1].toInt().toString();
   String get gr2Limit => gr2[2].toInt().toString();
   String get gr2Next => gr2[3].toString();
-  String get gr2Day => gr2[4].toString();
+  String get gr2Day => gr2[4].toString().replaceAll('天', '');
   String get gr2Date => gr2[5].toString();
   String get gr2GradeBoxContent => gr2[6].toString();
   String get _rawAva => gr2[7].toString().split(',').last;

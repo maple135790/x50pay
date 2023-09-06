@@ -1,0 +1,65 @@
+{
+  "@continuousDay": {
+    "placeholders": {
+      "continuousDay": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gatchaPoints": {
+    "placeholders": {
+      "gatchaPoints": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gr2Limit": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "continuous": " Continuous : {continuousDay} days",
+  "dialogReturn": "Return",
+  "dialogSave": "Save",
+  "dressRoomTitle": "Change avater/clothes",
+  "gameDiscountHour": "Discount",
+  "gameLocation": "Your Location",
+  "gameMPass": "Monthly Pass",
+  "gameNormalHour": "Normal",
+  "gameWeekday": "Weekday",
+  "gameWeekends": "Weekends",
+  "gatcha": " Gatcha : {gatchaPoints} points",
+  "gr2HeartBox": "Hearts Shop",
+  "gr2Limit": " Point back {gr2LimitTimes} times , 25P/t",
+  "gr2ResetDate": " Reset Date : ",
+  "heart": " Hearts",
+  "infoNotify": "Informations",
+  "loginEmail": "Email",
+  "loginError": "Login Error!",
+  "loginForgotPassword": "Forgot?",
+  "loginLogin": "Login",
+  "loginPassword": "Password",
+  "loginSignUp": "Not have account ?",
+  "loginSub": "24Hr Open.",
+  "loginWelcome": "Welcome Back !",
+  "monthlyPass": "Monthly Pass : ",
+  "mpassInvalid": "Buy it Now!",
+  "mpassValid": "Owned",
+  "navCollab": "Collab",
+  "navGame": "Game",
+  "navGift": "Gift",
+  "navSettings": "Settings",
+  "nextLv": " Next Lv : ",
+  "officialNotify": "Offical ADs",
+  "serviceError": "Server error, Please retry again.",
+  "ticketBalance": "Ticket Balance : ",
+  "ticketUnit": " ",
+  "vipDate": "Expire Date : ",
+  "vipExpiredMsg": "Click left \"Ticket\" icon to buy !",
+  "x50PayLanguage": "X50Pay Language"
+}

@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/extensions/locale_ext.dart';
+import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 class ScaffoldWithNavBar extends StatefulWidget {
@@ -18,18 +23,38 @@ class ScaffoldWithNavBar extends StatefulWidget {
   State<ScaffoldWithNavBar> createState() => _ScaffoldWithNavBarState();
 }
 
-class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
+class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
   DateTime lastPopTime = DateTime.fromMillisecondsSinceEpoch(0);
   static const _kMinPopInterval = Duration(milliseconds: 500);
   late int selectedIndex = _menus.indexWhere((element) =>
       GoRouterState.of(context).path?.contains(element.route.path) ?? false);
 
-  final _menus = [
-    (icon: Icons.sports_esports, label: '投幣', route: AppRoutes.gameStore),
-    (icon: Icons.settings, label: '設定', route: AppRoutes.settings),
-    (icon: Icons.home_rounded, label: 'Me', route: AppRoutes.home),
-    (icon: Icons.redeem_rounded, label: '禮物', route: AppRoutes.gift),
-    (icon: Icons.handshake_rounded, label: '合作', route: AppRoutes.collab),
+  late final _menus = [
+    (
+      icon: Icons.sports_esports,
+      label: i18n.navGame,
+      route: AppRoutes.gameStore
+    ),
+    (
+      icon: Icons.settings,
+      label: i18n.navSettings,
+      route: AppRoutes.settings,
+    ),
+    (
+      icon: Icons.home_rounded,
+      label: 'Me',
+      route: AppRoutes.home,
+    ),
+    (
+      icon: Icons.redeem_rounded,
+      label: i18n.navGift,
+      route: AppRoutes.gift,
+    ),
+    (
+      icon: Icons.handshake_rounded,
+      label: i18n.navCollab,
+      route: AppRoutes.collab
+    ),
   ];
 
   Future<bool?> confirmPopup() {
@@ -138,6 +163,7 @@ class _LoadedAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _LoadedAppBarState extends State<_LoadedAppBar> {
+  late final currentLocale = context.read<LanguageViewModel>().currentLocale;
   String get currentLocation => GoRouterState.of(context).matchedLocation;
 
   double get functionalHeaderHeight =>
@@ -146,6 +172,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
   Widget buildDebugStatus() {
     String serviceStatus =
         GlobalSingleton.instance.isServiceOnline ? 'ONLINE' : 'OFFLINE';
+    Color statusColor = serviceStatus == 'ONLINE' ? Colors.green : Colors.grey;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -158,19 +185,58 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
                 color: Colors.white.withOpacity(0.5),
                 fontWeight: FontWeight.bold,
               )),
-          Text('Service $serviceStatus',
-              style: TextStyle(
-                color: (serviceStatus == 'ONLINE' ? Colors.green : Colors.grey)
-                    .withOpacity(0.5),
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              )),
+          Row(
+            children: [
+              Icon(
+                Icons.circle,
+                size: 8,
+                color: statusColor.withOpacity(0.5),
+              ),
+              const SizedBox(width: 2.5),
+              Text(
+                'Service $serviceStatus',
+                style: TextStyle(
+                  color: statusColor.withOpacity(0.5),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );
   }
 
+  void onLanguagePressed() {
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(builder: (context, setState) {
+        return AlertDialog(
+          title: Text(S.of(context).x50PayLanguage),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(
+              S.delegate.supportedLocales.length,
+              (index) => RadioListTile<Locale>(
+                value: S.delegate.supportedLocales[index],
+                title: Text(S.delegate.supportedLocales[index].displayText),
+                groupValue: currentLocale,
+                onChanged: (value) {
+                  context.read<LanguageViewModel>().setUserPrefLocale(value!);
+                },
+              ),
+              growable: false,
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
   Widget buildFixedHeader(BuildContext context) {
+    final currentLocale = context.read<LanguageViewModel>().currentLocale;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -182,11 +248,39 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
                   bottom: BorderSide(color: Themes.borderColor, width: 1))),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Center(
-              child: CircleAvatar(
-                  backgroundImage: R.image.header_icon_rsz(),
-                  backgroundColor: Colors.black,
-                  radius: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+                Center(
+                  child: CircleAvatar(
+                      backgroundImage: R.image.header_icon_rsz(),
+                      backgroundColor: Colors.black,
+                      radius: 14),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: onLanguagePressed,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 6.75,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xff2a2a2a),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(currentLocale.displayText)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

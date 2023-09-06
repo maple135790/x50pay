@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' hide log;
 import 'dart:ui' as ui;
 
@@ -77,8 +76,7 @@ class _ProgressBarState extends State<ProgressBar>
     heartPath = parseSvgPathData(svgPath);
     defaultHeartIcon =
         (iconPath: heartPath, iconSize: heartPath.getBounds().size);
-    log('icon width: ${defaultHeartIcon.iconSize.width}',
-        name: 'ProgressBar._loadImage');
+
     setState(() {});
   }
 

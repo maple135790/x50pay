@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
 
 class PageDialog extends StatefulWidget {
@@ -21,7 +22,7 @@ class PageDialog extends StatefulWidget {
   State<PageDialog> createState() => _PageDialogState();
 }
 
-class _PageDialogState extends State<PageDialog> {
+class _PageDialogState extends BaseStatefulState<PageDialog> {
   static const _kMaxBottomSheetHeight = 80.0;
   ValueNotifier<Offset> offsetNotifier =
       ValueNotifier(const Offset(0, _kMaxBottomSheetHeight));
@@ -92,8 +93,9 @@ class _PageDialogState extends State<PageDialog> {
                               Navigator.of(context).pop();
                             },
                             style: buttonStyle,
-                            child: const Text('返回',
-                                style: TextStyle(color: Color(0xff1e1e1e)))),
+                            child: Text(i18n.dialogReturn,
+                                style:
+                                    const TextStyle(color: Color(0xff1e1e1e)))),
                       ),
                       const SizedBox(width: 15),
                       Expanded(
@@ -101,8 +103,9 @@ class _PageDialogState extends State<PageDialog> {
                             ? TextButton(
                                 style: buttonStyle,
                                 onPressed: widget.onConfirm,
-                                child: const Text('保存',
-                                    style: TextStyle(color: Color(0xff1e1e1e))),
+                                child: Text(i18n.dialogSave,
+                                    style: const TextStyle(
+                                        color: Color(0xff1e1e1e))),
                               )
                             : widget.customConfirmButton!,
                       ),
