@@ -4,16 +4,16 @@ import 'package:x50pay/common/models/common.dart';
 part 'free_p.g.dart';
 
 @JsonSerializable()
-class FreePModel {
+class FreePointModel {
   final int code;
   final String message;
   @JsonKey(name: 'log')
   final List<FreePLog> logs;
 
-  const FreePModel(
+  const FreePointModel(
       {required this.code, required this.message, required this.logs});
 
-  factory FreePModel.fromJson(Map<String, dynamic> json) =>
+  factory FreePointModel.fromJson(Map<String, dynamic> json) =>
       _$FreePModelFromJson(json);
   Map<String, dynamic> toJson() => _$FreePModelToJson(this);
 }

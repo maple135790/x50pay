@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/page/account/account.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
@@ -43,19 +42,18 @@ class _PaymentPrefDialogState extends State<PaymentPrefDialog> {
           onConfirm: () {
             confirmQuickPay(viewModel);
           },
-          content: (showButtonBar) => FutureBuilder<bool>(
+          content: (showButtonBar) => FutureBuilder(
                 future: viewModel.getPaymentSettings(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return const SizedBox();
                   }
-                  if (snapshot.data != true) {
-                    EasyLoading.dismiss();
+                  if (snapshot.hasError) {
                     return const Center(child: Text('failed'));
                   } else {
                     showButtonBar(true);
 
-                    final model = viewModel.paymentSettingModel!;
+                    final model = snapshot.data!;
                     isNfcAutoPayEnabled = model.nfcAuto;
                     isQuiCPayEnabled = model.nfcQuic;
                     isUseTicketEnabled = model.nfcTicket;

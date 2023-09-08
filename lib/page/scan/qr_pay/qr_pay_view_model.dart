@@ -180,9 +180,8 @@ class QRPayViewModel extends BaseViewModel {
 
   Future<PaymentSettingsModel> _getPaymentSettings() async {
     final accountViewModel = AccountViewModel();
-    final isGotSettings = await accountViewModel.getPaymentSettings();
-    if (!isGotSettings) throw Exception('getPaymentSettings failed');
-    currentPaymentSettings = accountViewModel.paymentSettingModel!;
+    final settings = await accountViewModel.getPaymentSettings();
+    currentPaymentSettings = settings;
     return currentPaymentSettings;
   }
 
@@ -213,9 +212,8 @@ class QRPayViewModel extends BaseViewModel {
     // 0mu 做 QRCode 的時候打錯了，所以要做轉換
     if (this.cid == '703765460') cid = '70376560';
     final accountViewModel = AccountViewModel();
-    final isGotSettings = await accountViewModel.getPaymentSettings();
-    if (!isGotSettings) throw Exception('getPaymentSettings failed');
-    if (accountViewModel.paymentSettingModel!.nfcTicket) {
+    final settings = await accountViewModel.getPaymentSettings();
+    if (settings.nfcTicket) {
       _doInsert('/api/v1/tic/$mid/$cid/0');
     } else {
       _doInsert('/api/v1/pay/$mid/$cid/0');

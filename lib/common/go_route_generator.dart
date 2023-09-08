@@ -171,7 +171,7 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
                       create: (context) => AccountViewModel(),
-                      builder: (context, child) => const FreePRecords(),
+                      builder: (context, child) => const FreePointRecords(),
                     ),
                   );
                 }),

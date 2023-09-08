@@ -43,14 +43,15 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
             if (snapshot.connectionState != ConnectionState.done) {
               return const SizedBox();
             }
-            if (snapshot.data == null) {
+            if (snapshot.hasError) {
               return const Center(child: Text('failed'));
             } else {
               showButtonBar(true);
 
               gotModel = true;
+              final model = snapshot.data!;
               return _PadPrefLoaded(
-                model: viewModel.padSettingsModel!,
+                model: model,
                 getValues: (value) {
                   modalValue = value;
                 },

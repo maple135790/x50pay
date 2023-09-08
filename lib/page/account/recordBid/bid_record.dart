@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/r.g.dart';
+import 'package:x50pay/page/account/record_mixin.dart';
 
 class BidRecords extends StatefulWidget {
   /// 儲值紀錄頁面
@@ -14,88 +13,31 @@ class BidRecords extends StatefulWidget {
   State<BidRecords> createState() => _BidRecordsState();
 }
 
-class _BidRecordsState extends BaseStatefulState<BidRecords> {
-  late AccountViewModel viewModel;
+class _BidRecordsState extends BaseStatefulState<BidRecords>
+    with RecordPageMixin<BidLogModel, BidRecords> {
+  @override
+  String pageTitle() => '近兩個月的儲值紀錄如下';
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<AccountViewModel>(
-      builder: (context, vm, child) {
-        viewModel = vm;
+  Future<BidLogModel> getRecord() =>
+      context.read<AccountViewModel>().getBidLog();
 
-        return Material(
-          child: FutureBuilder(
-            future: viewModel.getBidLog(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const SizedBox();
-              }
-              if (snapshot.data == false) {
-                return Center(child: Text(serviceErrorText));
-              }
-              if (viewModel.bidModel!.code != 200) {
-                return Center(child: Text(serviceErrorText));
-              }
-              return bidRecordLoaded(viewModel.bidModel!);
-            },
-          ),
-        );
-      },
-    );
-  }
+  @override
+  List<DataColumn> buildColumns() =>
+      ['時間', '儲值金額'].map((e) => DataColumn(label: Text(e))).toList();
 
-  Widget bidRecordLoaded(BidLogModel model) {
-    bool hasData = model.logs.isNotEmpty;
-
-    List<DataRow> buildRows() {
-      List<DataRow> rows = [];
-      for (BidLog log in model.logs) {
-        rows.add(DataRow(cells: [
-          DataCell(Text(log.time!)),
-          DataCell(Text(log.point!.toInt().toString())),
-        ]));
-      }
-      return rows;
+  @override
+  List<DataRow> buildRows(BidLogModel model) {
+    List<DataRow> rows = [];
+    for (BidLog log in model.logs) {
+      rows.add(DataRow(cells: [
+        DataCell(Text(log.time!)),
+        DataCell(Text(log.point!.toInt().toString())),
+      ]));
     }
-
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  border: Border.all(color: Themes.borderColor, width: 1)),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                      foregroundImage: R.image.logo_150_jpg(), radius: 29),
-                  const SizedBox(width: 16.8),
-                  const Text('近兩個月的儲值紀錄如下', style: TextStyle(fontSize: 18))
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            hasData
-                ? DataTable(
-                    border: TableBorder.all(color: Themes.borderColor),
-                    dataRowMaxHeight: 60,
-                    horizontalMargin: 12,
-                    columnSpacing: 25,
-                    columns: ['時間', '儲值金額']
-                        .map((e) => DataColumn(label: Text(e)))
-                        .toList(),
-                    rows: buildRows(),
-                  )
-                : const Center(child: Text('無資料')),
-            const SizedBox(height: 12),
-          ],
-        ),
-      ),
-    );
+    return rows;
   }
+
+  @override
+  bool hasData(model) => model.logs.isNotEmpty;
 }

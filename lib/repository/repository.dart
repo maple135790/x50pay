@@ -340,8 +340,8 @@ class Repository extends Api {
   /// 取得P點付費明細API
   ///
   /// 回傳付費明細 [PayLogModel]
-  Future<FreePModel> getFreePLog() async {
-    late FreePModel freePModel;
+  Future<FreePointModel> getFreePLog() async {
+    late FreePointModel freePModel;
 
     await Api.makeRequest(
       dest: '/log/FreeP',
@@ -349,7 +349,7 @@ class Repository extends Api {
       withSession: true,
       body: {},
       onSuccess: (json) {
-        freePModel = FreePModel.fromJson(json);
+        freePModel = FreePointModel.fromJson(json);
       },
     );
     return freePModel;

@@ -46,12 +46,12 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const SizedBox();
               }
-              if (snapshot.data != true) {
+              if (snapshot.hasError) {
                 return const Center(child: Text('failed'));
               }
               showButtonBar(true);
 
-              final model = vm.paymentSettingModel!;
+              final model = snapshot.data!;
               isQuiCPayEnabled = model.nfcQuic;
               nfcQlock = model.nfcQlock.toString();
 

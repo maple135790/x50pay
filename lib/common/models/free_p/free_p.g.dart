@@ -6,7 +6,7 @@ part of 'free_p.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FreePModel _$FreePModelFromJson(Map<String, dynamic> json) => FreePModel(
+FreePointModel _$FreePModelFromJson(Map<String, dynamic> json) => FreePointModel(
       code: json['code'] as int,
       message: json['message'] as String,
       logs: (json['log'] as List<dynamic>)
@@ -14,7 +14,7 @@ FreePModel _$FreePModelFromJson(Map<String, dynamic> json) => FreePModel(
           .toList(),
     );
 
-Map<String, dynamic> _$FreePModelToJson(FreePModel instance) =>
+Map<String, dynamic> _$FreePModelToJson(FreePointModel instance) =>
     <String, dynamic>{
       'code': instance.code,
       'message': instance.message,
