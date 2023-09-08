@@ -50,5 +50,5 @@ class AppRoutes {
       (routeName: 'questCampaign', path: 'questCampaign/:couid');
   static const qrPay = (routeName: 'qrPay', path: '/qrPay/:caboid/:sid');
   static const freePointRecords =
-      (routeName: 'freePointRecords', path: '/freePointRecords');
+      (routeName: 'freePointRecords', path: 'freePointRecords');
 }

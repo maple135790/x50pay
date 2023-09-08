@@ -167,6 +167,14 @@ RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
                     ),
                   );
                 }),
+                _routeTransition(AppRoutes.freePointRecords, (_, __) {
+                  return CupertinoPage(
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const FreePRecords(),
+                    ),
+                  );
+                }),
                 _routeTransition(AppRoutes.ticketUsedRecords, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(

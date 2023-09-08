@@ -402,13 +402,12 @@ class _AccountState extends BaseStatefulState<Account> {
                   color: _SettingTileColor.yellow,
                   onTap: onPlayRecordPressed,
                 ),
-                const _SettingTile(
+                _SettingTile(
                   iconData: Icons.list_alt_rounded,
                   title: '回饋明細',
                   subtitle: '查看回饋點數明細。',
                   color: _SettingTileColor.yellow,
-                  // TODO(kenneth): 等拿到 freeP api 內容後再開放
-                  onTap: null,
+                  onTap: onFreePointRecordPressed,
                 ),
                 _SettingTile(
                   iconData: Icons.confirmation_num,

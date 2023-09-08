@@ -8,6 +8,7 @@ import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
+import 'package:x50pay/common/models/free_p/free_p.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
@@ -334,6 +335,24 @@ class Repository extends Api {
       },
     );
     return playRecordModel;
+  }
+
+  /// 取得P點付費明細API
+  ///
+  /// 回傳付費明細 [PayLogModel]
+  Future<FreePModel> getFreePLog() async {
+    late FreePModel freePModel;
+
+    await Api.makeRequest(
+      dest: '/log/FreeP',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+      onSuccess: (json) {
+        freePModel = FreePModel.fromJson(json);
+      },
+    );
+    return freePModel;
   }
 
   /// 取得扣券明細API

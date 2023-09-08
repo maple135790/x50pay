@@ -5,6 +5,7 @@ export 'account/popups/pad_pref.dart';
 export 'account/popups/quiC_pay_pref.dart';
 export 'account/popups/quick_pay.dart';
 export 'account/recordBid/bid_record.dart';
+export 'account/recordFreeP/free_point_record.dart';
 export 'account/recordPlay/play_record.dart';
 export 'account/recordTicket/ticket_record.dart';
 export 'account/recordUsedTicket/ticket_used_record.dart';

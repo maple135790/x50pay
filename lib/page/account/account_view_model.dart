@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
+import 'package:x50pay/common/models/free_p/free_p.dart';
 import 'package:x50pay/common/models/padSettings/pad_settings.dart';
 import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
@@ -379,6 +380,34 @@ class AccountViewModel extends BaseViewModel {
     }
   }
 
+  Future<FreePModel> getFreePRecord({
+    int debugFlag = 200,
+  }) async {
+    await EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 200));
+    late FreePModel freePModel;
+    try {
+      if (!kDebugMode || isForceFetch) {
+        freePModel = await repo.getFreePLog();
+      } else {
+        if (debugFlag != 200) {
+          freePModel =
+              FreePModel.fromJson(jsonDecode(testPlayRecord(code: 700)));
+        } else {
+          freePModel = FreePModel.fromJson(jsonDecode(testPlayRecord()));
+        }
+      }
+
+      return freePModel;
+    } catch (e, stacktrace) {
+      log('', name: 'getPlayRecord', error: e, stackTrace: stacktrace);
+      await EasyLoading.dismiss();
+      rethrow;
+    } finally {
+      await EasyLoading.dismiss();
+    }
+  }
+
   Future<bool> getTicUsedLog({
     int debugFlag = 200,
   }) async {
@@ -399,7 +428,7 @@ class AccountViewModel extends BaseViewModel {
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (e) {
+    } catch (e) {
       log('', name: 'getTicUsedLog', error: e);
       await EasyLoading.dismiss();
       return false;
