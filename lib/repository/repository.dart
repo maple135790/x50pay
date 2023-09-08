@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/api.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
@@ -40,11 +39,6 @@ class Repository extends Api {
       method: HttpMethod.post,
       onSuccess: (json) {
         res = BasicResponse.fromJson(json);
-      },
-      responseHeader: (header) async {
-        final pref = await SharedPreferences.getInstance();
-        final session = header['set-cookie']?.split(';')[0].split('=').last;
-        await pref.setString('session', session ?? 'null');
       },
     );
     return res;
@@ -406,15 +400,17 @@ class Repository extends Api {
 
   /// 投幣API
   ///
-  /// 需要傳入原始URL [url]，使用於 QRCode 掃描後 (ScanPay) 的投幣
+  /// 需要傳入原始URL [url]，使用於 QRCode 掃描後 (QRPay) 的投幣
   Future<BasicResponse> doInsertRawUrl(String url) async {
     late BasicResponse response;
 
     await Api.makeRequest(
-      dest: url,
+      dest: '',
+      customDest: url,
       method: HttpMethod.post,
       withSession: true,
       body: {},
+      verbose: true,
       onSuccess: (json) {
         response = BasicResponse.fromJson(json);
       },
@@ -763,7 +759,29 @@ class Repository extends Api {
     return response.body;
   }
 
-  Future<http.Response> getScanPayDocument(String url) async {
+  Future<http.Response> getQRPayEntryDocument(String url) async {
+    final response = await Api.makeRequestNoFR(
+      method: HttpMethod.get,
+      customDest: url,
+    );
+
+    // final response = await Api.makeRequest(
+    //   dest: '',
+    //   customDest: url,
+    //   method: HttpMethod.get,
+    //   withSession: true,
+    //   verbose: true,
+    //   customHeaders: {
+    //     "User-Agent":
+    //         "Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36"
+    //   },
+    //   body: {},
+    // );
+    return response;
+    // return const Utf8Decoder().convert(response.bodyBytes);
+  }
+
+  Future<String> getQRPayDocument(String url) async {
     final response = await Api.makeRequest(
       dest: '',
       customDest: url,
@@ -771,16 +789,20 @@ class Repository extends Api {
       withSession: true,
       body: {},
     );
-    return response;
-    // return const Utf8Decoder().convert(response.bodyBytes);
+    return const Utf8Decoder().convert(response.bodyBytes);
   }
 
-  Future<String> getNFCPayDocument(String url) async {
+  Future<String> getQRPayPrePayDocument(
+      String payUrl, String refererUrl) async {
     final response = await Api.makeRequest(
       dest: '',
-      customDest: url,
+      customDest: "https://pay.x50.fun$payUrl",
       method: HttpMethod.get,
       withSession: true,
+      verbose: true,
+      customHeaders: {
+        'Referer': refererUrl,
+      },
       body: {},
     );
     return const Utf8Decoder().convert(response.bodyBytes);

@@ -12,6 +12,19 @@ class Api {
   /// 完整的URL，包含X50Pay domain
   static Uri _fullURL(String dest) => Uri.parse(domainBase + dest);
 
+  static void _checkNewSession(Map<String, String> headers) async {
+    if (headers['set-cookie']?.isEmpty ?? true) return;
+    String newSession = '';
+    final cookies = headers['set-cookie']!.split(';');
+    for (var cookie in cookies) {
+      if (!cookie.contains('session=')) continue;
+      newSession = cookie.split('=').last;
+    }
+    if (newSession.isEmpty) return;
+    final pref = await SharedPreferences.getInstance();
+    pref.setString('session', newSession);
+  }
+
   /// 通用的API請求
   ///
   /// - [dest] 請求的目的地，例如 /user/me
@@ -28,10 +41,11 @@ class Api {
   /// - [onSuccess] 請求成功時的callback函式
   /// - [onSuccessString] 請求成功時的callback函式，回傳的資料為String
   /// - [onError] 請求失敗時的callback函式
-  /// - [responseHeader] 回應的header
+  /// - [onResponseHeader] 回應的header
   static Future<http.Response> makeRequest({
     ContentType contentType = ContentType.json,
     Map<String, String>? session,
+    Map<String, String> customHeaders = const {},
     String? customDest,
     bool verbose = false,
     bool withSession = false,
@@ -41,12 +55,14 @@ class Api {
     Function(Map<String, dynamic>)? onSuccess,
     Function(String)? onSuccessString,
     Function(int statusCode, String body)? onError,
-    Function(Map<String, String>)? responseHeader,
+    Function(Map<String, String> headers)? onResponseHeader,
   }) async {
     http.Response response;
+    final client = http.Client();
     bool isResponseString = onSuccessString != null;
     bool isEmptyBody = body.isEmpty;
     String? session;
+    Uri url = customDest != null ? Uri.parse(customDest) : _fullURL(dest);
 
     const fixHeaders = {
       "Host": "pay.x50.fun",
@@ -54,21 +70,24 @@ class Api {
       "Referer": "https://pay.x50.fun/"
     };
 
-    if (withSession) {
-      final pref = await SharedPreferences.getInstance();
-      session = pref.getString('session');
-    }
-
     /// 建立請求的header
-    Map<String, String> buildHeaders() {
+    Map<String, String> buildHeaders({bool httpGet = false}) {
       Map<String, String> headers = {};
       if (withSession) {
         headers.addAll({
           'Cookie': 'session=$session',
-          if (contentType != ContentType.none) "Content-Type": contentType.value
+          "Content-Type": contentType.value,
         });
       }
-      headers.addAll(fixHeaders);
+      headers
+        ..addAll(fixHeaders)
+        ..addAll(customHeaders);
+
+      if (httpGet) {
+        headers
+          ..remove('Content-Type')
+          ..remove('Origin');
+      }
       return headers;
     }
 
@@ -84,10 +103,29 @@ class Api {
       return body;
     }
 
+    void checkNewSession(Map<String, String> headers) async {
+      if (headers['set-cookie']?.isEmpty ?? true) return;
+      String newSession = '';
+      final cookies = headers['set-cookie']!.split(';');
+      for (var cookie in cookies) {
+        if (!cookie.contains('session=')) continue;
+        newSession = cookie.split('=').last;
+      }
+      if (newSession.isEmpty) return;
+      final pref = await SharedPreferences.getInstance();
+      pref.setString('session', newSession);
+    }
+
+    if (verbose) log('request: $url', name: 'Api');
+    if (withSession) {
+      final pref = await SharedPreferences.getInstance();
+      session = pref.getString('session');
+    }
+
     switch (method) {
       case HttpMethod.post:
-        response = await http.post(
-          customDest != null ? Uri.parse(customDest) : _fullURL(dest),
+        response = await client.post(
+          url,
           body: buildBody(),
           headers: buildHeaders(),
           encoding: Encoding.getByName('utf-8'),
@@ -108,13 +146,14 @@ class Api {
             response.body
           ]);
         }
-        responseHeader?.call(response.headers);
+        checkNewSession(response.headers);
+        onResponseHeader?.call(response.headers);
         break;
 
       case HttpMethod.get:
-        response = await http.get(
-          customDest != null ? Uri.parse(customDest) : _fullURL(dest),
-          headers: withSession ? {'Cookie': 'session=$session'} : null,
+        response = await client.get(
+          url,
+          headers: buildHeaders(httpGet: true),
         );
         if (response.statusCode == 200) {
           isResponseString
@@ -129,20 +168,54 @@ class Api {
             response.body
           ]);
         }
-        responseHeader?.call(response.headers);
+        checkNewSession(response.headers);
+        onResponseHeader?.call(response.headers);
         break;
     }
     if (verbose && kDebugMode) {
-      log('request:', name: 'Api');
-      log("${response.request}", name: 'Api');
-      log('response:', name: 'Api');
-      log(response.body, name: 'Api');
+      log('request:', name: 'Api request');
+      log("headers: ${response.request?.headers.toString()}",
+          name: 'Api request');
+      log("${response.request}", name: 'Api request');
+      log('response: ${response.statusCode}', name: 'Api response');
+      log(response.headers.toString(), name: 'Api response');
+      log(response.body, name: 'Api response');
     }
+    return response;
+  }
+
+  static Future<http.Response> makeRequestNoFR({
+    required HttpMethod method,
+    required String customDest,
+    bool withSession = true,
+  }) async {
+    String? session;
+    if (withSession) {
+      final pref = await SharedPreferences.getInstance();
+      session = pref.getString('session');
+    }
+
+    final url = Uri.parse(customDest);
+    final client = http.Client();
+    final r = http.Request(method.name, url)
+      ..followRedirects = false
+      ..headers.addAll({
+        'Host': 'pay.x50.fun',
+        'Origin': 'https://pay.x50.fun',
+        'Referer': 'https://pay.x50.fun/',
+        if (withSession) 'Cookie': 'session=$session',
+      });
+    final a = await client.send(r);
+    var response = await http.Response.fromStream(a);
+    _checkNewSession(response.headers);
     return response;
   }
 }
 
-enum HttpMethod { post, get }
+enum HttpMethod {
+  post,
+  get;
+}
 
 enum ContentType {
   json('application/json'),

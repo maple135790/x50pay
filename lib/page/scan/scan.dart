@@ -8,12 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
-import 'package:x50pay/page/scan/scan_pay_view_model.dart';
-import 'package:x50pay/r.g.dart';
+import 'package:x50pay/page/scan/qr_pay/qr_pay.dart';
+import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 
 /// 掃描QRCode 頁面
@@ -28,10 +27,10 @@ class ScanQRCode extends StatefulWidget {
 class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
   late AnimationController animationController;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final isShowCameraPreviewNotifier = ValueNotifier(true);
   QRViewController? qrViewController;
   Barcode? result, lastEvent;
   bool isBusy = false;
-  final ValueNotifier<bool> isShowCameraPreviewNotifier = ValueNotifier(true);
 
   void onRechargePressed() async {
     qrViewController?.pauseCamera();
@@ -63,6 +62,53 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  void handleQRPay(String url, QRViewController controller) async {
+    EasyLoading.show();
+    final args = url.replaceAll('https://pay.x50.fun/mid/', '').split('/');
+
+    final viewModel = QRPayViewModel(
+      mid: args[0],
+      cid: args[1],
+      onCabSelect: (qrPayData) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CabSelect.fromQRPay(
+              qrPayData: qrPayData,
+              onCreated: () {
+                EasyLoading.dismiss();
+              },
+              onDestroy: () {
+                qrViewController?.resumeCamera();
+              },
+            );
+          },
+        );
+      },
+    );
+    final redirection = await viewModel.checkThirdPartyPaymentRedirect();
+
+    switch (redirection.type) {
+      case QRPayTPPRedirectType.x50Pay:
+        break;
+      case QRPayTPPRedirectType.none:
+        EasyLoading.dismiss();
+        showQRPayModal(controller, viewModel);
+        break;
+      case QRPayTPPRedirectType.jkoPay:
+        launchUrlString(
+          redirection.url,
+          mode: LaunchMode.externalApplication,
+        );
+        controller.resumeCamera();
+        EasyLoading.dismiss();
+        break;
+      case QRPayTPPRedirectType.linePay:
+      case QRPayTPPRedirectType.unknown:
+        throw ('該 QRPayTPPRedirectType 還沒開放');
+    }
+  }
+
   Widget buildQrView() {
     return QRView(
       key: qrKey,
@@ -73,6 +119,7 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
       ),
       onQRViewCreated: (controller) {
         qrViewController = controller;
+
         controller.scannedDataStream.listen((event) async {
           log("event: ${event.code}\nformat: ${event.format}");
           if (isBusy) {
@@ -81,17 +128,17 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
             isBusy = true;
             final nav = GoRouter.of(context);
             isShowCameraPreviewNotifier.value = false;
-            await controller.pauseCamera();
-            // ScanPay
+
+            // QRPay
             if (event.code!.startsWith('https://pay.x50.fun/mid/')) {
-              String url = event.code!;
-              List<String> args =
-                  url.replaceAll('https://pay.x50.fun/mid/', '').split('/');
-              showScanPayModal(controller, args[0], args[1]);
+              await controller.pauseCamera();
+              setState(() {});
+              handleQRPay(event.code!, controller);
             } else {
               // 平板排隊
               String msg = await Repository().qrDecryt(event.code!);
               if (msg != 'oof') {
+                setState(() {});
                 await EasyLoading.showInfo(msg,
                     duration: const Duration(milliseconds: 1000));
                 await Future.delayed(const Duration(milliseconds: 1300));
@@ -108,10 +155,13 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
     );
   }
 
-  void debugScanPay() {
+  void debugQRPay() {
     qrViewController!.pauseCamera();
-    showScanPayModal(
-        qrViewController!, '632905b31eb45d31f0a1185d', '703765460');
+
+    handleQRPay(
+      'https://pay.x50.fun/mid/5fcdcf800004a524c8fae000/703765460',
+      qrViewController!,
+    );
   }
 
   Widget buildButton() {
@@ -122,11 +172,11 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
     );
   }
 
-  void showScanPayModal(
+  void showQRPayModal(
     QRViewController controller,
-    String mid,
-    String cid,
+    QRPayViewModel viewModel,
   ) {
+    // log('https://pay.x50.fun/api/v1/pay/$mid/$cid/0', name: 'showScanPayModal');
     showModalBottomSheet<bool>(
         isScrollControlled: true,
         isDismissible: false,
@@ -141,8 +191,12 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
               snapSizes: const [0.5, 0.8],
               expand: false,
               builder: (context, controller) {
-                return ScanPayModal(
-                    scrollController: controller, mid: mid, cid: cid);
+                return ChangeNotifierProvider.value(
+                  value: viewModel,
+                  builder: (context, child) => QRPayModal(
+                    scrollController: controller,
+                  ),
+                );
               },
             )).then((_) {
       controller.resumeCamera();
@@ -152,7 +206,7 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: debugScanPay),
+      floatingActionButton: FloatingActionButton(onPressed: debugQRPay),
       body: Column(
         children: [
           ValueListenableBuilder(
@@ -165,193 +219,6 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
           Flexible(
             flex: 1,
             child: Center(child: buildButton()),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class ScanPayModal extends StatefulWidget {
-  final ScrollController scrollController;
-  final String mid;
-  final String cid;
-  const ScanPayModal({
-    super.key,
-    required this.scrollController,
-    required this.mid,
-    required this.cid,
-  });
-
-  @override
-  State<ScanPayModal> createState() => _ScanPayModalState();
-}
-
-class _ScanPayModalState extends BaseStatefulState<ScanPayModal> {
-  late Future<bool> init;
-  late final viewModel = ScanPayViewModel(widget.mid, widget.cid);
-
-  void onX50PayPressed() async {
-    EasyLoading.show();
-
-    final data = await viewModel.getScanPayData();
-    if (!mounted) return;
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        EasyLoading.dismiss();
-        return CabSelect.fromScanPay(scanPayData: data);
-      },
-    );
-  }
-
-  void onLinePayPressed() {
-    launchUrlString(
-      viewModel.linePayUrl,
-      mode: LaunchMode.externalNonBrowserApplication,
-    );
-  }
-
-  void onJKOPayPressed() {
-    launchUrlString(
-      viewModel.jkoPayUrl,
-      mode: LaunchMode.externalNonBrowserApplication,
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    init = viewModel.init();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: widget.scrollController,
-      physics: const ClampingScrollPhysics(),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 220,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                    child: Image(
-                        image: R.image.login_banner_jpg(),
-                        fit: BoxFit.fitWidth)),
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Colors.transparent, Colors.black],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.2, 1]),
-                    ),
-                  ),
-                ),
-                const Positioned(
-                  bottom: 15,
-                  left: 15,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('選擇付款方式',
-                            style: TextStyle(shadows: [
-                              Shadow(color: Colors.black, blurRadius: 25)
-                            ], fontSize: 17, color: Color(0xe6ffffff))),
-                        SizedBox(height: 5),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(Icons.schedule,
-                                  size: 12, color: Colors.white),
-                              Text(' 歡迎使用 X50MGS 多元付款平台',
-                                  style: TextStyle(
-                                      fontSize: 13, color: Color(0xe6ffffff)))
-                            ]),
-                      ]),
-                ),
-              ],
-            ),
-          ),
-          ChangeNotifierProvider.value(
-            value: viewModel,
-            builder: (context, child) => FutureBuilder(
-              future: init,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(
-                      child: Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: CircularProgressIndicator.adaptive(),
-                  ));
-                }
-                if (snapshot.data == false) {
-                  return Center(child: Text(serviceErrorText));
-                }
-                if (!viewModel.hasLogined) {
-                  return const Center(child: Text('登入 Session 過期，請重新登入。'));
-                }
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(12),
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: const Color(0xff3e3e3e))),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextButton(
-                            onPressed: onX50PayPressed,
-                            style: Themes.severe(isV4: true),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.wallet_rounded),
-                                Image(
-                                    image: R.svg.p_solid(width: 21, height: 15),
-                                    color: Colors.white),
-                                const SizedBox(width: 7.5),
-                                const Text('X50Pay'),
-                              ],
-                            ),
-                          ),
-                          const Divider(color: Color(0xff3e3e3e), height: 30),
-                          TextButton(
-                            onPressed: onJKOPayPressed,
-                            style: Themes.pale(),
-                            child: Center(
-                                child: Image(
-                                    image: R.image.jkopay_logo(), height: 28)),
-                          ),
-                          const SizedBox(height: 15),
-                          TextButton(
-                            onPressed: viewModel.isLinePayAvailable
-                                ? onLinePayPressed
-                                : null,
-                            style: Themes.pale(),
-                            child: Center(
-                              child: ColorFiltered(
-                                  colorFilter: const ColorFilter.mode(
-                                      Colors.black54, BlendMode.srcATop),
-                                  child: Image(
-                                      image: R.image.linepay_logo(),
-                                      height: 20)),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
           )
         ],
       ),

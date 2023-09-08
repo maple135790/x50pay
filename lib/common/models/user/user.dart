@@ -12,7 +12,7 @@ class UserModel {
   final double? point;
   final String? name;
   final int? ticketint;
-  final int? fpoint;
+  final double? fpoint;
   final int? givebool;
 
   /// 手機是否驗證

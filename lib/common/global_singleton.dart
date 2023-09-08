@@ -114,8 +114,8 @@ class GlobalSingleton {
         userNotifier.value = UserModel.fromJson(rawUserJson);
         return true;
       }
-    } catch (e) {
-      log('', error: e, name: 'checkUser');
+    } catch (e, stacktrace) {
+      log('', error: e, stackTrace: stacktrace, name: 'checkUser');
       return false;
     }
   }

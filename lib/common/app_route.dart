@@ -48,7 +48,7 @@ class AppRoutes {
   static const scanQRCode = (routeName: 'scanQRCode', path: '/scanQRCode');
   static const questCampaign =
       (routeName: 'questCampaign', path: 'questCampaign/:couid');
-  static const scanPay = (routeName: 'scanPay', path: '/scanPay/:caboid/:sid');
+  static const qrPay = (routeName: 'qrPay', path: '/qrPay/:caboid/:sid');
   static const freePointRecords =
       (routeName: 'freePointRecords', path: '/freePointRecords');
 }

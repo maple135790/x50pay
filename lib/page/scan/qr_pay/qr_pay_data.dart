@@ -1,10 +1,10 @@
-class ScanPayData {
+class QRPayData {
   final String rawGameCabImageUrl;
   final int cabNum;
   final List<List<dynamic>> mode;
   final String cabLabel;
 
-  const ScanPayData({
+  const QRPayData({
     required this.rawGameCabImageUrl,
     required this.cabNum,
     required this.mode,
@@ -12,7 +12,7 @@ class ScanPayData {
   });
   String get gameCabImageUrl => 'https://pay.x50.fun$rawGameCabImageUrl';
 
-  const ScanPayData.empty()
+  const QRPayData.empty()
       : rawGameCabImageUrl = '',
         cabNum = 0,
         mode = const [],

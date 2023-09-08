@@ -16,7 +16,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       name: json['name'] as String?,
       ticketint: json['ticketint'] as int?,
       phoneactive: json['phoneactive'] as bool?,
-      fpoint: json['fpoint'] as int?,
+      fpoint: (json['fpoint'] as num?)?.toDouble(),
       givebool: json['givebool'] as int?,
       vip: json['vip'] as bool?,
       vipdate: json['vipdate'] == null
