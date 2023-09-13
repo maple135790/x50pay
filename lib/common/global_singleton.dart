@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -17,6 +18,10 @@ class GlobalSingleton {
   ///
   /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
   final isServiceOnline = kReleaseMode || true;
+
+  final navigatorKey = GlobalKey<NavigatorState>();
+
+  bool isNfcPayDialogOpen = false;
 
   /// 開發用，模擬扣點
   final _devCostEnabled = false;
@@ -56,21 +61,6 @@ class GlobalSingleton {
   GlobalSingleton._();
 
   static GlobalSingleton get instance => _instance ??= GlobalSingleton._();
-
-  // Future<Locale> getUserPrefLocale() async {
-  //   final pref = await SharedPreferences.getInstance();
-  //   final languageCode = pref.getString('languageCode');
-  //   if (languageCode == null) return _defaultAppLocale;
-
-  //   return Locale.fromSubtags(languageCode: languageCode);
-  // }
-
-  // void setUserPrefLocale(Locale locale) async {
-  //   S.load(locale);
-  //   currentLocale = locale;
-  //   final pref = await SharedPreferences.getInstance();
-  //   pref.setString('languageCode', locale.toString());
-  // }
 
   /// 清除使用者資料
   void clearUser() {

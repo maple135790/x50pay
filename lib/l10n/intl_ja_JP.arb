@@ -1,0 +1,65 @@
+{
+  "@continuousDay": {
+    "placeholders": {
+      "continuousDay": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gatchaPoints": {
+    "placeholders": {
+      "gatchaPoints": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gr2Limit": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "continuous": " ログイン日数 :  {continuousDay} 日",
+  "dialogReturn": "戻る",
+  "dialogSave": "セーフ",
+  "dressRoomTitle": "キャラ変更/着せ替え",
+  "gameDiscountHour": "オフピークタイム",
+  "gameLocation": "ロケーション",
+  "gameMPass": "お得パス",
+  "gameNormalHour": "ピークタイム",
+  "gameWeekday": "平日",
+  "gameWeekends": "休日",
+  "gatcha": " 抽選券 :  {gatchaPoints} 点",
+  "gr2HeartBox": "絆ポイントショップ",
+  "gr2Limit": "還元ポイント 25P / {gr2LimitTimes} ",
+  "gr2ResetDate": " シーズン変わる日 : ",
+  "heart": " 絆ランク",
+  "infoNotify": "最新イベント",
+  "loginEmail": "メールアドレス",
+  "loginError": "ログインエラー",
+  "loginForgotPassword": "パスワードを忘れたお方",
+  "loginLogin": "ログイン",
+  "loginPassword": "パスワード",
+  "loginSignUp": "会員登録",
+  "loginSub": "24時間年中無休",
+  "loginWelcome": "おかえりなさい！",
+  "monthlyPass": "お得パス : ",
+  "mpassInvalid": "未購入",
+  "mpassValid": "購入済み",
+  "navCollab": "コラボ",
+  "navGame": "コインを入れる",
+  "navGift": "プレゼント",
+  "navSettings": "オプション",
+  "nextLv": "次のランク : ",
+  "officialNotify": "公式インフォメーション",
+  "serviceError": "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。",
+  "ticketBalance": "抽選券 : ",
+  "ticketUnit": " ",
+  "vipDate": "有効期限 : ",
+  "vipExpiredMsg": "左側のアイコンをクリックして購入",
+  "x50PayLanguage": "X50Pay 言語"
+}

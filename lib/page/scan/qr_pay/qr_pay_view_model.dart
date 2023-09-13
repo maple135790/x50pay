@@ -8,6 +8,7 @@ import 'package:html/parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
+import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/account/account.dart';
 import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
@@ -15,7 +16,7 @@ import 'package:x50pay/repository/repository.dart';
 
 typedef QRPayTPPRedirect = ({QRPayTPPRedirectType type, String url});
 
-class QRPayViewModel extends BaseViewModel {
+class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   final String mid;
   final String cid;
   final void Function(QRPayData qrPayData) onCabSelect;
@@ -45,7 +46,7 @@ class QRPayViewModel extends BaseViewModel {
     if (_rawEntryDocument.isNotEmpty) return _rawEntryDocument;
 
     if (!kDebugMode || isForceFetch) {
-      final rawResponse = await _repo.getQRPayEntryDocument(_qrPayEntryUrl);
+      final rawResponse = await _repo.getDocument(_qrPayEntryUrl);
       _rawEntryDocument = const Utf8Decoder().convert(rawResponse.bodyBytes);
     } else {
       _rawEntryDocument =
@@ -72,7 +73,7 @@ class QRPayViewModel extends BaseViewModel {
     try {
       log('url: $_qrPayEntryUrl', name: 'QRPayViewModel.init');
       if (!kDebugMode || isForceFetch) {
-        final rawResponse = await _repo.getQRPayEntryDocument(_qrPayEntryUrl);
+        final rawResponse = await _repo.getDocument(_qrPayEntryUrl);
         if (rawResponse.statusCode != 200) {
           if (rawResponse.statusCode == 302) {
             return _decideRedirectType(rawResponse.headers['location']!);
@@ -89,20 +90,7 @@ class QRPayViewModel extends BaseViewModel {
         return (type: QRPayTPPRedirectType.none, url: '');
       }
 
-      if (settings.nfcAuto) {
-        final enabledFastPay = await _checkEnableFastQRPay();
-        if (enabledFastPay) {
-          _handleFastQRPayment();
-        } else {
-          _handlePayment();
-        }
-      } else {
-        var cid = this.cid;
-        if (this.cid == '703765460') cid = '70376560';
-        _x50PayUrl = '/nfcpay/$mid/$cid';
-        final qrPayData = await _getQRPayData();
-        onCabSelect.call(qrPayData);
-      }
+      handleNfcPay(mid: mid, cid: cid, onCabSelect: onCabSelect);
 
       return (type: QRPayTPPRedirectType.x50Pay, url: '');
     } catch (e, stacktrace) {
@@ -192,8 +180,11 @@ class QRPayViewModel extends BaseViewModel {
       final prePayUrl =
           _rawMaybePayDoc.split('location.replace("').last.split('")').first;
       if (prePayUrl.isEmpty) throw Exception('payUrl is empty');
-      final prePaymentDoc =
-          await _repo.getQRPayPrePayDocument(prePayUrl, _qrPayEntryUrl);
+      final prePaymentDoc = await _repo.getDocumentWithDomainPrefix(
+        prePayUrl,
+        _qrPayEntryUrl,
+        descLabel: '取得支付前的頁面',
+      );
       final payUrl =
           prePaymentDoc.split("\$.post('")[1].split("',function").first;
       if (payUrl.isEmpty) throw Exception('payUrl is empty');

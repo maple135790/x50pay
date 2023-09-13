@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -85,17 +86,17 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
     );
   }
 
-  @override
-  void didUpdateWidget(covariant oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.body != widget.body) {
-      final currentLocation = GoRouterState.of(context).location;
-      selectedIndex = _menus.indexWhere((element) {
-        return currentLocation.contains(element.route.path.split('/')[1]);
-      });
-      setState(() {});
-    }
-  }
+  // @override
+  // void didUpdateWidget(covariant oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (oldWidget.body != widget.body) {
+  //     final currentLocation = GoRouterState.of(context).location;
+  //     selectedIndex = _menus.indexWhere((element) {
+  //       return currentLocation.contains(element.route.path.split('/')[1]);
+  //     });
+  //     setState(() {});
+  //   }
+  // }
 
   @override
   initState() {
@@ -208,8 +209,8 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
     );
   }
 
-  void onLanguagePressed() {
-    showDialog(
+  void onLanguagePressed() async {
+    final changedLocale = await showDialog<Locale>(
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setState) {
         return AlertDialog(
@@ -223,7 +224,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
                 title: Text(S.delegate.supportedLocales[index].displayText),
                 groupValue: currentLocale,
                 onChanged: (value) {
-                  context.read<LanguageViewModel>().setUserPrefLocale(value!);
+                  context.pop(value);
                 },
               ),
               growable: false,
@@ -232,6 +233,13 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
         );
       }),
     );
+    if (changedLocale == null) return;
+    if (!mounted) return;
+    EasyLoading.show();
+    Future.delayed(const Duration(milliseconds: 800), () {
+      EasyLoading.dismiss();
+      context.read<LanguageViewModel>().setUserPrefLocale(changedLocale);
+    });
   }
 
   Widget buildFixedHeader(BuildContext context) {

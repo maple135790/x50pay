@@ -7,8 +7,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/go_route_generator.dart';
+import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/language_view_model.dart';
@@ -69,23 +71,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: languageViewModel),
-      ],
-      child: Consumer<LanguageViewModel>(
-        builder: (context, vm, child) => MaterialApp.router(
-          theme: AppThemeData().materialTheme,
-          builder: EasyLoading.init(),
-          routerConfig: goRouteConfig(isLogin),
-          locale: vm.currentLocale,
-          supportedLocales: S.delegate.supportedLocales,
-          localizationsDelegates: const [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
+    return LifecycleManager(
+      callback: AppLifeCycles(),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: languageViewModel),
+        ],
+        child: Consumer<LanguageViewModel>(
+          builder: (context, vm, child) => MaterialApp.router(
+            theme: AppThemeData().materialTheme,
+            builder: EasyLoading.init(),
+            routerConfig: goRouteConfig(isLogin),
+            locale: vm.currentLocale,
+            supportedLocales: S.delegate.supportedLocales,
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+          ),
         ),
       ),
     );

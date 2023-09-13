@@ -778,26 +778,12 @@ class Repository extends Api {
     return response.body;
   }
 
-  Future<http.Response> getQRPayEntryDocument(String url) async {
+  Future<http.Response> getDocument(String fullUrl) async {
     final response = await Api.makeRequestNoFR(
       method: HttpMethod.get,
-      customDest: url,
+      customDest: fullUrl,
     );
-
-    // final response = await Api.makeRequest(
-    //   dest: '',
-    //   customDest: url,
-    //   method: HttpMethod.get,
-    //   withSession: true,
-    //   verbose: true,
-    //   customHeaders: {
-    //     "User-Agent":
-    //         "Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36"
-    //   },
-    //   body: {},
-    // );
     return response;
-    // return const Utf8Decoder().convert(response.bodyBytes);
   }
 
   Future<String> getQRPayDocument(String url) async {
@@ -811,11 +797,14 @@ class Repository extends Api {
     return const Utf8Decoder().convert(response.bodyBytes);
   }
 
-  Future<String> getQRPayPrePayDocument(
-      String payUrl, String refererUrl) async {
+  Future<String> getDocumentWithDomainPrefix(
+    String url,
+    String refererUrl, {
+    required String descLabel,
+  }) async {
     final response = await Api.makeRequest(
       dest: '',
-      customDest: "https://pay.x50.fun$payUrl",
+      customDest: "https://pay.x50.fun$url",
       method: HttpMethod.get,
       withSession: true,
       verbose: true,

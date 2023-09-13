@@ -52,6 +52,7 @@ final debugRoute = AppRoutes.home.path;
 
 /// 路由設定
 RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
+      navigatorKey: GlobalSingleton.instance.navigatorKey,
       initialLocation: kDebugMode && !GlobalSingleton.instance.isServiceOnline
           ? debugRoute
           : isLogin
