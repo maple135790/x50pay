@@ -17,11 +17,13 @@ class GlobalSingleton {
   /// 服務是否連接到X50Pay。
   ///
   /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
-  final isServiceOnline = kReleaseMode || true;
+  final isServiceOnline = kReleaseMode || false;
 
   final navigatorKey = GlobalKey<NavigatorState>();
 
   bool isNfcPayDialogOpen = false;
+
+  bool isLogined = false;
 
   /// 開發用，模擬扣點
   final _devCostEnabled = false;
@@ -64,6 +66,7 @@ class GlobalSingleton {
 
   /// 清除使用者資料
   void clearUser() {
+    isLogined = false;
     userNotifier.value = null;
   }
 

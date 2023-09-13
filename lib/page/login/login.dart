@@ -73,7 +73,15 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
         setState(() {});
       } else if (code == 200) {
         await GlobalSingleton.instance.checkUser(force: true);
-        nav.goNamed(AppRoutes.home.routeName);
+        GlobalSingleton.instance.isLogined = true;
+        EasyLoading.showSuccess('登入成功，歡迎回來',
+            duration: const Duration(milliseconds: 800));
+        Future.delayed(const Duration(milliseconds: 800), () {
+          EasyLoading.dismiss();
+          Future.delayed(const Duration(milliseconds: 400), () {
+            nav.goNamed(AppRoutes.home.routeName);
+          });
+        });
       }
     }
   }

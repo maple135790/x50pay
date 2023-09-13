@@ -34,15 +34,15 @@ void main() async {
 
   final appLocale = await languageViewModel.getUserPrefLocale();
   final packageInfo = await PackageInfo.fromPlatform();
-  final islogin = await _checkLogin();
+  GlobalSingleton.instance.isLogined = await _checkLogin();
   log('isServiceOnline: ${GlobalSingleton.instance.isServiceOnline}',
       name: 'main');
-  log('islogin: $islogin', name: 'main');
+  log('islogin: ${GlobalSingleton.instance.isLogined}', name: 'main');
   configLoadingStyle();
   GlobalSingleton.instance.setAppVersion =
       "${packageInfo.version}+${packageInfo.buildNumber}";
   languageViewModel.currentLocale = appLocale;
-  runApp(MyApp(isLogin: islogin));
+  runApp(const MyApp());
 }
 
 /// [EasyLoading] 的設定
@@ -66,8 +66,7 @@ void configLoadingStyle() {
 }
 
 class MyApp extends StatelessWidget {
-  final bool isLogin;
-  const MyApp({required this.isLogin, super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +80,7 @@ class MyApp extends StatelessWidget {
           builder: (context, vm, child) => MaterialApp.router(
             theme: AppThemeData().materialTheme,
             builder: EasyLoading.init(),
-            routerConfig: goRouteConfig(isLogin),
+            routerConfig: goRouteConfig(),
             locale: vm.currentLocale,
             supportedLocales: S.delegate.supportedLocales,
             localizationsDelegates: const [

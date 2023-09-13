@@ -48,14 +48,14 @@ GoRoute _routeTransition(
 }
 
 /// 開發用，設定初始路由
-final debugRoute = AppRoutes.home.path;
+final debugRoute = AppRoutes.login.path;
 
 /// 路由設定
-RouterConfig<Object> goRouteConfig(bool isLogin) => GoRouter(
+RouterConfig<Object> goRouteConfig() => GoRouter(
       navigatorKey: GlobalSingleton.instance.navigatorKey,
       initialLocation: kDebugMode && !GlobalSingleton.instance.isServiceOnline
           ? debugRoute
-          : isLogin
+          : GlobalSingleton.instance.isLogined
               ? AppRoutes.home.path
               : AppRoutes.login.path,
       debugLogDiagnostics: true,

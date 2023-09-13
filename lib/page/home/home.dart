@@ -30,22 +30,24 @@ class _HomeState extends BaseStatefulState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: viewModel,
-      builder: (context, child) => FutureBuilder<bool>(
-        future: viewModel.initHome(),
-        key: ValueKey(viewModel.entry),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const SizedBox();
-          }
-          if (snapshot.data == false) {
-            showServiceError();
-            return Center(child: Text(serviceErrorText));
-          } else {
-            return const SingleChildScrollView(child: _HomeLoaded());
-          }
-        },
+    return Material(
+      child: ChangeNotifierProvider.value(
+        value: viewModel,
+        builder: (context, child) => FutureBuilder<bool>(
+          future: viewModel.initHome(),
+          key: ValueKey(viewModel.entry),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const SizedBox();
+            }
+            if (snapshot.data == false) {
+              showServiceError();
+              return Center(child: Text(serviceErrorText));
+            } else {
+              return const SingleChildScrollView(child: _HomeLoaded());
+            }
+          },
+        ),
       ),
     );
   }
