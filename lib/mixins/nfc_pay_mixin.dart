@@ -16,6 +16,8 @@ mixin NfcPayMixin {
     required String mid,
     required String cid,
     required Function(QRPayData qrPayData) onCabSelect,
+    required VoidCallback onPaymentDone,
+    required bool isPreferTicket,
     bool? isNfcAutoOn,
   }) async {
     if (cid == '703765460') cid = '70376560';
@@ -25,11 +27,13 @@ mixin NfcPayMixin {
     if (isNfcAutoOn) {
       final isEnableFastNfcPay = await _checkEnableFastNfcPay();
       if (isEnableFastNfcPay) {
-        _handleFastQRPayment();
+        log('FastQRPay enabled', name: 'NfcPayMixin._handleFastQRPayment');
+        _handleFastQRPayment(mid, cid, isPreferTicket);
       } else {
         final rawDoc = await _getNfcPayDocument(url);
         _handlePayment(rawDoc, mid, cid);
       }
+      onPaymentDone.call();
     } else {
       final qrPayData = await _getQRPayData(url);
       onCabSelect.call(qrPayData);
@@ -71,13 +75,17 @@ mixin NfcPayMixin {
     return;
   }
 
-  void _handleFastQRPayment() async {}
+  void _handleFastQRPayment(String mid, String cid, bool isPreferTicket) async {
+    // 0mu 做 QRCode 的時候打錯了，所以要做轉換
+    if (cid == '703765460') cid = '70376560';
+    if (isPreferTicket) {
+      _doInsert('/api/v1/tic/$mid/$cid/0');
+    } else {
+      _doInsert('/api/v1/pay/$mid/$cid/0');
+    }
+  }
 
   Future<bool> _checkEnableFastNfcPay() async {
-    // TODO(kenneth): 實作 FastQRPay 設定流程
-    //
-    // 可在某頁面設定是否啟用，並將設定存入 SharedPreferences，key 為 fastQRPay
-    // 若有啟用，則按下 X50Pay 後，直接呼叫 handleFastQRPayment
     final pref = await SharedPreferences.getInstance();
     return pref.getBool('fastQRPay') ?? false;
   }

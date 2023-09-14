@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
+import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
@@ -103,9 +104,47 @@ class _HeaderState extends State<_Header> {
   String get _title => 'X50 Pay - ${widget.title}';
   late final currentLocale = context.read<LanguageViewModel>().currentLocale;
 
+  Widget buildDebugStatus() {
+    String serviceStatus =
+        GlobalSingleton.instance.isServiceOnline ? 'ONLINE' : 'OFFLINE';
+    Color statusColor = serviceStatus == 'ONLINE' ? Colors.green : Colors.grey;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(GlobalSingleton.instance.appVersion,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withOpacity(0.5),
+                fontWeight: FontWeight.bold,
+              )),
+          Row(
+            children: [
+              Icon(
+                Icons.circle,
+                size: 8,
+                color: statusColor.withOpacity(0.5),
+              ),
+              const SizedBox(width: 2.5),
+              Text(
+                'Service $serviceStatus',
+                style: TextStyle(
+                  color: statusColor.withOpacity(0.5),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget buildFixedHeader() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Stack(
       children: [
         Container(
           height: 50,
@@ -151,6 +190,7 @@ class _HeaderState extends State<_Header> {
             ),
           ),
         ),
+        buildDebugStatus(),
       ],
     );
   }

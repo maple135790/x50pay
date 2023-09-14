@@ -1,12 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:local_auth/error_codes.dart' as auth_error;
+import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences_debugger/shared_preferences_debugger.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/r.g.dart';
@@ -19,6 +24,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends BaseStatefulState<Login> with BasePage {
+  late final bool enabledBiometricsLogin;
   final email = TextEditingController();
   final password = TextEditingController();
   final viewModel = LoginViewModel();
@@ -37,196 +43,237 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   @override
   bool get isDarkHeader => true;
 
-  String? errorMsg;
-
   @override
   BaseViewModel? baseViewModel() => null;
+
   @override
   void initState() {
     super.initState();
     EasyLoading.dismiss();
   }
 
-  void doLogin() async {
+  void doBiometricsLogin() async {
+    final auth = LocalAuthentication();
     FocusManager.instance.primaryFocus?.unfocus();
-    if (email.text.isEmpty || password.text.isEmpty) {
-      errorMsg = '帳密不得為空';
-      setState(() {});
-      return;
-    }
-    final nav = GoRouter.of(context);
-    final isSuccessLogin =
-        await viewModel.login(email: email.text, password: password.text);
-    if (isSuccessLogin) {
-      int code = viewModel.response!.code;
-      if (code == 400) {
-        errorMsg = '帳號或密碼錯誤';
-        setState(() {});
-      } else if (code == 401) {
-        errorMsg = 'Email尚未驗證，請先驗證信箱\n若有問題請聯絡X50粉絲團';
-        setState(() {});
-      } else if (code == 402) {
-        errorMsg = 'nologin';
-        setState(() {});
-      } else if (code != 200) {
-        errorMsg = '未知錯誤';
-        setState(() {});
-      } else if (code == 200) {
-        await GlobalSingleton.instance.checkUser(force: true);
-        GlobalSingleton.instance.isLogined = true;
-        EasyLoading.showSuccess('登入成功，歡迎回來',
-            duration: const Duration(milliseconds: 800));
-        Future.delayed(const Duration(milliseconds: 800), () {
-          EasyLoading.dismiss();
-          Future.delayed(const Duration(milliseconds: 400), () {
-            nav.goNamed(AppRoutes.home.routeName);
-          });
-        });
+
+    try {
+      final bool didAuthenticate = await auth.authenticate(
+        localizedReason: '使用生物辨識快速登入',
+      );
+      if (!didAuthenticate) return;
+      viewModel.biometricsLogin(
+        onLoginSuccess: () {
+          context.goNamed(AppRoutes.home.routeName);
+        },
+      );
+    } on PlatformException catch (e) {
+      if (e.code == auth_error.notAvailable) {
+        EasyLoading.showError('此裝置不支援生物辨識登入');
+      } else if (e.code == auth_error.notEnrolled) {
+        EasyLoading.showError('此裝置尚未設定生物辨識登入');
+      } else {
+        log('', error: e, name: 'doBiometricsLogin');
       }
     }
   }
 
-  @override
-  Widget body() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Column(
-          children: [
-            SizedBox(
-              height: constraints.maxWidth > 480 ? 300 : 220,
-              width: constraints.maxWidth,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                      child: Image(
-                          image: R.image.login_banner_jpg(),
-                          fit: BoxFit.fitWidth)),
-                  Positioned.fill(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Colors.transparent, Colors.black],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            stops: [0.2, 1]),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 15,
-                    left: 15,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(i18n.loginWelcome,
-                              style: const TextStyle(shadows: [
-                                Shadow(color: Colors.black, blurRadius: 25)
-                              ], fontSize: 17, color: Color(0xe6ffffff))),
-                          const SizedBox(height: 5),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(Icons.schedule,
-                                    size: 12, color: Colors.white),
-                                Text(i18n.loginSub,
-                                    style: const TextStyle(
-                                        fontSize: 13, color: Color(0xe6ffffff)))
-                              ]),
-                        ]),
-                  ),
-                ],
-              ),
-            ),
-            errorNotice(),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    border:
-                        Border.all(color: const Color(0xff3e3e3e), width: 1),
-                    borderRadius: BorderRadius.circular(5)),
-                child: AutofillGroup(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(i18n.loginEmail),
-                      const SizedBox(height: 12),
-                      TextField(
-                          controller: email,
-                          autofillHints: const [AutofillHints.username],
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.person))),
-                      const SizedBox(height: 15),
-                      RichText(
-                          text: TextSpan(
-                              text: i18n.loginPassword,
-                              style: const TextStyle(color: Color(0xfffafafa)),
-                              children: [
-                            const TextSpan(text: '( '),
-                            TextSpan(
-                                text: i18n.loginForgotPassword,
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    // context.pushNamed(
-                                    //     AppRoutes.forgotPassword.routeName);
-                                    launchUrlString(
-                                      'https://pay.x50.fun/iforgot',
-                                      mode: LaunchMode.externalApplication,
-                                    );
-                                  },
-                                style: const TextStyle(
-                                    color: Color(0xfffafafa),
-                                    decoration: TextDecoration.underline)),
-                            const TextSpan(text: ' )')
-                          ])),
-                      const SizedBox(height: 12),
-                      TextField(
-                          controller: password,
-                          obscureText: true,
-                          autofillHints: const [AutofillHints.password],
-                          decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.lock))),
-                      const SizedBox(height: 10),
-                      const Divider(color: Color(0xff3e3e3e)),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextButton(
-                            onPressed: doLogin,
-                            style: Themes.pale(),
-                            child: Text(i18n.loginLogin),
-                          ),
-                          const SizedBox(width: 5),
-                          Material(
-                            type: MaterialType.transparency,
-                            child: OutlinedButton(
-                                onPressed: () async {
-                                  // await signUpDialog(context);
-                                  launchUrlString(
-                                    'https://pay.x50.fun/reg',
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                },
-                                style: Themes.severe(isV4: true),
-                                child: Text(i18n.loginSignUp)),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
+  void doLogin() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (email.text.isEmpty || password.text.isEmpty) {
+      viewModel.errorMsg = '帳密不得為空';
+      return;
+    }
+
+    viewModel.login(
+      email: email.text,
+      password: password.text,
+      onLoginSuccess: () {
+        context.goNamed(AppRoutes.home.routeName);
       },
     );
   }
 
-  Widget errorNotice() {
+  @override
+  Widget body() {
+    return ChangeNotifierProvider.value(
+      value: viewModel,
+      builder: (context, child) => FutureBuilder(
+          future: viewModel.checkEnableBiometricsLogin(),
+          builder: (context, snapshot) {
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: constraints.maxWidth > 480 ? 300 : 220,
+                      width: constraints.maxWidth,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                              child: Image(
+                                  image: R.image.login_banner_jpg(),
+                                  fit: BoxFit.fitWidth)),
+                          Positioned.fill(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [Colors.transparent, Colors.black],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    stops: [0.2, 1]),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 15,
+                            left: 15,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(i18n.loginWelcome,
+                                      style: const TextStyle(
+                                          shadows: [
+                                            Shadow(
+                                                color: Colors.black,
+                                                blurRadius: 25)
+                                          ],
+                                          fontSize: 17,
+                                          color: Color(0xe6ffffff))),
+                                  const SizedBox(height: 5),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Icon(Icons.schedule,
+                                            size: 12, color: Colors.white),
+                                        Text(i18n.loginSub,
+                                            style: const TextStyle(
+                                                fontSize: 13,
+                                                color: Color(0xe6ffffff)))
+                                      ]),
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Consumer<LoginViewModel>(
+                      builder: (context, vm, child) {
+                        return errorNotice(vm.errorMsg);
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            border: Border.all(
+                                color: const Color(0xff3e3e3e), width: 1),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: AutofillGroup(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(i18n.loginEmail),
+                              const SizedBox(height: 12),
+                              TextField(
+                                  controller: email,
+                                  autofillHints: const [AutofillHints.username],
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: const InputDecoration(
+                                      prefixIcon: Icon(Icons.person))),
+                              const SizedBox(height: 15),
+                              RichText(
+                                  text: TextSpan(
+                                      text: i18n.loginPassword,
+                                      style: const TextStyle(
+                                          color: Color(0xfffafafa)),
+                                      children: [
+                                    const TextSpan(text: '( '),
+                                    TextSpan(
+                                        text: i18n.loginForgotPassword,
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            // context.pushNamed(
+                                            //     AppRoutes.forgotPassword.routeName);
+                                            launchUrlString(
+                                              'https://pay.x50.fun/iforgot',
+                                              mode: LaunchMode
+                                                  .externalApplication,
+                                            );
+                                          },
+                                        style: const TextStyle(
+                                            color: Color(0xfffafafa),
+                                            decoration:
+                                                TextDecoration.underline)),
+                                    const TextSpan(text: ' )')
+                                  ])),
+                              const SizedBox(height: 12),
+                              TextField(
+                                  controller: password,
+                                  obscureText: true,
+                                  autofillHints: const [AutofillHints.password],
+                                  decoration: const InputDecoration(
+                                      prefixIcon: Icon(Icons.lock))),
+                              const SizedBox(height: 10),
+                              const Divider(color: Color(0xff3e3e3e)),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  TextButton(
+                                    onPressed: doLogin,
+                                    style: Themes.pale(),
+                                    child: Text(i18n.loginLogin),
+                                  ),
+                                  Consumer<LoginViewModel>(
+                                      builder: (context, vm, child) {
+                                    return TextButton(
+                                      onPressed: vm.enableBiometricsLogin
+                                          ? doBiometricsLogin
+                                          : null,
+                                      style: Themes.pale(),
+                                      child: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text('使用生物辨識登入'),
+                                          SizedBox(width: 15),
+                                          Icon(Icons.fingerprint_rounded)
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                                  const SizedBox(width: 5),
+                                  Material(
+                                    type: MaterialType.transparency,
+                                    child: OutlinedButton(
+                                        onPressed: () async {
+                                          // await signUpDialog(context);
+                                          launchUrlString(
+                                            'https://pay.x50.fun/reg',
+                                            mode:
+                                                LaunchMode.externalApplication,
+                                          );
+                                        },
+                                        style: Themes.severe(isV4: true),
+                                        child: Text(i18n.loginSignUp)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          }),
+    );
+  }
+
+  Widget errorNotice(String? errorMsg) {
     if (errorMsg == null) return const SizedBox();
 
     return Container(
@@ -235,8 +282,6 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
       decoration: const BoxDecoration(color: Color(0xfff5222d)),
       child: Row(
         children: [
-          // const Icon(Icons.priority_high, color: Color(0xffA1414C)),
-          // const SizedBox(width: 14),
           Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4), color: Colors.white),
@@ -245,7 +290,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
               child: Text(i18n.loginError,
                   style: const TextStyle(color: Color(0xffcf1322)))),
           const SizedBox(width: 15),
-          Text(errorMsg!),
+          Text(errorMsg),
         ],
       ),
     );

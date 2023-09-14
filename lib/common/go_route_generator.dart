@@ -48,7 +48,7 @@ GoRoute _routeTransition(
 }
 
 /// 開發用，設定初始路由
-final debugRoute = AppRoutes.login.path;
+final debugRoute = AppRoutes.home.path;
 
 /// 路由設定
 RouterConfig<Object> goRouteConfig() => GoRouter(
@@ -181,6 +181,14 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                     child: ChangeNotifierProvider(
                       create: (context) => AccountViewModel(),
                       builder: (context, child) => const TicketUsedRecords(),
+                    ),
+                  );
+                }),
+                _routeTransition(AppRoutes.x50PayAppSetting, (_, __) {
+                  return CupertinoPage(
+                    child: ChangeNotifierProvider(
+                      create: (context) => AccountViewModel(),
+                      builder: (context, child) => const AppSettings(),
                     ),
                   );
                 }),

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -21,8 +20,8 @@ import 'package:x50pay/r.g.dart';
 /// 檢查 [SharedPreferences] 中是否有 [session] 的 key，
 /// 若有效則回傳 true，否則回傳 false
 Future<bool> _checkLogin() async {
-  final pref = await SharedPreferences.getInstance();
-  final sess = pref.getString('session');
+  final sess =
+      await GlobalSingleton.instance.secureStorage.read(key: 'session');
   if (sess == null) return false;
   return await GlobalSingleton.instance.checkUser();
 }
@@ -31,14 +30,11 @@ final languageViewModel = LanguageViewModel();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  configLoadingStyle();
 
   final appLocale = await languageViewModel.getUserPrefLocale();
   final packageInfo = await PackageInfo.fromPlatform();
   GlobalSingleton.instance.isLogined = await _checkLogin();
-  log('isServiceOnline: ${GlobalSingleton.instance.isServiceOnline}',
-      name: 'main');
-  log('islogin: ${GlobalSingleton.instance.isLogined}', name: 'main');
-  configLoadingStyle();
   GlobalSingleton.instance.setAppVersion =
       "${packageInfo.version}+${packageInfo.buildNumber}";
   languageViewModel.currentLocale = appLocale;

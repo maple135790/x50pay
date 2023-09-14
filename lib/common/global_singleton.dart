@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -17,7 +18,7 @@ class GlobalSingleton {
   /// 服務是否連接到X50Pay。
   ///
   /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
-  final isServiceOnline = kReleaseMode || false;
+  final isServiceOnline = kReleaseMode || true;
 
   final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -43,14 +44,19 @@ class GlobalSingleton {
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid, int cabIndex})? recentPlayedCabinetData;
 
-  String _appVersion = '';
-
   /// App 版本，例如 `X50Pay app v1.0.0 + 1`
   String get appVersion => _appVersion;
-
+  String _appVersion = '';
   set setAppVersion(String value) {
     _appVersion = 'X50Pay app v$value';
   }
+
+  FlutterSecureStorage get secureStorage => const FlutterSecureStorage(
+        aOptions: AndroidOptions(
+          encryptedSharedPreferences: true,
+          preferencesKeyPrefix: 'x50pay_',
+        ),
+      );
 
   /// 是否在掃描QRCode頁面的旗標
   ///

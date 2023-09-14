@@ -37,6 +37,8 @@ class AppRoutes {
   static const ticketRecords =
       (routeName: 'ticketRecords', path: 'ticketRecords');
   static const playRecords = (routeName: 'playRecords', path: 'playRecords');
+  static const x50PayAppSetting =
+      (routeName: 'x50PayAppSetting', path: 'x50PayAppSetting');
   static const ticketUsedRecords =
       (routeName: 'ticketUsedRecords', path: 'ticketUsedRecords');
   static const gameStore = (routeName: 'gameStore', path: '/game/store');

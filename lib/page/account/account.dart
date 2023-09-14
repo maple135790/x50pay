@@ -83,40 +83,44 @@ class _AccountState extends BaseStatefulState<Account> {
     context.pushNamed(AppRoutes.quicPayPref.routeName);
   }
 
-  void onPaymentPrefPressed() async {
+  void onPaymentPrefPressed() {
     context.pushNamed(AppRoutes.paymentPref.routeName);
   }
 
-  void onPadPrefPressed() async {
+  void onPadPrefPressed() {
     context.pushNamed(AppRoutes.padPref.routeName);
   }
 
-  void onChangePasswordPressed() async {
+  void onChangePasswordPressed() {
     context.pushNamed(AppRoutes.changePassword.routeName);
   }
 
-  void onChangeEmailPressed() async {
+  void onChangeEmailPressed() {
     context.pushNamed(AppRoutes.changeEmail.routeName);
   }
 
-  void onBidRecordPressed() async {
+  void onBidRecordPressed() {
     context.pushNamed(AppRoutes.bidRecords.routeName);
   }
 
-  void onTicketRecordPressed() async {
+  void onTicketRecordPressed() {
     context.pushNamed(AppRoutes.ticketRecords.routeName);
   }
 
-  void onPlayRecordPressed() async {
+  void onPlayRecordPressed() {
     context.pushNamed(AppRoutes.playRecords.routeName);
   }
 
-  void onFreePointRecordPressed() async {
+  void onFreePointRecordPressed() {
     context.pushNamed(AppRoutes.freePointRecords.routeName);
   }
 
-  void onTicketUseRecordPressed() async {
+  void onTicketUseRecordPressed() {
     context.pushNamed(AppRoutes.ticketUsedRecords.routeName);
+  }
+
+  void onX50PayAppSettingPressed() {
+    context.pushNamed(AppRoutes.x50PayAppSetting.routeName);
   }
 
   void onChangePhonePressed() async {
@@ -157,7 +161,7 @@ class _AccountState extends BaseStatefulState<Account> {
     checkRemoteOpen(shop: RemoteOpenShop.secondShop);
   }
 
-  void onLogoutPressed() async {
+  void onLogoutPressed() {
     showDialog(context: context, builder: (context) => askLogout());
   }
 
@@ -415,6 +419,15 @@ class _AccountState extends BaseStatefulState<Account> {
                   subtitle: '查詢遊玩券使用明細。',
                   color: _SettingTileColor.yellow,
                   onTap: onTicketUseRecordPressed,
+                ),
+              ]),
+              _AccountBlock(children: [
+                _SettingTile(
+                  iconData: Icons.tune_rounded,
+                  title: 'X50Pay App 設定',
+                  subtitle: '設定',
+                  color: _SettingTileColor.white,
+                  onTap: onX50PayAppSettingPressed,
                 ),
               ]),
               _AccountBlock(children: [

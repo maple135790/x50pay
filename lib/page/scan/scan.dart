@@ -63,12 +63,15 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
   }
 
   void handleQRPay(String url, QRViewController controller) async {
-    EasyLoading.show();
+    EasyLoading.show(status: '檢查');
     final args = url.replaceAll('https://pay.x50.fun/mid/', '').split('/');
 
     final viewModel = QRPayViewModel(
       mid: args[0],
       cid: args[1],
+      onPaymentDone: () {
+        controller.resumeCamera();
+      },
       onCabSelect: (qrPayData) {
         showDialog(
           context: context,
@@ -79,7 +82,7 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
                 EasyLoading.dismiss();
               },
               onDestroy: () {
-                qrViewController?.resumeCamera();
+                controller.resumeCamera();
               },
             );
           },

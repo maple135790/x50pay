@@ -9,6 +9,7 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/mixins/nfc_pad_mixin.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
+import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
@@ -42,6 +43,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     handleNfcPay(
       mid: mid,
       cid: cid,
+      isPreferTicket: (await AccountViewModel().getPaymentSettings()).nfcTicket,
       onCabSelect: (qrPayData) {
         GlobalSingleton.instance.isNfcPayDialogOpen = true;
         showDialog(
@@ -59,6 +61,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
           },
         );
       },
+      onPaymentDone: () {},
     );
   }
 

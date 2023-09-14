@@ -126,9 +126,11 @@ class AccountViewModel extends BaseViewModel {
   }
 
   /// 取得快速付款偏好設定
-  Future<PaymentSettingsModel> getPaymentSettings() async {
+  Future<PaymentSettingsModel> getPaymentSettings({
+    bool enableDelay = true,
+  }) async {
     await EasyLoading.show();
-    await Future.delayed(const Duration(milliseconds: 200));
+    if (enableDelay) await Future.delayed(const Duration(milliseconds: 200));
     late final PaymentSettingsModel paymentSettingModel;
     try {
       if (!kDebugMode || isForceFetch) {

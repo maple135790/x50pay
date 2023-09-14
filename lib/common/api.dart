@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/common/global_singleton.dart';
 
 class Api {
   /// X50Pay API domain
@@ -21,8 +21,8 @@ class Api {
       newSession = cookie.split('=').last;
     }
     if (newSession.isEmpty) return;
-    final pref = await SharedPreferences.getInstance();
-    pref.setString('session', newSession);
+    GlobalSingleton.instance.secureStorage
+        .write(key: 'session', value: newSession);
   }
 
   /// 通用的API請求
@@ -112,14 +112,14 @@ class Api {
         newSession = cookie.split('=').last;
       }
       if (newSession.isEmpty) return;
-      final pref = await SharedPreferences.getInstance();
-      pref.setString('session', newSession);
+      GlobalSingleton.instance.secureStorage
+          .write(key: 'session', value: newSession);
     }
 
     if (verbose) log('request: $url', name: 'Api');
     if (withSession) {
-      final pref = await SharedPreferences.getInstance();
-      session = pref.getString('session');
+      session =
+          await GlobalSingleton.instance.secureStorage.read(key: 'session');
     }
 
     switch (method) {
@@ -191,8 +191,8 @@ class Api {
   }) async {
     String? session;
     if (withSession) {
-      final pref = await SharedPreferences.getInstance();
-      session = pref.getString('session');
+      session =
+          await GlobalSingleton.instance.secureStorage.read(key: 'session');
     }
 
     final url = Uri.parse(customDest);

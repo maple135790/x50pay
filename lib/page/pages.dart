@@ -1,4 +1,5 @@
 export 'account/account.dart';
+export 'account/popups/app_settings.dart';
 export 'account/popups/change_email.dart';
 export 'account/popups/change_password.dart';
 export 'account/popups/pad_pref.dart';

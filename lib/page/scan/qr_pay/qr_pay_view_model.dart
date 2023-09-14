@@ -20,11 +20,13 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   final String mid;
   final String cid;
   final void Function(QRPayData qrPayData) onCabSelect;
+  final VoidCallback onPaymentDone;
 
   QRPayViewModel({
     required this.mid,
     required this.cid,
     required this.onCabSelect,
+    required this.onPaymentDone,
   });
 
   final _repo = Repository();
@@ -72,6 +74,23 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     _qrPayEntryUrl = 'https://pay.x50.fun/mid/$mid/$cid';
     try {
       log('url: $_qrPayEntryUrl', name: 'QRPayViewModel.init');
+
+      final settings = await _getPaymentSettings();
+
+      if (settings.mtpMode == DefaultCabPayment.ask.value) {
+        return (type: QRPayTPPRedirectType.none, url: '');
+      }
+
+      if (settings.mtpMode == DefaultCabPayment.x50pay.value) {
+        handleNfcPay(
+          mid: mid,
+          cid: cid,
+          onCabSelect: onCabSelect,
+          isPreferTicket: settings.nfcTicket,
+          onPaymentDone: onPaymentDone,
+        );
+        return (type: QRPayTPPRedirectType.x50Pay, url: '');
+      }
       if (!kDebugMode || isForceFetch) {
         final rawResponse = await _repo.getDocument(_qrPayEntryUrl);
         if (rawResponse.statusCode != 200) {
@@ -82,17 +101,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
           }
         }
       }
-      final settings = await _getPaymentSettings();
-
-      if (DefaultCabPayment.values
-              .firstWhere((element) => element.value == settings.mtpMode) ==
-          DefaultCabPayment.ask) {
-        return (type: QRPayTPPRedirectType.none, url: '');
-      }
-
-      handleNfcPay(mid: mid, cid: cid, onCabSelect: onCabSelect);
-
-      return (type: QRPayTPPRedirectType.x50Pay, url: '');
+      return (type: QRPayTPPRedirectType.unknown, url: '');
     } catch (e, stacktrace) {
       log('',
           error: e,
@@ -103,7 +112,6 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   }
 
   Future<bool> checkSessionValid() async {
-    await Future.delayed(const Duration(milliseconds: 350));
     try {
       _qrPayEntryUrl = 'https://pay.x50.fun/mid/$mid/$cid';
       final rawDoc = await getRawEntryDocument();
@@ -139,9 +147,10 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     required VoidCallback onPaymentFinished,
     required void Function(QRPayData qrPayData) onCabSelect,
   }) async {
-    EasyLoading.show();
+    EasyLoading.show(status: '處理 X50Pay 支付');
     final enableFastQRPay = await _checkEnableFastQRPay();
     if (enableFastQRPay) {
+      log('FastQRPay enabled', name: 'QRPayViewModel._handleFastQRPayment');
       _handleFastQRPayment();
       onPaymentFinished.call();
       return;
@@ -212,10 +221,6 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   }
 
   Future<bool> _checkEnableFastQRPay() async {
-    // TODO(kenneth): 實作 FastQRPay 設定流程
-    //
-    // 可在某頁面設定是否啟用，並將設定存入 SharedPreferences，key 為 fastQRPay
-    // 若有啟用，則按下 X50Pay 後，直接呼叫 handleFastQRPayment
     final pref = await SharedPreferences.getInstance();
     _enabledFastQRPay = pref.getBool('fastQRPay') ?? false;
     return _enabledFastQRPay;
