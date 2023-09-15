@@ -22,9 +22,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(continuousDay) => " Continuous : ${continuousDay} days";
 
-  static String m1(gatchaPoints) => " Gatcha : ${gatchaPoints} points";
+  static String m1(waitCount) =>
+      "X50Pad queue status : ${waitCount} person waiting";
 
-  static String m2(gr2LimitTimes) =>
+  static String m2(gatchaPoints) => " Gatcha : ${gatchaPoints} points";
+
+  static String m3(gr2LimitTimes) =>
       " Point back ${gr2LimitTimes} times , 25P/t";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -38,11 +41,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "gameLocation": MessageLookupByLibrary.simpleMessage("Your Location"),
         "gameMPass": MessageLookupByLibrary.simpleMessage("Monthly Pass"),
         "gameNormalHour": MessageLookupByLibrary.simpleMessage("Normal"),
+        "gameTicket": MessageLookupByLibrary.simpleMessage("Ticket"),
+        "gameUnlimit": MessageLookupByLibrary.simpleMessage(
+            "This game have reservation at this week"),
+        "gameUnlimitTitle": MessageLookupByLibrary.simpleMessage(
+            "Already reservation datetime"),
+        "gameWait": m1,
         "gameWeekday": MessageLookupByLibrary.simpleMessage("Weekday"),
         "gameWeekends": MessageLookupByLibrary.simpleMessage("Weekends"),
-        "gatcha": m1,
+        "gatcha": m2,
         "gr2HeartBox": MessageLookupByLibrary.simpleMessage("Hearts Shop"),
-        "gr2Limit": m2,
+        "gr2Limit": m3,
         "gr2ResetDate": MessageLookupByLibrary.simpleMessage(" Reset Date : "),
         "heart": MessageLookupByLibrary.simpleMessage(" Hearts"),
         "infoNotify": MessageLookupByLibrary.simpleMessage("Informations"),
@@ -62,6 +71,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "navGame": MessageLookupByLibrary.simpleMessage("Game"),
         "navGift": MessageLookupByLibrary.simpleMessage("Gift"),
         "navSettings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "nbusyCoin": MessageLookupByLibrary.simpleMessage("Coined"),
+        "nbusyNoCoin": MessageLookupByLibrary.simpleMessage("Not Coined"),
+        "nbusyS1": MessageLookupByLibrary.simpleMessage("Idle"),
+        "nbusyS2": MessageLookupByLibrary.simpleMessage("Normal"),
+        "nbusyS3": MessageLookupByLibrary.simpleMessage("Busy"),
         "nextLv": MessageLookupByLibrary.simpleMessage(" Next Lv : "),
         "officialNotify": MessageLookupByLibrary.simpleMessage("Offical ADs"),
         "serviceError": MessageLookupByLibrary.simpleMessage(
@@ -69,6 +83,33 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticketBalance":
             MessageLookupByLibrary.simpleMessage("Ticket Balance : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
+        "userAvatar": MessageLookupByLibrary.simpleMessage("Change Gravator"),
+        "userBidLog": MessageLookupByLibrary.simpleMessage("Top-up history"),
+        "userEmail": MessageLookupByLibrary.simpleMessage("Change user E-mail"),
+        "userFPlayLog":
+            MessageLookupByLibrary.simpleMessage("Cashback history"),
+        "userInAppSetting":
+            MessageLookupByLibrary.simpleMessage("X50Pay App Settings"),
+        "userLogout": MessageLookupByLibrary.simpleMessage("Logout X50Pay"),
+        "userNFC":
+            MessageLookupByLibrary.simpleMessage("Multi Payment Setting"),
+        "userOpenDoor1":
+            MessageLookupByLibrary.simpleMessage("Open \"Ximen 1 Store\" door"),
+        "userOpenDoor2":
+            MessageLookupByLibrary.simpleMessage("Open \"Ximen 2 Store\" door"),
+        "userPad": MessageLookupByLibrary.simpleMessage("Online queue Setting"),
+        "userPassword":
+            MessageLookupByLibrary.simpleMessage("Change user password"),
+        "userPhone":
+            MessageLookupByLibrary.simpleMessage("Change user cellphone"),
+        "userPlayLog":
+            MessageLookupByLibrary.simpleMessage("Used point history"),
+        "userQUIC":
+            MessageLookupByLibrary.simpleMessage("X50QuIC Payment Setting"),
+        "userTicLog":
+            MessageLookupByLibrary.simpleMessage("Unused ticket history"),
+        "userUTicLog":
+            MessageLookupByLibrary.simpleMessage("Usage ticket history"),
         "vipDate": MessageLookupByLibrary.simpleMessage("Expire Date : "),
         "vipExpiredMsg": MessageLookupByLibrary.simpleMessage(
             "Click left \"Ticket\" icon to buy !"),

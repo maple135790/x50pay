@@ -22,11 +22,10 @@ class GameCabs extends StatefulWidget {
   State<GameCabs> createState() => _GameCabsState();
 }
 
-class _GameCabsState extends State<GameCabs> {
+class _GameCabsState extends BaseStatefulState<GameCabs> {
   final viewModel = GameCabsViewModel();
   late List<Machine> machine;
   late Future<GameList?> gameCabsInit;
-  // late List<Machine> machine = widget.games.machine!;
 
   @override
   void initState() {

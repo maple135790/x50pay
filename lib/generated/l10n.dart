@@ -130,6 +130,46 @@ class S {
     );
   }
 
+  /// `遊玩券`
+  String get gameTicket {
+    return Intl.message(
+      '遊玩券',
+      name: 'gameTicket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `該機種當周有無限制台預約`
+  String get gameUnlimit {
+    return Intl.message(
+      '該機種當周有無限制台預約',
+      name: 'gameUnlimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `已預約時段`
+  String get gameUnlimitTitle {
+    return Intl.message(
+      '已預約時段',
+      name: 'gameUnlimitTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `X50Pad 排隊狀況 : {waitCount} 人等待中`
+  String gameWait(Object waitCount) {
+    return Intl.message(
+      'X50Pad 排隊狀況 : $waitCount 人等待中',
+      name: 'gameWait',
+      desc: '',
+      args: [waitCount],
+    );
+  }
+
   /// `平日`
   String get gameWeekday {
     return Intl.message(
@@ -360,6 +400,56 @@ class S {
     );
   }
 
+  /// `已投幣`
+  String get nbusyCoin {
+    return Intl.message(
+      '已投幣',
+      name: 'nbusyCoin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `未投幣`
+  String get nbusyNoCoin {
+    return Intl.message(
+      '未投幣',
+      name: 'nbusyNoCoin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `空閒`
+  String get nbusyS1 {
+    return Intl.message(
+      '空閒',
+      name: 'nbusyS1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `適中`
+  String get nbusyS2 {
+    return Intl.message(
+      '適中',
+      name: 'nbusyS2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `忙碌`
+  String get nbusyS3 {
+    return Intl.message(
+      '忙碌',
+      name: 'nbusyS3',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `下一階 : `
   String get nextLv {
     return Intl.message(
@@ -405,6 +495,166 @@ class S {
     return Intl.message(
       '張',
       name: 'ticketUnit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `修改顯示頭貼`
+  String get userAvatar {
+    return Intl.message(
+      '修改顯示頭貼',
+      name: 'userAvatar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `店鋪儲值紀錄`
+  String get userBidLog {
+    return Intl.message(
+      '店鋪儲值紀錄',
+      name: 'userBidLog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `更改使用者信箱`
+  String get userEmail {
+    return Intl.message(
+      '更改使用者信箱',
+      name: 'userEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `回饋點數紀錄`
+  String get userFPlayLog {
+    return Intl.message(
+      '回饋點數紀錄',
+      name: 'userFPlayLog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `X50Pay App 設定`
+  String get userInAppSetting {
+    return Intl.message(
+      'X50Pay App 設定',
+      name: 'userInAppSetting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `登出 X50Pay`
+  String get userLogout {
+    return Intl.message(
+      '登出 X50Pay',
+      name: 'userLogout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `多元付款設定`
+  String get userNFC {
+    return Intl.message(
+      '多元付款設定',
+      name: 'userNFC',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `西門"一店"開門`
+  String get userOpenDoor1 {
+    return Intl.message(
+      '西門"一店"開門',
+      name: 'userOpenDoor1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `西門"二店"開門`
+  String get userOpenDoor2 {
+    return Intl.message(
+      '西門"二店"開門',
+      name: 'userOpenDoor2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `線上排隊設定`
+  String get userPad {
+    return Intl.message(
+      '線上排隊設定',
+      name: 'userPad',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `更改使用者密碼`
+  String get userPassword {
+    return Intl.message(
+      '更改使用者密碼',
+      name: 'userPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `更改使用者手機`
+  String get userPhone {
+    return Intl.message(
+      '更改使用者手機',
+      name: 'userPhone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `付費遊玩紀錄`
+  String get userPlayLog {
+    return Intl.message(
+      '付費遊玩紀錄',
+      name: 'userPlayLog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `QuIC付款設定`
+  String get userQUIC {
+    return Intl.message(
+      'QuIC付款設定',
+      name: 'userQUIC',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `未使用券紀錄`
+  String get userTicLog {
+    return Intl.message(
+      '未使用券紀錄',
+      name: 'userTicLog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `已使用券明細`
+  String get userUTicLog {
+    return Intl.message(
+      '已使用券明細',
+      name: 'userUTicLog',
       desc: '',
       args: [],
     );

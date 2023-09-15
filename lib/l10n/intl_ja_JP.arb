@@ -23,6 +23,14 @@
       }
     }
   },
+  "@waitCount": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
   "continuous": " ログイン日数 :  {continuousDay} 日",
   "dialogReturn": "戻る",
   "dialogSave": "セーフ",
@@ -31,6 +39,10 @@
   "gameLocation": "ロケーション",
   "gameMPass": "お得パス",
   "gameNormalHour": "ピークタイム",
+  "gameTicket": "遊びチケット",
+  "gameUnlimit": "予約された無制限台があります",
+  "gameUnlimitTitle": "予約された時間帯",
+  "gameWait": "X50Pad 並び状況 : {waitCount} 人待ち",
   "gameWeekday": "平日",
   "gameWeekends": "休日",
   "gatcha": " 抽選券 :  {gatchaPoints} 点",
@@ -51,14 +63,35 @@
   "mpassInvalid": "未購入",
   "mpassValid": "購入済み",
   "navCollab": "コラボ",
-  "navGame": "コインを入れる",
+  "navGame": "コインを\n  入れる",
   "navGift": "プレゼント",
   "navSettings": "オプション",
+  "nbusyCoin": "ゲーム中",
+  "nbusyNoCoin": "空いています",
+  "nbusyS1": "空いている",
+  "nbusyS2": "やや空いている",
+  "nbusyS3": "混雑中",
   "nextLv": "次のランク : ",
   "officialNotify": "公式インフォメーション",
   "serviceError": "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。",
-  "ticketBalance": "抽選券 : ",
+  "ticketBalance": "所持しているチケット : ",
   "ticketUnit": " ",
+  "userAvatar": "アイコン変更",
+  "userBidLog": "チャージ履歴",
+  "userEmail": "ユーザーメールアドレス変更",
+  "userFPlayLog": "還元履歴",
+  "userInAppSetting": "X50Pay アプリ設定",
+  "userLogout": "X50Payからログアウト",
+  "userNFC": "支払い設定",
+  "userOpenDoor1": "西門\"一号店\"のドアを開く",
+  "userOpenDoor2": "西門\"二号店\"のドアを開く",
+  "userPad": "オンライン並ぶ表示設定",
+  "userPassword": "ユーザーパスワード変更",
+  "userPhone": "ユーザー携帯番号変更",
+  "userPlayLog": "支払い履歴",
+  "userQUIC": "QUICアイコン変更",
+  "userTicLog": "所持チケット",
+  "userUTicLog": "チケット利用履歴",
   "vipDate": "有効期限 : ",
   "vipExpiredMsg": "左側のアイコンをクリックして購入",
   "x50PayLanguage": "X50Pay 言語"

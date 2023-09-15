@@ -23,6 +23,14 @@
       }
     }
   },
+  "@waitCount": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
   "continuous": " Continuous : {continuousDay} days",
   "dialogReturn": "Return",
   "dialogSave": "Save",
@@ -31,6 +39,10 @@
   "gameLocation": "Your Location",
   "gameMPass": "Monthly Pass",
   "gameNormalHour": "Normal",
+  "gameTicket": "Ticket",
+  "gameUnlimit": "This game have reservation at this week",
+  "gameUnlimitTitle": "Already reservation datetime",
+  "gameWait": "X50Pad queue status : {waitCount} person waiting",
   "gameWeekday": "Weekday",
   "gameWeekends": "Weekends",
   "gatcha": " Gatcha : {gatchaPoints} points",
@@ -54,11 +66,32 @@
   "navGame": "Game",
   "navGift": "Gift",
   "navSettings": "Settings",
+  "nbusyCoin": "Coined",
+  "nbusyNoCoin": "Not Coined",
+  "nbusyS1": "Idle",
+  "nbusyS2": "Normal",
+  "nbusyS3": "Busy",
   "nextLv": " Next Lv : ",
   "officialNotify": "Offical ADs",
   "serviceError": "Server error, Please retry again.",
   "ticketBalance": "Ticket Balance : ",
   "ticketUnit": " ",
+  "userAvatar": "Change Gravator",
+  "userBidLog": "Top-up history",
+  "userEmail": "Change user E-mail",
+  "userFPlayLog": "Cashback history",
+  "userInAppSetting": "X50Pay App Settings",
+  "userLogout": "Logout X50Pay",
+  "userNFC": "Multi Payment Setting",
+  "userOpenDoor1": "Open \"Ximen 1 Store\" door",
+  "userOpenDoor2": "Open \"Ximen 2 Store\" door",
+  "userPad": "Online queue Setting",
+  "userPassword": "Change user password",
+  "userPhone": "Change user cellphone",
+  "userPlayLog": "Used point history",
+  "userQUIC": "X50QuIC Payment Setting",
+  "userTicLog": "Unused ticket history",
+  "userUTicLog": "Usage ticket history",
   "vipDate": "Expire Date : ",
   "vipExpiredMsg": "Click left \"Ticket\" icon to buy !",
   "x50PayLanguage": "X50Pay Language"

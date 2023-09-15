@@ -37,7 +37,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
   void showEasterEgg() {
     Vibration.vibrate(duration: 50, amplitude: 128);
-    Fluttertoast.showToast(msg: ' 🥳 ');
+    Fluttertoast.showToast(msg: '     🥳');
   }
 
   void onQuicPayPrefPressed() {
@@ -186,7 +186,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       _SettingsGroup(children: [
         _SettingTile(
             iconData: Icons.remember_me,
-            title: '修改頭像',
+            title: i18n.userAvatar,
             subtitle: '外連至 Gravator 更換大頭貼相片',
             color: _SettingTileColor.green,
             onTap: () {
@@ -195,21 +195,21 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
             }),
         _SettingTile(
           iconData: Icons.rss_feed,
-          title: '多元付款設定',
+          title: i18n.userNFC,
           subtitle: 'X50MGS 多元付款喜好設定',
           color: _SettingTileColor.blue,
           onTap: onPaymentPrefPressed,
         ),
         _SettingTile(
           iconData: Icons.badge_outlined,
-          title: 'QuiC Pay 設定',
+          title: i18n.userQUIC,
           subtitle: 'QuiC 喜愛選項設定',
           color: _SettingTileColor.blue,
           onTap: onQuicPayPrefPressed,
         ),
         _SettingTile(
           iconData: Icons.tablet_mac,
-          title: '線上排隊設定',
+          title: i18n.userPad,
           subtitle: 'X50Pad 西門線上排隊系統偏好設定',
           color: _SettingTileColor.blue,
           onTap: onPadPrefPressed,
@@ -218,21 +218,21 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       _SettingsGroup(children: [
         _SettingTile(
           iconData: Icons.key,
-          title: '更改密碼',
+          title: i18n.userPassword,
           subtitle: '密碼不夠安全嗎？點我更改！',
           color: _SettingTileColor.red,
           onTap: onChangePasswordPressed,
         ),
         _SettingTile(
           iconData: Icons.email_outlined,
-          title: '更改信箱',
+          title: i18n.userEmail,
           subtitle: '換信箱了嗎，點我修改信箱。',
           color: _SettingTileColor.white,
           onTap: onChangeEmailPressed,
         ),
         _SettingTile(
           iconData: Icons.call,
-          title: '更改手機',
+          title: i18n.userPhone,
           subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
           color: _SettingTileColor.white,
           onTap: onChangePhonePressed,
@@ -241,35 +241,35 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       _SettingsGroup(children: [
         _SettingTile(
           iconData: Icons.local_atm,
-          title: '儲值紀錄',
+          title: i18n.userBidLog,
           subtitle: '查詢加值相關記錄。',
           color: _SettingTileColor.yellow,
           onTap: onBidRecordPressed,
         ),
         _SettingTile(
           iconData: Icons.redeem,
-          title: '獲券紀錄',
+          title: i18n.userTicLog,
           subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
           color: _SettingTileColor.yellow,
           onTap: onTicketRecordPressed,
         ),
         _SettingTile(
           iconData: Icons.format_list_bulleted,
-          title: '付費明細',
+          title: i18n.userPlayLog,
           subtitle: '查詢點數付款明細。',
           color: _SettingTileColor.yellow,
           onTap: onPlayRecordPressed,
         ),
         _SettingTile(
           iconData: Icons.list_alt_rounded,
-          title: '回饋明細',
+          title: i18n.userFPlayLog,
           subtitle: '查看回饋點數明細。',
           color: _SettingTileColor.yellow,
           onTap: onFreePointRecordPressed,
         ),
         _SettingTile(
           iconData: Icons.confirmation_num,
-          title: '扣券明細',
+          title: i18n.userUTicLog,
           subtitle: '查詢遊玩券使用明細。',
           color: _SettingTileColor.yellow,
           onTap: onTicketUseRecordPressed,
@@ -278,7 +278,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       _SettingsGroup(children: [
         _SettingTile(
           iconData: Icons.tune_rounded,
-          title: 'X50Pay App 設定',
+          title: i18n.userInAppSetting,
           subtitle: '設定',
           color: _SettingTileColor.white,
           onTap: onX50PayAppSettingPressed,
@@ -287,21 +287,21 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       _SettingsGroup(children: [
         _SettingTile(
           iconData: Icons.home,
-          title: '西門一店開門',
+          title: i18n.userOpenDoor1,
           subtitle: '就是個一店開門按鈕',
           color: _SettingTileColor.white,
           onTap: onXimen1OpenPressed,
         ),
         _SettingTile(
           iconData: Icons.home,
-          title: '西門二店開門',
+          title: i18n.userOpenDoor2,
           subtitle: '就是個二店開門按鈕',
           color: _SettingTileColor.white,
           onTap: onXimen2OpenPressed,
         ),
         _SettingTile(
           iconData: Icons.logout,
-          title: '登出帳號',
+          title: i18n.userLogout,
           subtitle: '就是個登出',
           color: _SettingTileColor.white,
           onTap: onLogoutPressed,
@@ -411,7 +411,7 @@ class _SettingsGroup extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: Themes.borderColor, width: 1),
+            border: Border.all(color: Themes.borderColor, width: 2),
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
           child: Column(children: _children),
@@ -465,18 +465,28 @@ class _SettingTile extends StatelessWidget {
         break;
     }
 
-    return ListTile(
-      onTap: onTap,
-      leading: Container(
-          height: 42,
-          width: 42,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Themes.borderColor, width: 2)),
-          child: Icon(iconData, color: iconColor, size: 18)),
-      title: Text(title, style: const TextStyle(fontSize: 18)),
-      subtitle:
-          Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8.5),
+      child: ListTile(
+        onTap: onTap,
+        contentPadding: EdgeInsets.zero,
+        minVerticalPadding: 0,
+        leading: Container(
+            height: 42,
+            width: 42,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Themes.borderColor, width: 2)),
+            child: Icon(iconData, color: iconColor, size: 18)),
+        title: Text(title,
+            style: const TextStyle(
+              fontSize: 14.5,
+              color: Color(0xfffafafa),
+              fontWeight: FontWeight.w500,
+            )),
+        // subtitle:
+        //     Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
+      ),
     );
   }
 }

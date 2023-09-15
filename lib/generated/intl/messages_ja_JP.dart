@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(continuousDay) => " ログイン日数 :  ${continuousDay} 日";
 
-  static String m1(gatchaPoints) => " 抽選券 :  ${gatchaPoints} 点";
+  static String m1(waitCount) => "X50Pad 並び状況 : ${waitCount} 人待ち";
 
-  static String m2(gr2LimitTimes) => "還元ポイント 25P / ${gr2LimitTimes} ";
+  static String m2(gatchaPoints) => " 抽選券 :  ${gatchaPoints} 点";
+
+  static String m3(gr2LimitTimes) => "還元ポイント 25P / ${gr2LimitTimes} ";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -36,11 +38,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "gameLocation": MessageLookupByLibrary.simpleMessage("ロケーション"),
         "gameMPass": MessageLookupByLibrary.simpleMessage("お得パス"),
         "gameNormalHour": MessageLookupByLibrary.simpleMessage("ピークタイム"),
+        "gameTicket": MessageLookupByLibrary.simpleMessage("遊びチケット"),
+        "gameUnlimit": MessageLookupByLibrary.simpleMessage("予約された無制限台があります"),
+        "gameUnlimitTitle": MessageLookupByLibrary.simpleMessage("予約された時間帯"),
+        "gameWait": m1,
         "gameWeekday": MessageLookupByLibrary.simpleMessage("平日"),
         "gameWeekends": MessageLookupByLibrary.simpleMessage("休日"),
-        "gatcha": m1,
+        "gatcha": m2,
         "gr2HeartBox": MessageLookupByLibrary.simpleMessage("絆ポイントショップ"),
-        "gr2Limit": m2,
+        "gr2Limit": m3,
         "gr2ResetDate": MessageLookupByLibrary.simpleMessage(" シーズン変わる日 : "),
         "heart": MessageLookupByLibrary.simpleMessage(" 絆ランク"),
         "infoNotify": MessageLookupByLibrary.simpleMessage("最新イベント"),
@@ -57,15 +63,39 @@ class MessageLookup extends MessageLookupByLibrary {
         "mpassInvalid": MessageLookupByLibrary.simpleMessage("未購入"),
         "mpassValid": MessageLookupByLibrary.simpleMessage("購入済み"),
         "navCollab": MessageLookupByLibrary.simpleMessage("コラボ"),
-        "navGame": MessageLookupByLibrary.simpleMessage("コインを入れる"),
+        "navGame": MessageLookupByLibrary.simpleMessage("コインを\n  入れる"),
         "navGift": MessageLookupByLibrary.simpleMessage("プレゼント"),
         "navSettings": MessageLookupByLibrary.simpleMessage("オプション"),
+        "nbusyCoin": MessageLookupByLibrary.simpleMessage("ゲーム中"),
+        "nbusyNoCoin": MessageLookupByLibrary.simpleMessage("空いています"),
+        "nbusyS1": MessageLookupByLibrary.simpleMessage("空いている"),
+        "nbusyS2": MessageLookupByLibrary.simpleMessage("やや空いている"),
+        "nbusyS3": MessageLookupByLibrary.simpleMessage("混雑中"),
         "nextLv": MessageLookupByLibrary.simpleMessage("次のランク : "),
         "officialNotify": MessageLookupByLibrary.simpleMessage("公式インフォメーション"),
         "serviceError": MessageLookupByLibrary.simpleMessage(
             "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。"),
-        "ticketBalance": MessageLookupByLibrary.simpleMessage("抽選券 : "),
+        "ticketBalance": MessageLookupByLibrary.simpleMessage("所持しているチケット : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
+        "userAvatar": MessageLookupByLibrary.simpleMessage("アイコン変更"),
+        "userBidLog": MessageLookupByLibrary.simpleMessage("チャージ履歴"),
+        "userEmail": MessageLookupByLibrary.simpleMessage("ユーザーメールアドレス変更"),
+        "userFPlayLog": MessageLookupByLibrary.simpleMessage("還元履歴"),
+        "userInAppSetting":
+            MessageLookupByLibrary.simpleMessage("X50Pay アプリ設定"),
+        "userLogout": MessageLookupByLibrary.simpleMessage("X50Payからログアウト"),
+        "userNFC": MessageLookupByLibrary.simpleMessage("支払い設定"),
+        "userOpenDoor1":
+            MessageLookupByLibrary.simpleMessage("西門\"一号店\"のドアを開く"),
+        "userOpenDoor2":
+            MessageLookupByLibrary.simpleMessage("西門\"二号店\"のドアを開く"),
+        "userPad": MessageLookupByLibrary.simpleMessage("オンライン並ぶ表示設定"),
+        "userPassword": MessageLookupByLibrary.simpleMessage("ユーザーパスワード変更"),
+        "userPhone": MessageLookupByLibrary.simpleMessage("ユーザー携帯番号変更"),
+        "userPlayLog": MessageLookupByLibrary.simpleMessage("支払い履歴"),
+        "userQUIC": MessageLookupByLibrary.simpleMessage("QUICアイコン変更"),
+        "userTicLog": MessageLookupByLibrary.simpleMessage("所持チケット"),
+        "userUTicLog": MessageLookupByLibrary.simpleMessage("チケット利用履歴"),
         "vipDate": MessageLookupByLibrary.simpleMessage("有効期限 : "),
         "vipExpiredMsg":
             MessageLookupByLibrary.simpleMessage("左側のアイコンをクリックして購入"),

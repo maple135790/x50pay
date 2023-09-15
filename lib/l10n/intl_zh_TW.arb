@@ -23,6 +23,14 @@
       }
     }
   },
+  "@waitCount": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
   "continuous": " 已簽到 : {continuousDay} 天",
   "dialogReturn": "返回",
   "dialogSave": "保存",
@@ -31,6 +39,10 @@
   "gameLocation": "目前所在",
   "gameMPass": "月票",
   "gameNormalHour": "通常時段",
+  "gameTicket": "遊玩券",
+  "gameUnlimit": "該機種當周有無限制台預約",
+  "gameUnlimitTitle": "已預約時段",
+  "gameWait": "X50Pad 排隊狀況 : {waitCount} 人等待中",
   "gameWeekday": "平日",
   "gameWeekends": "假日",
   "gatcha": " 抽獎券 : 再 {gatchaPoints} 點",
@@ -54,11 +66,32 @@
   "navGame": "投幣",
   "navGift": "禮物",
   "navSettings": "設定",
+  "nbusyCoin": "已投幣",
+  "nbusyNoCoin": "未投幣",
+  "nbusyS1": "空閒",
+  "nbusyS2": "適中",
+  "nbusyS3": "忙碌",
   "nextLv": "下一階 : ",
   "officialNotify": "官方資訊",
   "serviceError": "伺服器錯誤，請嘗試重新整理或回報X50",
   "ticketBalance": "券量 : ",
   "ticketUnit": "張",
+  "userAvatar": "修改顯示頭貼",
+  "userBidLog": "店鋪儲值紀錄",
+  "userEmail": "更改使用者信箱",
+  "userFPlayLog": "回饋點數紀錄",
+  "userInAppSetting": "X50Pay App 設定",
+  "userLogout": "登出 X50Pay",
+  "userNFC": "多元付款設定",
+  "userOpenDoor1": "西門\"一店\"開門",
+  "userOpenDoor2": "西門\"二店\"開門",
+  "userPad": "線上排隊設定",
+  "userPassword": "更改使用者密碼",
+  "userPhone": "更改使用者手機",
+  "userPlayLog": "付費遊玩紀錄",
+  "userQUIC": "QuIC付款設定",
+  "userTicLog": "未使用券紀錄",
+  "userUTicLog": "已使用券明細",
   "vipDate": "期限 : ",
   "vipExpiredMsg": "點左側票券圖樣立刻購買",
   "x50PayLanguage": "X50Pay 語言"

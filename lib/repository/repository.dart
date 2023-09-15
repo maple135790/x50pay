@@ -107,7 +107,9 @@ class Repository extends Api {
   /// 取得該店家的遊戲列表API
   ///
   /// 需要傳入店家編號 [storeId]
-  Future<GameList> getGameList({required String storeId}) async {
+  Future<GameList> getGameList({
+    required String storeId,
+  }) async {
     late GameList gameList;
 
     await Api.makeRequest(
@@ -115,6 +117,7 @@ class Repository extends Api {
       method: HttpMethod.post,
       withSession: true,
       body: {'sid': storeId},
+      verbose: true,
       onSuccess: (json) {
         gameList = GameList.fromJson(json);
       },

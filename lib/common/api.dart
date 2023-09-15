@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/global_singleton.dart';
 
 class Api {
@@ -58,11 +59,13 @@ class Api {
     Function(Map<String, String> headers)? onResponseHeader,
   }) async {
     http.Response response;
+    final pref = await SharedPreferences.getInstance();
     final client = http.Client();
     bool isResponseString = onSuccessString != null;
     bool isEmptyBody = body.isEmpty;
     String? session;
     Uri url = customDest != null ? Uri.parse(customDest) : _fullURL(dest);
+    String localeTag = pref.getString('appLang')?.toLowerCase() ?? 'zh-tw';
 
     const fixHeaders = {
       "Host": "pay.x50.fun",
@@ -75,7 +78,9 @@ class Api {
       Map<String, String> headers = {};
       if (withSession) {
         headers.addAll({
-          'Cookie': 'session=$session',
+          'Accept-Language':
+              'ja-JP,ja;q=0.9,zh-TW;q=0.8,zh;q=0.7,en-US;q=0.6,en;q=0.5',
+          'Cookie': 'lang=$localeTag;session=$session',
           "Content-Type": contentType.value,
         });
       }

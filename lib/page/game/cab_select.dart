@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/theme.dart';
@@ -65,7 +66,7 @@ class CabSelect extends StatefulWidget {
   State<CabSelect> createState() => _CabSelectState();
 }
 
-class _CabSelectState extends State<CabSelect> with GameMixin {
+class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
   late final viewModel = CabSelectViewModel(
     onInsertSuccess: () {
       GlobalSingleton.instance.recentPlayedCabinetData = (
@@ -357,7 +358,7 @@ class _CabSelectState extends State<CabSelect> with GameMixin {
                           }
                         : null,
                     style: Themes.pale(),
-                    child: const Text('遊玩券'));
+                    child: Text(i18n.gameTicket));
               },
             ),
           ],
