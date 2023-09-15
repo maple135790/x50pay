@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/popups/popup_dialog.dart';
+import 'package:x50pay/page/settings/popups/popup_dialog.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class QuiCPayPrefDialog extends StatefulWidget {
   const QuiCPayPrefDialog({super.key});
@@ -24,7 +24,7 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
     "0": "不限制"
   };
 
-  void sendQuicConfirm(AccountViewModel viewModel) async {
+  void sendQuicConfirm(SettingsViewModel viewModel) async {
     final isSuccess = await viewModel.quicConfirm(
       autoQlock: nfcQlock,
       autoQuic: isQuiCPayEnabled,
@@ -34,7 +34,7 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AccountViewModel>(
+    return Consumer<SettingsViewModel>(
       builder: (context, vm, child) => PageDialog.ios(
         title: 'QuiC 快速付款偏好設定',
         onConfirm: () {

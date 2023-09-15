@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/free_p/free_p.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/record_mixin.dart';
+import 'package:x50pay/page/settings/record_mixin.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class FreePointRecords extends StatefulWidget {
   const FreePointRecords({super.key});
@@ -14,7 +14,7 @@ class FreePointRecords extends StatefulWidget {
 
 class _FreePointRecordsState extends BaseStatefulState<FreePointRecords>
     with RecordPageMixin<FreePointModel, FreePointRecords> {
-  late AccountViewModel viewModel;
+  late SettingsViewModel viewModel;
 
   @override
   List<DataColumn> buildColumns() =>
@@ -35,7 +35,7 @@ class _FreePointRecordsState extends BaseStatefulState<FreePointRecords>
 
   @override
   Future<FreePointModel> getRecord() =>
-      context.read<AccountViewModel>().getFreePointRecord();
+      context.read<SettingsViewModel>().getFreePointRecord();
 
   @override
   bool hasData(FreePointModel model) => model.logs.isNotEmpty;

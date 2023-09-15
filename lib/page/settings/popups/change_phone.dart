@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class ChangePhoneDialog extends StatefulWidget {
-  final AccountViewModel viewModel;
+  final SettingsViewModel viewModel;
   final Function(bool) callback;
   const ChangePhoneDialog(this.viewModel, {Key? key, required this.callback})
       : super(key: key);
@@ -18,7 +18,7 @@ class ChangePhoneDialog extends StatefulWidget {
 }
 
 class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
-  late AccountViewModel model;
+  late SettingsViewModel model;
   final newEmail = TextEditingController();
 
   @override
@@ -99,7 +99,7 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
 
 class ChangePhoneConfirmedDialog extends StatefulWidget {
   final BuildContext context;
-  final AccountViewModel viewModel;
+  final SettingsViewModel viewModel;
 
   const ChangePhoneConfirmedDialog(this.viewModel, this.context, {Key? key})
       : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
-import 'package:x50pay/page/forgorPassword/forgot_password_view_model.dart';
+import 'package:x50pay/page/forgot_password/forgot_password_view_model.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);

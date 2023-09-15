@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/popups/popup_dialog.dart';
+import 'package:x50pay/page/settings/popups/popup_dialog.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class ChangePasswordDialog extends StatefulWidget {
   const ChangePasswordDialog({super.key});
@@ -26,7 +26,7 @@ class _ChangePasswordDialogState
   String buttonText = '請輸入密碼';
   bool isEnabled = false;
 
-  Widget confirmButton(AccountViewModel viewModel) {
+  Widget confirmButton(SettingsViewModel viewModel) {
     return TextButton(
       style: ButtonStyle(
         shape: MaterialStatePropertyAll(
@@ -77,7 +77,7 @@ class _ChangePasswordDialogState
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AccountViewModel>(
+    return Consumer<SettingsViewModel>(
       builder: (context, viewModel, child) => PageDialog.ios(
           title: '密碼變更',
           customConfirmButton: confirmButton(viewModel),

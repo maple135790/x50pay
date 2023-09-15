@@ -8,7 +8,7 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/giftSystem/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 
 part "lotte_box.dart";

@@ -11,9 +11,9 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/game_cabs_view_model.dart';
-import 'package:x50pay/page/game/game_mixin.dart';
 
 class GameCabs extends StatefulWidget {
   const GameCabs({super.key});

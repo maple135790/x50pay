@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/models/padSettings/pad_settings.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/popups/popup_dialog.dart';
+import 'package:x50pay/page/settings/popups/popup_dialog.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class PadPrefDialog extends StatefulWidget {
   const PadPrefDialog({super.key});
@@ -18,7 +18,7 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
   bool gotModel = false;
   _PadPrefModalValue? modalValue;
 
-  void savePadPref(AccountViewModel viewModel) {
+  void savePadPref(SettingsViewModel viewModel) {
     if (gotModel == false || modalValue == null) return;
     viewModel.setPadSettings(
       isNicknameShown: modalValue!.isNameShown,
@@ -29,7 +29,7 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AccountViewModel>(builder: (context, viewModel, child) {
+    return Consumer<SettingsViewModel>(builder: (context, viewModel, child) {
       final getPadSettings = viewModel.getPadSettings();
 
       return PageDialog.ios(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/record_mixin.dart';
+import 'package:x50pay/page/settings/record_mixin.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class TicketRecords extends StatefulWidget {
   /// 獲券紀錄頁面
@@ -20,7 +20,7 @@ class _TicketRecordsState extends BaseStatefulState<TicketRecords>
 
   @override
   Future<TicDateLogModel> getRecord() =>
-      context.read<AccountViewModel>().getTicketLog();
+      context.read<SettingsViewModel>().getTicketLog();
 
   @override
   List<DataColumn> buildColumns() => ['活動名稱', '過期日', '剩餘張數', '詳情']

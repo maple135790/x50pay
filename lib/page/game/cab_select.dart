@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
-import 'package:x50pay/page/game/game_mixin.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 
 enum PaymentType {

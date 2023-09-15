@@ -94,6 +94,13 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   }
 
   @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget body() {
     return ChangeNotifierProvider.value(
       value: viewModel,
@@ -178,6 +185,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                               const SizedBox(height: 12),
                               TextField(
                                   controller: email,
+                                  textInputAction: TextInputAction.next,
                                   autofillHints: const [AutofillHints.username],
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: const InputDecoration(
@@ -209,12 +217,43 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                     const TextSpan(text: ' )')
                                   ])),
                               const SizedBox(height: 12),
-                              TextField(
-                                  controller: password,
-                                  obscureText: true,
-                                  autofillHints: const [AutofillHints.password],
-                                  decoration: const InputDecoration(
-                                      prefixIcon: Icon(Icons.lock))),
+                              Consumer<LoginViewModel>(
+                                builder: (context, vm, child) => TextField(
+                                    controller: password,
+                                    obscureText: vm.hidePassword,
+                                    textInputAction: TextInputAction.done,
+                                    keyboardType: TextInputType.visiblePassword,
+                                    autofillHints: const [
+                                      AutofillHints.password
+                                    ],
+                                    decoration: InputDecoration(
+                                      prefixIcon: const Icon(Icons.lock),
+                                      suffixIcon: GestureDetector(
+                                        onLongPressDown: (_) {
+                                          vm.hidePassword = false;
+                                        },
+                                        onTapDown: (details) {
+                                          vm.hidePassword = false;
+                                        },
+                                        onTapCancel: () {
+                                          vm.hidePassword = true;
+                                        },
+                                        onLongPressCancel: () {
+                                          vm.hidePassword = true;
+                                        },
+                                        onTapUp: (details) {
+                                          vm.hidePassword = true;
+                                        },
+                                        onLongPressUp: () {
+                                          vm.hidePassword = true;
+                                        },
+                                        child: const Icon(
+                                          Icons.remove_red_eye,
+                                          color: Colors.white38,
+                                        ),
+                                      ),
+                                    )),
+                              ),
                               const SizedBox(height: 10),
                               const Divider(color: Color(0xff3e3e3e)),
                               Column(

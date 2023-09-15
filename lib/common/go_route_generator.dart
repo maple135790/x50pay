@@ -10,8 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/page/pages.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 /// GoRouter 路由 wrapper
 GoRoute _route(
@@ -98,7 +98,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
 
                 log('shouldGoPhone: $shouldGoPhone');
                 log('shouldGoTicketRecord: $shouldGoTicketRecord');
-                return Account(
+                return Settings(
                   shouldGoPhone: shouldGoPhone,
                   shouldGoTicketRecord: shouldGoTicketRecord,
                 );
@@ -107,7 +107,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.padPref, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const PadPrefDialog(),
                     ),
                   );
@@ -115,7 +115,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.quicPayPref, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const QuiCPayPrefDialog(),
                     ),
                   );
@@ -123,7 +123,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.paymentPref, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const PaymentPrefDialog(),
                     ),
                   );
@@ -131,7 +131,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.changePassword, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const ChangePasswordDialog(),
                     ),
                   );
@@ -139,7 +139,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.changeEmail, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const ChangeEmailDialog(),
                     ),
                   );
@@ -147,7 +147,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.bidRecords, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const BidRecords(),
                     ),
                   );
@@ -155,7 +155,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.ticketRecords, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const TicketRecords(),
                     ),
                   );
@@ -163,7 +163,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.playRecords, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const PlayRecords(),
                     ),
                   );
@@ -171,7 +171,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.freePointRecords, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const FreePointRecords(),
                     ),
                   );
@@ -179,7 +179,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.ticketUsedRecords, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const TicketUsedRecords(),
                     ),
                   );
@@ -187,7 +187,7 @@ RouterConfig<Object> goRouteConfig() => GoRouter(
                 _routeTransition(AppRoutes.x50PayAppSetting, (_, __) {
                   return CupertinoPage(
                     child: ChangeNotifierProvider(
-                      create: (context) => AccountViewModel(),
+                      create: (context) => SettingsViewModel(),
                       builder: (context, child) => const AppSettings(),
                     ),
                   );

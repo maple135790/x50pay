@@ -15,7 +15,45 @@ import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/repository/repository.dart';
 
-class AccountViewModel extends BaseViewModel {
+enum NVSVPayment {
+  light('Light', '0'),
+  standard('Standard', '1'),
+  blaster('Blaster', '2');
+
+  final String name;
+  final String value;
+  const NVSVPayment(this.name, this.value);
+}
+
+enum SDVXPayment {
+  standard('Standard', '0'),
+  blaster('Blaster', '1');
+
+  final String name;
+  final String value;
+  const SDVXPayment(this.name, this.value);
+}
+
+enum DPPayment {
+  single('單人', "0"),
+  double('雙人', "1");
+
+  final String name;
+  final String value;
+  const DPPayment(this.name, this.value);
+}
+
+enum DefaultCabPayment {
+  ask('每次都詢問我', 0),
+  x50pay('X50Pay', 1),
+  jko('街口支付', 2);
+
+  final String name;
+  final int value;
+  const DefaultCabPayment(this.name, this.value);
+}
+
+class SettingsViewModel extends BaseViewModel {
   final repo = Repository();
 
   BasicResponse? response;

@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:html/parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 
 mixin NfcPayMixin {
@@ -41,7 +41,7 @@ mixin NfcPayMixin {
   }
 
   Future<bool> _getNfcAutoSetting() async {
-    final accountViewModel = AccountViewModel();
+    final accountViewModel = SettingsViewModel();
     final settings = await accountViewModel.getPaymentSettings();
     return settings.nfcAuto;
   }

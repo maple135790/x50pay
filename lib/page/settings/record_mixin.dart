@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 /// 紀錄頁面的mixin
@@ -12,7 +12,7 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
   /// 頁面標題
   String pageTitle();
 
-  /// 取得紀錄的方法，通常是呼叫 [AccountViewModel] 的方法
+  /// 取得紀錄的方法，通常是呼叫 [SettingsViewModel] 的方法
   Future<M> getRecord();
 
   /// 建立 [DataTable] 的row
@@ -28,7 +28,7 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AccountViewModel>(
+    return Consumer<SettingsViewModel>(
       builder: (context, vm, child) {
         return Material(
           child: FutureBuilder(

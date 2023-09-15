@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/play/play.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/record_mixin.dart';
+import 'package:x50pay/page/settings/record_mixin.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class PlayRecords extends StatefulWidget {
   const PlayRecords({super.key});
@@ -19,7 +19,7 @@ class _PlayRecordsState extends BaseStatefulState<PlayRecords>
 
   @override
   Future<PlayRecordModel> getRecord() =>
-      context.read<AccountViewModel>().getPlayRecord();
+      context.read<SettingsViewModel>().getPlayRecord();
 
   @override
   List<DataColumn> buildColumns() => ['日期', '機台', '使用點數']

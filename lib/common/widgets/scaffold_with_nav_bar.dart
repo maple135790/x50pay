@@ -377,7 +377,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
                     }
                   : null,
               splashFactory: NoSplash.splashFactory,
-              child: const Icon(Icons.qr_code,
+              child: const Icon(Icons.qr_code_rounded,
                   size: 28, color: Color(0xfffafafa))),
           const SizedBox(width: 15),
         ],

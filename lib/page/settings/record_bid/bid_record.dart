@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/record_mixin.dart';
+import 'package:x50pay/page/settings/record_mixin.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class BidRecords extends StatefulWidget {
   /// 儲值紀錄頁面
@@ -20,7 +20,7 @@ class _BidRecordsState extends BaseStatefulState<BidRecords>
 
   @override
   Future<BidLogModel> getRecord() =>
-      context.read<AccountViewModel>().getBidLog();
+      context.read<SettingsViewModel>().getBidLog();
 
   @override
   List<DataColumn> buildColumns() =>

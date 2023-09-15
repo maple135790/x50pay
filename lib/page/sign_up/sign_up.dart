@@ -6,7 +6,7 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
-import 'package:x50pay/page/signUp/sign_up_view_model.dart';
+import 'package:x50pay/page/sign_up/sign_up_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 class SignUp extends StatefulWidget {

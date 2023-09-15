@@ -9,9 +9,9 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
-import 'package:x50pay/page/game/game_mixin.dart';
 
 extension on Color {
   Color invert(double value) {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/record_mixin.dart';
+import 'package:x50pay/page/settings/record_mixin.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class TicketUsedRecords extends StatefulWidget {
   const TicketUsedRecords({super.key});
@@ -40,7 +40,7 @@ class _TicketUsedRecordsState extends BaseStatefulState<TicketUsedRecords>
 
   @override
   Future<TicUsedModel> getRecord() =>
-      context.read<AccountViewModel>().getTicUsedLog();
+      context.read<SettingsViewModel>().getTicUsedLog();
 
   @override
   bool hasData(TicUsedModel model) => model.logs.isNotEmpty;

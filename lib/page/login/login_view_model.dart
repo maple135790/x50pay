@@ -27,6 +27,13 @@ class LoginViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  bool get hidePassword => _hidePassword;
+  bool _hidePassword = true;
+  set hidePassword(bool value) {
+    _hidePassword = value;
+    notifyListeners();
+  }
+
   void _login(
     String email,
     String password,

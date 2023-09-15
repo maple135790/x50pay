@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/page/account/popups/app_settings_view_model.dart';
-import 'package:x50pay/page/account/popups/popup_dialog.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
+import 'package:x50pay/page/settings/app_settings/app_settings_view_model.dart';
+import 'package:x50pay/page/settings/popups/popup_dialog.dart';
 
 class AppSettings extends StatefulWidget {
   const AppSettings({super.key});
@@ -13,6 +13,7 @@ class AppSettings extends StatefulWidget {
 }
 
 class _AppSettingsState extends State<AppSettings> {
+  final focus = FocusNode();
   final viewModel = AppSettingsViewModel();
 
   void onFastQRPayChanged(bool value) async {
@@ -105,43 +106,49 @@ class _AppSettingsState extends State<AppSettings> {
           value: loginViewModel,
           child: AlertDialog(
             title: const Text('登入資訊'),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('再次輸入帳號密碼'),
-                const SizedBox(height: 15),
-                Consumer<LoginViewModel>(
-                  builder: (context, vm, child) => Visibility(
-                    visible: vm.errorMsg != null,
-                    child: Row(
-                      children: [
-                        const Icon(Icons.error_outline_rounded,
-                            color: Colors.red),
-                        const SizedBox(width: 5),
-                        Text(
-                          vm.errorMsg ?? '',
-                          style: const TextStyle(color: Colors.red),
-                        )
-                      ],
+            content: AutofillGroup(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('再次輸入帳號密碼'),
+                  const SizedBox(height: 15),
+                  Consumer<LoginViewModel>(
+                    builder: (context, vm, child) => Visibility(
+                      visible: vm.errorMsg != null,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.error_outline_rounded,
+                              color: Colors.red),
+                          const SizedBox(width: 5),
+                          Text(
+                            vm.errorMsg ?? '',
+                            style: const TextStyle(color: Colors.red),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 15),
-                TextField(
-                    controller: email,
-                    autofillHints: const [AutofillHints.username],
-                    keyboardType: TextInputType.emailAddress,
-                    decoration:
-                        const InputDecoration(prefixIcon: Icon(Icons.person))),
-                const SizedBox(height: 15),
-                TextField(
-                    controller: password,
-                    obscureText: true,
-                    autofillHints: const [AutofillHints.password],
-                    decoration:
-                        const InputDecoration(prefixIcon: Icon(Icons.lock))),
-              ],
+                  const SizedBox(height: 15),
+                  TextField(
+                      focusNode: focus,
+                      controller: email,
+                      textInputAction: TextInputAction.next,
+                      autofillHints: const [AutofillHints.username],
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.person))),
+                  const SizedBox(height: 15),
+                  TextField(
+                      controller: password,
+                      focusNode: focus,
+                      textInputAction: TextInputAction.send,
+                      obscureText: true,
+                      autofillHints: const [AutofillHints.password],
+                      decoration:
+                          const InputDecoration(prefixIcon: Icon(Icons.lock))),
+                ],
+              ),
             ),
             actions: [
               TextButton(

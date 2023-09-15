@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/popups/popup_dialog.dart';
+import 'package:x50pay/page/settings/popups/popup_dialog.dart';
+import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class ChangeEmailDialog extends StatefulWidget {
   const ChangeEmailDialog({super.key});
@@ -17,7 +17,7 @@ class ChangeEmailDialog extends StatefulWidget {
 }
 
 class _ChangeEmailDialogState extends BaseStatefulState<ChangeEmailDialog> {
-  late final AccountViewModel viewModel;
+  late final SettingsViewModel viewModel;
   String? _errorText;
   bool isEnabled = false;
   final newEmail = TextEditingController();
@@ -74,7 +74,7 @@ class _ChangeEmailDialogState extends BaseStatefulState<ChangeEmailDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AccountViewModel>(
+    return Consumer<SettingsViewModel>(
       builder: (context, vm, child) {
         viewModel = vm;
 
