@@ -60,6 +60,36 @@ class S {
     );
   }
 
+  /// `取消`
+  String get dialogCancel {
+    return Intl.message(
+      '取消',
+      name: 'dialogCancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `確定`
+  String get dialogConfirm {
+    return Intl.message(
+      '確定',
+      name: 'dialogConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `下一步`
+  String get dialogNext {
+    return Intl.message(
+      '下一步',
+      name: 'dialogNext',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `返回`
   String get dialogReturn {
     return Intl.message(
@@ -495,6 +525,106 @@ class S {
     return Intl.message(
       '張',
       name: 'ticketUnit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `生物辨識登入`
+  String get userAppSettingsBiometrics {
+    return Intl.message(
+      '生物辨識登入',
+      name: 'userAppSettingsBiometrics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `取消生物辨識登入`
+  String get userAppSettingsBiometricsDisable {
+    return Intl.message(
+      '取消生物辨識登入',
+      name: 'userAppSettingsBiometricsDisable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `確定要取消生物辨識登入嗎？\n再次開啟需要重新輸入登入資訊`
+  String get userAppSettingsBiometricsDisableContent {
+    return Intl.message(
+      '確定要取消生物辨識登入嗎？\n再次開啟需要重新輸入登入資訊',
+      name: 'userAppSettingsBiometricsDisableContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `注意:\n此功能會將您的帳號密碼加密儲存於手機中，用生物辨識登入時會自動填入帳號密碼。\n\nAndroid 使用 KeyStore 儲存\niOS 使用 KeyChain 儲存。\n\n如果帳號密碼有更換，需要再次重新設定。\n\n確定使用此功能嗎？`
+  String get userAppSettingsBiometricsEnableContent {
+    return Intl.message(
+      '注意:\n此功能會將您的帳號密碼加密儲存於手機中，用生物辨識登入時會自動填入帳號密碼。\n\nAndroid 使用 KeyStore 儲存\niOS 使用 KeyChain 儲存。\n\n如果帳號密碼有更換，需要再次重新設定。\n\n確定使用此功能嗎？',
+      name: 'userAppSettingsBiometricsEnableContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `登入資訊`
+  String get userAppSettingsBiometricsLoginCred {
+    return Intl.message(
+      '登入資訊',
+      name: 'userAppSettingsBiometricsLoginCred',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `再次輸入帳號密碼`
+  String get userAppSettingsBiometricsLoginCredContent {
+    return Intl.message(
+      '再次輸入帳號密碼',
+      name: 'userAppSettingsBiometricsLoginCredContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `嘗試登入`
+  String get userAppSettingsBiometricsLoginTry {
+    return Intl.message(
+      '嘗試登入',
+      name: 'userAppSettingsBiometricsLoginTry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `快速支付`
+  String get userAppSettingsFastPayment {
+    return Intl.message(
+      '快速支付',
+      name: 'userAppSettingsFastPayment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `快速支付流程有別於網頁版的支付流程，投幣時不會做 Token 驗證\n\n確定開啟快速支付流程？`
+  String get userAppSettingsFastPaymentEnableContent {
+    return Intl.message(
+      '快速支付流程有別於網頁版的支付流程，投幣時不會做 Token 驗證\n\n確定開啟快速支付流程？',
+      name: 'userAppSettingsFastPaymentEnableContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `開啟快速支付`
+  String get userAppSettingsFastPaymentEnableTitle {
+    return Intl.message(
+      '開啟快速支付',
+      name: 'userAppSettingsFastPaymentEnableTitle',
       desc: '',
       args: [],
     );

@@ -33,6 +33,9 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "continuous": m0,
+        "dialogCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "dialogConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "dialogNext": MessageLookupByLibrary.simpleMessage("Next"),
         "dialogReturn": MessageLookupByLibrary.simpleMessage("Return"),
         "dialogSave": MessageLookupByLibrary.simpleMessage("Save"),
         "dressRoomTitle":
@@ -83,6 +86,30 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticketBalance":
             MessageLookupByLibrary.simpleMessage("Ticket Balance : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
+        "userAppSettingsBiometrics":
+            MessageLookupByLibrary.simpleMessage("Biometrics login"),
+        "userAppSettingsBiometricsDisable":
+            MessageLookupByLibrary.simpleMessage("Disable Biometrics login"),
+        "userAppSettingsBiometricsDisableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "You are going to disable Biomertrics Login.\nYou will be prompt to enter your login credentials in order to re-enable it."),
+        "userAppSettingsBiometricsEnableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "Attention:\n\nThis feature will encrypt and store your login credentials on your phone. When you log in with biometrics, your account and password will be automatically filled in.\n\nAndroid uses KeyStore to store.\niOS uses KeyChain to store.\n\nIf your login credentials is changed, you need to reset it again.\n\nAre you sure you want to use this feature?"),
+        "userAppSettingsBiometricsLoginCred":
+            MessageLookupByLibrary.simpleMessage("Login Credentials"),
+        "userAppSettingsBiometricsLoginCredContent":
+            MessageLookupByLibrary.simpleMessage(
+                "Enter your login credentials again"),
+        "userAppSettingsBiometricsLoginTry":
+            MessageLookupByLibrary.simpleMessage("Try to log in"),
+        "userAppSettingsFastPayment":
+            MessageLookupByLibrary.simpleMessage("Fast payment"),
+        "userAppSettingsFastPaymentEnableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "The Fast Payment feature is different from the web-based payment process. No token verification will be performed when coins are deposited.\n\nAre you sure you want to enable the quick payment process?"),
+        "userAppSettingsFastPaymentEnableTitle":
+            MessageLookupByLibrary.simpleMessage("Enable Fast Payment"),
         "userAvatar": MessageLookupByLibrary.simpleMessage("Change Gravator"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("Top-up history"),
         "userEmail": MessageLookupByLibrary.simpleMessage("Change user E-mail"),

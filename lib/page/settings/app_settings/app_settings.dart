@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/app_settings/app_settings_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
@@ -12,8 +13,7 @@ class AppSettings extends StatefulWidget {
   State<AppSettings> createState() => _AppSettingsState();
 }
 
-class _AppSettingsState extends State<AppSettings> {
-  final focus = FocusNode();
+class _AppSettingsState extends BaseStatefulState<AppSettings> {
   final viewModel = AppSettingsViewModel();
 
   void onFastQRPayChanged(bool value) async {
@@ -39,24 +39,21 @@ class _AppSettingsState extends State<AppSettings> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('開啟快速支付流程'),
-          content: const Text('''
-快速支付流程有別於網頁版的支付流程，投幣時不會做 Token 驗證
-
-確定開啟快速支付流程？'''),
+          title: Text(i18n.userAppSettingsFastPaymentEnableTitle),
+          content: Text(i18n.userAppSettingsFastPaymentEnableContent),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('取消'),
+              child: Text(i18n.dialogCancel),
             ),
             TextButton(
               onPressed: () {
                 viewModel.enableFastQRPay();
                 Navigator.of(context).pop();
               },
-              child: const Text('確定'),
+              child: Text(i18n.dialogConfirm),
             ),
           ],
         );
@@ -69,23 +66,21 @@ class _AppSettingsState extends State<AppSettings> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('取消生物辨識登入'),
-          content: const Text('''
-確定要取消生物辨識登入嗎？
-再次開啟需要重新輸入登入資訊'''),
+          title: Text(i18n.userAppSettingsBiometricsDisable),
+          content: Text(i18n.userAppSettingsBiometricsDisableContent),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('取消'),
+              child: Text(i18n.dialogCancel),
             ),
             TextButton(
               onPressed: () {
                 viewModel.disableBiometricsLogin();
                 Navigator.of(context).pop();
               },
-              child: const Text('確定'),
+              child: Text(i18n.dialogConfirm),
             ),
           ],
         );
@@ -105,13 +100,13 @@ class _AppSettingsState extends State<AppSettings> {
         return ChangeNotifierProvider.value(
           value: loginViewModel,
           child: AlertDialog(
-            title: const Text('登入資訊'),
+            title: Text(i18n.userAppSettingsBiometricsLoginCred),
             content: AutofillGroup(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('再次輸入帳號密碼'),
+                  Text(i18n.userAppSettingsBiometricsLoginCredContent),
                   const SizedBox(height: 15),
                   Consumer<LoginViewModel>(
                     builder: (context, vm, child) => Visibility(
@@ -131,7 +126,6 @@ class _AppSettingsState extends State<AppSettings> {
                   ),
                   const SizedBox(height: 15),
                   TextField(
-                      focusNode: focus,
                       controller: email,
                       textInputAction: TextInputAction.next,
                       autofillHints: const [AutofillHints.username],
@@ -141,8 +135,7 @@ class _AppSettingsState extends State<AppSettings> {
                   const SizedBox(height: 15),
                   TextField(
                       controller: password,
-                      focusNode: focus,
-                      textInputAction: TextInputAction.send,
+                      textInputAction: TextInputAction.done,
                       obscureText: true,
                       autofillHints: const [AutofillHints.password],
                       decoration:
@@ -155,11 +148,10 @@ class _AppSettingsState extends State<AppSettings> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('取消'),
+                child: Text(i18n.dialogCancel),
               ),
               TextButton(
                 onPressed: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
                   loginViewModel.login(
                     email: email.text,
                     password: password.text,
@@ -171,7 +163,7 @@ class _AppSettingsState extends State<AppSettings> {
                     },
                   );
                 },
-                child: const Text('嘗試登入'),
+                child: Text(i18n.userAppSettingsBiometricsLoginTry),
               ),
             ],
           ),
@@ -186,28 +178,20 @@ class _AppSettingsState extends State<AppSettings> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: const Text('生物辨識登入'),
-          content: const Text('''注意:
-此功能會將您的帳號密碼加密儲存於手機中，用生物辨識登入時會自動填入帳號密碼。
-
-Android 使用 KeyStore 儲存
-iOS 使用 KeyChain 儲存。
-
-如果帳號密碼有更換，需要再次重新設定。
-
-確定使用此功能嗎？'''),
+          title: Text(i18n.userAppSettingsBiometrics),
+          content: Text(i18n.userAppSettingsBiometricsEnableContent),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text('取消'),
+              child: Text(i18n.dialogCancel),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: const Text('下一步'),
+              child: Text(i18n.dialogNext),
             ),
           ],
         );
@@ -223,7 +207,7 @@ iOS 使用 KeyChain 儲存。
           future: viewModel.getAppSettings(),
           builder: (context, snapshot) {
             return PageDialog.ios(
-              title: 'X50Pay App 設定',
+              title: i18n.userInAppSetting,
               onConfirm: null,
               content: (showButtonBar) {
                 if (snapshot.connectionState != ConnectionState.done) {
@@ -240,7 +224,7 @@ iOS 使用 KeyChain 儲存。
                           initialData: false,
                           builder: (context, snapshot) {
                             return CupertinoListTile.notched(
-                              title: const Text('生物辨識登入'),
+                              title: Text(i18n.userAppSettingsBiometrics),
                               trailing: CupertinoSwitch(
                                 activeColor: const Color(0xff005eb0),
                                 value: vm.isEnabledBiometricsLogin,
@@ -254,7 +238,7 @@ iOS 使用 KeyChain 儲存。
                     Consumer<AppSettingsViewModel>(
                         builder: (context, vm, child) {
                       return CupertinoListTile.notched(
-                        title: const Text('快速支付流程'),
+                        title: Text(i18n.userAppSettingsFastPayment),
                         trailing: CupertinoSwitch(
                           activeColor: const Color(0xff005eb0),
                           value: vm.isEnabledFastQRPay,

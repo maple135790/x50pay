@@ -31,6 +31,9 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "continuous": m0,
+        "dialogCancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "dialogConfirm": MessageLookupByLibrary.simpleMessage("確定"),
+        "dialogNext": MessageLookupByLibrary.simpleMessage("下一步"),
         "dialogReturn": MessageLookupByLibrary.simpleMessage("返回"),
         "dialogSave": MessageLookupByLibrary.simpleMessage("保存"),
         "dressRoomTitle": MessageLookupByLibrary.simpleMessage("更換角色/衣裝"),
@@ -76,6 +79,29 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("伺服器錯誤，請嘗試重新整理或回報X50"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("券量 : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage("張"),
+        "userAppSettingsBiometrics":
+            MessageLookupByLibrary.simpleMessage("生物辨識登入"),
+        "userAppSettingsBiometricsDisable":
+            MessageLookupByLibrary.simpleMessage("取消生物辨識登入"),
+        "userAppSettingsBiometricsDisableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "確定要取消生物辨識登入嗎？\n再次開啟需要重新輸入登入資訊"),
+        "userAppSettingsBiometricsEnableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "注意:\n此功能會將您的帳號密碼加密儲存於手機中，用生物辨識登入時會自動填入帳號密碼。\n\nAndroid 使用 KeyStore 儲存\niOS 使用 KeyChain 儲存。\n\n如果帳號密碼有更換，需要再次重新設定。\n\n確定使用此功能嗎？"),
+        "userAppSettingsBiometricsLoginCred":
+            MessageLookupByLibrary.simpleMessage("登入資訊"),
+        "userAppSettingsBiometricsLoginCredContent":
+            MessageLookupByLibrary.simpleMessage("再次輸入帳號密碼"),
+        "userAppSettingsBiometricsLoginTry":
+            MessageLookupByLibrary.simpleMessage("嘗試登入"),
+        "userAppSettingsFastPayment":
+            MessageLookupByLibrary.simpleMessage("快速支付"),
+        "userAppSettingsFastPaymentEnableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "快速支付流程有別於網頁版的支付流程，投幣時不會做 Token 驗證\n\n確定開啟快速支付流程？"),
+        "userAppSettingsFastPaymentEnableTitle":
+            MessageLookupByLibrary.simpleMessage("開啟快速支付"),
         "userAvatar": MessageLookupByLibrary.simpleMessage("修改顯示頭貼"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("店鋪儲值紀錄"),
         "userEmail": MessageLookupByLibrary.simpleMessage("更改使用者信箱"),

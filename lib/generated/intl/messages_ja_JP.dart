@@ -31,6 +31,9 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "continuous": m0,
+        "dialogCancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
+        "dialogConfirm": MessageLookupByLibrary.simpleMessage("OK"),
+        "dialogNext": MessageLookupByLibrary.simpleMessage("次"),
         "dialogReturn": MessageLookupByLibrary.simpleMessage("戻る"),
         "dialogSave": MessageLookupByLibrary.simpleMessage("セーフ"),
         "dressRoomTitle": MessageLookupByLibrary.simpleMessage("キャラ変更/着せ替え"),
@@ -77,6 +80,29 @@ class MessageLookup extends MessageLookupByLibrary {
             "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("所持しているチケット : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
+        "userAppSettingsBiometrics":
+            MessageLookupByLibrary.simpleMessage("生体認証ログイン"),
+        "userAppSettingsBiometricsDisable":
+            MessageLookupByLibrary.simpleMessage("生体認証ログイン解除"),
+        "userAppSettingsBiometricsDisableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "生体認証ログインを解除しますか？\n再利用の場合は、ログイン情報を再び入力します"),
+        "userAppSettingsBiometricsEnableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "注意：\n\nこの機能は、ログイン情報を暗号化して携帯電話に保存します。生体認証でログインすると、ログイン情報が自動的に入力されます。\n\nAndroid は KeyStore を使用して保存します。\niOS は KeyChain を使用して保存します。\n\nログイン情報を変更した場合は、再度設定する必要があります。\n\nこの機能を使用してもよろしいですか？"),
+        "userAppSettingsBiometricsLoginCred":
+            MessageLookupByLibrary.simpleMessage("ログイン情報"),
+        "userAppSettingsBiometricsLoginCredContent":
+            MessageLookupByLibrary.simpleMessage("ログイン情報を再入力してください"),
+        "userAppSettingsBiometricsLoginTry":
+            MessageLookupByLibrary.simpleMessage("ログインを試みる"),
+        "userAppSettingsFastPayment":
+            MessageLookupByLibrary.simpleMessage("高速化決済"),
+        "userAppSettingsFastPaymentEnableContent":
+            MessageLookupByLibrary.simpleMessage(
+                "高速化決済は、Webベースの支払いプロセスとは異なります。コインを投入する際には、トークン認証は行われません。\n\n高速化決済を有効にしますか？"),
+        "userAppSettingsFastPaymentEnableTitle":
+            MessageLookupByLibrary.simpleMessage("高速化決済を有効化"),
         "userAvatar": MessageLookupByLibrary.simpleMessage("アイコン変更"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("チャージ履歴"),
         "userEmail": MessageLookupByLibrary.simpleMessage("ユーザーメールアドレス変更"),

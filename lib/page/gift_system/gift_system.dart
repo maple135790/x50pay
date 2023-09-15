@@ -79,6 +79,7 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: tabs.length,
+      initialIndex: 1,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -324,14 +324,12 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
     return Container(
       decoration: BoxDecoration(color: bgColor),
-      child: Padding(
+      child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: ListView.builder(
-          itemCount: settingsGroups.length,
-          itemBuilder: (context, index) {
-            return settingsGroups[index];
-          },
-        ),
+        itemCount: settingsGroups.length,
+        itemBuilder: (context, index) {
+          return settingsGroups[index];
+        },
       ),
     );
   }
@@ -342,7 +340,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Themes.borderColor, width: 1),
+            border: Border.all(color: Themes.borderColor, width: 2),
             color: bgColor),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -398,7 +396,7 @@ class _SettingsGroup extends StatelessWidget {
       ));
       if (i != children.length - 1) {
         list.add(
-            const Divider(thickness: 1, height: 1, color: Themes.borderColor));
+            const Divider(thickness: 2, height: 1, color: Themes.borderColor));
       }
     }
     return list;
@@ -409,9 +407,14 @@ class _SettingsGroup extends StatelessWidget {
     return Column(
       children: [
         Container(
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: Themes.borderColor, width: 2),
+            border: Border.all(
+              color: Themes.borderColor,
+              width: 2,
+              strokeAlign: BorderSide.strokeAlignOutside,
+            ),
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
           child: Column(children: _children),
@@ -465,28 +468,37 @@ class _SettingTile extends StatelessWidget {
         break;
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8.5),
-      child: ListTile(
+    return Material(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
         onTap: onTap,
-        contentPadding: EdgeInsets.zero,
-        minVerticalPadding: 0,
-        leading: Container(
-            height: 42,
-            width: 42,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: Themes.borderColor, width: 2)),
-            child: Icon(iconData, color: iconColor, size: 18)),
-        title: Text(title,
-            style: const TextStyle(
-              fontSize: 14.5,
-              color: Color(0xfffafafa),
-              fontWeight: FontWeight.w500,
-            )),
-        // subtitle:
-        //     Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
+        splashColor: Colors.white24,
+        highlightColor: Colors.white24.withOpacity(0.1),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
+          child: Row(
+            children: [
+              Container(
+                  height: 42,
+                  width: 42,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Themes.borderColor, width: 1)),
+                  child: Icon(iconData, color: iconColor, size: 18)),
+              const SizedBox(width: 15),
+              Text(title,
+                  style: const TextStyle(
+                    fontSize: 14.5,
+                    color: Color(0xfffafafa),
+                    fontWeight: FontWeight.w500,
+                  )),
+            ],
+          ),
+        ),
       ),
+
+      // subtitle:
+      //     Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
     );
   }
 }
