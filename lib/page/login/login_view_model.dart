@@ -41,8 +41,8 @@ class LoginViewModel extends BaseViewModel {
     bool isShowSuccessLogin, {
     int debugFlag = 200,
   }) async {
-    await EasyLoading.show();
-    await Future.delayed(const Duration(milliseconds: 200));
+    EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 100));
 
     try {
       if (!kDebugMode || isForceFetch) {
@@ -103,12 +103,14 @@ class LoginViewModel extends BaseViewModel {
     GlobalSingleton.instance.isLogined = true;
     if (isShowSuccessLogin) {
       EasyLoading.dismiss();
-      await Future.delayed(const Duration(milliseconds: 200));
-      EasyLoading.showSuccess('登入成功，歡迎回來',
-          duration: const Duration(milliseconds: 800));
-      await Future.delayed(const Duration(milliseconds: 800));
-      EasyLoading.dismiss();
+      await Future.delayed(const Duration(milliseconds: 150));
+      EasyLoading.showSuccess(
+        '登入成功，歡迎回來',
+        duration: const Duration(milliseconds: 400),
+      );
       await Future.delayed(const Duration(milliseconds: 400));
+      EasyLoading.dismiss();
+      await Future.delayed(const Duration(milliseconds: 150));
     }
     onLoginSuccess.call();
   }

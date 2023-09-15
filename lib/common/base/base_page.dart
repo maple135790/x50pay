@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -221,9 +220,7 @@ class _HeaderState extends State<_Header> {
     );
     if (changedLocale == null) return;
     if (!mounted) return;
-    EasyLoading.show();
-    Future.delayed(const Duration(milliseconds: 800), () {
-      EasyLoading.dismiss();
+    Future.delayed(const Duration(milliseconds: 100), () {
       context.read<LanguageViewModel>().setUserPrefLocale(changedLocale);
     });
   }

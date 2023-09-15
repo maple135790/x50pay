@@ -83,7 +83,7 @@ class GlobalSingleton {
   ///
   /// [force] 強制檢查使用者資料
   Future<bool> checkUser({bool force = false}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 100));
     try {
       final current = DateTime.now().millisecondsSinceEpoch;
       final isLess30Sec = (current ~/ 1000) - _lastChkMe < 30;

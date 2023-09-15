@@ -78,8 +78,10 @@ class _StoreItem extends StatelessWidget {
       ..setString('store_name', store.name!)
       ..setString('store_id', prefix + (store.sid!.toString()));
     await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
-        duration: const Duration(seconds: 2));
-    await Future.delayed(const Duration(seconds: 2));
+        duration: const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 800));
+    EasyLoading.dismiss();
+    await Future.delayed(const Duration(milliseconds: 150));
     router.goNamed(AppRoutes.gameCabs.routeName);
     return;
   }

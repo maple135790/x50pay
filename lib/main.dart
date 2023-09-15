@@ -104,7 +104,7 @@ class _Spinner extends StatefulWidget {
 
 class _SpinnerState extends State<_Spinner> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 2),
+    duration: const Duration(milliseconds: 1500),
     vsync: this,
   )..repeat();
   late final Animation<double> _animation = CurvedAnimation(
