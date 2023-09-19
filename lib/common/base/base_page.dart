@@ -1,3 +1,4 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -180,7 +181,18 @@ class _HeaderState extends State<_Header> {
                               color: const Color(0xff2a2a2a),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: Text(currentLocale.displayText)),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CountryFlag.fromCountryCode(
+                                  currentLocale.countryCode ?? '',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(currentLocale.displayText),
+                              ],
+                            )),
                       ),
                     ),
                   ),
@@ -205,8 +217,19 @@ class _HeaderState extends State<_Header> {
             children: List.generate(
               S.delegate.supportedLocales.length,
               (index) => RadioListTile<Locale>(
+                controlAffinity: ListTileControlAffinity.trailing,
                 value: S.delegate.supportedLocales[index],
-                title: Text(S.delegate.supportedLocales[index].displayText),
+                title: Row(
+                  children: [
+                    CountryFlag.fromCountryCode(
+                      S.delegate.supportedLocales[index].countryCode ?? '',
+                      height: 25,
+                      width: 25,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(S.delegate.supportedLocales[index].displayText),
+                  ],
+                ),
                 groupValue: currentLocale,
                 onChanged: (value) {
                   context.pop(value);

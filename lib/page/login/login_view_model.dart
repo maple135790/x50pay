@@ -106,11 +106,11 @@ class LoginViewModel extends BaseViewModel {
       await Future.delayed(const Duration(milliseconds: 150));
       EasyLoading.showSuccess(
         '登入成功，歡迎回來',
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 800),
       );
-      await Future.delayed(const Duration(milliseconds: 400));
+      await Future.delayed(const Duration(milliseconds: 800));
       EasyLoading.dismiss();
-      await Future.delayed(const Duration(milliseconds: 150));
+      await Future.delayed(const Duration(milliseconds: 350));
     }
     onLoginSuccess.call();
   }
