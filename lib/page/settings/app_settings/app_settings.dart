@@ -199,6 +199,35 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
     );
   }
 
+  Future<bool?> onInAppNfcScanChanged(bool value) async {
+    final confirmChange = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(i18n.userAppSettingsInAppNfc),
+        content: Text(i18n.userAppSettingsInAppNfcContent),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text(i18n.dialogCancel),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text(i18n.dialogConfirm),
+          ),
+        ],
+      ),
+    );
+    if (confirmChange != true) return null;
+    viewModel
+      ..isEnableInAppNfcScan = value
+      ..setInAppNfcScan();
+    return value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -243,6 +272,17 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
                           activeColor: const Color(0xff005eb0),
                           value: vm.isEnabledFastQRPay,
                           onChanged: onFastQRPayChanged,
+                        ),
+                      );
+                    }),
+                    Consumer<AppSettingsViewModel>(
+                        builder: (context, vm, child) {
+                      return CupertinoListTile.notched(
+                        title: Text(i18n.userAppSettingsInAppNfc),
+                        trailing: CupertinoSwitch(
+                          activeColor: const Color(0xff005eb0),
+                          value: vm.isEnableInAppNfcScan,
+                          onChanged: onInAppNfcScanChanged,
                         ),
                       );
                     }),

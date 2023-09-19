@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager/platform_tags.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/mixins/nfc_pad_mixin.dart';
@@ -13,7 +15,16 @@ import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
+  DateTime lastScanTime = DateTime.fromMillisecondsSinceEpoch(0);
+
+  Future<bool> _isEnableInAppNfcScan() async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getBool('inAppNfcScan') ?? false;
+  }
+
   Future<void> _handleNfc(NfcTag tag) async {
+    if (!GlobalSingleton.instance.isLogined) return;
+
     Ndef? ndef = Ndef.from(tag);
     if (ndef == null) {
       MifareClassic.from(tag);
@@ -43,7 +54,8 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     handleNfcPay(
       mid: mid,
       cid: cid,
-      isPreferTicket: (await SettingsViewModel().getPaymentSettings()).nfcTicket,
+      isPreferTicket:
+          (await SettingsViewModel().getPaymentSettings()).nfcTicket,
       onCabSelect: (qrPayData) {
         GlobalSingleton.instance.isNfcPayDialogOpen = true;
         showDialog(
@@ -65,7 +77,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     );
   }
 
-  void _handleNfcEvent(Ndef ndef) {
+  void _handleNfcEvent(Ndef ndef) async {
     final message = ndef.cachedMessage!;
     NdefRecord? urlRecord;
 
@@ -83,8 +95,19 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     }
     // 沒找到符合的record
     if (urlRecord == null) return;
-
+    log(DateTime.now().difference(lastScanTime).inMilliseconds.toString());
+    if (DateTime.now().difference(lastScanTime).inMilliseconds < 1000) {
+      return;
+    }
+    lastScanTime = DateTime.now();
     final url = String.fromCharCodes(urlRecord.payload);
+
+    if (!await _isEnableInAppNfcScan()) {
+      log('inAppNfcScan is disabled', name: 'handleNfc');
+      launchUrlString('https://$url', mode: LaunchMode.externalApplication);
+      return;
+    }
+
     if (url.contains('nfcpay')) {
       _handleNfcPayRecord(url);
     } else if (url.contains('nfcPad')) {
@@ -124,7 +147,6 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
       log('NFC is not available', name: 'tryActivateNfc');
       return;
     }
-
     _startNfcScan();
   }
 

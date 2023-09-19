@@ -5,12 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:html/parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 
 mixin NfcPayMixin {
   final _repo = Repository();
+  bool get isForceFetch => GlobalSingleton.instance.isServiceOnline;
 
   Future<void> handleNfcPay({
     required String mid,
@@ -71,7 +74,10 @@ mixin NfcPayMixin {
 
   void _doInsert(String url) async {
     log('https://pay.x50.fun$url');
-    // await CabSelectViewModel().doInsertQRPay(url: 'https://pay.x50.fun$url');
+
+    if (kReleaseMode) {
+      await CabSelectViewModel().doInsertQRPay(url: 'https://pay.x50.fun$url');
+    }
     return;
   }
 
@@ -92,7 +98,7 @@ mixin NfcPayMixin {
 
   Future<String> _getNfcPayDocument(String url) async {
     late final String rawDoc;
-    if (!kDebugMode) {
+    if (!kDebugMode || isForceFetch) {
       rawDoc = await _repo.getQRPayDocument(url);
     } else {
       rawDoc = await rootBundle.loadString('assets/tests/scan_pay_x50pay.html');

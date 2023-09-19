@@ -103,6 +103,10 @@ class MessageLookup extends MessageLookupByLibrary {
                 "高速化決済は、Webベースの支払いプロセスとは異なります。コインを投入する際には、トークン認証は行われません。\n\n高速化決済を有効にしますか？"),
         "userAppSettingsFastPaymentEnableTitle":
             MessageLookupByLibrary.simpleMessage("高速化決済を有効化"),
+        "userAppSettingsInAppNfc":
+            MessageLookupByLibrary.simpleMessage("アプリ内の NFC タグ読み取り"),
+        "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
+            "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。"),
         "userAvatar": MessageLookupByLibrary.simpleMessage("アイコン変更"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("チャージ履歴"),
         "userEmail": MessageLookupByLibrary.simpleMessage("ユーザーメールアドレス変更"),

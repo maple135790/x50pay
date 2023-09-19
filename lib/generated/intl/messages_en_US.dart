@@ -110,6 +110,10 @@ class MessageLookup extends MessageLookupByLibrary {
                 "The Fast Payment feature is different from the web-based payment process. No token verification will be performed when coins are deposited.\n\nAre you sure you want to enable the quick payment process?"),
         "userAppSettingsFastPaymentEnableTitle":
             MessageLookupByLibrary.simpleMessage("Enable Fast Payment"),
+        "userAppSettingsInAppNfc":
+            MessageLookupByLibrary.simpleMessage("In-App NFC tag read"),
+        "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
+            "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option."),
         "userAvatar": MessageLookupByLibrary.simpleMessage("Change Gravator"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("Top-up history"),
         "userEmail": MessageLookupByLibrary.simpleMessage("Change user E-mail"),

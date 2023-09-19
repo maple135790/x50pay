@@ -4,6 +4,13 @@ import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/global_singleton.dart';
 
 class AppSettingsViewModel extends BaseViewModel {
+  bool get isEnableInAppNfcScan => _isEnableInAppNfcScan;
+  bool _isEnableInAppNfcScan = true;
+  set isEnableInAppNfcScan(bool value) {
+    _isEnableInAppNfcScan = value;
+    notifyListeners();
+  }
+
   bool get isEnabledFastQRPay => _isEnabledFastQRPay;
   bool _isEnabledFastQRPay = false;
   set isEnabledFastQRPay(bool value) {
@@ -37,6 +44,16 @@ class AppSettingsViewModel extends BaseViewModel {
     final hasPwd = await GlobalSingleton.instance.secureStorage
         .containsKey(key: 'x50password');
     return hasUsername && hasPwd;
+  }
+
+  Future<bool> _getIsEnableInAppNfcScan() async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getBool('inAppNfcScan') ?? false;
+  }
+
+  void setInAppNfcScan() async {
+    final pref = await SharedPreferences.getInstance();
+    pref.setBool('inAppNfcScan', isEnableInAppNfcScan);
   }
 
   void enableBiometricsLogin(String email, String pasword) async {
@@ -73,6 +90,7 @@ class AppSettingsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 300));
     isEnabledFastQRPay = await _getIsEnabledFastQRPay();
     isEnabledBiometricsLogin = await _getIsEnabledBiometricsLogin();
+    isEnableInAppNfcScan = await _getIsEnableInAppNfcScan();
     return;
   }
 }

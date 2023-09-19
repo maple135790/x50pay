@@ -630,6 +630,26 @@ class S {
     );
   }
 
+  /// `App 內 NFC 標籤掃描`
+  String get userAppSettingsInAppNfc {
+    return Intl.message(
+      'App 內 NFC 標籤掃描',
+      name: 'userAppSettingsInAppNfc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項`
+  String get userAppSettingsInAppNfcContent {
+    return Intl.message(
+      '掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項',
+      name: 'userAppSettingsInAppNfcContent',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `修改顯示頭貼`
   String get userAvatar {
     return Intl.message(

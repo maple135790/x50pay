@@ -89,6 +89,8 @@
   "userAppSettingsFastPayment": "Fast payment",
   "userAppSettingsFastPaymentEnableContent": "The Fast Payment feature is different from the web-based payment process. No token verification will be performed when coins are deposited.\n\nAre you sure you want to enable the quick payment process?",
   "userAppSettingsFastPaymentEnableTitle": "Enable Fast Payment",
+  "userAppSettingsInAppNfc": "In-App NFC tag read",
+  "userAppSettingsInAppNfcContent": "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option.",
   "userAvatar": "Change Gravator",
   "userBidLog": "Top-up history",
   "userEmail": "Change user E-mail",

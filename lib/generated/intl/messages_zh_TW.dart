@@ -102,6 +102,10 @@ class MessageLookup extends MessageLookupByLibrary {
                 "快速支付流程有別於網頁版的支付流程，投幣時不會做 Token 驗證\n\n確定開啟快速支付流程？"),
         "userAppSettingsFastPaymentEnableTitle":
             MessageLookupByLibrary.simpleMessage("開啟快速支付"),
+        "userAppSettingsInAppNfc":
+            MessageLookupByLibrary.simpleMessage("App 內 NFC 標籤掃描"),
+        "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
+            "掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項"),
         "userAvatar": MessageLookupByLibrary.simpleMessage("修改顯示頭貼"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("店鋪儲值紀錄"),
         "userEmail": MessageLookupByLibrary.simpleMessage("更改使用者信箱"),

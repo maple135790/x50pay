@@ -39,6 +39,8 @@ mixin RemoteOpenMixin {
     PermissionStatus permissionGranted;
     LocationData locationData;
 
+    EasyLoading.show();
+
     serviceEnabled = await _location.serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await _location.requestService();
@@ -61,8 +63,8 @@ mixin RemoteOpenMixin {
       _getDistance(25.0455991, 121.5027702, myLat, myLng),
       doorName: shop.doorName,
     );
-
-    await EasyLoading.dismiss();
-    await EasyLoading.showInfo(result.replaceFirst(',', '\n'));
+    EasyLoading.dismiss();
+    await Future.delayed(const Duration(milliseconds: 250));
+    EasyLoading.showInfo(result.replaceFirst(',', '\n'));
   }
 }

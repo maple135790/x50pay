@@ -472,7 +472,7 @@ class _SettingTile extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        splashColor: Colors.white24,
+        splashColor: Colors.white24.withOpacity(0.2),
         highlightColor: Colors.white24.withOpacity(0.1),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 15),

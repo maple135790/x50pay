@@ -24,58 +24,60 @@ class _CollabState extends State<Collab> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: tabs.length,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(children: [
-            const Positioned(
-                right: 0,
-                child: Image(
-                  image: CachedNetworkImageProvider(titleImageUrl),
-                  height: 135,
-                  opacity: AlwaysStoppedAnimation(0.8),
-                )),
-            SizedBox(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+    return Material(
+      child: DefaultTabController(
+        length: tabs.length,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(children: [
+              const Positioned(
+                  right: 0,
+                  child: Image(
+                    image: CachedNetworkImageProvider(titleImageUrl),
+                    height: 135,
+                    opacity: AlwaysStoppedAnimation(0.8),
+                  )),
+              SizedBox(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        color: const Color.fromARGB(12, 255, 255, 255),
+                        width: MediaQuery.of(context).size.width,
+                        height: 89.19,
+                        child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('X50Pay 合作商家', style: TextStyle(fontSize: 17)),
+                              Text('查看 & 兌換合作商家優惠',
+                                  style: TextStyle(color: Color(0xffb4b4b4)))
+                            ])),
+                    Container(
+                        height: 42.5,
+                        alignment: Alignment.centerLeft,
+                        color: const Color.fromARGB(5, 255, 255, 255),
+                        child: TabBar(
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            isScrollable: true,
+                            tabs: tabs,
+                            indicatorWeight: 3,
+                            splashFactory: NoSplash.splashFactory,
+                            indicatorColor: Colors.white)),
+                  ],
+                ),
+              ),
+            ]),
+            const Expanded(
+              child: TabBarView(
                 children: [
-                  Container(
-                      color: const Color.fromARGB(12, 255, 255, 255),
-                      width: MediaQuery.of(context).size.width,
-                      height: 89.19,
-                      child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('X50Pay 合作商家', style: TextStyle(fontSize: 17)),
-                            Text('查看 & 兌換合作商家優惠',
-                                style: TextStyle(color: Color(0xffb4b4b4)))
-                          ])),
-                  Container(
-                      height: 42.5,
-                      alignment: Alignment.centerLeft,
-                      color: const Color.fromARGB(5, 255, 255, 255),
-                      child: TabBar(
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          isScrollable: true,
-                          tabs: tabs,
-                          indicatorWeight: 3,
-                          splashFactory: NoSplash.splashFactory,
-                          indicatorColor: Colors.white)),
+                  _CollabShopList(),
                 ],
               ),
             ),
-          ]),
-          const Expanded(
-            child: TabBarView(
-              children: [
-                _CollabShopList(),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

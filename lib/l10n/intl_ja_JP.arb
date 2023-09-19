@@ -89,6 +89,8 @@
   "userAppSettingsFastPayment": "高速化決済",
   "userAppSettingsFastPaymentEnableContent": "高速化決済は、Webベースの支払いプロセスとは異なります。コインを投入する際には、トークン認証は行われません。\n\n高速化決済を有効にしますか？",
   "userAppSettingsFastPaymentEnableTitle": "高速化決済を有効化",
+  "userAppSettingsInAppNfc": "アプリ内の NFC タグ読み取り",
+  "userAppSettingsInAppNfcContent": "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。",
   "userAvatar": "アイコン変更",
   "userBidLog": "チャージ履歴",
   "userEmail": "ユーザーメールアドレス変更",

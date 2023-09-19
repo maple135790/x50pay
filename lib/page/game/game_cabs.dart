@@ -257,76 +257,83 @@ class _GameCabItem extends StatelessWidget with GameMixin {
     onItemPressed.call();
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-      child: GestureDetector(
-        onTap: () async {
-          final isInsertToken = await GoRouter.of(context).pushNamed<bool>(
-            AppRoutes.gameCab.routeName,
-            pathParameters: {'mid': machine.id!},
-          );
-          if (isInsertToken == true) {
-            onCoinInserted.call();
-          }
-        },
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(
-                  color: Themes.borderColor,
-                  strokeAlign: BorderSide.strokeAlignOutside)),
-          height: 155,
-          child: ClipRRect(
+      child: Container(
+        decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                    child: CachedNetworkImage(
-                  imageUrl: getGameCabImage(machine.id!),
-                  color: const Color.fromARGB(35, 0, 0, 0),
-                  colorBlendMode: BlendMode.srcATop,
-                  fit: BoxFit.fitWidth,
-                  alignment: const Alignment(0, -0.25),
-                )),
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        colors: [Colors.black, Colors.transparent],
-                        transform: GradientRotation(12),
-                        stops: [0, 0.6],
-                      ),
+            border: Border.all(
+                color: Themes.borderColor,
+                strokeAlign: BorderSide.strokeAlignOutside)),
+        height: 155,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                  child: CachedNetworkImage(
+                imageUrl: getGameCabImage(machine.id!),
+                color: const Color.fromARGB(35, 0, 0, 0),
+                colorBlendMode: BlendMode.srcATop,
+                fit: BoxFit.fitWidth,
+                alignment: const Alignment(0, -0.25),
+              )),
+              Positioned.fill(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      colors: [Colors.black, Colors.transparent],
+                      transform: GradientRotation(12),
+                      stops: [0, 0.6],
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 8,
-                  left: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("[$storeName] ${machine.label!}",
+              ),
+              Positioned(
+                bottom: 8,
+                left: 10,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("[$storeName] ${machine.label!}",
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            shadows: [
+                              Shadow(color: Colors.black, blurRadius: 18)
+                            ])),
+                    Row(children: [
+                      const Icon(Icons.schedule,
+                          size: 15, color: Color(0xe6ffffff)),
+                      Text('  $time$addition',
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
+                              color: Color(0xffffffe6),
+                              fontSize: 13,
                               shadows: [
-                                Shadow(color: Colors.black, blurRadius: 18)
-                              ])),
-                      Row(children: [
-                        const Icon(Icons.schedule,
-                            size: 15, color: Color(0xe6ffffff)),
-                        Text('  $time$addition',
-                            style: const TextStyle(
-                                color: Color(0xffffffe6),
-                                fontSize: 13,
-                                shadows: [
-                                  Shadow(color: Colors.black, blurRadius: 15)
-                                ]))
-                      ]),
-                    ],
-                  ),
+                                Shadow(color: Colors.black, blurRadius: 15)
+                              ]))
+                    ]),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Positioned.fill(
+                  child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () async {
+                    final isInsertToken =
+                        await GoRouter.of(context).pushNamed<bool>(
+                      AppRoutes.gameCab.routeName,
+                      pathParameters: {'mid': machine.id!},
+                    );
+                    if (isInsertToken == true) {
+                      onCoinInserted.call();
+                    }
+                  },
+                  splashColor: Colors.white12,
+                  highlightColor: Colors.white12,
+                ),
+              )),
+            ],
           ),
         ),
       ),
