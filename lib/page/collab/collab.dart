@@ -50,7 +50,8 @@ class _CollabState extends State<Collab> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('X50Pay 合作商家', style: TextStyle(fontSize: 17)),
+                              Text('X50Pay 合作商家',
+                                  style: TextStyle(fontSize: 17)),
                               Text('查看 & 兌換合作商家優惠',
                                   style: TextStyle(color: Color(0xffb4b4b4)))
                             ])),

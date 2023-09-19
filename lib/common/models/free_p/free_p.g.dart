@@ -6,7 +6,8 @@ part of 'free_p.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-FreePointModel _$FreePModelFromJson(Map<String, dynamic> json) => FreePointModel(
+FreePointModel _$FreePModelFromJson(Map<String, dynamic> json) =>
+    FreePointModel(
       code: json['code'] as int,
       message: json['message'] as String,
       logs: (json['log'] as List<dynamic>)
