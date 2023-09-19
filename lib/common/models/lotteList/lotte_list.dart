@@ -11,6 +11,7 @@ class LotteListModel {
   final String date;
   final String tic;
 
+  /// 養成抽獎箱資料
   LotteListModel(this.rawLotteList)
       : self = rawLotteList[4],
         name = rawLotteList[0],

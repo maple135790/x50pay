@@ -3,13 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
 
 class GameStore extends StatefulWidget {
+  /// 選店頁面
   const GameStore({super.key});
 
   @override
@@ -23,7 +26,8 @@ class _GameStoreState extends State<GameStore> {
   @override
   void initState() {
     super.initState();
-    _getStoreData = viewModel.getStoreData();
+    final currentLocale = context.read<LanguageViewModel>().currentLocale;
+    _getStoreData = viewModel.getStoreData(currentLocale: currentLocale);
   }
 
   @override
@@ -48,7 +52,7 @@ class _GameStoreLoaded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Storelist> storeList = stores.storelist!;
+    final List<Store> storeList = stores.storelist!;
 
     return SingleChildScrollView(
       child: Column(
@@ -59,8 +63,10 @@ class _GameStoreLoaded extends StatelessWidget {
 }
 
 class _StoreItem extends StatelessWidget {
-  final Storelist store;
+  final Store store;
   final String prefix;
+
+  /// 店家項目
   const _StoreItem(this.store, this.prefix, {Key? key}) : super(key: key);
 
   String getStoreImage(int storeId) {
@@ -72,8 +78,10 @@ class _StoreItem extends StatelessWidget {
       ..setString('store_name', store.name!)
       ..setString('store_id', prefix + (store.sid!.toString()));
     await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
-        duration: const Duration(seconds: 2));
-    await Future.delayed(const Duration(seconds: 2));
+        duration: const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 800));
+    EasyLoading.dismiss();
+    await Future.delayed(const Duration(milliseconds: 150));
     router.goNamed(AppRoutes.gameCabs.routeName);
     return;
   }
@@ -129,20 +137,17 @@ class _StoreItem extends StatelessWidget {
                               shadows: [
                                 Shadow(color: Colors.black, blurRadius: 18)
                               ])),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const Icon(Icons.near_me,
-                                size: 15, color: Color(0xe6ffffff)),
-                            Text('  | ${store.address!}',
-                                style: const TextStyle(
-                                    color: Color(0xffbcbfbf),
-                                    fontSize: 13,
-                                    shadows: [
-                                      Shadow(
-                                          color: Colors.black, blurRadius: 15)
-                                    ]))
-                          ]),
+                      Row(children: [
+                        const Icon(Icons.near_me,
+                            size: 15, color: Color(0xe6ffffff)),
+                        Text('  | ${store.address!}',
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.9),
+                                fontSize: 13,
+                                shadows: const [
+                                  Shadow(color: Colors.black, blurRadius: 15)
+                                ]))
+                      ]),
                     ],
                   ),
                 ),

@@ -1,0 +1,113 @@
+{
+  "@continuousDay": {
+    "placeholders": {
+      "continuousDay": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gatchaPoints": {
+    "placeholders": {
+      "gatchaPoints": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gr2Limit": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@waitCount": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
+  "continuous": " Continuous : {continuousDay} days",
+  "dialogCancel": "Cancel",
+  "dialogConfirm": "Confirm",
+  "dialogNext": "Next",
+  "dialogReturn": "Return",
+  "dialogSave": "Save",
+  "dressRoomTitle": "Change avater/clothes",
+  "gameDiscountHour": "Discount",
+  "gameLocation": "Your Location",
+  "gameMPass": "Monthly Pass",
+  "gameNormalHour": "Normal",
+  "gameTicket": "Ticket",
+  "gameUnlimit": "This game have reservation at this week",
+  "gameUnlimitTitle": "Already reservation datetime",
+  "gameWait": "X50Pad queue status : {waitCount} person waiting",
+  "gameWeekday": "Weekday",
+  "gameWeekends": "Weekends",
+  "gatcha": " Gatcha : {gatchaPoints} points",
+  "gr2HeartBox": "Hearts Shop",
+  "gr2Limit": " Point back {gr2LimitTimes} times , 25P/t",
+  "gr2ResetDate": " Reset Date : ",
+  "heart": " Hearts",
+  "infoNotify": "Informations",
+  "loginEmail": "Email",
+  "loginError": "Login Error!",
+  "loginForgotPassword": "Forgot?",
+  "loginLogin": "Login",
+  "loginPassword": "Password",
+  "loginSignUp": "Not have account ?",
+  "loginSub": "24Hr Open.",
+  "loginWelcome": "Welcome Back !",
+  "monthlyPass": "Monthly Pass : ",
+  "mpassInvalid": "Buy it Now!",
+  "mpassValid": "Owned",
+  "navCollab": "Collab",
+  "navGame": "Game",
+  "navGift": "Gift",
+  "navSettings": "Settings",
+  "nbusyCoin": "Coined",
+  "nbusyNoCoin": "Not Coined",
+  "nbusyS1": "Idle",
+  "nbusyS2": "Normal",
+  "nbusyS3": "Busy",
+  "nextLv": " Next Lv : ",
+  "officialNotify": "Offical ADs",
+  "serviceError": "Server error, Please retry again.",
+  "ticketBalance": "Ticket Balance : ",
+  "ticketUnit": " ",
+  "userAppSettingsBiometrics": "Biometrics login",
+  "userAppSettingsBiometricsDisable": "Disable Biometrics login",
+  "userAppSettingsBiometricsDisableContent": "You are going to disable Biomertrics Login.\nYou will be prompt to enter your login credentials in order to re-enable it.",
+  "userAppSettingsBiometricsEnableContent": "Attention:\n\nThis feature will encrypt and store your login credentials on your phone. When you log in with biometrics, your account and password will be automatically filled in.\n\nAndroid uses KeyStore to store.\niOS uses KeyChain to store.\n\nIf your login credentials is changed, you need to reset it again.\n\nAre you sure you want to use this feature?",
+  "userAppSettingsBiometricsLoginCred": "Login Credentials",
+  "userAppSettingsBiometricsLoginCredContent": "Enter your login credentials again",
+  "userAppSettingsBiometricsLoginTry": "Try to log in",
+  "userAppSettingsFastPayment": "Fast payment",
+  "userAppSettingsFastPaymentEnableContent": "The Fast Payment feature is different from the web-based payment process. No token verification will be performed when coins are deposited.\n\nAre you sure you want to enable the quick payment process?",
+  "userAppSettingsFastPaymentEnableTitle": "Enable Fast Payment",
+  "userAppSettingsInAppNfc": "In-App NFC tag read",
+  "userAppSettingsInAppNfcContent": "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option.",
+  "userAvatar": "Change Gravator",
+  "userBidLog": "Top-up history",
+  "userEmail": "Change user E-mail",
+  "userFPlayLog": "Cashback history",
+  "userInAppSetting": "X50Pay App Settings",
+  "userLogout": "Logout X50Pay",
+  "userNFC": "Multi Payment Setting",
+  "userOpenDoor1": "Open \"Ximen 1 Store\" door",
+  "userOpenDoor2": "Open \"Ximen 2 Store\" door",
+  "userPad": "Online queue Setting",
+  "userPassword": "Change user password",
+  "userPhone": "Change user cellphone",
+  "userPlayLog": "Used point history",
+  "userQUIC": "X50QuIC Payment Setting",
+  "userTicLog": "Unused ticket history",
+  "userUTicLog": "Usage ticket history",
+  "vipDate": "Expire Date : ",
+  "vipExpiredMsg": "Click left \"Ticket\" icon to buy !",
+  "x50PayLanguage": "X50Pay Language"
+}

@@ -12,7 +12,13 @@ class UserModel {
   final double? point;
   final String? name;
   final int? ticketint;
+  final double? fpoint;
+  final int? givebool;
+
+  /// 手機是否驗證
   final bool? phoneactive;
+
+  /// 是否有月票身分
   final bool? vip;
   final VipDate? vipdate;
   final String? sid;
@@ -30,6 +36,8 @@ class UserModel {
       this.name,
       this.ticketint,
       this.phoneactive,
+      this.fpoint,
+      this.givebool,
       this.vip,
       this.vipdate,
       this.sid,
@@ -45,9 +53,19 @@ class UserModel {
   String get userImageUrl => rawUserImgUrl == null
       ? "https://pay.x50.fun/static/logo.jpg"
       : "$rawUserImgUrl&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+  String get settingsUserImageUrl => _getSettingsUserImageUrl();
   bool get hasTicket => ticketint != null && ticketint! > 0;
   bool get isStaff => uid != null && uid!.startsWith('X');
   bool get isInsertGod => uid != null && uid!.startsWith('v');
+
+  String _getSettingsUserImageUrl() {
+    if (rawUserImgUrl!.contains('size')) {
+      return '${rawUserImgUrl!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
+    } else {
+      return rawUserImgUrl! +
+          r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+    }
+  }
 
   @override
   String toString() {

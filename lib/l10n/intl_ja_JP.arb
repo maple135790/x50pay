@@ -1,0 +1,113 @@
+{
+  "@continuousDay": {
+    "placeholders": {
+      "continuousDay": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gatchaPoints": {
+    "placeholders": {
+      "gatchaPoints": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@gr2Limit": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "String"
+      }
+    }
+  },
+  "@waitCount": {
+    "placeholders": {
+      "gr2LimitTimes": {
+        "example": "3",
+        "type": "int"
+      }
+    }
+  },
+  "continuous": " ログイン日数 :  {continuousDay} 日",
+  "dialogCancel": "キャンセル",
+  "dialogConfirm": "OK",
+  "dialogNext": "次",
+  "dialogReturn": "戻る",
+  "dialogSave": "セーフ",
+  "dressRoomTitle": "キャラ変更/着せ替え",
+  "gameDiscountHour": "オフピークタイム",
+  "gameLocation": "ロケーション",
+  "gameMPass": "お得パス",
+  "gameNormalHour": "ピークタイム",
+  "gameTicket": "遊びチケット",
+  "gameUnlimit": "予約された無制限台があります",
+  "gameUnlimitTitle": "予約された時間帯",
+  "gameWait": "X50Pad 並び状況 : {waitCount} 人待ち",
+  "gameWeekday": "平日",
+  "gameWeekends": "休日",
+  "gatcha": " 抽選券 :  {gatchaPoints} 点",
+  "gr2HeartBox": "絆ポイントショップ",
+  "gr2Limit": "還元ポイント 25P / {gr2LimitTimes} ",
+  "gr2ResetDate": " シーズン変わる日 : ",
+  "heart": " 絆ランク",
+  "infoNotify": "最新イベント",
+  "loginEmail": "メールアドレス",
+  "loginError": "ログインエラー",
+  "loginForgotPassword": "パスワードを忘れたお方",
+  "loginLogin": "ログイン",
+  "loginPassword": "パスワード",
+  "loginSignUp": "会員登録",
+  "loginSub": "24時間年中無休",
+  "loginWelcome": "おかえりなさい！",
+  "monthlyPass": "お得パス : ",
+  "mpassInvalid": "未購入",
+  "mpassValid": "購入済み",
+  "navCollab": "コラボ",
+  "navGame": "コインを\n  入れる",
+  "navGift": "プレゼント",
+  "navSettings": "オプション",
+  "nbusyCoin": "ゲーム中",
+  "nbusyNoCoin": "空いています",
+  "nbusyS1": "空いている",
+  "nbusyS2": "やや空いている",
+  "nbusyS3": "混雑中",
+  "nextLv": "次のランク : ",
+  "officialNotify": "公式インフォメーション",
+  "serviceError": "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。",
+  "ticketBalance": "所持しているチケット : ",
+  "ticketUnit": " ",
+  "userAppSettingsBiometrics": "生体認証ログイン",
+  "userAppSettingsBiometricsDisable": "生体認証ログイン解除",
+  "userAppSettingsBiometricsDisableContent": "生体認証ログインを解除しますか？\n再利用の場合は、ログイン情報を再び入力します",
+  "userAppSettingsBiometricsEnableContent": "注意：\n\nこの機能は、ログイン情報を暗号化して携帯電話に保存します。生体認証でログインすると、ログイン情報が自動的に入力されます。\n\nAndroid は KeyStore を使用して保存します。\niOS は KeyChain を使用して保存します。\n\nログイン情報を変更した場合は、再度設定する必要があります。\n\nこの機能を使用してもよろしいですか？",
+  "userAppSettingsBiometricsLoginCred": "ログイン情報",
+  "userAppSettingsBiometricsLoginCredContent": "ログイン情報を再入力してください",
+  "userAppSettingsBiometricsLoginTry": "ログインを試みる",
+  "userAppSettingsFastPayment": "高速化決済",
+  "userAppSettingsFastPaymentEnableContent": "高速化決済は、Webベースの支払いプロセスとは異なります。コインを投入する際には、トークン認証は行われません。\n\n高速化決済を有効にしますか？",
+  "userAppSettingsFastPaymentEnableTitle": "高速化決済を有効化",
+  "userAppSettingsInAppNfc": "アプリ内の NFC タグ読み取り",
+  "userAppSettingsInAppNfcContent": "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。",
+  "userAvatar": "アイコン変更",
+  "userBidLog": "チャージ履歴",
+  "userEmail": "ユーザーメールアドレス変更",
+  "userFPlayLog": "還元履歴",
+  "userInAppSetting": "X50Pay アプリ設定",
+  "userLogout": "X50Payからログアウト",
+  "userNFC": "支払い設定",
+  "userOpenDoor1": "西門\"一号店\"のドアを開く",
+  "userOpenDoor2": "西門\"二号店\"のドアを開く",
+  "userPad": "オンライン並ぶ表示設定",
+  "userPassword": "ユーザーパスワード変更",
+  "userPhone": "ユーザー携帯番号変更",
+  "userPlayLog": "支払い履歴",
+  "userQUIC": "QUICアイコン変更",
+  "userTicLog": "所持チケット",
+  "userUTicLog": "チケット利用履歴",
+  "vipDate": "有効期限 : ",
+  "vipExpiredMsg": "左側のアイコンをクリックして購入",
+  "x50PayLanguage": "X50Pay 言語"
+}

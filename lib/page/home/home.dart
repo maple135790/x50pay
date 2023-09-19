@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
@@ -13,15 +12,14 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/page/home/dress_room/dress_room_popup.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
 
-// part "grade_box_popup.dart";
-
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  /// 首頁
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -32,31 +30,31 @@ class _HomeState extends BaseStatefulState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: viewModel.initHome(),
-      key: ValueKey(viewModel.entry),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          log('home not done');
-          return const SizedBox();
-        }
-        if (snapshot.data == false) {
-          EasyLoading.showError('伺服器錯誤，請嘗試重新整理或回報X50');
-          return const SizedBox(child: Text('伺服器錯誤，請嘗試重新整理或回報X50'));
-        } else {
-          return SingleChildScrollView(
-              child: _HomeLoaded(GlobalSingleton.instance.user!, viewModel));
-        }
-      },
+    return Material(
+      child: ChangeNotifierProvider.value(
+        value: viewModel,
+        builder: (context, child) => FutureBuilder<bool>(
+          future: viewModel.initHome(),
+          key: ValueKey(viewModel.entry),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const SizedBox();
+            }
+            if (snapshot.data == false) {
+              showServiceError();
+              return Center(child: Text(serviceErrorText));
+            } else {
+              return const SingleChildScrollView(child: _HomeLoaded());
+            }
+          },
+        ),
+      ),
     );
   }
 }
 
 class _HomeLoaded extends StatefulWidget {
-  final HomeViewModel viewModel;
-  final UserModel user;
-
-  const _HomeLoaded(this.user, this.viewModel, {Key? key}) : super(key: key);
+  const _HomeLoaded();
 
   @override
   State<_HomeLoaded> createState() => _HomeLoadedState();
@@ -78,20 +76,42 @@ class _HomeLoadedState extends State<_HomeLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    final user = widget.user;
-    final recentQuests = widget.viewModel.entry!.questCampaign;
+    final i18n = S.of(context);
 
+    return Consumer<HomeViewModel>(
+      builder: (context, vm, child) {
+        final recentQuests = vm.entry!.questCampaign;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 10),
+            _TopInfo(),
+            _TicketInfo(),
+            _MariInfo(entryData: vm.entry!),
+            if (recentQuests != null) divider(i18n.infoNotify),
+            if (recentQuests != null) _RecentQuests(quests: recentQuests),
+            divider(i18n.officialNotify),
+            const _OfficialInfo(),
+            const SizedBox(height: 25),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _OfficialInfo extends StatelessWidget {
+  /// 官方資訊區
+  ///
+  /// 包含官方資訊的圖片，點擊圖片後會跳轉到該活動的頁面
+  /// 通常是真璃的 youtube 頻道，及 X50 的 youtube 頻道
+  const _OfficialInfo();
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(height: 10),
-        _TopInfo(user: user),
-        _TicketInfo(user: user),
-        _MariInfo(isVip: user.vip!, entryData: widget.viewModel.entry!),
-        if (recentQuests != null) divider('最新活動'),
-        if (recentQuests != null) _RecentQuests(quests: recentQuests),
-        divider('官方資訊'),
-        _EventInfo(widget.viewModel.entry!.evlist),
         Padding(
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
             child: GestureDetector(
@@ -113,25 +133,35 @@ class _HomeLoadedState extends State<_HomeLoaded> {
                 },
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image(image: R.image.top())))),
-        const SizedBox(height: 25),
+                    child: Image(image: R.image.top()))))
       ],
     );
   }
 }
 
 class _TicketInfo extends StatelessWidget {
-  final UserModel user;
-
-  const _TicketInfo({Key? key, required this.user}) : super(key: key);
+  /// 票券資訊
+  ///
+  /// 包含券量、月票、月票期限
+  _TicketInfo();
+  final UserModel user = GlobalSingleton.instance.userNotifier.value!;
 
   String vipExpDate() {
     final date = DateTime.fromMillisecondsSinceEpoch(user.vipdate!.date);
     return '${date.month}/${date.day} ${date.hour}:${date.minute}';
   }
 
+  void onTicketInfoPressed(BuildContext context) {
+    context.goNamed(
+      AppRoutes.settings.routeName,
+      queryParameters: {'goTo': "ticketRecord"},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final i18n = S.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       child: Stack(children: [
@@ -152,7 +182,6 @@ class _TicketInfo extends StatelessWidget {
                     onTap: () {
                       GoRouter.of(context)
                           .pushNamed(AppRoutes.buyMPass.routeName);
-                      // Navigator.of(context).pushNamed(AppRoute.buyMPass);
                     },
                     child: const Icon(Icons.confirmation_number_rounded,
                         color: Color(0xff237804), size: 50)),
@@ -160,34 +189,48 @@ class _TicketInfo extends StatelessWidget {
                 const VerticalDivider(
                     thickness: 1, width: 0, color: Color(0xff3e3e3e)),
                 const SizedBox(width: 15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                        text: TextSpan(children: [
-                      const TextSpan(text: '券量 : '),
-                      const WidgetSpan(child: SizedBox(width: 5)),
-                      TextSpan(text: user.ticketint!.toString()),
-                      const TextSpan(text: '張'),
-                    ])),
-                    const SizedBox(height: 5),
-                    RichText(
-                        text: TextSpan(children: [
-                      const TextSpan(text: '月票 : '),
-                      const WidgetSpan(child: SizedBox(width: 5)),
-                      TextSpan(
-                          text: user.vip! ? '已購買' : '未購買',
-                          style: TextStyle(
-                              color: user.vip! == false ? Colors.red : null))
-                    ])),
-                    const SizedBox(height: 5),
-                    RichText(
-                        text: TextSpan(children: [
-                      const TextSpan(text: '期限 : '),
-                      const WidgetSpan(child: SizedBox(width: 5)),
-                      TextSpan(text: user.vip! ? vipExpDate() : '點左側票卷圖樣立刻購買')
-                    ])),
-                  ],
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      onTicketInfoPressed(context);
+                    },
+                    child: SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(text: i18n.ticketBalance),
+                            const WidgetSpan(child: SizedBox(width: 5)),
+                            TextSpan(text: user.ticketint!.toString()),
+                            TextSpan(text: i18n.ticketUnit),
+                          ])),
+                          const SizedBox(height: 5),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(text: i18n.monthlyPass),
+                            const WidgetSpan(child: SizedBox(width: 5)),
+                            TextSpan(
+                              text: user.vip!
+                                  ? i18n.mpassValid
+                                  : i18n.mpassInvalid,
+                            )
+                          ])),
+                          const SizedBox(height: 5),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(text: i18n.vipDate),
+                            const WidgetSpan(child: SizedBox(width: 5)),
+                            TextSpan(
+                                text: user.vip!
+                                    ? vipExpDate()
+                                    : i18n.vipExpiredMsg)
+                          ])),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -199,7 +242,12 @@ class _TicketInfo extends StatelessWidget {
 }
 
 class _RecentQuests extends StatelessWidget {
+  /// 活動列表
   final List<QuestCampaign> quests;
+
+  /// 最新活動區塊
+  ///
+  /// 包含最新活動的圖片，點擊圖片後會跳轉到該活動的頁面
   const _RecentQuests({required this.quests});
 
   @override
@@ -233,13 +281,13 @@ class _RecentQuests extends StatelessWidget {
 }
 
 class _MariInfo extends StatefulWidget {
-  final bool isVip;
+  /// 首頁的資料模型
   final EntryModel entryData;
 
-  const _MariInfo({
-    required this.isVip,
-    required this.entryData,
-  });
+  /// 真璃養成點數資訊
+  ///
+  /// 包含等級、養成點數、養成點數進度條、養成點數商城按鈕等
+  const _MariInfo({required this.entryData});
 
   @override
   State<_MariInfo> createState() => _MariInfoState();
@@ -247,6 +295,7 @@ class _MariInfo extends StatefulWidget {
 
 class _MariInfoState extends State<_MariInfo> {
   late final entry = widget.entryData;
+  final isVip = GlobalSingleton.instance.userNotifier.value?.vip ?? false;
   final progressBarNotifier = ValueNotifier(false);
 
   void onProgressBarCreated() async {
@@ -259,15 +308,14 @@ class _MariInfoState extends State<_MariInfo> {
     context.goNamed(AppRoutes.gradeBox.routeName);
   }
 
-  void onDressRoomPressed() {
-    showDialog(
-      context: context,
-      builder: (context) => const DressRoomPopup(),
-    );
+  void onDressRoomPressed() async {
+    context.goNamed(AppRoutes.dressRoom.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
+    final i18n = S.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       child: LayoutBuilder(
@@ -340,34 +388,39 @@ class _MariInfoState extends State<_MariInfo> {
                               style: const TextStyle(
                                   color: Color(0xff808080), fontSize: 30)),
                           const SizedBox(width: 5),
-                          Tooltip(
-                            preferBelow: false,
-                            decoration: BoxDecoration(
-                                color: const Color(0x33fefefe),
-                                borderRadius: BorderRadius.circular(8)),
-                            message: widget.isVip ? '月票：當日前12道加成' : '當日前10道加成',
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: const Color(0xff2282e9),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Image(
-                                            image: R.svg.bolt_solid(
-                                                width: 9, height: 13),
-                                            width: 9,
-                                            height: 13,
-                                            color: Colors.white),
-                                      ),
-                                      Text(entry.gr2BounsLeft),
-                                      const SizedBox(width: 3)
-                                    ])),
-                          )
+                          if (entry.gr2ShouldShowBouns)
+                            Tooltip(
+                              preferBelow: false,
+                              triggerMode: TooltipTriggerMode.tap,
+                              decoration: BoxDecoration(
+                                  color: const Color(0x33fefefe),
+                                  borderRadius: BorderRadius.circular(8)),
+                              message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
+                              textStyle:
+                                  Theme.of(context).textTheme.labelMedium,
+                              verticalOffset: 25,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xff2282e9),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Image(
+                                              image: R.svg.bolt_solid(
+                                                  width: 9, height: 13),
+                                              width: 9,
+                                              height: 13,
+                                              color: Colors.white),
+                                        ),
+                                        Text(entry.gr2BounsLimit),
+                                        const SizedBox(width: 3)
+                                      ])),
+                            )
                         ]),
                         const SizedBox(height: 5),
                         ValueListenableBuilder(
@@ -380,18 +433,58 @@ class _MariInfoState extends State<_MariInfo> {
                                 ? CrossFadeState.showSecond
                                 : CrossFadeState.showFirst,
                             secondCurve: Curves.easeInOutExpo,
-                            firstChild: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child:
-                                  SizedBox(height: 24, width: double.maxFinite),
-                            ),
+                            firstChild: const SizedBox(
+                                height: 24, width: double.maxFinite),
                             secondChild: ProgressBar(
+                              height: 24,
                               onProgressBarCreated: onProgressBarCreated,
-                              currentValue: entry.gr2Progress <= 20
-                                  ? 20
-                                  : entry.gr2Progress,
+                              currentValue: entry.gr2Progress,
                             ),
                           ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              child: ValueListenableBuilder(
+                                valueListenable: progressBarNotifier,
+                                builder:
+                                    (context, isProgressBarCreated, child) =>
+                                        AnimatedCrossFade(
+                                  duration: const Duration(milliseconds: 150),
+                                  alignment: Alignment.center,
+                                  crossFadeState: isProgressBarCreated
+                                      ? CrossFadeState.showSecond
+                                      : CrossFadeState.showFirst,
+                                  secondCurve: Curves.easeInOutExpo,
+                                  firstChild: const SizedBox(
+                                      height: 15, width: double.maxFinite),
+                                  secondChild: ProgressBar(
+                                    height: 15,
+                                    progressText:
+                                        '${entry.gr2CountMuch}/${entry.gr2HowMuch}P',
+                                    progressColor: const Color(0xffffde9b),
+                                    onProgressBarCreated: onProgressBarCreated,
+                                    currentValue: entry.gr2ProgressV5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 15,
+                              margin: const EdgeInsets.only(left: 9.25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 7.5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: const Color(0xffb0cf9e),
+                              ),
+                              child: Text(entry.gr2Timer,
+                                  style: const TextStyle(
+                                      fontSize: 10, color: Colors.black)),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 12),
                         Flexible(
@@ -411,11 +504,8 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 每 '),
-                                      TextSpan(text: entry.gr2HowMuch),
-                                      const TextSpan(text: ' 道贈 1 張，上限 '),
-                                      TextSpan(text: entry.gr2Limit),
-                                      const TextSpan(text: ' 張 '),
+                                      TextSpan(
+                                          text: i18n.gr2Limit(entry.gr2Limit)),
                                     ])),
                               ),
                               Padding(
@@ -431,9 +521,9 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 下一階: '),
+                                      TextSpan(text: i18n.nextLv),
                                       TextSpan(text: entry.gr2Next),
-                                      const TextSpan(text: ' 親密度 '),
+                                      TextSpan(text: i18n.heart),
                                     ])),
                               ),
                               Padding(
@@ -450,8 +540,8 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 已簽到: '),
-                                      TextSpan(text: entry.gr2Day),
+                                      TextSpan(
+                                          text: i18n.continuous(entry.gr2Day)),
                                     ])),
                               ),
                               Padding(
@@ -467,10 +557,7 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 抽獎券: '),
-                                      const TextSpan(text: ' 再 '),
-                                      TextSpan(text: entry.gr2VDay),
-                                      const TextSpan(text: ' 點 '),
+                                      TextSpan(text: i18n.gatcha(entry.gr2VDay))
                                     ])),
                               ),
                               Padding(
@@ -486,7 +573,7 @@ class _MariInfoState extends State<_MariInfo> {
                                               size: 15)),
                                       const WidgetSpan(
                                           child: SizedBox(width: 5)),
-                                      const TextSpan(text: ' 換季日: '),
+                                      TextSpan(text: i18n.gr2ResetDate),
                                       TextSpan(text: entry.gr2Date),
                                     ])),
                               ),
@@ -516,7 +603,7 @@ class _MariInfoState extends State<_MariInfo> {
                                       return const Color(0x22f7f7f7);
                                     }),
                                   ),
-                                  child: const Text('養成點數商城'),
+                                  child: Text(i18n.gr2HeartBox),
                                 ),
                               )
                             ],
@@ -535,59 +622,13 @@ class _MariInfoState extends State<_MariInfo> {
   }
 }
 
-class _EventInfo extends StatelessWidget {
-  final List<Evlist>? evlist;
-  const _EventInfo(this.evlist, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (evlist == null) return const SizedBox();
-    if (evlist!.isEmpty) return const SizedBox();
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 80,
-          margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-          padding: const EdgeInsets.only(bottom: 10),
-          decoration: BoxDecoration(
-              border: Border.all(color: Themes.borderColor, width: 1),
-              borderRadius: BorderRadius.circular(5),
-              shape: BoxShape.rectangle),
-        ),
-        Positioned(
-            left: 35,
-            top: 12,
-            child: Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: const Text('優惠時段',
-                  style: TextStyle(color: Color(0xfffafafa), fontSize: 13)),
-            )),
-        const Positioned(
-          top: 40,
-          left: 35,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('●   WACCA / GC / 女武神 / pop\'n 無提供優惠方案',
-                  style: TextStyle(color: Color(0xfffafafa))),
-              SizedBox(height: 5),
-              Text('●   月票： 全日延長至 19:00 優惠時段',
-                  style: TextStyle(color: Color(0xfffafafa))),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-}
-
 class _TopInfo extends StatelessWidget {
-  const _TopInfo({Key? key, required this.user}) : super(key: key);
+  /// 頁面頂部的個人資訊
+  ///
+  /// 包含頭像、名稱、UID、P點、QRCode掃描按鈕
+  _TopInfo();
 
-  final UserModel user;
+  final UserModel user = GlobalSingleton.instance.userNotifier.value!;
 
   @override
   Widget build(BuildContext context) {
@@ -627,7 +668,22 @@ class _TopInfo extends StatelessWidget {
                               child: Icon(Icons.person_rounded,
                                   color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
-                          TextSpan(text: user.name!)
+                          TextSpan(
+                              text: user.name!,
+                              children: user.phoneactive!
+                                  ? null
+                                  : [
+                                      TextSpan(
+                                          text: ' (未驗證)',
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              context.goNamed(
+                                                  AppRoutes.settings.routeName,
+                                                  queryParameters: {
+                                                    'goTo': 'phoneChange'
+                                                  });
+                                            })
+                                    ])
                         ])),
                         const SizedBox(height: 5),
                         RichText(
@@ -646,7 +702,11 @@ class _TopInfo extends StatelessWidget {
                                   color: Color(0xfffafafa), size: 20)),
                           const WidgetSpan(child: SizedBox(width: 5)),
                           TextSpan(text: user.point!.toInt().toString()),
-                          const TextSpan(text: 'P')
+                          const TextSpan(text: ' + '),
+                          TextSpan(
+                              text: user.fpoint!.toInt().toString(),
+                              style: const TextStyle(color: Color(0xffd4b106))),
+                          const TextSpan(text: ' P')
                         ])),
                       ],
                     ),

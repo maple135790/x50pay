@@ -6,8 +6,9 @@ part of 'quic_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QuicSettingsModel _$QuicSettingsModelFromJson(Map<String, dynamic> json) =>
-    QuicSettingsModel(
+PaymentSettingsModel _$PaymentSettingsModelFromJson(
+        Map<String, dynamic> json) =>
+    PaymentSettingsModel(
       mtpMode: json['mtpMode'] as int,
       nfcAuto: json['nfcAuto'] as bool,
       nfcTicket: json['nfcTicket'] as bool,
@@ -16,9 +17,11 @@ QuicSettingsModel _$QuicSettingsModelFromJson(Map<String, dynamic> json) =>
       nfcNVSV: json['nfcNVSV'] as String,
       nfcQuic: json['nfcQuic'] as bool,
       nfcQlock: json['nfcQlock'] as int,
+      aGV: json['aGV'] as bool,
     );
 
-Map<String, dynamic> _$QuicSettingsModelToJson(QuicSettingsModel instance) =>
+Map<String, dynamic> _$PaymentSettingsModelToJson(
+        PaymentSettingsModel instance) =>
     <String, dynamic>{
       'mtpMode': instance.mtpMode,
       'nfcAuto': instance.nfcAuto,
@@ -28,4 +31,5 @@ Map<String, dynamic> _$QuicSettingsModelToJson(QuicSettingsModel instance) =>
       'nfcSDVX': instance.nfcSDVX,
       'nfcTicket': instance.nfcTicket,
       'nfcTwo': instance.nfcTwo,
+      'aGV': instance.aGV,
     };

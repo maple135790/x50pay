@@ -1,50 +1,47 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/go_route_generator.dart';
+import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
-import 'package:x50pay/page/account/account_view_model.dart';
-import 'package:x50pay/page/account/popups/quiC_pay_pref.dart';
-import 'package:x50pay/page/account/popups/quick_pay.dart';
-import 'package:x50pay/page/pages.dart';
+import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
-part 'common/go_route_generator.dart';
-
-final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
-
+/// 檢查是否有登入
+///
+/// 檢查 [SharedPreferences] 中是否有 [session] 的 key，
+/// 若有效則回傳 true，否則回傳 false
 Future<bool> _checkLogin() async {
-  final pref = await SharedPreferences.getInstance();
-  final sess = pref.getString('session');
+  final sess =
+      await GlobalSingleton.instance.secureStorage.read(key: 'session');
   if (sess == null) return false;
   return await GlobalSingleton.instance.checkUser();
 }
 
+final languageViewModel = LanguageViewModel();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final packageInfo = await PackageInfo.fromPlatform();
-  GlobalSingleton.instance.appVersion =
-      "X50Pay app v${packageInfo.version}+${packageInfo.buildNumber}";
-
-  final islogin = await _checkLogin();
-  log('isServiceOnline: ${GlobalSingleton.instance.isServiceOnline}',
-      name: 'main');
-  log('islogin: $islogin', name: 'main');
   configLoadingStyle();
-  runApp(MyApp(isLogin: islogin));
+
+  final appLocale = await languageViewModel.getUserPrefLocale();
+  final packageInfo = await PackageInfo.fromPlatform();
+  GlobalSingleton.instance.isLogined = await _checkLogin();
+  GlobalSingleton.instance.setAppVersion =
+      "${packageInfo.version}+${packageInfo.buildNumber}";
+  languageViewModel.currentLocale = appLocale;
+  runApp(const MyApp());
 }
 
+/// [EasyLoading] 的設定
 void configLoadingStyle() {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
@@ -65,19 +62,39 @@ void configLoadingStyle() {
 }
 
 class MyApp extends StatelessWidget {
-  final bool isLogin;
-  const MyApp({required this.isLogin, super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: AppThemeData().materialTheme,
-      builder: EasyLoading.init(),
-      routerConfig: goRouteConfig(isLogin),
+    return LifecycleManager(
+      callback: AppLifeCycles(),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: languageViewModel),
+        ],
+        child: Consumer<LanguageViewModel>(
+          builder: (context, vm, child) => MaterialApp.router(
+            theme: AppThemeData().materialTheme,
+            builder: EasyLoading.init(),
+            routerConfig: goRouteConfig(),
+            locale: vm.currentLocale,
+            supportedLocales: S.delegate.supportedLocales,
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
+/// 旋轉的圖示
+///
+/// 用於 [EasyLoading] 的 [indicatorWidget]
 class _Spinner extends StatefulWidget {
   const _Spinner();
 
@@ -87,7 +104,7 @@ class _Spinner extends StatefulWidget {
 
 class _SpinnerState extends State<_Spinner> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 2),
+    duration: const Duration(milliseconds: 1500),
     vsync: this,
   )..repeat();
   late final Animation<double> _animation = CurvedAnimation(

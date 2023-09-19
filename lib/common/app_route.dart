@@ -20,6 +20,7 @@ class AppRoutes {
 
   static const login = (routeName: 'login', path: '/login');
   static const home = (routeName: 'home', path: '/home');
+  static const dressRoom = (routeName: 'dressRoom', path: 'dressRoom');
   static const forgotPassword = (routeName: 'forgotPassword', path: '/iforgot');
   static const license = (routeName: 'license', path: '/lic');
   static const signUp = (routeName: 'signUp', path: '/signUp');
@@ -36,6 +37,8 @@ class AppRoutes {
   static const ticketRecords =
       (routeName: 'ticketRecords', path: 'ticketRecords');
   static const playRecords = (routeName: 'playRecords', path: 'playRecords');
+  static const x50PayAppSetting =
+      (routeName: 'x50PayAppSetting', path: 'x50PayAppSetting');
   static const ticketUsedRecords =
       (routeName: 'ticketUsedRecords', path: 'ticketUsedRecords');
   static const gameStore = (routeName: 'gameStore', path: '/game/store');
@@ -47,4 +50,7 @@ class AppRoutes {
   static const scanQRCode = (routeName: 'scanQRCode', path: '/scanQRCode');
   static const questCampaign =
       (routeName: 'questCampaign', path: 'questCampaign/:couid');
+  static const qrPay = (routeName: 'qrPay', path: '/qrPay/:caboid/:sid');
+  static const freePointRecords =
+      (routeName: 'freePointRecords', path: 'freePointRecords');
 }

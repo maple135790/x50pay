@@ -153,8 +153,8 @@ class EasyLoadingContainerState extends State<EasyLoadingContainer>
                         onTap: _onTap,
                         behavior: HitTestBehavior.translucent,
                         child: Blur(
-                          blur: 5,
-                          blurColor: Colors.black,
+                          blur: 3,
+                          blurColor: Colors.black54,
                           child: Container(
                             width: double.infinity,
                             height: double.infinity,
@@ -163,11 +163,19 @@ class EasyLoadingContainerState extends State<EasyLoadingContainer>
                           ),
                         ),
                       )
-                    : Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        color: _maskColor,
-                        // color: Colors.amber,
+                    // : Container(
+                    //     width: double.infinity,
+                    //     height: double.infinity,
+                    //     color: _maskColor,
+                    //   ),
+                    : Blur(
+                        blur: 3,
+                        blurColor: Colors.black54,
+                        child: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          color: _maskColor,
+                        ),
                       ),
               ),
             );

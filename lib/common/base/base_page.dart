@@ -1,3 +1,4 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
+import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/extensions/locale_ext.dart';
+import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
@@ -72,7 +78,7 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
   }
 }
 
-class _Header extends StatelessWidget {
+class _Header extends StatefulWidget {
   final HeaderType _type;
   final bool isDark;
   final bool isBackType;
@@ -89,27 +95,164 @@ class _Header extends StatelessWidget {
         assert(isBackType != false || title != null,
             'floatHeaderText must be set'),
         super(key: key);
-  String get _title => 'X50 Pay - $title';
 
   @override
-  Widget build(BuildContext context) {
-    switch (_type) {
-      case HeaderType.normal:
-        return Container(
-          color: const Color(0xff1e1e1e),
+  State<_Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<_Header> {
+  String get _title => 'X50 Pay - ${widget.title}';
+  late final currentLocale = context.read<LanguageViewModel>().currentLocale;
+
+  Widget buildDebugStatus() {
+    String serviceStatus =
+        GlobalSingleton.instance.isServiceOnline ? 'ONLINE' : 'OFFLINE';
+    Color statusColor = serviceStatus == 'ONLINE' ? Colors.green : Colors.grey;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(GlobalSingleton.instance.appVersion,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withOpacity(0.5),
+                fontWeight: FontWeight.bold,
+              )),
+          Row(
+            children: [
+              Icon(
+                Icons.circle,
+                size: 8,
+                color: statusColor.withOpacity(0.5),
+              ),
+              const SizedBox(width: 2.5),
+              Text(
+                'Service $serviceStatus',
+                style: TextStyle(
+                  color: statusColor.withOpacity(0.5),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildFixedHeader() {
+    return Stack(
+      children: [
+        Container(
+          height: 50,
+          decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: const Border(
+                  bottom: BorderSide(color: Themes.borderColor, width: 1))),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                    backgroundImage: R.image.header_icon_rsz(),
-                    backgroundColor: Colors.black,
-                    radius: 14),
+                const Spacer(),
+                Center(
+                  child: CircleAvatar(
+                      backgroundImage: R.image.header_icon_rsz(),
+                      backgroundColor: Colors.black,
+                      radius: 14),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: onLanguagePressed,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 6.75,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xff2a2a2a),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CountryFlag.fromCountryCode(
+                                  currentLocale.countryCode ?? '',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(currentLocale.displayText),
+                              ],
+                            )),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
+        ),
+        buildDebugStatus(),
+      ],
+    );
+  }
+
+  void onLanguagePressed() async {
+    final changedLocale = await showDialog<Locale>(
+      context: context,
+      builder: (context) => StatefulBuilder(builder: (context, setState) {
+        return AlertDialog(
+          title: Text(S.of(context).x50PayLanguage),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(
+              S.delegate.supportedLocales.length,
+              (index) => RadioListTile<Locale>(
+                controlAffinity: ListTileControlAffinity.trailing,
+                value: S.delegate.supportedLocales[index],
+                title: Row(
+                  children: [
+                    CountryFlag.fromCountryCode(
+                      S.delegate.supportedLocales[index].countryCode ?? '',
+                      height: 25,
+                      width: 25,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(S.delegate.supportedLocales[index].displayText),
+                  ],
+                ),
+                groupValue: currentLocale,
+                onChanged: (value) {
+                  context.pop(value);
+                },
+              ),
+              growable: false,
+            ),
+          ),
         );
+      }),
+    );
+    if (changedLocale == null) return;
+    if (!mounted) return;
+    Future.delayed(const Duration(milliseconds: 100), () {
+      context.read<LanguageViewModel>().setUserPrefLocale(changedLocale);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    switch (widget._type) {
+      case HeaderType.normal:
+        return buildFixedHeader();
       case HeaderType.float:
         return Card(
           margin: const EdgeInsets.all(10),
@@ -119,7 +262,7 @@ class _Header extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: isBackType
+              children: widget.isBackType
                   ? [
                       const SizedBox(width: 15),
                       Container(

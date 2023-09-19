@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/game_cabs_view_model.dart';
-import 'package:x50pay/page/game/game_mixin.dart';
 
 class GameCabs extends StatefulWidget {
   const GameCabs({super.key});
@@ -20,11 +22,10 @@ class GameCabs extends StatefulWidget {
   State<GameCabs> createState() => _GameCabsState();
 }
 
-class _GameCabsState extends State<GameCabs> {
+class _GameCabsState extends BaseStatefulState<GameCabs> {
   final viewModel = GameCabsViewModel();
   late List<Machine> machine;
   late Future<GameList?> gameCabsInit;
-  // late List<Machine> machine = widget.games.machine!;
 
   @override
   void initState() {
@@ -40,21 +41,23 @@ class _GameCabsState extends State<GameCabs> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<GameList?>(
-        future: gameCabsInit,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const SizedBox();
-          }
-          if (snapshot.data == null) {
-            return const SizedBox(child: Text('failed'));
-          } else {
-            return _GameCabsLoaded(
-              viewModel.storeName,
-              games: snapshot.data!,
-            );
-          }
-        });
+    return Material(
+      child: FutureBuilder<GameList?>(
+          future: gameCabsInit,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const SizedBox();
+            }
+            if (snapshot.data == null) {
+              return const SizedBox(child: Text('failed'));
+            } else {
+              return _GameCabsLoaded(
+                viewModel.storeName,
+                games: snapshot.data!,
+              );
+            }
+          }),
+    );
   }
 }
 
@@ -67,7 +70,7 @@ class _GameCabsLoaded extends StatefulWidget {
   State<_GameCabsLoaded> createState() => _GameCabsLoadedState();
 }
 
-class _GameCabsLoadedState extends State<_GameCabsLoaded> {
+class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   late final machine = widget.games.machine!;
 
@@ -149,7 +152,7 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded> {
                     children: [
                       const Icon(Icons.push_pin,
                           color: Color(0xfffafafa), size: 16),
-                      Text('  目前所在「 ${widget.storeName} 」',
+                      Text('  ${i18n.gameLocation}「 ${widget.storeName} 」',
                           style: const TextStyle(color: Color(0xfffafafa))),
                       const Spacer(),
                       GestureDetector(
@@ -171,6 +174,7 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded> {
                   children: machine
                       .map((e) => _GameCabItem(
                             e,
+                            storeName: widget.storeName,
                             onCoinInserted: reloadSnackBar,
                             onItemPressed: clearSnackBar,
                           ))
@@ -227,100 +231,111 @@ class _GameCabItem extends StatelessWidget with GameMixin {
   final VoidCallback onCoinInserted;
   final VoidCallback onItemPressed;
   final Machine machine;
+  final String storeName;
 
   const _GameCabItem(
     this.machine, {
+    required this.storeName,
     required this.onCoinInserted,
     required this.onItemPressed,
   });
 
   @override
   Widget build(BuildContext context) {
+    final i18n = S.of(context);
     final isWeekend =
         DateTime.now().weekday == 6 || DateTime.now().weekday == 7;
-    final time = machine.mode![0][3] == true ? "離峰時段" : "通常時段";
+    final time = machine.mode![0][3] == true
+        ? i18n.gameDiscountHour
+        : i18n.gameNormalHour;
     final addition = machine.vipb == true
-        ? " [月票]"
-        : isWeekend
-            ? " [假日]"
-            : " [平日]";
+        ? " [${i18n.gameMPass}]"
+        : time == i18n.gameNormalHour
+            ? ''
+            : isWeekend
+                ? " [${i18n.gameWeekends}]"
+                : " [${i18n.gameWeekday}]";
 
     onItemPressed.call();
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-      child: GestureDetector(
-        onTap: () async {
-          final isInsertToken = await GoRouter.of(context).pushNamed<bool>(
-            AppRoutes.gameCab.routeName,
-            pathParameters: {'mid': machine.id!},
-          );
-          if (isInsertToken == true) {
-            onCoinInserted.call();
-          }
-        },
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(
-                  color: Themes.borderColor,
-                  strokeAlign: BorderSide.strokeAlignOutside)),
-          height: 155,
-          child: ClipRRect(
+      child: Container(
+        decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                    child: CachedNetworkImage(
-                  imageUrl: getGameCabImage(machine.id!),
-                  color: const Color.fromARGB(35, 0, 0, 0),
-                  colorBlendMode: BlendMode.srcATop,
-                  fit: BoxFit.fitWidth,
-                  alignment: const Alignment(0, -0.25),
-                )),
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        colors: [Colors.black, Colors.transparent],
-                        transform: GradientRotation(12),
-                        stops: [0, 0.6],
-                      ),
+            border: Border.all(
+                color: Themes.borderColor,
+                strokeAlign: BorderSide.strokeAlignOutside)),
+        height: 155,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                  child: CachedNetworkImage(
+                imageUrl: getGameCabImage(machine.id!),
+                color: const Color.fromARGB(35, 0, 0, 0),
+                colorBlendMode: BlendMode.srcATop,
+                fit: BoxFit.fitWidth,
+                alignment: const Alignment(0, -0.25),
+              )),
+              Positioned.fill(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      colors: [Colors.black, Colors.transparent],
+                      transform: GradientRotation(12),
+                      stops: [0, 0.6],
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 8,
-                  left: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(machine.label!,
+              ),
+              Positioned(
+                bottom: 8,
+                left: 10,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("[$storeName] ${machine.label!}",
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            shadows: [
+                              Shadow(color: Colors.black, blurRadius: 18)
+                            ])),
+                    Row(children: [
+                      const Icon(Icons.schedule,
+                          size: 15, color: Color(0xe6ffffff)),
+                      Text('  $time$addition',
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
+                              color: Color(0xffffffe6),
+                              fontSize: 13,
                               shadows: [
-                                Shadow(color: Colors.black, blurRadius: 18)
-                              ])),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const Icon(Icons.schedule,
-                                size: 15, color: Color(0xe6ffffff)),
-                            Text('  $time$addition',
-                                style: const TextStyle(
-                                    color: Color(0xffffffe6),
-                                    fontSize: 13,
-                                    shadows: [
-                                      Shadow(
-                                          color: Colors.black, blurRadius: 15)
-                                    ]))
-                          ]),
-                    ],
-                  ),
+                                Shadow(color: Colors.black, blurRadius: 15)
+                              ]))
+                    ]),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Positioned.fill(
+                  child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () async {
+                    final isInsertToken =
+                        await GoRouter.of(context).pushNamed<bool>(
+                      AppRoutes.gameCab.routeName,
+                      pathParameters: {'mid': machine.id!},
+                    );
+                    if (isInsertToken == true) {
+                      onCoinInserted.call();
+                    }
+                  },
+                  splashColor: Colors.white12,
+                  highlightColor: Colors.white12,
+                ),
+              )),
+            ],
           ),
         ),
       ),

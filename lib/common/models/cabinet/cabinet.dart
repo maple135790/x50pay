@@ -73,6 +73,19 @@ class Cabinet {
       _$CabinetFromJson(json);
   Map<String, dynamic> toJson() => _$CabinetToJson(this);
 
+  const Cabinet.empty()
+      : num = 0,
+        id = '',
+        label = '',
+        mode = const [],
+        card = false,
+        isBool = false,
+        vipbool = false,
+        notice = '',
+        busy = '',
+        nbusy = '',
+        pcl = false;
+
   @override
   String toString() {
     return """Cabinet(num: $num, id: $id, label: $label, mode: $mode, card: $card, isBool: $isBool, vipbool: $vipbool, notice: $notice, busy: $busy, nbusy: $nbusy, pcl: $pcl)\n""";

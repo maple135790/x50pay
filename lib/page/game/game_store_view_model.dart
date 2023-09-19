@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/store/store.dart';
@@ -10,7 +11,9 @@ import 'package:x50pay/repository/repository.dart';
 class GameStoreViewModel extends BaseViewModel {
   final repo = Repository();
 
+  /// 取得店家資料
   Future<StoreModel?> getStoreData({
+    required Locale currentLocale,
     int debugFlag = 200,
   }) async {
     try {
@@ -19,7 +22,7 @@ class GameStoreViewModel extends BaseViewModel {
 
       late final StoreModel stores;
       if (!kDebugMode || isForceFetch) {
-        stores = await repo.getStores();
+        stores = await repo.getStores(currentLocale);
       } else {
         stores = StoreModel.fromJson(jsonDecode(testStorelist));
       }

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -16,7 +18,13 @@ class GlobalSingleton {
   /// 服務是否連接到X50Pay。
   ///
   /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
-  final isServiceOnline = kReleaseMode || false;
+  final isServiceOnline = kReleaseMode || true;
+
+  final navigatorKey = GlobalKey<NavigatorState>();
+
+  bool isNfcPayDialogOpen = false;
+
+  bool isLogined = false;
 
   /// 開發用，模擬扣點
   final _devCostEnabled = false;
@@ -27,11 +35,6 @@ class GlobalSingleton {
   /// 開發用，模擬所持點數
   double _devPoint = 220;
 
-  /// 使用者資料
-  ///
-  /// (之後將 deprecate 這個變數，改用 `userNotifier`)
-  UserModel? user;
-
   /// 上次檢查使用者資料的時間
   int _lastChkMe = -1;
 
@@ -41,14 +44,24 @@ class GlobalSingleton {
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid, int cabIndex})? recentPlayedCabinetData;
 
-  /// App 版本，例如 X50Pay app v1.0.0 + 1
-  ///
-  /// 會在main() 中初始化。
-  late String appVersion;
+  /// App 版本，例如 `X50Pay app v1.0.0 + 1`
+  String get appVersion => _appVersion;
+  String _appVersion = '';
+  set setAppVersion(String value) {
+    _appVersion = 'X50Pay app v$value';
+  }
+
+  FlutterSecureStorage get secureStorage => const FlutterSecureStorage(
+        aOptions: AndroidOptions(
+          encryptedSharedPreferences: true,
+          preferencesKeyPrefix: 'x50pay_',
+        ),
+      );
 
   /// 是否在掃描QRCode頁面的旗標
   ///
-  /// 由於go_router 在pushNamed 無法取得location，因此使用此旗標來判斷是否在掃描QRCode頁面。
+  /// 由於go_router 在pushNamed 無法取得location，
+  /// 因此使用此旗標來判斷是否在掃描QRCode頁面。
   bool isInCameraPage = false;
 
   static GlobalSingleton? _instance;
@@ -59,7 +72,7 @@ class GlobalSingleton {
 
   /// 清除使用者資料
   void clearUser() {
-    user = null;
+    isLogined = false;
     userNotifier.value = null;
   }
 
@@ -70,7 +83,7 @@ class GlobalSingleton {
   ///
   /// [force] 強制檢查使用者資料
   Future<bool> checkUser({bool force = false}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 100));
     try {
       final current = DateTime.now().millisecondsSinceEpoch;
       final isLess30Sec = (current ~/ 1000) - _lastChkMe < 30;
@@ -79,12 +92,11 @@ class GlobalSingleton {
       final repo = Repository();
       _lastChkMe = DateTime.now().millisecondsSinceEpoch;
       if (!kDebugMode || isServiceOnline) {
-        user = await repo.getUser();
-        userNotifier.value = user;
+        userNotifier.value = await repo.getUser();
         // 未回傳UserModel
-        if (user == null) return false;
+        if (userNotifier.value == null) return false;
         // 回傳UserModel, 驗證失敗或是伺服器錯誤
-        if (user!.code != 200) return false;
+        if (userNotifier.value!.code != 200) return false;
         return true;
       } else {
         if (_devCostEnabled) _devPoint -= 20;
@@ -95,15 +107,14 @@ class GlobalSingleton {
           "uid": _devUserToStaff ? "X938" : "938",
         };
         var rawUserJson = jsonDecode(
-                r"""{"message":"done","code":200,"userimg":"https://secure.gravatar.com/avatar/6a4cbe004cdedee9738d82fe9670b326?size=250","ticketint":2,"phoneactive":true,"vip":true,"vipdate":{"$date":1685957759681},"sid":"","sixn":"842232","tphone":1,"doorpwd":"\u672c\u671f\u9580\u7981\u5bc6\u78bc\u7232 : 1743#"}""")
+                r"""{"message":"done","code":200,"userimg":"https://secure.gravatar.com/avatar/6a4cbe004cdedee9738d82fe9670b326?size=250","givebool":0,"ticketint":10,"phoneactive":true,"vip":false,"vipdate":{"$date":641865600000},"sid":"","sixn":"805349","tphone":1,"doorpwd":"\u672c\u671f\u9580\u7981\u5bc6\u78bc\u7232 : 1743#","fpoint":0}""")
             as Map<String, dynamic>
           ..addAll(customMap);
-        user = UserModel.fromJson(rawUserJson);
-        userNotifier.value = user;
+        userNotifier.value = UserModel.fromJson(rawUserJson);
         return true;
       }
-    } catch (e) {
-      log('', error: e, name: 'checkUser');
+    } catch (e, stacktrace) {
+      log('', error: e, stackTrace: stacktrace, name: 'checkUser');
       return false;
     }
   }

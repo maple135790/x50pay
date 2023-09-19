@@ -9,9 +9,9 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
-import 'package:x50pay/page/game/game_mixin.dart';
 
 extension on Color {
   Color invert(double value) {
@@ -132,6 +132,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                     child: TextButton(
                         onPressed: () {
                           viewModel.confirmPadCheck(padmid, padlid);
+                          Navigator.of(context).pop();
                         },
                         style: Themes.severe(isV4: true),
                         child: const Text('排隊')),
@@ -147,11 +148,20 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
 
   Widget cabDetailLoaded(CabinetModel model) {
     List<Cabinet> cabs = model.cabinets;
+    final isWeekend =
+        DateTime.now().weekday == 6 || DateTime.now().weekday == 7;
     final tagLabel = model.cabinets.first.isBool == true
         ? model.cabinets.first.vipbool == true
-            ? '月票'
-            : '離峰'
-        : '通常';
+            ? i18n.gameMPass
+            : i18n.gameDiscountHour
+        : i18n.gameNormalHour;
+    final addition = model.cabinets.first.vipbool == true
+        ? " [${i18n.gameMPass}]"
+        : tagLabel == i18n.gameNormalHour
+            ? ''
+            : isWeekend
+                ? " [${i18n.gameWeekends}]"
+                : " [${i18n.gameWeekday}]";
     final price = double.parse(model.cabinets.first.mode[0][2].toString());
     final note = model.note;
     final revbool = note.reversed.elementAt(1) as bool;
@@ -233,7 +243,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
               borderRadius: BorderRadius.circular(5)),
           child: Row(
             children: [
-              Text('  X50Pad 排隊狀況：${viewModel.lineupCount} 人等待中',
+              Text('  ${i18n.gameWait(viewModel.lineupCount)}',
                   style: const TextStyle(color: Color(0xfffafafa))),
               const Spacer(),
               GestureDetector(
@@ -279,7 +289,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                 child: const Text('!',
                     style: TextStyle(color: Color(0xffcf1322)))),
             const SizedBox(width: 15),
-            const Text('該機種當周有無限制台預約'),
+            Text(i18n.gameUnlimit),
             const Spacer(),
             GestureDetector(
               onTap: showRSVPPopup,
@@ -307,7 +317,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
           const SizedBox(height: 8),
           buildCabInfo(
               price: price,
-              tagName: tagLabel,
+              tagName: "$tagLabel$addition",
               cabLabel: model.cabinets.first.label),
           ...buildEventPic(model.spic, model.surl),
           ...buildCabBlock(caboid: model.caboid),
@@ -375,25 +385,31 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                         shadows: [
                           Shadow(color: Colors.black, blurRadius: 18)
                         ])),
-                Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                  const Icon(Icons.sell, size: 18, color: Color(0xe6ffffff)),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  const Icon(
+                    Icons.access_time_filled_rounded,
+                    size: 18,
+                    color: Color(0xe6ffffff),
+                  ),
                   Text('  $tagName',
-                      style: const TextStyle(
-                          height: 0,
-                          color: Color(0xffbcbfbf),
-                          fontSize: 16,
-                          shadows: [
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: 13,
+                          shadows: const [
                             Shadow(color: Colors.black, blurRadius: 15)
                           ])),
                   const SizedBox(width: 5),
                   const Icon(Icons.attach_money,
                       size: 18, color: Color(0xe6ffffff)),
                   Text('${price.toInt()}P',
-                      style: const TextStyle(
-                          height: 0,
-                          color: Color(0xffbcbfbf),
+                      textHeightBehavior: const TextHeightBehavior(
+                        applyHeightToFirstAscent: false,
+                        applyHeightToLastDescent: false,
+                      ),
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
                           fontSize: 16,
-                          shadows: [
+                          shadows: const [
                             Shadow(color: Colors.black, blurRadius: 15)
                           ]))
                 ]),
@@ -453,8 +469,13 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
     List<Widget> children = [];
     for (int i = 0; i < cabs.length; i++) {
       Cabinet cab = cabs[i];
-
-      String isPaid = cab.pcl == true ? '已投幣' : '未投幣';
+      String rawNbusy = cab.nbusy;
+      String nbusy = rawNbusy.contains('s1')
+          ? i18n.nbusyS1
+          : rawNbusy.contains('s2')
+              ? i18n.nbusyS2
+              : i18n.nbusyS3;
+      String isPaid = cab.pcl == true ? i18n.nbusyCoin : i18n.nbusyNoCoin;
       children.add(Expanded(
           child: GestureDetector(
         onTap: () {
@@ -499,7 +520,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                             style: const TextStyle(
                                 color: Color(0xff808080), fontSize: 12)),
                         const SizedBox(height: 4),
-                        Text('${cab.nbusy}/$isPaid',
+                        Text('$nbusy/$isPaid',
                             style: const TextStyle(
                                 color: Color(0xfffafafa), fontSize: 12)),
                         const SizedBox(height: 5),
@@ -527,7 +548,7 @@ class _RSVPDialog extends StatefulWidget {
   State<_RSVPDialog> createState() => _RSVPDialogState();
 }
 
-class _RSVPDialogState extends State<_RSVPDialog> {
+class _RSVPDialogState extends BaseStatefulState<_RSVPDialog> {
   String get title => widget.rsvp[0]![1];
 
   List<Widget> buildRSVPs() {
@@ -563,7 +584,7 @@ class _RSVPDialogState extends State<_RSVPDialog> {
                 children: [
                   Text(title, style: const TextStyle(fontSize: 17)),
                   const SizedBox(height: 5),
-                  const Text(' 已預約時段: '),
+                  Text(' ${i18n.gameUnlimitTitle} '),
                   const SizedBox(height: 5),
                   ...buildRSVPs(),
                 ],

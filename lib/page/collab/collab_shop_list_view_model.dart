@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:html/parser.dart';
@@ -34,7 +36,7 @@ class CollabShopListViewModel extends BaseViewModel {
   final repo = Repository();
 
   Future<List<Sponser>> init() async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 350));
 
     late final String rawDocument;
 
@@ -62,6 +64,7 @@ class CollabShopListViewModel extends BaseViewModel {
       }
       return sponsers;
     } catch (e) {
+      log('', error: '$e', name: 'CollabShopList init');
       return [];
     } finally {}
   }

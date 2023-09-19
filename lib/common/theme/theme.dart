@@ -71,7 +71,7 @@ class AppThemeData {
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Themes.pageDialogBackgroundColor,
       ),
       textSelectionTheme:
           const TextSelectionThemeData(cursorColor: Colors.white),
@@ -94,6 +94,7 @@ class AppThemeData {
 }
 
 class Themes {
+  static const pageDialogBackgroundColor = Colors.black;
   static const borderColor = Color(0xff505050);
   static ButtonStyle pale({EdgeInsetsGeometry? padding, VisualDensity? vd}) {
     return ButtonStyle(
@@ -103,6 +104,7 @@ class Themes {
       overlayColor: MaterialStateProperty.all(Colors.transparent),
       foregroundColor: MaterialStateProperty.all(const Color(0xff1e1e1e)),
       backgroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
         return const Color(0xfffafafa);
       }),
     );

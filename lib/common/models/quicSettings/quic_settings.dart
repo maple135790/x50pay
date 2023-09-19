@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'quic_settings.g.dart';
 
 @JsonSerializable()
-class QuicSettingsModel {
+class PaymentSettingsModel {
   final int mtpMode;
   final bool nfcAuto;
   final String nfcNVSV;
@@ -12,8 +12,9 @@ class QuicSettingsModel {
   final String nfcSDVX;
   final bool nfcTicket;
   final String nfcTwo;
+  final bool aGV;
 
-  const QuicSettingsModel({
+  const PaymentSettingsModel({
     required this.mtpMode,
     required this.nfcAuto,
     required this.nfcTicket,
@@ -22,10 +23,11 @@ class QuicSettingsModel {
     required this.nfcNVSV,
     required this.nfcQuic,
     required this.nfcQlock,
+    required this.aGV,
   });
 
-  factory QuicSettingsModel.fromJson(Map<String, dynamic> json) =>
-      _$QuicSettingsModelFromJson(json);
+  factory PaymentSettingsModel.fromJson(Map<String, dynamic> json) =>
+      _$PaymentSettingsModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$QuicSettingsModelToJson(this);
+  Map<String, dynamic> toJson() => _$PaymentSettingsModelToJson(this);
 }

@@ -10,6 +10,7 @@ import 'package:x50pay/repository/repository.dart';
 class GradeBoxViewModel extends BaseViewModel {
   final repo = Repository();
 
+  /// 取得養成商場內，點數兌換商品資料
   Future<GradeBoxModel> getGradeBox() async {
     EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 100));
@@ -32,6 +33,7 @@ class GradeBoxViewModel extends BaseViewModel {
     }
   }
 
+  /// 兌換養成商場內商品
   Future<bool> doChangeGrade(String gid, String grid) async {
     final result = await repo.chgGradev2(gid, grid);
     return result == 'done';
