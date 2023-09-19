@@ -36,6 +36,8 @@
 	<string>Need location when in use</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Provide a secure way to fast login</string>
+	<key>NFCReaderUsageDescription</key>
+	<string>This app needs NFC access to use NFCPay</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -3,7 +3,7 @@ description: X50Pay app
 publish_to: none
 version: 1.3.0+1
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: '>=3.0.0 <4.0.0'
 dependencies:
   cached_network_image: ^3.2.3
   collection: ^1.16.0
@@ -30,7 +30,7 @@ dependencies:
   qr_code_scanner: ^1.0.0
   r_dart_library:
     git:
-      url: "https://github.com/YK-Unit/r_dart_library.git"
+      url: 'https://github.com/YK-Unit/r_dart_library.git'
       ref: 0.4.1
   shared_preferences: ^2.0.15
   transparent_image: ^2.0.1
@@ -57,94 +57,93 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/appIcon/appstore.png
-    - assets/images/appIcon/playstore.png
-    - assets/images/collab/shop-solid.svg
-    - assets/images/common/header_float_icon.jpg
-    - assets/images/common/header_icon.png
-    - assets/images/common/header_icon_rsz.png
-    - assets/images/common/logo.jpg
-    - assets/images/common/logo_150.jpg
-    - assets/images/common/ouo.png
-    - assets/images/common/spinner-solid.svg
-    - assets/images/common/torii.svg
-    - assets/images/dev/dev_avatar.png
-    - assets/images/game/machine/2bom.png
-    - assets/images/game/machine/2chu.png
-    - assets/images/game/machine/2dm.png
-    - assets/images/game/machine/2mmdx.png
-    - assets/images/game/machine/2nos.png
-    - assets/images/game/machine/2tko.png
-    - assets/images/game/machine/chu.png
-    - assets/images/game/machine/ddr.png
-    - assets/images/game/machine/gc.png
-    - assets/images/game/machine/ju.png
-    - assets/images/game/machine/mmdx.png
-    - assets/images/game/machine/nvsv.png
-    - assets/images/game/machine/pop.png
-    - assets/images/game/machine/sdvx.png
-    - assets/images/game/machine/tko.png
-    - assets/images/game/machine/wac.png
-    - assets/images/game/machine/x40chu.png
-    - assets/images/game/machine/x40ddr.png
-    - assets/images/game/machine/x40maidx.png
-    - assets/images/game/machine/x40sdvx.png
-    - assets/images/game/machine/x40tko.png
-    - assets/images/game/machine/x40wac.png
-    - assets/images/game/store/37656.jpg
-    - assets/images/game/store/37657.jpg
-    - assets/images/game/store/37658.jpg
-    - assets/images/game/store/x40mgs.jpg
-    - assets/images/game/store/x50mgs.jpg
-    - assets/images/gradeBox/chu_80.png
-    - assets/images/gradeBox/mayhem.png
-    - assets/images/gradeBox/miku2nd.png
-    - assets/images/gradeBox/mmdxc.jpg
-    - assets/images/gradeBox/ouo_80.png
-    - assets/images/gradeBox/sdvx10th.jpg
-    - assets/images/gradeBox/vvelcome.png
-    - assets/images/home/bolt-solid.svg
-    - assets/images/home/heart-regular.svg
-    - assets/images/home/heart-solid.svg
-    - assets/images/home/mari_level/ouo.png
-    - assets/images/home/shirt-solid.svg
-    - assets/images/home/top.png
-    - assets/images/home/vts.png
-    - assets/images/login/login_banner.jpg
-    - assets/images/quest/stamp.svg
-    - assets/images/scanPay/jkopay_logo.png
-    - assets/images/scanPay/linepay_logo.png
-    - assets/images/scanPay/p-solid.svg
-    - assets/texts/avater.txt
-    - assets/texts/license.txt
-    - assets/tests/entry.json
-    - assets/tests/rpc_chusp08.html
-    - assets/tests/rqc_bpl.html
-    - assets/tests/scan_pay.html
-    - assets/tests/scan_pay_x50pay.html
-    - assets/tests/sponser.html
-
+  - assets/images/appIcon/appstore.png
+  - assets/images/appIcon/playstore.png
+  - assets/images/collab/shop-solid.svg
+  - assets/images/common/header_float_icon.jpg
+  - assets/images/common/header_icon.png
+  - assets/images/common/header_icon_rsz.png
+  - assets/images/common/logo.jpg
+  - assets/images/common/logo_150.jpg
+  - assets/images/common/ouo.png
+  - assets/images/common/spinner-solid.svg
+  - assets/images/common/torii.svg
+  - assets/images/dev/dev_avatar.png
+  - assets/images/game/machine/2bom.png
+  - assets/images/game/machine/2chu.png
+  - assets/images/game/machine/2dm.png
+  - assets/images/game/machine/2mmdx.png
+  - assets/images/game/machine/2nos.png
+  - assets/images/game/machine/2tko.png
+  - assets/images/game/machine/chu.png
+  - assets/images/game/machine/ddr.png
+  - assets/images/game/machine/gc.png
+  - assets/images/game/machine/ju.png
+  - assets/images/game/machine/mmdx.png
+  - assets/images/game/machine/nvsv.png
+  - assets/images/game/machine/pop.png
+  - assets/images/game/machine/sdvx.png
+  - assets/images/game/machine/tko.png
+  - assets/images/game/machine/wac.png
+  - assets/images/game/machine/x40chu.png
+  - assets/images/game/machine/x40ddr.png
+  - assets/images/game/machine/x40maidx.png
+  - assets/images/game/machine/x40sdvx.png
+  - assets/images/game/machine/x40tko.png
+  - assets/images/game/machine/x40wac.png
+  - assets/images/game/store/37656.jpg
+  - assets/images/game/store/37657.jpg
+  - assets/images/game/store/37658.jpg
+  - assets/images/game/store/x40mgs.jpg
+  - assets/images/game/store/x50mgs.jpg
+  - assets/images/gradeBox/chu_80.png
+  - assets/images/gradeBox/mayhem.png
+  - assets/images/gradeBox/miku2nd.png
+  - assets/images/gradeBox/mmdxc.jpg
+  - assets/images/gradeBox/ouo_80.png
+  - assets/images/gradeBox/sdvx10th.jpg
+  - assets/images/gradeBox/vvelcome.png
+  - assets/images/home/bolt-solid.svg
+  - assets/images/home/heart-regular.svg
+  - assets/images/home/heart-solid.svg
+  - assets/images/home/mari_level/ouo.png
+  - assets/images/home/shirt-solid.svg
+  - assets/images/home/top.png
+  - assets/images/home/vts.png
+  - assets/images/login/login_banner.jpg
+  - assets/images/quest/stamp.svg
+  - assets/images/scanPay/jkopay_logo.png
+  - assets/images/scanPay/linepay_logo.png
+  - assets/images/scanPay/p-solid.svg
+  - assets/texts/avater.txt
+  - assets/texts/license.txt
+  - assets/tests/entry.json
+  - assets/tests/rpc_chusp08.html
+  - assets/tests/rqc_bpl.html
+  - assets/tests/scan_pay.html
+  - assets/tests/scan_pay_x50pay.html
+  - assets/tests/sponser.html
 flr:
   core_version: 3.2.0
   dartfmt_line_length: 80
   assets:
-    - /assets/images/
-    - /assets/texts/
+  - /assets/images/
+  - /assets/texts/
   fonts:
-    - /assets/fonts/
+  - /assets/fonts/
 flutter_icons:
   image_path: assets/images/appIcon/appstore.png
   adaptive_icon_foreground: assets/images/appIcon/playstore.png
-  adaptive_icon_background: "#1c1728"
+  adaptive_icon_background: '#1c1728'
   image_path_ios: assets/images/appIcon/appstore.png
   android: true
   ios: true
   min_sdk_android: 21
   remove_alpha_ios: true
 flutter_native_splash:
-  color: "#1e1e1e"
+  color: '#1e1e1e'
   android_12:
-    color: "#1e1e1e"
+    color: '#1e1e1e'
 flutter_intl:
   enabled: true
   main_locale: zh_TW

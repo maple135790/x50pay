@@ -623,7 +623,4 @@
     class _R_FontFamily {
       const _R_FontFamily();
     
-  /// font family: NotoSansJP
-      // ignore: non_constant_identifier_names
-      final notoSansJP = "NotoSansJP";
     }

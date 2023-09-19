@@ -44,6 +44,7 @@ mixin RemoteOpenMixin {
     serviceEnabled = await _location.serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await _location.requestService();
+      await EasyLoading.dismiss();
       if (!serviceEnabled) return;
     }
 

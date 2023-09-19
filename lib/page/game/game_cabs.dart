@@ -41,21 +41,23 @@ class _GameCabsState extends BaseStatefulState<GameCabs> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<GameList?>(
-        future: gameCabsInit,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const SizedBox();
-          }
-          if (snapshot.data == null) {
-            return const SizedBox(child: Text('failed'));
-          } else {
-            return _GameCabsLoaded(
-              viewModel.storeName,
-              games: snapshot.data!,
-            );
-          }
-        });
+    return Material(
+      child: FutureBuilder<GameList?>(
+          future: gameCabsInit,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const SizedBox();
+            }
+            if (snapshot.data == null) {
+              return const SizedBox(child: Text('failed'));
+            } else {
+              return _GameCabsLoaded(
+                viewModel.storeName,
+                games: snapshot.data!,
+              );
+            }
+          }),
+    );
   }
 }
 

@@ -47,7 +47,7 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Themes.pageDialogBackgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
