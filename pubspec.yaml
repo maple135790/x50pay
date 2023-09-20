@@ -1,7 +1,7 @@
 name: x50pay
 description: X50Pay app
 publish_to: none
-version: 1.3.0+1
+version: 1.3.1+1
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
