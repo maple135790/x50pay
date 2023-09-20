@@ -14,8 +14,8 @@ class FreePointModel {
       {required this.code, required this.message, required this.logs});
 
   factory FreePointModel.fromJson(Map<String, dynamic> json) =>
-      _$FreePModelFromJson(json);
-  Map<String, dynamic> toJson() => _$FreePModelToJson(this);
+      _$FreePointModelFromJson(json);
+  Map<String, dynamic> toJson() => _$FreePointModelToJson(this);
 }
 
 @JsonSerializable()
