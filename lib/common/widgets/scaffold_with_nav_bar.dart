@@ -87,17 +87,18 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
     );
   }
 
-  // @override
-  // void didUpdateWidget(covariant oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   if (oldWidget.body != widget.body) {
-  //     final currentLocation = GoRouterState.of(context).location;
-  //     selectedIndex = _menus.indexWhere((element) {
-  //       return currentLocation.contains(element.route.path.split('/')[1]);
-  //     });
-  //     setState(() {});
-  //   }
-  // }
+  @override
+  void didUpdateWidget(covariant oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.body == widget.body) return;
+    // 如果頁面有更換，則重新計算 selectedIndex。
+    // 最明顯的例子是用於 [home] 的 養成點數商場頁面。
+    final currentLocation = GoRouterState.of(context).location;
+    selectedIndex = _menus.indexWhere((element) {
+      return currentLocation.contains(element.route.path.split('/')[1]);
+    });
+    setState(() {});
+  }
 
   @override
   initState() {

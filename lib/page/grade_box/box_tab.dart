@@ -9,9 +9,8 @@ class _BoxTab extends StatefulWidget {
   State<_BoxTab> createState() => __BoxTabState();
 }
 
-class __BoxTabState extends State<_BoxTab> {
+class __BoxTabState extends BaseStatefulState<_BoxTab> {
   bool get isEmptyItems => widget.items.isEmpty;
-  late List<Widget> children;
 
   void onChangeItemPressed(String gid, String eid) async {
     final isConfirm = await showDialog<bool?>(
@@ -61,63 +60,73 @@ class __BoxTabState extends State<_BoxTab> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    if (isEmptyItems) return;
-    children = widget.items.map((e) {
-      final item = e!;
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: CachedNetworkImage(
-                  imageUrl: item.rawPicUrl,
-                  placeholder: (_, __) => const Icon(
+  Widget itemRow(GradeBoxItem item) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: CachedNetworkImage(
+                imageUrl: item.picUrl,
+                placeholder: (_, __) => const Icon(
+                  Icons.broken_image_rounded,
+                  size: 35,
+                  color: Color(0xff303030),
+                ),
+                errorWidget: (_, __, ___) => const Icon(
                     Icons.broken_image_rounded,
                     size: 35,
-                    color: Color(0xff303030),
-                  ),
-                  errorWidget: (_, __, ___) => const Icon(
-                      Icons.broken_image_rounded,
-                      size: 35,
-                      color: Color(0xff303030)),
-                  width: 65,
-                  height: 65,
-                )),
-            Flexible(
+                    color: Color(0xff303030)),
+                width: 65,
+                height: 65,
+              )),
+          Flexible(
+            fit: FlexFit.tight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Align(
+                alignment: Alignment.topLeft,
                 child: Text(
-              '${item.name}\n${item.info}',
-              style: const TextStyle(color: Color(0xfffafafa), height: 2),
-            )),
-            ElevatedButton(
-              style: Themes.severe(isV4: true, isRRect: true),
-              onPressed: () {
-                onChangeItemPressed(item.gid, item.eid);
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.favorite_rounded, size: 17),
-                  Text(' ${item.heart} ')
-                ],
+                  '${item.name}\n${item.info}',
+                  style: const TextStyle(
+                    color: Color(0xfffafafa),
+                    height: 2,
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
-      );
-    }).toList();
+          ),
+          ElevatedButton(
+            style: Themes.severe(isV4: true, isRRect: true),
+            onPressed: () {
+              onChangeItemPressed(item.gid, item.eid);
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.favorite_rounded, size: 17),
+                Text(' ${item.heart} ')
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     if (isEmptyItems) return const SizedBox();
     return Scaffold(
-      body: Column(
-        children: children,
+      body: ListView.builder(
+        itemCount: widget.items.length,
+        itemBuilder: (context, index) {
+          final item = widget.items[index]!;
+
+          return itemRow(item);
+        },
       ),
     );
   }

@@ -46,10 +46,10 @@ class GradeBoxItem {
   final String name;
 
   /// 兌換剩餘數量
-  final String much;
+  final int much;
 
   /// 兌換次數限制
-  final String limit;
+  final double limit;
 
   /// 兌換物品編號
   final String gid;
@@ -58,7 +58,7 @@ class GradeBoxItem {
   final String eid;
 
   /// 物品兌換點數
-  final String heart;
+  final int heart;
 
   const GradeBoxItem({
     required this.rawPicUrl,
@@ -73,11 +73,22 @@ class GradeBoxItem {
   /// 物品資訊
   ///
   /// 例如：剩餘 12 份，可兌換 2 次
-  String get info => '剩餘 $much 份，可兌換 $limit 次';
+  String get info => '剩餘 $much 份，可兌換 ${limit.toInt()} 次';
 
-  String get picUrl => 'https://pay.x50.fun/static/$rawPicUrl';
+  String get picUrl =>
+      rawPicUrl.startsWith('/') ? 'https://pay.x50.fun$rawPicUrl' : rawPicUrl;
 
   factory GradeBoxItem.fromJson(Map<String, dynamic> json) =>
       _$GradeBoxItemFromJson(json);
   Map<String, dynamic> toJson() => _$GradeBoxItemToJson(this);
+
+  factory GradeBoxItem.empty() => const GradeBoxItem(
+        rawPicUrl: '',
+        name: '',
+        much: 0,
+        limit: 0,
+        gid: '',
+        eid: '',
+        heart: 0,
+      );
 }
