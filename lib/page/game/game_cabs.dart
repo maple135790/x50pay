@@ -145,7 +145,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                   margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
                   padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
                   decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: scaffoldBackgroundColor,
                       border: Border.all(color: Themes.borderColor, width: 1),
                       borderRadius: BorderRadius.circular(5)),
                   child: Row(
@@ -164,7 +164,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 4, horizontal: 8),
                           child: Icon(Icons.sync,
-                              color: Theme.of(context).scaffoldBackgroundColor,
+                              color: scaffoldBackgroundColor,
                               size: 26),
                         ),
                       ),
@@ -195,7 +195,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                       left: 35,
                       top: 12,
                       child: Container(
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        color: scaffoldBackgroundColor,
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: const Text('離峰時段',
                             style: TextStyle(

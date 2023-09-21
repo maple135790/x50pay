@@ -3,9 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class LifecycleManager extends StatefulWidget {
+  /// 需要監聽的Widget
   final Widget child;
+
+  /// 生命週期Callback
   final LifecycleCallback callback;
 
+  /// 生命週期管理
+  ///
+  /// 用於管理生命週期，可用於監聽 App 進入前景、背景、暫停、銷毀等狀態
   const LifecycleManager({
     super.key,
     required this.child,

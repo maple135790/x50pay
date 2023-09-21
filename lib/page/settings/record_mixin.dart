@@ -60,7 +60,7 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: scaffoldBackgroundColor,
                   border: Border.all(color: Themes.borderColor, width: 1)),
               child: Row(
                 children: [

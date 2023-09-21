@@ -165,7 +165,7 @@ class _LoadedAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<_LoadedAppBar> createState() => _LoadedAppBarState();
 }
 
-class _LoadedAppBarState extends State<_LoadedAppBar> {
+class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
   late final currentLocale = context.read<LanguageViewModel>().currentLocale;
   String get currentLocation => GoRouterState.of(context).matchedLocation;
 
@@ -264,7 +264,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
         Container(
           height: 50,
           decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
+              color: scaffoldBackgroundColor,
               border: const Border(
                   bottom: BorderSide(color: Themes.borderColor, width: 1))),
           child: Padding(
@@ -329,7 +329,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> {
         elevation: 15,
         scrolledUnderElevation: 15,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: scaffoldBackgroundColor,
         shadowColor: Colors.black87,
         title: Align(
           alignment: Alignment.topRight,

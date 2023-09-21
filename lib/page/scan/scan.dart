@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
@@ -24,7 +25,8 @@ class ScanQRCode extends StatefulWidget {
   State<ScanQRCode> createState() => _ScanQRCodeState();
 }
 
-class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
+class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
+    with TickerProviderStateMixin {
   late AnimationController animationController;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   final isShowCameraPreviewNotifier = ValueNotifier(true);
@@ -187,7 +189,7 @@ class _ScanQRCodeState extends State<ScanQRCode> with TickerProviderStateMixin {
         showDragHandle: true,
         enableDrag: true,
         transitionAnimationController: animationController,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: scaffoldBackgroundColor,
         builder: (context) => DraggableScrollableSheet(
               initialChildSize: 0.8,
               snap: true,

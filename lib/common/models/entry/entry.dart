@@ -16,6 +16,7 @@ class EntryModel {
   @JsonKey(name: 'rqc')
   final List<QuestCampaign>? questCampaign;
 
+  /// 首頁所使用的資料
   const EntryModel({
     required this.message,
     required this.code,

@@ -18,9 +18,13 @@ import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 class Settings extends StatefulWidget {
+  /// 是否要跳轉到更換手機
   final bool? shouldGoPhone;
+
+  /// 是否要跳轉到遊玩券記錄
   final bool? shouldGoTicketRecord;
 
+  /// 設定頁面
   const Settings({super.key, this.shouldGoPhone, this.shouldGoTicketRecord});
 
   @override
@@ -31,9 +35,6 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   late final String avatarUrl;
   final viewModel = SettingsViewModel();
   final user = GlobalSingleton.instance.userNotifier.value!;
-  late List<Widget> settingsGroups;
-
-  Color get bgColor => Theme.of(context).scaffoldBackgroundColor;
 
   void showEasterEgg() {
     Vibration.vibrate(duration: 50, amplitude: 128);
@@ -181,7 +182,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
   @override
   Widget build(BuildContext context) {
-    settingsGroups = [
+    List<Widget> settingsGroups = [
       accountItem(),
       _SettingsGroup(children: [
         _SettingTile(
@@ -323,7 +324,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
     ];
 
     return Container(
-      decoration: BoxDecoration(color: bgColor),
+      decoration: BoxDecoration(color: scaffoldBackgroundColor),
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         itemCount: settingsGroups.length,
@@ -341,7 +342,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Themes.borderColor, width: 2),
-            color: bgColor),
+            color: scaffoldBackgroundColor),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Row(

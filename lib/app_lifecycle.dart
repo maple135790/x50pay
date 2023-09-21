@@ -17,6 +17,9 @@ import 'package:x50pay/page/settings/settings_view_model.dart';
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   DateTime lastScanTime = DateTime.fromMillisecondsSinceEpoch(0);
 
+  /// App 全局的生命週期管理
+  AppLifeCycles();
+
   Future<bool> _isEnableInAppNfcScan() async {
     final pref = await SharedPreferences.getInstance();
     return pref.getBool('inAppNfcScan') ?? false;
@@ -141,7 +144,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     return NfcManager.instance.isAvailable();
   }
 
-  Future<void> tryActivateNfc() async {
+  Future<void> _tryActivateNfc() async {
     bool isAvailable = await _checkNfcAvailable();
     if (!isAvailable) {
       log('NFC is not available', name: 'tryActivateNfc');
@@ -153,7 +156,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   @override
   void onCreated() {
     super.onCreated();
-    tryActivateNfc();
+    _tryActivateNfc();
   }
 
   @override

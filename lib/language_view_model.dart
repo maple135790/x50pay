@@ -3,6 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/generated/l10n.dart';
 
 class LanguageViewModel extends ChangeNotifier {
+  /// 語系相關的 ViewModel
+  LanguageViewModel();
+
   /// 預設語系
   static const _defaultAppLocale =
       Locale.fromSubtags(languageCode: 'zh', countryCode: 'TW');

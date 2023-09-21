@@ -82,11 +82,9 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
 
   @override
   Widget build(BuildContext context) {
-    Color bgColor = Theme.of(context).scaffoldBackgroundColor;
-
     return SingleChildScrollView(
       child: Container(
-        color: bgColor,
+        color: scaffoldBackgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(25),
           child: Column(
@@ -112,9 +110,10 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                                 color: Color(0xfffafafa),
                                 shape: BoxShape.circle),
                             child: currentState.step > 1
-                                ? Icon(Icons.check, size: 20, color: bgColor)
+                                ? Icon(Icons.check,
+                                    size: 20, color: scaffoldBackgroundColor)
                                 : Icon(Icons.format_list_bulleted,
-                                    size: 20, color: bgColor)),
+                                    size: 20, color: scaffoldBackgroundColor)),
                         const SizedBox(width: 5),
                         const Text('讀條款'),
                         const SizedBox(width: 5),
@@ -139,11 +138,12 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                                         color: const Color(0xff3e3e3e),
                                         width: 2)),
                             child: currentState.step > 2
-                                ? Icon(Icons.check, size: 20, color: bgColor)
+                                ? Icon(Icons.check,
+                                    size: 20, color: scaffoldBackgroundColor)
                                 : Icon(Icons.badge,
                                     size: 20,
                                     color: stateIndex >= 2
-                                        ? bgColor
+                                        ? scaffoldBackgroundColor
                                         : const Color(0xfffafafa))),
                         const SizedBox(width: 5),
                         const Text('選方案'),
@@ -171,7 +171,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                             child: Icon(Icons.shopping_cart,
                                 size: 20,
                                 color: stateIndex >= 3
-                                    ? bgColor
+                                    ? scaffoldBackgroundColor
                                     : const Color(0xfffafafa))),
                         const SizedBox(width: 5),
                         const Text('買買買'),

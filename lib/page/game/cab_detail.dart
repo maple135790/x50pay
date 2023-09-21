@@ -59,7 +59,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: scaffoldBackgroundColor,
       child: FutureBuilder(
         future: cabInit,
         builder: (context, snapshot) {
@@ -238,7 +238,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
           margin: const EdgeInsets.fromLTRB(15, 0, 15, 8),
           padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
           decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
+              color: scaffoldBackgroundColor,
               border: Border.all(color: Themes.borderColor, width: 1),
               borderRadius: BorderRadius.circular(5)),
           child: Row(

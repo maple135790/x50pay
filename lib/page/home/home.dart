@@ -16,6 +16,7 @@ import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/r.g.dart';
+import 'package:x50pay/repository/repository.dart';
 
 class Home extends StatefulWidget {
   /// 首頁
@@ -26,26 +27,32 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends BaseStatefulState<Home> {
-  final viewModel = HomeViewModel()..isFunctionalHeader = false;
+  final repo = Repository();
+  late final HomeViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = HomeViewModel(repository: repo)..isFunctionalHeader = false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: ChangeNotifierProvider.value(
         value: viewModel,
-        builder: (context, child) => FutureBuilder<bool>(
+        builder: (context, child) => FutureBuilder(
           future: viewModel.initHome(),
           key: ValueKey(viewModel.entry),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const SizedBox();
             }
-            if (snapshot.data == false) {
+            if (viewModel.entry == null) {
               showServiceError();
               return Center(child: Text(serviceErrorText));
-            } else {
-              return const SingleChildScrollView(child: _HomeLoaded());
             }
+            return const SingleChildScrollView(child: _HomeLoaded());
           },
         ),
       ),
@@ -60,7 +67,7 @@ class _HomeLoaded extends StatefulWidget {
   State<_HomeLoaded> createState() => _HomeLoadedState();
 }
 
-class _HomeLoadedState extends State<_HomeLoaded> {
+class _HomeLoadedState extends BaseStatefulState<_HomeLoaded> {
   Widget divider(String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
@@ -76,8 +83,6 @@ class _HomeLoadedState extends State<_HomeLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    final i18n = S.of(context);
-
     return Consumer<HomeViewModel>(
       builder: (context, vm, child) {
         final recentQuests = vm.entry!.questCampaign;
@@ -85,9 +90,9 @@ class _HomeLoadedState extends State<_HomeLoaded> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 10),
-            _TopInfo(),
-            _TicketInfo(),
-            _MariInfo(entryData: vm.entry!),
+            const _TopInfo(),
+            const _TicketInfo(),
+            const _MariInfo(),
             if (recentQuests != null) divider(i18n.infoNotify),
             if (recentQuests != null) _RecentQuests(quests: recentQuests),
             divider(i18n.officialNotify),
@@ -143,11 +148,10 @@ class _TicketInfo extends StatelessWidget {
   /// 票券資訊
   ///
   /// 包含券量、月票、月票期限
-  _TicketInfo();
-  final UserModel user = GlobalSingleton.instance.userNotifier.value!;
+  const _TicketInfo();
 
-  String vipExpDate() {
-    final date = DateTime.fromMillisecondsSinceEpoch(user.vipdate!.date);
+  String vipExpDate(int expDate) {
+    final date = DateTime.fromMillisecondsSinceEpoch(expDate);
     return '${date.month}/${date.day} ${date.hour}:${date.minute}';
   }
 
@@ -161,6 +165,7 @@ class _TicketInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final i18n = S.of(context);
+    final user = GlobalSingleton.instance.userNotifier.value!;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
@@ -224,7 +229,7 @@ class _TicketInfo extends StatelessWidget {
                             const WidgetSpan(child: SizedBox(width: 5)),
                             TextSpan(
                                 text: user.vip!
-                                    ? vipExpDate()
+                                    ? vipExpDate(user.vipdate!.date)
                                     : i18n.vipExpiredMsg)
                           ])),
                         ],
@@ -281,20 +286,16 @@ class _RecentQuests extends StatelessWidget {
 }
 
 class _MariInfo extends StatefulWidget {
-  /// 首頁的資料模型
-  final EntryModel entryData;
-
   /// 真璃養成點數資訊
   ///
   /// 包含等級、養成點數、養成點數進度條、養成點數商城按鈕等
-  const _MariInfo({required this.entryData});
+  const _MariInfo();
 
   @override
   State<_MariInfo> createState() => _MariInfoState();
 }
 
-class _MariInfoState extends State<_MariInfo> {
-  late final entry = widget.entryData;
+class _MariInfoState extends BaseStatefulState<_MariInfo> {
   final isVip = GlobalSingleton.instance.userNotifier.value?.vip ?? false;
   final progressBarNotifier = ValueNotifier(false);
 
@@ -314,310 +315,331 @@ class _MariInfoState extends State<_MariInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final i18n = S.of(context);
+    return Consumer<HomeViewModel>(
+      builder: (context, vm, child) {
+        final entry = vm.entry!;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-      child: LayoutBuilder(
-        builder: (context, constraint) => ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Stack(children: [
-            const Positioned(
-                bottom: -25,
-                right: -40,
-                child: Icon(Icons.compost_rounded,
-                    size: 140, color: Color(0xff343434))),
-            Container(
-              width: constraint.maxWidth,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Themes.borderColor)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                      width: double.maxFinite,
-                      child: FadeInImage(
-                        image: MemoryImage(entry.ava),
-                        placeholder: MemoryImage(kTransparentImage),
-                        fadeInDuration: const Duration(milliseconds: 150),
-                        fit: BoxFit.contain,
-                        alignment: Alignment.center,
-                        height: 270,
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: 26,
-                      height: 26,
-                      child: IconButton(
-                        iconSize: 16.5,
-                        onPressed: onDressRoomPressed,
-                        padding: EdgeInsets.zero,
-                        icon: ImageIcon(
-                            R.svg.shirt_solid(width: 16.25, height: 13)),
-                        color: const Color(0xffffc0cb),
-                        style: const ButtonStyle(
-                          side: MaterialStatePropertyAll(
-                              BorderSide(color: Color(0xff3e3e3e))),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+          child: LayoutBuilder(
+            builder: (context, constraint) => ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Stack(children: [
+                const Positioned(
+                    bottom: -25,
+                    right: -40,
+                    child: Icon(Icons.compost_rounded,
+                        size: 140, color: Color(0xff343434))),
+                Container(
+                  width: constraint.maxWidth,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Themes.borderColor)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: SizedBox(
+                          width: double.maxFinite,
+                          child: FadeInImage(
+                            image: MemoryImage(entry.ava),
+                            placeholder: MemoryImage(kTransparentImage),
+                            fadeInDuration: const Duration(milliseconds: 150),
+                            fit: BoxFit.contain,
+                            alignment: Alignment.center,
+                            height: 270,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(children: [
-                          Image(
-                              width: 17,
-                              height: 17,
-                              image: R.svg.heart_solid(width: 17, height: 17),
-                              color: const Color(0xbfff1100)),
-                          const SizedBox(width: 5),
-                          Text(entry.gradeLv,
-                              style: const TextStyle(
-                                  color: Color(0xff808080), fontSize: 30)),
-                          const SizedBox(width: 5),
-                          if (entry.gr2ShouldShowBouns)
-                            Tooltip(
-                              preferBelow: false,
-                              triggerMode: TooltipTriggerMode.tap,
-                              decoration: BoxDecoration(
-                                  color: const Color(0x33fefefe),
-                                  borderRadius: BorderRadius.circular(8)),
-                              message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
-                              textStyle:
-                                  Theme.of(context).textTheme.labelMedium,
-                              verticalOffset: 25,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xff2282e9),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Image(
-                                              image: R.svg.bolt_solid(
-                                                  width: 9, height: 13),
-                                              width: 9,
-                                              height: 13,
-                                              color: Colors.white),
-                                        ),
-                                        Text(entry.gr2BounsLimit),
-                                        const SizedBox(width: 3)
-                                      ])),
-                            )
-                        ]),
-                        const SizedBox(height: 5),
-                        ValueListenableBuilder(
-                          valueListenable: progressBarNotifier,
-                          builder: (context, isProgressBarCreated, child) =>
-                              AnimatedCrossFade(
-                            duration: const Duration(milliseconds: 150),
-                            alignment: Alignment.center,
-                            crossFadeState: isProgressBarCreated
-                                ? CrossFadeState.showSecond
-                                : CrossFadeState.showFirst,
-                            secondCurve: Curves.easeInOutExpo,
-                            firstChild: const SizedBox(
-                                height: 24, width: double.maxFinite),
-                            secondChild: ProgressBar(
-                              height: 24,
-                              onProgressBarCreated: onProgressBarCreated,
-                              currentValue: entry.gr2Progress,
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SizedBox(
+                          width: 26,
+                          height: 26,
+                          child: IconButton(
+                            iconSize: 16.5,
+                            onPressed: onDressRoomPressed,
+                            padding: EdgeInsets.zero,
+                            icon: ImageIcon(
+                                R.svg.shirt_solid(width: 16.25, height: 13)),
+                            color: const Color(0xffffc0cb),
+                            style: const ButtonStyle(
+                              side: MaterialStatePropertyAll(
+                                  BorderSide(color: Color(0xff3e3e3e))),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Expanded(
-                              child: ValueListenableBuilder(
-                                valueListenable: progressBarNotifier,
-                                builder:
-                                    (context, isProgressBarCreated, child) =>
-                                        AnimatedCrossFade(
-                                  duration: const Duration(milliseconds: 150),
-                                  alignment: Alignment.center,
-                                  crossFadeState: isProgressBarCreated
-                                      ? CrossFadeState.showSecond
-                                      : CrossFadeState.showFirst,
-                                  secondCurve: Curves.easeInOutExpo,
-                                  firstChild: const SizedBox(
-                                      height: 15, width: double.maxFinite),
-                                  secondChild: ProgressBar(
-                                    height: 15,
-                                    progressText:
-                                        '${entry.gr2CountMuch}/${entry.gr2HowMuch}P',
-                                    progressColor: const Color(0xffffde9b),
-                                    onProgressBarCreated: onProgressBarCreated,
-                                    currentValue: entry.gr2ProgressV5,
-                                  ),
+                            Row(children: [
+                              Image(
+                                  width: 17,
+                                  height: 17,
+                                  image:
+                                      R.svg.heart_solid(width: 17, height: 17),
+                                  color: const Color(0xbfff1100)),
+                              const SizedBox(width: 5),
+                              Text(entry.gradeLv,
+                                  style: const TextStyle(
+                                      color: Color(0xff808080), fontSize: 30)),
+                              const SizedBox(width: 5),
+                              if (entry.gr2ShouldShowBouns)
+                                Tooltip(
+                                  preferBelow: false,
+                                  triggerMode: TooltipTriggerMode.tap,
+                                  decoration: BoxDecoration(
+                                      color: const Color(0x33fefefe),
+                                      borderRadius: BorderRadius.circular(8)),
+                                  message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
+                                  textStyle:
+                                      Theme.of(context).textTheme.labelMedium,
+                                  verticalOffset: 25,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xff2282e9),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Image(
+                                                  image: R.svg.bolt_solid(
+                                                      width: 9, height: 13),
+                                                  width: 9,
+                                                  height: 13,
+                                                  color: Colors.white),
+                                            ),
+                                            Text(entry.gr2BounsLimit),
+                                            const SizedBox(width: 3)
+                                          ])),
+                                )
+                            ]),
+                            const SizedBox(height: 5),
+                            ValueListenableBuilder(
+                              valueListenable: progressBarNotifier,
+                              builder: (context, isProgressBarCreated, child) =>
+                                  AnimatedCrossFade(
+                                duration: const Duration(milliseconds: 150),
+                                alignment: Alignment.center,
+                                crossFadeState: isProgressBarCreated
+                                    ? CrossFadeState.showSecond
+                                    : CrossFadeState.showFirst,
+                                secondCurve: Curves.easeInOutExpo,
+                                firstChild: const SizedBox(
+                                    height: 24, width: double.maxFinite),
+                                secondChild: ProgressBar(
+                                  height: 24,
+                                  onProgressBarCreated: onProgressBarCreated,
+                                  currentValue: entry.gr2Progress,
                                 ),
                               ),
                             ),
-                            Container(
-                              height: 15,
-                              margin: const EdgeInsets.only(left: 9.25),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 7.5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: const Color(0xffb0cf9e),
-                              ),
-                              child: Text(entry.gr2Timer,
-                                  style: const TextStyle(
-                                      fontSize: 10, color: Colors.black)),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  child: ValueListenableBuilder(
+                                    valueListenable: progressBarNotifier,
+                                    builder: (context, isProgressBarCreated,
+                                            child) =>
+                                        AnimatedCrossFade(
+                                      duration:
+                                          const Duration(milliseconds: 150),
+                                      alignment: Alignment.center,
+                                      crossFadeState: isProgressBarCreated
+                                          ? CrossFadeState.showSecond
+                                          : CrossFadeState.showFirst,
+                                      secondCurve: Curves.easeInOutExpo,
+                                      firstChild: const SizedBox(
+                                          height: 15, width: double.maxFinite),
+                                      secondChild: ProgressBar(
+                                        height: 15,
+                                        progressText:
+                                            '${entry.gr2CountMuch}/${entry.gr2HowMuch}P',
+                                        progressColor: const Color(0xffffde9b),
+                                        onProgressBarCreated:
+                                            onProgressBarCreated,
+                                        currentValue: entry.gr2ProgressV5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 15,
+                                  margin: const EdgeInsets.only(left: 9.25),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 7.5),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: const Color(0xffb0cf9e),
+                                  ),
+                                  child: Text(entry.gr2Timer,
+                                      style: const TextStyle(
+                                          fontSize: 10, color: Colors.black)),
+                                ),
+                              ],
                             ),
+                            const SizedBox(height: 12),
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.5),
+                                    child: RichText(
+                                        text: TextSpan(
+                                            style:
+                                                const TextStyle(fontSize: 11.5),
+                                            children: [
+                                          const WidgetSpan(
+                                              child: Icon(Icons.redeem_rounded,
+                                                  color: Color(0xfffafafa),
+                                                  size: 15)),
+                                          const WidgetSpan(
+                                              child: SizedBox(width: 5)),
+                                          TextSpan(
+                                              text: i18n
+                                                  .gr2Limit(entry.gr2Limit)),
+                                        ])),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.5),
+                                    child: RichText(
+                                        text: TextSpan(
+                                            style:
+                                                const TextStyle(fontSize: 11.5),
+                                            children: [
+                                          const WidgetSpan(
+                                              child: Icon(
+                                                  Icons.favorite_rounded,
+                                                  color: Color(0xfffafafa),
+                                                  size: 15)),
+                                          const WidgetSpan(
+                                              child: SizedBox(width: 5)),
+                                          TextSpan(text: i18n.nextLv),
+                                          TextSpan(text: entry.gr2Next),
+                                          TextSpan(text: i18n.heart),
+                                        ])),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.5),
+                                    child: RichText(
+                                        text: TextSpan(
+                                            style:
+                                                const TextStyle(fontSize: 11.5),
+                                            children: [
+                                          const WidgetSpan(
+                                              child: Icon(
+                                                  Icons.calendar_today_rounded,
+                                                  color: Color(0xfffafafa),
+                                                  size: 15)),
+                                          const WidgetSpan(
+                                              child: SizedBox(width: 5)),
+                                          TextSpan(
+                                              text: i18n
+                                                  .continuous(entry.gr2Day)),
+                                        ])),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.5),
+                                    child: RichText(
+                                        text: TextSpan(
+                                            style:
+                                                const TextStyle(fontSize: 11.5),
+                                            children: [
+                                          const WidgetSpan(
+                                              child: Icon(
+                                                  Icons.how_to_vote_rounded,
+                                                  color: Color(0xfffafafa),
+                                                  size: 15)),
+                                          const WidgetSpan(
+                                              child: SizedBox(width: 5)),
+                                          TextSpan(
+                                              text: i18n.gatcha(entry.gr2VDay))
+                                        ])),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2.5),
+                                    child: RichText(
+                                        text: TextSpan(
+                                            style:
+                                                const TextStyle(fontSize: 11.5),
+                                            children: [
+                                          const WidgetSpan(
+                                              child: Icon(Icons.sync_rounded,
+                                                  color: Color(0xfffafafa),
+                                                  size: 15)),
+                                          const WidgetSpan(
+                                              child: SizedBox(width: 5)),
+                                          TextSpan(text: i18n.gr2ResetDate),
+                                          TextSpan(text: entry.gr2Date),
+                                        ])),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: TextButton(
+                                      onPressed: onGradeBoxPressed,
+                                      style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        padding: MaterialStateProperty.all(
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 20)),
+                                        textStyle: MaterialStateProperty.all(
+                                            const TextStyle(fontSize: 13)),
+                                        visualDensity:
+                                            VisualDensity.comfortable,
+                                        splashFactory: NoSplash.splashFactory,
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20))),
+                                        foregroundColor:
+                                            MaterialStateProperty.all(
+                                                const Color(0xfff5222d)),
+                                        backgroundColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) {
+                                          return const Color(0x22f7f7f7);
+                                        }),
+                                      ),
+                                      child: Text(i18n.gr2HeartBox),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 2.5),
-                                child: RichText(
-                                    text: TextSpan(
-                                        style: const TextStyle(fontSize: 11.5),
-                                        children: [
-                                      const WidgetSpan(
-                                          child: Icon(Icons.redeem_rounded,
-                                              color: Color(0xfffafafa),
-                                              size: 15)),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 5)),
-                                      TextSpan(
-                                          text: i18n.gr2Limit(entry.gr2Limit)),
-                                    ])),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 2.5),
-                                child: RichText(
-                                    text: TextSpan(
-                                        style: const TextStyle(fontSize: 11.5),
-                                        children: [
-                                      const WidgetSpan(
-                                          child: Icon(Icons.favorite_rounded,
-                                              color: Color(0xfffafafa),
-                                              size: 15)),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 5)),
-                                      TextSpan(text: i18n.nextLv),
-                                      TextSpan(text: entry.gr2Next),
-                                      TextSpan(text: i18n.heart),
-                                    ])),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 2.5),
-                                child: RichText(
-                                    text: TextSpan(
-                                        style: const TextStyle(fontSize: 11.5),
-                                        children: [
-                                      const WidgetSpan(
-                                          child: Icon(
-                                              Icons.calendar_today_rounded,
-                                              color: Color(0xfffafafa),
-                                              size: 15)),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 5)),
-                                      TextSpan(
-                                          text: i18n.continuous(entry.gr2Day)),
-                                    ])),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 2.5),
-                                child: RichText(
-                                    text: TextSpan(
-                                        style: const TextStyle(fontSize: 11.5),
-                                        children: [
-                                      const WidgetSpan(
-                                          child: Icon(Icons.how_to_vote_rounded,
-                                              color: Color(0xfffafafa),
-                                              size: 15)),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 5)),
-                                      TextSpan(text: i18n.gatcha(entry.gr2VDay))
-                                    ])),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 2.5),
-                                child: RichText(
-                                    text: TextSpan(
-                                        style: const TextStyle(fontSize: 11.5),
-                                        children: [
-                                      const WidgetSpan(
-                                          child: Icon(Icons.sync_rounded,
-                                              color: Color(0xfffafafa),
-                                              size: 15)),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 5)),
-                                      TextSpan(text: i18n.gr2ResetDate),
-                                      TextSpan(text: entry.gr2Date),
-                                    ])),
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: TextButton(
-                                  onPressed: onGradeBoxPressed,
-                                  style: ButtonStyle(
-                                    overlayColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    padding: MaterialStateProperty.all(
-                                        const EdgeInsets.symmetric(
-                                            horizontal: 20)),
-                                    textStyle: MaterialStateProperty.all(
-                                        const TextStyle(fontSize: 13)),
-                                    visualDensity: VisualDensity.comfortable,
-                                    splashFactory: NoSplash.splashFactory,
-                                    shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20))),
-                                    foregroundColor: MaterialStateProperty.all(
-                                        const Color(0xfff5222d)),
-                                    backgroundColor:
-                                        MaterialStateProperty.resolveWith(
-                                            (states) {
-                                      return const Color(0x22f7f7f7);
-                                    }),
-                                  ),
-                                  child: Text(i18n.gr2HeartBox),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ]),
             ),
-          ]),
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -626,12 +648,12 @@ class _TopInfo extends StatelessWidget {
   /// 頁面頂部的個人資訊
   ///
   /// 包含頭像、名稱、UID、P點、QRCode掃描按鈕
-  _TopInfo();
-
-  final UserModel user = GlobalSingleton.instance.userNotifier.value!;
+  const _TopInfo();
 
   @override
   Widget build(BuildContext context) {
+    final UserModel user = GlobalSingleton.instance.userNotifier.value!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
       child: Row(
