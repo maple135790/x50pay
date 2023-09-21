@@ -3,42 +3,56 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Flutter
+name: Flutter CI
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    tags:
+      - "v*.*.*"
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Flutter
+      - name: ⚙️ Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.os }}-flutter
+
+      - name: 💻 Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.2'
-          channel: 'stable'
+          flutter-version: "3.13.4"
+          channel: "stable"
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
-      
-      - name: pub get
-        run: flutter pub get
-      
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Analyze project source
+      - name: 🔍 Analyze project source
         run: dart analyze
 
-      - name: Build apk
+      - name: 📝 Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: 🔨 Pub get
+        run: flutter pub get
+
+      - name: 🔨 Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "11"
+
+      - name: 🔨 Build apk
         run: flutter build apk
-      # Your project will need to have tests in test/ and a dependency on
-      # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
-#       - name: Run tests
-#         run: flutter test
+
+      - name: 🚀🚀🚀 Release to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: build/app/outputs/apk/release/app-release.apk
+          body: ${{ github.event.head_commit.message }}
