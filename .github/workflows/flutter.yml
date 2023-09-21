@@ -7,56 +7,52 @@ name: Flutter CI
 
 on:
   push:
-    branches: ["master"]
-  pull_request:
-    branches: ["master"]
+    tags:
+      - "v*.*.*"
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v1
+      - name: ⚙️ Cache Flutter dependencies
+        uses: actions/cache@v3
         with:
           path: /opt/hostedtoolcache/flutter
           key: ${{ runner.os }}-flutter
 
-      - name: Install Flutter
+      - name: 💻 Install Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.13.4"
           channel: "stable"
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
-
-      - name: pub get
-        run: flutter pub get
-
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Analyze project source
+      - name: 🔍 Analyze project source
         run: dart analyze
 
-      - name: Setup Java
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/setup-java@v2
+      - name: 📝 Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: 🔨 Pub get
+        run: flutter pub get
+
+      - name: 🔨 Setup Java
+        uses: actions/setup-java@v3
         with:
           distribution: "zulu"
           java-version: "11"
 
-      - name: Build apk
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: 🔨 Build apk
         run: flutter build apk
 
-      - name: Release
+      - name: 🚀🚀🚀 Release to GitHub Releases
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: build/app/outputs/apk/release/app-release.apk
-          body: |
-            ### Changelog
-            ${{ github.event.head_commit.message}}
+          body: ${{ github.event.head_commit.message }}
