@@ -1,8 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/global_singleton.dart';
 
 class BaseViewModel extends ChangeNotifier {
   final isForceFetch = GlobalSingleton.instance.isServiceOnline;
+
+  bool get _duringTest => Platform.environment.containsKey('FLUTTER_TEST');
+
+  void showLoading() {
+    if (_duringTest) return;
+    dimissLoading();
+    EasyLoading.show();
+  }
+
+  void dimissLoading() {
+    if (_duringTest) return;
+    if (EasyLoading.isShow) EasyLoading.dismiss();
+  }
 
   bool _isFunctionalHeader = true;
   bool get isFunctionalHeader => _isFunctionalHeader;

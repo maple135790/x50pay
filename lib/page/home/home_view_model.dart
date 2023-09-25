@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
@@ -11,7 +10,7 @@ class HomeViewModel extends BaseViewModel {
   final Repository repository;
 
   HomeViewModel({required this.repository});
-
+  
   BasicResponse? response;
   EntryModel? _entry;
   EntryModel? get entry => _entry;
@@ -21,7 +20,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   Future<void> initHome() async {
-    await EasyLoading.show();
+    showLoading();
     await Future.delayed(const Duration(milliseconds: 100));
     try {
       await GlobalSingleton.instance.checkUser(force: true);
@@ -29,7 +28,7 @@ class HomeViewModel extends BaseViewModel {
     } catch (e) {
       log('', error: e, name: 'home init');
     } finally {
-      await EasyLoading.dismiss();
+      dimissLoading();
     }
   }
 }
