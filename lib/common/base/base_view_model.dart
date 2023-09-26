@@ -11,11 +11,11 @@ class BaseViewModel extends ChangeNotifier {
 
   void showLoading() {
     if (_duringTest) return;
-    dimissLoading();
+    dismissLoading();
     EasyLoading.show();
   }
 
-  void dimissLoading() {
+  void dismissLoading() {
     if (_duringTest) return;
     if (EasyLoading.isShow) EasyLoading.dismiss();
   }

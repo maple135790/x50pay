@@ -12,6 +12,7 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
 import 'package:x50pay/page/pages.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/repository/setting_repository.dart';
 
 /// GoRouter 路由 wrapper
 GoRoute _route(
@@ -51,192 +52,207 @@ GoRoute _routeTransition(
 final debugRoute = AppRoutes.home.path;
 
 /// 路由設定
-RouterConfig<Object> goRouteConfig() => GoRouter(
-      navigatorKey: GlobalSingleton.instance.navigatorKey,
-      initialLocation: kDebugMode && !GlobalSingleton.instance.isServiceOnline
-          ? debugRoute
-          : GlobalSingleton.instance.isLogined
-              ? AppRoutes.home.path
-              : AppRoutes.login.path,
-      debugLogDiagnostics: true,
-      routes: [
-        ShellRoute(
-          routes: [
-            _route(AppRoutes.forgotPassword, (_, __) => const ForgotPassword()),
-            _route(AppRoutes.signUp, (_, __) => const SignUp()),
-            _route(AppRoutes.login, (_, __) => const Login()),
-            _route(
-              AppRoutes.gameStore,
-              (_, __) => const GameStore(),
-              redirect: gameStoreRedirect,
-            ),
-            _route(AppRoutes.gameCabs, (_, state) {
+RouterConfig<Object> goRouteConfig() {
+  final settingRepo = SettingRepository();
+
+  return GoRouter(
+    navigatorKey: GlobalSingleton.instance.navigatorKey,
+    initialLocation: kDebugMode && !GlobalSingleton.instance.isServiceOnline
+        ? debugRoute
+        : GlobalSingleton.instance.isLogined
+            ? AppRoutes.home.path
+            : AppRoutes.login.path,
+    debugLogDiagnostics: true,
+    routes: [
+      ShellRoute(
+        routes: [
+          _route(AppRoutes.forgotPassword, (_, __) => const ForgotPassword()),
+          _route(AppRoutes.signUp, (_, __) => const SignUp()),
+          _route(AppRoutes.login, (_, __) => const Login()),
+          _route(
+            AppRoutes.gameStore,
+            (_, __) => const GameStore(),
+            redirect: gameStoreRedirect,
+          ),
+          _route(AppRoutes.gameCabs, (_, state) {
+            final shouldRebuild = state.extra as bool?;
+            if (shouldRebuild ?? false) {
+              return GameCabs(
+                  key: ValueKey(DateTime.now().millisecondsSinceEpoch));
+            }
+            return const GameCabs();
+          }, innerRoutes: [
+            _routeTransition(AppRoutes.gameCab, (_, state) {
+              final machineId = state.pathParameters['mid']!;
+              return CupertinoPage(child: CabDetail(machineId));
+            }),
+          ]),
+          _route(
+            AppRoutes.scanQRCode,
+            (_, state) => ScanQRCode(state.extra as PermissionStatus),
+          ),
+          _route(AppRoutes.license, (_, __) => const License()),
+          _route(
+            AppRoutes.settings,
+            (_, state) {
+              final shouldGoPhone =
+                  state.queryParameters['goTo'] == 'phoneChange';
+              final shouldGoTicketRecord =
+                  state.queryParameters['goTo'] == 'ticketRecord';
+
+              log('shouldGoPhone: $shouldGoPhone');
+              log('shouldGoTicketRecord: $shouldGoTicketRecord');
+              return Settings(
+                shouldGoPhone: shouldGoPhone,
+                shouldGoTicketRecord: shouldGoTicketRecord,
+              );
+            },
+            innerRoutes: [
+              _routeTransition(AppRoutes.padPref, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const PadPrefDialog(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.quicPayPref, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const QuiCPayPrefDialog(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.paymentPref, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const PaymentPrefDialog(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.changePassword, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const ChangePasswordDialog(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.changeEmail, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const ChangeEmailDialog(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.bidRecords, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const BidRecords(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.ticketRecords, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const TicketRecords(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.playRecords, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const PlayRecords(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.freePointRecords, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const FreePointRecords(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.ticketUsedRecords, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const TicketUsedRecords(),
+                  ),
+                );
+              }),
+              _routeTransition(AppRoutes.x50PayAppSetting, (_, __) {
+                return CupertinoPage(
+                  child: ChangeNotifierProvider(
+                    create: (context) =>
+                        SettingsViewModel(repository: settingRepo),
+                    builder: (context, child) => const AppSettings(),
+                  ),
+                );
+              }),
+            ],
+          ),
+          _route(
+            AppRoutes.home,
+            (_, state) {
               final shouldRebuild = state.extra as bool?;
-              if (shouldRebuild ?? false) {
-                return GameCabs(
+              if (shouldRebuild == true) {
+                return Home(
                     key: ValueKey(DateTime.now().millisecondsSinceEpoch));
               }
-              return const GameCabs();
-            }, innerRoutes: [
-              _routeTransition(AppRoutes.gameCab, (_, state) {
-                final machineId = state.pathParameters['mid']!;
-                return CupertinoPage(child: CabDetail(machineId));
-              }),
-            ]),
-            _route(
-              AppRoutes.scanQRCode,
-              (_, state) => ScanQRCode(state.extra as PermissionStatus),
-            ),
-            _route(AppRoutes.license, (_, __) => const License()),
-            _route(
-              AppRoutes.settings,
-              (_, state) {
-                final shouldGoPhone =
-                    state.queryParameters['goTo'] == 'phoneChange';
-                final shouldGoTicketRecord =
-                    state.queryParameters['goTo'] == 'ticketRecord';
-
-                log('shouldGoPhone: $shouldGoPhone');
-                log('shouldGoTicketRecord: $shouldGoTicketRecord');
-                return Settings(
-                  shouldGoPhone: shouldGoPhone,
-                  shouldGoTicketRecord: shouldGoTicketRecord,
-                );
-              },
-              innerRoutes: [
-                _routeTransition(AppRoutes.padPref, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const PadPrefDialog(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.quicPayPref, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const QuiCPayPrefDialog(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.paymentPref, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const PaymentPrefDialog(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.changePassword, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const ChangePasswordDialog(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.changeEmail, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const ChangeEmailDialog(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.bidRecords, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const BidRecords(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.ticketRecords, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const TicketRecords(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.playRecords, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const PlayRecords(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.freePointRecords, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const FreePointRecords(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.ticketUsedRecords, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const TicketUsedRecords(),
-                    ),
-                  );
-                }),
-                _routeTransition(AppRoutes.x50PayAppSetting, (_, __) {
-                  return CupertinoPage(
-                    child: ChangeNotifierProvider(
-                      create: (context) => SettingsViewModel(),
-                      builder: (context, child) => const AppSettings(),
-                    ),
-                  );
-                }),
-              ],
-            ),
-            _route(
-              AppRoutes.home,
-              (_, state) {
+              return const Home();
+            },
+            innerRoutes: [
+              _route(AppRoutes.ecPay, (_, state) => const EcPay()),
+              _routeTransition(AppRoutes.dressRoom,
+                  (_, __) => const CupertinoPage(child: DressRoom())),
+              _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
+              _route(AppRoutes.questCampaign, (_, state) {
                 final shouldRebuild = state.extra as bool?;
                 if (shouldRebuild == true) {
-                  return Home(
-                      key: ValueKey(DateTime.now().millisecondsSinceEpoch));
-                }
-                return const Home();
-              },
-              innerRoutes: [
-                _route(AppRoutes.ecPay, (_, state) => const EcPay()),
-                _routeTransition(AppRoutes.dressRoom,
-                    (_, __) => const CupertinoPage(child: DressRoom())),
-                _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
-                _route(AppRoutes.questCampaign, (_, state) {
-                  final shouldRebuild = state.extra as bool?;
-                  if (shouldRebuild == true) {
-                    return QuestCampaign(
-                      key: ValueKey(DateTime.now().millisecondsSinceEpoch),
-                      campaignId: state.pathParameters['couid']!,
-                    );
-                  }
                   return QuestCampaign(
+                    key: ValueKey(DateTime.now().millisecondsSinceEpoch),
                     campaignId: state.pathParameters['couid']!,
                   );
-                }),
-              ],
-            ),
-            _route(AppRoutes.gift, (_, __) => const GiftSystem()),
-            _route(AppRoutes.gradeBox, (_, __) => const GradeBox()),
-            _route(AppRoutes.collab, (_, __) => const Collab()),
-          ],
-          builder: (context, state, child) {
-            if (AppRoutes.noLoginPages
-                .any((p) => p.path == state.location.toString())) {
-              return child;
-            }
-            return ScaffoldWithNavBar(body: child);
-          },
-        ),
-      ],
-    );
+                }
+                return QuestCampaign(
+                  campaignId: state.pathParameters['couid']!,
+                );
+              }),
+            ],
+          ),
+          _route(AppRoutes.gift, (_, __) => const GiftSystem()),
+          _route(AppRoutes.gradeBox, (_, __) => const GradeBox()),
+          _route(AppRoutes.collab, (_, __) => const Collab()),
+        ],
+        builder: (context, state, child) {
+          if (AppRoutes.noLoginPages
+              .any((p) => p.path == state.location.toString())) {
+            return child;
+          }
+          return ScaffoldWithNavBar(body: child);
+        },
+      ),
+    ],
+  );
+}
 
 /// 遊戲頁面的重新導向邏輯
 ///

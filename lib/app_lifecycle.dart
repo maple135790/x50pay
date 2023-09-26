@@ -13,6 +13,7 @@ import 'package:x50pay/mixins/nfc_pad_mixin.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/repository/setting_repository.dart';
 
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   DateTime lastScanTime = DateTime.fromMillisecondsSinceEpoch(0);
@@ -54,11 +55,13 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     final mid = url.split('nfcpay/').last.split('/').first;
     final cid = url.split('nfcpay/').last.split('/').last;
     if (mid.isEmpty || cid.isEmpty) return;
+    final settingRepo = SettingRepository();
+    final isPreferTicket = await _getNfcPreferTicketSetting(settingRepo);
     handleNfcPay(
       mid: mid,
       cid: cid,
-      isPreferTicket:
-          (await SettingsViewModel().getPaymentSettings()).nfcTicket,
+      settingRepo: settingRepo,
+      isPreferTicket: isPreferTicket,
       onCabSelect: (qrPayData) {
         GlobalSingleton.instance.isNfcPayDialogOpen = true;
         showDialog(
@@ -178,5 +181,11 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
       return;
     }
     _startNfcScan();
+  }
+
+  Future<bool> _getNfcPreferTicketSetting(SettingRepository settingRepo) async {
+    final settings =
+        await SettingsViewModel(repository: settingRepo).getPaymentSettings();
+    return settings.nfcTicket;
   }
 }

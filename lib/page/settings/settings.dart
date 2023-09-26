@@ -16,6 +16,7 @@ import 'package:x50pay/mixins/remote_open_mixin.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/r.g.dart';
+import 'package:x50pay/repository/setting_repository.dart';
 
 class Settings extends StatefulWidget {
   /// 是否要跳轉到更換手機
@@ -33,7 +34,8 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   late final String avatarUrl;
-  final viewModel = SettingsViewModel();
+  late final viewModel = SettingsViewModel(repository: settingRepo);
+  final settingRepo = SettingRepository();
   final user = GlobalSingleton.instance.userNotifier.value!;
 
   void showEasterEgg() {

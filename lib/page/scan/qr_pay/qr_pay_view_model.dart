@@ -12,13 +12,16 @@ import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/setting_repository.dart';
 
 typedef QRPayTPPRedirect = ({QRPayTPPRedirectType type, String url});
 
 class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   final String mid;
   final String cid;
+  final SettingRepository settingRepo;
   final void Function(QRPayData qrPayData) onCabSelect;
+
   final VoidCallback onPaymentDone;
 
   QRPayViewModel({
@@ -26,6 +29,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     required this.cid,
     required this.onCabSelect,
     required this.onPaymentDone,
+    required this.settingRepo,
   });
 
   final _repo = Repository();
@@ -85,6 +89,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
           mid: mid,
           cid: cid,
           onCabSelect: onCabSelect,
+          settingRepo: SettingRepository(),
           isPreferTicket: settings.nfcTicket,
           onPaymentDone: onPaymentDone,
         );
@@ -175,7 +180,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   }
 
   Future<PaymentSettingsModel> _getPaymentSettings() async {
-    final accountViewModel = SettingsViewModel();
+    final accountViewModel = SettingsViewModel(repository: settingRepo);
     final settings = await accountViewModel.getPaymentSettings();
     currentPaymentSettings = settings;
     return currentPaymentSettings;
@@ -210,7 +215,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     String cid = this.cid;
     // 0mu 做 QRCode 的時候打錯了，所以要做轉換
     if (this.cid == '703765460') cid = '70376560';
-    final accountViewModel = SettingsViewModel();
+    final accountViewModel = SettingsViewModel(repository: settingRepo);
     final settings = await accountViewModel.getPaymentSettings();
     if (settings.nfcTicket) {
       _doInsert('/api/v1/tic/$mid/$cid/0');

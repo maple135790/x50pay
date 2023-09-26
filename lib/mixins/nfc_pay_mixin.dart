@@ -10,6 +10,7 @@ import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/setting_repository.dart';
 
 mixin NfcPayMixin {
   final _repo = Repository();
@@ -18,6 +19,7 @@ mixin NfcPayMixin {
   Future<void> handleNfcPay({
     required String mid,
     required String cid,
+    required SettingRepository settingRepo,
     required Function(QRPayData qrPayData) onCabSelect,
     required VoidCallback onPaymentDone,
     required bool isPreferTicket,
@@ -25,7 +27,7 @@ mixin NfcPayMixin {
   }) async {
     if (cid == '703765460') cid = '70376560';
     final url = 'https://pay.x50.fun/nfcpay/$mid/$cid';
-    isNfcAutoOn ??= await _getNfcAutoSetting();
+    isNfcAutoOn ??= await _getNfcAutoSetting(settingRepo);
 
     if (isNfcAutoOn) {
       final isEnableFastNfcPay = await _checkEnableFastNfcPay();
@@ -43,8 +45,8 @@ mixin NfcPayMixin {
     }
   }
 
-  Future<bool> _getNfcAutoSetting() async {
-    final accountViewModel = SettingsViewModel();
+  Future<bool> _getNfcAutoSetting(SettingRepository settingRepo) async {
+    final accountViewModel = SettingsViewModel(repository: settingRepo);
     final settings = await accountViewModel.getPaymentSettings();
     return settings.nfcAuto;
   }

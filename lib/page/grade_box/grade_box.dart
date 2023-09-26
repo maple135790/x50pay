@@ -9,6 +9,7 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
 
 part 'box_tab.dart';
 
@@ -21,7 +22,8 @@ class GradeBox extends StatefulWidget {
 }
 
 class _GradeBoxState extends BaseStatefulState<GradeBox> {
-  final viewModel = GradeBoxViewModel();
+  final repo = Repository();
+  late final viewModel = GradeBoxViewModel(repository: repo);
   late Future<GradeBoxModel> init;
 
   @override

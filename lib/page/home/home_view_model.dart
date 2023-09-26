@@ -28,7 +28,7 @@ class HomeViewModel extends BaseViewModel {
     } catch (e) {
       log('', error: e, name: 'home init');
     } finally {
-      dimissLoading();
+      dismissLoading();
     }
   }
 }

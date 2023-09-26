@@ -15,6 +15,7 @@ import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/setting_repository.dart';
 
 /// 掃描QRCode 頁面
 class ScanQRCode extends StatefulWidget {
@@ -71,6 +72,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
     final viewModel = QRPayViewModel(
       mid: args[0],
       cid: args[1],
+      settingRepo: SettingRepository(),
       onPaymentDone: () {
         controller.resumeCamera();
       },
