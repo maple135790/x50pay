@@ -107,6 +107,16 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
     selectedIndex = 2;
   }
 
+  Future<void> onRefresh() async {
+    await Future.delayed(const Duration(milliseconds: 800));
+    if (currentLocation == AppRoutes.home.path) {
+      GlobalSingleton.instance.checkUser(force: true);
+    }
+    if (context.mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -127,7 +137,7 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
       child: Scaffold(
         appBar: _LoadedAppBar(selectedIndex),
         body: RefreshIndicator(
-          onRefresh: () async {},
+          onRefresh: onRefresh,
           child: widget.body,
         ),
         bottomNavigationBar: Container(

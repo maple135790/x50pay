@@ -56,10 +56,11 @@ class _GameStoreLoaded extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Store> storeList = stores.storelist!;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: storeList.map((e) => _StoreItem(e, stores.prefix!)).toList(),
-      ),
+    return ListView.builder(
+      itemCount: storeList.length,
+      itemBuilder: (context, index) {
+        return _StoreItem(storeList[index], stores.prefix!);
+      },
     );
   }
 }
