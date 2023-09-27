@@ -81,7 +81,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
           },
         );
       },
-      onPaymentDone: () {},
+      onNfcAutoPaymentDone: () {},
     );
   }
 

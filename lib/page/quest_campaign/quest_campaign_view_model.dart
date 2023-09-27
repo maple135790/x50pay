@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:html/parser.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/quest_campaign/campaign.dart';
@@ -9,21 +7,17 @@ import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class QuestCampaignViewModel extends BaseViewModel {
-  final repo = Repository();
+  final Repository repository;
+
+  QuestCampaignViewModel({required this.repository});
 
   Future<Campaign?> init({required String campaignId}) async {
-    await EasyLoading.show();
+    showLoading();
     await Future.delayed(const Duration(milliseconds: 100));
 
     late final String rawDocument;
     try {
-      if (!kDebugMode || isForceFetch) {
-        rawDocument = await repo.getCampaignDocument(campaignId);
-      } else {
-        rawDocument = await rootBundle.loadString(campaignId.contains('bpl')
-            ? 'assets/tests/rqc_bpl.html'
-            : 'assets/tests/rpc_chusp08.html');
-      }
+      rawDocument = await repository.getCampaignDocument(campaignId);
 
       final document = parse(rawDocument);
 
@@ -97,12 +91,12 @@ class QuestCampaignViewModel extends BaseViewModel {
       log('', error: e.toString(), name: 'QuestCampaignViewModel');
       return null;
     } finally {
-      await EasyLoading.dismiss();
+      dismissLoading();
     }
   }
 
   Future<void> onAddStampRowTap({required String campaignId}) async {
-    if (!kDebugMode || isForceFetch) repo.addCampaignStampRow(campaignId);
+    if (!kDebugMode || isForceFetch) repository.addCampaignStampRow(campaignId);
     return;
   }
 }

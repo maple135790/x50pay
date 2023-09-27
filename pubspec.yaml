@@ -117,12 +117,6 @@ flutter:
   - assets/images/scanPay/linepay_logo.png
   - assets/images/scanPay/p-solid.svg
   - assets/texts/license.txt
-  - assets/tests/entry.json
-  - assets/tests/rpc_chusp08.html
-  - assets/tests/rqc_bpl.html
-  - assets/tests/scan_pay.html
-  - assets/tests/scan_pay_x50pay.html
-  - assets/tests/sponser.html
 flr:
   core_version: 3.2.0
   dartfmt_line_length: 80

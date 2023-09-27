@@ -21,7 +21,7 @@ mixin NfcPayMixin {
     required String cid,
     required SettingRepository settingRepo,
     required Function(QRPayData qrPayData) onCabSelect,
-    required VoidCallback onPaymentDone,
+    required VoidCallback onNfcAutoPaymentDone,
     required bool isPreferTicket,
     required Repository repository,
     bool? isNfcAutoOn,
@@ -40,7 +40,7 @@ mixin NfcPayMixin {
         final rawDoc = await _getNfcPayDocument(url);
         _handlePayment(rawDoc, mid, cid);
       }
-      onPaymentDone.call();
+      onNfcAutoPaymentDone.call();
     } else {
       final qrPayData = await _getQRPayData(url);
       onCabSelect.call(qrPayData);
@@ -160,7 +160,7 @@ mixin NfcPayMixin {
         cabNum: int.parse(cabNum),
         mode: modes,
       );
-    } on Exception catch (e, stacktrace) {
+    } catch (e, stacktrace) {
       log('',
           error: e, stackTrace: stacktrace, name: 'NfcPayMixin._getQRPayData');
       rethrow;

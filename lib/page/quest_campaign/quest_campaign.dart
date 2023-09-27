@@ -10,6 +10,7 @@ import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/quest_campaign/quest_campaign_view_model.dart';
 import 'package:x50pay/r.g.dart';
+import 'package:x50pay/repository/repository.dart';
 
 class QuestCampaign extends StatefulWidget {
   final String campaignId;
@@ -20,7 +21,8 @@ class QuestCampaign extends StatefulWidget {
 }
 
 class _QuestCampaignState extends State<QuestCampaign> {
-  final viewModel = QuestCampaignViewModel();
+  final repo = Repository();
+  late final viewModel = QuestCampaignViewModel(repository: repo);
   late Future<Campaign?> init;
 
   Future<void> onAddStampRowTap() async {

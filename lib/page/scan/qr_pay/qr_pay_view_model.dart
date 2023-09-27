@@ -34,9 +34,9 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     required this.repository,
   });
 
-  late final PaymentSettingsModel currentPaymentSettings;
   late final bool _enabledFastQRPay;
   late String _qrPayEntryUrl;
+  late PaymentSettingsModel currentPaymentSettings;
   bool hasLogined = false;
   String _rawEntryDocument = '';
   String _rawMaybePayDoc = '';
@@ -93,7 +93,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
           repository: repository,
           settingRepo: SettingRepository(),
           isPreferTicket: settings.nfcTicket,
-          onPaymentDone: onPaymentDone,
+          onNfcAutoPaymentDone: onPaymentDone,
         );
         return (type: QRPayTPPRedirectType.x50Pay, url: '');
       }
@@ -185,7 +185,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     final accountViewModel = SettingsViewModel(settingRepo: settingRepo);
     final settings = await accountViewModel.getPaymentSettings();
     currentPaymentSettings = settings;
-    return currentPaymentSettings;
+    return settings;
   }
 
   void _handlePayment() async {

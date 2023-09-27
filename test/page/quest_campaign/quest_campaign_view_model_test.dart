@@ -1,4 +1,18 @@
-<div class="gamebase">
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:x50pay/page/quest_campaign/quest_campaign_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
+
+class MockRepository extends Mock implements Repository {}
+
+final mockRepo = MockRepository();
+
+void main() {
+  final viewModel = QuestCampaignViewModel(repository: mockRepo);
+
+  setUp(() {
+    when(() => mockRepo.getCampaignDocument(any())).thenAnswer((_) async {
+      const rawResponse = r'''<div class="gamebase">
     <div class="ts-box gamesel"  style="margi">
         <div class="ts-image" style="overflow: hidden; height:150px;">
             <img src="/static/coupon/chu08/big.jpg" style="margin-top:-25%;">
@@ -392,4 +406,13 @@
             alert(data);
         });
     });
-    </script>
+    </script>''';
+      return rawResponse;
+    });
+  });
+  test('測試取得集點活動資料', () async {
+    final campaign = await viewModel.init(campaignId: '');
+
+    expect(campaign, isNotNull);
+  });
+}

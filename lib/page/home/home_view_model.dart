@@ -10,7 +10,7 @@ class HomeViewModel extends BaseViewModel {
   final Repository repository;
 
   HomeViewModel({required this.repository});
-  
+
   BasicResponse? response;
   EntryModel? _entry;
   EntryModel? get entry => _entry;

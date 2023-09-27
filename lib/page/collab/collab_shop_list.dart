@@ -9,7 +9,8 @@ class _CollabShopList extends StatefulWidget {
 }
 
 class __CollabShopListState extends State<_CollabShopList> {
-  final viewModel = CollabShopListViewModel();
+  final repo = Repository();
+  late final viewModel = CollabShopListViewModel(repository: repo);
 
   void showQRCodeScan() async {
     var status = await Permission.camera.status;

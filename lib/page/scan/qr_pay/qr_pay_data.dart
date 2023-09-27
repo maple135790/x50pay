@@ -18,5 +18,6 @@ class QRPayData {
         mode = const [],
         cabLabel = '';
   @override
-  String toString() => 'QRPayData(rawGameCabImageUrl: $rawGameCabImageUrl, cabNum: $cabNum, mode: $mode, cabLabel: $cabLabel)';
+  String toString() =>
+      'QRPayData(rawGameCabImageUrl: $rawGameCabImageUrl, cabNum: $cabNum, mode: $mode, cabLabel: $cabLabel)';
 }

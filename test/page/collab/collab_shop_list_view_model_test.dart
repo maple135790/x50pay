@@ -1,4 +1,22 @@
-<div class="ts-content is-tertiary" style="padding:0px;">
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
+
+class MockRepository extends Mock implements Repository {}
+
+final mockRepo = MockRepository();
+
+void main() {
+  final viewModel = CollabShopListViewModel(repository: mockRepo);
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({"store_id": "7037656"});
+
+    when(() => mockRepo.getSponserDocument()).thenAnswer((_) async {
+      const rawResponse =
+          r'''<div class="ts-content is-tertiary" style="padding:0px;">
     <div class="ts-center">
         <div class="ts-space"></div>
         <div class="ts-header is-secondary">X50Pay 合作商家</div>
@@ -58,3 +76,13 @@
         </div> 
     </div>
 </div>
+''';
+      return rawResponse;
+    });
+  });
+  test('測試取得合作資料', () async {
+    final sponsers = await viewModel.init();
+
+    expect(sponsers, isNotEmpty);
+  });
+}

@@ -26,12 +26,6 @@ class CabDatailViewModel extends BaseViewModel {
 
       if (sid == null) return false;
 
-      // if (!kDebugMode || isForceFetch) {
-      //   cabinetModel = await repository.selGame(machineId);
-      // } else {
-      //   cabinetModel =
-      //       CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
-      // }
       cabinetModel = await repository.selGame(machineId);
       if (cabinetModel!.pad) {
         lineupCount =

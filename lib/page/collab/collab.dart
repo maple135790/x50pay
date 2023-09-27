@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
 import 'package:x50pay/r.g.dart';
+import 'package:x50pay/repository/repository.dart';
 
 part 'collab_shop_list.dart';
 

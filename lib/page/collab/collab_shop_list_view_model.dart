@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:html/parser.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -33,7 +31,9 @@ class Sponser {
 }
 
 class CollabShopListViewModel extends BaseViewModel {
-  final repo = Repository();
+  final Repository repository;
+
+  CollabShopListViewModel({required this.repository});
 
   Future<List<Sponser>> init() async {
     await Future.delayed(const Duration(milliseconds: 350));
@@ -41,11 +41,7 @@ class CollabShopListViewModel extends BaseViewModel {
     late final String rawDocument;
 
     try {
-      if (!kDebugMode || isForceFetch) {
-        rawDocument = await repo.getSponserDocument();
-      } else {
-        rawDocument = await rootBundle.loadString('assets/tests/sponser.html');
-      }
+      rawDocument = await repository.getSponserDocument();
       final document = parse(rawDocument);
       final rawSponserItems =
           document.querySelector('div > div.ts-menu.is-fluid')?.children ?? [];
