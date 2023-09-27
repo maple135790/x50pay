@@ -1,7 +1,6 @@
 import 'package:local_auth/local_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
-import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 
 class AppSettingsViewModel extends BaseViewModel {
   bool get isEnableInAppNfcScan => _isEnableInAppNfcScan;
@@ -34,56 +33,45 @@ class AppSettingsViewModel extends BaseViewModel {
   }
 
   Future<bool> _getIsEnabledFastQRPay() async {
-    final pref = await SharedPreferences.getInstance();
-    return pref.getBool('fastQRPay') ?? false;
+    final enabled = await Prefs.getBool(PrefsToken.enabledFastQRPay);
+    return enabled ?? false;
   }
 
   Future<bool> _getIsEnabledBiometricsLogin() async {
-    final hasUsername = await GlobalSingleton.instance.secureStorage
-        .containsKey(key: 'x50username');
-    final hasPwd = await GlobalSingleton.instance.secureStorage
-        .containsKey(key: 'x50password');
+    final hasUsername =
+        await Prefs.secureContainsKey(SecurePrefsToken.username);
+    final hasPwd = await Prefs.secureContainsKey(SecurePrefsToken.password);
+
     return hasUsername && hasPwd;
   }
 
   Future<bool> _getIsEnableInAppNfcScan() async {
-    final pref = await SharedPreferences.getInstance();
-    return pref.getBool('inAppNfcScan') ?? false;
+    final enabled = await Prefs.getBool(PrefsToken.enabledInAppNfcScan);
+    return enabled ?? PrefsToken.enabledInAppNfcScan.defaultValue;
   }
 
   void setInAppNfcScan() async {
-    final pref = await SharedPreferences.getInstance();
-    pref.setBool('inAppNfcScan', isEnableInAppNfcScan);
+    Prefs.setBool(PrefsToken.enabledInAppNfcScan, isEnableInAppNfcScan);
+    return;
   }
 
   void enableBiometricsLogin(String email, String pasword) async {
-    await GlobalSingleton.instance.secureStorage.write(
-      key: 'x50username',
-      value: email,
-    );
-    await GlobalSingleton.instance.secureStorage.write(
-      key: 'x50password',
-      value: pasword,
-    );
+    await Prefs.secureWrite(SecurePrefsToken.username, email);
+    await Prefs.secureWrite(SecurePrefsToken.password, pasword);
+
     isEnabledBiometricsLogin = true;
   }
 
   void disableBiometricsLogin() async {
-    await GlobalSingleton.instance.secureStorage.delete(key: 'x50username');
-    await GlobalSingleton.instance.secureStorage.delete(key: 'x50password');
+    await Prefs.secureDelete(SecurePrefsToken.username);
+    await Prefs.secureDelete(SecurePrefsToken.password);
+
     isEnabledBiometricsLogin = false;
   }
 
-  void enableFastQRPay() async {
-    final pref = await SharedPreferences.getInstance();
-    await pref.setBool('fastQRPay', true);
-    isEnabledFastQRPay = true;
-  }
-
-  void disableFastQRPay() async {
-    final pref = await SharedPreferences.getInstance();
-    await pref.setBool('fastQRPay', false);
-    isEnabledFastQRPay = false;
+  void setFastQRPay(bool value) async {
+    Prefs.setBool(PrefsToken.enabledFastQRPay, value);
+    return;
   }
 
   Future<void> getAppSettings() async {

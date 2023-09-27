@@ -29,11 +29,13 @@ class Home extends StatefulWidget {
 class _HomeState extends BaseStatefulState<Home> {
   final repo = Repository();
   late final HomeViewModel viewModel;
+  late Future<void> init;
 
   @override
   void initState() {
     super.initState();
     viewModel = HomeViewModel(repository: repo)..isFunctionalHeader = false;
+    init = viewModel.initHome();
   }
 
   @override
@@ -42,7 +44,7 @@ class _HomeState extends BaseStatefulState<Home> {
       child: ChangeNotifierProvider.value(
         value: viewModel,
         builder: (context, child) => FutureBuilder(
-          future: viewModel.initHome(),
+          future: init,
           key: ValueKey(viewModel.entry),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {

@@ -5,12 +5,12 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/go_route_generator.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/r.g.dart';
@@ -20,8 +20,7 @@ import 'package:x50pay/r.g.dart';
 /// 檢查 [SharedPreferences] 中是否有 [session] 的 key，
 /// 若有效則回傳 true，否則回傳 false
 Future<bool> _checkLogin() async {
-  final sess =
-      await GlobalSingleton.instance.secureStorage.read(key: 'session');
+  final sess = await Prefs.secureRead(SecurePrefsToken.session);
   if (sess == null) return false;
   return await GlobalSingleton.instance.checkUser();
 }
@@ -63,7 +62,7 @@ void configLoadingStyle() {
 
 class MyApp extends StatelessWidget {
   static final router = goRouteConfig();
-  
+
   const MyApp({super.key});
 
   @override

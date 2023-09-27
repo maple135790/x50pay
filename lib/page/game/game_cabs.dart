@@ -4,12 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
@@ -93,9 +93,8 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
 
   void onChangeStoreTap() async {
     final router = GoRouter.of(context);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('store_name');
-    await prefs.remove('store_id');
+    Prefs.remove(PrefsToken.storeName);
+    Prefs.remove(PrefsToken.storeId);
     router.goNamed(AppRoutes.gameStore.routeName, extra: true);
   }
 

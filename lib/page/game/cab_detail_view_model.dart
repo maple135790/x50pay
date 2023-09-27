@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class CabDatailViewModel extends BaseViewModel {
@@ -21,8 +21,8 @@ class CabDatailViewModel extends BaseViewModel {
       log('machineId: $machineId', name: 'getSelGame');
       showLoading();
       await Future.delayed(const Duration(milliseconds: 100));
-      final prefs = await SharedPreferences.getInstance();
-      final sid = prefs.getString('store_id');
+
+      final sid = await Prefs.getString(PrefsToken.storeId);
 
       if (sid == null) return false;
 

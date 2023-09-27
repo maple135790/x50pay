@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager/platform_tags.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pad_mixin.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
@@ -23,8 +23,8 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   AppLifeCycles();
 
   Future<bool> _isEnableInAppNfcScan() async {
-    final pref = await SharedPreferences.getInstance();
-    return pref.getBool('inAppNfcScan') ?? false;
+    final enabled = await Prefs.getBool(PrefsToken.enabledInAppNfcScan);
+    return enabled ?? false;
   }
 
   Future<void> _handleNfc(NfcTag tag) async {

@@ -3,8 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 
 class Api {
   /// X50Pay API domain
@@ -22,8 +21,8 @@ class Api {
       newSession = cookie.split('=').last;
     }
     if (newSession.isEmpty) return;
-    GlobalSingleton.instance.secureStorage
-        .write(key: 'session', value: newSession);
+
+    Prefs.secureWrite(SecurePrefsToken.session, newSession);
   }
 
   /// 通用的API請求
@@ -59,13 +58,14 @@ class Api {
     Function(Map<String, String> headers)? onResponseHeader,
   }) async {
     http.Response response;
-    final pref = await SharedPreferences.getInstance();
+
     final client = http.Client();
     bool isResponseString = onSuccessString != null;
     bool isEmptyBody = body.isEmpty;
     String? session;
     Uri url = customDest != null ? Uri.parse(customDest) : _fullURL(dest);
-    String localeTag = pref.getString('appLang')?.toLowerCase() ?? 'zh-tw';
+    String? localeTag = await Prefs.getString(PrefsToken.appLang);
+    localeTag = localeTag?.toLowerCase() ?? 'zh-tw';
 
     const fixHeaders = {
       "Host": "pay.x50.fun",
@@ -117,14 +117,13 @@ class Api {
         newSession = cookie.split('=').last;
       }
       if (newSession.isEmpty) return;
-      GlobalSingleton.instance.secureStorage
-          .write(key: 'session', value: newSession);
+
+      Prefs.secureWrite(SecurePrefsToken.session, newSession);
     }
 
     if (verbose) log('request: $url', name: 'Api');
     if (withSession) {
-      session =
-          await GlobalSingleton.instance.secureStorage.read(key: 'session');
+      session = await Prefs.secureRead(SecurePrefsToken.session);
     }
 
     switch (method) {
@@ -196,8 +195,7 @@ class Api {
   }) async {
     String? session;
     if (withSession) {
-      session =
-          await GlobalSingleton.instance.secureStorage.read(key: 'session');
+      session = await Prefs.secureRead(SecurePrefsToken.session);
     }
 
     final url = Uri.parse(customDest);

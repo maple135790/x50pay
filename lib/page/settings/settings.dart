@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vibration/vibration.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/remote_open_mixin.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
@@ -150,10 +150,9 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
             onPressed: () async {
               if (await viewModel.logout()) {
                 GlobalSingleton.instance.clearUser();
-                final prefs = await SharedPreferences.getInstance();
                 await EasyLoading.showSuccess('感謝\n登出成功！歡迎再光臨本小店',
                     dismissOnTap: false, duration: const Duration(seconds: 2));
-                await prefs.remove('session');
+                Prefs.secureDelete(SecurePrefsToken.session);
                 await Future.delayed(const Duration(seconds: 2));
                 onLogout();
               } else {

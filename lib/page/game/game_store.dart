@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -77,9 +77,8 @@ class _StoreItem extends StatelessWidget {
   }
 
   void onStoreSelected(GoRouter router) async {
-    await SharedPreferences.getInstance()
-      ..setString('store_name', store.name!)
-      ..setString('store_id', prefix + (store.sid!.toString()));
+    Prefs.setString(PrefsToken.storeName, store.name!);
+    Prefs.setString(PrefsToken.storeId, prefix + (store.sid!.toString()));
     await EasyLoading.showInfo('已切換至${store.name}\n\n少女祈禱中...',
         duration: const Duration(milliseconds: 800));
     await Future.delayed(const Duration(milliseconds: 800));

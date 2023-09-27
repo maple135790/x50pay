@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
 
 typedef _InsertResponse = ({
@@ -50,8 +50,7 @@ class CabSelectViewModel extends BaseViewModel {
       showLoading();
       await Future.delayed(const Duration(milliseconds: 500));
       late _InsertResponse result;
-      final prefs = await SharedPreferences.getInstance();
-      final sid = prefs.getString('store_id');
+      final sid = await Prefs.getString(PrefsToken.storeId);
       BasicResponse rawResponse = BasicResponse.empty();
 
       log(

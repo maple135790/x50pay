@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -51,13 +50,6 @@ class GlobalSingleton {
   set setAppVersion(String value) {
     _appVersion = 'X50Pay app v$value';
   }
-
-  FlutterSecureStorage get secureStorage => const FlutterSecureStorage(
-        aOptions: AndroidOptions(
-          encryptedSharedPreferences: true,
-          preferencesKeyPrefix: 'x50pay_',
-        ),
-      );
 
   /// 是否在掃描QRCode頁面的旗標
   ///

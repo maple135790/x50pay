@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class GameCabsViewModel extends BaseViewModel {
@@ -13,15 +13,13 @@ class GameCabsViewModel extends BaseViewModel {
   late String storeName;
 
   Future<String?> getStoreName() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('store_name');
+    final storeName = Prefs.getString(PrefsToken.storeName);
+    return storeName;
   }
 
   Future<GameList?> getGamelist() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final sid = prefs.getString('store_id');
-
+      final sid = await Prefs.getString(PrefsToken.storeId);
       if (sid == null) return null;
 
       late final GameList gamelist;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
 
 class LanguageViewModel extends ChangeNotifier {
@@ -23,8 +23,7 @@ class LanguageViewModel extends ChangeNotifier {
   /// 會從 [SharedPreferences] 中取得使用者偏好語系，若沒有則回傳 [_defaultAppLocale]。
   /// 儲存的語系標籤為 `zh-TW`、`en-US`、`ja-JP`。
   Future<Locale> getUserPrefLocale() async {
-    final pref = await SharedPreferences.getInstance();
-    final locale = pref.getString('appLang');
+    final locale = await Prefs.getString(PrefsToken.appLang);
     if (locale == null) return _defaultAppLocale;
     final lc = locale.split('-')[0];
     final cc = locale.split('-')[1];
@@ -38,11 +37,9 @@ class LanguageViewModel extends ChangeNotifier {
   /// 並且會清除 store_id、store_name，讓使用者重新選店。
   void setUserPrefLocale(Locale locale) async {
     currentLocale = locale;
-    final pref = await SharedPreferences.getInstance();
-    pref
-      ..setString('appLang', locale.toLanguageTag())
-      ..remove('store_id')
-      ..remove('store_name');
+    Prefs.setString(PrefsToken.appLang, locale.toLanguageTag());
+    Prefs.remove(PrefsToken.storeId);
+    Prefs.remove(PrefsToken.storeName);
     S.load(locale);
   }
 }

@@ -20,7 +20,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
     if (viewModel.isEnabledFastQRPay == false) {
       enableFastQRPayDialog();
     } else {
-      viewModel.disableFastQRPay();
+      viewModel.setFastQRPay(false);
     }
   }
 
@@ -50,7 +50,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
             ),
             TextButton(
               onPressed: () {
-                viewModel.enableFastQRPay();
+                viewModel.setFastQRPay(true);
                 Navigator.of(context).pop();
               },
               child: Text(i18n.dialogConfirm),

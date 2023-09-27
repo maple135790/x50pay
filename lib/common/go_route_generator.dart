@@ -6,9 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
 import 'package:x50pay/page/pages.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
@@ -262,9 +262,9 @@ RouterConfig<Object> goRouteConfig() {
 ///
 /// 若判定為須導向至遊戲商店頁面，則回傳 [AppRoutes.gameCabs.path]，若判定為不須導向，則回傳 null。
 FutureOr<String?> gameStoreRedirect(context, state) async {
-  final prefs = await SharedPreferences.getInstance();
-  final shouldRedirect = prefs.getString('store_id') != null ||
-      prefs.getString('store_name') != null;
+  final storeId = await Prefs.getString(PrefsToken.storeId);
+  final storeName = await Prefs.getString(PrefsToken.storeName);
+  final shouldRedirect = storeId != null || storeName != null;
   if (shouldRedirect) return AppRoutes.gameCabs.path;
   return null;
 }

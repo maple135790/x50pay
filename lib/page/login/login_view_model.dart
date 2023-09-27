@@ -7,6 +7,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class LoginViewModel extends BaseViewModel {
@@ -88,10 +89,9 @@ class LoginViewModel extends BaseViewModel {
   }
 
   void biometricsLogin({required VoidCallback onLoginSuccess}) async {
-    final email = await GlobalSingleton.instance.secureStorage
-        .read(key: 'x50username') as String;
-    final password = await GlobalSingleton.instance.secureStorage
-        .read(key: 'x50password') as String;
+    final email = await Prefs.secureRead(SecurePrefsToken.username) as String;
+    final password =
+        await Prefs.secureRead(SecurePrefsToken.password) as String;
     _login(email, password, onLoginSuccess, true);
   }
 
@@ -117,10 +117,9 @@ class LoginViewModel extends BaseViewModel {
 
   Future<void> checkEnableBiometricsLogin() async {
     final auth = LocalAuthentication();
-    final hasUsername = await GlobalSingleton.instance.secureStorage
-        .containsKey(key: 'x50username');
-    final hasPwd = await GlobalSingleton.instance.secureStorage
-        .containsKey(key: 'x50password');
+    final hasUsername =
+        await Prefs.secureContainsKey(SecurePrefsToken.username);
+    final hasPwd = await Prefs.secureContainsKey(SecurePrefsToken.password);
     final canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
     final canAuthenticate =
         canAuthenticateWithBiometrics || await auth.isDeviceSupported();

@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:html/parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
@@ -92,8 +92,8 @@ mixin NfcPayMixin {
   }
 
   Future<bool> _checkEnableFastNfcPay() async {
-    final pref = await SharedPreferences.getInstance();
-    return pref.getBool('fastQRPay') ?? false;
+    final enabled = await Prefs.getBool(PrefsToken.enabledFastQRPay);
+    return enabled ?? false;
   }
 
   Future<String> _getNfcPayDocument(String url) async {

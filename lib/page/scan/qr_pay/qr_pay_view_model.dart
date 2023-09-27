@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:html/parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
@@ -227,8 +227,8 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   }
 
   Future<bool> _checkEnableFastQRPay() async {
-    final pref = await SharedPreferences.getInstance();
-    _enabledFastQRPay = pref.getBool('fastQRPay') ?? false;
+    final enabled = await Prefs.getBool(PrefsToken.enabledFastQRPay);
+    _enabledFastQRPay = enabled ?? PrefsToken.enabledFastQRPay.defaultValue;
     return _enabledFastQRPay;
   }
 
