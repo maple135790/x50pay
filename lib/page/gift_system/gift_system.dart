@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
@@ -24,8 +25,9 @@ class GiftSystem extends StatefulWidget {
 }
 
 class _GiftSystemState extends BaseStatefulState<GiftSystem> {
-  final viewModel = GiftSystemViewModel();
-  late Future<bool> init;
+  final repo = Repository();
+  late final viewModel = GiftSystemViewModel(repository: repo);
+  late Future<void> init;
 
   @override
   void initState() {
@@ -35,40 +37,36 @@ class _GiftSystemState extends BaseStatefulState<GiftSystem> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: init,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: kDebugMode ? Text('not done') : null);
-        }
-        if (snapshot.data != true) {
-          showServiceError();
-          return Center(child: Text(serviceErrorText));
-        }
-        if (EasyLoading.isShow) EasyLoading.dismiss();
-        return _GiftBoxLoaded(
-          giftBoxModel: viewModel.giftBoxModel!,
-          lotteListModel: viewModel.lotteListModel!,
-        );
-      },
-    );
+    return ChangeNotifierProvider.value(
+        value: viewModel,
+        builder: (context, child) {
+          return FutureBuilder(
+            future: init,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(
+                    child: kDebugMode ? Text('not done') : null);
+              }
+              if (snapshot.hasError) {
+                showServiceError();
+                return Center(child: Text(serviceErrorText));
+              }
+              if (EasyLoading.isShow) EasyLoading.dismiss();
+              return const _GiftBoxLoaded();
+            },
+          );
+        });
   }
 }
 
 class _GiftBoxLoaded extends StatefulWidget {
-  final LotteListModel lotteListModel;
-  final GiftBoxModel giftBoxModel;
-
-  const _GiftBoxLoaded(
-      {Key? key, required this.giftBoxModel, required this.lotteListModel})
-      : super(key: key);
+  const _GiftBoxLoaded();
 
   @override
   State<_GiftBoxLoaded> createState() => _GiftBoxLoadedState();
 }
 
 class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
-  final viewModel = GiftSystemViewModel();
   final tabs = const <Widget>[
     Tab(text: '養成抽獎箱'),
     Tab(text: '領取禮物'),
@@ -117,12 +115,12 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
               ],
             ),
           ]),
-          Expanded(
+          const Expanded(
             child: TabBarView(
               children: [
-                _LotteBox(lotteList: widget.lotteListModel),
-                _GiftClaim(canChangeList: widget.giftBoxModel.canChange),
-                _ClaimedGift(claimedList: widget.giftBoxModel.alChange),
+                _LotteBox(),
+                _GiftClaim(),
+                _ClaimedGift(),
               ],
             ),
           ),

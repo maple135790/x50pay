@@ -1,14 +1,14 @@
 part of "gift_system.dart";
 
 class _LotteBox extends StatelessWidget {
-  /// 養成抽獎箱資料
-  final LotteListModel lotteList;
-
   /// 養成抽獎箱頁面
-  const _LotteBox({Key? key, required this.lotteList}) : super(key: key);
+  const _LotteBox();
 
   @override
   Widget build(BuildContext context) {
+    final lotteList = context.select<GiftSystemViewModel, LotteListModel>(
+        (vm) => vm.lotteList ?? LotteListModel.empty());
+
     return Container(
       color: const Color(0xff2a2a2a),
       padding: const EdgeInsets.symmetric(vertical: 52.2, horizontal: 15),

@@ -22,4 +22,6 @@ class LotteListModel {
       _$LotteListModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LotteListModelToJson(this);
+
+  factory LotteListModel.empty() => LotteListModel(['', '', '', '', 0]);
 }
