@@ -62,6 +62,8 @@ void configLoadingStyle() {
 }
 
 class MyApp extends StatelessWidget {
+  static final router = goRouteConfig();
+  
   const MyApp({super.key});
 
   @override
@@ -76,7 +78,7 @@ class MyApp extends StatelessWidget {
           builder: (context, vm, child) => MaterialApp.router(
             theme: AppThemeData().materialTheme,
             builder: EasyLoading.init(),
-            routerConfig: goRouteConfig(),
+            routerConfig: router,
             locale: vm.currentLocale,
             supportedLocales: S.delegate.supportedLocales,
             localizationsDelegates: const [

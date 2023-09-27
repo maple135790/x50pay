@@ -56,7 +56,7 @@ RouterConfig<Object> goRouteConfig() {
   final settingRepo = SettingRepository();
 
   return GoRouter(
-    navigatorKey: GlobalSingleton.instance.navigatorKey,
+    navigatorKey: GlobalSingleton.navigatorKey,
     initialLocation: kDebugMode && !GlobalSingleton.instance.isServiceOnline
         ? debugRoute
         : GlobalSingleton.instance.isLogined

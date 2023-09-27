@@ -67,7 +67,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
       onCabSelect: (qrPayData) {
         GlobalSingleton.instance.isNfcPayDialogOpen = true;
         showDialog(
-          context: GlobalSingleton.instance.navigatorKey.currentContext!,
+          context: GlobalSingleton.navigatorKey.currentContext!,
           builder: (context) {
             return CabSelect.fromQRPay(
               qrPayData: qrPayData,
