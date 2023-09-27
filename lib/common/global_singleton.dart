@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:x50pay/repository/repository.dart';
 ///
 /// 用於儲存全域變數，例如使用者資料、最近遊玩的機台資料等。
 class GlobalSingleton {
+  bool get _duringTest => Platform.environment.containsKey('FLUTTER_TEST');
+
   /// 使用者資料註冊器
   final ValueNotifier<UserModel?> userNotifier = ValueNotifier(null);
 
@@ -76,6 +79,7 @@ class GlobalSingleton {
   ///
   /// [force] 強制檢查使用者資料
   Future<bool> checkUser({bool force = false}) async {
+    if (_duringTest) return true;
     await Future.delayed(const Duration(milliseconds: 100));
     try {
       final current = DateTime.now().millisecondsSinceEpoch;

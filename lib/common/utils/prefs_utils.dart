@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs {
+  static bool get _duringTest =>
+      Platform.environment.containsKey('FLUTTER_TEST');
+
   static FlutterSecureStorage get _secureStorage => const FlutterSecureStorage(
         aOptions: AndroidOptions(
           encryptedSharedPreferences: true,
@@ -35,18 +40,25 @@ class Prefs {
   }
 
   static Future<void> secureWrite(SecurePrefsToken token, String value) async {
+    if (_duringTest) return;
+
     _secureStorage.write(key: token.value, value: value);
   }
 
   static Future<String?> secureRead(SecurePrefsToken token) async {
+    if (_duringTest) return '';
     return _secureStorage.read(key: token.value);
   }
 
   static Future<void> secureDelete(SecurePrefsToken token) async {
+    if (_duringTest) return;
+
     _secureStorage.delete(key: token.value);
   }
 
   static Future<bool> secureContainsKey(SecurePrefsToken token) async {
+    if (_duringTest) return false;
+
     return _secureStorage.containsKey(key: token.value);
   }
 }
