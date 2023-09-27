@@ -112,7 +112,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const PadPrefDialog(),
                   ),
                 );
@@ -121,7 +121,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const QuiCPayPrefDialog(),
                   ),
                 );
@@ -130,7 +130,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const PaymentPrefDialog(),
                   ),
                 );
@@ -139,7 +139,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const ChangePasswordDialog(),
                   ),
                 );
@@ -148,7 +148,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const ChangeEmailDialog(),
                   ),
                 );
@@ -157,7 +157,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const BidRecords(),
                   ),
                 );
@@ -166,7 +166,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const TicketRecords(),
                   ),
                 );
@@ -175,7 +175,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const PlayRecords(),
                   ),
                 );
@@ -184,7 +184,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const FreePointRecords(),
                   ),
                 );
@@ -193,7 +193,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const TicketUsedRecords(),
                   ),
                 );
@@ -202,7 +202,7 @@ RouterConfig<Object> goRouteConfig() {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) =>
-                        SettingsViewModel(repository: settingRepo),
+                        SettingsViewModel(settingRepo: settingRepo),
                     builder: (context, child) => const AppSettings(),
                   ),
                 );

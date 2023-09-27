@@ -13,6 +13,7 @@ import 'package:x50pay/mixins/nfc_pad_mixin.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
@@ -60,6 +61,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     handleNfcPay(
       mid: mid,
       cid: cid,
+      repository: Repository(),
       settingRepo: settingRepo,
       isPreferTicket: isPreferTicket,
       onCabSelect: (qrPayData) {
@@ -185,7 +187,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
 
   Future<bool> _getNfcPreferTicketSetting(SettingRepository settingRepo) async {
     final settings =
-        await SettingsViewModel(repository: settingRepo).getPaymentSettings();
+        await SettingsViewModel(settingRepo: settingRepo).getPaymentSettings();
     return settings.nfcTicket;
   }
 }

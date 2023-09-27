@@ -1,4 +1,21 @@
-<style>
+import 'dart:convert';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:x50pay/page/home/dress_room/dress_room_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
+
+class MockRepository extends Mock implements Repository {}
+
+final mockRepo = MockRepository();
+
+void main() {
+  final viewModel = DressRoomViewModel(repository: mockRepo);
+
+  setUp(() {
+    when(() => mockRepo.getAvatar()).thenAnswer((_) async {
+      const rawResponse = r'''<style>
 .ts-image.is-ava img {
         /* aspect-ratio: 1/1; */
         height: 150px;
@@ -140,4 +157,21 @@ $.post("/api/v1/cgAva/"+id, function( data ) {
   alert(data);
 });
     }
-</script>
+</script>''';
+      return Response.bytes(utf8.encode(rawResponse), 200);
+    });
+    when(() => mockRepo.setAvatar(any())).thenAnswer((_) async {
+      const rawResponse = '''成功更換衣裝''';
+      return Response.bytes(utf8.encode(rawResponse), 200);
+    });
+  });
+
+  test('測試取得Dress room 的Avatar', () async {
+    final avatars = await viewModel.getAvatars();
+    expect(avatars, isNotEmpty);
+  });
+  test('測試設定Dress room 的Avatar', () async {
+    final result = await viewModel.setAvatar('1');
+    expect(result, isNotEmpty);
+  });
+}

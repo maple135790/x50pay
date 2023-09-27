@@ -68,10 +68,12 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
   void handleQRPay(String url, QRViewController controller) async {
     EasyLoading.show(status: '檢查');
     final args = url.replaceAll('https://pay.x50.fun/mid/', '').split('/');
+    final repo = Repository();
 
     final viewModel = QRPayViewModel(
       mid: args[0],
       cid: args[1],
+      repository: repo,
       settingRepo: SettingRepository(),
       onPaymentDone: () {
         controller.resumeCamera();

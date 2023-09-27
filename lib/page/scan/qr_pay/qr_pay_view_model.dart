@@ -20,6 +20,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   final String mid;
   final String cid;
   final SettingRepository settingRepo;
+  final Repository repository;
   final void Function(QRPayData qrPayData) onCabSelect;
 
   final VoidCallback onPaymentDone;
@@ -30,9 +31,9 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     required this.onCabSelect,
     required this.onPaymentDone,
     required this.settingRepo,
+    required this.repository,
   });
 
-  final _repo = Repository();
   late final PaymentSettingsModel currentPaymentSettings;
   late final bool _enabledFastQRPay;
   late String _qrPayEntryUrl;
@@ -51,7 +52,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     if (_rawEntryDocument.isNotEmpty) return _rawEntryDocument;
 
     if (!kDebugMode || isForceFetch) {
-      final rawResponse = await _repo.getDocument(_qrPayEntryUrl);
+      final rawResponse = await repository.getDocument(_qrPayEntryUrl);
       _rawEntryDocument = const Utf8Decoder().convert(rawResponse.bodyBytes);
     } else {
       _rawEntryDocument =
@@ -89,6 +90,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
           mid: mid,
           cid: cid,
           onCabSelect: onCabSelect,
+          repository: repository,
           settingRepo: SettingRepository(),
           isPreferTicket: settings.nfcTicket,
           onPaymentDone: onPaymentDone,
@@ -96,7 +98,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
         return (type: QRPayTPPRedirectType.x50Pay, url: '');
       }
       if (!kDebugMode || isForceFetch) {
-        final rawResponse = await _repo.getDocument(_qrPayEntryUrl);
+        final rawResponse = await repository.getDocument(_qrPayEntryUrl);
         if (rawResponse.statusCode != 200) {
           if (rawResponse.statusCode == 302) {
             return _decideRedirectType(rawResponse.headers['location']!);
@@ -180,7 +182,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   }
 
   Future<PaymentSettingsModel> _getPaymentSettings() async {
-    final accountViewModel = SettingsViewModel(repository: settingRepo);
+    final accountViewModel = SettingsViewModel(settingRepo: settingRepo);
     final settings = await accountViewModel.getPaymentSettings();
     currentPaymentSettings = settings;
     return currentPaymentSettings;
@@ -193,7 +195,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       final prePayUrl =
           _rawMaybePayDoc.split('location.replace("').last.split('")').first;
       if (prePayUrl.isEmpty) throw Exception('payUrl is empty');
-      final prePaymentDoc = await _repo.getDocumentWithDomainPrefix(
+      final prePaymentDoc = await repository.getDocumentWithDomainPrefix(
         prePayUrl,
         _qrPayEntryUrl,
         descLabel: '取得支付前的頁面',
@@ -215,7 +217,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     String cid = this.cid;
     // 0mu 做 QRCode 的時候打錯了，所以要做轉換
     if (this.cid == '703765460') cid = '70376560';
-    final accountViewModel = SettingsViewModel(repository: settingRepo);
+    final accountViewModel = SettingsViewModel(settingRepo: settingRepo);
     final settings = await accountViewModel.getPaymentSettings();
     if (settings.nfcTicket) {
       _doInsert('/api/v1/tic/$mid/$cid/0');
@@ -233,7 +235,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   Future<bool> _checkDirectPay() async {
     try {
       if (!kDebugMode || isForceFetch) {
-        _rawMaybePayDoc = await _repo.getQRPayDocument(x50PayUrl);
+        _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
       } else {
         _rawMaybePayDoc =
             await rootBundle.loadString('assets/tests/scan_pay_x50pay.html');
@@ -249,7 +251,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   Future<QRPayData> _getQRPayData() async {
     try {
       if (!kDebugMode || isForceFetch) {
-        _rawMaybePayDoc = await _repo.getQRPayDocument(x50PayUrl);
+        _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
       } else {
         _rawMaybePayDoc =
             await rootBundle.loadString('assets/tests/scan_pay_x50pay.html');

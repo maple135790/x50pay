@@ -14,6 +14,7 @@ import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/game_cabs_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
 
 class GameCabs extends StatefulWidget {
   const GameCabs({super.key});
@@ -23,7 +24,8 @@ class GameCabs extends StatefulWidget {
 }
 
 class _GameCabsState extends BaseStatefulState<GameCabs> {
-  final viewModel = GameCabsViewModel();
+  final repo = Repository();
+  late final viewModel = GameCabsViewModel(repository: repo);
   late List<Machine> machine;
   late Future<GameList?> gameCabsInit;
 
@@ -164,8 +166,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 4, horizontal: 8),
                           child: Icon(Icons.sync,
-                              color: scaffoldBackgroundColor,
-                              size: 26),
+                              color: scaffoldBackgroundColor, size: 26),
                         ),
                       ),
                     ],

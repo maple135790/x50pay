@@ -13,4 +13,9 @@ class BasicResponse {
       _$BasicResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$BasicResponseToJson(this);
+
+  factory BasicResponse.empty() => const BasicResponse(
+        code: -1,
+        message: 'empty BasicResponse',
+      );
 }

@@ -55,10 +55,9 @@ enum DefaultCabPayment {
 }
 
 class SettingsViewModel extends BaseViewModel {
-  // final repo = Repository();
-  final SettingRepository repository;
+  final SettingRepository settingRepo;
 
-  SettingsViewModel({required this.repository});
+  SettingsViewModel({required this.settingRepo});
 
   BasicResponse? response;
 
@@ -75,7 +74,7 @@ class SettingsViewModel extends BaseViewModel {
     try {
       if (!kDebugMode || isForceFetch) {
         httpResponse =
-            await repository.quicConfirm(atq: autoQuic, atql: autoQlock);
+            await settingRepo.quicConfirm(atq: autoQuic, atql: autoQlock);
       } else {
         httpResponse = http.Response(testResponse(), 200);
       }
@@ -103,7 +102,7 @@ class SettingsViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        httpResponse = await repository.setPadSettings(
+        httpResponse = await settingRepo.setPadSettings(
           shname: nickname,
           shid: isNicknameShown,
           shcolor: showColor,
@@ -145,7 +144,7 @@ class SettingsViewModel extends BaseViewModel {
     late http.Response httpResponse;
 
     try {
-      httpResponse = await repository.autoConfirm(
+      httpResponse = await settingRepo.autoConfirm(
           atc: autoTicket,
           atn: autoNVSV,
           atp: autoPay,
@@ -172,7 +171,7 @@ class SettingsViewModel extends BaseViewModel {
     if (enableDelay) await Future.delayed(const Duration(milliseconds: 200));
     late final PaymentSettingsModel paymentSettingModel;
     try {
-      paymentSettingModel = await repository.getQuickPaySettings();
+      paymentSettingModel = await settingRepo.getQuickPaySettings();
       return paymentSettingModel;
     } catch (e, stacktrace) {
       log('', name: 'getQuicSettings', error: e, stackTrace: stacktrace);
@@ -188,7 +187,7 @@ class SettingsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
     late final PadSettingsModel padSettingsModel;
     try {
-      padSettingsModel = await repository.getPadSettings();
+      padSettingsModel = await settingRepo.getPadSettings();
 
       return padSettingsModel;
     } catch (e) {
@@ -212,7 +211,7 @@ class SettingsViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        response = await repository.changePassword(oldPwd: oldPwd, pwd: pwd);
+        response = await settingRepo.changePassword(oldPwd: oldPwd, pwd: pwd);
       } else {
         if (debugFlag == 700) {
           response =
@@ -246,7 +245,7 @@ class SettingsViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        response = await repository.changeEmail(remail: email);
+        response = await settingRepo.changeEmail(remail: email);
       } else {
         if (debugFlag == 700) {
           response =
@@ -277,7 +276,7 @@ class SettingsViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        response = await repository.changePhone();
+        response = await settingRepo.changePhone();
       } else {
         response = BasicResponse.fromJson(jsonDecode(testResponse()));
       }
@@ -300,7 +299,7 @@ class SettingsViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        response = await repository.doChangePhone(phone: phone);
+        response = await settingRepo.doChangePhone(phone: phone);
       } else {
         response = BasicResponse.fromJson(jsonDecode(testResponse()));
       }
@@ -323,7 +322,7 @@ class SettingsViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        response = await repository.smsActivate(sms: smsCode);
+        response = await settingRepo.smsActivate(sms: smsCode);
       } else {
         response = BasicResponse.fromJson(jsonDecode(testResponse()));
       }
@@ -344,7 +343,7 @@ class SettingsViewModel extends BaseViewModel {
     late final BidLogModel bidModel;
 
     try {
-      bidModel = await repository.getBidLog();
+      bidModel = await settingRepo.getBidLog();
 
       return bidModel;
     } catch (e, stacktrace) {
@@ -361,7 +360,7 @@ class SettingsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
     late final TicDateLogModel ticDateLogModel;
     try {
-      ticDateLogModel = await repository.getTicDateLog();
+      ticDateLogModel = await settingRepo.getTicDateLog();
 
       return ticDateLogModel;
     } catch (e, stacktrace) {
@@ -378,7 +377,7 @@ class SettingsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
     late final PlayRecordModel playRecordModel;
     try {
-      playRecordModel = await repository.getPlayLog();
+      playRecordModel = await settingRepo.getPlayLog();
       return playRecordModel;
     } catch (e, stacktrace) {
       log('', name: 'getPlayRecord', error: e, stackTrace: stacktrace);
@@ -394,7 +393,7 @@ class SettingsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
     late final FreePointModel freePModel;
     try {
-      freePModel = await repository.getFreePLog();
+      freePModel = await settingRepo.getFreePLog();
       return freePModel;
     } catch (e, stacktrace) {
       log('', name: 'getPlayRecord', error: e, stackTrace: stacktrace);
@@ -410,7 +409,7 @@ class SettingsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
     late final TicUsedModel ticUsedModel;
     try {
-      ticUsedModel = await repository.getTicUsedLog();
+      ticUsedModel = await settingRepo.getTicUsedLog();
       return ticUsedModel;
     } catch (e, stacktrace) {
       log('', name: 'getPlayRecord', error: e, stackTrace: stacktrace);

@@ -12,6 +12,7 @@ import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
+import 'package:x50pay/repository/repository.dart';
 
 extension on Color {
   Color invert(double value) {
@@ -33,7 +34,8 @@ class CabDetail extends StatefulWidget {
 }
 
 class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
-  final viewModel = CabDatailViewModel();
+  final repo = Repository();
+  late final viewModel = CabDatailViewModel(repository: repo);
   late Future<bool> cabInit;
 
   void onCabSelect({

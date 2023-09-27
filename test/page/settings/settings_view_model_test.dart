@@ -69,7 +69,7 @@ void main() {
       return PadSettingsModel.fromJson(json.decode(rawResponse));
     });
   });
-  final viewModel = SettingsViewModel(repository: mockRepo);
+  final viewModel = SettingsViewModel(settingRepo: mockRepo);
 
   group('快速付款偏好設定', () {
     test('測試取得快速付款偏好設定', () async {

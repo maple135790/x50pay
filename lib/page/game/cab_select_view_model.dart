@@ -1,111 +1,90 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
-import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/repository/repository.dart';
 
-typedef InsertResponse = ({
+typedef _InsertResponse = ({
   bool is200,
   ({String msg, String describe}) response
 });
 
 class CabSelectViewModel extends BaseViewModel {
   final VoidCallback? onInsertSuccess;
+  final Repository repository;
 
-  CabSelectViewModel({this.onInsertSuccess});
-  final repo = Repository();
+  CabSelectViewModel({this.onInsertSuccess, required this.repository});
 
-  Future<bool> doInsertQRPay({
-    required String url,
-    int debugFlag = 200,
-  }) async {
+  Future<bool> doInsertQRPay({required String url}) async {
     try {
-      await EasyLoading.show();
+      showLoading();
       await Future.delayed(const Duration(milliseconds: 500));
-      late InsertResponse result;
-      late final BasicResponse rawResponse;
+      late _InsertResponse result;
+      BasicResponse rawResponse = BasicResponse.empty();
       log('url: $url', name: 'doInsertQRPay');
 
-      if (!kDebugMode || isForceFetch) {
-        rawResponse = await repo.doInsertRawUrl(url);
-      } else {
-        rawResponse =
-            BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
+      if (kReleaseMode) {
+        rawResponse = await repository.doInsertRawUrl(url);
       }
       result = _resolveRawResponse(rawResponse);
       _showInsertResult(result);
       return true;
-    } catch (e) {
-      _onInsertError(e);
+    } catch (e, stacktrace) {
+      _onInsertError(e, stacktrace);
       return false;
     } finally {
       _postDoInsert();
     }
   }
 
-  Future<bool> doInsert({
-    required bool isTicket,
-    required bool isUseRewardPoint,
-    required String id,
-    required int index,
-    required num mode,
-    int debugFlag = 200,
-  }) async {
+  Future<bool> doInsert(
+      {required bool isTicket,
+      required bool isUseRewardPoint,
+      required String id,
+      required int index,
+      required num mode}) async {
     try {
-      await EasyLoading.show();
+      showLoading();
       await Future.delayed(const Duration(milliseconds: 500));
-      late InsertResponse result;
-      late final BasicResponse rawResponse;
+      late _InsertResponse result;
       final prefs = await SharedPreferences.getInstance();
       final sid = prefs.getString('store_id');
+      BasicResponse rawResponse = BasicResponse.empty();
+
       log(
         'index: $index, id: $id/$sid$index, mode: $mode, isTicket: $isTicket',
         name: 'doInsert',
       );
 
-      if (!kDebugMode || isForceFetch) {
-        rawResponse = await repo.doInsert(
+      if (kReleaseMode) {
+        rawResponse = await repository.doInsert(
             isTicket, '$id/$sid$index', mode, isUseRewardPoint);
-      } else {
-        String insertUrl = isTicket ? 'tic' : 'pay';
-        String url = '/$insertUrl/$id/${mode.toInt()}';
-        if (!isTicket) {
-          url += '/${isUseRewardPoint ? 1 : 0}';
-        }
-        log('url: $url', name: 'doInsert');
-        rawResponse =
-            BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
       }
       result = _resolveRawResponse(rawResponse);
       _showInsertResult(result);
       return true;
-    } catch (e) {
-      _onInsertError(e);
+    } catch (e, stacktrace) {
+      _onInsertError(e, stacktrace);
       return false;
     } finally {
       _postDoInsert();
     }
   }
 
-  void _showInsertResult(InsertResponse result) async {
-    await EasyLoading.dismiss();
+  void _showInsertResult(_InsertResponse result) async {
+    dismissLoading();
     result.is200
-        ? await EasyLoading.showSuccess(
-            '${result.response.msg}\n${result.response.describe}')
-        : await EasyLoading.showError(
-            '${result.response.msg}\n${result.response.describe}');
+        ? showSuccess('${result.response.msg}\n${result.response.describe}')
+        : showError('${result.response.msg}\n${result.response.describe}');
   }
 
-  void _onInsertError(Object e) async {
-    await EasyLoading.dismiss();
-    log('', error: '$e', name: 'doInsert');
-    await EasyLoading.showError(S.current.serviceError);
+  void _onInsertError(Object e, StackTrace stacktrace) async {
+    dismissLoading();
+    log('', error: '$e', name: 'doInsert', stackTrace: stacktrace);
+    showError(serviceErrorMessage);
   }
 
   void _postDoInsert() async {
@@ -113,14 +92,13 @@ class CabSelectViewModel extends BaseViewModel {
     await Future.delayed(const Duration(seconds: 2));
   }
 
-  InsertResponse _resolveRawResponse(BasicResponse response) {
+  _InsertResponse _resolveRawResponse(BasicResponse response) {
     String msg = '';
-    String describe = '';
-    bool is200 = false;
+    String describe = response.message;
+    bool is200 = response.code == 200;
 
     switch (response.code) {
       case 200:
-        is200 = true;
         msg = '投幣成功，感謝您的惠顧！';
         describe = '請等候約三秒鐘，若機台仍無反應請盡速與X50粉絲專頁聯絡';
         onInsertSuccess?.call();
@@ -161,7 +139,4 @@ class CabSelectViewModel extends BaseViewModel {
 
     return (is200: is200, response: (msg: msg, describe: describe));
   }
-
-  String testResponse({int code = 200}) =>
-      '''{"code":$code,"message":"smth"}''';
 }

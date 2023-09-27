@@ -34,7 +34,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   late final String avatarUrl;
-  late final viewModel = SettingsViewModel(repository: settingRepo);
+  late final viewModel = SettingsViewModel(settingRepo: settingRepo);
   final settingRepo = SettingRepository();
   final user = GlobalSingleton.instance.userNotifier.value!;
 

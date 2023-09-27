@@ -13,8 +13,8 @@ import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
 mixin NfcPayMixin {
-  final _repo = Repository();
   bool get isForceFetch => GlobalSingleton.instance.isServiceOnline;
+  late Repository _repo;
 
   Future<void> handleNfcPay({
     required String mid,
@@ -23,8 +23,10 @@ mixin NfcPayMixin {
     required Function(QRPayData qrPayData) onCabSelect,
     required VoidCallback onPaymentDone,
     required bool isPreferTicket,
+    required Repository repository,
     bool? isNfcAutoOn,
   }) async {
+    _repo = repository;
     if (cid == '703765460') cid = '70376560';
     final url = 'https://pay.x50.fun/nfcpay/$mid/$cid';
     isNfcAutoOn ??= await _getNfcAutoSetting(settingRepo);
@@ -46,14 +48,12 @@ mixin NfcPayMixin {
   }
 
   Future<bool> _getNfcAutoSetting(SettingRepository settingRepo) async {
-    final accountViewModel = SettingsViewModel(repository: settingRepo);
+    final accountViewModel = SettingsViewModel(settingRepo: settingRepo);
     final settings = await accountViewModel.getPaymentSettings();
     return settings.nfcAuto;
   }
 
   void _handlePayment(String rawDoc, String mid, String cid) async {
-    assert(rawDoc.contains('付款中...'));
-
     try {
       final prePayUrl =
           rawDoc.split('location.replace("').last.split('")').first;
@@ -68,7 +68,7 @@ mixin NfcPayMixin {
       if (payUrl.isEmpty) throw Exception('payUrl is empty');
 
       _doInsert(payUrl);
-    } on Exception catch (e) {
+    } catch (e) {
       log('', error: e, name: 'QRPayViewModel.handlePayment');
       rethrow;
     }
@@ -76,10 +76,8 @@ mixin NfcPayMixin {
 
   void _doInsert(String url) async {
     log('https://pay.x50.fun$url');
-
-    if (kReleaseMode) {
-      await CabSelectViewModel().doInsertQRPay(url: 'https://pay.x50.fun$url');
-    }
+    await CabSelectViewModel(repository: _repo)
+        .doInsertQRPay(url: 'https://pay.x50.fun$url');
     return;
   }
 
@@ -100,11 +98,7 @@ mixin NfcPayMixin {
 
   Future<String> _getNfcPayDocument(String url) async {
     late final String rawDoc;
-    if (!kDebugMode || isForceFetch) {
-      rawDoc = await _repo.getQRPayDocument(url);
-    } else {
-      rawDoc = await rootBundle.loadString('assets/tests/scan_pay_x50pay.html');
-    }
+    rawDoc = await _repo.getQRPayDocument(url);
     return rawDoc;
   }
 

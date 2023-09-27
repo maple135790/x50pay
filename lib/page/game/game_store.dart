@@ -10,6 +10,7 @@ import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
 
 class GameStore extends StatefulWidget {
   /// 選店頁面
@@ -20,7 +21,8 @@ class GameStore extends StatefulWidget {
 }
 
 class _GameStoreState extends State<GameStore> {
-  final viewModel = GameStoreViewModel();
+  final repo = Repository();
+  late final viewModel = GameStoreViewModel(repository: repo);
   late Future<StoreModel?> _getStoreData;
 
   @override

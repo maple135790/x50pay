@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
@@ -10,55 +8,57 @@ import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class CabDatailViewModel extends BaseViewModel {
-  final repo = Repository();
+  final Repository repository;
   CabinetModel? cabinetModel;
   BasicResponse? response;
   int lineupCount = -1;
 
+  CabDatailViewModel({required this.repository});
+
   /// 取得遊戲機台資料
-  Future<bool> getSelGameCab(String machineId, {int debugFlag = 200}) async {
+  Future<bool> getSelGameCab(String machineId) async {
     try {
       log('machineId: $machineId', name: 'getSelGame');
-      await EasyLoading.show();
+      showLoading();
       await Future.delayed(const Duration(milliseconds: 100));
       final prefs = await SharedPreferences.getInstance();
       final sid = prefs.getString('store_id');
 
       if (sid == null) return false;
 
-      if (!kDebugMode || isForceFetch) {
-        cabinetModel = await repo.selGame(machineId);
-      } else {
-        cabinetModel =
-            CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
-      }
+      // if (!kDebugMode || isForceFetch) {
+      //   cabinetModel = await repository.selGame(machineId);
+      // } else {
+      //   cabinetModel =
+      //       CabinetModel.fromJson(jsonDecode(testSelGame(machineId)));
+      // }
+      cabinetModel = await repository.selGame(machineId);
       if (cabinetModel!.pad) {
         lineupCount =
             await getPadLineup(cabinetModel!.padmid, cabinetModel!.padlid);
       }
-      await EasyLoading.dismiss();
       return true;
     } catch (e) {
       log('', error: '$e', name: 'getSelGameCab');
       return false;
     } finally {
-      await EasyLoading.dismiss();
+      dismissLoading();
     }
   }
 
   /// 確定平板排隊
   Future<void> confirmPadCheck(String padmid, String padlid) async {
     if (!kDebugMode || isForceFetch) {
-      await repo.confirmPadCheck(padmid, padlid);
-    } else {}
+      await repository.confirmPadCheck(padmid, padlid);
+    }
     return;
   }
 
   /// 取得排隊人數
   Future<int> getPadLineup(String padmid, String padlid) async {
-    late int count;
+    int count = -1;
     if (!kDebugMode || isForceFetch) {
-      count = await repo.getPadLineup(padmid, padlid);
+      count = await repository.getPadLineup(padmid, padlid);
     } else {
       count = 0;
     }

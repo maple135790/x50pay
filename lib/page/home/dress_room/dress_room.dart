@@ -8,6 +8,7 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
+import 'package:x50pay/repository/repository.dart';
 
 typedef Avatar = ({String b64Image, String? id, String badgeText});
 
@@ -19,14 +20,15 @@ class DressRoom extends StatefulWidget {
 }
 
 class _DressRoomState extends BaseStatefulState<DressRoom> {
-  final viewModel = DressRoomViewModel();
+  final repo = Repository();
+  late final viewModel = DressRoomViewModel(repository: repo);
   String? selectedAvater;
   late Future<List<Avatar>> initDressRoom;
 
   @override
   void initState() {
     super.initState();
-    initDressRoom = viewModel.init();
+    initDressRoom = viewModel.getAvatars();
   }
 
   void onDressPressed(String? id) {

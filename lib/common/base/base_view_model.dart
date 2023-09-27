@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/generated/l10n.dart';
 
 class BaseViewModel extends ChangeNotifier {
   final isForceFetch = GlobalSingleton.instance.isServiceOnline;
 
   bool get _duringTest => Platform.environment.containsKey('FLUTTER_TEST');
+
+  String get serviceErrorMessage => _duringTest ? '' : S.current.serviceError;
 
   void showLoading() {
     if (_duringTest) return;
@@ -18,6 +21,16 @@ class BaseViewModel extends ChangeNotifier {
   void dismissLoading() {
     if (_duringTest) return;
     if (EasyLoading.isShow) EasyLoading.dismiss();
+  }
+
+  void showSuccess(String text) {
+    if (_duringTest) return;
+    EasyLoading.showSuccess(text);
+  }
+
+  void showError(String text) {
+    if (_duringTest) return;
+    EasyLoading.showError(text);
   }
 
   bool _isFunctionalHeader = true;
