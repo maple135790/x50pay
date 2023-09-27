@@ -37,6 +37,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
   final repo = Repository();
   late final viewModel = CabDatailViewModel(repository: repo);
   late Future<bool> cabInit;
+  var key = GlobalKey();
 
   void onCabSelect({
     required String caboid,
@@ -55,28 +56,36 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
   @override
   void initState() {
     super.initState();
-    cabInit = viewModel.getSelGameCab(widget.machineId);
+  }
+
+  Future<void> onRefresh() async {
+    key = GlobalKey();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: scaffoldBackgroundColor,
-      child: FutureBuilder(
-        future: cabInit,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            log('loading', name: 'CabDetail');
-            return const SizedBox();
-          }
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: Container(
+        key: key,
+        color: scaffoldBackgroundColor,
+        child: FutureBuilder(
+          future: viewModel.getSelGameCab(widget.machineId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              log('loading', name: 'CabDetail');
+              return const SizedBox();
+            }
 
-          if (snapshot.data == true) {
-            final cabDetail = viewModel.cabinetModel!;
-            return cabDetailLoaded(cabDetail);
-          } else {
-            return const Text('failed');
-          }
-        },
+            if (snapshot.data == true) {
+              final cabDetail = viewModel.cabinetModel!;
+              return cabDetailLoaded(cabDetail);
+            } else {
+              return const Text('failed');
+            }
+          },
+        ),
       ),
     );
   }
@@ -309,23 +318,21 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
       );
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 15),
-          buildRSVP(model.reservations),
-          const SizedBox(height: 10),
-          buildPadLineUp(),
-          const SizedBox(height: 8),
-          buildCabInfo(
-              price: price,
-              tagName: "$tagLabel$addition",
-              cabLabel: model.cabinets.first.label),
-          ...buildEventPic(model.spic, model.surl),
-          ...buildCabBlock(caboid: model.caboid),
-          const SizedBox(height: 12),
-        ],
-      ),
+    return ListView(
+      children: [
+        const SizedBox(height: 15),
+        buildRSVP(model.reservations),
+        const SizedBox(height: 10),
+        buildPadLineUp(),
+        const SizedBox(height: 8),
+        buildCabInfo(
+            price: price,
+            tagName: "$tagLabel$addition",
+            cabLabel: model.cabinets.first.label),
+        ...buildEventPic(model.spic, model.surl),
+        ...buildCabBlock(caboid: model.caboid),
+        const SizedBox(height: 12),
+      ],
     );
   }
 

@@ -31,8 +31,6 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
   late int selectedIndex = _menus.indexWhere((element) =>
       GoRouterState.of(context).path?.contains(element.route.path) ?? false);
 
-  String currentLocation = '';
-
   late final _menus = [
     (
       icon: Icons.sports_esports,
@@ -96,25 +94,17 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
 
     // 如果頁面有更換，則重新計算 selectedIndex。
     // 最明顯的例子是用於 [home] 的 養成點數商場頁面。
+    final currentLocation = GoRouterState.of(context).matchedLocation;
     selectedIndex = _menus.indexWhere((element) {
       return currentLocation.contains(element.route.path.split('/')[1]);
     });
+    setState(() {});
   }
 
   @override
   initState() {
     super.initState();
     selectedIndex = 2;
-  }
-
-  Future<void> onRefresh() async {
-    await Future.delayed(const Duration(milliseconds: 800));
-    if (currentLocation == AppRoutes.home.path) {
-      GlobalSingleton.instance.checkUser(force: true);
-    }
-    if (context.mounted) {
-      setState(() {});
-    }
   }
 
   @override
@@ -136,10 +126,7 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
       },
       child: Scaffold(
         appBar: _LoadedAppBar(selectedIndex),
-        body: RefreshIndicator(
-          onRefresh: onRefresh,
-          child: widget.body,
-        ),
+        body: widget.body,
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(
               border:
@@ -150,7 +137,6 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
             onDestinationSelected: (index) async {
               selectedIndex = index;
               context.goNamed(_menus[index].route.routeName);
-              currentLocation = _menus[index].route.path;
               setState(() {});
             },
             destinations: _menus
@@ -270,7 +256,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
     });
   }
 
-  Widget buildFixedHeader(BuildContext context) {
+  Widget buildFixedHeader() {
     final currentLocale = context.read<LanguageViewModel>().currentLocale;
 
     return Column(
@@ -335,7 +321,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
     );
   }
 
-  Widget buildFunctionalHeader(BuildContext context) {
+  Widget buildFunctionalHeader() {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       child: AppBar(
@@ -437,13 +423,13 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            buildFixedHeader(context),
+            buildFixedHeader(),
             AnimatedPositioned(
               height: functionalHeaderHeight,
-              duration: const Duration(milliseconds: 400),
+              duration: const Duration(milliseconds: 550),
               curve: Curves.easeInOutExpo,
               top: 0,
-              child: buildFunctionalHeader(context),
+              child: buildFunctionalHeader(),
             ),
             if (kDebugMode) buildDebugStatus(),
           ],

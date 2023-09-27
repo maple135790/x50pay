@@ -110,7 +110,6 @@ class Repository extends Api {
       method: HttpMethod.post,
       withSession: true,
       body: {'sid': storeId},
-      verbose: true,
       onSuccess: (json) {
         gameList = GameList.fromJson(json);
       },
@@ -174,7 +173,6 @@ class Repository extends Api {
       method: HttpMethod.post,
       withSession: true,
       body: {},
-      verbose: true,
       onSuccess: (json) {
         response = BasicResponse.fromJson(json);
       },
@@ -512,7 +510,6 @@ class Repository extends Api {
       customDest: "https://pay.x50.fun$url",
       method: HttpMethod.get,
       withSession: true,
-      verbose: true,
       customHeaders: {
         'Referer': refererUrl,
       },

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,38 +25,40 @@ class _GameCabsState extends BaseStatefulState<GameCabs> {
   final repo = Repository();
   late final viewModel = GameCabsViewModel(repository: repo);
   late List<Machine> machine;
-  late Future<GameList?> gameCabsInit;
+  var key = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    gameCabsInit = viewModel.getGamelist();
   }
 
-  @override
-  void dispose() {
-    log('GameCabs disposed', name: 'GameCabs');
-    super.dispose();
+  Future<void> onRefresh() async {
+    key = GlobalKey();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: FutureBuilder<GameList?>(
-          future: gameCabsInit,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const SizedBox();
-            }
-            if (snapshot.data == null) {
-              return const SizedBox(child: Text('failed'));
-            } else {
-              return _GameCabsLoaded(
-                viewModel.storeName,
-                games: snapshot.data!,
-              );
-            }
-          }),
+      child: RefreshIndicator(
+        onRefresh: onRefresh,
+        child: FutureBuilder<GameList?>(
+            key: key,
+            future: viewModel.getGamelist(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const SizedBox();
+              }
+              if (snapshot.data == null) {
+                return const SizedBox(child: Text('failed'));
+              } else {
+                return _GameCabsLoaded(
+                  viewModel.storeName,
+                  games: snapshot.data!,
+                );
+              }
+            }),
+      ),
     );
   }
 }

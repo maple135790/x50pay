@@ -29,33 +29,41 @@ class Home extends StatefulWidget {
 class _HomeState extends BaseStatefulState<Home> {
   final repo = Repository();
   late final HomeViewModel viewModel;
-  late Future<void> init;
+
+  var key = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     viewModel = HomeViewModel(repository: repo)..isFunctionalHeader = false;
-    init = viewModel.initHome();
+  }
+
+  Future<void> onRefresh() async {
+    key = GlobalKey();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: ChangeNotifierProvider.value(
-        value: viewModel,
-        builder: (context, child) => FutureBuilder(
-          future: init,
-          key: ValueKey(viewModel.entry),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const SizedBox();
-            }
-            if (viewModel.entry == null) {
-              showServiceError();
-              return Center(child: Text(serviceErrorText));
-            }
-            return const SingleChildScrollView(child: _HomeLoaded());
-          },
+      child: RefreshIndicator(
+        onRefresh: onRefresh,
+        child: ChangeNotifierProvider.value(
+          value: viewModel,
+          builder: (context, child) => FutureBuilder(
+            future: viewModel.initHome(),
+            key: key,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const SizedBox();
+              }
+              if (viewModel.entry == null) {
+                showServiceError();
+                return Center(child: Text(serviceErrorText));
+              }
+              return const SingleChildScrollView(child: _HomeLoaded());
+            },
+          ),
         ),
       ),
     );

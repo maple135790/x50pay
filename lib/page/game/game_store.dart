@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
@@ -20,37 +21,43 @@ class GameStore extends StatefulWidget {
   State<GameStore> createState() => _GameStoreState();
 }
 
-class _GameStoreState extends State<GameStore> {
+class _GameStoreState extends BaseStatefulState<GameStore> {
   final repo = Repository();
   late final viewModel = GameStoreViewModel(repository: repo);
-  late Future<StoreModel?> _getStoreData;
+  var key = GlobalKey();
 
-  @override
-  void initState() {
-    super.initState();
-    final currentLocale = context.read<LanguageViewModel>().currentLocale;
-    _getStoreData = viewModel.getStoreData(currentLocale: currentLocale);
+  Locale get currentLocale => context.read<LanguageViewModel>().currentLocale;
+
+  Future<void> onRefresh() async {
+    key = GlobalKey();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<StoreModel?>(
-      future: _getStoreData,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Text(kDebugMode ? 'loading...' : '');
-        }
-        if (snapshot.data == null) return const Text('failed');
+    return Material(
+      child: RefreshIndicator(
+        onRefresh: onRefresh,
+        child: FutureBuilder<StoreModel?>(
+          key: key,
+          future: viewModel.getStoreData(currentLocale: currentLocale),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Text(kDebugMode ? 'loading...' : '');
+            }
+            if (snapshot.data == null) return const Text('failed');
 
-        return _GameStoreLoaded(snapshot.data!);
-      },
+            return _GameStoreLoaded(snapshot.data!);
+          },
+        ),
+      ),
     );
   }
 }
 
 class _GameStoreLoaded extends StatelessWidget {
   final StoreModel stores;
-  const _GameStoreLoaded(this.stores, {Key? key}) : super(key: key);
+  const _GameStoreLoaded(this.stores);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +77,7 @@ class _StoreItem extends StatelessWidget {
   final String prefix;
 
   /// 店家項目
-  const _StoreItem(this.store, this.prefix, {Key? key}) : super(key: key);
+  const _StoreItem(this.store, this.prefix);
 
   String getStoreImage(int storeId) {
     return "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2";
