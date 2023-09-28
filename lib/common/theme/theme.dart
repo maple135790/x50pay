@@ -10,9 +10,15 @@ extension MaterialStateSet on Set<MaterialState> {
 }
 
 class AppThemeData {
-  ThemeData get materialTheme {
+  ThemeData get appTheme {
     return ThemeData(
       useMaterial3: true,
+      scrollbarTheme: ScrollbarThemeData(
+        radius: const Radius.circular(1.5),
+        thumbColor: MaterialStateProperty.all(const Color(0x80FFFFFF)),
+      ),
+      splashColor: Colors.white12,
+      highlightColor: Colors.white12,
       brightness: Brightness.dark,
       cupertinoOverrideTheme: const CupertinoThemeData(
           primaryColor: CupertinoColors.activeBlue,

@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
         ],
         child: Consumer<LanguageViewModel>(
           builder: (context, vm, child) => MaterialApp.router(
-            theme: AppThemeData().materialTheme,
+            theme: AppThemeData().appTheme,
             builder: EasyLoading.init(),
             routerConfig: router,
             locale: vm.currentLocale,

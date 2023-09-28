@@ -33,6 +33,11 @@ class BaseViewModel extends ChangeNotifier {
     EasyLoading.showError(text);
   }
 
+  void showInfo(String text, {Duration duration = const Duration(seconds: 1)}) {
+    if (_duringTest) return;
+    EasyLoading.showInfo(text, duration: duration);
+  }
+
   bool _isFunctionalHeader = true;
   bool get isFunctionalHeader => _isFunctionalHeader;
 

@@ -240,9 +240,10 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
               onConfirm: null,
               content: (showButtonBar) {
                 if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  );
+                  return const Center(child: SizedBox());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text(serviceErrorText));
                 }
 
                 return CupertinoListSection.insetGrouped(
@@ -255,7 +256,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
                             return CupertinoListTile.notched(
                               title: Text(i18n.userAppSettingsBiometrics),
                               trailing: CupertinoSwitch(
-                                activeColor: const Color(0xff005eb0),
+                                activeColor: CupertinoColors.activeGreen,
                                 value: vm.isEnabledBiometricsLogin,
                                 onChanged: snapshot.data!
                                     ? onBiometricsLoginChanged
@@ -269,7 +270,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
                       return CupertinoListTile.notched(
                         title: Text(i18n.userAppSettingsFastPayment),
                         trailing: CupertinoSwitch(
-                          activeColor: const Color(0xff005eb0),
+                          activeColor: CupertinoColors.activeGreen,
                           value: vm.isEnabledFastQRPay,
                           onChanged: onFastQRPayChanged,
                         ),
@@ -280,7 +281,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
                       return CupertinoListTile.notched(
                         title: Text(i18n.userAppSettingsInAppNfc),
                         trailing: CupertinoSwitch(
-                          activeColor: const Color(0xff005eb0),
+                          activeColor: CupertinoColors.activeGreen,
                           value: vm.isEnableInAppNfcScan,
                           onChanged: onInAppNfcScanChanged,
                         ),

@@ -139,87 +139,90 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
     return ScaffoldMessenger(
       key: _scaffoldMessengerKey,
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                  margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                  padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
-                  decoration: BoxDecoration(
-                      color: scaffoldBackgroundColor,
-                      border: Border.all(color: Themes.borderColor, width: 1),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.push_pin,
-                          color: Color(0xfffafafa), size: 16),
-                      Text('  ${i18n.gameLocation}「 ${widget.storeName} 」',
-                          style: const TextStyle(color: Color(0xfffafafa))),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: onChangeStoreTap,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: const Color(0xfffafafa)),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 8),
-                          child: Icon(Icons.sync,
-                              color: scaffoldBackgroundColor, size: 26),
-                        ),
-                      ),
-                    ],
-                  )),
-              Column(
-                  children: machine
-                      .map((e) => _GameCabItem(
-                            e,
-                            storeName: widget.storeName,
-                            onCoinInserted: reloadSnackBar,
-                            onItemPressed: clearSnackBar,
-                          ))
-                      .toList()),
-              Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 80,
-                    margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                    padding: const EdgeInsets.only(bottom: 10),
+        body: Scrollbar(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                    margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                    padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
                     decoration: BoxDecoration(
-                        border: Border.all(color: Themes.borderColor, width: 1),
-                        borderRadius: BorderRadius.circular(5),
-                        shape: BoxShape.rectangle),
-                  ),
-                  Positioned(
-                      left: 35,
-                      top: 12,
-                      child: Container(
                         color: scaffoldBackgroundColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: const Text('離峰時段',
-                            style: TextStyle(
-                                color: Color(0xfffafafa), fontSize: 13)),
-                      )),
-                  const Positioned(
-                    top: 40,
-                    left: 35,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
+                        border: Border.all(color: Themes.borderColor, width: 1),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Row(
                       children: [
-                        Text('●   部分機種不提供離峰方案',
-                            style: TextStyle(color: Color(0xfffafafa))),
-                        SizedBox(height: 5),
-                        Text('●   詳情請見粉絲專頁更新貼文',
-                            style: TextStyle(color: Color(0xfffafafa))),
+                        const Icon(Icons.push_pin,
+                            color: Color(0xfffafafa), size: 16),
+                        Text('  ${i18n.gameLocation}「 ${widget.storeName} 」',
+                            style: const TextStyle(color: Color(0xfffafafa))),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: onChangeStoreTap,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: const Color(0xfffafafa)),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
+                            child: Icon(Icons.sync,
+                                color: scaffoldBackgroundColor, size: 26),
+                          ),
+                        ),
                       ],
+                    )),
+                Column(
+                    children: machine
+                        .map((e) => _GameCabItem(
+                              e,
+                              storeName: widget.storeName,
+                              onCoinInserted: reloadSnackBar,
+                              onItemPressed: clearSnackBar,
+                            ))
+                        .toList()),
+                Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 80,
+                      margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                      padding: const EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Themes.borderColor, width: 1),
+                          borderRadius: BorderRadius.circular(5),
+                          shape: BoxShape.rectangle),
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 12),
-            ],
+                    Positioned(
+                        left: 35,
+                        top: 12,
+                        child: Container(
+                          color: scaffoldBackgroundColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: const Text('離峰時段',
+                              style: TextStyle(
+                                  color: Color(0xfffafafa), fontSize: 13)),
+                        )),
+                    const Positioned(
+                      top: 40,
+                      left: 35,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('●   部分機種不提供離峰方案',
+                              style: TextStyle(color: Color(0xfffafafa))),
+                          SizedBox(height: 5),
+                          Text('●   詳情請見粉絲專頁更新貼文',
+                              style: TextStyle(color: Color(0xfffafafa))),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 12),
+              ],
+            ),
           ),
         ),
       ),
@@ -331,8 +334,6 @@ class _GameCabItem extends StatelessWidget with GameMixin {
                       onCoinInserted.call();
                     }
                   },
-                  splashColor: Colors.white12,
-                  highlightColor: Colors.white12,
                 ),
               )),
             ],

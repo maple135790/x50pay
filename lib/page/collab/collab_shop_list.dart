@@ -8,7 +8,7 @@ class _CollabShopList extends StatefulWidget {
   State<_CollabShopList> createState() => __CollabShopListState();
 }
 
-class __CollabShopListState extends State<_CollabShopList> {
+class __CollabShopListState extends BaseStatefulState<_CollabShopList> {
   final repo = Repository();
   late final viewModel = CollabShopListViewModel(repository: repo);
 
@@ -81,8 +81,10 @@ class __CollabShopListState extends State<_CollabShopList> {
         future: viewModel.init(),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            log('loading', name: '_CollabShopList');
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: SizedBox());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text(serviceErrorText));
           }
 
           final data = snapshot.data!;

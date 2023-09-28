@@ -120,13 +120,15 @@ class __BoxTabState extends BaseStatefulState<_BoxTab> {
   Widget build(BuildContext context) {
     if (isEmptyItems) return const SizedBox();
     return Scaffold(
-      body: ListView.builder(
-        itemCount: widget.items.length,
-        itemBuilder: (context, index) {
-          final item = widget.items[index]!;
+      body: Scrollbar(
+        child: ListView.builder(
+          itemCount: widget.items.length,
+          itemBuilder: (context, index) {
+            final item = widget.items[index]!;
 
-          return itemRow(item);
-        },
+            return itemRow(item);
+          },
+        ),
       ),
     );
   }

@@ -52,7 +52,11 @@ class _QuestCampaignState extends State<QuestCampaign> {
             return const Center(child: Text('Error'));
           }
           final model = snapshot.data as Campaign;
-          return SingleChildScrollView(child: campaignLoaded(model));
+          return Scrollbar(
+            child: SingleChildScrollView(
+              child: campaignLoaded(model),
+            ),
+          );
         });
   }
 
@@ -411,83 +415,85 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
                   ),
                 ),
               )),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
-          child: Column(
-            children: [
-              Container(
-                height: 157,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xff3e3e3e)),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Row(
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: widget.imgUrl ?? '',
-                      fit: BoxFit.fitHeight,
-                      errorWidget: (_, __, ___) =>
-                          const Icon(Icons.broken_image_rounded),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(25, 5, 5, 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Flexible(
-                                child: Text(widget.name ?? '',
-                                    style: const TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w500))),
-                            if (widget.extras != null)
-                              const SizedBox(height: 5),
-                            if (widget.extras != null)
-                              ...widget.extras!
-                                  .map((e) => Text(
-                                        e,
-                                        textAlign: TextAlign.left,
-                                        style: const TextStyle(fontSize: 12),
-                                      ))
-                                  .toList(),
-                          ],
+      body: Scrollbar(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
+            child: Column(
+              children: [
+                Container(
+                  height: 157,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xff3e3e3e)),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: widget.imgUrl ?? '',
+                        fit: BoxFit.fitHeight,
+                        errorWidget: (_, __, ___) =>
+                            const Icon(Icons.broken_image_rounded),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(25, 5, 5, 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                  child: Text(widget.name ?? '',
+                                      style: const TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500))),
+                              if (widget.extras != null)
+                                const SizedBox(height: 5),
+                              if (widget.extras != null)
+                                ...widget.extras!
+                                    .map((e) => Text(
+                                          e,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(fontSize: 12),
+                                        ))
+                                    .toList(),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 27.5),
-              const SizedBox(
-                height: 24.5,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Divider(
-                          height: 0, color: Color(0xff3e3e3e), thickness: 1),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('近期被兌換時間',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500)),
-                    ),
-                    Expanded(
-                      child: Divider(
-                          height: 0, color: Color(0xff3e3e3e), thickness: 1),
-                    ),
-                  ],
+                const SizedBox(height: 27.5),
+                const SizedBox(
+                  height: 24.5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Divider(
+                            height: 0, color: Color(0xff3e3e3e), thickness: 1),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text('近期被兌換時間',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w500)),
+                      ),
+                      Expanded(
+                        child: Divider(
+                            height: 0, color: Color(0xff3e3e3e), thickness: 1),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              if (widget.redeemRecords != null)
-                Column(
-                    children:
-                        widget.redeemRecords!.map((e) => Text(e)).toList()),
-            ],
+                if (widget.redeemRecords != null)
+                  Column(
+                      children:
+                          widget.redeemRecords!.map((e) => Text(e)).toList()),
+              ],
+            ),
           ),
         ),
       ),

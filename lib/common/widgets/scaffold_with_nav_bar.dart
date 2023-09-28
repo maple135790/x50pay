@@ -129,8 +129,13 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
         body: widget.body,
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(
-              border:
-                  Border(top: BorderSide(width: 1, color: Color(0xff3e3e3e)))),
+            border: Border(
+              top: BorderSide(
+                width: 1,
+                color: Color(0xff3e3e3e),
+              ),
+            ),
+          ),
           child: NavigationBar(
             selectedIndex: selectedIndex,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
@@ -171,7 +176,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
   String get currentLocation => GoRouterState.of(context).matchedLocation;
 
   double get functionalHeaderHeight =>
-      widget.menuIndex == 2 ? 0 : widget.preferredSize.height + 2;
+      widget.menuIndex == 2 ? 0 : widget.preferredSize.height;
 
   Widget buildDebugStatus() {
     String serviceStatus =
@@ -257,8 +262,6 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
   }
 
   Widget buildFixedHeader() {
-    final currentLocale = context.read<LanguageViewModel>().currentLocale;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -331,7 +334,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
         scrolledUnderElevation: 15,
         surfaceTintColor: Colors.transparent,
         backgroundColor: scaffoldBackgroundColor,
-        shadowColor: Colors.black87,
+        shadowColor: Colors.black,
         title: Align(
           alignment: Alignment.topRight,
           child: Container(
@@ -408,11 +411,6 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override

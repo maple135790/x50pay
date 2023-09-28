@@ -75,10 +75,12 @@ class AppSettingsViewModel extends BaseViewModel {
   }
 
   Future<void> getAppSettings() async {
+    showLoading();
     await Future.delayed(const Duration(milliseconds: 300));
     isEnabledFastQRPay = await _getIsEnabledFastQRPay();
     isEnabledBiometricsLogin = await _getIsEnabledBiometricsLogin();
     isEnableInAppNfcScan = await _getIsEnableInAppNfcScan();
+    dismissLoading();
     return;
   }
 }

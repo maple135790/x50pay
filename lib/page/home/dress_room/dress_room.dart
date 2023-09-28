@@ -67,60 +67,62 @@ class _DressRoomState extends BaseStatefulState<DressRoom> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: FutureBuilder(
-                      future: initDressRoom,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        final avatars = snapshot.data!;
-                        showButtonBar(true);
-                        return GridView.builder(
-                          itemCount: avatars.length,
-                          padding: const EdgeInsets.only(bottom: 80),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  childAspectRatio: 106 / 150,
-                                  crossAxisSpacing: 18,
-                                  mainAxisSpacing: 12),
-                          itemBuilder: (context, index) {
-                            final avatar = avatars[index];
-                            final selected = selectedAvater != null &&
-                                selectedAvater == avatar.id;
+                child: FutureBuilder(
+                    future: initDressRoom,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      final avatars = snapshot.data!;
+                      showButtonBar(true);
+                      return Scrollbar(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: GridView.builder(
+                            itemCount: avatars.length,
+                            padding: const EdgeInsets.only(bottom: 80),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    childAspectRatio: 106 / 150,
+                                    crossAxisSpacing: 18,
+                                    mainAxisSpacing: 12),
+                            itemBuilder: (context, index) {
+                              final avatar = avatars[index];
+                              final selected = selectedAvater != null &&
+                                  selectedAvater == avatar.id;
 
-                            return GestureDetector(
-                              onTap: () {
-                                onDressPressed(avatar.id);
-                              },
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      curve: Curves.easeInOutQuad,
-                                      foregroundDecoration: BoxDecoration(
-                                        color: selected ? Colors.black38 : null,
-                                      ),
-                                      child: DressedAvatar(
-                                        id: avatar.id,
-                                        imageSrc: avatar.b64Image,
-                                        amount: avatar.badgeText,
+                              return GestureDetector(
+                                onTap: () {
+                                  onDressPressed(avatar.id);
+                                },
+                                child: Stack(
+                                  children: [
+                                    Positioned.fill(
+                                      child: AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOutQuad,
+                                        foregroundDecoration: BoxDecoration(
+                                          color:
+                                              selected ? Colors.black38 : null,
+                                        ),
+                                        child: DressedAvatar(
+                                          id: avatar.id,
+                                          imageSrc: avatar.b64Image,
+                                          amount: avatar.badgeText,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  if (selected) checkMark()
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      }),
-                ),
+                                    if (selected) checkMark()
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    }),
               ),
             ],
           );

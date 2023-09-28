@@ -36,6 +36,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   late final String avatarUrl;
   late final viewModel = SettingsViewModel(settingRepo: settingRepo);
   final settingRepo = SettingRepository();
+  final controller = ScrollController();
   final user = GlobalSingleton.instance.userNotifier.value!;
 
   void showEasterEgg() {
@@ -179,6 +180,12 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         onTicketRecordPressed.call();
       });
     }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -326,12 +333,17 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
     return Container(
       decoration: BoxDecoration(color: scaffoldBackgroundColor),
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        itemCount: settingsGroups.length,
-        itemBuilder: (context, index) {
-          return settingsGroups[index];
-        },
+      child: Scrollbar(
+        controller: controller,
+        child: ListView.builder(
+          cacheExtent: 10000, // 現在的workround，不然Scrollbar會跳，等待2D Scrolling
+          controller: controller,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          itemCount: settingsGroups.length,
+          itemBuilder: (context, index) {
+            return settingsGroups[index];
+          },
+        ),
       ),
     );
   }

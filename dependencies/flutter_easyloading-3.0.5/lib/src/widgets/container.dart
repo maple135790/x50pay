@@ -152,15 +152,14 @@ class EasyLoadingContainerState extends State<EasyLoadingContainer>
                     ? GestureDetector(
                         onTap: _onTap,
                         behavior: HitTestBehavior.translucent,
-                        child: Blur(
-                          blur: 3,
-                          blurColor: Colors.black54,
-                          child: Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            color: Colors.transparent,
-                            // color: _maskColor,
-                          ),
+                        child: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          color: Colors.transparent,
+                          // color: _maskColor,
+                        ).frosted(
+                          blur: 5 * _animationController.value,
+                          frostColor: Colors.black38,
                         ),
                       )
                     // : Container(
@@ -169,8 +168,8 @@ class EasyLoadingContainerState extends State<EasyLoadingContainer>
                     //     color: _maskColor,
                     //   ),
                     : Blur(
-                        blur: 3,
-                        blurColor: Colors.black54,
+                        blur: 5 * _animationController.value,
+                        blurColor: Colors.black38,
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,

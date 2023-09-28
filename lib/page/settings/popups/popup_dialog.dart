@@ -147,7 +147,7 @@ class _DialogSwitchState extends State<DialogSwitch> {
     return CupertinoListTile.notched(
       title: Text(widget.title),
       trailing: CupertinoSwitch(
-          activeColor: const Color(0xff005eb0),
+          activeColor: CupertinoColors.systemGreen,
           value: v,
           onChanged: (newValue) {
             v = newValue;

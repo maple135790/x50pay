@@ -47,6 +47,7 @@ class _HomeState extends BaseStatefulState<Home> {
   Widget build(BuildContext context) {
     return Material(
       child: RefreshIndicator(
+        displacement: 80,
         onRefresh: onRefresh,
         child: ChangeNotifierProvider.value(
           value: viewModel,
@@ -61,7 +62,11 @@ class _HomeState extends BaseStatefulState<Home> {
                 showServiceError();
                 return Center(child: Text(serviceErrorText));
               }
-              return const SingleChildScrollView(child: _HomeLoaded());
+              return const Scrollbar(
+                child: SingleChildScrollView(
+                  child: _HomeLoaded(),
+                ),
+              );
             },
           ),
         ),
@@ -129,26 +134,52 @@ class _OfficialInfo extends StatelessWidget {
       children: [
         Padding(
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-            child: GestureDetector(
-                onTap: () {
-                  launchUrlString(
-                      'https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ',
-                      mode: LaunchMode.externalNonBrowserApplication);
-                },
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image(image: R.image.vts())))),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Stack(
+                  children: [
+                    Image(
+                      image: R.image.vts(),
+                      fit: BoxFit.fill,
+                    ),
+                    Positioned.fill(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            launchUrlString(
+                                'https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ',
+                                mode: LaunchMode.externalNonBrowserApplication);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ))),
         Padding(
             padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-            child: GestureDetector(
-                onTap: () {
-                  launchUrlString(
-                      'https://www.youtube.com/c/X50MusicGameStation-onAir',
-                      mode: LaunchMode.externalNonBrowserApplication);
-                },
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image(image: R.image.top()))))
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Stack(
+                  children: [
+                    Image(
+                      image: R.image.top(),
+                      fit: BoxFit.fill,
+                    ),
+                    Positioned.fill(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            launchUrlString(
+                                'https://www.youtube.com/c/X50MusicGameStation-onAir',
+                                mode: LaunchMode.externalNonBrowserApplication);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                )))
       ],
     );
   }
@@ -271,23 +302,36 @@ class _RecentQuests extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: quests
-          .map((q) => GestureDetector(
-                onTap: () {
-                  context.goNamed(AppRoutes.questCampaign.routeName,
-                      pathParameters: {'couid': q.couid});
-                },
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xff505050)),
-                    borderRadius: BorderRadius.circular(6),
+          .map((q) => Container(
+                margin: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xff505050),
+                    strokeAlign: BorderSide.strokeAlignOutside,
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: q.lpic,
-                    fit: BoxFit.fitWidth,
-                    height: 55,
-                  ),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Stack(
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: q.lpic,
+                      height: 55,
+                      width: MediaQuery.sizeOf(context).width,
+                      fit: BoxFit.fitWidth,
+                    ),
+                    Positioned.fill(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            context.goNamed(AppRoutes.questCampaign.routeName,
+                                pathParameters: {'couid': q.couid});
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ))
           .toList(),

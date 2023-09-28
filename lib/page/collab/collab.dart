@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
 import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -19,7 +18,7 @@ class Collab extends StatefulWidget {
   State<Collab> createState() => _CollabState();
 }
 
-class _CollabState extends State<Collab> {
+class _CollabState extends BaseStatefulState<Collab> {
   static const titleImageUrl = 'https://pay.x50.fun/static/giftcenter.png';
   final tabs = const <Widget>[Tab(text: '商家清單 / 兌換')];
 

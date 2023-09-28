@@ -36,8 +36,8 @@ class CollabShopListViewModel extends BaseViewModel {
   CollabShopListViewModel({required this.repository});
 
   Future<List<Sponser>> init() async {
+    showLoading();
     await Future.delayed(const Duration(milliseconds: 350));
-
     late final String rawDocument;
 
     try {
@@ -62,6 +62,8 @@ class CollabShopListViewModel extends BaseViewModel {
     } catch (e) {
       log('', error: '$e', name: 'CollabShopList init');
       return [];
-    } finally {}
+    } finally {
+      dismissLoading();
+    }
   }
 }

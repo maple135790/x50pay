@@ -110,18 +110,24 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
 
             return Padding(
               padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-              child: CupertinoTextField(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                decoration: BoxDecoration(
-                  color: const Color(0xff1c1c1e),
-                  borderRadius: BorderRadius.circular(11),
-                ),
-                placeholder: nickname,
-                controller: nameController,
-                autofocus: true,
-                style: const TextStyle(
-                    color: CupertinoColors.white, fontWeight: FontWeight.w500),
+              child: Column(
+                children: [
+                  CupertinoTextField(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff1c1c1e),
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    placeholder: nickname,
+                    controller: nameController,
+                    autofocus: true,
+                    style: const TextStyle(
+                        color: CupertinoColors.white,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  const Spacer(),
+                ],
               ),
             );
           },

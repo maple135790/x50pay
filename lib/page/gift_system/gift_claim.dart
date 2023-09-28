@@ -9,74 +9,80 @@ class _GiftClaim extends StatelessWidget {
     final canChangeList = context.select<GiftSystemViewModel, List<CanChange>>(
         (vm) => vm.giftBox?.canChange ?? []);
 
-    return ListView.builder(
-      itemCount: canChangeList.length,
-      prototypeItem: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-        child: ListTile(
-          contentPadding: EdgeInsets.zero,
-          visualDensity: VisualDensity.comfortable,
-          title: const Text('',
-              style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
-          subtitle: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 4),
-              Text('', style: TextStyle(color: Color(0xfffafafa), fontSize: 14))
-            ],
-          ),
-          trailing: ElevatedButton(
-              onPressed: null, style: Themes.grey(), child: const Text('已領取')),
-        ),
-      ),
-      itemBuilder: (context, index) {
-        late String subtitle, buttonText;
-        if (canChangeList[index].name.contains('抽選')) {
-          subtitle = '請於想抽的月份自助兌換';
-          buttonText = '馬上抽';
-        } else {
-          subtitle = '粉絲專頁預約';
-          buttonText = '領禮物';
-        }
-
-        return Padding(
+    return Scrollbar(
+      child: ListView.builder(
+        itemCount: canChangeList.length,
+        prototypeItem: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
           child: ListTile(
             contentPadding: EdgeInsets.zero,
             visualDensity: VisualDensity.comfortable,
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: CachedNetworkImage(
-                  imageUrl: canChangeList[index].pic, width: 50),
-            ),
-            title: Text(canChangeList[index].name,
-                style: const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
-            subtitle: Column(
+            title: const Text('',
+                style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+            subtitle: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 4),
-                Text(subtitle,
-                    style: const TextStyle(
-                        color: Color(0xfffafafa), fontSize: 14)),
+                SizedBox(height: 4),
+                Text('',
+                    style: TextStyle(color: Color(0xfffafafa), fontSize: 14))
               ],
             ),
             trailing: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return _ConfirmChangeDialog(
-                            gid: canChangeList[index].gid);
-                      });
-                  getGiftDialog(canChangeList[index].gid);
-                },
-                style: Themes.severe(isV4: true),
-                child: Text(buttonText)),
+                onPressed: null,
+                style: Themes.grey(),
+                child: const Text('已領取')),
           ),
-        );
-      },
+        ),
+        itemBuilder: (context, index) {
+          late String subtitle, buttonText;
+          if (canChangeList[index].name.contains('抽選')) {
+            subtitle = '請於想抽的月份自助兌換';
+            buttonText = '馬上抽';
+          } else {
+            subtitle = '粉絲專頁預約';
+            buttonText = '領禮物';
+          }
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              visualDensity: VisualDensity.comfortable,
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: CachedNetworkImage(
+                    imageUrl: canChangeList[index].pic, width: 50),
+              ),
+              title: Text(canChangeList[index].name,
+                  style:
+                      const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 4),
+                  Text(subtitle,
+                      style: const TextStyle(
+                          color: Color(0xfffafafa), fontSize: 14)),
+                ],
+              ),
+              trailing: ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return _ConfirmChangeDialog(
+                              gid: canChangeList[index].gid);
+                        });
+                    getGiftDialog(canChangeList[index].gid);
+                  },
+                  style: Themes.severe(isV4: true),
+                  child: Text(buttonText)),
+            ),
+          );
+        },
+      ),
     );
   }
 

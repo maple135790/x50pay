@@ -50,40 +50,43 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
   }
 
   Widget _body() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              decoration: BoxDecoration(
-                  color: scaffoldBackgroundColor,
-                  border: Border.all(color: Themes.borderColor, width: 1)),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                      foregroundImage: R.image.logo_150_jpg(), radius: 29),
-                  const SizedBox(width: 16.8),
-                  Text(pageTitle(), style: const TextStyle(fontSize: 18))
-                ],
+    return Scrollbar(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                decoration: BoxDecoration(
+                    color: scaffoldBackgroundColor,
+                    border: Border.all(color: Themes.borderColor, width: 1)),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                        foregroundImage: R.image.logo_150_jpg(), radius: 29),
+                    const SizedBox(width: 16.8),
+                    Text(pageTitle(), style: const TextStyle(fontSize: 18))
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            hasData(_model)
-                ? DataTable(
-                    border: TableBorder.all(color: Themes.borderColor),
-                    dataRowMaxHeight: 60,
-                    horizontalMargin: 12,
-                    columnSpacing: 25,
-                    columns: buildColumns(),
-                    rows: buildRows(_model),
-                  )
-                : const Center(child: Text('無資料')),
-            const SizedBox(height: 12),
-          ],
+              const SizedBox(height: 12),
+              hasData(_model)
+                  ? DataTable(
+                      border: TableBorder.all(color: Themes.borderColor),
+                      dataRowMaxHeight: 60,
+                      horizontalMargin: 12,
+                      columnSpacing: 25,
+                      columns: buildColumns(),
+                      rows: buildRows(_model),
+                    )
+                  : const Center(child: Text('無資料')),
+              const SizedBox(height: 12),
+            ],
+          ),
         ),
       ),
     );

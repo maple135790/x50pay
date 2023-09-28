@@ -363,9 +363,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                 log('',
                     name: 'err cabDetailLoaded',
                     error: 'error loading gamecab image: $error');
-                return Image(
-                  image: getGameCabImageFallback(widget.machineId),
-                );
+                return const SizedBox();
               },
             ),
           )),
@@ -439,31 +437,43 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
     }
     var list = <Widget>[];
     for (var i = 0; i < surl.length; i++) {
-      list.add(GestureDetector(
-          onTap: () {
-            if (surl[i].startsWith('http')) {
-              launchUrlString(surl[i].replaceAll('\'', ''),
-                  mode: LaunchMode.externalNonBrowserApplication);
-              return;
-            }
-            context.pushNamed(AppRoutes.questCampaign.routeName,
-                pathParameters: {'couid': surl[i].replaceAll('\'', '')});
-          },
-          child: Container(
-            width: double.maxFinite,
-            clipBehavior: Clip.antiAlias,
-            margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: const Color(0xff505050),
-                    strokeAlign: BorderSide.strokeAlignOutside),
-                borderRadius: BorderRadius.circular(6)),
-            child: CachedNetworkImage(
+      list.add(Container(
+        clipBehavior: Clip.antiAlias,
+        margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+        decoration: BoxDecoration(
+            border: Border.all(
+                color: const Color(0xff505050),
+                strokeAlign: BorderSide.strokeAlignOutside),
+            borderRadius: BorderRadius.circular(6)),
+        child: Stack(
+          children: [
+            CachedNetworkImage(
               imageUrl: 'https://pay.x50.fun${spic[i]}',
-              height: 55,
               fit: BoxFit.fill,
+              height: 55,
+              width: MediaQuery.sizeOf(context).width,
             ),
-          )));
+            Positioned.fill(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    if (surl[i].startsWith('http')) {
+                      launchUrlString(surl[i].replaceAll('\'', ''),
+                          mode: LaunchMode.externalNonBrowserApplication);
+                      return;
+                    }
+                    context.pushNamed(AppRoutes.questCampaign.routeName,
+                        pathParameters: {
+                          'couid': surl[i].replaceAll('\'', '')
+                        });
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ));
     }
 
     return list;
@@ -485,63 +495,71 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
               ? i18n.nbusyS2
               : i18n.nbusyS3;
       String isPaid = cab.pcl == true ? i18n.nbusyCoin : i18n.nbusyNoCoin;
-      children.add(Expanded(
-          child: GestureDetector(
-        onTap: () {
-          onCabSelect(
-            caboid: caboid,
-            cabIndex: isGroup1 ? i : group1Length + i,
-            cabData: cab,
-          );
-        },
-        child: LayoutBuilder(
-          builder: (context, constraint) {
-            final top = constraint.biggest.height * 0.25;
-            final right = constraint.biggest.width * 0.05 * -1;
+      children.add(
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraint) {
+              final top = constraint.biggest.height * 0.25;
+              final right = constraint.biggest.width * 0.05 * -1;
 
-            return Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                      color: Themes.borderColor,
-                      strokeAlign: BorderSide.strokeAlignOutside)),
-              child: Stack(
-                children: [
-                  Positioned(
-                      right: right,
-                      top: top,
-                      child: CachedNetworkImage(
-                        imageUrl: getMachineIcon(widget.machineId),
-                        errorWidget: (context, url, error) => const SizedBox(),
-                        height: 95,
-                        color: Colors.white.withOpacity(0.15).invert(0.28),
-                      )),
-                  Positioned.fill(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(cab.num.toString(),
-                            style: const TextStyle(fontSize: 34)),
-                        const SizedBox(height: 5),
-                        Text(cab.notice,
-                            style: const TextStyle(
-                                color: Color(0xff808080), fontSize: 12)),
-                        const SizedBox(height: 4),
-                        Text('$nbusy/$isPaid',
-                            style: const TextStyle(
-                                color: Color(0xfffafafa), fontSize: 12)),
-                        const SizedBox(height: 5),
-                      ],
+              return Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(
+                        color: Themes.borderColor,
+                        strokeAlign: BorderSide.strokeAlignOutside)),
+                child: Stack(
+                  children: [
+                    Positioned(
+                        right: right,
+                        top: top,
+                        child: CachedNetworkImage(
+                          imageUrl: getMachineIcon(widget.machineId),
+                          errorWidget: (context, url, error) =>
+                              const SizedBox(),
+                          height: 95,
+                          color: Colors.white.withOpacity(0.15).invert(0.28),
+                        )),
+                    Positioned.fill(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(cab.num.toString(),
+                              style: const TextStyle(fontSize: 34)),
+                          const SizedBox(height: 5),
+                          Text(cab.notice,
+                              style: const TextStyle(
+                                  color: Color(0xff808080), fontSize: 12)),
+                          const SizedBox(height: 4),
+                          Text('$nbusy/$isPaid',
+                              style: const TextStyle(
+                                  color: Color(0xfffafafa), fontSize: 12)),
+                          const SizedBox(height: 5),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
+                    Positioned.fill(
+                        child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          onCabSelect(
+                            caboid: caboid,
+                            cabIndex: isGroup1 ? i : group1Length + i,
+                            cabData: cab,
+                          );
+                        },
+                      ),
+                    )),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
-      )));
+      );
       if (cab != cabs.last) children.add(const SizedBox(width: 8));
     }
     return children;

@@ -37,6 +37,9 @@ jobs:
       - name: 📝 Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
+      - name: 🧪 Run tests
+        run: flutter test
+
       - name: 🔨 Pub get
         run: flutter pub get
 

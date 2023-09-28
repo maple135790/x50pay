@@ -85,7 +85,6 @@ class QuestCampaignViewModel extends BaseViewModel {
             .toList(),
         stampRowCounts: stampRowCounts,
       );
-      log('campaign: $campaign');
       return campaign;
     } catch (e) {
       log('', error: e.toString(), name: 'QuestCampaignViewModel');
