@@ -86,13 +86,14 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   }
 
   void _handleNfcEvent(Ndef ndef) async {
-    final message = ndef.cachedMessage!;
+    final message = ndef.cachedMessage;
     NdefRecord? urlRecord;
 
     if (GlobalSingleton.instance.isNfcPayDialogOpen) {
       log('nfcPay dialog already opened', name: '_nfcTest');
       return;
     }
+    if (message == null) return;
 
     for (var record in message.records) {
       if (record.typeNameFormat != NdefTypeNameFormat.nfcWellknown) continue;
