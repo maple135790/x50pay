@@ -37,6 +37,7 @@ void main() async {
   GlobalSingleton.instance.setAppVersion =
       "${packageInfo.version}+${packageInfo.buildNumber}";
   languageViewModel.currentLocale = appLocale;
+
   runApp(const MyApp());
 }
 
@@ -95,7 +96,7 @@ class MyApp extends StatelessWidget {
 
 /// 旋轉的圖示
 ///
-/// 用於 [EasyLoading] 的 [indicatorWidget]
+/// 用於 [EasyLoading.indicatorWidget]
 class _Spinner extends StatefulWidget {
   const _Spinner();
 

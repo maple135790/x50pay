@@ -280,6 +280,26 @@ class S {
     );
   }
 
+  /// `使用生物辨識登入`
+  String get loginBiometrics {
+    return Intl.message(
+      '使用生物辨識登入',
+      name: 'loginBiometrics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `使用生物辨識登入 X50Pay`
+  String get loginBiometricsReason {
+    return Intl.message(
+      '使用生物辨識登入 X50Pay',
+      name: 'loginBiometricsReason',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `電子郵件`
   String get loginEmail {
     return Intl.message(

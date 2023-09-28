@@ -54,6 +54,8 @@
   "gr2ResetDate": " Reset Date : ",
   "heart": " Hearts",
   "infoNotify": "Informations",
+  "loginBiometrics": "Biometric Login",
+  "loginBiometricsReason": "Using Biometrics to login X50Pay app",
   "loginEmail": "Email",
   "loginError": "Login Error!",
   "loginForgotPassword": "Forgot?",

@@ -11,9 +11,10 @@ import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class LoginViewModel extends BaseViewModel {
-  final repo = Repository();
+  final _repo = Repository();
   BasicResponse? response;
 
+  /// 錯誤訊息，若無錯誤則為 null
   String? get errorMsg => _errorMsg;
   String? _errorMsg;
   set errorMsg(String? value) {
@@ -21,6 +22,7 @@ class LoginViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  /// 是否開啟生物辨識登入
   bool get enableBiometricsLogin => _enableBiometricsLogin;
   bool _enableBiometricsLogin = false;
   set enableBiometricsLogin(bool value) {
@@ -28,6 +30,7 @@ class LoginViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  /// 是否隱藏密碼。使用於密碼欄位的眼睛
   bool get hidePassword => _hidePassword;
   bool _hidePassword = true;
   set hidePassword(bool value) {
@@ -35,6 +38,7 @@ class LoginViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  /// 登入的實體方法
   void _login(
     String email,
     String password,
@@ -47,7 +51,7 @@ class LoginViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        response = await repo.login(email: email, password: password);
+        response = await _repo.login(email: email, password: password);
       } else {
         response =
             BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
@@ -79,6 +83,9 @@ class LoginViewModel extends BaseViewModel {
     }
   }
 
+  /// 帳號密碼的登入
+  ///
+  /// 需傳入帳號 [email] 及密碼 [password]。
   void login({
     required String email,
     required String password,
@@ -88,6 +95,10 @@ class LoginViewModel extends BaseViewModel {
     _login(email, password, onLoginSuccess, isShowSuccessLogin);
   }
 
+  /// 使用生物辨識的登入
+  ///
+  /// 會找尋儲存於 [FlutterSecureStorage] 的帳號及密碼。
+  /// 並傳至內部登入方法 [_login]
   void biometricsLogin({required VoidCallback onLoginSuccess}) async {
     final email = await Prefs.secureRead(SecurePrefsToken.username) as String;
     final password =
@@ -95,6 +106,7 @@ class LoginViewModel extends BaseViewModel {
     _login(email, password, onLoginSuccess, true);
   }
 
+  /// 成功登入
   void _successLogin(
     VoidCallback onLoginSuccess,
     bool isShowSuccessLogin,
@@ -115,6 +127,7 @@ class LoginViewModel extends BaseViewModel {
     onLoginSuccess.call();
   }
 
+  /// 檢查是否可以開啟生物辨識登入
   Future<void> checkEnableBiometricsLogin() async {
     final auth = LocalAuthentication();
     final hasUsername =

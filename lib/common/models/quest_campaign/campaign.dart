@@ -2,6 +2,7 @@ import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
 
 class Campaign {
   /// 網頁上的靜態圖片路徑
+  /// 
   /// 若要顯示圖片，請使用 [campaignImageUrl]
   final String? rawImgUrl;
 
@@ -15,6 +16,7 @@ class Campaign {
   final String? minQuestPoints;
 
   /// 點數說明
+  /// 
   /// 例如：「已擁有 0 點，已兌換 0 點」
   final String? pointInfo;
 

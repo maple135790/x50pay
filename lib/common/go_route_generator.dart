@@ -96,9 +96,9 @@ RouterConfig<Object> goRouteConfig() {
             AppRoutes.settings,
             (_, state) {
               final shouldGoPhone =
-                  state.queryParameters['goTo'] == 'phoneChange';
+                  state.uri.queryParameters['goTo'] == 'phoneChange';
               final shouldGoTicketRecord =
-                  state.queryParameters['goTo'] == 'ticketRecord';
+                  state.uri.queryParameters['goTo'] == 'ticketRecord';
 
               log('shouldGoPhone: $shouldGoPhone');
               log('shouldGoTicketRecord: $shouldGoTicketRecord');
@@ -244,7 +244,7 @@ RouterConfig<Object> goRouteConfig() {
         ],
         builder: (context, state, child) {
           if (AppRoutes.noLoginPages
-              .any((p) => p.path == state.location.toString())) {
+              .any((p) => p.path == state.uri.toString())) {
             return child;
           }
           return ScaffoldWithNavBar(body: child);

@@ -58,6 +58,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "gr2ResetDate": MessageLookupByLibrary.simpleMessage(" Reset Date : "),
         "heart": MessageLookupByLibrary.simpleMessage(" Hearts"),
         "infoNotify": MessageLookupByLibrary.simpleMessage("Informations"),
+        "loginBiometrics":
+            MessageLookupByLibrary.simpleMessage("Biometric Login"),
+        "loginBiometricsReason": MessageLookupByLibrary.simpleMessage(
+            "Using Biometrics to login X50Pay app"),
         "loginEmail": MessageLookupByLibrary.simpleMessage("Email"),
         "loginError": MessageLookupByLibrary.simpleMessage("Login Error!"),
         "loginForgotPassword": MessageLookupByLibrary.simpleMessage("Forgot?"),

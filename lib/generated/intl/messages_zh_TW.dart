@@ -53,6 +53,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "gr2ResetDate": MessageLookupByLibrary.simpleMessage(" 換季日: "),
         "heart": MessageLookupByLibrary.simpleMessage(" 親密度 "),
         "infoNotify": MessageLookupByLibrary.simpleMessage("最新活動"),
+        "loginBiometrics": MessageLookupByLibrary.simpleMessage("使用生物辨識登入"),
+        "loginBiometricsReason":
+            MessageLookupByLibrary.simpleMessage("使用生物辨識登入 X50Pay"),
         "loginEmail": MessageLookupByLibrary.simpleMessage("電子郵件"),
         "loginError": MessageLookupByLibrary.simpleMessage("登入錯誤"),
         "loginForgotPassword": MessageLookupByLibrary.simpleMessage("忘記密碼嗎?"),
