@@ -31,6 +31,9 @@ jobs:
           flutter-version: "3.13.4"
           channel: "stable"
 
+      - name: 💻 Pub get
+        run: flutter pub get
+
       - name: 🔍 Analyze project source
         run: dart analyze
 
@@ -39,9 +42,6 @@ jobs:
 
       - name: 🧪 Run tests
         run: flutter test
-
-      - name: 🔨 Pub get
-        run: flutter pub get
 
       - name: 🔨 Setup Java
         uses: actions/setup-java@v3
