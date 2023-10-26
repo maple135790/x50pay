@@ -52,13 +52,14 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
     EasyLoading.dismiss();
   }
 
+  /// 使用生物辨識登入
   void doBiometricsLogin() async {
     final auth = LocalAuthentication();
     FocusManager.instance.primaryFocus?.unfocus();
 
     try {
       final bool didAuthenticate = await auth.authenticate(
-        localizedReason: '使用生物辨識快速登入',
+        localizedReason: i18n.loginBiometricsReason,
       );
       if (!didAuthenticate) return;
       viewModel.biometricsLogin(
@@ -77,6 +78,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
     }
   }
 
+  /// 輸入帳號密碼的登入
   void doLogin() async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (email.text.isEmpty || password.text.isEmpty) {
@@ -271,13 +273,13 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                           ? doBiometricsLogin
                                           : null,
                                       style: Themes.pale(),
-                                      child: const Row(
+                                      child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Text('使用生物辨識登入'),
-                                          SizedBox(width: 15),
-                                          Icon(Icons.fingerprint_rounded)
+                                          Text(i18n.loginBiometrics),
+                                          const SizedBox(width: 15),
+                                          const Icon(Icons.fingerprint_rounded)
                                         ],
                                       ),
                                     );

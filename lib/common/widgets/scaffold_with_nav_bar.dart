@@ -172,7 +172,6 @@ class _LoadedAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
-  late final currentLocale = context.read<LanguageViewModel>().currentLocale;
   String get currentLocation => GoRouterState.of(context).matchedLocation;
 
   double get functionalHeaderHeight =>
@@ -217,7 +216,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
     );
   }
 
-  void onLanguagePressed() async {
+  void onLanguagePressed(Locale currentLocale) async {
     final changedLocale = await showDialog<Locale>(
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setState) {
@@ -285,33 +284,37 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: onLanguagePressed,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 6.75,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xff2a2a2a),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CountryFlag.fromCountryCode(
-                                  currentLocale.countryCode ?? '',
-                                  height: 15,
-                                  width: 15,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(currentLocale.displayText),
-                              ],
-                            )),
+                  child: Consumer<LanguageViewModel>(
+                    builder: (context, vm, child) => Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          onLanguagePressed(vm.currentLocale);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 6.75,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xff2a2a2a),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CountryFlag.fromCountryCode(
+                                    vm.currentLocale.countryCode ?? '',
+                                    height: 15,
+                                    width: 15,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(vm.currentLocale.displayText),
+                                ],
+                              )),
+                        ),
                       ),
                     ),
                   ),

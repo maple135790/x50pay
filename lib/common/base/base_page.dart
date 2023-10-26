@@ -100,9 +100,8 @@ class _Header extends StatefulWidget {
   State<_Header> createState() => _HeaderState();
 }
 
-class _HeaderState extends State<_Header> {
+class _HeaderState extends BaseStatefulState<_Header> {
   String get _title => 'X50 Pay - ${widget.title}';
-  late final currentLocale = context.read<LanguageViewModel>().currentLocale;
 
   Widget buildDebugStatus() {
     String serviceStatus =
@@ -168,31 +167,35 @@ class _HeaderState extends State<_Header> {
                   flex: 1,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: onLanguagePressed,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 6.75,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xff2a2a2a),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CountryFlag.fromCountryCode(
-                                  currentLocale.countryCode ?? '',
-                                  height: 15,
-                                  width: 15,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(currentLocale.displayText),
-                              ],
-                            )),
+                    child: Consumer<LanguageViewModel>(
+                      builder: (context, vm, child) => GestureDetector(
+                        onTap: () {
+                          onLanguagePressed(vm.currentLocale);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 6.75,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xff2a2a2a),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CountryFlag.fromCountryCode(
+                                    vm.currentLocale.countryCode ?? '',
+                                    height: 15,
+                                    width: 15,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(vm.currentLocale.displayText),
+                                ],
+                              )),
+                        ),
                       ),
                     ),
                   ),
@@ -206,40 +209,38 @@ class _HeaderState extends State<_Header> {
     );
   }
 
-  void onLanguagePressed() async {
+  void onLanguagePressed(Locale currentLocale) async {
     final changedLocale = await showDialog<Locale>(
       context: context,
-      builder: (context) => StatefulBuilder(builder: (context, setState) {
-        return AlertDialog(
-          title: Text(S.of(context).x50PayLanguage),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(
-              S.delegate.supportedLocales.length,
-              (index) => RadioListTile<Locale>(
-                controlAffinity: ListTileControlAffinity.trailing,
-                value: S.delegate.supportedLocales[index],
-                title: Row(
-                  children: [
-                    CountryFlag.fromCountryCode(
-                      S.delegate.supportedLocales[index].countryCode ?? '',
-                      height: 25,
-                      width: 25,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(S.delegate.supportedLocales[index].displayText),
-                  ],
-                ),
-                groupValue: currentLocale,
-                onChanged: (value) {
-                  context.pop(value);
-                },
+      builder: (context) => AlertDialog(
+        title: Text(S.of(context).x50PayLanguage),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(
+            S.delegate.supportedLocales.length,
+            (index) => RadioListTile<Locale>(
+              controlAffinity: ListTileControlAffinity.trailing,
+              value: S.delegate.supportedLocales[index],
+              title: Row(
+                children: [
+                  CountryFlag.fromCountryCode(
+                    S.delegate.supportedLocales[index].countryCode ?? '',
+                    height: 25,
+                    width: 25,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(S.delegate.supportedLocales[index].displayText),
+                ],
               ),
-              growable: false,
+              groupValue: currentLocale,
+              onChanged: (value) {
+                context.pop(value);
+              },
             ),
+            growable: false,
           ),
-        );
-      }),
+        ),
+      ),
     );
     if (changedLocale == null) return;
     if (!mounted) return;

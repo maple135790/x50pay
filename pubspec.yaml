@@ -1,7 +1,7 @@
 name: x50pay
 description: X50Pay app
 publish_to: none
-version: 1.4.0+1
+version: 1.4.1+1
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
@@ -17,24 +17,24 @@ dependencies:
   flutter_native_splash: ^2.2.7
   flutter_svg: ^1.1.6
   fluttertoast: ^8.2.2
-  go_router: ^9.1.1
+  go_router: ^10.1.2
   html: ^0.15.3
-  http: ^0.13.4
+  http: ^1.1.0
   json_annotation: ^4.8.1
-  location: ^4.4.0
+  location: ^5.0.3
   matrix4_transform: ^2.0.1
   navigation_history_observer: ^1.1.0
   path_drawing: ^1.0.1
-  permission_handler: ^10.0.0
+  permission_handler: ^11.0.0
   provider: ^6.0.3
   qr_code_scanner: ^1.0.0
   r_dart_library:
     git:
       url: 'https://github.com/YK-Unit/r_dart_library.git'
       ref: 0.4.1
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.2.1
   transparent_image: ^2.0.1
-  url_launcher: ^6.1.3
+  url_launcher: ^6.1.14
   xml: ^6.3.0
   shared_preferences_debugger: ^0.1.0
   package_info_plus: ^4.1.0

@@ -33,7 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "continuous": m0,
         "dialogCancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
         "dialogConfirm": MessageLookupByLibrary.simpleMessage("OK"),
-        "dialogNext": MessageLookupByLibrary.simpleMessage("次"),
+        "dialogNext": MessageLookupByLibrary.simpleMessage("次へ"),
         "dialogReturn": MessageLookupByLibrary.simpleMessage("戻る"),
         "dialogSave": MessageLookupByLibrary.simpleMessage("セーフ"),
         "dressRoomTitle": MessageLookupByLibrary.simpleMessage("キャラ変更/着せ替え"),
@@ -53,6 +53,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "gr2ResetDate": MessageLookupByLibrary.simpleMessage(" シーズン変わる日 : "),
         "heart": MessageLookupByLibrary.simpleMessage(" 絆ランク"),
         "infoNotify": MessageLookupByLibrary.simpleMessage("最新イベント"),
+        "loginBiometrics": MessageLookupByLibrary.simpleMessage("生体認証でログイン"),
+        "loginBiometricsReason":
+            MessageLookupByLibrary.simpleMessage("X50Pay App で生体認証を使用"),
         "loginEmail": MessageLookupByLibrary.simpleMessage("メールアドレス"),
         "loginError": MessageLookupByLibrary.simpleMessage("ログインエラー"),
         "loginForgotPassword":

@@ -23,6 +23,8 @@ enum NVSVPayment {
 
   final String name;
   final String value;
+
+  /// 女武神預設扣款模式
   const NVSVPayment(this.name, this.value);
 }
 
@@ -41,6 +43,8 @@ enum DPPayment {
 
   final String name;
   final String value;
+
+  /// 雙人遊玩機種預設扣款模式
   const DPPayment(this.name, this.value);
 }
 
@@ -51,6 +55,8 @@ enum DefaultCabPayment {
 
   final String name;
   final int value;
+
+  /// 機台付款碼預設
   const DefaultCabPayment(this.name, this.value);
 }
 

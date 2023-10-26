@@ -54,6 +54,8 @@
   "gr2ResetDate": " 換季日: ",
   "heart": " 親密度 ",
   "infoNotify": "最新活動",
+  "loginBiometrics": "使用生物辨識登入",
+  "loginBiometricsReason": "使用生物辨識登入 X50Pay",
   "loginEmail": "電子郵件",
   "loginError": "登入錯誤",
   "loginForgotPassword": "忘記密碼嗎?",
