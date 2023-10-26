@@ -50,8 +50,10 @@ class AppSettingsViewModel extends BaseViewModel {
     return enabled ?? PrefsToken.enabledInAppNfcScan.defaultValue;
   }
 
-  void setInAppNfcScan() async {
-    Prefs.setBool(PrefsToken.enabledInAppNfcScan, isEnableInAppNfcScan);
+  void setInAppNfcScan(bool value) async {
+    Prefs.setBool(PrefsToken.enabledInAppNfcScan, value);
+
+    isEnableInAppNfcScan = value;
     return;
   }
 
@@ -71,6 +73,8 @@ class AppSettingsViewModel extends BaseViewModel {
 
   void setFastQRPay(bool value) async {
     Prefs.setBool(PrefsToken.enabledFastQRPay, value);
+
+    isEnabledFastQRPay = value;
     return;
   }
 

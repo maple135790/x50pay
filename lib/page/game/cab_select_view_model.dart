@@ -51,7 +51,12 @@ class CabSelectViewModel extends BaseViewModel {
       await Future.delayed(const Duration(milliseconds: 500));
       late _InsertResponse result;
       final sid = await Prefs.getString(PrefsToken.storeId);
-      BasicResponse rawResponse = BasicResponse.empty();
+      BasicResponse rawResponse = kDebugMode
+          ? const BasicResponse(
+              code: 200,
+              message: "Test Success, no token is inserted",
+            )
+          : BasicResponse.empty();
 
       log(
         'index: $index, id: $id/$sid$index, mode: $mode, isTicket: $isTicket',
@@ -60,7 +65,11 @@ class CabSelectViewModel extends BaseViewModel {
 
       if (kReleaseMode) {
         rawResponse = await repository.doInsert(
-            isTicket, '$id/$sid$index', mode, isUseRewardPoint);
+          isTicket,
+          '$id/$sid$index',
+          mode,
+          isUseRewardPoint,
+        );
       }
       result = _resolveRawResponse(rawResponse);
       _showInsertResult(result);

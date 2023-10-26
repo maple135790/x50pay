@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +17,10 @@ class AppSettings extends StatefulWidget {
 
 class _AppSettingsState extends BaseStatefulState<AppSettings> {
   final viewModel = AppSettingsViewModel();
+  late Future<void> init;
 
   void onFastQRPayChanged(bool value) async {
+    log('onFastQRPayChanged: $value', name: 'AppSettings');
     if (viewModel.isEnabledFastQRPay == false) {
       enableFastQRPayDialog();
     } else {
@@ -199,33 +203,42 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
     );
   }
 
-  Future<bool?> onInAppNfcScanChanged(bool value) async {
+  Future<void> onInAppNfcScanChanged(bool value) async {
+    if (value == false) {
+      viewModel.setInAppNfcScan(false);
+      return;
+    }
     final confirmChange = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(i18n.userAppSettingsInAppNfc),
-        content: Text(i18n.userAppSettingsInAppNfcContent),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: Text(i18n.dialogCancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: Text(i18n.dialogConfirm),
-          ),
-        ],
-      ),
+      builder: (context) {
+        return AlertDialog(
+          title: Text(i18n.userAppSettingsInAppNfc),
+          content: Text(i18n.userAppSettingsInAppNfcContent),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(i18n.dialogCancel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(i18n.dialogConfirm),
+            ),
+          ],
+        );
+      },
     );
-    if (confirmChange != true) return null;
-    viewModel
-      ..isEnableInAppNfcScan = value
-      ..setInAppNfcScan();
-    return value;
+    if (confirmChange != true) return;
+    viewModel.setInAppNfcScan(value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    init = viewModel.getAppSettings();
   }
 
   @override
@@ -233,7 +246,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
     return ChangeNotifierProvider.value(
       value: viewModel,
       builder: (context, child) => FutureBuilder(
-          future: viewModel.getAppSettings(),
+          future: init,
           builder: (context, snapshot) {
             return PageDialog.ios(
               title: i18n.userInAppSetting,

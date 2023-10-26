@@ -201,7 +201,7 @@ class _HeaderState extends State<_Header> {
             ),
           ),
         ),
-        buildDebugStatus(),
+        if (kDebugMode) buildDebugStatus(),
       ],
     );
   }

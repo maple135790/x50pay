@@ -8,10 +8,7 @@ class Prefs {
       Platform.environment.containsKey('FLUTTER_TEST');
 
   static FlutterSecureStorage get _secureStorage => const FlutterSecureStorage(
-        aOptions: AndroidOptions(
-          encryptedSharedPreferences: true,
-          preferencesKeyPrefix: 'x50pay_',
-        ),
+        aOptions: AndroidOptions(encryptedSharedPreferences: true),
       );
 
   static Future<String?> getString(PrefsToken token) async {

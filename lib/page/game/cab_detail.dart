@@ -41,14 +41,13 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
 
   void onCabSelect({
     required String caboid,
-    required int cabIndex,
     required Cabinet cabData,
   }) {
     showCupertinoDialog(
         context: context,
         builder: (context) => CabSelect.fromCabDetail(
               caboid: caboid,
-              cabIndex: cabIndex,
+              cabNum: cabData.num - 1,
               cabinetData: cabData,
             ));
   }
@@ -184,12 +183,12 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
       model.cabinets[1] = nwcabinet;
       model.cabinets[0] = nwcabinet1;
     }
-    if (revbool == true) cabs = cabs.reversed.toList();
+    if (revbool == true) cabs = List.from(cabs.reversed.toList());
     if (rrbool is bool) {
       var nwcabinet = model.cabinets[4];
       var nwcabinet1 = model.cabinets[5];
-      model.cabinets[4] = nwcabinet;
-      model.cabinets[5] = nwcabinet1;
+      model.cabinets[5] = nwcabinet;
+      model.cabinets[4] = nwcabinet1;
     }
     List<Widget> buildCabBlock({required String caboid}) {
       List<Widget> widgets = [];
@@ -547,7 +546,6 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                         onTap: () {
                           onCabSelect(
                             caboid: caboid,
-                            cabIndex: isGroup1 ? i : group1Length + i,
                             cabData: cab,
                           );
                         },

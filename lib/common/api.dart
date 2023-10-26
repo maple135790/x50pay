@@ -108,19 +108,6 @@ class Api {
       return body;
     }
 
-    void checkNewSession(Map<String, String> headers) async {
-      if (headers['set-cookie']?.isEmpty ?? true) return;
-      String newSession = '';
-      final cookies = headers['set-cookie']!.split(';');
-      for (var cookie in cookies) {
-        if (!cookie.contains('session=')) continue;
-        newSession = cookie.split('=').last;
-      }
-      if (newSession.isEmpty) return;
-
-      Prefs.secureWrite(SecurePrefsToken.session, newSession);
-    }
-
     if (verbose) log('request: $url', name: 'Api');
     if (withSession) {
       session = await Prefs.secureRead(SecurePrefsToken.session);
@@ -150,7 +137,7 @@ class Api {
             response.body
           ]);
         }
-        checkNewSession(response.headers);
+        _checkNewSession(response.headers);
         onResponseHeader?.call(response.headers);
         break;
 
@@ -172,7 +159,7 @@ class Api {
             response.body
           ]);
         }
-        checkNewSession(response.headers);
+        _checkNewSession(response.headers);
         onResponseHeader?.call(response.headers);
         break;
     }

@@ -45,7 +45,7 @@ class GlobalSingleton {
   bool isLogin = false;
 
   /// 最近遊玩的機台資料
-  ({Cabinet cabinet, String caboid, int cabIndex})? recentPlayedCabinetData;
+  ({Cabinet cabinet, String caboid, int cabNum})? recentPlayedCabinetData;
 
   /// App 版本，例如 `X50Pay app v1.0.0 + 1`
   String get appVersion => _appVersion;
@@ -86,10 +86,9 @@ class GlobalSingleton {
       final isLess30Sec = (current ~/ 1000) - _lastChkMe < 30;
 
       if (isLess30Sec && !force) return false;
-      final repo = Repository();
       _lastChkMe = DateTime.now().millisecondsSinceEpoch;
       if (!kDebugMode || isServiceOnline) {
-        userNotifier.value = await repo.getUser();
+        userNotifier.value = await Repository().getUser();
         // 未回傳UserModel
         if (userNotifier.value == null) return false;
         // 回傳UserModel, 驗證失敗或是伺服器錯誤

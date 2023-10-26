@@ -22,7 +22,7 @@ enum PaymentType {
 class CabSelect extends StatefulWidget {
   final String caboid;
   final Cabinet cabinetData;
-  final int cabIndex;
+  final int cabNum;
   final QRPayData qrPayData;
   final bool _isFromCabDetail;
   final bool _isFromQRPay;
@@ -33,7 +33,7 @@ class CabSelect extends StatefulWidget {
   const CabSelect({
     super.key,
     required this.caboid,
-    required this.cabIndex,
+    required this.cabNum,
     required this.cabinetData,
     this.onCreated,
     this.onDestroy,
@@ -44,7 +44,7 @@ class CabSelect extends StatefulWidget {
   const CabSelect.fromCabDetail({
     super.key,
     required this.caboid,
-    required this.cabIndex,
+    required this.cabNum,
     required this.cabinetData,
     this.onCreated,
     this.onDestroy,
@@ -60,7 +60,7 @@ class CabSelect extends StatefulWidget {
   })  : _isFromCabDetail = false,
         _isFromQRPay = true,
         caboid = '',
-        cabIndex = -1,
+        cabNum = -1,
         cabinetData = const Cabinet.empty();
 
   @override
@@ -74,7 +74,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
     onInsertSuccess: () {
       GlobalSingleton.instance.recentPlayedCabinetData = (
         cabinet: widget.cabinetData,
-        cabIndex: widget.cabIndex,
+        cabNum: widget.cabNum,
         caboid: widget.caboid
       );
     },
@@ -223,7 +223,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
       insertSuccess = await viewModel.doInsert(
         isUseRewardPoint: isUseRewardPoint,
         id: widget.caboid,
-        index: widget.cabIndex,
+        index: widget.cabNum,
         isTicket: paymentType == PaymentType.ticket,
         mode:
             paymentType != PaymentType.reloadCoin ? selectedMode!.first : 9999,
