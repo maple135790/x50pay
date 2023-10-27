@@ -20,13 +20,15 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja_JP';
 
-  static String m0(continuousDay) => " ログイン日数 :  ${continuousDay} 日";
+  static String m0(day) => " ログイン日数 :  ${day} 日";
 
   static String m1(waitCount) => "X50Pad 並び状況 : ${waitCount} 人待ち";
 
-  static String m2(gatchaPoints) => " 抽選券 :  ${gatchaPoints} 点";
+  static String m2(point) => " 抽選券 :  ${point} 点";
 
-  static String m3(gr2LimitTimes) => "還元ポイント 25P / ${gr2LimitTimes} ";
+  static String m3(limitTimes) => "還元ポイント 25P / ${limitTimes} ";
+
+  static String m4(pages) => "機能を有効にすると、以下のページにまとめた情報が表示されます。\n${pages}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -82,6 +84,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "officialNotify": MessageLookupByLibrary.simpleMessage("公式インフォメーション"),
         "serviceError": MessageLookupByLibrary.simpleMessage(
             "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。"),
+        "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30日"),
+        "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60日 (全て)"),
+        "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7日"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("所持しているチケット : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
         "userAppSettingsBiometrics":
@@ -111,6 +116,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("アプリ内の NFC タグ読み取り"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。"),
+        "userAppSettingsSummarizedRecord":
+            MessageLookupByLibrary.simpleMessage("まとめた支払い履歴を表示"),
+        "userAppSettingsSummarizedRecordContent": m4,
         "userAvatar": MessageLookupByLibrary.simpleMessage("アイコン変更"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("チャージ履歴"),
         "userEmail": MessageLookupByLibrary.simpleMessage("ユーザーメールアドレス変更"),

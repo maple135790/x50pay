@@ -12,7 +12,7 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
-import 'package:x50pay/language_view_model.dart';
+import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/r.g.dart';
 
 mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
@@ -167,7 +167,7 @@ class _HeaderState extends BaseStatefulState<_Header> {
                   flex: 1,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Consumer<LanguageViewModel>(
+                    child: Consumer<LanguageProvider>(
                       builder: (context, vm, child) => GestureDetector(
                         onTap: () {
                           onLanguagePressed(vm.currentLocale);
@@ -246,7 +246,7 @@ class _HeaderState extends BaseStatefulState<_Header> {
     if (changedLocale == null) return;
     if (!mounted) return;
     Future.delayed(const Duration(milliseconds: 100), () {
-      context.read<LanguageViewModel>().setUserPrefLocale(changedLocale);
+      context.read<LanguageProvider>().setUserPrefLocale(changedLocale);
     });
   }
 

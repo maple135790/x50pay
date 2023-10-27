@@ -1,37 +1,41 @@
 {
-  "@continuousDay": {
+  "@@locale": "zh_TW",
+  "@continuous": {
     "placeholders": {
-      "continuousDay": {
-        "example": "3",
+      "day": {
         "type": "String"
       }
     }
   },
-  "@gatchaPoints": {
+  "@gameWait": {
     "placeholders": {
-      "gatchaPoints": {
-        "example": "3",
+      "waitCount": {
+        "type": "int"
+      }
+    }
+  },
+  "@gatcha": {
+    "placeholders": {
+      "point": {
         "type": "String"
       }
     }
   },
   "@gr2Limit": {
     "placeholders": {
-      "gr2LimitTimes": {
-        "example": "3",
+      "limitTimes": {
         "type": "String"
       }
     }
   },
-  "@waitCount": {
+  "@userAppSettingsSummarizedRecordContent": {
     "placeholders": {
-      "gr2LimitTimes": {
-        "example": "3",
-        "type": "int"
+      "pages": {
+        "type": "String"
       }
     }
   },
-  "continuous": " 已簽到 : {continuousDay} 天",
+  "continuous": " 已簽到 : {day} 天",
   "dialogCancel": "取消",
   "dialogConfirm": "確定",
   "dialogNext": "下一步",
@@ -48,9 +52,9 @@
   "gameWait": "X50Pad 排隊狀況 : {waitCount} 人等待中",
   "gameWeekday": "平日",
   "gameWeekends": "假日",
-  "gatcha": " 抽獎券 : 再 {gatchaPoints} 點",
+  "gatcha": " 抽獎券 : 再 {point} 點",
   "gr2HeartBox": "養成點數商城",
-  "gr2Limit": " 每日回饋 {gr2LimitTimes} 次 每次 25 P ",
+  "gr2Limit": " 每日回饋 {limitTimes} 次 每次 25 P ",
   "gr2ResetDate": " 換季日: ",
   "heart": " 親密度 ",
   "infoNotify": "最新活動",
@@ -80,6 +84,9 @@
   "nextLv": "下一階 : ",
   "officialNotify": "官方資訊",
   "serviceError": "伺服器錯誤，請嘗試重新整理或回報X50",
+  "summaryPeriod30": "30天",
+  "summaryPeriod60": "60天 (全部)",
+  "summaryPeriod7": "7天",
   "ticketBalance": "券量 : ",
   "ticketUnit": "張",
   "userAppSettingsBiometrics": "生物辨識登入",
@@ -94,6 +101,8 @@
   "userAppSettingsFastPaymentEnableTitle": "開啟快速支付",
   "userAppSettingsInAppNfc": "App 內 NFC 標籤掃描",
   "userAppSettingsInAppNfcContent": "掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項",
+  "userAppSettingsSummarizedRecord": "顯示遊玩紀錄統計",
+  "userAppSettingsSummarizedRecordContent": "開啟功能後，會在以下頁面顯示統整過後的資訊。\n{pages}",
   "userAvatar": "修改顯示頭貼",
   "userBidLog": "店鋪儲值紀錄",
   "userEmail": "更改使用者信箱",

@@ -20,13 +20,15 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_TW';
 
-  static String m0(continuousDay) => " 已簽到 : ${continuousDay} 天";
+  static String m0(day) => " 已簽到 : ${day} 天";
 
   static String m1(waitCount) => "X50Pad 排隊狀況 : ${waitCount} 人等待中";
 
-  static String m2(gatchaPoints) => " 抽獎券 : 再 ${gatchaPoints} 點";
+  static String m2(point) => " 抽獎券 : 再 ${point} 點";
 
-  static String m3(gr2LimitTimes) => " 每日回饋 ${gr2LimitTimes} 次 每次 25 P ";
+  static String m3(limitTimes) => " 每日回饋 ${limitTimes} 次 每次 25 P ";
+
+  static String m4(pages) => "開啟功能後，會在以下頁面顯示統整過後的資訊。\n${pages}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -81,6 +83,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "officialNotify": MessageLookupByLibrary.simpleMessage("官方資訊"),
         "serviceError":
             MessageLookupByLibrary.simpleMessage("伺服器錯誤，請嘗試重新整理或回報X50"),
+        "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30天"),
+        "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60天 (全部)"),
+        "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7天"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("券量 : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage("張"),
         "userAppSettingsBiometrics":
@@ -110,6 +115,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("App 內 NFC 標籤掃描"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項"),
+        "userAppSettingsSummarizedRecord":
+            MessageLookupByLibrary.simpleMessage("顯示遊玩紀錄統計"),
+        "userAppSettingsSummarizedRecordContent": m4,
         "userAvatar": MessageLookupByLibrary.simpleMessage("修改顯示頭貼"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("店鋪儲值紀錄"),
         "userEmail": MessageLookupByLibrary.simpleMessage("更改使用者信箱"),

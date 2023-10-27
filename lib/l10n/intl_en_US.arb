@@ -1,37 +1,42 @@
 {
-  "@continuousDay": {
+  "@@locale": "en_US",
+  "@continuous": {
     "placeholders": {
-      "continuousDay": {
+      "day": {
         "example": "3",
         "type": "String"
       }
     }
   },
-  "@gatchaPoints": {
+  "@gameWait": {
     "placeholders": {
-      "gatchaPoints": {
-        "example": "3",
+      "waitCount": {
+        "type": "int"
+      }
+    }
+  },
+  "@gatcha": {
+    "placeholders": {
+      "point": {
         "type": "String"
       }
     }
   },
   "@gr2Limit": {
     "placeholders": {
-      "gr2LimitTimes": {
-        "example": "3",
+      "limitTimes": {
         "type": "String"
       }
     }
   },
-  "@waitCount": {
+  "@userAppSettingsSummarizedRecordContent": {
     "placeholders": {
-      "gr2LimitTimes": {
-        "example": "3",
-        "type": "int"
+      "pages": {
+        "type": "String"
       }
     }
   },
-  "continuous": " Continuous : {continuousDay} days",
+  "continuous": " Continuous : {day} days",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
   "dialogNext": "Next",
@@ -48,9 +53,9 @@
   "gameWait": "X50Pad queue status : {waitCount} person waiting",
   "gameWeekday": "Weekday",
   "gameWeekends": "Weekends",
-  "gatcha": " Gatcha : {gatchaPoints} points",
+  "gatcha": " Gatcha : {point} points",
   "gr2HeartBox": "Hearts Shop",
-  "gr2Limit": " Point back {gr2LimitTimes} times , 25P/t",
+  "gr2Limit": " Point back {limitTimes} times , 25P/t",
   "gr2ResetDate": " Reset Date : ",
   "heart": " Hearts",
   "infoNotify": "Informations",
@@ -80,6 +85,9 @@
   "nextLv": " Next Lv : ",
   "officialNotify": "Offical ADs",
   "serviceError": "Server error, Please retry again.",
+  "summaryPeriod30": "30 Days",
+  "summaryPeriod60": "60 Days (All)",
+  "summaryPeriod7": "7 Days",
   "ticketBalance": "Ticket Balance : ",
   "ticketUnit": " ",
   "userAppSettingsBiometrics": "Biometrics login",
@@ -94,6 +102,8 @@
   "userAppSettingsFastPaymentEnableTitle": "Enable Fast Payment",
   "userAppSettingsInAppNfc": "In-App NFC tag read",
   "userAppSettingsInAppNfcContent": "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option.",
+  "userAppSettingsSummarizedRecord": "Show summarized used point record",
+  "userAppSettingsSummarizedRecordContent": "After enabling the function, the summarized information will be displayed on the following page.\n{pages}",
   "userAvatar": "Change Gravator",
   "userBidLog": "Top-up history",
   "userEmail": "Change user E-mail",

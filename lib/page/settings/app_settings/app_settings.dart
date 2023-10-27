@@ -203,6 +203,39 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
     );
   }
 
+  void onSummarizedRecordChanged(bool value) async {
+    if (value == false) {
+      viewModel.setSummarizedRecord(false);
+      return;
+    }
+    final confirmChange = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(i18n.userAppSettingsSummarizedRecord),
+          content: Text(i18n.userAppSettingsSummarizedRecordContent(
+              "\n- ${i18n.userPlayLog}\n- ${i18n.userUTicLog}\n- ${i18n.userBidLog}")),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(i18n.dialogCancel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(i18n.dialogConfirm),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmChange != true) return;
+    viewModel.setSummarizedRecord(true);
+  }
+
   Future<void> onInAppNfcScanChanged(bool value) async {
     if (value == false) {
       viewModel.setInAppNfcScan(false);
@@ -259,48 +292,60 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
                   return Center(child: Text(serviceErrorText));
                 }
 
-                return CupertinoListSection.insetGrouped(
-                  children: [
-                    Consumer<AppSettingsViewModel>(
-                      builder: (context, vm, child) => FutureBuilder(
-                          future: vm.isBiomerticsAvailable(),
-                          initialData: false,
-                          builder: (context, snapshot) {
-                            return CupertinoListTile.notched(
-                              title: Text(i18n.userAppSettingsBiometrics),
-                              trailing: CupertinoSwitch(
-                                activeColor: CupertinoColors.activeGreen,
-                                value: vm.isEnabledBiometricsLogin,
-                                onChanged: snapshot.data!
-                                    ? onBiometricsLoginChanged
-                                    : null,
-                              ),
-                            );
-                          }),
-                    ),
-                    Consumer<AppSettingsViewModel>(
-                        builder: (context, vm, child) {
-                      return CupertinoListTile.notched(
-                        title: Text(i18n.userAppSettingsFastPayment),
-                        trailing: CupertinoSwitch(
-                          activeColor: CupertinoColors.activeGreen,
-                          value: vm.isEnabledFastQRPay,
-                          onChanged: onFastQRPayChanged,
+                return Consumer<AppSettingsViewModel>(
+                  builder: (context, vm, child) {
+                    return CupertinoListSection.insetGrouped(
+                      children: [
+                        FutureBuilder(
+                            future: vm.isBiomerticsAvailable(),
+                            initialData: false,
+                            builder: (context, snapshot) {
+                              return CupertinoListTile.notched(
+                                title: Text(i18n.userAppSettingsBiometrics),
+                                trailing: CupertinoSwitch(
+                                  activeColor: CupertinoColors.activeGreen,
+                                  value: vm.isEnabledBiometricsLogin,
+                                  onChanged: snapshot.data!
+                                      ? onBiometricsLoginChanged
+                                      : null,
+                                ),
+                              );
+                            }),
+                        CupertinoListTile.notched(
+                          title: Text(i18n.userAppSettingsFastPayment),
+                          trailing: CupertinoSwitch(
+                            activeColor: CupertinoColors.activeGreen,
+                            value: vm.isEnabledFastQRPay,
+                            onChanged: onFastQRPayChanged,
+                          ),
                         ),
-                      );
-                    }),
-                    Consumer<AppSettingsViewModel>(
-                        builder: (context, vm, child) {
-                      return CupertinoListTile.notched(
-                        title: Text(i18n.userAppSettingsInAppNfc),
-                        trailing: CupertinoSwitch(
-                          activeColor: CupertinoColors.activeGreen,
-                          value: vm.isEnableInAppNfcScan,
-                          onChanged: onInAppNfcScanChanged,
+                        CupertinoListTile.notched(
+                          title: Text(i18n.userAppSettingsSummarizedRecord),
+                          trailing: CupertinoSwitch(
+                            activeColor: CupertinoColors.activeGreen,
+                            value: vm.isEnableSummarizedRecord,
+                            onChanged: onSummarizedRecordChanged,
+                          ),
                         ),
-                      );
-                    }),
-                  ],
+                        CupertinoListTile.notched(
+                          title: Text(i18n.userAppSettingsInAppNfc),
+                          trailing: CupertinoSwitch(
+                            activeColor: CupertinoColors.activeGreen,
+                            value: vm.isEnableInAppNfcScan,
+                            onChanged: onInAppNfcScanChanged,
+                          ),
+                        ),
+                        CupertinoListTile.notched(
+                          title: Text(i18n.userAppSettingsInAppNfc),
+                          trailing: CupertinoSwitch(
+                            activeColor: CupertinoColors.activeGreen,
+                            value: vm.isEnableInAppNfcScan,
+                            onChanged: onInAppNfcScanChanged,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
             );

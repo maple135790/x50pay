@@ -63,6 +63,8 @@ class Prefs {
 enum PrefsToken {
   enabledFastQRPay('fastQRPay', defaultValue: false),
   enabledInAppNfcScan('inAppNfcScan', defaultValue: false),
+  enableSummarizedRecord('summarizedRecord', defaultValue: false),
+  favGameName('favGameName'),
   appLang('appLang', defaultValue: 'zh-tw'),
   storeId('store_id'),
   storeName('store_name');

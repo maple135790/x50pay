@@ -7,8 +7,8 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/language_view_model.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
+import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class GameStore extends StatefulWidget {
@@ -24,7 +24,7 @@ class _GameStoreState extends BaseStatefulState<GameStore> {
   late final viewModel = GameStoreViewModel(repository: repo);
   var key = GlobalKey();
 
-  Locale get currentLocale => context.read<LanguageViewModel>().currentLocale;
+  Locale get currentLocale => context.read<LanguageProvider>().currentLocale;
 
   Future<void> onRefresh() async {
     key = GlobalKey();

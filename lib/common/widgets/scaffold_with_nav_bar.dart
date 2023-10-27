@@ -13,7 +13,7 @@ import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
-import 'package:x50pay/language_view_model.dart';
+import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/r.g.dart';
 
 class ScaffoldWithNavBar extends StatefulWidget {
@@ -257,7 +257,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
     EasyLoading.show();
     Future.delayed(const Duration(milliseconds: 800), () {
       EasyLoading.dismiss();
-      context.read<LanguageViewModel>().setUserPrefLocale(changedLocale);
+      context.read<LanguageProvider>().setUserPrefLocale(changedLocale);
     });
   }
 
@@ -285,7 +285,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Consumer<LanguageViewModel>(
+                  child: Consumer<LanguageProvider>(
                     builder: (context, vm, child) => Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(

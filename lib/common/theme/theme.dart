@@ -17,6 +17,7 @@ class AppThemeData {
         radius: const Radius.circular(1.5),
         thumbColor: MaterialStateProperty.all(const Color(0x80FFFFFF)),
       ),
+      colorSchemeSeed: const Color(0xb3e3c81b),
       splashColor: Colors.white12,
       highlightColor: Colors.white12,
       brightness: Brightness.dark,
