@@ -67,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "monthlyPass": MessageLookupByLibrary.simpleMessage("月票 : "),
         "mpassInvalid": MessageLookupByLibrary.simpleMessage("未購買"),
         "mpassValid": MessageLookupByLibrary.simpleMessage("已購買"),
+        "msgNotify": MessageLookupByLibrary.simpleMessage("訊息告知"),
         "navCollab": MessageLookupByLibrary.simpleMessage("合作"),
         "navGame": MessageLookupByLibrary.simpleMessage("投幣"),
         "navGift": MessageLookupByLibrary.simpleMessage("禮物"),

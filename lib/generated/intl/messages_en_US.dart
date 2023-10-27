@@ -74,6 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "monthlyPass": MessageLookupByLibrary.simpleMessage("Monthly Pass : "),
         "mpassInvalid": MessageLookupByLibrary.simpleMessage("Buy it Now!"),
         "mpassValid": MessageLookupByLibrary.simpleMessage("Owned"),
+        "msgNotify": MessageLookupByLibrary.simpleMessage("Events"),
         "navCollab": MessageLookupByLibrary.simpleMessage("Collab"),
         "navGame": MessageLookupByLibrary.simpleMessage("Game"),
         "navGift": MessageLookupByLibrary.simpleMessage("Gift"),

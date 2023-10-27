@@ -410,6 +410,16 @@ class S {
     );
   }
 
+  /// `訊息告知`
+  String get msgNotify {
+    return Intl.message(
+      '訊息告知',
+      name: 'msgNotify',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `合作`
   String get navCollab {
     return Intl.message(
