@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -77,17 +78,22 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
             child: Stack(
               children: [
                 Positioned.fill(
-                    child: Image(
-                        image: R.image.login_banner_jpg(),
-                        fit: BoxFit.fitWidth)),
+                    child: CachedNetworkImage(
+                  imageUrl: "https://pay.x50.fun/static/logo.jpg",
+                  color: const Color.fromARGB(35, 0, 0, 0),
+                  colorBlendMode: BlendMode.srcATop,
+                  fit: BoxFit.fitWidth,
+                  alignment: const Alignment(0, -0.25),
+                )),
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                          colors: [Colors.transparent, Colors.black],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.2, 1]),
+                        begin: Alignment.bottomLeft,
+                        colors: [Colors.black, Colors.transparent],
+                        transform: GradientRotation(12),
+                        stops: [0, 0.6],
+                      ),
                     ),
                   ),
                 ),

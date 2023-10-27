@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +15,6 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
-import 'package:x50pay/r.g.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -113,56 +113,64 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
               builder: (context, constraints) {
                 return Column(
                   children: [
-                    SizedBox(
-                      height: constraints.maxWidth > 480 ? 300 : 220,
-                      width: constraints.maxWidth,
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                              child: Image(
-                                  image: R.image.login_banner_jpg(),
-                                  fit: BoxFit.fitWidth)),
-                          Positioned.fill(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                    colors: [Colors.transparent, Colors.black],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    stops: [0.2, 1]),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(3.75),
+                      child: SizedBox(
+                        height: constraints.maxWidth > 480 ? 300 : 220,
+                        width: constraints.maxWidth,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                                child: CachedNetworkImage(
+                              imageUrl: "https://pay.x50.fun/static/logo.jpg",
+                              color: const Color.fromARGB(35, 0, 0, 0),
+                              colorBlendMode: BlendMode.srcATop,
+                              fit: BoxFit.fitWidth,
+                              alignment: const Alignment(0, -0.25),
+                            )),
+                            Positioned.fill(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomLeft,
+                                    colors: [Colors.black, Colors.transparent],
+                                    transform: GradientRotation(12),
+                                    stops: [0, 0.6],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 15,
-                            left: 15,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(i18n.loginWelcome,
-                                      style: const TextStyle(
-                                          shadows: [
-                                            Shadow(
-                                                color: Colors.black,
-                                                blurRadius: 25)
-                                          ],
+                            Positioned(
+                              bottom: 6,
+                              left: 12,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(i18n.loginWelcome,
+                                        style: const TextStyle(
                                           fontSize: 17,
-                                          color: Color(0xe6ffffff))),
-                                  const SizedBox(height: 5),
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        const Icon(Icons.schedule,
-                                            size: 12, color: Colors.white),
-                                        Text(i18n.loginSub,
-                                            style: const TextStyle(
+                                          color: Colors.white,
+                                        )),
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const Icon(
+                                            Icons.schedule_rounded,
+                                            size: 13,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(i18n.loginSub,
+                                              style: const TextStyle(
                                                 fontSize: 13,
-                                                color: Color(0xe6ffffff)))
-                                      ]),
-                                ]),
-                          ),
-                        ],
+                                                color: Color(0xe6ffffff),
+                                              ))
+                                        ]),
+                                  ]),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Consumer<LoginViewModel>(
@@ -287,7 +295,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                   const SizedBox(width: 5),
                                   Material(
                                     type: MaterialType.transparency,
-                                    child: OutlinedButton(
+                                    child: TextButton(
                                         onPressed: () async {
                                           // await signUpDialog(context);
                                           launchUrlString(

@@ -221,6 +221,7 @@ class _HeaderState extends BaseStatefulState<_Header> {
             (index) => RadioListTile<Locale>(
               controlAffinity: ListTileControlAffinity.trailing,
               value: S.delegate.supportedLocales[index],
+              visualDensity: VisualDensity.compact,
               title: Row(
                 children: [
                   CountryFlag.fromCountryCode(

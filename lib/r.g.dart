@@ -113,9 +113,6 @@
   /// asset: assets/images/home/vts.png
       // ignore: non_constant_identifier_names
       final vts = const AssetResource("assets/images/home/vts.png", packageName: null);
-  /// asset: assets/images/login/login_banner.jpg
-      // ignore: non_constant_identifier_names
-      final login_banner_jpg = const AssetResource("assets/images/login/login_banner.jpg", packageName: null);
   /// asset: assets/images/scanPay/jkopay_logo.png
       // ignore: non_constant_identifier_names
       final jkopay_logo = const AssetResource("assets/images/scanPay/jkopay_logo.png", packageName: null);
@@ -204,11 +201,6 @@
       // ignore: non_constant_identifier_names
       AssetImage vts() {
         return AssetImage(asset.vts.keyName);
-      }
-  /// asset: assets/images/login/login_banner.jpg
-      // ignore: non_constant_identifier_names
-      AssetImage login_banner_jpg() {
-        return AssetImage(asset.login_banner_jpg.keyName);
       }
   /// asset: assets/images/scanPay/jkopay_logo.png
       // ignore: non_constant_identifier_names

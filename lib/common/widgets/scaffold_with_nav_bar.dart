@@ -227,6 +227,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
             children: List.generate(
               S.delegate.supportedLocales.length,
               (index) => RadioListTile<Locale>(
+                visualDensity: VisualDensity.compact,
                 controlAffinity: ListTileControlAffinity.trailing,
                 value: S.delegate.supportedLocales[index],
                 title: Row(
