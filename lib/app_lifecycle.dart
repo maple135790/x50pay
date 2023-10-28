@@ -43,7 +43,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
         log('not capable of this tag', name: 'handleNfc');
         return;
       } else {
-        _nfcTest(tag);
+        // _nfcTest(tag);
         return;
       }
     }
@@ -110,16 +110,20 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     }
     // 沒找到符合的record
     if (urlRecord == null) return;
-    log(DateTime.now().difference(lastScanTime).inMilliseconds.toString());
     if (DateTime.now().difference(lastScanTime).inMilliseconds < 1000) {
       return;
     }
     lastScanTime = DateTime.now();
     final url = String.fromCharCodes(urlRecord.payload);
+    log(url, name: 'handleNfcEvent');
 
     if (!await _isEnableInAppNfcScan()) {
-      log('inAppNfcScan is disabled', name: 'handleNfc');
-      launchUrlString('https://$url', mode: LaunchMode.externalApplication);
+      log('inAppNfcScan is disabled', name: 'handleNfcEvent');
+      final isUrl = Uri.tryParse(url) != null;
+      log("$url $isUrl", name: 'handleNfcEvent');
+      if (isUrl) {
+        launchUrlString('https://$url', mode: LaunchMode.externalApplication);
+      }
       return;
     }
 
@@ -137,20 +141,20 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     );
   }
 
-  Future<void> _nfcTest(NfcTag tag) async {
-    final ndef = Ndef(
-      tag: tag,
-      isWritable: true,
-      maxSize: 137,
-      cachedMessage: NdefMessage([
-        NdefRecord.createUri(
-          Uri.parse('https://pay.x50.fun/nfcPad/byMid/50Pad01'),
-        ),
-      ]),
-      additionalData: {},
-    );
-    _handleNfcEvent(ndef);
-  }
+  // Future<void> _nfcTest(NfcTag tag) async {
+  //   final ndef = Ndef(
+  //     tag: tag,
+  //     isWritable: true,
+  //     maxSize: 137,
+  //     cachedMessage: NdefMessage([
+  //       NdefRecord.createUri(
+  //         Uri.parse('https://pay.x50.fun/nfcPad/byMid/50Pad01'),
+  //       ),
+  //     ]),
+  //     additionalData: {},
+  //   );
+  //   _handleNfcEvent(ndef);
+  // }
 
   Future<bool> _checkNfcAvailable() {
     return NfcManager.instance.isAvailable();

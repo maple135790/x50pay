@@ -110,7 +110,7 @@ class _HomeLoadedState extends BaseStatefulState<_HomeLoaded> {
             const _TopInfo(),
             const _TicketInfo(),
             const _MariInfo(),
-            if (event != null) _EventInfo(events: event),
+            if (event != null && event.isNotEmpty) _EventInfo(events: event),
             if (recentQuests != null) divider(i18n.infoNotify),
             if (recentQuests != null) _RecentQuests(quests: recentQuests),
             divider(i18n.officialNotify),

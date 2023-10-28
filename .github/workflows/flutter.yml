@@ -57,5 +57,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          draft: true
           files: build/app/outputs/apk/release/app-release.apk
           body: ${{ github.event.head_commit.message }}
