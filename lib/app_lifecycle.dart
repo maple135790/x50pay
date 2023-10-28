@@ -17,7 +17,13 @@ import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
-  DateTime lastScanTime = DateTime.fromMillisecondsSinceEpoch(0);
+  var lastScanTime = DateTime.fromMillisecondsSinceEpoch(0);
+
+  /// X50 店內的 tag type
+  static const availablePollingTypes = {NfcPollingOption.iso14443};
+
+  /// 機台使用的 polling type，需要被排除
+  static const neverPollingTypes = {NfcPollingOption.iso18092};
 
   /// App 全局的生命週期管理
   AppLifeCycles();
@@ -127,7 +133,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   void _startNfcScan() async {
     NfcManager.instance.startSession(
       onDiscovered: _handleNfc,
-      pollingOptions: NfcPollingOption.values.toSet(),
+      pollingOptions: availablePollingTypes,
     );
   }
 
@@ -168,22 +174,14 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   @override
   void onPaused() async {
     bool isAvailable = await _checkNfcAvailable();
-    if (!isAvailable) {
-      log('NFC is not available', name: 'onPaused');
-      return;
-    }
+    if (!isAvailable) return;
 
     NfcManager.instance.stopSession();
   }
 
   @override
-  void onResumed() async {
-    bool isAvailable = await _checkNfcAvailable();
-    if (!isAvailable) {
-      log('NFC is not available', name: 'onResumed');
-      return;
-    }
-    _startNfcScan();
+  void onResumed() {
+    _tryActivateNfc();
   }
 
   Future<bool> _getNfcPreferTicketSetting(SettingRepository settingRepo) async {
