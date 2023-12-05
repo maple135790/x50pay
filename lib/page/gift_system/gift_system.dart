@@ -108,6 +108,7 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
                     child: TabBar(
                         indicatorSize: TabBarIndicatorSize.tab,
                         isScrollable: true,
+                        tabAlignment: TabAlignment.start,
                         tabs: tabs,
                         indicatorWeight: 3,
                         splashFactory: NoSplash.splashFactory,

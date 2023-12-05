@@ -62,6 +62,7 @@ class _CollabState extends BaseStatefulState<Collab> {
                         color: const Color.fromARGB(5, 255, 255, 255),
                         child: TabBar(
                             indicatorSize: TabBarIndicatorSize.tab,
+                            tabAlignment: TabAlignment.start,
                             isScrollable: true,
                             tabs: tabs,
                             indicatorWeight: 3,

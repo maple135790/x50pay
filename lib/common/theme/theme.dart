@@ -49,6 +49,7 @@ class AppThemeData {
       dialogBackgroundColor: const Color(0xff1e1e1e),
       dividerTheme: const DividerThemeData(color: Color(0xff3e3e3e)),
       tabBarTheme: const TabBarTheme(
+        tabAlignment: TabAlignment.start,
         labelColor: Colors.white,
         dividerColor: Colors.transparent,
       ),
