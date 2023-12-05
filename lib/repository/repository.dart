@@ -353,7 +353,7 @@ class Repository extends Api {
       body: {},
       method: HttpMethod.post,
       withSession: true,
-      contentType: ContentType.none,
+      contentType: ContentType.json,
     );
     log("request: ${response.request!.contentLength}", name: 'setAvatar');
     log("request: ${response.request!.headers}", name: 'setAvatar');

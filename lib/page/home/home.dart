@@ -449,37 +449,44 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                         flex: 1,
                         child: SizedBox(
                           width: double.maxFinite,
-                          child: FadeInImage(
-                            image: MemoryImage(entry.ava),
-                            placeholder: MemoryImage(kTransparentImage),
-                            fadeInDuration: const Duration(milliseconds: 150),
-                            fit: BoxFit.contain,
-                            alignment: Alignment.center,
-                            height: 270,
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: SizedBox(
-                          width: 26,
-                          height: 26,
-                          child: IconButton(
-                            iconSize: 16.5,
-                            onPressed: onDressRoomPressed,
-                            padding: EdgeInsets.zero,
-                            icon: SvgPicture(
-                              Svgs.shirtSolid,
-                              width: 16.25,
-                              height: 13,
-                              colorFilter: SvgsExtension.colorFilter(
-                                  const Color(0xffffc0cb)),
-                            ),
-                            color: const Color(0xffffc0cb),
-                            style: const ButtonStyle(
-                              side: MaterialStatePropertyAll(
-                                  BorderSide(color: Color(0xff3e3e3e))),
-                            ),
+                          child: Stack(
+                            fit: StackFit.passthrough,
+                            children: [
+                              FadeInImage(
+                                image: MemoryImage(entry.ava),
+                                placeholder: MemoryImage(kTransparentImage),
+                                fadeInDuration:
+                                    const Duration(milliseconds: 150),
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center,
+                                height: 270,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: IconButton(
+                                    iconSize: 16.5,
+                                    onPressed: onDressRoomPressed,
+                                    padding: EdgeInsets.zero,
+                                    icon: SvgPicture(
+                                      Svgs.shirtSolid,
+                                      width: 17.875,
+                                      height: 14.3,
+                                      colorFilter: SvgsExtension.colorFilter(
+                                          const Color(0xffffc0cb)),
+                                    ),
+                                    color: const Color(0xffffc0cb),
+                                    style: const ButtonStyle(
+                                      side: MaterialStatePropertyAll(
+                                          BorderSide(color: Color(0xff3e3e3e))),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
