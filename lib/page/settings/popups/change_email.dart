@@ -17,12 +17,11 @@ class ChangeEmailDialog extends StatefulWidget {
 }
 
 class _ChangeEmailDialogState extends BaseStatefulState<ChangeEmailDialog> {
-  late final SettingsViewModel viewModel;
   String? _errorText;
   bool isEnabled = false;
   final newEmail = TextEditingController();
 
-  void changeEmail() async {
+  void changeEmail(SettingsViewModel viewModel) async {
     final nav = GoRouter.of(context);
     if (await viewModel.changeEmail(email: newEmail.text)) {
       switch (viewModel.response!.code) {
@@ -64,10 +63,14 @@ class _ChangeEmailDialogState extends BaseStatefulState<ChangeEmailDialog> {
     }),
   );
 
-  Widget confirmButton() {
+  Widget confirmButton(SettingsViewModel vm) {
     return TextButton(
       style: buttonStyle,
-      onPressed: isEnabled ? changeEmail : null,
+      onPressed: isEnabled
+          ? () {
+              changeEmail(vm);
+            }
+          : null,
       child: isEnabled ? const Text('確認') : const Text('請輸入信箱'),
     );
   }
@@ -76,12 +79,12 @@ class _ChangeEmailDialogState extends BaseStatefulState<ChangeEmailDialog> {
   Widget build(BuildContext context) {
     return Consumer<SettingsViewModel>(
       builder: (context, vm, child) {
-        viewModel = vm;
-
         return PageDialog.ios(
           title: '更改信箱',
-          onConfirm: changeEmail,
-          customConfirmButton: confirmButton(),
+          onConfirm: () {
+            changeEmail(vm);
+          },
+          customConfirmButton: confirmButton(vm),
           content: (showButtonBar) {
             showButtonBar(true);
 
