@@ -29,7 +29,7 @@ class _TicketUsedRecordsState extends BaseStatefulState<TicketUsedRecords>
         DataCell(
           Text(
             cab,
-            textScaleFactor: cab.length > 20 ? 0.9 : 1,
+            textScaler: TextScaler.linear(cab.length > 20 ? 0.9 : 1),
           ),
         ),
         const DataCell(Text('1張')),

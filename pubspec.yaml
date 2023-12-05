@@ -3,7 +3,7 @@ description: X50Pay app
 publish_to: none
 version: 1.4.2+1
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.2.0 <4.0.0'
 dependencies:
   cached_network_image: ^3.2.3
   collection: ^1.16.0
@@ -15,29 +15,27 @@ dependencies:
     path: ./dependencies/flutter_easyloading-3.0.5/
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.2.7
-  flutter_svg: ^1.1.6
+  flutter_svg: ^2.0.9
   fluttertoast: ^8.2.2
-  go_router: ^10.1.2
+  go_router: ^12.1.1
   html: ^0.15.3
   http: ^1.1.0
   json_annotation: ^4.8.1
   location: ^5.0.3
-  matrix4_transform: ^2.0.1
+  matrix4_transform: ^3.0.0
   navigation_history_observer: ^1.1.0
   path_drawing: ^1.0.1
   permission_handler: ^11.0.0
   provider: ^6.0.3
   qr_code_scanner: ^1.0.0
   r_dart_library:
-    git:
-      url: 'https://github.com/YK-Unit/r_dart_library.git'
-      ref: 0.4.1
+    path: ./dependencies/r_dart_library/
   shared_preferences: ^2.2.1
   transparent_image: ^2.0.1
   url_launcher: ^6.1.14
   xml: ^6.3.0
   shared_preferences_debugger: ^0.1.0
-  package_info_plus: ^4.1.0
+  package_info_plus: ^5.0.1
   vibration: ^1.8.1
   flutter_localizations:
     sdk: flutter
@@ -47,6 +45,7 @@ dependencies:
   local_auth: ^2.1.7
   intl: ^0.18.1
   country_flags: ^2.1.1
+  vector_graphics: ^1.1.9+1
 dev_dependencies:
   change_app_package_name: ^1.1.0
   mocktail: ^1.0.0
@@ -54,28 +53,37 @@ dev_dependencies:
   json_serializable: ^6.7.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 flutter:
   uses-material-design: true
   assets:
   - assets/images/appIcon/appstore.png
   - assets/images/appIcon/playstore.png
   - assets/images/collab/shop-solid.svg
+  - assets/images/collab/shop-solid.svg.vec
   - assets/images/common/header_icon_rsz.png
   - assets/images/common/logo_150.jpg
   - assets/images/common/spinner-solid.svg
+  - assets/images/common/spinner-solid.svg.vec
   - assets/images/common/torii.svg
+  - assets/images/common/torii.svg.vec
   - assets/images/home/bolt-solid.svg
+  - assets/images/home/bolt-solid.svg.vec
   - assets/images/home/heart-regular.svg
+  - assets/images/home/heart-regular.svg.vec
   - assets/images/home/heart-solid.svg
+  - assets/images/home/heart-solid.svg.vec
   - assets/images/home/mari_level/ouo.png
   - assets/images/home/shirt-solid.svg
+  - assets/images/home/shirt-solid.svg.vec
   - assets/images/home/top.png
   - assets/images/home/vts.png
   - assets/images/quest/stamp.svg
+  - assets/images/quest/stamp.svg.vec
   - assets/images/scanPay/jkopay_logo.png
   - assets/images/scanPay/linepay_logo.png
   - assets/images/scanPay/p-solid.svg
+  - assets/images/scanPay/p-solid.svg.vec
   - assets/texts/license.txt
 flr:
   core_version: 3.2.0

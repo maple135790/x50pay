@@ -3,17 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/go_route_generator.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
+import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/language_view_model.dart';
-import 'package:x50pay/r.g.dart';
 
 /// 檢查是否有登入
 ///
@@ -45,9 +46,12 @@ void main() async {
 void configLoadingStyle() {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..infoWidget = Image(
-        image: R.svg.torii(width: 80, height: 80),
-        color: const Color(0xfffafafa))
+    ..infoWidget = const SvgPicture(
+      Svgs.torii,
+      width: 80,
+      height: 80,
+      colorFilter: ColorFilter.mode(Color(0xfffafafa), BlendMode.srcIn),
+    )
     ..maskType = EasyLoadingMaskType.black
     ..loadingStyle = EasyLoadingStyle.custom
     ..backgroundColor = const Color(0xff2a2a2a)
@@ -124,9 +128,12 @@ class _SpinnerState extends State<_Spinner> with TickerProviderStateMixin {
     return RepaintBoundary(
       child: RotationTransition(
         turns: _animation,
-        child: Image(
-            image: R.svg.spinner_solid(width: 42, height: 42),
-            color: Colors.white),
+        child: const SvgPicture(
+          Svgs.spinnerSolid,
+          width: 42,
+          height: 42,
+          colorFilter: ColorFilter.mode(Color(0xfffafafa), BlendMode.srcIn),
+        ),
       ),
     );
   }

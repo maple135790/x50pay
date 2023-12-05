@@ -83,18 +83,16 @@ class _Header extends StatefulWidget {
   final bool isDark;
   final bool isBackType;
   final String? title;
-  const _Header({Key? key, this.isDark = false})
+  const _Header({this.isDark = false})
       : _type = HeaderType.normal,
         isBackType = false,
-        title = null,
-        super(key: key);
+        title = null;
 
   const _Header.float(
-      {Key? key, required this.isBackType, this.title, this.isDark = false})
+      {required this.isBackType, this.title, this.isDark = false})
       : _type = HeaderType.float,
         assert(isBackType != false || title != null,
-            'floatHeaderText must be set'),
-        super(key: key);
+            'floatHeaderText must be set');
 
   @override
   State<_Header> createState() => _HeaderState();
@@ -297,7 +295,7 @@ class _HeaderState extends BaseStatefulState<_Header> {
 }
 
 class _Footer extends StatelessWidget {
-  const _Footer({Key? key}) : super(key: key);
+  const _Footer();
 
   @override
   Widget build(BuildContext context) {

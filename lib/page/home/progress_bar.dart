@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:path_drawing/path_drawing.dart';
 import 'package:xml/xml.dart';
@@ -31,7 +30,6 @@ class ProgressBar extends StatefulWidget {
 
 class _ProgressBarState extends State<ProgressBar>
     with TickerProviderStateMixin {
-  late Future<DrawableRoot> getDrawableRoot;
   late double barHeight = widget.height;
   late Path heartPath;
   late Future<void> loadImageInit;

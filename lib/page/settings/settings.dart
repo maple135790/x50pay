@@ -396,7 +396,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
 class _SettingsGroup extends StatelessWidget {
   final List<_SettingTile> children;
-  const _SettingsGroup({required this.children, Key? key}) : super(key: key);
+  const _SettingsGroup({required this.children});
 
   List<Widget> get _children {
     final list = <Widget>[];
@@ -450,12 +450,10 @@ class _SettingTile extends StatelessWidget {
 
   const _SettingTile(
       {required this.iconData,
-      Key? key,
       required this.title,
       required this.subtitle,
       required this.color,
-      required this.onTap})
-      : super(key: key);
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {

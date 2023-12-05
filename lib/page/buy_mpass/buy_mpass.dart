@@ -70,7 +70,7 @@ enum _MpassProgram {
 }
 
 class BuyMPass extends StatefulWidget {
-  const BuyMPass({Key? key}) : super(key: key);
+  const BuyMPass({super.key});
 
   @override
   State<BuyMPass> createState() => _BuyMPassState();

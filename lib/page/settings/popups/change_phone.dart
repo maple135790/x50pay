@@ -10,8 +10,7 @@ import 'package:x50pay/page/settings/settings_view_model.dart';
 class ChangePhoneDialog extends StatefulWidget {
   final SettingsViewModel viewModel;
   final Function(bool) callback;
-  const ChangePhoneDialog(this.viewModel, {Key? key, required this.callback})
-      : super(key: key);
+  const ChangePhoneDialog(this.viewModel, {super.key, required this.callback});
 
   @override
   State<ChangePhoneDialog> createState() => _ChangePhoneDialogState();
@@ -101,8 +100,7 @@ class ChangePhoneConfirmedDialog extends StatefulWidget {
   final BuildContext context;
   final SettingsViewModel viewModel;
 
-  const ChangePhoneConfirmedDialog(this.viewModel, this.context, {Key? key})
-      : super(key: key);
+  const ChangePhoneConfirmedDialog(this.viewModel, this.context, {super.key});
 
   @override
   State<ChangePhoneConfirmedDialog> createState() =>
@@ -307,8 +305,7 @@ class _DialogState extends State<_Dialog> {
 class _DialogBody extends StatelessWidget {
   final List<Widget> children;
   final String title;
-  const _DialogBody({Key? key, required this.children, required this.title})
-      : super(key: key);
+  const _DialogBody({required this.children, required this.title});
 
   @override
   Widget build(BuildContext context) {

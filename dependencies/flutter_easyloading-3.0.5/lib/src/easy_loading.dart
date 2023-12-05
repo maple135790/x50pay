@@ -24,14 +24,13 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-import './widgets/container.dart';
-import './widgets/progress.dart';
-import './widgets/indicator.dart';
-import './widgets/overlay_entry.dart';
-import './widgets/loading.dart';
-import './animations/animation.dart';
-import './theme.dart';
+import 'package:flutter_easyloading/src/animations/animation.dart';
+import 'package:flutter_easyloading/src/theme.dart';
+import 'package:flutter_easyloading/src/widgets/container.dart';
+import 'package:flutter_easyloading/src/widgets/indicator.dart';
+import 'package:flutter_easyloading/src/widgets/loading.dart';
+import 'package:flutter_easyloading/src/widgets/overlay_entry.dart';
+import 'package:flutter_easyloading/src/widgets/progress.dart';
 
 /// loading style
 enum EasyLoadingStyle {
@@ -252,7 +251,8 @@ class EasyLoading {
     EasyLoadingMaskType? maskType,
     bool? dismissOnTap,
   }) {
-    Widget w = indicator ?? (_instance.indicatorWidget ?? LoadingIndicator());
+    Widget w =
+        indicator ?? (_instance.indicatorWidget ?? const LoadingIndicator());
     return _instance._show(
       status: status,
       maskType: maskType,
@@ -287,13 +287,14 @@ class EasyLoading {
         key: _progressKey,
         value: value,
       );
-      _instance._show(
-        status: status,
-        maskType: maskType,
-        dismissOnTap: false,
-        w: w,
-      );
-      _instance._progressKey = _progressKey;
+      _instance
+        .._show(
+          status: status,
+          maskType: maskType,
+          dismissOnTap: false,
+          w: w,
+        )
+        .._progressKey = _progressKey;
     }
     // update progress
     _instance.progressKey?.currentState?.updateProgress(min(1.0, value));

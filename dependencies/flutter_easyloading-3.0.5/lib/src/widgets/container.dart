@@ -21,14 +21,12 @@
 // IN THE SOFTWARE.
 
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-
-import '../theme.dart';
-import '../easy_loading.dart';
+import 'package:flutter_easyloading/src/easy_loading.dart';
+import 'package:flutter_easyloading/src/theme.dart';
 
 //https://docs.flutter.dev/development/tools/sdk/release-notes/release-notes-3.0.0
 T? _ambiguate<T>(T? value) => value;

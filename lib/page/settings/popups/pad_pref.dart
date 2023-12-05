@@ -74,8 +74,7 @@ class _PadPrefLoaded extends StatefulWidget {
   final PadSettingsModel model;
   final void Function(_PadPrefModalValue value) getValues;
 
-  const _PadPrefLoaded({required this.model, required this.getValues, Key? key})
-      : super(key: key);
+  const _PadPrefLoaded({required this.model, required this.getValues});
 
   @override
   State<_PadPrefLoaded> createState() => __PadPrefLoadedState();
@@ -91,13 +90,10 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
 
     final newNickname =
         await Navigator.of(context).push<String?>(CupertinoPageRoute(
-      builder: (context) => WillPopScope(
-        onWillPop: () async {
-          log(nameController.text, name: 'changeNicknamePage');
-          Navigator.of(context)
-              .pop(nameController.text.isEmpty ? null : nameController.text);
+      builder: (context) => PopScope(
+        canPop: true,
+        onPopInvoked: (didPop) {
           nameController.dispose();
-          return true;
         },
         child: PageDialog.ios(
           title: '平板上顯示不同暱稱',

@@ -24,7 +24,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import 'package:flutter_easyloading/src/theme.dart';
 
 class EasyLoadingProgress extends StatefulWidget {
   final double value;

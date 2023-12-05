@@ -15,7 +15,7 @@ part 'box_tab.dart';
 
 class GradeBox extends StatefulWidget {
   /// 養成商場頁面
-  const GradeBox({Key? key}) : super(key: key);
+  const GradeBox({super.key});
 
   @override
   State<GradeBox> createState() => _GradeBoxState();

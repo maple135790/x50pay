@@ -20,11 +20,10 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 
-import '../easy_loading.dart';
-import './overlay_entry.dart';
+import 'package:flutter_easyloading/src/easy_loading.dart';
+import 'package:flutter_easyloading/src/widgets/overlay_entry.dart';
 
 class FlutterEasyLoading extends StatefulWidget {
   final Widget? child;

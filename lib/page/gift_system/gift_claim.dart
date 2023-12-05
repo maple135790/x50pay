@@ -92,7 +92,7 @@ class _GiftClaim extends StatelessWidget {
 class _ConfirmChangeDialog extends StatelessWidget {
   final String gid;
 
-  const _ConfirmChangeDialog({Key? key, required this.gid}) : super(key: key);
+  const _ConfirmChangeDialog({required this.gid});
 
   @override
   Widget build(BuildContext context) {

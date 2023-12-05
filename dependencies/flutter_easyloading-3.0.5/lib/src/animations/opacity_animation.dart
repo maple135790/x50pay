@@ -22,7 +22,7 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'animation.dart';
+import 'package:flutter_easyloading/src/animations/animation.dart';
 
 class OpacityAnimation extends EasyLoadingAnimation {
   OpacityAnimation();

@@ -120,7 +120,7 @@ class SettingsViewModel extends BaseViewModel {
 
       return httpResponse.statusCode == 200;
     } on Exception catch (e) {
-      log('', name: 'setPadSettings', error: e);
+      log('', name: 'setPadSettings error', error: e);
       await EasyLoading.dismiss();
       return false;
     }

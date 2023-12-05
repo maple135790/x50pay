@@ -21,10 +21,9 @@
 // IN THE SOFTWARE.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/src/easy_loading.dart';
+import 'package:flutter_easyloading/src/theme.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-import '../easy_loading.dart';
-import '../theme.dart';
 
 class LoadingIndicator extends StatefulWidget {
   const LoadingIndicator({

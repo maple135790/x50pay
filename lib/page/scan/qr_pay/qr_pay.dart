@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
@@ -157,9 +159,13 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Icon(Icons.wallet_rounded),
-                              Image(
-                                  image: R.svg.p_solid(width: 21, height: 15),
-                                  color: Colors.white),
+                              SvgPicture(
+                                Svgs.pSoild,
+                                width: 21,
+                                height: 15,
+                                colorFilter:
+                                    SvgsExtension.colorFilter(Colors.white),
+                              ),
                               const SizedBox(width: 7.5),
                               const Text('X50Pay'),
                             ],

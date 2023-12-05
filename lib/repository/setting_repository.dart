@@ -240,7 +240,7 @@ class SettingRepository extends Api {
       method: HttpMethod.post,
       withSession: true,
       body: {'shid': shid, 'shcolor': shcolor, 'shname': shname},
-      onSuccess: (json) {},
+      onSuccessString: (_) {},
     );
     return response;
   }

@@ -21,12 +21,11 @@
 // IN THE SOFTWARE.
 
 import 'package:flutter/material.dart';
-
-import './easy_loading.dart';
-import './animations/animation.dart';
-import './animations/opacity_animation.dart';
-import './animations/offset_animation.dart';
-import './animations/scale_animation.dart';
+import 'package:flutter_easyloading/src/animations/animation.dart';
+import 'package:flutter_easyloading/src/animations/offset_animation.dart';
+import 'package:flutter_easyloading/src/animations/opacity_animation.dart';
+import 'package:flutter_easyloading/src/animations/scale_animation.dart';
+import 'package:flutter_easyloading/src/easy_loading.dart';
 
 class EasyLoadingTheme {
   /// color of indicator
@@ -56,7 +55,7 @@ class EasyLoadingTheme {
   /// boxShadow color of loading
   static List<BoxShadow>? get boxShadow =>
       EasyLoading.instance.loadingStyle == EasyLoadingStyle.custom
-          ? EasyLoading.instance.boxShadow ?? [BoxShadow()]
+          ? EasyLoading.instance.boxShadow ?? [const BoxShadow()]
           : null;
 
   /// font color of status

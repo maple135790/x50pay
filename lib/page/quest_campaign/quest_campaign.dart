@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/quest_campaign/campaign.dart';
 import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
+import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/quest_campaign/quest_campaign_view_model.dart';
-import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class QuestCampaign extends StatefulWidget {
@@ -123,10 +124,12 @@ class _QuestCampaignState extends State<QuestCampaign> {
                                     )
                                   : SizedBox.fromSize(
                                       size: const Size.square(35),
-                                      child: Image(
-                                        image:
-                                            R.svg.stamp(width: 25, height: 25),
-                                        color: const Color(0xfffafafa),
+                                      child: SvgPicture(
+                                        Svgs.stamp,
+                                        width: 25,
+                                        height: 25,
+                                        colorFilter: SvgsExtension.colorFilter(
+                                            const Color(0xfffafafa)),
                                       ),
                                     ),
                             ),
@@ -450,13 +453,11 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
                               if (widget.extras != null)
                                 const SizedBox(height: 5),
                               if (widget.extras != null)
-                                ...widget.extras!
-                                    .map((e) => Text(
-                                          e,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(fontSize: 12),
-                                        ))
-                                    .toList(),
+                                ...widget.extras!.map((e) => Text(
+                                      e,
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(fontSize: 12),
+                                    )),
                             ],
                           ),
                         ),

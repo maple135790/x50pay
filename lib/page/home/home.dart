@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
+import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
@@ -325,12 +327,10 @@ class _EventInfo extends StatelessWidget {
               ),
             ),
             // 活動列表，不需要使用 Vertical Padding
-            ...events
-                .map((evt) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Text("> ${evt.name} : ${evt.describe}\n"),
-                    ))
-                .toList(),
+            ...events.map((evt) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Text("> ${evt.name} : ${evt.describe}\n"),
+                ))
           ],
         ),
       ),
@@ -468,8 +468,13 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                             iconSize: 16.5,
                             onPressed: onDressRoomPressed,
                             padding: EdgeInsets.zero,
-                            icon: ImageIcon(
-                                R.svg.shirt_solid(width: 16.25, height: 13)),
+                            icon: SvgPicture(
+                              Svgs.shirtSolid,
+                              width: 16.25,
+                              height: 13,
+                              colorFilter: SvgsExtension.colorFilter(
+                                  const Color(0xffffc0cb)),
+                            ),
                             color: const Color(0xffffc0cb),
                             style: const ButtonStyle(
                               side: MaterialStatePropertyAll(
@@ -486,12 +491,13 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Row(children: [
-                              Image(
-                                  width: 17,
-                                  height: 17,
-                                  image:
-                                      R.svg.heart_solid(width: 17, height: 17),
-                                  color: const Color(0xbfff1100)),
+                              SvgPicture(
+                                Svgs.heartSoild,
+                                width: 17,
+                                height: 17,
+                                colorFilter: SvgsExtension.colorFilter(
+                                    const Color(0xbfff1100)),
+                              ),
                               const SizedBox(width: 5),
                               Text(entry.gradeLv,
                                   style: const TextStyle(
@@ -521,12 +527,14 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(4.0),
-                                              child: Image(
-                                                  image: R.svg.bolt_solid(
-                                                      width: 9, height: 13),
-                                                  width: 9,
-                                                  height: 13,
-                                                  color: Colors.white),
+                                              child: SvgPicture(
+                                                Svgs.boltSoild,
+                                                width: 9,
+                                                height: 13,
+                                                colorFilter:
+                                                    SvgsExtension.colorFilter(
+                                                        Colors.white),
+                                              ),
                                             ),
                                             Text(entry.gr2BounsLimit),
                                             const SizedBox(width: 3)

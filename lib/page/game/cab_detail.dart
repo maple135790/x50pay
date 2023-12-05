@@ -27,7 +27,7 @@ extension on Color {
 
 class CabDetail extends StatefulWidget {
   final String machineId;
-  const CabDetail(this.machineId, {Key? key}) : super(key: key);
+  const CabDetail(this.machineId, {super.key});
 
   @override
   State<CabDetail> createState() => _CabDetailState();

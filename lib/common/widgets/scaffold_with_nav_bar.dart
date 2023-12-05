@@ -107,23 +107,45 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
     selectedIndex = 2;
   }
 
+  bool popDelegate() {
+    final popTime = DateTime.now();
+    if (popTime.difference(lastPopTime) < _kMinPopInterval) return false;
+    if (selectedIndex != 2) {
+      selectedIndex = 2;
+      lastPopTime = popTime;
+      context.goNamed(AppRoutes.home.routeName);
+      setState(() {});
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        final popTime = DateTime.now();
-        if (popTime.difference(lastPopTime) < _kMinPopInterval) return false;
+    return PopScope(
+      canPop: selectedIndex == 2,
+      onPopInvoked: (didPop) {
         if (selectedIndex != 2) {
-          selectedIndex = 2;
-          lastPopTime = popTime;
           context.goNamed(AppRoutes.home.routeName);
           setState(() {});
-          return false;
+        } else {
+          confirmPopup();
         }
-        final shouldPop = await confirmPopup();
-        lastPopTime = popTime;
-        return shouldPop!;
       },
+      // onWillPop: () async {
+      //   final popTime = DateTime.now();
+      //   if (popTime.difference(lastPopTime) < _kMinPopInterval) return false;
+      //   if (selectedIndex != 2) {
+      //     selectedIndex = 2;
+      //     lastPopTime = popTime;
+      //     context.goNamed(AppRoutes.home.routeName);
+      //     setState(() {});
+      //     return false;
+      //   }
+      //   final shouldPop = await confirmPopup();
+      //   lastPopTime = popTime;
+      //   return shouldPop!;
+      // },
       child: Scaffold(
         appBar: _LoadedAppBar(selectedIndex),
         body: widget.body,

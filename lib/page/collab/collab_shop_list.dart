@@ -49,17 +49,20 @@ class __CollabShopListState extends BaseStatefulState<_CollabShopList> {
                   children: [
                     Row(
                       children: [
-                        Image(
-                            image: R.svg.shop_solid(width: 19.25, height: 15),
-                            color: const Color(0xfffafafa)),
+                        const SvgPicture(
+                          Svgs.shopSolid,
+                          width: 19.25,
+                          height: 15,
+                          colorFilter: ColorFilter.mode(
+                              Color(0xfffafafa), BlendMode.srcIn),
+                        ),
                         const SizedBox(width: 10),
                         Text(data.sponserName,
                             style: const TextStyle(height: 2))
                       ],
                     ),
                     ...data.meta
-                        .map((e) => Text(e, style: const TextStyle(height: 2)))
-                        .toList(),
+                        .map((e) => Text(e, style: const TextStyle(height: 2))),
                   ],
                 ),
               ],

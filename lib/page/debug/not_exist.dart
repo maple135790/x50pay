@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NotExist extends StatelessWidget {
-  const NotExist({Key? key}) : super(key: key);
+  const NotExist({super.key});
 
   @override
   Widget build(BuildContext context) {

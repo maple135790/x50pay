@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/app_route.dart';  
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
@@ -10,7 +10,7 @@ import 'package:x50pay/page/sign_up/sign_up_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  const SignUp({super.key});
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -152,7 +152,7 @@ class _SignUpState extends BaseStatefulState<SignUp> with BasePage {
 
 class _EmailSent extends StatefulWidget {
   final String email;
-  const _EmailSent(this.email, {Key? key}) : super(key: key);
+  const _EmailSent(this.email);
 
   @override
   State<_EmailSent> createState() => __EmailSentState();

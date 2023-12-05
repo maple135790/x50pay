@@ -37,7 +37,7 @@ class _PlayRecordsState extends BaseStatefulState<PlayRecords>
         DataCell(
           Text(
             cab,
-            textScaleFactor: cab.length > 20 ? 0.9 : 1,
+            textScaler: TextScaler.linear(cab.length > 20 ? 0.9 : 1),
           ),
         ),
         DataCell(Text('${log.price.toInt()}+${log.freep.toInt()}P')),

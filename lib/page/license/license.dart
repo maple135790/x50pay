@@ -6,7 +6,7 @@ import 'package:x50pay/page/license/license_view_model.dart';
 import 'package:x50pay/r.g.dart';
 
 class License extends StatefulWidget {
-  const License({Key? key}) : super(key: key);
+  const License({super.key});
 
   @override
   State<License> createState() => _LicenseState();

@@ -20,7 +20,7 @@ import 'package:x50pay/repository/setting_repository.dart';
 /// 掃描QRCode 頁面
 class ScanQRCode extends StatefulWidget {
   final PermissionStatus permission;
-  const ScanQRCode(this.permission, {Key? key}) : super(key: key);
+  const ScanQRCode(this.permission, {super.key});
 
   @override
   State<ScanQRCode> createState() => _ScanQRCodeState();

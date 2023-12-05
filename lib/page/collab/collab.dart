@@ -1,18 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
-import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/repository.dart';
 
 part 'collab_shop_list.dart';
 
 class Collab extends StatefulWidget {
   /// 合作店家頁面
-  const Collab({Key? key}) : super(key: key);
+  const Collab({super.key});
 
   @override
   State<Collab> createState() => _CollabState();

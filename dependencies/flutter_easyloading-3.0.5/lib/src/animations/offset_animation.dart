@@ -22,7 +22,7 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'animation.dart';
+import 'package:flutter_easyloading/src/animations/animation.dart';
 
 class OffsetAnimation extends EasyLoadingAnimation {
   OffsetAnimation();
@@ -34,13 +34,13 @@ class OffsetAnimation extends EasyLoadingAnimation {
     AlignmentGeometry alignment,
   ) {
     Offset _begin = alignment == AlignmentDirectional.topCenter
-        ? Offset(0, -1)
+        ? const Offset(0, -1)
         : alignment == AlignmentDirectional.bottomCenter
-            ? Offset(0, 1)
-            : Offset(0, 0);
+            ? const Offset(0, 1)
+            : const Offset(0, 0);
     Animation<Offset> _animation = Tween(
       begin: _begin,
-      end: Offset(0, 0),
+      end: const Offset(0, 0),
     ).animate(controller);
     return Opacity(
       opacity: controller.value,
