@@ -418,6 +418,37 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
     context.goNamed(AppRoutes.dressRoom.routeName);
   }
 
+  Widget infoItem({
+    required IconData icon,
+    required String title,
+    required String value,
+  }) {
+    return DefaultTextStyle(
+      style: const TextStyle(fontSize: 11.5),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: const Color(0xfffafafa),
+            size: 15,
+          ),
+          const SizedBox(width: 5),
+          Expanded(
+            child: Wrap(
+              runAlignment: WrapAlignment.start,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Text(title),
+                Text(value, softWrap: false),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
@@ -443,7 +474,7 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                       border: Border.all(color: Themes.borderColor)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Flexible(
                         flex: 1,
@@ -497,58 +528,68 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(children: [
-                              SvgPicture(
-                                Svgs.heartSoild,
-                                width: 17,
-                                height: 17,
-                                colorFilter: SvgsExtension.colorFilter(
-                                    const Color(0xbfff1100)),
-                              ),
-                              const SizedBox(width: 5),
-                              Text(entry.gradeLv,
-                                  style: const TextStyle(
-                                      color: Color(0xff808080), fontSize: 30)),
-                              const SizedBox(width: 5),
-                              if (entry.gr2ShouldShowBouns)
-                                Tooltip(
-                                  preferBelow: false,
-                                  triggerMode: TooltipTriggerMode.tap,
-                                  decoration: BoxDecoration(
-                                      color: const Color(0x33fefefe),
-                                      borderRadius: BorderRadius.circular(8)),
-                                  message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
-                                  textStyle:
-                                      Theme.of(context).textTheme.labelMedium,
-                                  verticalOffset: 25,
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                          color: const Color(0xff2282e9),
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child: SvgPicture(
-                                                Svgs.boltSoild,
-                                                width: 9,
-                                                height: 13,
-                                                colorFilter:
-                                                    SvgsExtension.colorFilter(
-                                                        Colors.white),
+                            Wrap(
+                              runAlignment: WrapAlignment.start,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SvgPicture(
+                                      Svgs.heartSoild,
+                                      width: 17,
+                                      height: 17,
+                                      colorFilter: SvgsExtension.colorFilter(
+                                          const Color(0xbfff1100)),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(entry.gradeLv,
+                                        style: const TextStyle(
+                                            color: Color(0xff808080),
+                                            fontSize: 30)),
+                                    const SizedBox(width: 5),
+                                  ],
+                                ),
+                                if (entry.gr2ShouldShowBouns)
+                                  Tooltip(
+                                    preferBelow: false,
+                                    triggerMode: TooltipTriggerMode.tap,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0x33fefefe),
+                                        borderRadius: BorderRadius.circular(8)),
+                                    message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
+                                    textStyle:
+                                        Theme.of(context).textTheme.labelMedium,
+                                    verticalOffset: 25,
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            color: const Color(0xff2282e9),
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: SvgPicture(
+                                                  Svgs.boltSoild,
+                                                  width: 9,
+                                                  height: 13,
+                                                  colorFilter:
+                                                      SvgsExtension.colorFilter(
+                                                          Colors.white),
+                                                ),
                                               ),
-                                            ),
-                                            Text(entry.gr2BounsLimit),
-                                            const SizedBox(width: 3)
-                                          ])),
-                                )
-                            ]),
-                            const SizedBox(height: 5),
+                                              Text(entry.gr2BounsLimit),
+                                              const SizedBox(width: 3)
+                                            ])),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
                             ValueListenableBuilder(
                               valueListenable: progressBarNotifier,
                               builder: (context, isProgressBarCreated, child) =>
@@ -641,79 +682,45 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 2.5),
-                                    child: RichText(
-                                        text: TextSpan(
-                                            style:
-                                                const TextStyle(fontSize: 11.5),
-                                            children: [
-                                          const WidgetSpan(
-                                              child: Icon(
-                                                  Icons.favorite_rounded,
-                                                  color: Color(0xfffafafa),
-                                                  size: 15)),
-                                          const WidgetSpan(
-                                              child: SizedBox(width: 5)),
-                                          TextSpan(text: i18n.nextLv),
-                                          TextSpan(text: entry.gr2Next),
-                                          TextSpan(text: i18n.heart),
-                                        ])),
+                                    child: infoItem(
+                                      icon: Icons.favorite_rounded,
+                                      title: i18n.nextLv,
+                                      value: entry.gr2Next + i18n.heart,
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 2.5),
-                                    child: RichText(
-                                        text: TextSpan(
-                                            style:
-                                                const TextStyle(fontSize: 11.5),
-                                            children: [
-                                          const WidgetSpan(
-                                              child: Icon(
-                                                  Icons.calendar_today_rounded,
-                                                  color: Color(0xfffafafa),
-                                                  size: 15)),
-                                          const WidgetSpan(
-                                              child: SizedBox(width: 5)),
-                                          TextSpan(
-                                              text: i18n
-                                                  .continuous(entry.gr2Day)),
-                                        ])),
+                                    child: infoItem(
+                                      icon: Icons.calendar_today_rounded,
+                                      title:
+                                          "${i18n.continuous(entry.gr2Day).split(" : ").first} : ",
+                                      value: i18n
+                                          .continuous(entry.gr2Day)
+                                          .split(" : ")
+                                          .last,
+                                    ),
                                   ),
+                                  Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 2.5),
+                                      child: infoItem(
+                                        icon: Icons.how_to_vote_rounded,
+                                        title:
+                                            "${i18n.gatcha(entry.gr2VDay).split(" : ").first} : ",
+                                        value: i18n
+                                            .gatcha(entry.gr2VDay)
+                                            .split(" : ")
+                                            .last,
+                                      )),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 2.5),
-                                    child: RichText(
-                                        text: TextSpan(
-                                            style:
-                                                const TextStyle(fontSize: 11.5),
-                                            children: [
-                                          const WidgetSpan(
-                                              child: Icon(
-                                                  Icons.how_to_vote_rounded,
-                                                  color: Color(0xfffafafa),
-                                                  size: 15)),
-                                          const WidgetSpan(
-                                              child: SizedBox(width: 5)),
-                                          TextSpan(
-                                              text: i18n.gatcha(entry.gr2VDay))
-                                        ])),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 2.5),
-                                    child: RichText(
-                                        text: TextSpan(
-                                            style:
-                                                const TextStyle(fontSize: 11.5),
-                                            children: [
-                                          const WidgetSpan(
-                                              child: Icon(Icons.sync_rounded,
-                                                  color: Color(0xfffafafa),
-                                                  size: 15)),
-                                          const WidgetSpan(
-                                              child: SizedBox(width: 5)),
-                                          TextSpan(text: i18n.gr2ResetDate),
-                                          TextSpan(text: entry.gr2Date),
-                                        ])),
+                                    child: infoItem(
+                                      icon: Icons.sync_rounded,
+                                      title: i18n.gr2ResetDate,
+                                      value: entry.gr2Date,
+                                    ),
                                   ),
                                   Align(
                                     alignment: Alignment.center,
@@ -743,7 +750,10 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                                           return const Color(0x22f7f7f7);
                                         }),
                                       ),
-                                      child: Text(i18n.gr2HeartBox),
+                                      child: Text(
+                                        i18n.gr2HeartBox,
+                                        textScaler: TextScaler.linear(0.85),
+                                      ),
                                     ),
                                   )
                                 ],

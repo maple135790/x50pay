@@ -210,6 +210,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(GlobalSingleton.instance.appVersion,
+              textScaler: const TextScaler.linear(0.95),
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.white.withOpacity(0.5),
@@ -225,6 +226,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
               const SizedBox(width: 2.5),
               Text(
                 'Service $serviceStatus',
+                textScaler: const TextScaler.linear(0.95),
                 style: TextStyle(
                   color: statusColor.withOpacity(0.5),
                   fontSize: 12,
@@ -334,7 +336,10 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
                                     width: 15,
                                   ),
                                   const SizedBox(width: 5),
-                                  Text(vm.currentLocale.displayText),
+                                  Text(
+                                    vm.currentLocale.displayText,
+                                    textScaler: const TextScaler.linear(0.85),
+                                  ),
                                 ],
                               )),
                         ),
