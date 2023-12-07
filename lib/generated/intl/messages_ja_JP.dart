@@ -28,7 +28,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m3(limitTimes) => "還元ポイント 25P / ${limitTimes} ";
 
-  static String m4(pages) => "機能を有効にすると、以下のページにまとめた情報が表示されます。\n${pages}";
+  static String m4(summaryGameRecordTimes, summaryGameRecordTotal) =>
+      "${summaryGameRecordTimes}回、合計${summaryGameRecordTotal}";
+
+  static String m5(pages) => "機能を有効にすると、以下のページにまとめた情報が表示されます。\n${pages}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -84,9 +87,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "officialNotify": MessageLookupByLibrary.simpleMessage("公式インフォメーション"),
         "serviceError": MessageLookupByLibrary.simpleMessage(
             "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。"),
+        "summaryGame": MessageLookupByLibrary.simpleMessage("機種別"),
+        "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("機種詳細"),
+        "summaryGameFavGame": MessageLookupByLibrary.simpleMessage("メイン機種設定"),
+        "summaryGameFavGameSetup":
+            MessageLookupByLibrary.simpleMessage("メイン機種設定できます"),
+        "summaryGameRecordRecord": m4,
+        "summaryGameRecordTitle": MessageLookupByLibrary.simpleMessage("機種記録:"),
+        "summaryHide": MessageLookupByLibrary.simpleMessage("非表示"),
+        "summaryNoData": MessageLookupByLibrary.simpleMessage("データなし"),
+        "summaryPeriod": MessageLookupByLibrary.simpleMessage("通算期間"),
         "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30日"),
         "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60日 (全て)"),
         "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7日"),
+        "summaryPoint": MessageLookupByLibrary.simpleMessage("使用済ポイント"),
+        "summaryShow": MessageLookupByLibrary.simpleMessage("表示"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("所持しているチケット : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
         "userAppSettingsBiometrics":
@@ -118,7 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。"),
         "userAppSettingsSummarizedRecord":
             MessageLookupByLibrary.simpleMessage("まとめた支払い履歴を表示"),
-        "userAppSettingsSummarizedRecordContent": m4,
+        "userAppSettingsSummarizedRecordContent": m5,
         "userAvatar": MessageLookupByLibrary.simpleMessage("アイコン変更"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("チャージ履歴"),
         "userEmail": MessageLookupByLibrary.simpleMessage("ユーザーメールアドレス変更"),

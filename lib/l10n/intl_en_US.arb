@@ -29,6 +29,16 @@
       }
     }
   },
+  "@summaryGameRecordRecord": {
+    "placeholders": {
+      "summaryGameRecordTimes": {
+        "type": "int"
+      },
+      "summaryGameRecordTotal": {
+        "type": "String"
+      }
+    }
+  },
   "@userAppSettingsSummarizedRecordContent": {
     "placeholders": {
       "pages": {
@@ -85,9 +95,20 @@
   "nextLv": " Next Lv : ",
   "officialNotify": "Offical ADs",
   "serviceError": "Server error, Please retry again.",
+  "summaryGame": "Game",
+  "summaryGameDetailed": "Game",
+  "summaryGameFavGame": "Set up Favorite Game",
+  "summaryGameFavGameSetup": "Not Set Favorite Game Yet",
+  "summaryGameRecordRecord": "{summaryGameRecordTimes} times, total {summaryGameRecordTotal}",
+  "summaryGameRecordTitle": "Game Record:",
+  "summaryHide": "Hide",
+  "summaryNoData": "No Data",
+  "summaryPeriod": "Calculation Period",
   "summaryPeriod30": "30 Days",
   "summaryPeriod60": "60 Days (All)",
   "summaryPeriod7": "7 Days",
+  "summaryPoint": "Used Point",
+  "summaryShow": "Show",
   "ticketBalance": "Ticket Balance : ",
   "ticketUnit": " ",
   "userAppSettingsBiometrics": "Biometrics login",

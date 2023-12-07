@@ -63,20 +63,20 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
             return PopScope(
               canPop: true,
               child: AlertDialog(
-                title: const Text('詳細機種別'),
+                title: Text(i18n.summaryGameDetailed),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(selectedFavGame);
                     },
-                    child: const Text('關閉'),
+                    child: Text(i18n.dialogReturn),
                   )
                 ],
                 content: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('設定喜好機台'),
+                    Text(i18n.summaryGameFavGame),
                     Flexible(
                       child: Wrap(
                         children: gameSummaries
@@ -100,9 +100,9 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    const Text('機種別紀錄:'),
+                    Text(i18n.summaryGameRecordTitle),
                     ...gameSummaries.map((e) => Text(
-                        '${e.gameName} : ${e.playCount}次，共${e.totalPoints}'))
+                        '${e.gameName} : ${i18n.summaryGameRecordRecord(e.playCount, e.totalPoints)}'))
                   ],
                 ),
               ),
@@ -125,7 +125,9 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
       children: [
         Row(
           children: [
-            const Align(alignment: Alignment.topCenter, child: Text('計算期間  ')),
+            Align(
+                alignment: Alignment.topCenter,
+                child: Text('${i18n.summaryPeriod}  ')),
             Expanded(
               child: Wrap(
                 alignment: WrapAlignment.start,
@@ -170,8 +172,7 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                   var summary = gameSummaries.firstWhereOrNull(
                       (element) => element.gameName == vm.favGameName);
                   var favGameSummary =
-                      "${vm.favGameName}\n${summary?.playCount ?? 0}次，共${summary?.totalPoints ?? "0P"}";
-
+                      "${vm.favGameName}\n${i18n.summaryGameRecordRecord(summary?.playCount ?? 0, summary?.totalPoints ?? "0P")}";
                   return FutureBuilder(
                       future: vm.getFavGameName(),
                       builder: (context, snapshot) {
@@ -218,10 +219,12 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('使用點數'),
+                Text(i18n.summaryPoint),
                 const SizedBox(height: 8),
                 Text(
-                  isShowPointSummary ? periodPoints ?? '無資料' : "***",
+                  isShowPointSummary
+                      ? periodPoints ?? i18n.summaryNoData
+                      : "***",
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -231,8 +234,9 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                 const Spacer(),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child:
-                      isShowPointSummary ? const Text('隱藏') : const Text('顯示'),
+                  child: isShowPointSummary
+                      ? Text(i18n.summaryHide)
+                      : Text(i18n.summaryShow),
                 )
               ],
             ),
@@ -255,7 +259,7 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('機種別'),
+                  Text(i18n.summaryGame),
                   const SizedBox(height: 8),
                   Text(
                     isShowFavGameSummary ? favGameSummary : "***",
@@ -268,21 +272,21 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: isShowFavGameSummary
-                        ? const Text('隱藏')
-                        : const Text('顯示'),
+                        ? Text(i18n.summaryHide)
+                        : Text(i18n.summaryShow),
                   )
                 ],
               )
-            : const Center(
+            : Center(
                 child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('機種別'),
-                  SizedBox(height: 8),
+                  Text(i18n.summaryGame),
+                  const SizedBox(height: 8),
                   Text(
-                    "可設定喜好機台",
-                    style: TextStyle(fontSize: 12),
+                    i18n.summaryGameFavGameSetup,
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               )),

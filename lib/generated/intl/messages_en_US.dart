@@ -28,7 +28,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m3(limitTimes) => " Point back ${limitTimes} times , 25P/t";
 
-  static String m4(pages) =>
+  static String m4(summaryGameRecordTimes, summaryGameRecordTotal) =>
+      "${summaryGameRecordTimes} times, total ${summaryGameRecordTotal}";
+
+  static String m5(pages) =>
       "After enabling the function, the summarized information will be displayed on the following page.\n${pages}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -89,10 +92,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "officialNotify": MessageLookupByLibrary.simpleMessage("Offical ADs"),
         "serviceError": MessageLookupByLibrary.simpleMessage(
             "Server error, Please retry again."),
+        "summaryGame": MessageLookupByLibrary.simpleMessage("Game"),
+        "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("Game"),
+        "summaryGameFavGame":
+            MessageLookupByLibrary.simpleMessage("Set up Favorite Game"),
+        "summaryGameFavGameSetup":
+            MessageLookupByLibrary.simpleMessage("Not Set Favorite Game Yet"),
+        "summaryGameRecordRecord": m4,
+        "summaryGameRecordTitle":
+            MessageLookupByLibrary.simpleMessage("Game Record:"),
+        "summaryHide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "summaryNoData": MessageLookupByLibrary.simpleMessage("No Data"),
+        "summaryPeriod":
+            MessageLookupByLibrary.simpleMessage("Calculation Period"),
         "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30 Days"),
         "summaryPeriod60":
             MessageLookupByLibrary.simpleMessage("60 Days (All)"),
         "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7 Days"),
+        "summaryPoint": MessageLookupByLibrary.simpleMessage("Used Point"),
+        "summaryShow": MessageLookupByLibrary.simpleMessage("Show"),
         "ticketBalance":
             MessageLookupByLibrary.simpleMessage("Ticket Balance : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
@@ -126,7 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option."),
         "userAppSettingsSummarizedRecord": MessageLookupByLibrary.simpleMessage(
             "Show summarized used point record"),
-        "userAppSettingsSummarizedRecordContent": m4,
+        "userAppSettingsSummarizedRecordContent": m5,
         "userAvatar": MessageLookupByLibrary.simpleMessage("Change Gravator"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("Top-up history"),
         "userEmail": MessageLookupByLibrary.simpleMessage("Change user E-mail"),

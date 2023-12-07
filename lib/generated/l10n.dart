@@ -540,6 +540,97 @@ class S {
     );
   }
 
+  /// `機種別`
+  String get summaryGame {
+    return Intl.message(
+      '機種別',
+      name: 'summaryGame',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `詳細機種別`
+  String get summaryGameDetailed {
+    return Intl.message(
+      '詳細機種別',
+      name: 'summaryGameDetailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `設定喜好機台`
+  String get summaryGameFavGame {
+    return Intl.message(
+      '設定喜好機台',
+      name: 'summaryGameFavGame',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `可設定喜好機台`
+  String get summaryGameFavGameSetup {
+    return Intl.message(
+      '可設定喜好機台',
+      name: 'summaryGameFavGameSetup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{summaryGameRecordTimes}次，共{summaryGameRecordTotal}`
+  String summaryGameRecordRecord(
+      int summaryGameRecordTimes, String summaryGameRecordTotal) {
+    return Intl.message(
+      '$summaryGameRecordTimes次，共$summaryGameRecordTotal',
+      name: 'summaryGameRecordRecord',
+      desc: '',
+      args: [summaryGameRecordTimes, summaryGameRecordTotal],
+    );
+  }
+
+  /// `機種別紀錄:`
+  String get summaryGameRecordTitle {
+    return Intl.message(
+      '機種別紀錄:',
+      name: 'summaryGameRecordTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `隱藏`
+  String get summaryHide {
+    return Intl.message(
+      '隱藏',
+      name: 'summaryHide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `無資料`
+  String get summaryNoData {
+    return Intl.message(
+      '無資料',
+      name: 'summaryNoData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `計算期間`
+  String get summaryPeriod {
+    return Intl.message(
+      '計算期間',
+      name: 'summaryPeriod',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `30天`
   String get summaryPeriod30 {
     return Intl.message(
@@ -565,6 +656,26 @@ class S {
     return Intl.message(
       '7天',
       name: 'summaryPeriod7',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `使用點數`
+  String get summaryPoint {
+    return Intl.message(
+      '使用點數',
+      name: 'summaryPoint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `顯示`
+  String get summaryShow {
+    return Intl.message(
+      '顯示',
+      name: 'summaryShow',
       desc: '',
       args: [],
     );

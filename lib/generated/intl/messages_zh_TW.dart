@@ -28,7 +28,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m3(limitTimes) => " 每日回饋 ${limitTimes} 次 每次 25 P ";
 
-  static String m4(pages) => "開啟功能後，會在以下頁面顯示統整過後的資訊。\n${pages}";
+  static String m4(summaryGameRecordTimes, summaryGameRecordTotal) =>
+      "${summaryGameRecordTimes}次，共${summaryGameRecordTotal}";
+
+  static String m5(pages) => "開啟功能後，會在以下頁面顯示統整過後的資訊。\n${pages}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -83,9 +86,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "officialNotify": MessageLookupByLibrary.simpleMessage("官方資訊"),
         "serviceError":
             MessageLookupByLibrary.simpleMessage("伺服器錯誤，請嘗試重新整理或回報X50"),
+        "summaryGame": MessageLookupByLibrary.simpleMessage("機種別"),
+        "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("詳細機種別"),
+        "summaryGameFavGame": MessageLookupByLibrary.simpleMessage("設定喜好機台"),
+        "summaryGameFavGameSetup":
+            MessageLookupByLibrary.simpleMessage("可設定喜好機台"),
+        "summaryGameRecordRecord": m4,
+        "summaryGameRecordTitle":
+            MessageLookupByLibrary.simpleMessage("機種別紀錄:"),
+        "summaryHide": MessageLookupByLibrary.simpleMessage("隱藏"),
+        "summaryNoData": MessageLookupByLibrary.simpleMessage("無資料"),
+        "summaryPeriod": MessageLookupByLibrary.simpleMessage("計算期間"),
         "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30天"),
         "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60天 (全部)"),
         "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7天"),
+        "summaryPoint": MessageLookupByLibrary.simpleMessage("使用點數"),
+        "summaryShow": MessageLookupByLibrary.simpleMessage("顯示"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("券量 : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage("張"),
         "userAppSettingsBiometrics":
@@ -117,7 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項"),
         "userAppSettingsSummarizedRecord":
             MessageLookupByLibrary.simpleMessage("顯示遊玩紀錄統計"),
-        "userAppSettingsSummarizedRecordContent": m4,
+        "userAppSettingsSummarizedRecordContent": m5,
         "userAvatar": MessageLookupByLibrary.simpleMessage("修改顯示頭貼"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("店鋪儲值紀錄"),
         "userEmail": MessageLookupByLibrary.simpleMessage("更改使用者信箱"),
