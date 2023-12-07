@@ -52,41 +52,71 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
   Widget _body() {
     return Scrollbar(
       child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 12),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                decoration: BoxDecoration(
-                    color: scaffoldBackgroundColor,
-                    border: Border.all(color: Themes.borderColor, width: 1)),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                        foregroundImage: R.image.logo_150_jpg(), radius: 29),
-                    const SizedBox(width: 16.8),
-                    Text(pageTitle(), style: const TextStyle(fontSize: 18))
-                  ],
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+              decoration: BoxDecoration(
+                  color: scaffoldBackgroundColor,
+                  border: Border.all(color: Themes.borderColor, width: 1)),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                      foregroundImage: R.image.logo_150_jpg(), radius: 29),
+                  const SizedBox(width: 16.8),
+                  Expanded(
+                    child: Text(
+                      pageTitle(),
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  )
+                ],
               ),
-              const SizedBox(height: 12),
-              hasData(_model)
-                  ? DataTable(
-                      border: TableBorder.all(color: Themes.borderColor),
-                      dataRowMaxHeight: 60,
-                      horizontalMargin: 12,
-                      columnSpacing: 25,
-                      columns: buildColumns(),
-                      rows: buildRows(_model),
-                    )
-                  : const Center(child: Text('無資料')),
-              const SizedBox(height: 12),
-            ],
-          ),
+            ),
+            const SizedBox(height: 12),
+            hasData(_model)
+                ? ShaderMask(
+                    shaderCallback: (Rect rect) {
+                      return const LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Colors.white,
+                          Colors.white,
+                          Colors.transparent,
+                          Colors.transparent,
+                          Colors.white,
+                          Colors.white,
+                        ],
+                        stops: [0.0, 0.02, 0.1, 0.9, 0.98, 1.0],
+                      ).createShader(rect);
+                    },
+                    blendMode: BlendMode.dstOut,
+                    child: Center(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: DataTable(
+                            border: TableBorder.all(color: Themes.borderColor),
+                            dataRowMaxHeight: 60,
+                            horizontalMargin: 12,
+                            columnSpacing: 25,
+                            columns: buildColumns(),
+                            rows: buildRows(_model),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : const Center(child: Text('無資料')),
+            const SizedBox(height: 12),
+          ],
         ),
       ),
     );
