@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,8 @@ import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/r.g.dart';
 
+typedef MenuItem = ({IconData icon, String label, RouteProperty route});
+
 class ScaffoldWithNavBar extends StatefulWidget {
   final Widget body;
 
@@ -31,33 +35,33 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
   late int selectedIndex = _menus.indexWhere((element) =>
       GoRouterState.of(context).path?.contains(element.route.path) ?? false);
 
-  late final _menus = [
-    (
-      icon: Icons.sports_esports,
-      label: i18n.navGame,
-      route: AppRoutes.gameStore
-    ),
-    (
-      icon: Icons.settings,
-      label: i18n.navSettings,
-      route: AppRoutes.settings,
-    ),
-    (
-      icon: Icons.home_rounded,
-      label: 'Me',
-      route: AppRoutes.home,
-    ),
-    (
-      icon: Icons.redeem_rounded,
-      label: i18n.navGift,
-      route: AppRoutes.gift,
-    ),
-    (
-      icon: Icons.handshake_rounded,
-      label: i18n.navCollab,
-      route: AppRoutes.collab
-    ),
-  ];
+  List<MenuItem> get _menus => [
+        (
+          icon: Icons.sports_esports,
+          label: i18n.navGame,
+          route: AppRoutes.gameStore
+        ),
+        (
+          icon: Icons.settings,
+          label: i18n.navSettings,
+          route: AppRoutes.settings,
+        ),
+        (
+          icon: Icons.home_rounded,
+          label: 'Me',
+          route: AppRoutes.home,
+        ),
+        (
+          icon: Icons.redeem_rounded,
+          label: i18n.navGift,
+          route: AppRoutes.gift,
+        ),
+        (
+          icon: Icons.handshake_rounded,
+          label: i18n.navCollab,
+          route: AppRoutes.collab
+        ),
+      ];
 
   Future<bool?> confirmPopup() {
     return showDialog<bool>(
