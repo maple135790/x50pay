@@ -16,7 +16,6 @@ import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
-import 'package:x50pay/r.g.dart';
 
 /// 檢查是否有登入
 ///

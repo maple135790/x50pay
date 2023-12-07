@@ -66,27 +66,30 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
   }
 
   Widget _buildSummarizedRecord() {
-    return FutureBuilder(
-      future: _getIsEnableSummarizedRecord,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const SizedBox();
-        }
-        final isEnabled = snapshot.data!;
-        if (!isEnabled) return const SizedBox();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: FutureBuilder(
+        future: _getIsEnableSummarizedRecord,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const SizedBox();
+          }
+          final isEnabled = snapshot.data!;
+          if (!isEnabled) return const SizedBox();
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              summarizedInfo(_model),
-              const SizedBox(height: 8),
-              const Divider(),
-            ],
-          ),
-        );
-      },
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                summarizedInfo(_model),
+                const SizedBox(height: 8),
+                const Divider(),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

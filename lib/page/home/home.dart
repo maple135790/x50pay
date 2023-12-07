@@ -752,7 +752,8 @@ class _MariInfoState extends BaseStatefulState<_MariInfo> {
                                       ),
                                       child: Text(
                                         i18n.gr2HeartBox,
-                                        textScaler: TextScaler.linear(0.85),
+                                        textScaler:
+                                            const TextScaler.linear(0.85),
                                       ),
                                     ),
                                   )
