@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 extension MaterialStateSet on Set<MaterialState> {
   bool get isHovered => contains(MaterialState.hovered);
@@ -54,10 +55,11 @@ class AppThemeData {
         labelColor: Colors.white,
         dividerColor: Colors.transparent,
       ),
-      textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Color(0xfffafafa)),
-          bodyMedium: TextStyle(color: Color(0xfffafafa)),
-          titleMedium: TextStyle(color: Color(0xfffafafa))),
+      textTheme: GoogleFonts.notoSansJpTextTheme().copyWith(
+        bodyLarge: const TextStyle(color: Color(0xfffafafa)),
+        bodyMedium: const TextStyle(color: Color(0xfffafafa)),
+        titleMedium: const TextStyle(color: Color(0xfffafafa)),
+      ),
       scaffoldBackgroundColor: const Color(0xff1e1e1e),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: const Color(0xff1e1e1e),
