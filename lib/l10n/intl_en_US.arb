@@ -45,7 +45,7 @@
   "gameTicket": "Ticket",
   "gameUnlimit": "This game have reservation at this week",
   "gameUnlimitTitle": "Already reservation datetime",
-  "gameWait": "X50Pad queue status : {waitCount} person waiting",
+  "gameWait": "X50Pad queue status : {waitCount} waiting",
   "gameWeekday": "Weekday",
   "gameWeekends": "Weekends",
   "gatcha": " Gatcha : {gatchaPoints} points",

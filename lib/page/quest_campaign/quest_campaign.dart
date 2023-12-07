@@ -26,6 +26,8 @@ class _QuestCampaignState extends State<QuestCampaign> {
   late final viewModel = QuestCampaignViewModel(repository: repo);
   late Future<Campaign?> init;
 
+  double get stampSize => 35;
+
   Future<void> onAddStampRowTap() async {
     viewModel.onAddStampRowTap(campaignId: widget.campaignId);
     context.goNamed(
@@ -85,63 +87,102 @@ class _QuestCampaignState extends State<QuestCampaign> {
     return Column(
       children: [
         SizedBox(
-            height: ((35 + 16) * stampRowCounts).toDouble(),
-            child: Column(
-              children: List.generate(
-                growable: false,
-                stampRowCounts,
-                (rowIndex) => Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ...List.generate(6, (colIndex) {
-                          final hasStamp =
-                              (rowIndex * 6 + colIndex + 1 > stampCounts);
+          height: ((35 + 16) * stampRowCounts).toDouble(),
+          // child: Column(
+          //   children: List.generate(
+          //     growable: false,
+          //     stampRowCounts,
+          //     (rowIndex) => Column(
+          //       children: [
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //           children: [
+          //             ...List.generate(6, (colIndex) {
+          //               final hasStamp =
+          //                   (rowIndex * 6 + colIndex + 1 > stampCounts);
 
-                          return Container(
-                            margin: colIndex != 0
-                                ? const EdgeInsets.only(left: 7.5)
-                                : null,
-                            padding: colIndex != 0
-                                ? const EdgeInsets.only(left: 15)
-                                : null,
-                            decoration: colIndex != 0
-                                ? const BoxDecoration(
-                                    border: Border(
-                                        left: BorderSide(
-                                      color: Color(0xff5a5a5a),
-                                    )),
-                                  )
-                                : null,
-                            child: Center(
-                              child: hasStamp
-                                  ? Icon(
-                                      Icons.circle_rounded,
-                                      size: 35,
-                                      color: const Color(0xfffafafa)
-                                          .withOpacity(0.2),
-                                    )
-                                  : SizedBox.fromSize(
-                                      size: const Size.square(35),
-                                      child: SvgPicture(
-                                        Svgs.stamp,
-                                        width: 25,
-                                        height: 25,
-                                        colorFilter: SvgsExtension.colorFilter(
-                                            const Color(0xfffafafa)),
-                                      ),
-                                    ),
-                            ),
-                          );
-                        })
-                      ],
-                    ),
-                    divider(),
-                  ],
+          //               return Container(
+          //                 margin: colIndex != 0
+          //                     ? const EdgeInsets.only(left: 7.5)
+          //                     : null,
+          //                 padding: colIndex != 0
+          //                     ? const EdgeInsets.only(left: 15)
+          //                     : null,
+          //                 decoration: colIndex != 0
+          //                     ? const BoxDecoration(
+          //                         border: Border(
+          //                             left: BorderSide(
+          //                           color: Color(0xff5a5a5a),
+          //                         )),
+          //                       )
+          //                     : null,
+          //                 child: Center(
+          //                   child: hasStamp
+          //                       ? Icon(
+          //                           Icons.circle_rounded,
+          //                           size: 35,
+          //                           color: const Color(0xfffafafa)
+          //                               .withOpacity(0.2),
+          //                         )
+          //                       : SizedBox.fromSize(
+          //                           size: const Size.square(35),
+          //                           child: SvgPicture(
+          //                             Svgs.stamp,
+          //                             width: 25,
+          //                             height: 25,
+          //                             colorFilter: SvgsExtension.colorFilter(
+          //                                 const Color(0xfffafafa)),
+          //                           ),
+          //                         ),
+          //                 ),
+          //               );
+          //             })
+          //           ],
+          //         ),
+          //         divider(),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          child: GridView.builder(
+            itemCount: stampRowCounts * 6,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 6,
+            ),
+            itemBuilder: (context, index) {
+              return Container(
+                decoration: BoxDecoration(
+                  border: index + 6 < stampRowCounts * 6
+                      ? const Border(
+                          bottom: BorderSide(color: Color(0xff5a5a5a)),
+                        )
+                      : null,
                 ),
-              ),
-            )),
+                child: Container(
+                  margin: const EdgeInsets.all(7.5),
+                  child: Center(
+                    child: index + 1 > stampCounts
+                        ? Icon(
+                            Icons.circle_rounded,
+                            size: stampSize,
+                            color: const Color(0xfffafafa).withOpacity(0.2),
+                          )
+                        : SizedBox.fromSize(
+                            size: Size.square(stampSize),
+                            child: SvgPicture(
+                              Svgs.stamp,
+                              width: 25,
+                              height: 25,
+                              colorFilter: SvgsExtension.colorFilter(
+                                  const Color(0xfffafafa)),
+                            ),
+                          ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
         Row(
           children: [
             Expanded(
@@ -375,125 +416,138 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomSheet: BottomSheet(
-          onClosing: () {},
-          enableDrag: false,
-          dragHandleSize: Size.zero,
-          shape: const RoundedRectangleBorder(),
-          builder: (context) => AnimatedSlide(
-                offset: _offset,
-                curve: Curves.easeOutExpo,
-                duration: const Duration(milliseconds: 300),
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: const BoxDecoration(
-                    color: Color(0xff2a2a2a),
-                    border: Border(
-                      top: BorderSide(color: Color(0xff3e3e3e)),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          surfaceTintColor: Colors.transparent,
+        ),
+      ),
+      child: Scaffold(
+        bottomSheet: BottomSheet(
+            onClosing: () {},
+            enableDrag: false,
+            dragHandleSize: Size.zero,
+            shape: const RoundedRectangleBorder(),
+            builder: (context) => AnimatedSlide(
+                  offset: _offset,
+                  curve: Curves.easeOutExpo,
+                  duration: const Duration(milliseconds: 300),
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    decoration: const BoxDecoration(
+                      color: Color(0xff2a2a2a),
+                      border: Border(
+                        top: BorderSide(color: Color(0xff3e3e3e)),
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                              onPressed: null,
+                              style: buttonStyle,
+                              child: const Text('點數不足',
+                                  style: TextStyle(color: Color(0xff1e1e1e)))),
+                        ),
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: buttonStyle,
+                              child: const Text('思考一下',
+                                  style: TextStyle(color: Color(0xff1e1e1e)))),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                            onPressed: null,
-                            style: buttonStyle,
-                            child: const Text('點數不足',
-                                style: TextStyle(color: Color(0xff1e1e1e)))),
-                      ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            style: buttonStyle,
-                            child: const Text('思考一下',
-                                style: TextStyle(color: Color(0xff1e1e1e)))),
-                      ),
-                    ],
-                  ),
-                ),
-              )),
-      body: Scrollbar(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
-            child: Column(
-              children: [
-                Container(
-                  height: 157,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xff3e3e3e)),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Row(
-                    children: [
-                      CachedNetworkImage(
-                        imageUrl: widget.imgUrl ?? '',
-                        fit: BoxFit.fitHeight,
-                        errorWidget: (_, __, ___) =>
-                            const Icon(Icons.broken_image_rounded),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(25, 5, 5, 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                  child: Text(widget.name ?? '',
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500))),
-                              if (widget.extras != null)
-                                const SizedBox(height: 5),
-                              if (widget.extras != null)
-                                ...widget.extras!.map((e) => Text(
-                                      e,
-                                      textAlign: TextAlign.left,
-                                      style: const TextStyle(fontSize: 12),
-                                    )),
-                            ],
+                )),
+        body: Scrollbar(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
+              child: Column(
+                children: [
+                  Container(
+                    height: 157,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xff3e3e3e)),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: widget.imgUrl ?? '',
+                          fit: BoxFit.fitHeight,
+                          errorWidget: (_, __, ___) =>
+                              const Icon(Icons.broken_image_rounded),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(25, 5, 5, 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                    child: Text(widget.name ?? '',
+                                        style: const TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w500))),
+                                if (widget.extras != null)
+                                  const SizedBox(height: 5),
+                                if (widget.extras != null)
+                                  ...widget.extras!.map((e) => Text(
+                                        e,
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(fontSize: 12),
+                                      )),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 27.5),
-                const SizedBox(
-                  height: 24.5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Divider(
-                            height: 0, color: Color(0xff3e3e3e), thickness: 1),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text('近期被兌換時間',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500)),
-                      ),
-                      Expanded(
-                        child: Divider(
-                            height: 0, color: Color(0xff3e3e3e), thickness: 1),
-                      ),
-                    ],
+                  const SizedBox(height: 27.5),
+                  const SizedBox(
+                    height: 24.5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Divider(
+                              height: 0,
+                              color: Color(0xff3e3e3e),
+                              thickness: 1),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text('近期被兌換時間',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w500)),
+                        ),
+                        Expanded(
+                          child: Divider(
+                              height: 0,
+                              color: Color(0xff3e3e3e),
+                              thickness: 1),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                if (widget.redeemRecords != null)
-                  Column(
-                      children:
-                          widget.redeemRecords!.map((e) => Text(e)).toList()),
-              ],
+                  if (widget.redeemRecords != null)
+                    Column(
+                        children:
+                            widget.redeemRecords!.map((e) => Text(e)).toList()),
+                ],
+              ),
             ),
           ),
         ),

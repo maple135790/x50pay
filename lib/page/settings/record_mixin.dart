@@ -7,7 +7,7 @@ import 'package:x50pay/r.g.dart';
 
 /// 紀錄頁面的mixin
 ///
-/// 用於簡化紀錄頁面的代碼，提供一個標準的頁面結構。
+/// 用於簡化紀錄頁面，提供標準的頁面結構。
 mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
   /// 頁面標題
   String pageTitle();

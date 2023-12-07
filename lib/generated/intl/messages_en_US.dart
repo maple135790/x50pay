@@ -22,8 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(continuousDay) => " Continuous : ${continuousDay} days";
 
-  static String m1(waitCount) =>
-      "X50Pad queue status : ${waitCount} person waiting";
+  static String m1(waitCount) => "X50Pad queue status : ${waitCount} waiting";
 
   static String m2(gatchaPoints) => " Gatcha : ${gatchaPoints} points";
 

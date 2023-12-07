@@ -524,6 +524,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(cab.num.toString(),
                               style: const TextStyle(fontSize: 34)),
@@ -533,6 +534,8 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                                   color: Color(0xff808080), fontSize: 12)),
                           const SizedBox(height: 4),
                           Text('$nbusy/$isPaid',
+                              textAlign: TextAlign.center,
+                              textScaler: const TextScaler.linear(0.85),
                               style: const TextStyle(
                                   color: Color(0xfffafafa), fontSize: 12)),
                           const SizedBox(height: 5),

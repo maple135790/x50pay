@@ -48,18 +48,25 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Themes.pageDialogBackgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(28, 14, 28, 0),
-            child: Text(
-              widget.title,
-              style: Theme.of(context).textTheme.titleLarge,
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: _kMaxBottomSheetHeight),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(28, 14, 28, 14),
+              child: Text(
+                widget.title,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             ),
-          ),
-          Expanded(child: widget.content.call(showButtonBar)),
-        ],
+            Expanded(
+              child: SingleChildScrollView(
+                child: widget.content.call(showButtonBar),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomSheet: ValueListenableBuilder(
         valueListenable: offsetNotifier,
