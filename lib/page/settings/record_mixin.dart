@@ -1,14 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/r.g.dart';
+import 'package:x50pay/providers/app_settings_provider.dart';
 
 /// 紀錄頁面的mixin
 ///
 /// 用於簡化紀錄頁面，提供標準的頁面結構。
 mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
+  late final Future<M> _init;
+  late final Future<bool> _getIsEnableSummarizedRecord;
+
   /// 頁面標題
   String pageTitle();
 
@@ -24,7 +28,15 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
   /// 檢查紀錄是否含有資料，通常是檢查 `model.logs.isNotEmpty`
   bool hasData(M model);
 
-  late final M _model;
+  late M _model;
+
+  @override
+  void initState() {
+    super.initState();
+    _init = getRecord();
+    _getIsEnableSummarizedRecord =
+        context.read<AppSettingsProvider>().getIsEnableSummarizedRecord();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +44,7 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
       builder: (context, vm, child) {
         return Material(
           child: FutureBuilder(
-            future: getRecord(),
+            future: _init,
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const SizedBox();
@@ -43,6 +55,35 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
               _model = snapshot.data as M;
               return _body();
             },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget summarizedInfo(M model) {
+    return const SizedBox();
+  }
+
+  Widget _buildSummarizedRecord() {
+    return FutureBuilder(
+      future: _getIsEnableSummarizedRecord,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const SizedBox();
+        }
+        final isEnabled = snapshot.data!;
+        if (!isEnabled) return const SizedBox();
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              summarizedInfo(_model),
+              const SizedBox(height: 8),
+              const Divider(),
+            ],
           ),
         );
       },
@@ -64,8 +105,13 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
                   border: Border.all(color: Themes.borderColor, width: 1)),
               child: Row(
                 children: [
-                  CircleAvatar(
-                      foregroundImage: R.image.logo_150_jpg(), radius: 29),
+                  const CircleAvatar(
+                      foregroundImage: CachedNetworkImageProvider(
+                        "https://pay.x50.fun/static/logo.jpg",
+                        maxHeight: 150,
+                        maxWidth: 150,
+                      ),
+                      radius: 29),
                   const SizedBox(width: 16.8),
                   Expanded(
                     child: Text(
@@ -77,6 +123,7 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
               ),
             ),
             const SizedBox(height: 12),
+            hasData(_model) ? _buildSummarizedRecord() : const SizedBox(),
             hasData(_model)
                 ? ShaderMask(
                     shaderCallback: (Rect rect) {

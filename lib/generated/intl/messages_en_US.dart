@@ -20,14 +20,16 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en_US';
 
-  static String m0(continuousDay) => " Continuous : ${continuousDay} days";
+  static String m0(day) => " Continuous : ${day} days";
 
   static String m1(waitCount) => "X50Pad queue status : ${waitCount} waiting";
 
-  static String m2(gatchaPoints) => " Gatcha : ${gatchaPoints} points";
+  static String m2(point) => " Gatcha : ${point} points";
 
-  static String m3(gr2LimitTimes) =>
-      " Point back ${gr2LimitTimes} times , 25P/t";
+  static String m3(limitTimes) => " Point back ${limitTimes} times , 25P/t";
+
+  static String m4(pages) =>
+      "After enabling the function, the summarized information will be displayed on the following page.\n${pages}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -87,6 +89,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "officialNotify": MessageLookupByLibrary.simpleMessage("Offical ADs"),
         "serviceError": MessageLookupByLibrary.simpleMessage(
             "Server error, Please retry again."),
+        "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30 Days"),
+        "summaryPeriod60":
+            MessageLookupByLibrary.simpleMessage("60 Days (All)"),
+        "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7 Days"),
         "ticketBalance":
             MessageLookupByLibrary.simpleMessage("Ticket Balance : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
@@ -118,6 +124,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("In-App NFC tag read"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option."),
+        "userAppSettingsSummarizedRecord": MessageLookupByLibrary.simpleMessage(
+            "Show summarized used point record"),
+        "userAppSettingsSummarizedRecordContent": m4,
         "userAvatar": MessageLookupByLibrary.simpleMessage("Change Gravator"),
         "userBidLog": MessageLookupByLibrary.simpleMessage("Top-up history"),
         "userEmail": MessageLookupByLibrary.simpleMessage("Change user E-mail"),

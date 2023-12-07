@@ -1,7 +1,10 @@
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:x50pay/common/models/common.dart';
 
 part 'play.g.dart';
+
+typedef GameSummary = ({String gameName, int playCount, String totalPoints});
 
 @JsonSerializable()
 class PlayRecordModel {
@@ -16,6 +19,60 @@ class PlayRecordModel {
   factory PlayRecordModel.fromJson(Map<String, dynamic> json) =>
       _$PlayRecordModelFromJson(json);
   Map<String, dynamic> toJson() => _$PlayRecordModelToJson(this);
+
+  /// 取得近 [period] 天的點數
+  ///
+  /// 回傳格式為 `總點數+總免費點數P`
+  String? getPeriodPoints(int period) {
+    final valueFormat = NumberFormat("#,###");
+    final Iterable<PlayLog> filteredLogs = logs.where((element) =>
+        DateTime.fromMillisecondsSinceEpoch(element.initTime.date)
+            .isAfter(DateTime.now().subtract(Duration(days: period))));
+    if (filteredLogs.isEmpty) return null;
+    var totalPoint = 0;
+    var totalfreep = 0;
+    for (var log in filteredLogs) {
+      totalPoint += log.price.toInt();
+      totalfreep += log.freep.toInt();
+    }
+    return '${valueFormat.format(totalPoint)}+${valueFormat.format(totalfreep)}P';
+  }
+
+  List<GameSummary> getGameSummaries(int period) {
+    Map<String, ({int playCount, int point, int freep})> map = {};
+
+    final Iterable<PlayLog> filteredLogs = logs.where((element) =>
+        DateTime.fromMillisecondsSinceEpoch(element.initTime.date)
+            .isAfter(DateTime.now().subtract(Duration(days: period))));
+    if (filteredLogs.isEmpty) return [];
+
+    for (var log in filteredLogs) {
+      if (!map.containsKey(log.mid)) {
+        map[log.mid] = (
+          playCount: 1,
+          point: log.price.toInt(),
+          freep: log.freep.toInt(),
+        );
+      } else {
+        map[log.mid] = (
+          playCount: map[log.mid]!.playCount + 1,
+          point: map[log.mid]!.point + log.price.toInt(),
+          freep: map[log.mid]!.freep + log.freep.toInt()
+        );
+      }
+    }
+    List<GameSummary> summaries = [];
+    final valueFormat = NumberFormat("#,###");
+    for (var record in map.entries) {
+      summaries.add((
+        gameName: record.key,
+        playCount: record.value.playCount,
+        totalPoints:
+            "${valueFormat.format(record.value.point)}+${valueFormat.format(record.value.freep)}P",
+      ));
+    }
+    return summaries;
+  }
 }
 
 @JsonSerializable()

@@ -50,13 +50,13 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// ` 已簽到 : {continuousDay} 天`
-  String continuous(Object continuousDay) {
+  /// ` 已簽到 : {day} 天`
+  String continuous(String day) {
     return Intl.message(
-      ' 已簽到 : $continuousDay 天',
+      ' 已簽到 : $day 天',
       name: 'continuous',
       desc: '',
-      args: [continuousDay],
+      args: [day],
     );
   }
 
@@ -191,7 +191,7 @@ class S {
   }
 
   /// `X50Pad 排隊狀況 : {waitCount} 人等待中`
-  String gameWait(Object waitCount) {
+  String gameWait(int waitCount) {
     return Intl.message(
       'X50Pad 排隊狀況 : $waitCount 人等待中',
       name: 'gameWait',
@@ -220,13 +220,13 @@ class S {
     );
   }
 
-  /// ` 抽獎券 : 再 {gatchaPoints} 點`
-  String gatcha(Object gatchaPoints) {
+  /// ` 抽獎券 : 再 {point} 點`
+  String gatcha(String point) {
     return Intl.message(
-      ' 抽獎券 : 再 $gatchaPoints 點',
+      ' 抽獎券 : 再 $point 點',
       name: 'gatcha',
       desc: '',
-      args: [gatchaPoints],
+      args: [point],
     );
   }
 
@@ -240,13 +240,13 @@ class S {
     );
   }
 
-  /// ` 每日回饋 {gr2LimitTimes} 次 每次 25 P `
-  String gr2Limit(String gr2LimitTimes) {
+  /// ` 每日回饋 {limitTimes} 次 每次 25 P `
+  String gr2Limit(String limitTimes) {
     return Intl.message(
-      ' 每日回饋 $gr2LimitTimes 次 每次 25 P ',
+      ' 每日回饋 $limitTimes 次 每次 25 P ',
       name: 'gr2Limit',
       desc: '',
-      args: [gr2LimitTimes],
+      args: [limitTimes],
     );
   }
 
@@ -540,6 +540,36 @@ class S {
     );
   }
 
+  /// `30天`
+  String get summaryPeriod30 {
+    return Intl.message(
+      '30天',
+      name: 'summaryPeriod30',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `60天 (全部)`
+  String get summaryPeriod60 {
+    return Intl.message(
+      '60天 (全部)',
+      name: 'summaryPeriod60',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `7天`
+  String get summaryPeriod7 {
+    return Intl.message(
+      '7天',
+      name: 'summaryPeriod7',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `券量 : `
   String get ticketBalance {
     return Intl.message(
@@ -677,6 +707,26 @@ class S {
       name: 'userAppSettingsInAppNfcContent',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `顯示遊玩紀錄統計`
+  String get userAppSettingsSummarizedRecord {
+    return Intl.message(
+      '顯示遊玩紀錄統計',
+      name: 'userAppSettingsSummarizedRecord',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `開啟功能後，會在以下頁面顯示統整過後的資訊。\n{pages}`
+  String userAppSettingsSummarizedRecordContent(String pages) {
+    return Intl.message(
+      '開啟功能後，會在以下頁面顯示統整過後的資訊。\n$pages',
+      name: 'userAppSettingsSummarizedRecordContent',
+      desc: '',
+      args: [pages],
     );
   }
 

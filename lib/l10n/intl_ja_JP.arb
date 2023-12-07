@@ -1,37 +1,42 @@
 {
-  "@continuousDay": {
+  "@@locale": "ja_JP",
+  "@continuous": {
     "placeholders": {
-      "continuousDay": {
+      "day": {
         "example": "3",
         "type": "String"
       }
     }
   },
-  "@gatchaPoints": {
+  "@gameWait": {
     "placeholders": {
-      "gatchaPoints": {
-        "example": "3",
+      "waitCount": {
+        "type": "int"
+      }
+    }
+  },
+  "@gatcha": {
+    "placeholders": {
+      "point": {
         "type": "String"
       }
     }
   },
   "@gr2Limit": {
     "placeholders": {
-      "gr2LimitTimes": {
-        "example": "3",
+      "limitTimes": {
         "type": "String"
       }
     }
   },
-  "@waitCount": {
+  "@userAppSettingsSummarizedRecordContent": {
     "placeholders": {
-      "gr2LimitTimes": {
-        "example": "3",
-        "type": "int"
+      "pages": {
+        "type": "String"
       }
     }
   },
-  "continuous": " ログイン日数 :  {continuousDay} 日",
+  "continuous": " ログイン日数 :  {day} 日",
   "dialogCancel": "キャンセル",
   "dialogConfirm": "OK",
   "dialogNext": "次へ",
@@ -48,9 +53,9 @@
   "gameWait": "X50Pad 並び状況 : {waitCount} 人待ち",
   "gameWeekday": "平日",
   "gameWeekends": "休日",
-  "gatcha": " 抽選券 :  {gatchaPoints} 点",
+  "gatcha": " 抽選券 :  {point} 点",
   "gr2HeartBox": "絆ポイントショップ",
-  "gr2Limit": "還元ポイント 25P / {gr2LimitTimes} ",
+  "gr2Limit": "還元ポイント 25P / {limitTimes} ",
   "gr2ResetDate": " シーズン変わる日 : ",
   "heart": " 絆ランク",
   "infoNotify": "最新イベント",
@@ -80,6 +85,9 @@
   "nextLv": "次のランク : ",
   "officialNotify": "公式インフォメーション",
   "serviceError": "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。",
+  "summaryPeriod30": "30日",
+  "summaryPeriod60": "60日 (全て)",
+  "summaryPeriod7": "7日",
   "ticketBalance": "所持しているチケット : ",
   "ticketUnit": " ",
   "userAppSettingsBiometrics": "生体認証ログイン",
@@ -94,6 +102,8 @@
   "userAppSettingsFastPaymentEnableTitle": "高速化決済を有効化",
   "userAppSettingsInAppNfc": "アプリ内の NFC タグ読み取り",
   "userAppSettingsInAppNfcContent": "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。",
+  "userAppSettingsSummarizedRecord": "まとめた支払い履歴を表示",
+  "userAppSettingsSummarizedRecordContent": "機能を有効にすると、以下のページにまとめた情報が表示されます。\n{pages}",
   "userAvatar": "アイコン変更",
   "userBidLog": "チャージ履歴",
   "userEmail": "ユーザーメールアドレス変更",

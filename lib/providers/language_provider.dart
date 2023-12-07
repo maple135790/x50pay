@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
 
-class LanguageViewModel extends ChangeNotifier {
+class LanguageProvider extends ChangeNotifier {
   /// 語系相關的 ViewModel
-  LanguageViewModel();
+  LanguageProvider();
 
   /// 預設語系
   static const _defaultAppLocale =

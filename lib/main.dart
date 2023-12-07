@@ -14,7 +14,9 @@ import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
-import 'package:x50pay/language_view_model.dart';
+import 'package:x50pay/providers/app_settings_provider.dart';
+import 'package:x50pay/providers/language_provider.dart';
+import 'package:x50pay/r.g.dart';
 
 /// 檢查是否有登入
 ///
@@ -26,18 +28,18 @@ Future<bool> _checkLogin() async {
   return await GlobalSingleton.instance.checkUser();
 }
 
-final languageViewModel = LanguageViewModel();
+final languageProvider = LanguageProvider();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configLoadingStyle();
 
-  final appLocale = await languageViewModel.getUserPrefLocale();
+  final appLocale = await languageProvider.getUserPrefLocale();
   final packageInfo = await PackageInfo.fromPlatform();
   GlobalSingleton.instance.isLogined = await _checkLogin();
   GlobalSingleton.instance.setAppVersion =
       "${packageInfo.version}+${packageInfo.buildNumber}";
-  languageViewModel.currentLocale = appLocale;
+  languageProvider.currentLocale = appLocale;
 
   runApp(const MyApp());
 }
@@ -76,9 +78,10 @@ class MyApp extends StatelessWidget {
       callback: AppLifeCycles(),
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider.value(value: languageViewModel),
+          ChangeNotifierProvider.value(value: languageProvider),
+          ChangeNotifierProvider(create: (_) => AppSettingsProvider()),
         ],
-        child: Consumer<LanguageViewModel>(
+        child: Consumer<LanguageProvider>(
           builder: (context, vm, child) => MaterialApp.router(
             theme: AppThemeData().appTheme,
             builder: EasyLoading.init(),

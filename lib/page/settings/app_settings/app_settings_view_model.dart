@@ -24,6 +24,13 @@ class AppSettingsViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  bool get isEnableSummarizedRecord => _isEnableSummarizedRecord;
+  bool _isEnableSummarizedRecord = false;
+  set isEnableSummarizedRecord(bool value) {
+    _isEnableSummarizedRecord = value;
+    notifyListeners();
+  }
+
   Future<bool> isBiomerticsAvailable() async {
     final auth = LocalAuthentication();
     final canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
@@ -48,6 +55,11 @@ class AppSettingsViewModel extends BaseViewModel {
   Future<bool> _getIsEnableInAppNfcScan() async {
     final enabled = await Prefs.getBool(PrefsToken.enabledInAppNfcScan);
     return enabled ?? PrefsToken.enabledInAppNfcScan.defaultValue;
+  }
+
+  Future<bool> getIsEnableSummarizedRecord() async {
+    final enabled = await Prefs.getBool(PrefsToken.enableSummarizedRecord);
+    return enabled ?? PrefsToken.enableSummarizedRecord.defaultValue;
   }
 
   void setInAppNfcScan(bool value) async {
@@ -78,12 +90,20 @@ class AppSettingsViewModel extends BaseViewModel {
     return;
   }
 
+  void setSummarizedRecord(bool value) async {
+    Prefs.setBool(PrefsToken.enableSummarizedRecord, value);
+
+    isEnableSummarizedRecord = value;
+    return;
+  }
+
   Future<void> getAppSettings() async {
     showLoading();
     await Future.delayed(const Duration(milliseconds: 300));
     isEnabledFastQRPay = await _getIsEnabledFastQRPay();
     isEnabledBiometricsLogin = await _getIsEnabledBiometricsLogin();
     isEnableInAppNfcScan = await _getIsEnableInAppNfcScan();
+    isEnableSummarizedRecord = await getIsEnableSummarizedRecord();
     dismissLoading();
     return;
   }
