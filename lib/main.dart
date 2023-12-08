@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
@@ -71,6 +72,30 @@ class MyApp extends StatelessWidget {
 
   const MyApp({super.key});
 
+  ThemeData _buildTheme(Locale locale) {
+    final baseTheme = AppThemeData().appTheme;
+    late final TextTheme resolvedTextTheme;
+
+    switch (locale.languageCode) {
+      case 'zh':
+        resolvedTextTheme =
+            GoogleFonts.notoSansTcTextTheme(baseTheme.textTheme);
+        break;
+      case 'ja':
+        resolvedTextTheme =
+            GoogleFonts.notoSansJpTextTheme(baseTheme.textTheme);
+        break;
+      case 'en':
+        resolvedTextTheme = GoogleFonts.notoSansTextTheme(baseTheme.textTheme);
+        break;
+      default:
+        resolvedTextTheme = GoogleFonts.notoSansTextTheme(baseTheme.textTheme);
+        break;
+    }
+
+    return baseTheme.copyWith(textTheme: resolvedTextTheme);
+  }
+
   @override
   Widget build(BuildContext context) {
     return LifecycleManager(
@@ -82,7 +107,7 @@ class MyApp extends StatelessWidget {
         ],
         child: Consumer<LanguageProvider>(
           builder: (context, vm, child) => MaterialApp.router(
-            theme: AppThemeData().appTheme,
+            theme: _buildTheme(vm.currentLocale),
             builder: EasyLoading.init(),
             routerConfig: router,
             locale: vm.currentLocale,
