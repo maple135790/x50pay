@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -319,14 +320,16 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
                             onChanged: onFastQRPayChanged,
                           ),
                         ),
-                        CupertinoListTile.notched(
-                          title: Text(i18n.userAppSettingsSummarizedRecord),
-                          trailing: CupertinoSwitch(
-                            activeColor: CupertinoColors.activeGreen,
-                            value: vm.isEnableSummarizedRecord,
-                            onChanged: onSummarizedRecordChanged,
+                        // TODO (kenneth) : 等待0mu web 版寫完後開放
+                        if (kDebugMode)
+                          CupertinoListTile.notched(
+                            title: Text(i18n.userAppSettingsSummarizedRecord),
+                            trailing: CupertinoSwitch(
+                              activeColor: CupertinoColors.activeGreen,
+                              value: vm.isEnableSummarizedRecord,
+                              onChanged: onSummarizedRecordChanged,
+                            ),
                           ),
-                        ),
                         CupertinoListTile.notched(
                           title: Text(i18n.userAppSettingsInAppNfc),
                           trailing: CupertinoSwitch(

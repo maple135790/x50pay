@@ -23,7 +23,7 @@ class AppSettingsProvider extends ChangeNotifier {
   Future<bool> getIsEnableSummarizedRecord() async {
     final enabled = await Prefs.getBool(PrefsToken.enableSummarizedRecord);
     // TODO(kenneth) : 等待0mu web 版寫完後開放
-    return enabled ??
-        PrefsToken.enableSummarizedRecord.defaultValue && kDebugMode;
+    return (enabled ?? PrefsToken.enableSummarizedRecord.defaultValue) &&
+        kDebugMode;
   }
 }

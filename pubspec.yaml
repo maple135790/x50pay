@@ -61,31 +61,31 @@ flutter:
   - assets/images/appIcon/appstore.png
   - assets/images/appIcon/playstore.png
   - assets/images/collab/shop-solid.svg
-  - assets/images/collab/shop-solid.svg.vec
   - assets/images/common/header_icon_rsz.png
   - assets/images/common/logo_150.jpg
   - assets/images/common/spinner-solid.svg
-  - assets/images/common/spinner-solid.svg.vec
   - assets/images/common/torii.svg
-  - assets/images/common/torii.svg.vec
   - assets/images/home/bolt-solid.svg
-  - assets/images/home/bolt-solid.svg.vec
   - assets/images/home/heart-regular.svg
-  - assets/images/home/heart-regular.svg.vec
   - assets/images/home/heart-solid.svg
-  - assets/images/home/heart-solid.svg.vec
   - assets/images/home/mari_level/ouo.png
   - assets/images/home/shirt-solid.svg
-  - assets/images/home/shirt-solid.svg.vec
   - assets/images/home/top.png
   - assets/images/home/vts.png
   - assets/images/quest/stamp.svg
-  - assets/images/quest/stamp.svg.vec
   - assets/images/scanPay/jkopay_logo.png
   - assets/images/scanPay/linepay_logo.png
   - assets/images/scanPay/p-solid.svg
-  - assets/images/scanPay/p-solid.svg.vec
   - assets/texts/license.txt
+  - assets/images/collab/shop-solid.svg.vec
+  - assets/images/common/spinner-solid.svg.vec
+  - assets/images/common/torii.svg.vec
+  - assets/images/home/bolt-solid.svg.vec
+  - assets/images/home/heart-regular.svg.vec
+  - assets/images/home/heart-solid.svg.vec
+  - assets/images/home/shirt-solid.svg.vec
+  - assets/images/quest/stamp.svg.vec
+  - assets/images/scanPay/p-solid.svg.vec
 flr:
   core_version: 3.2.0
   dartfmt_line_length: 80
