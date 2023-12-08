@@ -88,9 +88,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("伺服器錯誤，請嘗試重新整理或回報X50"),
         "summaryGame": MessageLookupByLibrary.simpleMessage("機種別"),
         "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("詳細機種別"),
-        "summaryGameFavGame": MessageLookupByLibrary.simpleMessage("設定喜好機台"),
+        "summaryGameFavGame": MessageLookupByLibrary.simpleMessage("喜好機台"),
         "summaryGameFavGameSetup":
             MessageLookupByLibrary.simpleMessage("可設定喜好機台"),
+        "summaryGameNoData":
+            MessageLookupByLibrary.simpleMessage("計算期間內無遊玩紀錄，請重新選擇計算期間"),
         "summaryGameRecordRecord": m4,
         "summaryGameRecordTitle":
             MessageLookupByLibrary.simpleMessage("機種別紀錄:"),
@@ -98,7 +100,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "summaryNoData": MessageLookupByLibrary.simpleMessage("無資料"),
         "summaryPeriod": MessageLookupByLibrary.simpleMessage("計算期間"),
         "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30天"),
-        "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60天 (全部)"),
+        "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60天"),
         "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7天"),
         "summaryPoint": MessageLookupByLibrary.simpleMessage("使用點數"),
         "summaryShow": MessageLookupByLibrary.simpleMessage("顯示"),

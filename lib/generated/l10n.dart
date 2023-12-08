@@ -560,10 +560,10 @@ class S {
     );
   }
 
-  /// `設定喜好機台`
+  /// `喜好機台`
   String get summaryGameFavGame {
     return Intl.message(
-      '設定喜好機台',
+      '喜好機台',
       name: 'summaryGameFavGame',
       desc: '',
       args: [],
@@ -575,6 +575,16 @@ class S {
     return Intl.message(
       '可設定喜好機台',
       name: 'summaryGameFavGameSetup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `計算期間內無遊玩紀錄，請重新選擇計算期間`
+  String get summaryGameNoData {
+    return Intl.message(
+      '計算期間內無遊玩紀錄，請重新選擇計算期間',
+      name: 'summaryGameNoData',
       desc: '',
       args: [],
     );
@@ -641,10 +651,10 @@ class S {
     );
   }
 
-  /// `60天 (全部)`
+  /// `60天`
   String get summaryPeriod60 {
     return Intl.message(
-      '60天 (全部)',
+      '60天',
       name: 'summaryPeriod60',
       desc: '',
       args: [],

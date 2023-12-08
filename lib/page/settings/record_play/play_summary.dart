@@ -33,11 +33,6 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
   List<GameSummary> get gameSummaries =>
       widget.model.getGameSummaries(selectedPeriod.day);
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void onChangeShowPointSummary() {
     isShowPointSummary = !isShowPointSummary;
     setState(() {});
@@ -48,74 +43,61 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
     setState(() {});
   }
 
-  void showAllGameSummaries(
-    List<GameSummary> gameSummaries,
-    String? favGameName,
-  ) async {
+  void showAllGameSummaries(String? favGameName) async {
     final appSettingsProvider = context.read<AppSettingsProvider>();
-    final selectedFavGameName = await showDialog<String>(
-      context: context,
-      builder: (context) {
-        String selectedFavGame = favGameName ?? '';
 
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return PopScope(
-              canPop: true,
-              child: AlertDialog(
-                title: Text(i18n.summaryGameDetailed),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(selectedFavGame);
-                    },
-                    child: Text(i18n.dialogReturn),
-                  )
-                ],
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(i18n.summaryGameFavGame),
-                    Flexible(
-                      child: Wrap(
-                        children: gameSummaries
-                            .map((e) => Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: ChoiceChip(
-                                    label: Text(e.gameName),
-                                    visualDensity: VisualDensity.compact,
-                                    selected: selectedFavGame == e.gameName,
-                                    onSelected: (value) {
-                                      if (!value) {
-                                        selectedFavGame = '';
-                                      } else {
-                                        selectedFavGame = e.gameName;
-                                      }
-                                      setState(() {});
-                                    },
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 25),
-                    Text(i18n.summaryGameRecordTitle),
-                    ...gameSummaries.map((e) => Text(
-                        '${e.gameName} : ${i18n.summaryGameRecordRecord(e.playCount, e.totalPoints)}'))
-                  ],
-                ),
-              ),
-            );
-          },
+    void saveFavGameName(String? favGameName) async {
+      log('selectedFavGameName: $favGameName', name: 'PlayRecords');
+
+      // 這裡需要postFrameCallback，因為modal會先關閉，再執行這裡的code
+      // 否則這裡的Widget tree 會被lock 住，無法setState
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        appSettingsProvider.setFavGameName(favGameName);
+        return;
+      });
+    }
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      isDismissible: true,
+      context: context,
+      showDragHandle: true,
+      enableDrag: true,
+      backgroundColor: scaffoldBackgroundColor,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          maxChildSize: 0.8,
+          builder: (context, scrollController) => DetailedFavGameModal(
+            gameSummaries: gameSummaries,
+            period: selectedPeriod,
+            scrollController: scrollController,
+            currentFavGameName: favGameName,
+            onFavGameChanged: saveFavGameName,
+          ),
         );
       },
     );
+  }
 
-    log('selectedFavGameName: $selectedFavGameName', name: 'PlayRecords');
-    if (selectedFavGameName == null || selectedFavGameName.isEmpty) return;
-
-    appSettingsProvider.setFavGameName(selectedFavGameName);
+  List<Widget> buildPeriodChips() {
+    return [i18n.summaryPeriod60, i18n.summaryPeriod30, i18n.summaryPeriod7]
+        .mapIndexed(
+          (index, element) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: ChoiceChip(
+              label: Text(element),
+              selected: selectedPeriod == SummarizePeriod.values[index],
+              onSelected: (value) {
+                selectedPeriod = SummarizePeriod.values[index];
+                isShowPointSummary = false;
+                isShowFavGameSummary = false;
+                setState(() {});
+              },
+            ),
+          ),
+        )
+        .toList();
   }
 
   @override
@@ -126,35 +108,15 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
         Row(
           children: [
             Align(
-                alignment: Alignment.topCenter,
-                child: Text('${i18n.summaryPeriod}  ')),
+              alignment: Alignment.topCenter,
+              child: Text(i18n.summaryPeriod),
+            ),
             Expanded(
               child: Wrap(
                 alignment: WrapAlignment.start,
                 runAlignment: WrapAlignment.start,
                 crossAxisAlignment: WrapCrossAlignment.start,
-                children: [
-                  i18n.summaryPeriod60,
-                  i18n.summaryPeriod30,
-                  i18n.summaryPeriod7
-                ]
-                    .mapIndexed(
-                      (index, element) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: ChoiceChip(
-                          label: Text(element),
-                          selected:
-                              selectedPeriod == SummarizePeriod.values[index],
-                          onSelected: (value) {
-                            selectedPeriod = SummarizePeriod.values[index];
-                            isShowPointSummary = false;
-                            isShowFavGameSummary = false;
-                            setState(() {});
-                          },
-                        ),
-                      ),
-                    )
-                    .toList(),
+                children: buildPeriodChips(),
               ),
             ),
           ],
@@ -162,17 +124,17 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
         const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(
-              child: pointSummary(),
-            ),
+            Expanded(child: pointSummary()),
             const SizedBox(width: 15),
             Expanded(
               child: Consumer<AppSettingsProvider>(
                 builder: (context, vm, child) {
                   var summary = gameSummaries.firstWhereOrNull(
                       (element) => element.gameName == vm.favGameName);
+
                   var favGameSummary =
                       "${vm.favGameName}\n${i18n.summaryGameRecordRecord(summary?.playCount ?? 0, summary?.totalPoints ?? "0P")}";
+
                   return FutureBuilder(
                       future: vm.getFavGameName(),
                       builder: (context, snapshot) {
@@ -181,16 +143,14 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                           color: Theme.of(context).colorScheme.surfaceVariant,
                           child: InkWell(
                             onLongPress: () {
-                              showAllGameSummaries(
-                                gameSummaries,
-                                vm.favGameName,
-                              );
+                              showAllGameSummaries(vm.favGameName);
                             },
                             onTap: vm.favGameName != null
                                 ? onChangeShowFavGameSummary
                                 : () {},
                             child: buildGameSummary(
-                              hasSetFavGame: vm.favGameName != null,
+                              hasSetFavGame:
+                                  vm.favGameName?.isNotEmpty ?? false,
                               favGameSummary: favGameSummary,
                             ),
                           ),
@@ -290,6 +250,121 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                   ),
                 ],
               )),
+      ),
+    );
+  }
+}
+
+class DetailedFavGameModal extends StatefulWidget {
+  final List<GameSummary> gameSummaries;
+  final ScrollController scrollController;
+  final String? currentFavGameName;
+  final SummarizePeriod period;
+  final void Function(String? value) onFavGameChanged;
+
+  const DetailedFavGameModal({
+    super.key,
+    required this.gameSummaries,
+    required this.period,
+    required this.scrollController,
+    required this.currentFavGameName,
+    required this.onFavGameChanged,
+  });
+
+  @override
+  State<DetailedFavGameModal> createState() => _DetailedFavGameModalState();
+}
+
+class _DetailedFavGameModalState
+    extends BaseStatefulState<DetailedFavGameModal> {
+  String selectedFavGame = '';
+
+  @override
+  void initState() {
+    super.initState();
+    selectedFavGame = widget.currentFavGameName ?? '';
+  }
+
+  @override
+  void dispose() {
+    widget.onFavGameChanged.call(selectedFavGame);
+    super.dispose();
+  }
+
+  List<Widget> buildFavGameChips() {
+    if (widget.gameSummaries.isEmpty) {
+      return [Text(i18n.summaryGameNoData)];
+    }
+    return widget.gameSummaries
+        .map((e) => Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: ChoiceChip(
+                  label: Text(e.gameName),
+                  visualDensity: VisualDensity.compact,
+                  selected: selectedFavGame == e.gameName,
+                  onSelected: (value) {
+                    if (!value) {
+                      selectedFavGame = '';
+                    } else {
+                      selectedFavGame = e.gameName;
+                    }
+                    setState(() {});
+                  },
+                ),
+              ),
+            ))
+        .toList();
+  }
+
+  List<Widget> buildGameRecords() {
+    if (widget.gameSummaries.isEmpty) {
+      return [Text(i18n.summaryGameNoData)];
+    }
+    return widget.gameSummaries
+        .map((e) => Text(
+            '${e.gameName} : ${i18n.summaryGameRecordRecord(e.playCount, e.totalPoints)}'))
+        .toList();
+  }
+
+  String getPeriodString() {
+    switch (widget.period) {
+      case SummarizePeriod.twoMonth:
+        return i18n.summaryPeriod60;
+      case SummarizePeriod.oneMonth:
+        return i18n.summaryPeriod30;
+      case SummarizePeriod.oneWeek:
+        return i18n.summaryPeriod7;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+      controller: widget.scrollController,
+      physics: const ClampingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            i18n.summaryGameFavGame,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(height: 12),
+          ...buildFavGameChips(),
+          const SizedBox(height: 25),
+          const Divider(),
+          const SizedBox(height: 25),
+          Text(
+            '${getPeriodString()} ${i18n.summaryGameRecordTitle}',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          const SizedBox(height: 12),
+          ...buildGameRecords(),
+        ],
       ),
     );
   }

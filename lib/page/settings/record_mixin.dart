@@ -61,11 +61,11 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
     );
   }
 
-  Widget summarizedInfo(M model) {
-    return const SizedBox();
-  }
+  Widget? summarizedInfo(M model) => null;
 
   Widget _buildSummarizedRecord() {
+    if (summarizedInfo(_model) == null) return const SizedBox();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: FutureBuilder(
@@ -82,7 +82,7 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                summarizedInfo(_model),
+                summarizedInfo(_model)!,
                 const SizedBox(height: 8),
                 const Divider(),
               ],

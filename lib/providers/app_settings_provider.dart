@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 
 class AppSettingsProvider extends ChangeNotifier {
@@ -9,8 +9,8 @@ class AppSettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setFavGameName(String name) {
-    Prefs.setString(PrefsToken.favGameName, name);
+  void setFavGameName(String? name) {
+    Prefs.setString(PrefsToken.favGameName, name ?? '');
     favGameName = name;
   }
 
@@ -22,6 +22,8 @@ class AppSettingsProvider extends ChangeNotifier {
 
   Future<bool> getIsEnableSummarizedRecord() async {
     final enabled = await Prefs.getBool(PrefsToken.enableSummarizedRecord);
-    return enabled ?? PrefsToken.enableSummarizedRecord.defaultValue;
+    // TODO(kenneth) : 等待0mu web 版寫完後開放
+    return enabled ??
+        PrefsToken.enableSummarizedRecord.defaultValue && kDebugMode;
   }
 }

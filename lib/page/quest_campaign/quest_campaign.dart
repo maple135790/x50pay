@@ -22,11 +22,10 @@ class QuestCampaign extends StatefulWidget {
 }
 
 class _QuestCampaignState extends State<QuestCampaign> {
+  static const emptyCellSize = 40.0;
   final repo = Repository();
   late final viewModel = QuestCampaignViewModel(repository: repo);
   late Future<Campaign?> init;
-
-  double get stampSize => 35;
 
   Future<void> onAddStampRowTap() async {
     viewModel.onAddStampRowTap(campaignId: widget.campaignId);
@@ -83,11 +82,11 @@ class _QuestCampaignState extends State<QuestCampaign> {
     ));
   }
 
-  Widget buildStampRow(int stampRowCounts, {required int stampCounts}) {
+  Widget buildStampRow(int stampRowCount, {required int ownedStampCount}) {
     return Column(
       children: [
         SizedBox(
-          height: ((35 + 16) * stampRowCounts).toDouble(),
+          height: ((emptyCellSize + 22) * stampRowCount).toDouble(),
           // child: Column(
           //   children: List.generate(
           //     growable: false,
@@ -145,14 +144,14 @@ class _QuestCampaignState extends State<QuestCampaign> {
           //   ),
           // ),
           child: GridView.builder(
-            itemCount: stampRowCounts * 6,
+            itemCount: stampRowCount * 6,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 6,
             ),
             itemBuilder: (context, index) {
               return Container(
                 decoration: BoxDecoration(
-                  border: index + 6 < stampRowCounts * 6
+                  border: index + 6 < stampRowCount * 6
                       ? const Border(
                           bottom: BorderSide(color: Color(0xff5a5a5a)),
                         )
@@ -161,14 +160,14 @@ class _QuestCampaignState extends State<QuestCampaign> {
                 child: Container(
                   margin: const EdgeInsets.all(7.5),
                   child: Center(
-                    child: index + 1 > stampCounts
+                    child: index + 1 > ownedStampCount
                         ? Icon(
                             Icons.circle_rounded,
-                            size: stampSize,
+                            size: emptyCellSize,
                             color: const Color(0xfffafafa).withOpacity(0.2),
                           )
                         : SizedBox.fromSize(
-                            size: Size.square(stampSize),
+                            size: const Size.square(emptyCellSize),
                             child: SvgPicture(
                               Svgs.stamp,
                               width: 25,
@@ -354,7 +353,7 @@ class _QuestCampaignState extends State<QuestCampaign> {
             ),
             child: buildStampRow(
               data.stampRowCounts ?? 1,
-              stampCounts: data.ownedPoints,
+              ownedStampCount: data.ownedPoints,
             ),
           ),
           divider(),

@@ -95,9 +95,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "summaryGame": MessageLookupByLibrary.simpleMessage("Game"),
         "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("Game"),
         "summaryGameFavGame":
-            MessageLookupByLibrary.simpleMessage("Set up Favorite Game"),
+            MessageLookupByLibrary.simpleMessage("Favorite Game"),
         "summaryGameFavGameSetup":
             MessageLookupByLibrary.simpleMessage("Not Set Favorite Game Yet"),
+        "summaryGameNoData": MessageLookupByLibrary.simpleMessage(
+            "No play record found in the calculation period. Please select another calculation period"),
         "summaryGameRecordRecord": m4,
         "summaryGameRecordTitle":
             MessageLookupByLibrary.simpleMessage("Game Record:"),
@@ -106,8 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "summaryPeriod":
             MessageLookupByLibrary.simpleMessage("Calculation Period"),
         "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30 Days"),
-        "summaryPeriod60":
-            MessageLookupByLibrary.simpleMessage("60 Days (All)"),
+        "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60 Days"),
         "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7 Days"),
         "summaryPoint": MessageLookupByLibrary.simpleMessage("Used Point"),
         "summaryShow": MessageLookupByLibrary.simpleMessage("Show"),
