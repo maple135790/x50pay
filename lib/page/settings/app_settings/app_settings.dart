@@ -338,14 +338,6 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
                             onChanged: onInAppNfcScanChanged,
                           ),
                         ),
-                        CupertinoListTile.notched(
-                          title: Text(i18n.userAppSettingsInAppNfc),
-                          trailing: CupertinoSwitch(
-                            activeColor: CupertinoColors.activeGreen,
-                            value: vm.isEnableInAppNfcScan,
-                            onChanged: onInAppNfcScanChanged,
-                          ),
-                        ),
                       ],
                     );
                   },
