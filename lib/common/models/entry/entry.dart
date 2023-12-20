@@ -43,7 +43,7 @@ class EntryModel {
   String get gr2BounsLimit => gr2[10].toString();
   String get gr2Timer => double.parse(gr2[12].toString()).toStringAsFixed(0);
   String get gr2CountMuch => gr2[13].toString();
-  double get gr2ProgressV5 => gr2[13] / gr2[1];
+  double get gr2ProgressV5 => (gr2[13] / gr2[1]) * 100;
   double get gr2Progress => gr2[0] / 15;
   Uint8List get ava => base64Decode(_rawAva);
 }
