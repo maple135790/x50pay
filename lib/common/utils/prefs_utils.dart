@@ -21,6 +21,11 @@ class Prefs {
     return pref.getBool(token.value);
   }
 
+  static Future<int?> getInt(PrefsToken token) async {
+    final pref = await SharedPreferences.getInstance();
+    return pref.getInt(token.value);
+  }
+
   static Future<void> setString(PrefsToken token, String value) async {
     final pref = await SharedPreferences.getInstance();
     pref.setString(token.value, value);
@@ -29,6 +34,11 @@ class Prefs {
   static Future<void> setBool(PrefsToken token, bool value) async {
     final pref = await SharedPreferences.getInstance();
     pref.setBool(token.value, value);
+  }
+
+  static Future<void> setInt(PrefsToken token, int value) async {
+    final pref = await SharedPreferences.getInstance();
+    pref.setInt(token.value, value);
   }
 
   static Future<void> remove(PrefsToken token) async {
@@ -61,6 +71,7 @@ class Prefs {
 }
 
 enum PrefsToken {
+  cardEmulationInterval('cardEmulationInterval', defaultValue: 350),
   enabledFastQRPay('fastQRPay', defaultValue: false),
   enabledInAppNfcScan('inAppNfcScan', defaultValue: false),
   enableSummarizedRecord('summarizedRecord', defaultValue: false),

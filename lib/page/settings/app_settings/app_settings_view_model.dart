@@ -2,7 +2,26 @@ import 'package:local_auth/local_auth.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 
+enum CardEmulationIntervals {
+  long(700),
+  medium(500),
+  short(300),
+  disabled(-1);
+
+  final int timeInMilliSeconds;
+  final String text;
+  const CardEmulationIntervals(this.timeInMilliSeconds)
+      : text = timeInMilliSeconds == -1 ? "不模擬卡片" : "$timeInMilliSeconds ms";
+}
+
 class AppSettingsViewModel extends BaseViewModel {
+  String get ceInterval => _ceInterval;
+  String _ceInterval = CardEmulationIntervals.medium.text;
+  set ceInterval(String value) {
+    _ceInterval = value;
+    notifyListeners();
+  }
+
   bool get isEnableInAppNfcScan => _isEnableInAppNfcScan;
   bool _isEnableInAppNfcScan = true;
   set isEnableInAppNfcScan(bool value) {
@@ -62,6 +81,14 @@ class AppSettingsViewModel extends BaseViewModel {
     return enabled ?? PrefsToken.enableSummarizedRecord.defaultValue;
   }
 
+  Future<String> _getCEInterval() async {
+    final interval = await Prefs.getInt(PrefsToken.cardEmulationInterval);
+    final intv = CardEmulationIntervals.values.firstWhere(
+        (element) => element.timeInMilliSeconds == interval,
+        orElse: () => CardEmulationIntervals.medium);
+    return intv.text;
+  }
+
   void setInAppNfcScan(bool value) async {
     Prefs.setBool(PrefsToken.enabledInAppNfcScan, value);
 
@@ -97,6 +124,13 @@ class AppSettingsViewModel extends BaseViewModel {
     return;
   }
 
+  void setCEInterval(CardEmulationIntervals value) async {
+    Prefs.setInt(PrefsToken.cardEmulationInterval, value.timeInMilliSeconds);
+
+    ceInterval = value.text;
+    return;
+  }
+
   Future<void> getAppSettings() async {
     showLoading();
     await Future.delayed(const Duration(milliseconds: 300));
@@ -104,6 +138,7 @@ class AppSettingsViewModel extends BaseViewModel {
     isEnabledBiometricsLogin = await _getIsEnabledBiometricsLogin();
     isEnableInAppNfcScan = await _getIsEnableInAppNfcScan();
     isEnableSummarizedRecord = await getIsEnableSummarizedRecord();
+    ceInterval = await _getCEInterval();
     dismissLoading();
     return;
   }

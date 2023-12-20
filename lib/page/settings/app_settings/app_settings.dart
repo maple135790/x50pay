@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/app_settings/app_settings_view_model.dart';
@@ -269,10 +270,40 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
     viewModel.setInAppNfcScan(value);
   }
 
+  void onCEChanged(String ceText) async {
+    final ceInterval = CardEmulationIntervals.values
+        .firstWhere((element) => element.text == ceText);
+    if (ceInterval == CardEmulationIntervals.disabled) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('警告'),
+          content: const Text('停用卡片模擬將無法在使用APP時，用手機感應進門(如果有設定)，也無法使用手機感應機台'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(i18n.dialogConfirm),
+            ),
+          ],
+        ),
+      );
+    }
+    viewModel.setCEInterval(ceInterval);
+  }
+
   @override
   void initState() {
     super.initState();
+    AppLifeCycles.instance.onPaused();
     init = viewModel.getAppSettings();
+  }
+
+  @override
+  void dispose() {
+    AppLifeCycles.instance.reactivateNFC();
+    super.dispose();
   }
 
   @override
@@ -337,6 +368,14 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
                             value: vm.isEnableInAppNfcScan,
                             onChanged: onInAppNfcScanChanged,
                           ),
+                        ),
+                        DialogDropdown.ios(
+                          title: '卡片模擬間隔',
+                          value: vm.ceInterval,
+                          avaliList: CardEmulationIntervals.values
+                              .map((e) => e.text)
+                              .toList(),
+                          onChanged: onCEChanged,
                         ),
                       ],
                     );
