@@ -1,20 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/models/giftBox/gift_box.dart';
-import 'package:x50pay/common/models/lotteList/lotte_list.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/gift_system/claimed_gift.dart';
+import 'package:x50pay/page/gift_system/gift_claim.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/lotte_box.dart';
 import 'package:x50pay/repository/repository.dart';
-
-part "lotte_box.dart";
-part "gift_claim.dart";
-part "claimed_gift.dart";
 
 class GiftSystem extends StatefulWidget {
   /// 禮物系統頁面
@@ -119,9 +112,9 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
           const Expanded(
             child: TabBarView(
               children: [
-                _LotteBox(),
-                _GiftClaim(),
-                _ClaimedGift(),
+                LotteBox(),
+                GiftClaim(),
+                ClaimedGift(),
               ],
             ),
           ),

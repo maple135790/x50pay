@@ -1,8 +1,11 @@
-part of "gift_system.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/models/lotteList/lotte_list.dart';
+import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
 
-class _LotteBox extends StatelessWidget {
+class LotteBox extends StatelessWidget {
   /// 養成抽獎箱頁面
-  const _LotteBox();
+  const LotteBox({super.key});
 
   @override
   Widget build(BuildContext context) {

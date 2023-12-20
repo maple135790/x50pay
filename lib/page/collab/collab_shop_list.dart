@@ -1,14 +1,23 @@
-part of "collab.dart";
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/theme/svg_path.dart';
+import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
 
-class _CollabShopList extends StatefulWidget {
+class CollabShopList extends StatefulWidget {
   /// 商家清單/兌換頁面
-  const _CollabShopList();
+  const CollabShopList({super.key});
 
   @override
-  State<_CollabShopList> createState() => __CollabShopListState();
+  State<CollabShopList> createState() => _CollabShopListState();
 }
 
-class __CollabShopListState extends BaseStatefulState<_CollabShopList> {
+class _CollabShopListState extends BaseStatefulState<CollabShopList> {
   final repo = Repository();
   late final viewModel = CollabShopListViewModel(repository: repo);
 

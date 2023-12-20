@@ -1,8 +1,18 @@
-part of "gift_system.dart";
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/repository/repository.dart';
 
-class _GiftClaim extends StatelessWidget {
+class GiftClaim extends StatelessWidget {
   /// 領取禮物頁面
-  const _GiftClaim();
+  const GiftClaim({super.key});
 
   @override
   Widget build(BuildContext context) {

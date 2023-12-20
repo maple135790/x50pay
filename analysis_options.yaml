@@ -32,7 +32,6 @@ linter:
 
 analyzer:
   exclude:
-  # - dependencies/**
   - lib/*.g.dart
   - lib/generated/**
   - lib/repository/*.g.dart

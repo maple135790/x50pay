@@ -1,17 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/grade_box/box_tab.dart';
 import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
-
-part 'box_tab.dart';
 
 class GradeBox extends StatefulWidget {
   /// 養成商場頁面
@@ -78,11 +73,11 @@ class _GradeBoxLoadedState extends State<_GradeBoxLoaded> {
     super.initState();
 
     tabViews = [
-      _BoxTab(items: widget.model.all),
-      _BoxTab(items: widget.model.card),
-      _BoxTab(items: widget.model.gifts),
-      _BoxTab(items: widget.model.cd),
-      _BoxTab(items: widget.model.x50),
+      GradeBoxTab(items: widget.model.all),
+      GradeBoxTab(items: widget.model.card),
+      GradeBoxTab(items: widget.model.gifts),
+      GradeBoxTab(items: widget.model.cd),
+      GradeBoxTab(items: widget.model.x50),
     ];
   }
 

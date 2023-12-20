@@ -55,8 +55,8 @@ class Repository extends Api {
   }
 
   /// 取得首頁資料API
-  Future<EntryModel> getEntry() async {
-    late EntryModel entry;
+  Future<EntryModel?> getEntry() async {
+    late EntryModel? entry;
 
     await Api.makeRequest(
       dest: '/entry',

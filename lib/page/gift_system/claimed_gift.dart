@@ -1,8 +1,13 @@
-part of "gift_system.dart";
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
 
-class _ClaimedGift extends StatelessWidget {
+class ClaimedGift extends StatelessWidget {
   /// 已領取禮物頁面
-  const _ClaimedGift();
+  const ClaimedGift({super.key});
 
   @override
   Widget build(BuildContext context) {

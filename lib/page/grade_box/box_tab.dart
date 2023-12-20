@@ -1,15 +1,24 @@
-part of 'grade_box.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/models/grade_box/grade_box.dart';
+import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
 
-class _BoxTab extends StatefulWidget {
+class GradeBoxTab extends StatefulWidget {
   final List<GradeBoxItem?> items;
 
-  const _BoxTab({required this.items});
+  const GradeBoxTab({super.key, required this.items});
 
   @override
-  State<_BoxTab> createState() => __BoxTabState();
+  State<GradeBoxTab> createState() => _GradeBoxTabState();
 }
 
-class __BoxTabState extends BaseStatefulState<_BoxTab> {
+class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
   bool get isEmptyItems => widget.items.isEmpty;
 
   void onChangeItemPressed(String gid, String eid) async {
