@@ -36,7 +36,7 @@
 
 ## Installation
 
-本專案使用 `Flutter ^3.13` 版本建構。請先[下載][Flutter SDK]合適的 SDK 版本。
+本專案使用 `Flutter ^3.16` 版本建構。請先[下載][Flutter SDK]合適的 SDK 版本。
 
 Flutter SDK 的安裝流程請參考[這裡][Flutter installation]。
 
@@ -64,9 +64,14 @@ flutter run android
 
 ## FAQ
 
-Q: 我用的 1password 為甚麼沒辦法自動帶入(autofill)帳號密碼?
+Q: 我用的 1password 為甚麼沒辦法自動帶入(autofill)帳號密碼？
 
 > A: 我也不知道，google autofill 和 apple autofill 可以填入。在找到問題之前看要不要先啟用原生的 autofill，或是直接 CopyPaste。
+
+Q: 為甚麼不能用手機刷卡？為甚麼手機刷卡有點難觸發?
+
+> A: 目前正在嘗試修復。由於手機的卡片模擬和 NFC tag 讀取[不能同時使用][nfc hce]，所以有新增了卡片模擬時間的選項 (於 設定 > X50Pay App 設定
+> )。如果仍有問題，再和我連絡，
 
 ## Authors
 
@@ -91,6 +96,7 @@ Q: 我用的 1password 為甚麼沒辦法自動帶入(autofill)帳號密碼?
 [Release Depolyment]: https://docs.flutter.dev/deployment
 [Flutter SDK]: https://docs.flutter.dev/release/archive
 [Flutter installation]: https://docs.flutter.dev/get-started/install
-[Flutter badge]: https://img.shields.io/badge/version-3.10-brightgreen?logo=flutter
+[Flutter badge]: https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmaple135790%2Fx50pay%2Fmaster%2Fpubspec.yaml&query=%24.environment.flutter&logo=flutter&label=version
 [Dart badge]: https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmaple135790%2Fx50pay%2Fmaster%2Fpubspec.yaml&query=%24.environment.sdk&logo=dart&label=version
 [Build badge]: https://github.com/maple135790/x50pay/actions/workflows/flutter.yml/badge.svg?branch=master&event=push
+[nfc hce]: https://developer.android.com/reference/android/nfc/NfcAdapter#In%20this%20mode%20the%20NFC%20controller%20will%20only%20act%20as%20an%20NFC%20tag%20reader/writer,%20thus%20disabling%20any%20peer-to-peer%20(Android%20Beam)%20and%20card-emulation%20modes%20of%20the%20NFC%20adapter%20on%20this%20device.:~:text=In%20this%20mode%20the%20NFC%20controller%20will%20only%20act%20as%20an%20NFC%20tag%20reader/writer%2C%20thus%20disabling%20any%20peer%2Dto%2Dpeer%20(Android%20Beam)%20and%20card%2Demulation%20modes%20of%20the%20NFC%20adapter%20on%20this%20device.
