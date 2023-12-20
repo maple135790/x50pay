@@ -26,7 +26,7 @@ class UserModel {
   final int? tphone;
   final String? doorpwd;
 
-  UserModel(
+  const UserModel(
       {required this.message,
       required this.code,
       this.rawUserImgUrl,
@@ -44,6 +44,9 @@ class UserModel {
       this.sixn,
       this.tphone,
       this.doorpwd});
+
+  static VipDate setVipDate(int millisecondsSinceEpoch) =>
+      VipDate(date: millisecondsSinceEpoch);
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
@@ -70,6 +73,24 @@ class UserModel {
   @override
   String toString() {
     return 'UserModel(message: $message, code: $code, userimg: $rawUserImgUrl, email: $email, uid: $uid, point: $point, name: $name, ticketint: $ticketint, phoneactive: $phoneactive, vip: $vip, vipdate: $vipdate, sid: $sid, sixn: $sixn, tphone: $tphone, doorpwd: $doorpwd)';
+  }
+
+  bool equals(UserModel user) {
+    return email == user.email &&
+        uid == user.uid &&
+        point == user.point &&
+        name == user.name &&
+        ticketint == user.ticketint &&
+        phoneactive == user.phoneactive &&
+        fpoint == user.fpoint &&
+        givebool == user.givebool &&
+        vip == user.vip &&
+        vipdate == user.vipdate &&
+        sid == user.sid &&
+        sixn == user.sixn &&
+        tphone == user.tphone &&
+        rawUserImgUrl == user.rawUserImgUrl &&
+        doorpwd == user.doorpwd;
   }
 }
 

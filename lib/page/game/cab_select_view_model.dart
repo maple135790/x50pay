@@ -96,7 +96,9 @@ class CabSelectViewModel extends BaseViewModel {
   }
 
   void _postDoInsert() async {
-    await GlobalSingleton.instance.checkUser(force: true);
+    log('post do insert', name: '_postDoInsert');
+    await GlobalSingleton.instance.checkUser();
+    await GlobalSingleton.instance.checkEntry();
     await Future.delayed(const Duration(seconds: 2));
   }
 

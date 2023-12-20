@@ -1,11 +1,12 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
+import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/user/user.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
 
 /// 全域變數
@@ -17,20 +18,40 @@ class GlobalSingleton {
   /// 使用者資料註冊器
   final ValueNotifier<UserModel?> userNotifier = ValueNotifier(null);
 
+  /// Entry 資料註冊器
+  final ValueNotifier<EntryModel?> entryNotifier = ValueNotifier(null);
+
   /// 服務是否連接到X50Pay。
   ///
   /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
   final isServiceOnline = kReleaseMode || true;
 
+  /// 全域的 navigatorKey
+  ///
+  /// 在不特定頁面顯示 dialog 時使用
   static final navigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'Global navigatorKey');
 
+  /// 是否正在顯示 NfcPay 的 dialog
+  ///
+  /// 用來防止重複顯示 dialog
   bool isNfcPayDialogOpen = false;
 
+  /// 是否已經登入
+  ///
+  /// 用於確認是否要顯示登入頁面，於 app 啟動時檢查。
   bool isLogined = false;
 
+  /// 現在的頁面是否在首頁
+  ///
+  /// 用於確認是否要取得 Entry 資料，因為只有在首頁才需要取得。
+  bool isAtHome = true;
+
   /// 開發用，模擬扣點
-  final _devCostEnabled = false;
+  final _devPCostEnabled = true;
+
+  /// 開發用，模擬GR2點數增加
+  final _devGr2GainEnabled = true;
 
   /// 開發用，模擬Staff
   final _devUserToStaff = false;
@@ -38,11 +59,14 @@ class GlobalSingleton {
   /// 開發用，模擬所持點數
   double _devPoint = 220;
 
-  /// 上次檢查使用者資料的時間
-  int _lastChkMe = -1;
+  /// 開發用，模擬 GR2 點數
+  double _devGr2Point = 157.31;
 
-  /// 是否登入
-  bool isLogin = false;
+  /// 開發用，模擬 fP 點數
+  double _devfPPoint = 0;
+
+  /// 上次檢查使用者資料的時間
+  int _lastChkUser = -1;
 
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid, int cabNum})? recentPlayedCabinetData;
@@ -59,6 +83,10 @@ class GlobalSingleton {
   /// 由於go_router 在pushNamed 無法取得location，
   /// 因此使用此旗標來判斷是否在掃描QRCode頁面。
   bool isInCameraPage = false;
+
+  var refreshKey = GlobalKey();
+
+  final _repo = Repository();
 
   static GlobalSingleton? _instance;
 
@@ -78,40 +106,122 @@ class GlobalSingleton {
   /// 回傳是否成功取得使用者資料。
   ///
   /// [force] 強制檢查使用者資料
-  Future<bool> checkUser({bool force = false}) async {
+  Future<bool> checkUser() async {
     if (_duringTest) return true;
+    log('check user...', name: 'checkUser');
+
     await Future.delayed(const Duration(milliseconds: 100));
     try {
       final current = DateTime.now().millisecondsSinceEpoch;
-      final isLess30Sec = (current ~/ 1000) - _lastChkMe < 30;
+      final isLess500ms =
+          Duration(milliseconds: current - _lastChkUser).inMilliseconds < 500;
 
-      if (isLess30Sec && !force) return false;
-      _lastChkMe = DateTime.now().millisecondsSinceEpoch;
+      if (isLess500ms) return true;
+      _lastChkUser = DateTime.now().millisecondsSinceEpoch;
       if (!kDebugMode || isServiceOnline) {
-        userNotifier.value = await Repository().getUser();
+        final fetchedUser = await _repo.getUser();
+
         // 未回傳UserModel
-        if (userNotifier.value == null) return false;
+        if (fetchedUser == null) return false;
         // 回傳UserModel, 驗證失敗或是伺服器錯誤
-        if (userNotifier.value!.code != 200) return false;
+        if (fetchedUser.code != 200) return false;
+        // 與現有資料相同，不需要更新
+        if (userNotifier.value?.equals(fetchedUser) ?? false) return true;
+        userNotifier.value = fetchedUser;
         return true;
       } else {
-        if (_devCostEnabled) _devPoint -= 20;
-        final customMap = {
-          "point": _devPoint,
-          "email": "testUser@testUser",
-          "name": "testUser",
-          "uid": _devUserToStaff ? "X938" : "938",
-        };
-        var rawUserJson = jsonDecode(
-                r"""{"message":"done","code":200,"userimg":"https://secure.gravatar.com/avatar/6a4cbe004cdedee9738d82fe9670b326?size=250","givebool":0,"ticketint":10,"phoneactive":true,"vip":false,"vipdate":{"$date":641865600000},"sid":"","sixn":"805349","tphone":1,"doorpwd":"\u672c\u671f\u9580\u7981\u5bc6\u78bc\u7232 : 1743#","fpoint":0}""")
-            as Map<String, dynamic>
-          ..addAll(customMap);
-        userNotifier.value = UserModel.fromJson(rawUserJson);
+        userNotifier.value = UserModel(
+          message: "done",
+          code: 200,
+          doorpwd: "本期門禁密碼爲 : 1743#",
+          vip: false,
+          phoneactive: true,
+          vipdate: UserModel.setVipDate(641865600000),
+          fpoint: 0,
+          givebool: 0,
+          name: "testUser",
+          email: "testUser@testUser",
+          point: _devPCostEnabled ? _devPoint -= 20 : _devPoint,
+          uid: _devUserToStaff ? "X938" : "938",
+          sid: "",
+          sixn: "805349",
+          tphone: 1,
+          ticketint: 10,
+        );
         return true;
       }
     } catch (e, stacktrace) {
       log('', error: e, stackTrace: stacktrace, name: 'checkUser');
       return false;
+    }
+  }
+
+  /// 檢查 Entry 資料
+  ///
+  /// 取得 Entry 資料，並將資料存入 [entryNotifier] 變數中。
+  /// 回傳是否成功取得 Entry 資料。
+  Future<bool> checkEntry() async {
+    if (!isAtHome || _duringTest) return true;
+    await Future.delayed(const Duration(milliseconds: 100));
+    log('check entry...', name: 'checkEntry');
+
+    try {
+      if (!kDebugMode || isServiceOnline) {
+        final fetchedEntry = await _repo.getEntry();
+        if (fetchedEntry == null || fetchedEntry.code != 200) return false;
+
+        entryNotifier.value = fetchedEntry;
+        return true;
+      } else {
+        entryNotifier.value = EntryModel(
+          message: "done",
+          code: 200,
+          gr2: [
+            _devGr2GainEnabled ? _devGr2Point += 30 : _devGr2GainEnabled,
+            220,
+            3,
+            "250",
+            "12/13 - 0",
+            "01/16",
+            "",
+            "",
+            true,
+            42.79,
+            15,
+            25,
+            0,
+            _devGr2GainEnabled ? _devfPPoint += 30 : _devfPPoint
+          ],
+        );
+        return true;
+      }
+    } catch (e, stacktrace) {
+      log('', error: e, stackTrace: stacktrace, name: 'checkEntry');
+      return false;
+    }
+  }
+
+  /// 檢查登入狀態
+  Future<void> getLoginStatus() async {
+    if (_duringTest) return;
+    log('get login status...', name: 'getLoginStatus');
+    try {
+      // 檢查是否存在之前登入的session
+      final sess = await Prefs.secureRead(SecurePrefsToken.session);
+      if (sess == null) {
+        isLogined = false;
+        return;
+      }
+      // 嘗試登入，檢查session是否有效
+      final fetchedUser = await _repo.getUser();
+      if (fetchedUser == null || fetchedUser.code != 200) {
+        isLogined = false;
+      } else {
+        isLogined = true;
+      }
+    } catch (e, stacktrace) {
+      log('', error: e, stackTrace: stacktrace, name: 'getLoginStatus');
+      return;
     }
   }
 }

@@ -37,12 +37,19 @@ class _HomeState extends BaseStatefulState<Home> {
   @override
   void initState() {
     super.initState();
+    GlobalSingleton.instance.isAtHome = true;
     viewModel = HomeViewModel(repository: repo)..isFunctionalHeader = false;
   }
 
   Future<void> onRefresh() async {
     refreshKey = GlobalKey();
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    GlobalSingleton.instance.isAtHome = false;
+    super.dispose();
   }
 
   @override
@@ -60,7 +67,7 @@ class _HomeState extends BaseStatefulState<Home> {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const SizedBox();
               }
-              if (viewModel.entry == null) {
+              if (snapshot.hasError || snapshot.data == false) {
                 showServiceError();
                 return Center(child: Text(serviceErrorText));
               }
@@ -100,10 +107,11 @@ class _HomeLoadedState extends BaseStatefulState<_HomeLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeViewModel>(
-      builder: (context, vm, child) {
-        final recentQuests = vm.entry!.questCampaign;
-        final event = vm.entry!.evlist;
+    return ValueListenableBuilder(
+      valueListenable: GlobalSingleton.instance.entryNotifier,
+      builder: (context, entry, child) {
+        final recentQuests = entry?.questCampaign;
+        final events = entry?.evlist;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,20 +11,9 @@ import 'package:x50pay/common/go_route_generator.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/theme/theme.dart';
-import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
-
-/// 檢查是否有登入
-///
-/// 檢查 [SharedPreferences] 中是否有 [session] 的 key，
-/// 若有效則回傳 true，否則回傳 false
-Future<bool> _checkLogin() async {
-  final sess = await Prefs.secureRead(SecurePrefsToken.session);
-  if (sess == null) return false;
-  return await GlobalSingleton.instance.checkUser();
-}
 
 final languageProvider = LanguageProvider();
 
@@ -36,7 +23,7 @@ void main() async {
 
   final appLocale = await languageProvider.getUserPrefLocale();
   final packageInfo = await PackageInfo.fromPlatform();
-  GlobalSingleton.instance.isLogined = await _checkLogin();
+  await GlobalSingleton.instance.getLoginStatus();
   GlobalSingleton.instance.setAppVersion =
       "${packageInfo.version}+${packageInfo.buildNumber}";
   languageProvider.currentLocale = appLocale;
@@ -99,7 +86,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LifecycleManager(
-      callback: AppLifeCycles(),
+      callback: AppLifeCycles.instance,
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: languageProvider),

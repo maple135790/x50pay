@@ -75,9 +75,9 @@ class LoginViewModel extends BaseViewModel {
         default:
           errorMsg = '未知錯誤';
       }
-    } catch (e) {
+    } catch (e, stacktrace) {
       errorMsg = '未知錯誤，請通知開發者';
-      log('', error: e, name: 'LoginViewModel.login');
+      log('', error: e, stackTrace: stacktrace, name: 'LoginViewModel.login');
     } finally {
       EasyLoading.dismiss();
     }
@@ -111,7 +111,6 @@ class LoginViewModel extends BaseViewModel {
     VoidCallback onLoginSuccess,
     bool isShowSuccessLogin,
   ) async {
-    GlobalSingleton.instance.checkUser(force: true);
     GlobalSingleton.instance.isLogined = true;
     if (isShowSuccessLogin) {
       EasyLoading.dismiss();
