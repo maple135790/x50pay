@@ -262,8 +262,8 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                         borderRadius: BorderRadius.circular(8)),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child:
-                        const Icon(Icons.tablet_mac_rounded, color: Color(0xff1e1e1e)),
+                    child: const Icon(Icons.tablet_mac_rounded,
+                        color: Color(0xff1e1e1e)),
                   ))
             ],
           ));

@@ -157,7 +157,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     NfcManager.instance.stopSession();
 
     cardEmuInterval = await Prefs.getInt(PrefsToken.cardEmulationInterval) ??
-      PrefsToken.cardEmulationInterval.defaultValue;
+        PrefsToken.cardEmulationInterval.defaultValue;
     log('card Emu Interval: $cardEmuInterval', name: 'startNfcScan');
 
     // 若使用者設定不模擬卡片，則不需要模擬卡片

@@ -151,8 +151,8 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                       textInputAction: TextInputAction.done,
                       obscureText: true,
                       autofillHints: const [AutofillHints.password],
-                      decoration:
-                          const InputDecoration(prefixIcon: Icon(Icons.lock_rounded))),
+                      decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.lock_rounded))),
                 ],
               ),
             ),
