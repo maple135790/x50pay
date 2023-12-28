@@ -268,7 +268,7 @@ class _GameCabItem extends StatelessWidget with GameMixin {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
       child: Material(
-        elevation: 5,
+        elevation: isDarkTheme ? 5 : 10,
         borderRadius: BorderRadius.circular(5),
         child: Container(
           decoration: BoxDecoration(
