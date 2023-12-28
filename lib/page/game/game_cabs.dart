@@ -6,7 +6,7 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
@@ -115,19 +115,19 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
     Future.delayed(const Duration(milliseconds: 500), () {
       _scaffoldMessengerKey.currentState!
         ..clearSnackBars()
-        ..showSnackBar(SnackBar(
-          backgroundColor: const Color(0xff373737),
-          width: 210,
-          dismissDirection: DismissDirection.horizontal,
-          behavior: SnackBarBehavior.floating,
-          action: SnackBarAction(
-              label: '玩',
-              onPressed: showCabSelectDialog,
-              textColor: const Color(0xfff5222d)),
-          duration: const Duration(days: 1),
-          content:
-              const Text('再一道？', style: TextStyle(color: Color(0xfffafafa))),
-        ));
+        ..showSnackBar(
+          SnackBar(
+            width: 210,
+            dismissDirection: DismissDirection.startToEnd,
+            behavior: SnackBarBehavior.floating,
+            action: SnackBarAction(
+                label: '玩',
+                onPressed: showCabSelectDialog,
+                textColor: const Color(0xfff5222d)),
+            duration: const Duration(days: 1),
+            content: const Text('再一道？'),
+          ),
+        );
     });
   }
 
@@ -148,21 +148,25 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                     padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
                     decoration: BoxDecoration(
                         color: scaffoldBackgroundColor,
-                        border: Border.all(color: Themes.borderColor, width: 1),
+                        border: Border.all(
+                          color: borderColor,
+                          width: 1,
+                        ),
                         borderRadius: BorderRadius.circular(5)),
                     child: Row(
                       children: [
-                        const Icon(Icons.push_pin,
-                            color: Color(0xfffafafa), size: 16),
-                        Text('  ${i18n.gameLocation}「 ${widget.storeName} 」',
-                            style: const TextStyle(color: Color(0xfffafafa))),
+                        const Icon(Icons.push_pin, size: 16),
+                        Text('  ${i18n.gameLocation}「 ${widget.storeName} 」'),
                         const Spacer(),
                         GestureDetector(
                           onTap: onChangeStoreTap,
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: const Color(0xfffafafa)),
+                              color: isDarkTheme
+                                  ? CustomColorThemes.appbarBoxColorLight
+                                  : CustomColorThemes.appbarBoxColorDark,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 4, horizontal: 8),
                             child: Icon(Icons.sync,
@@ -188,10 +192,13 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                       margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                       padding: const EdgeInsets.only(bottom: 10),
                       decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Themes.borderColor, width: 1),
-                          borderRadius: BorderRadius.circular(5),
-                          shape: BoxShape.rectangle),
+                        border: Border.all(
+                          color: borderColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
+                        shape: BoxShape.rectangle,
+                      ),
                     ),
                     Positioned(
                         left: 35,
@@ -200,8 +207,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                           color: scaffoldBackgroundColor,
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: const Text('離峰時段',
-                              style: TextStyle(
-                                  color: Color(0xfffafafa), fontSize: 13)),
+                              style: TextStyle(fontSize: 13)),
                         )),
                     const Positioned(
                       top: 40,
@@ -210,11 +216,9 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('●   部分機種不提供離峰方案',
-                              style: TextStyle(color: Color(0xfffafafa))),
+                          Text('●   部分機種不提供離峰方案'),
                           SizedBox(height: 5),
-                          Text('●   詳情請見粉絲專頁更新貼文',
-                              style: TextStyle(color: Color(0xfffafafa))),
+                          Text('●   詳情請見粉絲專頁更新貼文'),
                         ],
                       ),
                     )
@@ -245,6 +249,7 @@ class _GameCabItem extends StatelessWidget with GameMixin {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final i18n = S.of(context);
     final isWeekend =
         DateTime.now().weekday == 6 || DateTime.now().weekday == 7;
@@ -262,81 +267,88 @@ class _GameCabItem extends StatelessWidget with GameMixin {
     onItemPressed.call();
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(
-                color: Themes.borderColor,
-                strokeAlign: BorderSide.strokeAlignOutside)),
-        height: 155,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                  child: CachedNetworkImage(
-                imageUrl: getGameCabImage(machine.id!),
-                color: const Color.fromARGB(35, 0, 0, 0),
-                colorBlendMode: BlendMode.srcATop,
-                fit: BoxFit.fitWidth,
-                alignment: const Alignment(0, -0.25),
+      child: Material(
+        elevation: 5,
+        borderRadius: BorderRadius.circular(5),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                color: isDarkTheme
+                    ? CustomColorThemes.borderColorDark
+                    : CustomColorThemes.borderColorLight,
+                strokeAlign: BorderSide.strokeAlignOutside,
               )),
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      colors: [Colors.black, Colors.transparent],
-                      transform: GradientRotation(12),
-                      stops: [0, 0.6],
+          height: 155,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                    child: CachedNetworkImage(
+                  imageUrl: getGameCabImage(machine.id!),
+                  color: const Color.fromARGB(35, 0, 0, 0),
+                  colorBlendMode: BlendMode.srcATop,
+                  fit: BoxFit.fitWidth,
+                  alignment: const Alignment(0, -0.25),
+                )),
+                Positioned.fill(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        colors: [Colors.black, Colors.transparent],
+                        transform: GradientRotation(12),
+                        stops: [0, 0.6],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 8,
-                left: 10,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("[$storeName] ${machine.label!}",
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            shadows: [
-                              Shadow(color: Colors.black, blurRadius: 18)
-                            ])),
-                    Row(children: [
-                      const Icon(Icons.schedule,
-                          size: 15, color: Color(0xe6ffffff)),
-                      Text('  $time$addition',
+                Positioned(
+                  bottom: 8,
+                  left: 10,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("[$storeName] ${machine.label!}",
                           style: const TextStyle(
-                              color: Color(0xffffffe6),
-                              fontSize: 13,
+                              color: Colors.white,
+                              fontSize: 18,
                               shadows: [
-                                Shadow(color: Colors.black, blurRadius: 15)
-                              ]))
-                    ]),
-                  ],
+                                Shadow(color: Colors.black, blurRadius: 18)
+                              ])),
+                      Row(children: [
+                        const Icon(Icons.schedule,
+                            size: 15, color: Color(0xe6ffffff)),
+                        Text('  $time$addition',
+                            style: const TextStyle(
+                                color: Color(0xffffffe6),
+                                fontSize: 13,
+                                shadows: [
+                                  Shadow(color: Colors.black, blurRadius: 15)
+                                ]))
+                      ]),
+                    ],
+                  ),
                 ),
-              ),
-              Positioned.fill(
-                  child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () async {
-                    final isInsertToken =
-                        await GoRouter.of(context).pushNamed<bool>(
-                      AppRoutes.gameCab.routeName,
-                      pathParameters: {'mid': machine.id!},
-                    );
-                    if (isInsertToken == true) {
-                      onCoinInserted.call();
-                    }
-                  },
-                ),
-              )),
-            ],
+                Positioned.fill(
+                    child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () async {
+                      final isInsertToken =
+                          await GoRouter.of(context).pushNamed<bool>(
+                        AppRoutes.gameCab.routeName,
+                        pathParameters: {'mid': machine.id!},
+                      );
+                      if (isInsertToken == true) {
+                        onCoinInserted.call();
+                      }
+                    },
+                  ),
+                )),
+              ],
+            ),
           ),
         ),
       ),

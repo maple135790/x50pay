@@ -10,10 +10,12 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
+import 'package:x50pay/providers/theme_provider.dart';
 import 'package:x50pay/r.g.dart';
 
 typedef MenuItem = ({IconData icon, String label, RouteProperty route});
@@ -66,18 +68,17 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title:
-              const Text('確認離開 ?', style: TextStyle(color: Color(0xfffafafa))),
+          title: const Text('確認離開 ?'),
           actions: [
             TextButton(
-              style: Themes.severe(isV4: true),
+              style: CustomButtonThemes.severe(isV4: true),
               onPressed: () {
                 SystemNavigator.pop();
               },
               child: const Text('是'),
             ),
             TextButton(
-              style: Themes.pale(),
+              style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
               onPressed: () {
                 Navigator.pop(context, false);
               },
@@ -104,7 +105,7 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
   }
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     selectedIndex = 2;
   }
@@ -150,13 +151,29 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
       // },
       child: Scaffold(
         appBar: _LoadedAppBar(selectedIndex),
+        floatingActionButton: kDebugMode
+            ? FloatingActionButton(
+                child: const Icon(Icons.brightness_6_rounded),
+                onPressed: () {
+                  Theme.of(context).brightness == Brightness.dark
+                      ? context
+                          .read<AppThemeProvider>()
+                          .changeBrightness(Brightness.light)
+                      : context
+                          .read<AppThemeProvider>()
+                          .changeBrightness(Brightness.dark);
+                },
+              )
+            : null,
         body: widget.body,
         bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border: Border(
               top: BorderSide(
                 width: 1,
-                color: Color(0xff3e3e3e),
+                color: isDarkTheme
+                    ? CustomColorThemes.borderColorDark
+                    : CustomColorThemes.borderColorLight,
               ),
             ),
           ),
@@ -170,10 +187,9 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
             },
             destinations: _menus
                 .map((menu) => NavigationDestination(
-                      icon: Icon(menu.icon, color: const Color(0xffb4b4b4)),
+                      icon: Icon(menu.icon),
                       label: menu.label,
-                      selectedIcon:
-                          Icon(menu.icon, color: const Color(0xfffafafa)),
+                      selectedIcon: Icon(menu.icon),
                     ))
                 .toList(),
           ),
@@ -215,7 +231,11 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
               textScaler: const TextScaler.linear(0.95),
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.white.withOpacity(0.5),
+                color: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.color
+                    ?.withOpacity(0.5),
                 fontWeight: FontWeight.bold,
               )),
           Row(
@@ -295,8 +315,14 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
           height: 50,
           decoration: BoxDecoration(
               color: scaffoldBackgroundColor,
-              border: const Border(
-                  bottom: BorderSide(color: Themes.borderColor, width: 1))),
+              border: Border(
+                bottom: BorderSide(
+                  color: isDarkTheme
+                      ? CustomColorThemes.borderColorDark
+                      : CustomColorThemes.borderColorLight,
+                  width: 1,
+                ),
+              )),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
@@ -326,7 +352,9 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
                                 vertical: 6.75,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xff2a2a2a),
+                                color: isDarkTheme
+                                    ? CustomColorThemes.appbarBoxColorDark
+                                    : CustomColorThemes.appbarBoxColorLight,
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Row(
@@ -363,64 +391,65 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
       child: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: widget.preferredSize.height,
-        elevation: 15,
-        scrolledUnderElevation: 15,
+        elevation: isDarkTheme ? 15 : 5,
+        scrolledUnderElevation: isDarkTheme ? 15 : 10,
         surfaceTintColor: Colors.transparent,
         backgroundColor: scaffoldBackgroundColor,
         shadowColor: Colors.black,
         title: Align(
           alignment: Alignment.topRight,
-          child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
-              decoration: BoxDecoration(
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black54,
-                        blurRadius: 15,
-                        spreadRadius: 0.5)
-                  ],
-                  color: const Color(0xff3e3e3e),
-                  borderRadius: BorderRadius.circular(5)),
-              child: ValueListenableBuilder<UserModel?>(
-                valueListenable: GlobalSingleton.instance.userNotifier,
-                builder: (context, user, child) {
-                  final point = user?.point?.toInt() ?? -1;
-                  final fpoint = user?.fpoint?.toInt() ?? -1;
+          child: Material(
+            elevation: 5,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
+                decoration: BoxDecoration(
+                  color: isDarkTheme
+                      ? CustomColorThemes.appbarBoxColorDark
+                      : CustomColorThemes.appbarBoxColorLight,
+                ),
+                child: ValueListenableBuilder<UserModel?>(
+                  valueListenable: GlobalSingleton.instance.userNotifier,
+                  builder: (context, user, child) {
+                    final point = user?.point?.toInt() ?? -1;
+                    final fpoint = user?.fpoint?.toInt() ?? -1;
 
-                  return Text.rich(TextSpan(
-                      text: '$point + ',
-                      style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.labelLarge!.fontSize,
-                        color: const Color(0xfffafafa),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      children: [
-                        TextSpan(
-                            text: '$fpoint',
+                    return Text.rich(TextSpan(
+                        text: '$point + ',
+                        style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.labelLarge!.fontSize,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        children: [
+                          TextSpan(
+                              text: '$fpoint',
+                              style: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .fontSize,
+                                color: const Color(0xffd4b106),
+                                fontWeight: FontWeight.bold,
+                              )),
+                          TextSpan(
+                            text: ' P',
                             style: TextStyle(
                               fontSize: Theme.of(context)
                                   .textTheme
                                   .labelLarge!
                                   .fontSize,
-                              color: const Color(0xffd4b106),
                               fontWeight: FontWeight.bold,
-                            )),
-                        TextSpan(
-                          text: ' P',
-                          style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .fontSize,
-                            color: const Color(0xfffafafa),
-                            fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ]));
-                },
-              )),
+                        ]));
+                  },
+                )),
+          ),
         ),
         actions: [
           InkWell(
@@ -438,8 +467,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
                     }
                   : null,
               splashFactory: NoSplash.splashFactory,
-              child: const Icon(Icons.qr_code_rounded,
-                  size: 28, color: Color(0xfffafafa))),
+              child: const Icon(Icons.qr_code_rounded, size: 28)),
           const SizedBox(width: 15),
         ],
       ),
@@ -449,7 +477,8 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle.light,
+      value:
+          isDarkTheme ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
       child: SafeArea(
         child: Stack(
           clipBehavior: Clip.none,

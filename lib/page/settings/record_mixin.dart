@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 
@@ -105,16 +104,17 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
               decoration: BoxDecoration(
                   color: scaffoldBackgroundColor,
-                  border: Border.all(color: Themes.borderColor, width: 1)),
+                  border: Border.all(color: borderColor, width: 1)),
               child: Row(
                 children: [
                   const CircleAvatar(
-                      foregroundImage: CachedNetworkImageProvider(
-                        "https://pay.x50.fun/static/logo.jpg",
-                        maxHeight: 150,
-                        maxWidth: 150,
-                      ),
-                      radius: 29),
+                    foregroundImage: CachedNetworkImageProvider(
+                      "https://pay.x50.fun/static/logo.jpg",
+                      maxHeight: 150,
+                      maxWidth: 150,
+                    ),
+                    radius: 29,
+                  ),
                   const SizedBox(width: 16.8),
                   Expanded(
                     child: Text(
@@ -153,7 +153,7 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: DataTable(
-                            border: TableBorder.all(color: Themes.borderColor),
+                            border: TableBorder.all(color: borderColor),
                             dataRowMaxHeight: 60,
                             horizontalMargin: 12,
                             columnSpacing: 25,

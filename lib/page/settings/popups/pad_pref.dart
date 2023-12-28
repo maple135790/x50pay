@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/padSettings/pad_settings.dart';
+import 'package:x50pay/mixins/color_picker_mixin.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 
@@ -14,7 +16,7 @@ class PadPrefDialog extends StatefulWidget {
   State<PadPrefDialog> createState() => _PadPrefDialogState();
 }
 
-class _PadPrefDialogState extends State<PadPrefDialog> {
+class _PadPrefDialogState extends BaseStatefulState<PadPrefDialog> {
   bool gotModel = false;
   _PadPrefModalValue? modalValue;
 
@@ -80,7 +82,8 @@ class _PadPrefLoaded extends StatefulWidget {
   State<_PadPrefLoaded> createState() => __PadPrefLoadedState();
 }
 
-class __PadPrefLoadedState extends State<_PadPrefLoaded> {
+class __PadPrefLoadedState extends BaseStatefulState<_PadPrefLoaded>
+    with ColorPickerMixin {
   late String nickname;
   late bool isNameShown;
   Color? showColor;
@@ -137,26 +140,6 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
     return;
   }
 
-  Future<dynamic> showColorPicker() {
-    return showCupertinoDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            content: SingleChildScrollView(
-              child: ColorPicker(
-                pickerColor: showColor!,
-                enableAlpha: false,
-                onColorChanged: (color) {
-                  showColor = color;
-                  setState(() {});
-                },
-              ),
-            ),
-          );
-        });
-  }
-
   void updateValue() {
     widget.getValues.call((
       nickname: nickname,
@@ -164,6 +147,15 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
       showColor: showColor!.value.toRadixString(16).substring(2),
     ));
   }
+
+  @override
+  void onColorChanged(Color color) {
+    showColor = color;
+    setState(() {});
+  }
+
+  @override
+  Color pickerColor() => showColor ?? Colors.black;
 
   @override
   void initState() {
@@ -205,8 +197,7 @@ class __PadPrefLoadedState extends State<_PadPrefLoaded> {
                       decoration: BoxDecoration(
                         color: showColor,
                         borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                            color: const Color(0xffd9d9d9), width: 1),
+                        border: Border.all(color: borderColor, width: 1),
                       )),
                   const SizedBox(width: 10),
                   const CupertinoListTileChevron(),

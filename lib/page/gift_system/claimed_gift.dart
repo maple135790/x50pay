@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
 
 class ClaimedGift extends StatelessWidget {
@@ -21,20 +21,18 @@ class ClaimedGift extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
           child: ListTile(
             visualDensity: VisualDensity.comfortable,
-            title: const Text('',
-                style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+            title: const Text('', style: TextStyle(fontSize: 14)),
             subtitle: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 4),
-                Text('',
-                    style: TextStyle(color: Color(0xfffafafa), fontSize: 14))
+                Text('', style: TextStyle(fontSize: 14))
               ],
             ),
             trailing: ElevatedButton(
                 onPressed: null,
-                style: Themes.grey(),
+                style: CustomButtonThemes.grey(),
                 child: const Text('已領取')),
           ),
         ),
@@ -67,21 +65,18 @@ class ClaimedGift extends StatelessWidget {
                 ),
               ),
               title: Text(claimedList[index].name,
-                  style:
-                      const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+                  style: const TextStyle(fontSize: 14)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 4),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: Color(0xfffafafa), fontSize: 14)),
+                  Text(subtitle, style: const TextStyle(fontSize: 14)),
                 ],
               ),
               trailing: ElevatedButton(
                   onPressed: null,
-                  style: Themes.grey(),
+                  style: CustomButtonThemes.grey(),
                   child: const Text('已領取')),
             ),
           );

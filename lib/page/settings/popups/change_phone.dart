@@ -1,10 +1,11 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 
 class ChangePhoneDialog extends StatefulWidget {
@@ -16,7 +17,7 @@ class ChangePhoneDialog extends StatefulWidget {
   State<ChangePhoneDialog> createState() => _ChangePhoneDialogState();
 }
 
-class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
+class _ChangePhoneDialogState extends BaseStatefulState<ChangePhoneDialog> {
   late SettingsViewModel model;
   final newEmail = TextEditingController();
 
@@ -35,35 +36,45 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.error, size: 50, color: Color(0xfffafafa)),
+          const Icon(Icons.error, size: 50),
           const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
-            child: Column(
+            child: const Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                RichText(
-                    text: const TextSpan(
-                        text: '此選項會',
-                        style: TextStyle(fontSize: 16),
-                        children: [
+                Text.rich(
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  TextSpan(
+                    text: '此選項會',
+                    children: [
                       TextSpan(
                           text: "解除您的帳戶的手機綁定",
-                          style: TextStyle(color: Color(0xfffad814))),
+                          style: TextStyle(color: Color(0xFFEAC912))),
                       TextSpan(text: '，並且讓原先的手機號碼可以被再次使用')
-                    ])),
-                const Text('且您的帳戶會變成尚未簡訊驗證的狀況，直到您驗證完新的電話號碼。'),
-                const SizedBox(height: 20),
-                const Text('您確定要取消手機綁定並重新驗證？',
-                    style: TextStyle(
-                        color: Color(0xfffad814), fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text('且您的帳戶會變成尚未簡訊驗證的狀況，直到您驗證完新的電話號碼。'),
+                SizedBox(height: 20),
+                Text(
+                  '您確定要取消手機綁定並重新驗證？',
+                  style: TextStyle(
+                    color: Color(0xFFEAC912),
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
               ],
             ),
           ),
           const Divider(thickness: 1, height: 0),
           Container(
-            color: const Color(0xff2a2a2a),
+            color: dialogButtomBarColor,
             padding: const EdgeInsets.all(15),
             child: Row(
               children: [
@@ -72,20 +83,16 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      style: Themes.cancel(),
+                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
                       child: const Text('取消')),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: TextButton(
-                      onPressed: () async {
-                        final isDetached = await model.detachPhone();
-                        log('isDetached: $isDetached',
-                            name: 'ChangePhoneDialog');
-                        widget.callback(isDetached);
-                      },
-                      style: Themes.severe(isV4: true),
-                      child: const Text('確認')),
+                    onPressed: onDetachPhoneTap,
+                    style: CustomButtonThemes.severe(isV4: true),
+                    child: const Text('確認'),
+                  ),
                 ),
               ],
             ),
@@ -93,6 +100,17 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog> {
         ],
       ),
     );
+  }
+
+  void onDetachPhoneTap() async {
+    if (kDebugMode) {
+      widget.callback(true);
+      log('dev isDetached: true', name: 'ChangePhoneDialog');
+      return;
+    }
+    final isDetached = await model.detachPhone();
+    log('isDetached: $isDetached', name: 'ChangePhoneDialog');
+    widget.callback(isDetached);
   }
 }
 
@@ -196,7 +214,9 @@ class _ChangePhoneConfirmedDialogState
               children: [
                 const Text('請注意！只能發送一次簡訊驗證碼。若手機號碼輸入錯誤或30分鐘仍未收到請聯絡粉絲專頁',
                     style: TextStyle(
-                        color: Colors.red, fontWeight: FontWeight.bold)),
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    )),
                 const SizedBox(height: 15),
                 _DialogWidget(
                   titleIcon: isEnteredNewPhone ? Icons.email : Icons.phone,
@@ -206,10 +226,12 @@ class _ChangePhoneConfirmedDialogState
                     Expanded(
                         child: TextFormField(
                       maxLength: isEnteredNewPhone ? 6 : null,
-                      buildCounter: (context,
-                              {currentLength = 0,
-                              isFocused = true,
-                              maxLength}) =>
+                      buildCounter: (
+                        context, {
+                        currentLength = 0,
+                        isFocused = true,
+                        maxLength,
+                      }) =>
                           null,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       keyboardType: TextInputType.phone,
@@ -247,7 +269,7 @@ class _Dialog extends StatefulWidget {
   State<_Dialog> createState() => _DialogState();
 }
 
-class _DialogState extends State<_Dialog> {
+class _DialogState extends BaseStatefulState<_Dialog> {
   static const _kMaxBottomSheetHeight = 80.0;
   ValueNotifier<Offset> offsetNotifier =
       ValueNotifier(const Offset(0, _kMaxBottomSheetHeight));
@@ -261,14 +283,6 @@ class _DialogState extends State<_Dialog> {
     }
   }
 
-  final buttonStyle = ButtonStyle(
-    shape: MaterialStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-    backgroundColor: MaterialStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
-      return const Color(0xfffafafa);
-    }),
-  );
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -289,12 +303,12 @@ class _DialogState extends State<_Dialog> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            style: Themes.pale(),
+            style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
             child: const Text('取消')),
         widget.customConfirmButton == null
             ? TextButton(
                 onPressed: widget.onConfirm,
-                style: Themes.severe(isV4: true),
+                style: CustomButtonThemes.severe(isV4: true),
                 child: const Text('保存'))
             : widget.customConfirmButton!
       ],
@@ -309,17 +323,19 @@ class _DialogBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTextStyle(
-        style: const TextStyle(color: Color(0xff5a5a5a)),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Align(
-              alignment: Alignment.topLeft,
-              child: Text(title,
-                  style:
-                      const TextStyle(color: Color(0xffbfbfbf), fontSize: 12))),
-          const SizedBox(height: 30),
-          ...children,
-        ]));
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.headlineSmall,
+            )),
+        const SizedBox(height: 30),
+        ...children,
+      ],
+    );
   }
 }
 
@@ -328,11 +344,13 @@ class _DialogWidget extends StatefulWidget {
   final Widget child;
   final IconData? titleIcon;
   final bool isRequired;
-  const _DialogWidget(
-      {required this.title,
-      required this.child,
-      this.isRequired = false,
-      this.titleIcon});
+
+  const _DialogWidget({
+    required this.title,
+    required this.child,
+    this.isRequired = false,
+    this.titleIcon,
+  });
 
   @override
   State<_DialogWidget> createState() => _DialogWidgetState();
@@ -345,16 +363,14 @@ class _DialogWidgetState extends State<_DialogWidget> {
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: RichText(
-                text: TextSpan(
-              style: const TextStyle(color: Color(0xfffafafa)),
+            child: Text.rich(TextSpan(
               children: widget.isRequired
                   ? [
                       widget.titleIcon == null
                           ? const WidgetSpan(child: SizedBox())
                           : WidgetSpan(
-                              child: Icon(widget.titleIcon!,
-                                  color: const Color(0xff5a5a5a), size: 18)),
+                              child: Icon(widget.titleIcon!, size: 18)),
+                      const WidgetSpan(child: SizedBox(width: 5)),
                       TextSpan(text: widget.title),
                       const TextSpan(
                           text: ' *', style: TextStyle(color: Colors.red))
@@ -370,9 +386,7 @@ class _DialogWidgetState extends State<_DialogWidget> {
             ))),
         const SizedBox(height: 12),
         Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffd9d9d9)),
-              borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
           child: widget.child,
         ),
         const SizedBox(height: 22.4),

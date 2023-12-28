@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
@@ -148,7 +148,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
           child: const Text.rich(TextSpan(text: '用回饋', children: [
             TextSpan(
                 text: '(無法集計道數/參與部分活動)',
-                style: TextStyle(color: Color(0xffffec3d)))
+                style: TextStyle(color: Color(0xFFEAC912)))
           ])),
         ),
       ],
@@ -181,7 +181,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
         ),
         const Divider(thickness: 1, height: 0),
         Container(
-          color: const Color(0xff2a2a2a),
+          color: dialogButtomBarColor,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 14),
             child: Row(
@@ -192,14 +192,14 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      style: Themes.pale(),
+                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
                       child: const Text('取消')),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: TextButton(
                       onPressed: isPayPressed ? null : onPayConfirmPressed,
-                      style: Themes.severe(isV4: true),
+                      style: CustomButtonThemes.severe(isV4: true),
                       child:
                           isPayPressed ? const Text('請稍等') : const Text('確認')),
                 )
@@ -290,23 +290,17 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(cabLabel,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                shadows: [
-                                  Shadow(color: Colors.black, blurRadius: 18)
-                                ])),
+                            style: const TextStyle(fontSize: 18, shadows: [
+                              Shadow(color: Colors.black, blurRadius: 18)
+                            ])),
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text('$cabNum號機',
-                                  style: const TextStyle(
-                                      color: Color(0xffbcbfbf),
-                                      fontSize: 16,
-                                      shadows: [
-                                        Shadow(
-                                            color: Colors.black, blurRadius: 15)
-                                      ])),
+                                  style:
+                                      const TextStyle(fontSize: 16, shadows: [
+                                    Shadow(color: Colors.black, blurRadius: 15)
+                                  ])),
                             ]),
                       ],
                     ),
@@ -329,43 +323,47 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
       final double price = double.parse(mode.last.toString());
       children
         ..add(const SizedBox(height: 20))
-        ..add(Text(mode[1], style: const TextStyle(color: Color(0xfffafafa))))
-        ..add(ButtonBar(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextButton(
-                onPressed: () {
-                  if (widget._isFromQRPay) {
-                    selectedRawPayUrl = mode.first[0].toString();
-                  }
-                  selectedMode = mode;
-                  isSelectPayment = true;
-                  paymentType = PaymentType.point;
-                  setState(() {});
-                },
-                style: Themes.severe(isV4: true),
-                child: Text('${price.toInt()}P')),
-            ValueListenableBuilder(
-              valueListenable: GlobalSingleton.instance.userNotifier,
-              builder: (context, user, child) {
-                return TextButton(
-                    onPressed: user?.hasTicket ?? false
-                        ? () {
-                            if (widget._isFromQRPay) {
-                              selectedRawPayUrl = mode.first[1].toString();
+        ..add(Text(mode[1]))
+        ..add(
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    if (widget._isFromQRPay) {
+                      selectedRawPayUrl = mode.first[0].toString();
+                    }
+                    selectedMode = mode;
+                    isSelectPayment = true;
+                    paymentType = PaymentType.point;
+                    setState(() {});
+                  },
+                  style: CustomButtonThemes.severe(isV4: true),
+                  child: Text('${price.toInt()}P')),
+              const SizedBox(width: 15),
+              ValueListenableBuilder(
+                valueListenable: GlobalSingleton.instance.userNotifier,
+                builder: (context, user, child) {
+                  return TextButton(
+                      onPressed: user?.hasTicket ?? false
+                          ? () {
+                              if (widget._isFromQRPay) {
+                                selectedRawPayUrl = mode.first[1].toString();
+                              }
+                              selectedMode = mode;
+                              isSelectPayment = true;
+                              paymentType = PaymentType.ticket;
+                              setState(() {});
                             }
-                            selectedMode = mode;
-                            isSelectPayment = true;
-                            paymentType = PaymentType.ticket;
-                            setState(() {});
-                          }
-                        : null,
-                    style: Themes.pale(),
-                    child: Text(i18n.gameTicket));
-              },
-            ),
-          ],
-        ));
+                          : null,
+                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+                      child: Text(i18n.gameTicket));
+                },
+              ),
+            ],
+          ),
+        );
     }
     return Column(mainAxisSize: MainAxisSize.min, children: [
       ...children,
@@ -377,7 +375,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 20),
-              const Text('工作人員補幣', style: TextStyle(color: Color(0xfffafafa))),
+              const Text('工作人員補幣'),
               const SizedBox(height: 5),
               TextButton(
                   onPressed: () {
@@ -385,7 +383,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                     paymentType = PaymentType.reloadCoin;
                     setState(() {});
                   },
-                  style: Themes.severe(isV4: true),
+                  style: CustomButtonThemes.severe(isV4: true),
                   child: const Text('補幣')),
             ],
           );

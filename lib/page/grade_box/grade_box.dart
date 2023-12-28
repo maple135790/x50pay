@@ -57,7 +57,7 @@ class _GradeBoxLoaded extends StatefulWidget {
   State<_GradeBoxLoaded> createState() => _GradeBoxLoadedState();
 }
 
-class _GradeBoxLoadedState extends State<_GradeBoxLoaded> {
+class _GradeBoxLoadedState extends BaseStatefulState<_GradeBoxLoaded> {
   static const titleImageUrl = 'https://pay.x50.fun/static/grade/gdebox.png';
   final tabs = const <Widget>[
     Tab(text: '全部'),
@@ -101,7 +101,9 @@ class _GradeBoxLoadedState extends State<_GradeBoxLoaded> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                      color: const Color.fromARGB(12, 255, 255, 255),
+                      color: isDarkTheme
+                          ? const Color.fromARGB(12, 255, 255, 255)
+                          : const Color.fromARGB(12, 0, 0, 0),
                       width: MediaQuery.of(context).size.width,
                       height: 89.19,
                       child: const Column(
@@ -110,20 +112,20 @@ class _GradeBoxLoadedState extends State<_GradeBoxLoaded> {
                           children: [
                             Text('養成商場', style: TextStyle(fontSize: 17)),
                             Text('點數兌換商品',
-                                style: TextStyle(color: Color(0xffb4b4b4)))
+                                style: TextStyle(color: Color(0xff787878)))
                           ])),
                   Container(
                       height: 42.5,
                       alignment: Alignment.centerLeft,
-                      color: const Color.fromARGB(5, 255, 255, 255),
+                      color: isDarkTheme
+                          ? const Color.fromARGB(5, 255, 255, 255)
+                          : const Color.fromARGB(5, 0, 0, 0),
                       child: TabBar(
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          tabAlignment: TabAlignment.start,
-                          isScrollable: true,
-                          tabs: tabs,
-                          indicatorWeight: 3,
-                          splashFactory: NoSplash.splashFactory,
-                          indicatorColor: Colors.white)),
+                        tabAlignment: TabAlignment.start,
+                        isScrollable: true,
+                        tabs: tabs,
+                        indicatorWeight: 3,
+                      )),
                 ],
               ),
             ),

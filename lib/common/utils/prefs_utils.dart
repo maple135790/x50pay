@@ -71,12 +71,13 @@ class Prefs {
 }
 
 enum PrefsToken {
-  cardEmulationInterval('cardEmulationInterval', defaultValue: 350),
-  enabledFastQRPay('fastQRPay', defaultValue: false),
-  enabledInAppNfcScan('inAppNfcScan', defaultValue: false),
-  enableSummarizedRecord('summarizedRecord', defaultValue: false),
-  favGameName('favGameName'),
-  appLang('appLang', defaultValue: 'zh-tw'),
+  cardEmulationInterval('card_emulation_interval', defaultValue: -1),
+  enabledFastQRPay('fast_qrpay', defaultValue: false),
+  enabledInAppNfcScan('in_app_nfc_scan', defaultValue: false),
+  enableSummarizedRecord('summarized_record', defaultValue: false),
+  enableDarkTheme('dark_theme', defaultValue: true),
+  favGameName('fav_game_name'),
+  appLang('app_lang', defaultValue: 'zh-tw'),
   storeId('store_id'),
   storeName('store_name');
 

@@ -5,8 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
 import 'package:x50pay/r.g.dart';
@@ -147,14 +148,15 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                     margin: const EdgeInsets.all(12),
                     padding: const EdgeInsets.all(15),
                     decoration: BoxDecoration(
+                        color: CustomColorThemes.pageDialogBackgroundColorDark,
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: const Color(0xff3e3e3e))),
+                        border: Border.all(color: borderColor)),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         TextButton(
                           onPressed: onX50PayPressed,
-                          style: Themes.severe(isV4: true),
+                          style: CustomButtonThemes.severe(isV4: true),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -171,20 +173,22 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                             ],
                           ),
                         ),
-                        const Divider(color: Color(0xff3e3e3e), height: 30),
+                        Divider(color: borderColor, height: 30),
                         TextButton(
                           onPressed: onJKOPayPressed,
-                          style: Themes.pale(),
+                          style: buttonStyleDark,
                           child: Center(
                               child: Image(
-                                  image: R.image.jkopay_logo(), height: 28)),
+                            image: R.image.jkopay_logo(),
+                            height: 28,
+                          )),
                         ),
                         const SizedBox(height: 15),
                         TextButton(
                           onPressed: viewModel.isLinePayAvailable
                               ? onLinePayPressed
                               : null,
-                          style: Themes.pale(),
+                          style: buttonStyleDark,
                           child: Center(
                             child: ColorFiltered(
                                 colorFilter: const ColorFilter.mode(

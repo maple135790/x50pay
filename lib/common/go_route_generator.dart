@@ -69,18 +69,20 @@ RouterConfig<Object> goRouteConfig() {
           _route(AppRoutes.forgotPassword, (_, __) => const ForgotPassword()),
           _route(AppRoutes.signUp, (_, __) => const SignUp()),
           _route(AppRoutes.login, (_, __) => const Login()),
-          _route(
+          _routeTransition(
             AppRoutes.gameStore,
-            (_, __) => const GameStore(),
+            (_, __) => const NoTransitionPage(child: GameStore()),
             redirect: gameStoreRedirect,
           ),
-          _route(AppRoutes.gameCabs, (_, state) {
+          _routeTransition(AppRoutes.gameCabs, (_, state) {
             final shouldRebuild = state.extra as bool?;
             if (shouldRebuild ?? false) {
-              return GameCabs(
-                  key: ValueKey(DateTime.now().millisecondsSinceEpoch));
+              return NoTransitionPage(
+                child: GameCabs(
+                    key: ValueKey(DateTime.now().millisecondsSinceEpoch)),
+              );
             }
-            return const GameCabs();
+            return const NoTransitionPage(child: GameCabs());
           }, innerRoutes: [
             _routeTransition(AppRoutes.gameCab, (_, state) {
               final machineId = state.pathParameters['mid']!;
@@ -92,7 +94,7 @@ RouterConfig<Object> goRouteConfig() {
             (_, state) => ScanQRCode(state.extra as PermissionStatus),
           ),
           _route(AppRoutes.license, (_, __) => const License()),
-          _route(
+          _routeTransition(
             AppRoutes.settings,
             (_, state) {
               final shouldGoPhone =
@@ -102,9 +104,11 @@ RouterConfig<Object> goRouteConfig() {
 
               log('shouldGoPhone: $shouldGoPhone');
               log('shouldGoTicketRecord: $shouldGoTicketRecord');
-              return Settings(
-                shouldGoPhone: shouldGoPhone,
-                shouldGoTicketRecord: shouldGoTicketRecord,
+              return NoTransitionPage(
+                child: Settings(
+                  shouldGoPhone: shouldGoPhone,
+                  shouldGoTicketRecord: shouldGoTicketRecord,
+                ),
               );
             },
             innerRoutes: [
@@ -209,15 +213,17 @@ RouterConfig<Object> goRouteConfig() {
               }),
             ],
           ),
-          _route(
+          _routeTransition(
             AppRoutes.home,
             (_, state) {
               final shouldRebuild = state.extra as bool?;
               if (shouldRebuild == true) {
-                return Home(
-                    key: ValueKey(DateTime.now().millisecondsSinceEpoch));
+                return NoTransitionPage(
+                  child: Home(
+                      key: ValueKey(DateTime.now().millisecondsSinceEpoch)),
+                );
               }
-              return const Home();
+              return const NoTransitionPage(child: Home());
             },
             innerRoutes: [
               _route(AppRoutes.ecPay, (_, state) => const EcPay()),
@@ -238,9 +244,12 @@ RouterConfig<Object> goRouteConfig() {
               }),
             ],
           ),
-          _route(AppRoutes.gift, (_, __) => const GiftSystem()),
-          _route(AppRoutes.gradeBox, (_, __) => const GradeBox()),
-          _route(AppRoutes.collab, (_, __) => const Collab()),
+          _routeTransition(AppRoutes.gift,
+              (_, __) => const NoTransitionPage(child: GiftSystem())),
+          _routeTransition(AppRoutes.gradeBox,
+              (_, __) => const NoTransitionPage(child: GradeBox())),
+          _routeTransition(AppRoutes.collab,
+              (_, __) => const NoTransitionPage(child: Collab())),
         ],
         builder: (context, state, child) {
           if (AppRoutes.noLoginPages

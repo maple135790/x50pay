@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:x50pay/common/base/base.dart';
 
 class EcPay extends StatefulWidget {
   const EcPay({super.key});
@@ -8,8 +9,11 @@ class EcPay extends StatefulWidget {
   State<EcPay> createState() => _EcPayState();
 }
 
-class _EcPayState extends State<EcPay> {
-  Widget paymentTile({required String point, required String price}) {
+class _EcPayState extends BaseStatefulState<EcPay> {
+  Widget paymentTile({
+    required String point,
+    required String price,
+  }) {
     return GestureDetector(
       onTap: () {
         launchUrlString(
@@ -24,20 +28,21 @@ class _EcPayState extends State<EcPay> {
         margin: const EdgeInsets.fromLTRB(15, 0, 15, 35),
         decoration: BoxDecoration(
           border: Border.all(
-              color: const Color(0xff505050),
-              strokeAlign: BorderSide.strokeAlignOutside),
+            color: borderColor,
+            strokeAlign: BorderSide.strokeAlignOutside,
+          ),
           borderRadius: BorderRadius.circular(6),
         ),
         child: Stack(
           children: [
-            const Positioned(
+            Positioned(
               height: 90,
               bottom: 0,
               right: -45,
               child: Icon(
                 Icons.payment_rounded,
                 size: 140,
-                color: Colors.white10,
+                color: isDarkTheme ? Colors.white10 : Colors.black12,
               ),
             ),
             Positioned.fill(

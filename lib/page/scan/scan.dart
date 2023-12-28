@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
@@ -176,7 +176,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
   Widget buildButton() {
     return ElevatedButton(
       onPressed: onRechargePressed,
-      style: Themes.pale(),
+      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
       child: const Text('信用卡 / ATM 線上加值'),
     );
   }

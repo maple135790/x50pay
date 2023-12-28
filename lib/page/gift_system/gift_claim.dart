@@ -5,8 +5,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 
@@ -27,21 +28,20 @@ class GiftClaim extends StatelessWidget {
           child: ListTile(
             contentPadding: EdgeInsets.zero,
             visualDensity: VisualDensity.comfortable,
-            title: const Text('',
-                style: TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+            title: const Text('', style: TextStyle(fontSize: 14)),
             subtitle: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 4),
-                Text('',
-                    style: TextStyle(color: Color(0xfffafafa), fontSize: 14))
+                Text('', style: TextStyle(fontSize: 14))
               ],
             ),
             trailing: ElevatedButton(
-                onPressed: null,
-                style: Themes.grey(),
-                child: const Text('已領取')),
+              onPressed: null,
+              style: CustomButtonThemes.grey(),
+              child: const Text('已領取'),
+            ),
           ),
         ),
         itemBuilder: (context, index) {
@@ -65,30 +65,28 @@ class GiftClaim extends StatelessWidget {
                     imageUrl: canChangeList[index].pic, width: 50),
               ),
               title: Text(canChangeList[index].name,
-                  style:
-                      const TextStyle(color: Color(0xfffafafa), fontSize: 14)),
+                  style: const TextStyle(fontSize: 14)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 4),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: Color(0xfffafafa), fontSize: 14)),
+                  Text(subtitle, style: const TextStyle(fontSize: 14)),
                 ],
               ),
               trailing: ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return _ConfirmChangeDialog(
-                              gid: canChangeList[index].gid);
-                        });
-                    getGiftDialog(canChangeList[index].gid);
-                  },
-                  style: Themes.severe(isV4: true),
-                  child: Text(buttonText)),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return _ConfirmChangeDialog(
+                            gid: canChangeList[index].gid);
+                      });
+                  getGiftDialog(canChangeList[index].gid);
+                },
+                style: CustomButtonThemes.severe(isV4: true),
+                child: Text(buttonText),
+              ),
             ),
           );
         },
@@ -99,11 +97,17 @@ class GiftClaim extends StatelessWidget {
   void getGiftDialog(String gid) {}
 }
 
-class _ConfirmChangeDialog extends StatelessWidget {
+class _ConfirmChangeDialog extends StatefulWidget {
   final String gid;
 
   const _ConfirmChangeDialog({required this.gid});
 
+  @override
+  State<_ConfirmChangeDialog> createState() => _ConfirmChangeDialogState();
+}
+
+class _ConfirmChangeDialogState
+    extends BaseStatefulState<_ConfirmChangeDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -113,7 +117,7 @@ class _ConfirmChangeDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.error, size: 60, color: Color(0xfffafafa)),
+          const Icon(Icons.error, size: 60),
           const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
@@ -131,7 +135,7 @@ class _ConfirmChangeDialog extends StatelessWidget {
           ),
           const Divider(thickness: 1, height: 0),
           Container(
-            color: const Color(0xff2a2a2a),
+            color: dialogButtomBarColor,
             padding: const EdgeInsets.all(15),
             child: Row(
               children: [
@@ -140,7 +144,7 @@ class _ConfirmChangeDialog extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      style: Themes.cancel(),
+                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
                       child: const Text('取消')),
                 ),
                 const SizedBox(width: 15),
@@ -150,14 +154,14 @@ class _ConfirmChangeDialog extends StatelessWidget {
                         final nav = GoRouter.of(context);
                         kDebugMode
                             ? null
-                            : await Repository().giftExchange(gid);
+                            : await Repository().giftExchange(widget.gid);
                         await EasyLoading.showSuccess('成功兌換,將會回到首頁',
                             duration: const Duration(milliseconds: 800));
                         await Future.delayed(const Duration(milliseconds: 800));
 
                         nav.goNamed(AppRoutes.home.routeName);
                       },
-                      style: Themes.severe(isV4: true),
+                      style: CustomButtonThemes.severe(isV4: true),
                       child: const Text('確認')),
                 ),
               ],

@@ -67,6 +67,12 @@ class SettingsViewModel extends BaseViewModel {
 
   BasicResponse? response;
 
+  Future<void> init() async {
+    showLoading();
+    await Future.delayed(const Duration(milliseconds: 650));
+    dismissLoading();
+  }
+
   /// 設定 QuicPay 偏好
   Future<bool> quicConfirm(
       {required bool autoQuic, required String autoQlock}) async {

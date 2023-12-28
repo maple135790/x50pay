@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 
 class PageDialog extends StatefulWidget {
   final Widget Function(void Function(bool isShow) showButtonBar) content;
@@ -36,18 +36,12 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
     }
   }
 
-  final buttonStyle = ButtonStyle(
-    shape: MaterialStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-    backgroundColor: MaterialStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
-      return const Color(0xfffafafa);
-    }),
-  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Themes.pageDialogBackgroundColor,
+      backgroundColor: isDarkTheme
+          ? CustomColorThemes.pageDialogBackgroundColorDark
+          : CustomColorThemes.pageDialogBackgroundColorLight,
       body: Padding(
         padding: const EdgeInsets.only(bottom: _kMaxBottomSheetHeight),
         child: Column(
@@ -81,14 +75,14 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
         child: BottomSheet(
             onClosing: () {},
             dragHandleSize: Size.zero,
-            backgroundColor: const Color(0xff2a2a2a),
+            backgroundColor: dialogButtomBarColor,
             enableDrag: false,
             shape: const RoundedRectangleBorder(),
             builder: (context) => Container(
                   height: _kMaxBottomSheetHeight,
                   padding: const EdgeInsets.all(15),
-                  decoration: const BoxDecoration(
-                    border: Border(top: BorderSide(color: Color(0xff3e3e3e))),
+                  decoration: BoxDecoration(
+                    border: Border(top: BorderSide(color: borderColor)),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,20 +93,20 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            style: buttonStyle,
-                            child: Text(i18n.dialogReturn,
-                                style:
-                                    const TextStyle(color: Color(0xff1e1e1e)))),
+                            style: isDarkTheme
+                                ? buttonStyleDark
+                                : buttonStyleLight,
+                            child: Text(i18n.dialogReturn)),
                       ),
                       const SizedBox(width: 15),
                       Expanded(
                         child: widget.customConfirmButton == null
                             ? TextButton(
-                                style: buttonStyle,
+                                style: isDarkTheme
+                                    ? buttonStyleDark
+                                    : buttonStyleLight,
                                 onPressed: widget.onConfirm,
-                                child: Text(i18n.dialogSave,
-                                    style: const TextStyle(
-                                        color: Color(0xff1e1e1e))),
+                                child: Text(i18n.dialogSave),
                               )
                             : widget.customConfirmButton!,
                       ),

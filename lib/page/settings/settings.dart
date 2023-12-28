@@ -10,7 +10,8 @@ import 'package:vibration/vibration.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/remote_open_mixin.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
@@ -35,6 +36,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   late final String avatarUrl;
   late final viewModel = SettingsViewModel(settingRepo: settingRepo);
+  late Future<void> intentDelay;
   final settingRepo = SettingRepository();
   final controller = ScrollController();
   final user = GlobalSingleton.instance.userNotifier.value!;
@@ -142,11 +144,13 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       content: const Text('確定要登出?'),
       actions: [
         TextButton(
-            onPressed: () {
-              context.pop();
-            },
-            style: Themes.grey(),
-            child: const Text('取消')),
+          onPressed: () {
+            context.pop();
+          },
+          style: CustomButtonThemes.grey(),
+          child: const Text('取消'),
+        ),
+        const SizedBox(width: 8),
         TextButton(
             onPressed: () async {
               if (await viewModel.logout()) {
@@ -160,7 +164,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
                 showServiceError();
               }
             },
-            style: Themes.severe(isV4: true),
+            style: CustomButtonThemes.severe(isV4: true),
             child: const Text('登出'))
       ],
     );
@@ -169,6 +173,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   @override
   void initState() {
     super.initState();
+    intentDelay = viewModel.init();
 
     avatarUrl = user.settingsUserImageUrl;
     if (widget.shouldGoPhone ?? false) {
@@ -194,7 +199,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       accountItem(),
       _SettingsGroup(children: [
         _SettingTile(
-            iconData: Icons.remember_me,
+            iconData: Icons.remember_me_rounded,
             title: i18n.userAvatar,
             subtitle: '外連至 Gravator 更換大頭貼相片',
             color: _SettingTileColor.green,
@@ -203,21 +208,21 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
                   mode: LaunchMode.externalApplication);
             }),
         _SettingTile(
-          iconData: Icons.rss_feed,
+          iconData: Icons.rss_feed_rounded,
           title: i18n.userNFC,
           subtitle: 'X50MGS 多元付款喜好設定',
           color: _SettingTileColor.blue,
           onTap: onPaymentPrefPressed,
         ),
         _SettingTile(
-          iconData: Icons.badge_outlined,
+          iconData: Icons.badge_rounded,
           title: i18n.userQUIC,
           subtitle: 'QuiC 喜愛選項設定',
           color: _SettingTileColor.blue,
           onTap: onQuicPayPrefPressed,
         ),
         _SettingTile(
-          iconData: Icons.tablet_mac,
+          iconData: Icons.tablet_mac_rounded,
           title: i18n.userPad,
           subtitle: 'X50Pad 西門線上排隊系統偏好設定',
           color: _SettingTileColor.blue,
@@ -226,21 +231,21 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       ]),
       _SettingsGroup(children: [
         _SettingTile(
-          iconData: Icons.key,
+          iconData: Icons.key_rounded,
           title: i18n.userPassword,
           subtitle: '密碼不夠安全嗎？點我更改！',
           color: _SettingTileColor.red,
           onTap: onChangePasswordPressed,
         ),
         _SettingTile(
-          iconData: Icons.email_outlined,
+          iconData: Icons.email_rounded,
           title: i18n.userEmail,
           subtitle: '換信箱了嗎，點我修改信箱。',
           color: _SettingTileColor.white,
           onTap: onChangeEmailPressed,
         ),
         _SettingTile(
-          iconData: Icons.call,
+          iconData: Icons.call_rounded,
           title: i18n.userPhone,
           subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
           color: _SettingTileColor.white,
@@ -249,21 +254,21 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       ]),
       _SettingsGroup(children: [
         _SettingTile(
-          iconData: Icons.local_atm,
+          iconData: Icons.local_atm_rounded,
           title: i18n.userBidLog,
           subtitle: '查詢加值相關記錄。',
           color: _SettingTileColor.yellow,
           onTap: onBidRecordPressed,
         ),
         _SettingTile(
-          iconData: Icons.redeem,
+          iconData: Icons.redeem_rounded,
           title: i18n.userTicLog,
           subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
           color: _SettingTileColor.yellow,
           onTap: onTicketRecordPressed,
         ),
         _SettingTile(
-          iconData: Icons.format_list_bulleted,
+          iconData: Icons.format_list_bulleted_rounded,
           title: i18n.userPlayLog,
           subtitle: '查詢點數付款明細。',
           color: _SettingTileColor.yellow,
@@ -277,7 +282,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           onTap: onFreePointRecordPressed,
         ),
         _SettingTile(
-          iconData: Icons.confirmation_num,
+          iconData: Icons.confirmation_num_rounded,
           title: i18n.userUTicLog,
           subtitle: '查詢遊玩券使用明細。',
           color: _SettingTileColor.yellow,
@@ -295,21 +300,21 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       ]),
       _SettingsGroup(children: [
         _SettingTile(
-          iconData: Icons.home,
+          iconData: Icons.home_rounded,
           title: i18n.userOpenDoor1,
           subtitle: '就是個一店開門按鈕',
           color: _SettingTileColor.white,
           onTap: onXimen1OpenPressed,
         ),
         _SettingTile(
-          iconData: Icons.home,
+          iconData: Icons.home_rounded,
           title: i18n.userOpenDoor2,
           subtitle: '就是個二店開門按鈕',
           color: _SettingTileColor.white,
           onTap: onXimen2OpenPressed,
         ),
         _SettingTile(
-          iconData: Icons.logout,
+          iconData: Icons.logout_rounded,
           title: i18n.userLogout,
           subtitle: '就是個登出',
           color: _SettingTileColor.white,
@@ -331,20 +336,34 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       const SizedBox(height: 15),
     ];
 
-    return Container(
-      decoration: BoxDecoration(color: scaffoldBackgroundColor),
-      child: Scrollbar(
-        controller: controller,
-        child: ListView.builder(
-          cacheExtent: 10000, // 現在的workround，不然Scrollbar會跳，等待2D Scrolling
-          controller: controller,
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          itemCount: settingsGroups.length,
-          itemBuilder: (context, index) {
-            return settingsGroups[index];
-          },
-        ),
-      ),
+    return FutureBuilder(
+      future: intentDelay,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(child: SizedBox());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text(serviceErrorText));
+        }
+
+        return Container(
+          decoration: BoxDecoration(color: scaffoldBackgroundColor),
+          child: Scrollbar(
+            controller: controller,
+            child: ListView.builder(
+              // https://github.com/flutter/flutter/issues/25652
+              // 現在的workround，不然 Scrollbar 會跳
+              cacheExtent: 10000,
+              controller: controller,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              itemCount: settingsGroups.length,
+              itemBuilder: (context, index) {
+                return settingsGroups[index];
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -353,9 +372,15 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Themes.borderColor, width: 2),
-            color: scaffoldBackgroundColor),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isDarkTheme
+                ? CustomColorThemes.borderColorDark
+                : CustomColorThemes.borderColorLight,
+            width: 2,
+          ),
+          color: isDarkTheme ? scaffoldBackgroundColor : Colors.white,
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Row(
@@ -378,11 +403,9 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user.name!,
-                        style: const TextStyle(color: Color(0xfffafafa))),
+                    Text(user.name!),
                     const SizedBox(height: 5),
-                    Text(user.email!,
-                        style: const TextStyle(color: Color(0xfffafafa))),
+                    Text(user.email!),
                   ],
                 ),
               )
@@ -398,7 +421,7 @@ class _SettingsGroup extends StatelessWidget {
   final List<_SettingTile> children;
   const _SettingsGroup({required this.children});
 
-  List<Widget> get _children {
+  List<Widget> buildTiles(bool isDarkTheme) {
     final list = <Widget>[];
     for (var i = 0; i < children.length; i++) {
       list.add(_SettingTile(
@@ -409,8 +432,13 @@ class _SettingsGroup extends StatelessWidget {
         onTap: children[i].onTap,
       ));
       if (i != children.length - 1) {
-        list.add(
-            const Divider(thickness: 2, height: 1, color: Themes.borderColor));
+        list.add(Divider(
+          thickness: 2,
+          height: 1,
+          color: isDarkTheme
+              ? CustomColorThemes.borderColorDark
+              : CustomColorThemes.borderColorLight,
+        ));
       }
     }
     return list;
@@ -418,6 +446,8 @@ class _SettingsGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         Container(
@@ -425,13 +455,15 @@ class _SettingsGroup extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
-              color: Themes.borderColor,
+              color: isDarkTheme
+                  ? CustomColorThemes.borderColorDark
+                  : CustomColorThemes.borderColorLight,
               width: 2,
               strokeAlign: BorderSide.strokeAlignOutside,
             ),
             color: Theme.of(context).scaffoldBackgroundColor,
           ),
-          child: Column(children: _children),
+          child: Column(children: buildTiles(isDarkTheme)),
         ),
         const SizedBox(height: 20),
       ],
@@ -458,6 +490,8 @@ class _SettingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color? iconColor;
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final splashColor = isDarkTheme ? Colors.white24 : Colors.black26;
 
     switch (color) {
       case _SettingTileColor.green:
@@ -467,16 +501,24 @@ class _SettingTile extends StatelessWidget {
         iconColor = const Color(0xfff5222d);
         break;
       case _SettingTileColor.yellow:
-        iconColor = const Color(0xfff4d614);
+        iconColor = const Color(0xffd4b106);
         break;
       case _SettingTileColor.blue:
         iconColor = const Color(0xff2492f7);
         break;
       case _SettingTileColor.black:
-        iconColor = const Color(0xff333333);
+        if (isDarkTheme) {
+          iconColor = const Color(0xff333333);
+        } else {
+          iconColor = const Color(0xff333333);
+        }
         break;
       case _SettingTileColor.white:
-        iconColor = const Color(0xfffafafa);
+        if (isDarkTheme) {
+          iconColor = const Color(0xfffafafa);
+        } else {
+          iconColor = const Color(0xff333333);
+        }
         break;
     }
 
@@ -484,8 +526,8 @@ class _SettingTile extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        splashColor: Colors.white24.withOpacity(0.2),
-        highlightColor: Colors.white24.withOpacity(0.1),
+        splashColor: splashColor.withOpacity(0.2),
+        highlightColor: splashColor.withOpacity(0.1),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
           child: Row(
@@ -495,13 +537,17 @@ class _SettingTile extends StatelessWidget {
                   width: 42,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Themes.borderColor, width: 1)),
+                      border: Border.all(
+                        color: isDarkTheme
+                            ? CustomColorThemes.borderColorDark
+                            : CustomColorThemes.borderColorLight,
+                        width: 1,
+                      )),
                   child: Icon(iconData, color: iconColor, size: 18)),
               const SizedBox(width: 15),
               Text(title,
                   style: const TextStyle(
                     fontSize: 14.5,
-                    color: Color(0xfffafafa),
                     fontWeight: FontWeight.w500,
                   )),
             ],

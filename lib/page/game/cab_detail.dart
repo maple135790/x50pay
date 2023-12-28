@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
@@ -45,6 +45,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
   }) {
     showCupertinoDialog(
         context: context,
+        barrierDismissible: true,
         builder: (context) => CabSelect.fromCabDetail(
               caboid: caboid,
               cabNum: cabData.num - 1,
@@ -64,26 +65,28 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: onRefresh,
-      child: Container(
-        key: key,
-        color: scaffoldBackgroundColor,
-        child: FutureBuilder(
-          future: viewModel.getSelGameCab(widget.machineId),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              log('loading', name: 'CabDetail');
-              return const SizedBox();
-            }
+    return Material(
+      child: RefreshIndicator(
+        onRefresh: onRefresh,
+        child: Container(
+          key: key,
+          color: scaffoldBackgroundColor,
+          child: FutureBuilder(
+            future: viewModel.getSelGameCab(widget.machineId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                log('loading', name: 'CabDetail');
+                return const SizedBox();
+              }
 
-            if (snapshot.data == true) {
-              final cabDetail = viewModel.cabinetModel!;
-              return cabDetailLoaded(cabDetail);
-            } else {
-              return const Text('failed');
-            }
-          },
+              if (snapshot.data == true) {
+                final cabDetail = viewModel.cabinetModel!;
+                return cabDetailLoaded(cabDetail);
+              } else {
+                return const Text('failed');
+              }
+            },
+          ),
         ),
       ),
     );
@@ -98,7 +101,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error, size: 50, color: Color(0xfffafafa)),
+            const Icon(Icons.error, size: 50),
             const Text('注意 請確認是否在平板前', style: TextStyle(fontSize: 17)),
             const SizedBox(height: 15),
             Container(
@@ -109,23 +112,17 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                     TextSpan(
                       text: '在平板前',
                       style: TextStyle(color: Colors.red),
-                      children: [
-                        TextSpan(
-                            text: ' 平板會跳出排隊確認請於 180 秒內確認，如接受再點 ',
-                            style: TextStyle(color: Colors.white),
-                            children: [
-                              TextSpan(
-                                text: '『排隊』',
-                                style: TextStyle(color: Colors.red),
-                              )
-                            ])
-                      ],
+                    ),
+                    TextSpan(text: ' 平板會跳出排隊確認請於 180 秒內確認，如接受再點 '),
+                    TextSpan(
+                      text: '『排隊』',
+                      style: TextStyle(color: Colors.red),
                     )
                   ],
                 ))),
             const Divider(thickness: 1, height: 0),
             Container(
-              color: const Color(0xff2a2a2a),
+              color: dialogButtomBarColor,
               padding: const EdgeInsets.all(15),
               child: Row(
                 children: [
@@ -134,7 +131,8 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        style: Themes.cancel(),
+                        style:
+                            CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
                         child: const Text('取消')),
                   ),
                   const SizedBox(width: 15),
@@ -144,7 +142,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                           viewModel.confirmPadCheck(padmid, padlid);
                           Navigator.of(context).pop();
                         },
-                        style: Themes.severe(isV4: true),
+                        style: CustomButtonThemes.severe(isV4: true),
                         child: const Text('排隊')),
                   ),
                 ],
@@ -218,8 +216,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
               child: Row(
                 children: [
                   const Expanded(child: Divider(thickness: 1, endIndent: 15)),
-                  Text(divText,
-                      style: const TextStyle(color: Color(0xfffafafa))),
+                  Text(divText),
                   const Expanded(child: Divider(thickness: 1, indent: 15))
                 ],
               )))
@@ -249,12 +246,11 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
           padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
           decoration: BoxDecoration(
               color: scaffoldBackgroundColor,
-              border: Border.all(color: Themes.borderColor, width: 1),
+              border: Border.all(color: borderColor, width: 1),
               borderRadius: BorderRadius.circular(5)),
           child: Row(
             children: [
-              Text('  ${i18n.gameWait(viewModel.lineupCount)}',
-                  style: const TextStyle(color: Color(0xfffafafa))),
+              Text('  ${i18n.gameWait(viewModel.lineupCount)}'),
               const Spacer(),
               GestureDetector(
                   onTap: () {
@@ -299,7 +295,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                 child: const Text('!',
                     style: TextStyle(color: Color(0xffcf1322)))),
             const SizedBox(width: 15),
-            Text(i18n.gameUnlimit),
+            Text(i18n.gameUnlimit, style: const TextStyle(color: Colors.white)),
             const Spacer(),
             GestureDetector(
               onTap: showRSVPPopup,
@@ -346,8 +342,9 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         border: Border.all(
-            color: const Color(0xff505050),
-            strokeAlign: BorderSide.strokeAlignOutside),
+          color: borderColor,
+          strokeAlign: BorderSide.strokeAlignOutside,
+        ),
       ),
       child: Stack(
         children: [
@@ -441,8 +438,9 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
         margin: const EdgeInsets.fromLTRB(15, 10, 15, 0),
         decoration: BoxDecoration(
             border: Border.all(
-                color: const Color(0xff505050),
-                strokeAlign: BorderSide.strokeAlignOutside),
+              color: borderColor,
+              strokeAlign: BorderSide.strokeAlignOutside,
+            ),
             borderRadius: BorderRadius.circular(6)),
         child: Stack(
           children: [
@@ -506,8 +504,9 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(
-                        color: Themes.borderColor,
-                        strokeAlign: BorderSide.strokeAlignOutside)),
+                      color: borderColor,
+                      strokeAlign: BorderSide.strokeAlignOutside,
+                    )),
                 child: Stack(
                   children: [
                     Positioned(
@@ -518,7 +517,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                           errorWidget: (context, url, error) =>
                               const SizedBox(),
                           height: 95,
-                          color: Colors.white.withOpacity(0.15).invert(0.28),
+                          color: iconColor.withOpacity(0.15).invert(0.28),
                         )),
                     Positioned.fill(
                       child: Column(
@@ -536,8 +535,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                           Text('$nbusy/$isPaid',
                               textAlign: TextAlign.center,
                               textScaler: const TextScaler.linear(0.85),
-                              style: const TextStyle(
-                                  color: Color(0xfffafafa), fontSize: 12)),
+                              style: const TextStyle(fontSize: 12)),
                           const SizedBox(height: 5),
                         ],
                       ),
@@ -618,9 +616,9 @@ class _RSVPDialogState extends BaseStatefulState<_RSVPDialog> {
                 ],
               ),
             ),
-            const Divider(thickness: 1, height: 0, color: Color(0xff3e3e3e)),
+            Divider(thickness: 1, height: 0, color: borderColor),
             Container(
-              color: const Color(0xff2a2a2a),
+              color: dialogButtomBarColor,
               padding: const EdgeInsets.all(15),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -630,14 +628,15 @@ class _RSVPDialogState extends BaseStatefulState<_RSVPDialog> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        style: Themes.cancel(),
+                        style:
+                            CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
                         child: const Text('關閉')),
                   ),
                   const SizedBox(width: 15),
                   Expanded(
                     child: TextButton(
                       onPressed: doRSVP,
-                      style: Themes.severe(isV4: true),
+                      style: CustomButtonThemes.severe(isV4: true),
                       child: const Text('馬上預約'),
                     ),
                   ),

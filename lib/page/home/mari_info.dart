@@ -8,7 +8,6 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 
 class MariInfo extends StatefulWidget {
@@ -46,29 +45,23 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
     required String title,
     required String value,
   }) {
-    return DefaultTextStyle(
-      style: const TextStyle(fontSize: 11.5),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: const Color(0xfffafafa),
-            size: 15,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 15),
+        const SizedBox(width: 5),
+        Expanded(
+          child: Wrap(
+            runAlignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(title, style: const TextStyle(fontSize: 11.5)),
+              Text(value,
+                  softWrap: false, style: const TextStyle(fontSize: 11.5)),
+            ],
           ),
-          const SizedBox(width: 5),
-          Expanded(
-            child: Wrap(
-              runAlignment: WrapAlignment.start,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text(title),
-                Text(value, softWrap: false),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -97,17 +90,20 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
             builder: (context, constraint) => ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Stack(children: [
-                const Positioned(
+                Positioned(
                     bottom: -25,
                     right: -40,
-                    child: Icon(Icons.compost_rounded,
-                        size: 140, color: Color(0xff343434))),
+                    child: Icon(
+                      Icons.compost_rounded,
+                      size: 140,
+                      color: iconColor.withOpacity(0.1),
+                    )),
                 Container(
                   width: constraint.maxWidth,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Themes.borderColor)),
+                      border: Border.all(color: borderColor)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,9 +143,11 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                           const Color(0xffffc0cb)),
                                     ),
                                     color: const Color(0xffffc0cb),
-                                    style: const ButtonStyle(
-                                      side: MaterialStatePropertyAll(
-                                          BorderSide(color: Color(0xff3e3e3e))),
+                                    style: ButtonStyle(
+                                      side: MaterialStatePropertyAll(BorderSide(
+                                        color: borderColor,
+                                        width: 1.5,
+                                      )),
                                     ),
                                   ),
                                 ),
@@ -195,8 +193,8 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                         color: const Color(0x33fefefe),
                                         borderRadius: BorderRadius.circular(8)),
                                     message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
-                                    textStyle:
-                                        Theme.of(context).textTheme.labelMedium,
+                                    // textStyle:
+                                    //     Theme.of(context).textTheme.labelMedium,
                                     verticalOffset: 25,
                                     child: Container(
                                         decoration: BoxDecoration(
@@ -220,7 +218,9 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                                           Colors.white),
                                                 ),
                                               ),
-                                              Text(entry.gr2BounsLimit),
+                                              Text(entry.gr2BounsLimit,
+                                                  style: const TextStyle(
+                                                      color: Colors.white)),
                                               const SizedBox(width: 3)
                                             ])),
                                   ),
@@ -300,21 +300,21 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 2.5),
-                                    child: RichText(
-                                        text: TextSpan(
-                                            style:
-                                                const TextStyle(fontSize: 11.5),
-                                            children: [
+                                    child: Text.rich(
+                                      TextSpan(
+                                        style: const TextStyle(fontSize: 11.5),
+                                        children: [
                                           const WidgetSpan(
                                               child: Icon(Icons.redeem_rounded,
-                                                  color: Color(0xfffafafa),
                                                   size: 15)),
                                           const WidgetSpan(
                                               child: SizedBox(width: 5)),
                                           TextSpan(
                                               text: i18n
                                                   .gr2Limit(entry.gr2Limit)),
-                                        ])),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -384,7 +384,9 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                         backgroundColor:
                                             MaterialStateProperty.resolveWith(
                                                 (states) {
-                                          return const Color(0x22f7f7f7);
+                                          return isDarkTheme
+                                              ? const Color(0x22f7f7f7)
+                                              : const Color(0x88e1e1e1);
                                         }),
                                       ),
                                       child: Text(

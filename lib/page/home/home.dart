@@ -46,6 +46,7 @@ class _HomeState extends BaseStatefulState<Home> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: scaffoldBackgroundColor,
       child: RefreshIndicator(
         displacement: 80,
         onRefresh: onRefresh,
@@ -88,9 +89,9 @@ class _HomeLoadedState extends BaseStatefulState<_HomeLoaded> {
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
       child: Row(
         children: [
-          const Expanded(child: Divider(color: Color(0xff3e3e3e))),
+          Expanded(child: Divider(color: borderColor)),
           Text(' $title '),
-          const Expanded(child: Divider(color: Color(0xff3e3e3e))),
+          Expanded(child: Divider(color: borderColor)),
         ],
       ),
     );

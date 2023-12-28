@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/store/store.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -97,80 +97,92 @@ class _StoreItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-          border: Border.all(color: Themes.borderColor),
-          borderRadius: BorderRadius.circular(5)),
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 7.5),
-      child: ClipRRect(
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7.5),
+      child: Material(
+        elevation: 2.5,
         borderRadius: BorderRadius.circular(5),
-        child: SizedBox(
-          width: double.maxFinite,
-          height: 180,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                  child: CachedNetworkImage(
-                      imageUrl: getStoreImage(store.sid!),
-                      alignment: const Alignment(0, -0.25),
-                      fit: BoxFit.fitWidth,
-                      colorBlendMode: BlendMode.modulate)),
-              Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      colors: [Colors.black, Colors.transparent],
-                      transform: GradientRotation(12),
-                      stops: [0, 0.6],
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+              border: Border.all(
+                color: isDarkTheme
+                    ? CustomColorThemes.borderColorDark
+                    : CustomColorThemes.borderColorLight,
+              ),
+              borderRadius: BorderRadius.circular(5)),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: SizedBox(
+              width: double.maxFinite,
+              height: 180,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                      child: CachedNetworkImage(
+                          imageUrl: getStoreImage(store.sid!),
+                          alignment: const Alignment(0, -0.25),
+                          fit: BoxFit.fitWidth,
+                          colorBlendMode: BlendMode.modulate)),
+                  Positioned.fill(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomLeft,
+                          colors: [Colors.black, Colors.transparent],
+                          transform: GradientRotation(12),
+                          stops: [0, 0.6],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Positioned(
-                bottom: 10,
-                left: 15,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(store.name!,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            shadows: [
-                              Shadow(color: Colors.black, blurRadius: 18)
-                            ])),
-                    Row(children: [
-                      const Icon(Icons.near_me,
-                          size: 15, color: Color(0xe6ffffff)),
-                      Text('  | ${store.address!}',
-                          style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
-                              fontSize: 13,
-                              shadows: const [
-                                Shadow(color: Colors.black, blurRadius: 15)
-                              ]))
-                    ]),
-                  ],
-                ),
-              ),
-              Positioned.fill(
-                  child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () async {
-                    context.read<GameStoreViewModel>().onStoreSelected(
-                      store,
-                      prefix,
-                      onPageChange: () {
-                        context.goNamed(AppRoutes.gameCabs.routeName);
+                  Positioned(
+                    bottom: 10,
+                    left: 15,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(store.name!,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                shadows: [
+                                  Shadow(color: Colors.black, blurRadius: 18)
+                                ])),
+                        Row(children: [
+                          const Icon(Icons.near_me,
+                              size: 15, color: Color(0xe6ffffff)),
+                          Text('  | ${store.address!}',
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.9),
+                                  fontSize: 13,
+                                  shadows: const [
+                                    Shadow(color: Colors.black, blurRadius: 15)
+                                  ]))
+                        ]),
+                      ],
+                    ),
+                  ),
+                  Positioned.fill(
+                      child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () async {
+                        context.read<GameStoreViewModel>().onStoreSelected(
+                          store,
+                          prefix,
+                          onPageChange: () {
+                            context.goNamed(AppRoutes.gameCabs.routeName);
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
-              )),
-            ],
+                    ),
+                  )),
+                ],
+              ),
+            ),
           ),
         ),
       ),

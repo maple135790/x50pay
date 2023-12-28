@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/widgets/body_card.dart';
 import 'package:x50pay/page/sign_up/sign_up_view_model.dart';
 import 'package:x50pay/r.g.dart';
@@ -127,7 +127,7 @@ class _SignUpState extends BaseStatefulState<SignUp> with BasePage {
                                 }
                               }
                             : null,
-                        style: Themes.confirm(),
+                        style: CustomButtonThemes.severe(),
                         child: Text(isVaild ? '送出' : '密碼錯誤')))
               ],
             )

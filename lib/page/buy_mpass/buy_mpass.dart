@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/repository/repository.dart';
 
@@ -90,8 +92,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.calendar_today,
-                  size: 51, color: Color(0xfffafafa)),
+              const Icon(Icons.calendar_today, size: 51),
               const SizedBox(height: 5),
               const Align(
                   alignment: Alignment.center,
@@ -106,13 +107,14 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                         Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                                color: Color(0xfffafafa),
-                                shape: BoxShape.circle),
+                            decoration: BoxDecoration(
+                              color: iconColor,
+                              shape: BoxShape.circle,
+                            ),
                             child: currentState.step > 1
-                                ? Icon(Icons.check,
+                                ? Icon(Icons.check_rounded,
                                     size: 20, color: scaffoldBackgroundColor)
-                                : Icon(Icons.format_list_bulleted,
+                                : Icon(Icons.format_list_bulleted_rounded,
                                     size: 20, color: scaffoldBackgroundColor)),
                         const SizedBox(width: 5),
                         const Text('讀條款'),
@@ -129,14 +131,10 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: stateIndex >= 2
-                                    ? const Color(0xfffafafa)
-                                    : null,
+                                color: stateIndex >= 2 ? iconColor : null,
                                 border: stateIndex >= 2
                                     ? null
-                                    : Border.all(
-                                        color: const Color(0xff3e3e3e),
-                                        width: 2)),
+                                    : Border.all(color: borderColor, width: 2)),
                             child: currentState.step > 2
                                 ? Icon(Icons.check,
                                     size: 20, color: scaffoldBackgroundColor)
@@ -144,7 +142,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                                     size: 20,
                                     color: stateIndex >= 2
                                         ? scaffoldBackgroundColor
-                                        : const Color(0xfffafafa))),
+                                        : iconColor)),
                         const SizedBox(width: 5),
                         const Text('選方案'),
                         const SizedBox(width: 5),
@@ -159,20 +157,18 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                                color: stateIndex >= 3
-                                    ? const Color(0xfffafafa)
-                                    : null,
+                                color: stateIndex >= 3 ? iconColor : null,
                                 shape: BoxShape.circle,
                                 border: stateIndex >= 3
                                     ? null
-                                    : Border.all(
-                                        color: const Color(0xff3e3e3e),
-                                        width: 2)),
-                            child: Icon(Icons.shopping_cart,
-                                size: 20,
-                                color: stateIndex >= 3
-                                    ? scaffoldBackgroundColor
-                                    : const Color(0xfffafafa))),
+                                    : Border.all(color: borderColor, width: 2)),
+                            child: Icon(
+                              Icons.shopping_cart,
+                              size: 20,
+                              color: stateIndex >= 3
+                                  ? scaffoldBackgroundColor
+                                  : iconColor,
+                            )),
                         const SizedBox(width: 5),
                         const Text('買買買'),
                         const SizedBox(width: 5),
@@ -209,11 +205,10 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                 '掉落遊玩券數量 : ${program.ticAmount}',
                 program.icon,
                 TextButton(
-                    style: Themes.severe(
-                        isV4: true,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        outlinedBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8))),
+                    style: CustomButtonThemes.severe(
+                      isV4: true,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                    ),
                     onPressed: () {
                       showPurchaseDialog(program);
                     },
@@ -224,13 +219,17 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
   }
 
   Widget _planTile(
-      String title, String describe, IconData trailIcon, Widget button) {
+    String title,
+    String describe,
+    IconData trailIcon,
+    Widget selectButton,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 45),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          decoration: const BoxDecoration(color: Color(0xff2a2a2a)),
+          decoration: BoxDecoration(color: cardColor),
           child: Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.hardEdge,
@@ -239,7 +238,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                     bottom: -26,
                     right: -24,
                     child: Icon(trailIcon,
-                        size: 120, color: const Color(0xff3f3f3f))),
+                        size: 120, color: iconColor.withOpacity(0.1))),
                 Positioned(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -248,14 +247,11 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(title,
-                            style: const TextStyle(
-                                color: Color(0xffdcdcdc), fontSize: 17)),
+                        Text(title, style: const TextStyle(fontSize: 17)),
                         const SizedBox(height: 5),
-                        Text(describe,
-                            style: const TextStyle(color: Color(0xffb4b4b4))),
+                        Text(describe),
                         const SizedBox(height: 14),
-                        button
+                        selectButton
                       ],
                     ),
                   ),
@@ -273,14 +269,14 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
         Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-            border: Border.all(color: Themes.borderColor),
+            border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(8),
-            color: const Color(0xff2a2a2a),
+            color: cardColor,
           ),
           child: const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.redeem, color: Color(0xfffafafa), size: 34),
+              Icon(Icons.redeem, size: 34),
               SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,15 +321,14 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
         Container(
           padding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
           decoration: BoxDecoration(
-            border: Border.all(color: Themes.borderColor),
+            border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(8),
-            color: const Color(0xff2a2a2a),
+            color: cardColor,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.card_membership,
-                  color: Color(0xfffafafa), size: 34),
+              Icon(Icons.card_membership, color: iconColor, size: 34),
               const SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,16 +352,16 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
         Container(
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-            border: Border.all(color: Themes.borderColor),
+            border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(8),
-            color: const Color(0xff2a2a2a),
+            color: cardColor,
           ),
-          child: const Row(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.edit, color: Color(0xfffafafa), size: 34),
-              SizedBox(width: 15),
-              Column(
+              Icon(Icons.edit, color: iconColor, size: 34),
+              const SizedBox(width: 15),
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -402,11 +397,10 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
               stateIndex += 1;
               setState(() {});
             },
-            style: Themes.severe(
-                isV4: true,
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                outlinedBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8))),
+            style: CustomButtonThemes.severe(
+              isV4: true,
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+            ),
             child: const Text('選方案')),
       ],
     );
@@ -421,7 +415,8 @@ class _MpassPurchaseDialog extends StatefulWidget {
   State<_MpassPurchaseDialog> createState() => _MpassPurchaseDialogState();
 }
 
-class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
+class _MpassPurchaseDialogState
+    extends BaseStatefulState<_MpassPurchaseDialog> {
   late List<TextEditingController> emails;
   ValueNotifier<String?> errorMsgNotifier = ValueNotifier(null);
 
@@ -447,7 +442,8 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
                   borderSide: BorderSide.none),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(5),
-                  borderSide: const BorderSide(color: Themes.borderColor)),
+                  borderSide: const BorderSide(
+                      color: CustomColorThemes.borderColorDark)),
               fillColor: MaterialStateColor.resolveWith((states) {
                 if (states.isFocused) {
                   return Theme.of(context).dialogBackgroundColor;
@@ -593,7 +589,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error, size: 70, color: Color(0xfffafafa)),
+            const Icon(Icons.error, size: 70),
             const SizedBox(height: 15),
             Container(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
@@ -603,9 +599,9 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
                 children: buildContent(),
               ),
             ),
-            const Divider(thickness: 1, height: 0, color: Color(0xff3e3e3e)),
+            Divider(thickness: 1, height: 0, color: borderColor),
             Container(
-              color: const Color(0xff2a2a2a),
+              color: dialogButtomBarColor,
               padding: const EdgeInsets.all(15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -615,16 +611,17 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog> {
                     onPressed: widget.program.isAllowMultiPeople
                         ? submitEmails
                         : doBuyVip,
-                    style: Themes.severe(isV4: true),
+                    style: CustomButtonThemes.severe(isV4: true),
                     child: Text('${widget.program.price}P / mo'),
                   ),
                   const SizedBox(height: 15),
                   TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: Themes.cancel(),
-                      child: const Text('取消')),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+                    child: const Text('取消'),
+                  ),
                 ],
               ),
             ),

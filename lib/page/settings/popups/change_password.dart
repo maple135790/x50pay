@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 
@@ -28,16 +27,7 @@ class _ChangePasswordDialogState
 
   Widget confirmButton(SettingsViewModel viewModel) {
     return TextButton(
-      style: ButtonStyle(
-        shape: MaterialStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-        backgroundColor: MaterialStateColor.resolveWith((states) {
-          if (states.isDisabled) {
-            return const Color(0xfffafafa).withOpacity(0.5);
-          }
-          return const Color(0xfffafafa);
-        }),
-      ),
+      style: buttonStyle,
       onPressed: isEnabled
           ? () async {
               final nav = GoRouter.of(context);

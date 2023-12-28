@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 
 class RecentQuests extends StatelessWidget {
   /// 活動列表
@@ -15,40 +16,52 @@ class RecentQuests extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: quests
-          .map((q) => Container(
-                margin: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const Color(0xff505050),
-                    strokeAlign: BorderSide.strokeAlignOutside,
-                  ),
+          .map((q) => Padding(
+                padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+                child: Material(
+                  elevation: 5,
                   borderRadius: BorderRadius.circular(6),
-                ),
-                child: Stack(
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: q.lpic,
-                      height: 55,
-                      width: MediaQuery.sizeOf(context).width,
-                      fit: BoxFit.fitWidth,
-                    ),
-                    Positioned.fill(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            context.goNamed(AppRoutes.questCampaign.routeName,
-                                pathParameters: {'couid': q.couid});
-                          },
-                        ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: isDarkTheme
+                            ? CustomColorThemes.borderColorDark
+                            : CustomColorThemes.borderColorLight,
+                        strokeAlign: BorderSide.strokeAlignOutside,
                       ),
+                      borderRadius: BorderRadius.circular(6),
                     ),
-                  ],
+                    child: Stack(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: q.lpic,
+                          height: 55,
+                          width: MediaQuery.sizeOf(context).width,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        Positioned.fill(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                context.goNamed(
+                                    AppRoutes.questCampaign.routeName,
+                                    pathParameters: {'couid': q.couid});
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ))
           .toList(),

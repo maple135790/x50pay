@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/quest_campaign/campaign.dart';
 import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/quest_campaign/quest_campaign_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 
@@ -21,11 +22,16 @@ class QuestCampaign extends StatefulWidget {
   State<QuestCampaign> createState() => _QuestCampaignState();
 }
 
-class _QuestCampaignState extends State<QuestCampaign> {
-  static const emptyCellSize = 40.0;
+class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
+  static const stampSlotSize = 40.0;
   final repo = Repository();
   late final viewModel = QuestCampaignViewModel(repository: repo);
   late Future<Campaign?> init;
+
+  Color get stampSlotColor =>
+      isDarkTheme ? const Color(0xfffafafa) : const Color(0xff373737);
+  Color get stampColor =>
+      isDarkTheme ? const Color(0xff373737) : const Color(0xfffafafa);
 
   Future<void> onAddStampRowTap() async {
     viewModel.onAddStampRowTap(campaignId: widget.campaignId);
@@ -51,7 +57,8 @@ class _QuestCampaignState extends State<QuestCampaign> {
             return const SizedBox();
           }
           if (snapshot.hasError || snapshot.data == null) {
-            return const Center(child: Text('Error'));
+            showServiceError();
+            return Center(child: Text(serviceErrorText));
           }
           final model = snapshot.data as Campaign;
           return Scrollbar(
@@ -62,7 +69,7 @@ class _QuestCampaignState extends State<QuestCampaign> {
         });
   }
 
-  Widget divider() => const Divider(color: Color(0xff3e3e3e), height: 16);
+  Widget divider() => Divider(color: borderColor, height: 16);
 
   void showRedeemItemDialog({
     required String? imgUrl,
@@ -86,7 +93,7 @@ class _QuestCampaignState extends State<QuestCampaign> {
     return Column(
       children: [
         SizedBox(
-          height: ((emptyCellSize + 22) * stampRowCount).toDouble(),
+          height: ((stampSlotSize + 22) * stampRowCount).toDouble(),
           // child: Column(
           //   children: List.generate(
           //     growable: false,
@@ -152,9 +159,7 @@ class _QuestCampaignState extends State<QuestCampaign> {
               return Container(
                 decoration: BoxDecoration(
                   border: index + 6 < stampRowCount * 6
-                      ? const Border(
-                          bottom: BorderSide(color: Color(0xff5a5a5a)),
-                        )
+                      ? Border(bottom: BorderSide(color: borderColor))
                       : null,
                 ),
                 child: Container(
@@ -163,17 +168,17 @@ class _QuestCampaignState extends State<QuestCampaign> {
                     child: index + 1 > ownedStampCount
                         ? Icon(
                             Icons.circle_rounded,
-                            size: emptyCellSize,
-                            color: const Color(0xfffafafa).withOpacity(0.2),
+                            size: stampSlotSize,
+                            color: stampSlotColor.withOpacity(0.2),
                           )
                         : SizedBox.fromSize(
-                            size: const Size.square(emptyCellSize),
+                            size: const Size.square(stampSlotSize),
                             child: SvgPicture(
                               Svgs.stamp,
                               width: 25,
                               height: 25,
-                              colorFilter: SvgsExtension.colorFilter(
-                                  const Color(0xfffafafa)),
+                              colorFilter:
+                                  SvgsExtension.colorFilter(stampColor),
                             ),
                           ),
                   ),
@@ -187,18 +192,13 @@ class _QuestCampaignState extends State<QuestCampaign> {
             Expanded(
               child: TextButton(
                 onPressed: onAddStampRowTap,
-                style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6))),
-                  backgroundColor: MaterialStateColor.resolveWith(
-                      (states) => const Color(0xfffafafa)),
-                ),
+                style: buttonStyle,
                 child: const Text(
                   '增加一行欄位',
                   style: TextStyle(
-                      color: Color(0xff1e1e1e),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
@@ -217,7 +217,7 @@ class _QuestCampaignState extends State<QuestCampaign> {
           margin: const EdgeInsets.symmetric(vertical: 8),
           padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 8),
           decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xff3e3e3e)),
+            border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Row(
@@ -233,14 +233,14 @@ class _QuestCampaignState extends State<QuestCampaign> {
               Expanded(
                   child: Text(
                 '${item.name}\n所需點數 ${item.points} 點',
-                style: const TextStyle(color: Color(0xfffafafa), height: 2),
+                style: const TextStyle(height: 2),
               )),
               const SizedBox(width: 15),
               SizedBox(
                 width: 75,
                 child: Center(
                   child: TextButton(
-                    style: Themes.severe(isV4: true),
+                    style: CustomButtonThemes.severe(isV4: true),
                     onPressed: () {
                       showRedeemItemDialog(
                         imgUrl: item.imgUrl,
@@ -273,7 +273,7 @@ class _QuestCampaignState extends State<QuestCampaign> {
             clipBehavior: Clip.antiAlias,
             margin: const EdgeInsets.symmetric(vertical: 12),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff3e3e3e)),
+              border: Border.all(color: borderColor),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Stack(
@@ -319,7 +319,11 @@ class _QuestCampaignState extends State<QuestCampaign> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.schedule_rounded, size: 14),
+                            const Icon(
+                              Icons.schedule_rounded,
+                              size: 14,
+                              color: Colors.white,
+                            ),
                             const SizedBox(width: 8),
                             Text(data.campaignGoodThruDate ?? '',
                                 style: TextStyle(
@@ -327,8 +331,11 @@ class _QuestCampaignState extends State<QuestCampaign> {
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400)),
                             const SizedBox(width: 10.281),
-                            const Icon(Icons.workspace_premium_rounded,
-                                size: 14),
+                            const Icon(
+                              Icons.workspace_premium_rounded,
+                              color: Colors.white,
+                              size: 14,
+                            ),
                             const SizedBox(width: 8),
                             Text(data.minQuestPoints ?? '',
                                 style: TextStyle(
@@ -348,7 +355,7 @@ class _QuestCampaignState extends State<QuestCampaign> {
             margin: const EdgeInsets.symmetric(vertical: 12),
             padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 8),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff3e3e3e)),
+              border: Border.all(color: borderColor),
               borderRadius: BorderRadius.circular(6),
             ),
             child: buildStampRow(
@@ -360,8 +367,7 @@ class _QuestCampaignState extends State<QuestCampaign> {
           Center(
             child: Text(
               data.pointInfo ?? '',
-              style: const TextStyle(
-                  fontSize: 14, color: Color(0xfffafafa), height: 1.75),
+              style: const TextStyle(fontSize: 14, height: 1.75),
             ),
           ),
           divider(),
@@ -389,7 +395,7 @@ class _RedeemItemDetail extends StatefulWidget {
   State<_RedeemItemDetail> createState() => _RedeemItemDetailState();
 }
 
-class _RedeemItemDetailState extends State<_RedeemItemDetail> {
+class _RedeemItemDetailState extends BaseStatefulState<_RedeemItemDetail> {
   static const _kMaxBottomSheetHeight = 80.0;
   Offset _offset = const Offset(0, 1);
   double bottomSheetHeight = 0;
@@ -403,15 +409,6 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
       setState(() {});
     });
   }
-
-  final buttonStyle = ButtonStyle(
-    shape: MaterialStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-    backgroundColor: MaterialStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
-      return const Color(0xfffafafa);
-    }),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -434,11 +431,8 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
                   duration: const Duration(milliseconds: 300),
                   child: Container(
                     padding: const EdgeInsets.all(15),
-                    decoration: const BoxDecoration(
-                      color: Color(0xff2a2a2a),
-                      border: Border(
-                        top: BorderSide(color: Color(0xff3e3e3e)),
-                      ),
+                    decoration: BoxDecoration(
+                      border: Border(top: BorderSide(color: borderColor)),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -448,8 +442,7 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
                           child: TextButton(
                               onPressed: null,
                               style: buttonStyle,
-                              child: const Text('點數不足',
-                                  style: TextStyle(color: Color(0xff1e1e1e)))),
+                              child: const Text('點數不足')),
                         ),
                         const SizedBox(width: 15),
                         Expanded(
@@ -458,8 +451,7 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
                                 Navigator.of(context).pop();
                               },
                               style: buttonStyle,
-                              child: const Text('思考一下',
-                                  style: TextStyle(color: Color(0xff1e1e1e)))),
+                              child: const Text('思考一下')),
                         ),
                       ],
                     ),
@@ -476,7 +468,7 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
                     height: 157,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xff3e3e3e)),
+                      border: Border.all(color: borderColor),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Row(
@@ -514,7 +506,7 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
                     ),
                   ),
                   const SizedBox(height: 27.5),
-                  const SizedBox(
+                  SizedBox(
                     height: 24.5,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -522,21 +514,25 @@ class _RedeemItemDetailState extends State<_RedeemItemDetail> {
                       children: [
                         Expanded(
                           child: Divider(
-                              height: 0,
-                              color: Color(0xff3e3e3e),
-                              thickness: 1),
+                            height: 0,
+                            color: borderColor,
+                            thickness: 1,
+                          ),
                         ),
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           child: Text('近期被兌換時間',
                               style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w500)),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              )),
                         ),
                         Expanded(
                           child: Divider(
-                              height: 0,
-                              color: Color(0xff3e3e3e),
-                              thickness: 1),
+                            height: 0,
+                            color: borderColor,
+                            thickness: 1,
+                          ),
                         ),
                       ],
                     ),

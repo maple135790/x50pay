@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 
@@ -50,18 +49,6 @@ class _ChangeEmailDialogState extends BaseStatefulState<ChangeEmailDialog> {
       showServiceError();
     }
   }
-
-  final buttonStyle = ButtonStyle(
-    shape: MaterialStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-    foregroundColor: MaterialStateColor.resolveWith((states) {
-      return const Color(0xff1e1e1e);
-    }),
-    backgroundColor: MaterialStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
-      return const Color(0xfffafafa);
-    }),
-  );
 
   Widget confirmButton(SettingsViewModel vm) {
     return TextButton(

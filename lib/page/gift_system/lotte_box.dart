@@ -9,20 +9,19 @@ class LotteBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final lotteList = context.select<GiftSystemViewModel, LotteListModel>(
         (vm) => vm.lotteList ?? LotteListModel.empty());
 
     return Container(
-      color: const Color(0xff2a2a2a),
+      color: isDarkTheme ? const Color(0xff2a2a2a) : const Color(0xfff2f2f2),
       padding: const EdgeInsets.symmetric(vertical: 52.2, horizontal: 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.how_to_vote_rounded,
-              size: 92, color: Color(0xff5e5e5e)),
+          const Icon(Icons.how_to_vote_rounded, size: 92),
           const SizedBox(height: 15),
-          const Text('立即參與抽獎',
-              style: TextStyle(color: Color(0xffdcdcdc), fontSize: 17)),
+          const Text('立即參與抽獎', style: TextStyle(fontSize: 17)),
           Text('您擁有的抽獎券 : ${lotteList.self}'),
           const SizedBox(height: 16),
           Text('本次獎品 : ${lotteList.name}'),

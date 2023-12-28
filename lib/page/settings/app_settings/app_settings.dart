@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/mixins/color_picker_mixin.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/app_settings/app_settings_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
+import 'package:x50pay/providers/theme_provider.dart';
 
 class AppSettings extends StatefulWidget {
   const AppSettings({super.key});
@@ -17,9 +19,14 @@ class AppSettings extends StatefulWidget {
   State<AppSettings> createState() => _AppSettingsState();
 }
 
-class _AppSettingsState extends BaseStatefulState<AppSettings> {
+class _AppSettingsState extends BaseStatefulState<AppSettings>
+    with ColorPickerMixin<AppSettings> {
   final viewModel = AppSettingsViewModel();
   late Future<void> init;
+
+  void onResetThemePressed() {
+    context.read<AppThemeProvider>().resetTheme();
+  }
 
   void onFastQRPayChanged(bool value) async {
     log('onFastQRPayChanged: $value', name: 'AppSettings');
@@ -293,6 +300,23 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
     viewModel.setCEInterval(ceInterval);
   }
 
+  void onChangeThemeBrightness(bool isDarkTheme) {
+    viewModel.onChangeTheme(
+      isDarkTheme: isDarkTheme,
+      themeProvider: context.read<AppThemeProvider>(),
+    );
+  }
+
+  @override
+  void onColorChanged(Color color) {
+    context.read<AppThemeProvider>().seedColor = color;
+  }
+
+  @override
+  Color pickerColor() {
+    return context.read<AppThemeProvider>().seedColor;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -326,56 +350,106 @@ class _AppSettingsState extends BaseStatefulState<AppSettings> {
 
                 return Consumer<AppSettingsViewModel>(
                   builder: (context, vm, child) {
-                    return CupertinoListSection.insetGrouped(
+                    return Column(
                       children: [
-                        FutureBuilder(
-                            future: vm.isBiomerticsAvailable(),
-                            initialData: false,
-                            builder: (context, snapshot) {
-                              return CupertinoListTile.notched(
-                                title: Text(i18n.userAppSettingsBiometrics),
+                        CupertinoListSection.insetGrouped(
+                          children: [
+                            FutureBuilder(
+                                future: vm.isBiomerticsAvailable(),
+                                initialData: false,
+                                builder: (context, snapshot) {
+                                  return CupertinoListTile.notched(
+                                    title: Text(i18n.userAppSettingsBiometrics),
+                                    trailing: CupertinoSwitch(
+                                      activeColor: CupertinoColors.activeGreen,
+                                      value: vm.isEnabledBiometricsLogin,
+                                      onChanged: snapshot.data!
+                                          ? onBiometricsLoginChanged
+                                          : null,
+                                    ),
+                                  );
+                                }),
+                            CupertinoListTile.notched(
+                              title: Text(i18n.userAppSettingsFastPayment),
+                              trailing: CupertinoSwitch(
+                                activeColor: CupertinoColors.activeGreen,
+                                value: vm.isEnabledFastQRPay,
+                                onChanged: onFastQRPayChanged,
+                              ),
+                            ),
+                            // TODO (kenneth) : 等待0mu web 版寫完後開放
+                            if (kDebugMode)
+                              CupertinoListTile.notched(
+                                title:
+                                    Text(i18n.userAppSettingsSummarizedRecord),
                                 trailing: CupertinoSwitch(
                                   activeColor: CupertinoColors.activeGreen,
-                                  value: vm.isEnabledBiometricsLogin,
-                                  onChanged: snapshot.data!
-                                      ? onBiometricsLoginChanged
-                                      : null,
+                                  value: vm.isEnableSummarizedRecord,
+                                  onChanged: onSummarizedRecordChanged,
                                 ),
-                              );
-                            }),
-                        CupertinoListTile.notched(
-                          title: Text(i18n.userAppSettingsFastPayment),
-                          trailing: CupertinoSwitch(
-                            activeColor: CupertinoColors.activeGreen,
-                            value: vm.isEnabledFastQRPay,
-                            onChanged: onFastQRPayChanged,
-                          ),
-                        ),
-                        // TODO (kenneth) : 等待0mu web 版寫完後開放
-                        if (kDebugMode)
-                          CupertinoListTile.notched(
-                            title: Text(i18n.userAppSettingsSummarizedRecord),
-                            trailing: CupertinoSwitch(
-                              activeColor: CupertinoColors.activeGreen,
-                              value: vm.isEnableSummarizedRecord,
-                              onChanged: onSummarizedRecordChanged,
+                              ),
+                            CupertinoListTile.notched(
+                              title: Text(i18n.userAppSettingsInAppNfc),
+                              trailing: CupertinoSwitch(
+                                activeColor: CupertinoColors.activeGreen,
+                                value: vm.isEnableInAppNfcScan,
+                                onChanged: onInAppNfcScanChanged,
+                              ),
                             ),
-                          ),
-                        CupertinoListTile.notched(
-                          title: Text(i18n.userAppSettingsInAppNfc),
-                          trailing: CupertinoSwitch(
-                            activeColor: CupertinoColors.activeGreen,
-                            value: vm.isEnableInAppNfcScan,
-                            onChanged: onInAppNfcScanChanged,
-                          ),
+                            if (vm.isSupportCE)
+                              DialogDropdown.ios(
+                                title: '卡片模擬間隔',
+                                value: vm.ceInterval,
+                                avaliList: CardEmulationIntervals.values
+                                    .map((e) => e.text)
+                                    .toList(),
+                                onChanged: onCEChanged,
+                              ),
+                          ],
                         ),
-                        DialogDropdown.ios(
-                          title: '卡片模擬間隔',
-                          value: vm.ceInterval,
-                          avaliList: CardEmulationIntervals.values
-                              .map((e) => e.text)
-                              .toList(),
-                          onChanged: onCEChanged,
+                        CupertinoListSection.insetGrouped(
+                          children: [
+                            CupertinoListTile.notched(
+                              title: const Text('主題色'),
+                              onTap: showColorPicker,
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        color: context
+                                            .read<AppThemeProvider>()
+                                            .seedColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                          color: borderColor,
+                                          width: 1,
+                                        ),
+                                      )),
+                                  const SizedBox(width: 10),
+                                  const CupertinoListTileChevron(),
+                                ],
+                              ),
+                            ),
+                            CupertinoListTile.notched(
+                              title: const Text("深色主題"),
+                              trailing: CupertinoSwitch(
+                                activeColor: CupertinoColors.activeGreen,
+                                value: isDarkTheme,
+                                onChanged: onChangeThemeBrightness,
+                              ),
+                            ),
+                            CupertinoListTile.notched(
+                              title: const Text(
+                                "重設主題",
+                                style: TextStyle(
+                                    color: CupertinoColors.systemBlue),
+                              ),
+                              onTap: onResetThemePressed,
+                            ),
+                          ],
                         ),
                       ],
                     );

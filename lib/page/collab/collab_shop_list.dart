@@ -58,12 +58,14 @@ class _CollabShopListState extends BaseStatefulState<CollabShopList> {
                   children: [
                     Row(
                       children: [
-                        const SvgPicture(
+                        SvgPicture(
                           Svgs.shopSolid,
                           width: 19.25,
                           height: 15,
                           colorFilter: ColorFilter.mode(
-                              Color(0xfffafafa), BlendMode.srcIn),
+                            iconColor,
+                            BlendMode.srcIn,
+                          ),
                         ),
                         const SizedBox(width: 10),
                         Text(data.sponserName,
@@ -113,18 +115,18 @@ class _CollabShopListState extends BaseStatefulState<CollabShopList> {
                     child: Container(
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                          color: const Color(0xff2a2a2a),
+                          color: cardColor,
                           borderRadius: BorderRadius.circular(5)),
                       alignment: Alignment.center,
                       height: 93.86,
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.qr_code_rounded,
-                              size: 28, color: Colors.white),
-                          Text('點我掃店鋪 QRCode',
-                              style: TextStyle(
-                                  color: Color(0xffdcdcdc), fontSize: 17)),
+                          Icon(
+                            Icons.qr_code_rounded,
+                            size: 28,
+                          ),
+                          Text('點我掃店鋪 QRCode', style: TextStyle(fontSize: 17)),
                         ],
                       ),
                     ),

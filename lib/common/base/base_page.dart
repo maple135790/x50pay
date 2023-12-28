@@ -2,6 +2,7 @@ import 'package:country_flags/country_flags.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,30 +10,23 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/global_singleton.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
+import 'package:x50pay/providers/theme_provider.dart';
 import 'package:x50pay/r.g.dart';
 
 mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
   BaseViewModel? baseViewModel();
   Widget body();
-  HeaderType headerType = HeaderType.normal;
   bool isShowFooter = false;
-  bool isHeaderBackType = false;
-  String? floatHeaderText;
-  bool isDarkHeader = false;
   void Function()? debugFunction;
 
   @override
   Widget build(BuildContext context) {
     if (baseViewModel() != null) {
-      headerType =
-          baseViewModel()!.isFloatHeader ? HeaderType.float : HeaderType.normal;
       isShowFooter = baseViewModel()!.isShowFooter;
-      isHeaderBackType = baseViewModel()!.isHeaderBackType;
-      floatHeaderText = baseViewModel()!.floatHeaderText;
     }
 
     return ChangeNotifierProvider.value(
@@ -43,9 +37,26 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
         },
         child: Scaffold(
           floatingActionButton: kDebugMode && debugFunction != null
-              ? FloatingActionButton(
-                  onPressed: debugFunction,
-                  child: const Icon(Icons.developer_mode))
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FloatingActionButton(
+                        onPressed: debugFunction,
+                        child: const Icon(Icons.developer_mode)),
+                    FloatingActionButton(
+                      child: const Icon(Icons.brightness_6_rounded),
+                      onPressed: () {
+                        Theme.of(context).brightness == Brightness.dark
+                            ? context
+                                .read<AppThemeProvider>()
+                                .changeBrightness(Brightness.light)
+                            : context
+                                .read<AppThemeProvider>()
+                                .changeBrightness(Brightness.dark);
+                      },
+                    )
+                  ],
+                )
               : null,
           body: SafeArea(
             child: SingleChildScrollView(
@@ -55,12 +66,7 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
                   constraints: const BoxConstraints(maxWidth: 700),
                   child: Column(
                     children: [
-                      headerType == HeaderType.normal
-                          ? _Header(isDark: isDarkHeader)
-                          : _Header.float(
-                              isBackType: isHeaderBackType,
-                              title: floatHeaderText,
-                              isDark: isDarkHeader),
+                      _Header(),
                       body(),
                       isShowFooter
                           ? const Padding(
@@ -79,28 +85,13 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
 }
 
 class _Header extends StatefulWidget {
-  final HeaderType _type;
-  final bool isDark;
-  final bool isBackType;
-  final String? title;
-  const _Header({this.isDark = false})
-      : _type = HeaderType.normal,
-        isBackType = false,
-        title = null;
-
-  const _Header.float(
-      {required this.isBackType, this.title, this.isDark = false})
-      : _type = HeaderType.float,
-        assert(isBackType != false || title != null,
-            'floatHeaderText must be set');
+  const _Header();
 
   @override
   State<_Header> createState() => _HeaderState();
 }
 
 class _HeaderState extends BaseStatefulState<_Header> {
-  String get _title => 'X50 Pay - ${widget.title}';
-
   Widget buildDebugStatus() {
     String serviceStatus =
         GlobalSingleton.instance.isServiceOnline ? 'ONLINE' : 'OFFLINE';
@@ -112,9 +103,14 @@ class _HeaderState extends BaseStatefulState<_Header> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(GlobalSingleton.instance.appVersion,
+              textScaler: const TextScaler.linear(0.95),
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.white.withOpacity(0.5),
+                color: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.color
+                    ?.withOpacity(0.5),
                 fontWeight: FontWeight.bold,
               )),
           Row(
@@ -127,6 +123,7 @@ class _HeaderState extends BaseStatefulState<_Header> {
               const SizedBox(width: 2.5),
               Text(
                 'Service $serviceStatus',
+                textScaler: const TextScaler.linear(0.95),
                 style: TextStyle(
                   color: statusColor.withOpacity(0.5),
                   fontSize: 12,
@@ -137,73 +134,6 @@ class _HeaderState extends BaseStatefulState<_Header> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildFixedHeader() {
-    return Stack(
-      children: [
-        Container(
-          height: 50,
-          decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              border: const Border(
-                  bottom: BorderSide(color: Themes.borderColor, width: 1))),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(),
-                Center(
-                  child: CircleAvatar(
-                      backgroundImage: R.image.header_icon_rsz(),
-                      backgroundColor: Colors.black,
-                      radius: 14),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Consumer<LanguageProvider>(
-                      builder: (context, vm, child) => GestureDetector(
-                        onTap: () {
-                          onLanguagePressed(vm.currentLocale);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 6.75,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xff2a2a2a),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CountryFlag.fromCountryCode(
-                                    vm.currentLocale.countryCode ?? '',
-                                    height: 15,
-                                    width: 15,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(vm.currentLocale.displayText),
-                                ],
-                              )),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (kDebugMode) buildDebugStatus(),
-      ],
     );
   }
 
@@ -250,47 +180,79 @@ class _HeaderState extends BaseStatefulState<_Header> {
 
   @override
   Widget build(BuildContext context) {
-    switch (widget._type) {
-      case HeaderType.normal:
-        return buildFixedHeader();
-      case HeaderType.float:
-        return Card(
-          margin: const EdgeInsets.all(10),
-          elevation: 1,
-          color: const Color(0xff1e1e1e),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: widget.isBackType
-                  ? [
-                      const SizedBox(width: 15),
-                      Container(
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xffdfdfdf)),
-                        padding: const EdgeInsets.all(5),
-                        alignment: Alignment.center,
-                        child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Icon(Icons.chevron_left_outlined,
-                                size: 25, color: Color(0xff5a5a5a))),
+    return AnnotatedRegion(
+      value:
+          isDarkTheme ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      child: Stack(
+        children: [
+          Container(
+            height: 50,
+            decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                border:
+                    Border(bottom: BorderSide(color: borderColor, width: 1))),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  Center(
+                    child: CircleAvatar(
+                        backgroundImage: R.image.header_icon_rsz(),
+                        backgroundColor: Colors.black,
+                        radius: 14),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Consumer<LanguageProvider>(
+                      builder: (context, vm, child) => Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            onLanguagePressed(vm.currentLocale);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: 6.75,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isDarkTheme
+                                      ? CustomColorThemes.appbarBoxColorDark
+                                      : CustomColorThemes.appbarBoxColorLight,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CountryFlag.fromCountryCode(
+                                      vm.currentLocale.countryCode ?? '',
+                                      height: 15,
+                                      width: 15,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      vm.currentLocale.displayText,
+                                      textScaler: const TextScaler.linear(0.85),
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ),
                       ),
-                      const SizedBox(width: 10),
-                    ]
-                  : [
-                      const SizedBox(width: 15),
-                      CircleAvatar(
-                          backgroundImage: R.image.header_icon_rsz(),
-                          backgroundColor: const Color(0xff5a5a5a)),
-                      const SizedBox(width: 15),
-                      Text(_title),
-                    ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        );
-    }
+          if (kDebugMode) buildDebugStatus(),
+        ],
+      ),
+    );
   }
 }
 

@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 
 class TopInfo extends StatelessWidget {
   /// 頁面頂部的個人資訊
@@ -16,6 +16,8 @@ class TopInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return ValueListenableBuilder(
       valueListenable: GlobalSingleton.instance.userNotifier,
       builder: (context, user, child) {
@@ -25,15 +27,19 @@ class TopInfo extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
           child: Row(
             children: [
-              Container(
-                width: 88,
-                height: 88,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(shape: BoxShape.circle),
-                child: CachedNetworkImage(
-                  imageUrl: user.userImageUrl,
-                  alignment: Alignment.center,
-                  fit: BoxFit.fill,
+              Material(
+                shape: const CircleBorder(),
+                elevation: 2.5,
+                child: Container(
+                  width: 88,
+                  height: 88,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
+                  child: CachedNetworkImage(
+                    imageUrl: user.userImageUrl,
+                    alignment: Alignment.center,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -42,7 +48,11 @@ class TopInfo extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Themes.borderColor)),
+                      border: Border.all(
+                        color: isDarkTheme
+                            ? CustomColorThemes.borderColorDark
+                            : CustomColorThemes.borderColorLight,
+                      )),
                   child: IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,45 +61,57 @@ class TopInfo extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            RichText(
-                                text: TextSpan(children: [
-                              const WidgetSpan(
-                                  child: Icon(Icons.person_rounded,
-                                      color: Color(0xfffafafa), size: 20)),
-                              const WidgetSpan(child: SizedBox(width: 5)),
+                            Text.rich(
                               TextSpan(
-                                  text: user.name!,
-                                  children: user.phoneactive!
-                                      ? null
-                                      : [
-                                          TextSpan(
-                                              text: ' (未驗證)',
-                                              recognizer: TapGestureRecognizer()
-                                                ..onTap = () {
-                                                  context.goNamed(
-                                                      AppRoutes
-                                                          .settings.routeName,
-                                                      queryParameters: {
-                                                        'goTo': 'phoneChange'
-                                                      });
-                                                })
-                                        ])
-                            ])),
+                                children: [
+                                  const WidgetSpan(
+                                      child:
+                                          Icon(Icons.person_rounded, size: 20)),
+                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                  TextSpan(
+                                      text: user.name!,
+                                      children: user.phoneactive!
+                                          ? null
+                                          : [
+                                              TextSpan(
+                                                  text: ' (未驗證)',
+                                                  recognizer:
+                                                      TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                          context.goNamed(
+                                                              AppRoutes.settings
+                                                                  .routeName,
+                                                              queryParameters: {
+                                                                'goTo':
+                                                                    'phoneChange'
+                                                              });
+                                                        })
+                                            ])
+                                ],
+                              ),
+                            ),
                             const SizedBox(height: 5),
-                            RichText(
-                                text: TextSpan(children: [
-                              const WidgetSpan(
-                                  child: Icon(Icons.perm_contact_cal_rounded,
-                                      color: Color(0xfffafafa), size: 20)),
-                              const WidgetSpan(child: SizedBox(width: 5)),
-                              TextSpan(text: user.uid!)
-                            ])),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  const WidgetSpan(
+                                      child: Icon(
+                                    Icons.perm_contact_cal_rounded,
+                                    size: 20,
+                                  )),
+                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                  TextSpan(text: user.uid!)
+                                ],
+                              ),
+                            ),
                             const SizedBox(height: 5),
-                            RichText(
-                                text: TextSpan(children: [
+                            Text.rich(TextSpan(children: [
                               const WidgetSpan(
-                                  child: Icon(Icons.currency_yen_rounded,
-                                      color: Color(0xfffafafa), size: 20)),
+                                child: Icon(
+                                  Icons.currency_yen_rounded,
+                                  size: 20,
+                                ),
+                              ),
                               const WidgetSpan(child: SizedBox(width: 5)),
                               TextSpan(text: user.point!.toInt().toString()),
                               const TextSpan(text: ' + '),
@@ -102,8 +124,13 @@ class TopInfo extends StatelessWidget {
                           ],
                         ),
                         const Spacer(),
-                        const VerticalDivider(
-                            thickness: 1, width: 0, color: Color(0xff3e3e3e)),
+                        VerticalDivider(
+                          thickness: 1,
+                          width: 0,
+                          color: isDarkTheme
+                              ? CustomColorThemes.borderColorDark
+                              : CustomColorThemes.borderColorLight,
+                        ),
                         const SizedBox(width: 16),
                         GestureDetector(
                           onTap: () async {
@@ -118,8 +145,7 @@ class TopInfo extends StatelessWidget {
                               );
                             }
                           },
-                          child: const Icon(Icons.qr_code_rounded,
-                              color: Color(0xfffafafa), size: 45),
+                          child: const Icon(Icons.qr_code_rounded, size: 45),
                         ),
                       ],
                     ),

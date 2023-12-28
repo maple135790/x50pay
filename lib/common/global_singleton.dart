@@ -209,16 +209,20 @@ class GlobalSingleton {
       // 檢查是否存在之前登入的session
       final sess = await Prefs.secureRead(SecurePrefsToken.session);
       if (sess == null) {
+        log('no session', name: 'getLoginStatus');
         isLogined = false;
         return;
       }
       // 嘗試登入，檢查session是否有效
       final fetchedUser = await _repo.getUser();
       if (fetchedUser == null || fetchedUser.code != 200) {
+        log('session invalid', name: 'getLoginStatus');
         isLogined = false;
       } else {
+        log('session valid', name: 'getLoginStatus');
         isLogined = true;
       }
+      return;
     } catch (e, stacktrace) {
       log('', error: e, stackTrace: stacktrace, name: 'getLoginStatus');
       return;

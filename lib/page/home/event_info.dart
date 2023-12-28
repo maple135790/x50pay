@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/generated/l10n.dart';
 
 class EventInfo extends StatelessWidget {
@@ -12,6 +12,7 @@ class EventInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final i18n = S.of(context);
 
     return Padding(
@@ -19,7 +20,11 @@ class EventInfo extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 2),
         decoration: BoxDecoration(
-          border: Border.all(color: Themes.borderColor),
+          border: Border.all(
+            color: isDarkTheme
+                ? CustomColorThemes.borderColorDark
+                : CustomColorThemes.borderColorLight,
+          ),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(

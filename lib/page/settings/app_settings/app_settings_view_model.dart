@@ -1,11 +1,14 @@
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
+import 'package:x50pay/providers/theme_provider.dart';
 
 enum CardEmulationIntervals {
-  long(700),
-  medium(500),
-  short(300),
+  long(300),
+  medium(200),
+  short(100),
   disabled(-1);
 
   final int timeInMilliSeconds;
@@ -19,6 +22,30 @@ class AppSettingsViewModel extends BaseViewModel {
   String _ceInterval = CardEmulationIntervals.medium.text;
   set ceInterval(String value) {
     _ceInterval = value;
+    notifyListeners();
+  }
+
+  List<String> pixelProductNames = [
+    'flame', // pixel 4
+    'coral', // pixel 4 xl
+    'bramble', // pixel 4a 5g
+    'sunfish', // pixel 4a
+    'redfin', // pixel 5
+    'barbet', // pixel 5a
+    'oriole', // pixel 6
+    'raven', // pixel 6 pro
+    'blueay', // pixel 6a
+    'panther', // pixel 7
+    'cheetah', // pixel 7 pro
+    'lynx', // pixel 7a
+    'shiba', // pixel 8
+    'husky', // pixel 8 pro
+  ];
+
+  bool get isSupportCE => _isSupportCE;
+  bool _isSupportCE = false;
+  set isSupportCE(bool value) {
+    _isSupportCE = value;
     notifyListeners();
   }
 
@@ -84,8 +111,9 @@ class AppSettingsViewModel extends BaseViewModel {
   Future<String> _getCEInterval() async {
     final interval = await Prefs.getInt(PrefsToken.cardEmulationInterval);
     final intv = CardEmulationIntervals.values.firstWhere(
-        (element) => element.timeInMilliSeconds == interval,
-        orElse: () => CardEmulationIntervals.medium);
+      (element) => element.timeInMilliSeconds == interval,
+      orElse: () => CardEmulationIntervals.disabled,
+    );
     return intv.text;
   }
 
@@ -131,6 +159,20 @@ class AppSettingsViewModel extends BaseViewModel {
     return;
   }
 
+  void onChangeTheme({
+    required bool isDarkTheme,
+    required AppThemeProvider themeProvider,
+  }) async {
+    final brightness = isDarkTheme ? Brightness.dark : Brightness.light;
+
+    showLoading();
+    await Future.delayed(const Duration(milliseconds: 600));
+    themeProvider.changeBrightness(brightness);
+    await Future.delayed(const Duration(milliseconds: 200));
+    await Prefs.setBool(PrefsToken.enableDarkTheme, isDarkTheme);
+    dismissLoading();
+  }
+
   Future<void> getAppSettings() async {
     showLoading();
     await Future.delayed(const Duration(milliseconds: 300));
@@ -138,6 +180,9 @@ class AppSettingsViewModel extends BaseViewModel {
     isEnabledBiometricsLogin = await _getIsEnabledBiometricsLogin();
     isEnableInAppNfcScan = await _getIsEnableInAppNfcScan();
     isEnableSummarizedRecord = await getIsEnableSummarizedRecord();
+    final androidinfo = await DeviceInfoPlugin().androidInfo;
+
+    isSupportCE = pixelProductNames.contains(androidinfo.product.toLowerCase());
     ceInterval = await _getCEInterval();
     dismissLoading();
     return;

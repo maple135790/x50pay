@@ -36,7 +36,9 @@ class _CollabState extends BaseStatefulState<Collab> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                        color: const Color.fromARGB(12, 255, 255, 255),
+                        color: isDarkTheme
+                            ? const Color.fromARGB(12, 255, 255, 255)
+                            : const Color.fromARGB(12, 0, 0, 0),
                         width: MediaQuery.of(context).size.width,
                         height: 89.19,
                         child: const Column(
@@ -46,20 +48,20 @@ class _CollabState extends BaseStatefulState<Collab> {
                               Text('X50Pay 合作商家',
                                   style: TextStyle(fontSize: 17)),
                               Text('查看 & 兌換合作商家優惠',
-                                  style: TextStyle(color: Color(0xffb4b4b4)))
+                                  style: TextStyle(color: Color(0xff787878)))
                             ])),
                     Container(
                         height: 42.5,
                         alignment: Alignment.centerLeft,
-                        color: const Color.fromARGB(5, 255, 255, 255),
+                        color: isDarkTheme
+                            ? const Color.fromARGB(5, 255, 255, 255)
+                            : const Color.fromARGB(5, 0, 0, 0),
                         child: TabBar(
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            tabAlignment: TabAlignment.start,
-                            isScrollable: true,
-                            tabs: tabs,
-                            indicatorWeight: 3,
-                            splashFactory: NoSplash.splashFactory,
-                            indicatorColor: Colors.white)),
+                          tabAlignment: TabAlignment.start,
+                          isScrollable: true,
+                          tabs: tabs,
+                          indicatorWeight: 3,
+                        )),
                   ],
                 ),
               ),

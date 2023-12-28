@@ -59,7 +59,7 @@ class _GiftBoxLoaded extends StatefulWidget {
   State<_GiftBoxLoaded> createState() => _GiftBoxLoadedState();
 }
 
-class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
+class _GiftBoxLoadedState extends BaseStatefulState<_GiftBoxLoaded> {
   final tabs = const <Widget>[
     Tab(text: '養成抽獎箱'),
     Tab(text: '領取禮物'),
@@ -75,15 +75,22 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Stack(children: [
-            const Positioned(
-                bottom: -35,
-                right: -20,
-                child: Icon(Icons.redeem, size: 120, color: Color(0xff343434))),
+            Positioned(
+              bottom: -35,
+              right: -20,
+              child: Icon(
+                Icons.redeem,
+                size: 120,
+                color: IconTheme.of(context).color?.withOpacity(0.1),
+              ),
+            ),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                    color: const Color.fromARGB(12, 255, 255, 255),
+                    color: isDarkTheme
+                        ? const Color.fromARGB(12, 255, 255, 255)
+                        : const Color.fromARGB(12, 0, 0, 0),
                     width: MediaQuery.of(context).size.width,
                     height: 89.19,
                     child: const Column(
@@ -97,15 +104,15 @@ class _GiftBoxLoadedState extends State<_GiftBoxLoaded> {
                 Container(
                     height: 42.5,
                     alignment: Alignment.centerLeft,
-                    color: const Color.fromARGB(5, 255, 255, 255),
+                    color: isDarkTheme
+                        ? const Color.fromARGB(5, 255, 255, 255)
+                        : const Color.fromARGB(5, 0, 0, 0),
                     child: TabBar(
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        isScrollable: true,
-                        tabAlignment: TabAlignment.start,
-                        tabs: tabs,
-                        indicatorWeight: 3,
-                        splashFactory: NoSplash.splashFactory,
-                        indicatorColor: Colors.white)),
+                      isScrollable: true,
+                      tabAlignment: TabAlignment.start,
+                      tabs: tabs,
+                      indicatorWeight: 3,
+                    )),
               ],
             ),
           ]),

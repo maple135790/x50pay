@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
 
 class GradeBoxTab extends StatefulWidget {
@@ -30,14 +30,14 @@ class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
         content: const Text('確認是否要使用親密度兌換？'),
         actions: [
           TextButton(
-            style: Themes.pale(),
+            style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
             onPressed: () {
               context.pop(false);
             },
             child: const Text('取消'),
           ),
           TextButton(
-            style: Themes.severe(isV4: true),
+            style: CustomButtonThemes.severe(isV4: true),
             onPressed: () {
               context.pop(true);
             },
@@ -99,16 +99,13 @@ class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   '${item.name}\n${item.info}',
-                  style: const TextStyle(
-                    color: Color(0xfffafafa),
-                    height: 2,
-                  ),
+                  style: const TextStyle(height: 2),
                 ),
               ),
             ),
           ),
           ElevatedButton(
-            style: Themes.severe(isV4: true, isRRect: true),
+            style: CustomButtonThemes.severe(isV4: true, isRRect: true),
             onPressed: () {
               onChangeItemPressed(item.gid, item.eid);
             },
