@@ -165,12 +165,8 @@ class AppSettingsViewModel extends BaseViewModel {
   }) async {
     final brightness = isDarkTheme ? Brightness.dark : Brightness.light;
 
-    showLoading();
-    await Future.delayed(const Duration(milliseconds: 600));
     themeProvider.changeBrightness(brightness);
-    await Future.delayed(const Duration(milliseconds: 200));
     await Prefs.setBool(PrefsToken.enableDarkTheme, isDarkTheme);
-    dismissLoading();
   }
 
   Future<void> getAppSettings() async {

@@ -106,6 +106,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "summaryShow": MessageLookupByLibrary.simpleMessage("顯示"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("券量 : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage("張"),
+        "userAppSettingsAccentColor":
+            MessageLookupByLibrary.simpleMessage("主題色"),
         "userAppSettingsBiometrics":
             MessageLookupByLibrary.simpleMessage("生物辨識登入"),
         "userAppSettingsBiometricsDisable":
@@ -122,6 +124,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("再次輸入帳號密碼"),
         "userAppSettingsBiometricsLoginTry":
             MessageLookupByLibrary.simpleMessage("嘗試登入"),
+        "userAppSettingsCardEmulationInterval":
+            MessageLookupByLibrary.simpleMessage("卡片模擬間隔"),
+        "userAppSettingsEnableDarkTheme":
+            MessageLookupByLibrary.simpleMessage("深色主題"),
         "userAppSettingsFastPayment":
             MessageLookupByLibrary.simpleMessage("快速支付"),
         "userAppSettingsFastPaymentEnableContent":
@@ -133,6 +139,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("App 內 NFC 標籤掃描"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項"),
+        "userAppSettingsResetTheme":
+            MessageLookupByLibrary.simpleMessage("重設主題"),
         "userAppSettingsSummarizedRecord":
             MessageLookupByLibrary.simpleMessage("顯示遊玩紀錄統計"),
         "userAppSettingsSummarizedRecordContent": m5,

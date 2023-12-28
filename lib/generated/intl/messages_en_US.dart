@@ -115,6 +115,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticketBalance":
             MessageLookupByLibrary.simpleMessage("Ticket Balance : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
+        "userAppSettingsAccentColor":
+            MessageLookupByLibrary.simpleMessage("Accent Color"),
         "userAppSettingsBiometrics":
             MessageLookupByLibrary.simpleMessage("Biometrics login"),
         "userAppSettingsBiometricsDisable":
@@ -132,6 +134,10 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Enter your login credentials again"),
         "userAppSettingsBiometricsLoginTry":
             MessageLookupByLibrary.simpleMessage("Try to log in"),
+        "userAppSettingsCardEmulationInterval":
+            MessageLookupByLibrary.simpleMessage("Card Emulation Interval"),
+        "userAppSettingsEnableDarkTheme":
+            MessageLookupByLibrary.simpleMessage("Dark Theme"),
         "userAppSettingsFastPayment":
             MessageLookupByLibrary.simpleMessage("Fast payment"),
         "userAppSettingsFastPaymentEnableContent":
@@ -143,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("In-App NFC tag read"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option."),
+        "userAppSettingsResetTheme":
+            MessageLookupByLibrary.simpleMessage("Reset Theme"),
         "userAppSettingsSummarizedRecord": MessageLookupByLibrary.simpleMessage(
             "Show summarized used point record"),
         "userAppSettingsSummarizedRecordContent": m5,

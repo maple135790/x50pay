@@ -106,6 +106,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "summaryShow": MessageLookupByLibrary.simpleMessage("表示"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("所持しているチケット : "),
         "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
+        "userAppSettingsAccentColor":
+            MessageLookupByLibrary.simpleMessage("アクセントカラー"),
         "userAppSettingsBiometrics":
             MessageLookupByLibrary.simpleMessage("生体認証ログイン"),
         "userAppSettingsBiometricsDisable":
@@ -122,6 +124,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("ログイン情報を再入力してください"),
         "userAppSettingsBiometricsLoginTry":
             MessageLookupByLibrary.simpleMessage("ログインを試みる"),
+        "userAppSettingsCardEmulationInterval":
+            MessageLookupByLibrary.simpleMessage("Card Emulation 間隔"),
+        "userAppSettingsEnableDarkTheme":
+            MessageLookupByLibrary.simpleMessage("ダークテーマ"),
         "userAppSettingsFastPayment":
             MessageLookupByLibrary.simpleMessage("高速化決済"),
         "userAppSettingsFastPaymentEnableContent":
@@ -133,6 +139,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("アプリ内の NFC タグ読み取り"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。"),
+        "userAppSettingsResetTheme":
+            MessageLookupByLibrary.simpleMessage("デフォルトテーマに戻す"),
         "userAppSettingsSummarizedRecord":
             MessageLookupByLibrary.simpleMessage("まとめた支払い履歴を表示"),
         "userAppSettingsSummarizedRecordContent": m5,

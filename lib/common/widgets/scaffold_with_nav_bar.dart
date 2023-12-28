@@ -12,6 +12,7 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
+import 'package:x50pay/common/widgets/persist_app_bar.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
@@ -169,12 +170,7 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(
-                width: 1,
-                color: isDarkTheme
-                    ? CustomColorThemes.borderColorDark
-                    : CustomColorThemes.borderColorLight,
-              ),
+              top: BorderSide(width: 1, color: borderColor),
             ),
           ),
           child: NavigationBar(
@@ -483,7 +479,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            buildFixedHeader(),
+            const PersistentAppBar(),
             AnimatedPositioned(
               height: functionalHeaderHeight,
               duration: const Duration(milliseconds: 550),

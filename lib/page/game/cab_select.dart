@@ -138,18 +138,24 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
         Checkbox.adaptive(
           value: isUseRewardPoint,
           onChanged: onUseRewardPointChanged,
-          activeColor: const Color(0xff0e52a5),
-          checkColor: Colors.white,
         ),
         GestureDetector(
           onTap: () {
             onUseRewardPointChanged(!isUseRewardPoint);
           },
-          child: const Text.rich(TextSpan(text: '用回饋', children: [
+          child: const Text.rich(
             TextSpan(
-                text: '(無法集計道數/參與部分活動)',
-                style: TextStyle(color: Color(0xFFEAC912)))
-          ])),
+              text: '用回饋',
+              children: [
+                TextSpan(
+                    text: ' (無法集計道數/參與部分活動)',
+                    style: TextStyle(
+                      color: Color(0xFFEAC912),
+                      fontWeight: FontWeight.bold,
+                    ))
+              ],
+            ),
+          ),
         ),
       ],
     );

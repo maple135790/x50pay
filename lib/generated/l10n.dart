@@ -711,6 +711,16 @@ class S {
     );
   }
 
+  /// `主題色`
+  String get userAppSettingsAccentColor {
+    return Intl.message(
+      '主題色',
+      name: 'userAppSettingsAccentColor',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `生物辨識登入`
   String get userAppSettingsBiometrics {
     return Intl.message(
@@ -781,6 +791,26 @@ class S {
     );
   }
 
+  /// `卡片模擬間隔`
+  String get userAppSettingsCardEmulationInterval {
+    return Intl.message(
+      '卡片模擬間隔',
+      name: 'userAppSettingsCardEmulationInterval',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `深色主題`
+  String get userAppSettingsEnableDarkTheme {
+    return Intl.message(
+      '深色主題',
+      name: 'userAppSettingsEnableDarkTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `快速支付`
   String get userAppSettingsFastPayment {
     return Intl.message(
@@ -826,6 +856,16 @@ class S {
     return Intl.message(
       '掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項',
       name: 'userAppSettingsInAppNfcContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `重設主題`
+  String get userAppSettingsResetTheme {
+    return Intl.message(
+      '重設主題',
+      name: 'userAppSettingsResetTheme',
       desc: '',
       args: [],
     );

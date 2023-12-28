@@ -72,8 +72,8 @@ class Prefs {
 
 enum PrefsToken {
   cardEmulationInterval('card_emulation_interval', defaultValue: -1),
-  enabledFastQRPay('fast_qrpay', defaultValue: false),
-  enabledInAppNfcScan('in_app_nfc_scan', defaultValue: false),
+  enabledFastQRPay('fast_qrpay', defaultValue: true),
+  enabledInAppNfcScan('in_app_nfc_scan', defaultValue: true),
   enableSummarizedRecord('summarized_record', defaultValue: false),
   enableDarkTheme('dark_theme', defaultValue: true),
   favGameName('fav_game_name'),

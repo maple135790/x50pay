@@ -398,7 +398,8 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                             ),
                             if (vm.isSupportCE)
                               DialogDropdown.ios(
-                                title: '卡片模擬間隔',
+                                title:
+                                    i18n.userAppSettingsCardEmulationInterval,
                                 value: vm.ceInterval,
                                 avaliList: CardEmulationIntervals.values
                                     .map((e) => e.text)
@@ -410,7 +411,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                         CupertinoListSection.insetGrouped(
                           children: [
                             CupertinoListTile.notched(
-                              title: const Text('主題色'),
+                              title: Text(i18n.userAppSettingsAccentColor),
                               onTap: showColorPicker,
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -434,7 +435,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                               ),
                             ),
                             CupertinoListTile.notched(
-                              title: const Text("深色主題"),
+                              title: Text(i18n.userAppSettingsEnableDarkTheme),
                               trailing: CupertinoSwitch(
                                 activeColor: CupertinoColors.activeGreen,
                                 value: isDarkTheme,
@@ -442,9 +443,9 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                               ),
                             ),
                             CupertinoListTile.notched(
-                              title: const Text(
-                                "重設主題",
-                                style: TextStyle(
+                              title: Text(
+                                i18n.userAppSettingsResetTheme,
+                                style: const TextStyle(
                                     color: CupertinoColors.systemBlue),
                               ),
                               onTap: onResetThemePressed,
