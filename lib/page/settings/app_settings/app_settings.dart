@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/color_picker_mixin.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/app_settings/app_settings_view_model.dart';
@@ -23,6 +24,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
     with ColorPickerMixin<AppSettings> {
   final viewModel = AppSettingsViewModel();
   late Future<void> init;
+  Color? newSeedColor;
 
   void onResetThemePressed() {
     context.read<AppThemeProvider>().resetTheme();
@@ -309,12 +311,20 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
 
   @override
   void onColorChanged(Color color) {
-    context.read<AppThemeProvider>().seedColor = color;
+    newSeedColor = color;
   }
 
   @override
   Color pickerColor() {
     return context.read<AppThemeProvider>().seedColor;
+  }
+
+  void onChangeAccentColorPressed() async {
+    final appThemeProvider = context.read<AppThemeProvider>();
+    await showColorPicker();
+    if (newSeedColor == null) return;
+    appThemeProvider.seedColor = newSeedColor!;
+    Prefs.setInt(PrefsToken.seedColor, newSeedColor!.value);
   }
 
   @override
@@ -412,7 +422,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                           children: [
                             CupertinoListTile.notched(
                               title: Text(i18n.userAppSettingsAccentColor),
-                              onTap: showColorPicker,
+                              onTap: onChangeAccentColorPressed,
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [

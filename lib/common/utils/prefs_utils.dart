@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/providers/theme_provider.dart';
 
 class Prefs {
   static bool get _duringTest =>
@@ -76,6 +77,8 @@ enum PrefsToken {
   enabledInAppNfcScan('in_app_nfc_scan', defaultValue: true),
   enableSummarizedRecord('summarized_record', defaultValue: false),
   enableDarkTheme('dark_theme', defaultValue: true),
+  seedColor('theme_seed_color',
+      defaultValue: AppThemeProvider.defaultSeedColor),
   favGameName('fav_game_name'),
   appLang('app_lang', defaultValue: 'zh-tw'),
   storeId('store_id'),

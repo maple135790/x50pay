@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 
 extension AppThemeMode on ThemeMode {
   ThemeData get themeData {
@@ -220,6 +221,19 @@ class AppThemeProvider extends ChangeNotifier {
       ..indicatorWidget = const _Spinner()
       ..userInteractions = false
       ..dismissOnTap = false;
+  }
+
+  Future<void> init() async {
+    final isEnabledDarkTheme = await Prefs.getBool(PrefsToken.enableDarkTheme);
+    final seedColor = await Prefs.getInt(PrefsToken.seedColor);
+    if (isEnabledDarkTheme != null) {
+      currentMode = isEnabledDarkTheme ? ThemeMode.dark : ThemeMode.light;
+    }
+    if (seedColor != null) {
+      this.seedColor = Color(seedColor);
+    }
+    configLoadingStyle();
+    return;
   }
 
   void resetTheme() {

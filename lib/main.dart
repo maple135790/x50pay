@@ -30,6 +30,8 @@ void main() async {
   await GlobalSingleton.instance.getLoginStatus();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
+  await themeProvider.init();
+
   runApp(const MyApp());
 }
 
