@@ -277,7 +277,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                           autofillHints: const [AutofillHints.username],
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.person)),
+                              prefixIcon: Icon(Icons.person_rounded)),
                         ),
                         const SizedBox(height: 15),
                         Text.rich(
@@ -304,7 +304,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                                 keyboardType: TextInputType.visiblePassword,
                                 autofillHints: const [AutofillHints.password],
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.lock),
+                                  prefixIcon: const Icon(Icons.lock_rounded),
                                   suffixIcon: showPasswordButton(vm),
                                 ));
                           },

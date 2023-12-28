@@ -144,7 +144,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                       autofillHints: const [AutofillHints.username],
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.person))),
+                          prefixIcon: Icon(Icons.person_rounded))),
                   const SizedBox(height: 15),
                   TextField(
                       controller: password,
@@ -152,7 +152,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                       obscureText: true,
                       autofillHints: const [AutofillHints.password],
                       decoration:
-                          const InputDecoration(prefixIcon: Icon(Icons.lock))),
+                          const InputDecoration(prefixIcon: Icon(Icons.lock_rounded))),
                 ],
               ),
             ),

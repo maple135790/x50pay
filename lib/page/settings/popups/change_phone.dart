@@ -219,7 +219,9 @@ class _ChangePhoneConfirmedDialogState
                     )),
                 const SizedBox(height: 15),
                 _DialogWidget(
-                  titleIcon: isEnteredNewPhone ? Icons.email : Icons.phone,
+                  titleIcon: isEnteredNewPhone
+                      ? Icons.email_rounded
+                      : Icons.phone_rounded,
                   title: isEnteredNewPhone ? '請輸入您的簡訊認證碼' : '請欲更改的手機號碼',
                   isRequired: true,
                   child: Row(children: [

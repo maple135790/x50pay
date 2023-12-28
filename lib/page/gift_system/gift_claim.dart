@@ -117,7 +117,7 @@ class _ConfirmChangeDialogState
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.error, size: 60),
+          const Icon(Icons.error_rounded, size: 60),
           const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),

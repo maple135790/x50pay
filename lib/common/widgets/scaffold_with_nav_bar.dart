@@ -38,12 +38,12 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
 
   List<MenuItem> get _menus => [
         (
-          icon: Icons.sports_esports,
+          icon: Icons.sports_esports_rounded,
           label: i18n.navGame,
           route: AppRoutes.gameStore
         ),
         (
-          icon: Icons.settings,
+          icon: Icons.settings_rounded,
           label: i18n.navSettings,
           route: AppRoutes.settings,
         ),
@@ -237,7 +237,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
           Row(
             children: [
               Icon(
-                Icons.circle,
+                Icons.circle_rounded,
                 size: 8,
                 color: statusColor.withOpacity(0.5),
               ),

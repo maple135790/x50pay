@@ -152,7 +152,7 @@ class _StoreItem extends StatelessWidget {
                                   Shadow(color: Colors.black, blurRadius: 18)
                                 ])),
                         Row(children: [
-                          const Icon(Icons.near_me,
+                          const Icon(Icons.near_me_rounded,
                               size: 15, color: Color(0xe6ffffff)),
                           Text('  | ${store.address!}',
                               style: TextStyle(

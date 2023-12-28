@@ -114,7 +114,7 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(Icons.schedule,
+                              Icon(Icons.schedule_rounded,
                                   size: 12, color: Colors.white),
                               Text(' 歡迎使用 X50MGS 多元付款平台',
                                   style: TextStyle(

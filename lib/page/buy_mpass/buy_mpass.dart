@@ -9,8 +9,6 @@ import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
-import 'package:x50pay/common/theme/color_theme.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/repository/repository.dart';
 
 enum _MpassProgressState {
@@ -29,7 +27,7 @@ enum _MpassProgram {
       price: 99,
       priceDesc: '1人1個月',
       ticAmount: 3,
-      icon: Icons.person,
+      icon: Icons.person_rounded,
       discountTimeDesc: '較長',
       raisingBounsAmount: 2),
   partyPeople(
@@ -38,7 +36,7 @@ enum _MpassProgram {
       priceDesc: '5人1個月',
       isAllowMultiPeople: true,
       ticAmount: 4,
-      icon: Icons.people,
+      icon: Icons.people_rounded,
       discountTimeDesc: '較長',
       raisingBounsAmount: 2),
   monthlyRaising(
@@ -46,7 +44,7 @@ enum _MpassProgram {
       price: 349,
       priceDesc: '1人1個月',
       ticAmount: 3,
-      icon: Icons.confirmation_number,
+      icon: Icons.confirmation_number_rounded,
       discountTimeDesc: '全日',
       raisingBounsAmount: 40);
 
@@ -92,7 +90,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.calendar_today, size: 51),
+              const Icon(Icons.calendar_today_rounded, size: 51),
               const SizedBox(height: 5),
               const Align(
                   alignment: Alignment.center,
@@ -136,9 +134,9 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                                     ? null
                                     : Border.all(color: borderColor, width: 2)),
                             child: currentState.step > 2
-                                ? Icon(Icons.check,
+                                ? Icon(Icons.check_rounded,
                                     size: 20, color: scaffoldBackgroundColor)
-                                : Icon(Icons.badge,
+                                : Icon(Icons.badge_rounded,
                                     size: 20,
                                     color: stateIndex >= 2
                                         ? scaffoldBackgroundColor
@@ -163,7 +161,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                                     ? null
                                     : Border.all(color: borderColor, width: 2)),
                             child: Icon(
-                              Icons.shopping_cart,
+                              Icons.shopping_cart_rounded,
                               size: 20,
                               color: stateIndex >= 3
                                   ? scaffoldBackgroundColor
@@ -276,38 +274,42 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
           child: const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.redeem, size: 34),
+              Icon(Icons.redeem_rounded, size: 34),
               SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(children: [
-                    Icon(Icons.add_circle, color: Color(0xff92d34f), size: 22),
+                    Icon(Icons.add_circle_rounded,
+                        color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('天上掉下來的遊玩券')
                   ]),
                   SizedBox(height: 5),
                   Row(children: [
-                    Icon(Icons.add_circle, color: Color(0xff92d34f), size: 22),
+                    Icon(Icons.add_circle_rounded,
+                        color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('比別人更長的優惠時段')
                   ]),
                   SizedBox(height: 5),
                   Row(children: [
-                    Icon(Icons.add_circle, color: Color(0xff92d34f), size: 22),
+                    Icon(Icons.add_circle_rounded,
+                        color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('養成每日增加兩次加成')
                   ]),
                   SizedBox(height: 5),
                   Row(children: [
-                    Icon(Icons.add_circle, color: Color(0xff92d34f), size: 22),
+                    Icon(Icons.add_circle_rounded,
+                        color: Color(0xff92d34f), size: 22),
                     SizedBox(width: 5),
                     Text('月票會員專屬活動')
                   ]),
                   SizedBox(height: 5),
                   Row(children: [
-                    Icon(Icons.do_not_disturb_on,
+                    Icon(Icons.do_not_disturb_on_rounded,
                         color: Color(0xffd60000), size: 22),
                     SizedBox(width: 5),
                     Text('沒有專屬停車位')
@@ -328,7 +330,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.card_membership, color: iconColor, size: 34),
+              Icon(Icons.card_membership_rounded, color: iconColor, size: 34),
               const SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +339,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: Row(children: [
-                      const Icon(Icons.check_circle,
+                      const Icon(Icons.check_circle_rounded,
                           color: Color(0xff92d34f), size: 22),
                       const SizedBox(width: 5),
                       Text('${program.name}專屬 : ${program.price} / mo')
@@ -359,26 +361,29 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.edit, color: iconColor, size: 34),
+              Icon(Icons.edit_rounded, color: iconColor, size: 34),
               const SizedBox(width: 15),
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(children: [
-                    Icon(Icons.cancel, color: Color(0xffd60000), size: 22),
+                    Icon(Icons.cancel_rounded,
+                        color: Color(0xffd60000), size: 22),
                     SizedBox(width: 5),
                     Text('嚴禁多人共享/代投幣')
                   ]),
                   SizedBox(height: 5),
                   Row(children: [
-                    Icon(Icons.cancel, color: Color(0xffd60000), size: 22),
+                    Icon(Icons.cancel_rounded,
+                        color: Color(0xffd60000), size: 22),
                     SizedBox(width: 5),
                     Text('違約將取消方案且不可重新加入')
                   ]),
                   SizedBox(height: 5),
                   Row(children: [
-                    Icon(Icons.cancel, color: Color(0xffd60000), size: 22),
+                    Icon(Icons.cancel_rounded,
+                        color: Color(0xffd60000), size: 22),
                     SizedBox(width: 5),
                     Text('違約者養成系統將取消養成權限')
                   ]),
@@ -434,22 +439,8 @@ class _MpassPurchaseDialogState
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              hintText: '朋友$counter號的 Email',
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide.none),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: const BorderSide(
-                      color: CustomColorThemes.borderColorDark)),
-              fillColor: MaterialStateColor.resolveWith((states) {
-                if (states.isFocused) {
-                  return Theme.of(context).dialogBackgroundColor;
-                }
-                return const Color(0xff2a2a2a);
-              }),
+              prefixIcon: const Icon(Icons.email_rounded),
+              hintText: ' 朋友$counter號的 Email',
             )))
         ..add(const SizedBox(height: 10));
     }
@@ -589,7 +580,7 @@ class _MpassPurchaseDialogState
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error, size: 70),
+            const Icon(Icons.error_rounded, size: 70),
             const SizedBox(height: 15),
             Container(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),

@@ -155,7 +155,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                         borderRadius: BorderRadius.circular(5)),
                     child: Row(
                       children: [
-                        const Icon(Icons.push_pin, size: 16),
+                        const Icon(Icons.push_pin_rounded, size: 16),
                         Text('  ${i18n.gameLocation}「 ${widget.storeName} 」'),
                         const Spacer(),
                         GestureDetector(
@@ -169,7 +169,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded> {
                             ),
                             padding: const EdgeInsets.symmetric(
                                 vertical: 4, horizontal: 8),
-                            child: Icon(Icons.sync,
+                            child: Icon(Icons.sync_rounded,
                                 color: scaffoldBackgroundColor, size: 26),
                           ),
                         ),
@@ -318,7 +318,7 @@ class _GameCabItem extends StatelessWidget with GameMixin {
                                 Shadow(color: Colors.black, blurRadius: 18)
                               ])),
                       Row(children: [
-                        const Icon(Icons.schedule,
+                        const Icon(Icons.schedule_rounded,
                             size: 15, color: Color(0xe6ffffff)),
                         Text('  $time$addition',
                             style: const TextStyle(

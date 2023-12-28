@@ -79,7 +79,7 @@ class _GiftBoxLoadedState extends BaseStatefulState<_GiftBoxLoaded> {
               bottom: -35,
               right: -20,
               child: Icon(
-                Icons.redeem,
+                Icons.redeem_rounded,
                 size: 120,
                 color: IconTheme.of(context).color?.withOpacity(0.1),
               ),

@@ -26,7 +26,7 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
                 children: [
                   FloatingActionButton(
                       onPressed: debugFunction,
-                      child: const Icon(Icons.developer_mode)),
+                      child: const Icon(Icons.developer_mode_rounded)),
                   FloatingActionButton(
                     child: const Icon(Icons.brightness_6_rounded),
                     onPressed: () {

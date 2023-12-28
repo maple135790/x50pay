@@ -101,7 +101,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error, size: 50),
+            const Icon(Icons.error_rounded, size: 50),
             const Text('注意 請確認是否在平板前', style: TextStyle(fontSize: 17)),
             const SizedBox(height: 15),
             Container(
@@ -263,7 +263,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child:
-                        const Icon(Icons.tablet_mac, color: Color(0xff1e1e1e)),
+                        const Icon(Icons.tablet_mac_rounded, color: Color(0xff1e1e1e)),
                   ))
             ],
           ));
@@ -304,7 +304,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5)),
-                child: const Icon(Icons.calendar_month,
+                child: const Icon(Icons.calendar_month_rounded,
                     color: Color(0xffa8071a), size: 16),
               ),
             ),
@@ -402,7 +402,7 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
                             Shadow(color: Colors.black, blurRadius: 15)
                           ])),
                   const SizedBox(width: 5),
-                  const Icon(Icons.attach_money,
+                  const Icon(Icons.attach_money_rounded,
                       size: 18, color: Color(0xe6ffffff)),
                   Text('${price.toInt()}P',
                       textHeightBehavior: const TextHeightBehavior(
