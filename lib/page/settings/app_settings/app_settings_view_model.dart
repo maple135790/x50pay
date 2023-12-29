@@ -34,7 +34,7 @@ class AppSettingsViewModel extends BaseViewModel {
     'barbet', // pixel 5a
     'oriole', // pixel 6
     'raven', // pixel 6 pro
-    'blueay', // pixel 6a
+    'bluejay', // pixel 6a
     'panther', // pixel 7
     'cheetah', // pixel 7 pro
     'lynx', // pixel 7a
