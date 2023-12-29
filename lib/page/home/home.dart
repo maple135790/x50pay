@@ -28,19 +28,12 @@ class _HomeState extends BaseStatefulState<Home> {
   @override
   void initState() {
     super.initState();
-    GlobalSingleton.instance.isAtHome = true;
     viewModel = HomeViewModel(repository: repo)..isFunctionalHeader = false;
   }
 
   Future<void> onRefresh() async {
     refreshKey = GlobalKey();
     setState(() {});
-  }
-
-  @override
-  void dispose() {
-    GlobalSingleton.instance.isAtHome = false;
-    super.dispose();
   }
 
   @override

@@ -42,11 +42,6 @@ class GlobalSingleton {
   /// 用於確認是否要顯示登入頁面，於 app 啟動時檢查。
   bool isLogined = false;
 
-  /// 現在的頁面是否在首頁
-  ///
-  /// 用於確認是否要取得 Entry 資料，因為只有在首頁才需要取得。
-  bool isAtHome = true;
-
   /// 開發用，模擬扣點
   final _devPCostEnabled = true;
 
@@ -161,7 +156,7 @@ class GlobalSingleton {
   /// 取得 Entry 資料，並將資料存入 [entryNotifier] 變數中。
   /// 回傳是否成功取得 Entry 資料。
   Future<bool> checkEntry() async {
-    if (!isAtHome || _duringTest) return true;
+    if (_duringTest) return true;
     await Future.delayed(const Duration(milliseconds: 100));
     log('check entry...', name: 'checkEntry');
 
