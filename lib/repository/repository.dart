@@ -514,4 +514,17 @@ class Repository extends Api {
     );
     return const Utf8Decoder().convert(response.bodyBytes);
   }
+
+  Future<String> redeemQuestCampaignItem(
+    String campaignId,
+    String itemId,
+  ) async {
+    final response = await Api.makeRequest(
+      dest: "https://pay.x50.fun/coupon/changecheck/$campaignId/$itemId",
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+    );
+    return response.body;
+  }
 }

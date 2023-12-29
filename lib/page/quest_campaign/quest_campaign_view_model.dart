@@ -7,11 +7,12 @@ import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class QuestCampaignViewModel extends BaseViewModel {
+  final String campaignId;
   final Repository repository;
 
-  QuestCampaignViewModel({required this.repository});
+  QuestCampaignViewModel({required this.repository, required this.campaignId});
 
-  Future<Campaign?> init({required String campaignId}) async {
+  Future<Campaign?> init() async {
     showLoading();
     await Future.delayed(const Duration(milliseconds: 100));
 
@@ -53,6 +54,12 @@ class QuestCampaignViewModel extends BaseViewModel {
         pointInfo: pointInfo,
         redeemItems: items
             .map((e) => RedeemItem(
+                  id: e
+                      .querySelector('div.column.actions')!
+                      .nodes[1]
+                      .attributes['id']
+                      .toString()
+                      .replaceFirst('btn', ''),
                   rawImgUrl: e
                           .querySelector('div > div > div> div > img')
                           ?.attributes['src'] ??
@@ -94,8 +101,19 @@ class QuestCampaignViewModel extends BaseViewModel {
     }
   }
 
-  Future<void> onAddStampRowTap({required String campaignId}) async {
+  Future<void> onAddStampRowTap() async {
     if (!kDebugMode || isForceFetch) repository.addCampaignStampRow(campaignId);
+    return;
+  }
+
+  Future<void> onRedeemItemPressed(String itemId) async {
+    late final String response;
+    if (!kDebugMode) {
+      response = await repository.redeemQuestCampaignItem(campaignId, itemId);
+    } else {
+      response = 'done';
+    }
+    showSuccess(response);
     return;
   }
 }

@@ -25,16 +25,19 @@ class QuestCampaign extends StatefulWidget {
 class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
   static const stampSlotSize = 40.0;
   final repo = Repository();
-  late final viewModel = QuestCampaignViewModel(repository: repo);
+  late final viewModel =
+      QuestCampaignViewModel(repository: repo, campaignId: widget.campaignId);
   late Future<Campaign?> init;
+  int ownedPoints = 0;
 
   Color get stampSlotColor =>
-      isDarkTheme ? const Color(0xfffafafa) : const Color(0xff373737);
-  Color get stampColor =>
-      isDarkTheme ? const Color(0xff373737) : const Color(0xfffafafa);
+      isDarkTheme ? const Color(0xfffafafa) : const Color(0xffb2b2b2);
+  Color get stampColor => isDarkTheme
+      ? const Color(0xff373737)
+      : const Color(0xff373737).withOpacity(0.2);
 
   Future<void> onAddStampRowTap() async {
-    viewModel.onAddStampRowTap(campaignId: widget.campaignId);
+    viewModel.onAddStampRowTap();
     context.goNamed(
       AppRoutes.questCampaign.routeName,
       pathParameters: {'couid': widget.campaignId},
@@ -45,7 +48,7 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
   @override
   void initState() {
     super.initState();
-    init = viewModel.init(campaignId: widget.campaignId);
+    init = viewModel.init();
   }
 
   @override
@@ -61,6 +64,7 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
             return Center(child: Text(serviceErrorText));
           }
           final model = snapshot.data as Campaign;
+          ownedPoints = model.ownedPoints;
           return Scrollbar(
             child: SingleChildScrollView(
               child: campaignLoaded(model),
@@ -76,6 +80,8 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
     required String? name,
     required List<String>? extras,
     required List<String>? redeemRecords,
+    required bool exchangeable,
+    required VoidCallback onRedeemButtonPressed,
   }) {
     Navigator.of(context).push(CupertinoPageRoute(
       builder: (context) {
@@ -84,6 +90,8 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
           name: name,
           extras: extras,
           redeemRecords: redeemRecords,
+          redeemable: exchangeable,
+          onRedeemButtonPressed: onRedeemButtonPressed,
         );
       },
     ));
@@ -217,7 +225,10 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
           margin: const EdgeInsets.symmetric(vertical: 8),
           padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 8),
           decoration: BoxDecoration(
-            border: Border.all(color: borderColor),
+            border: Border.all(
+              color: borderColor,
+              strokeAlign: BorderSide.strokeAlignOutside,
+            ),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Row(
@@ -247,6 +258,9 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                         name: item.name,
                         extras: item.extra,
                         redeemRecords: item.recentRedeemTime,
+                        exchangeable: ownedPoints >= item.points,
+                        onRedeemButtonPressed: () =>
+                            viewModel.onRedeemItemPressed(item.id),
                       );
                     },
                     child: const Text('查看'),
@@ -360,7 +374,7 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
             ),
             child: buildStampRow(
               data.stampRowCounts ?? 1,
-              ownedStampCount: data.ownedPoints,
+              ownedStampCount: ownedPoints,
             ),
           ),
           divider(),
@@ -372,6 +386,7 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
           ),
           divider(),
           if (data.redeemItems != null) ...buildRedeemItems(data.redeemItems!),
+          const SizedBox(height: 15),
         ],
       ),
     );
@@ -383,12 +398,16 @@ class _RedeemItemDetail extends StatefulWidget {
   final String? name;
   final List<String>? extras;
   final List<String>? redeemRecords;
+  final VoidCallback onRedeemButtonPressed;
+  final bool redeemable;
 
   const _RedeemItemDetail({
     required this.imgUrl,
     required this.name,
     required this.extras,
     required this.redeemRecords,
+    required this.redeemable,
+    required this.onRedeemButtonPressed,
   });
 
   @override
@@ -399,6 +418,21 @@ class _RedeemItemDetailState extends BaseStatefulState<_RedeemItemDetail> {
   static const _kMaxBottomSheetHeight = 80.0;
   Offset _offset = const Offset(0, 1);
   double bottomSheetHeight = 0;
+
+  Widget buildRedeemButton() {
+    if (!widget.redeemable) {
+      return TextButton(
+        onPressed: null,
+        style: buttonStyle,
+        child: const Text('點數不足'),
+      );
+    }
+    return TextButton(
+      onPressed: widget.onRedeemButtonPressed,
+      style: buttonStyle,
+      child: const Text('兌換'),
+    );
+  }
 
   @override
   void initState() {
@@ -438,12 +472,7 @@ class _RedeemItemDetailState extends BaseStatefulState<_RedeemItemDetail> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Expanded(
-                          child: TextButton(
-                              onPressed: null,
-                              style: buttonStyle,
-                              child: const Text('點數不足')),
-                        ),
+                        Expanded(child: buildRedeemButton()),
                         const SizedBox(width: 15),
                         Expanded(
                           child: TextButton(

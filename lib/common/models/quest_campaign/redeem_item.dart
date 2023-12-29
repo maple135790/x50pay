@@ -1,4 +1,7 @@
 class RedeemItem {
+  /// 物品ID
+  final String id;
+
   /// 商品圖片
   final String rawImgUrl;
 
@@ -15,6 +18,7 @@ class RedeemItem {
   final List<String>? recentRedeemTime;
 
   const RedeemItem({
+    required this.id,
     required this.rawImgUrl,
     required this.name,
     required this.points,
@@ -24,7 +28,7 @@ class RedeemItem {
 
   @override
   String toString() {
-    return 'RedeemItem{imgUrl: $imgUrl, name: $name, points: $points, extra: $extra, recentRedeemTime: $recentRedeemTime}';
+    return 'RedeemItem(id: $id, rawImgUrl: $rawImgUrl, name: $name, points: $points, rawExtra: $rawExtra, recentRedeemTime: $recentRedeemTime)';
   }
 
   List<String> get extra => ["所需點數 $points 點", ...rawExtra ?? []];

@@ -8,7 +8,10 @@ class MockRepository extends Mock implements Repository {}
 final mockRepo = MockRepository();
 
 void main() {
-  final viewModel = QuestCampaignViewModel(repository: mockRepo);
+  final viewModel = QuestCampaignViewModel(
+    campaignId: 'test_x50chusp082023619',
+    repository: mockRepo,
+  );
 
   setUp(() {
     when(() => mockRepo.getCampaignDocument(any())).thenAnswer((_) async {
@@ -409,10 +412,15 @@ void main() {
     </script>''';
       return rawResponse;
     });
+    when(() => mockRepo.redeemQuestCampaignItem(any(), any()))
+        .thenAnswer((_) async {
+      return "https://pay.x50.fun/coupon/changecheck/${_.positionalArguments[0]}/${_.positionalArguments[1]}";
+    });
   });
   test('測試取得集點活動資料', () async {
-    final campaign = await viewModel.init(campaignId: '');
+    final campaign = await viewModel.init();
 
     expect(campaign, isNotNull);
+    expect(campaign!.redeemItems, isNotEmpty);
   });
 }
