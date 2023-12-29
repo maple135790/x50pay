@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -355,8 +354,6 @@ class Repository extends Api {
       withSession: true,
       contentType: ContentType.json,
     );
-    log("request: ${response.request!.contentLength}", name: 'setAvatar');
-    log("request: ${response.request!.headers}", name: 'setAvatar');
     return response;
   }
 

@@ -88,6 +88,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
         child: Padding(
           padding: const EdgeInsets.all(25),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Icon(Icons.calendar_today_rounded, size: 51),
@@ -392,7 +393,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
             ],
           ),
         ),
-        const SizedBox(height: 45),
+        const SizedBox(height: 30),
         TextButton(
             onPressed: () async {
               await EasyLoading.show();

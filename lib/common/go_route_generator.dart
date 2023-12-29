@@ -220,7 +220,8 @@ RouterConfig<Object> goRouteConfig() {
               if (shouldRebuild == true) {
                 return NoTransitionPage(
                   child: Home(
-                      key: ValueKey(DateTime.now().millisecondsSinceEpoch)),
+                    key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                  ),
                 );
               }
               return const NoTransitionPage(child: Home());
@@ -229,7 +230,8 @@ RouterConfig<Object> goRouteConfig() {
               _route(AppRoutes.ecPay, (_, state) => const EcPay()),
               _routeTransition(AppRoutes.dressRoom,
                   (_, __) => const CupertinoPage(child: DressRoom())),
-              _route(AppRoutes.buyMPass, (_, state) => const BuyMPass()),
+              _routeTransition(AppRoutes.buyMPass,
+                  (_, state) => const CupertinoPage(child: BuyMPass())),
               _route(AppRoutes.questCampaign, (_, state) {
                 final shouldRebuild = state.extra as bool?;
                 if (shouldRebuild == true) {

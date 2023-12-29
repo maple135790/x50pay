@@ -16,11 +16,15 @@ class TicketInfo extends StatelessWidget {
     return '${date.month}/${date.day} ${date.hour}:${date.minute}';
   }
 
-  void onTicketInfoPressed(BuildContext context) {
-    context.goNamed(
+  void onTicketInfoPressed(GoRouter router) {
+    router.goNamed(
       AppRoutes.settings.routeName,
       queryParameters: {'goTo': "ticketRecord"},
     );
+  }
+
+  void onMPassPressed(GoRouter router) {
+    router.pushNamed(AppRoutes.buyMPass.routeName);
   }
 
   Color getIconColor(bool isDarkTheme) {
@@ -66,8 +70,7 @@ class TicketInfo extends StatelessWidget {
                     children: [
                       GestureDetector(
                           onTap: () {
-                            GoRouter.of(context)
-                                .pushNamed(AppRoutes.buyMPass.routeName);
+                            onMPassPressed(GoRouter.of(context));
                           },
                           child: Icon(
                             Icons.confirmation_number_rounded,
@@ -87,7 +90,7 @@ class TicketInfo extends StatelessWidget {
                         child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
-                            onTicketInfoPressed(context);
+                            onTicketInfoPressed(GoRouter.of(context));
                           },
                           child: SizedBox(
                             child: Column(
