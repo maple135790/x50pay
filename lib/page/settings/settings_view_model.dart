@@ -69,7 +69,7 @@ class SettingsViewModel extends BaseViewModel {
 
   Future<void> init() async {
     showLoading();
-    await Future.delayed(const Duration(milliseconds: 650));
+    await Future.delayed(const Duration(milliseconds: 400));
     dismissLoading();
   }
 
