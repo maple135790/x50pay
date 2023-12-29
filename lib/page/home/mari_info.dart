@@ -116,6 +116,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                             fit: StackFit.passthrough,
                             children: [
                               FadeInImage(
+                                key: ValueKey(entry.ava),
                                 image: MemoryImage(entry.ava),
                                 placeholder: MemoryImage(kTransparentImage),
                                 imageErrorBuilder: handleMariImageError,
@@ -144,6 +145,8 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                     ),
                                     color: const Color(0xffffc0cb),
                                     style: ButtonStyle(
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          scaffoldBackgroundColor),
                                       side: MaterialStatePropertyAll(BorderSide(
                                         color: borderColor,
                                         width: 1.5,
@@ -189,12 +192,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                   Tooltip(
                                     preferBelow: false,
                                     triggerMode: TooltipTriggerMode.tap,
-                                    decoration: BoxDecoration(
-                                        color: const Color(0x33fefefe),
-                                        borderRadius: BorderRadius.circular(8)),
                                     message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
-                                    // textStyle:
-                                    //     Theme.of(context).textTheme.labelMedium,
                                     verticalOffset: 25,
                                     child: Container(
                                         decoration: BoxDecoration(
