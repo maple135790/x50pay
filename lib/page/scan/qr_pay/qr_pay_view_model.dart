@@ -9,6 +9,7 @@ import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
+import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -177,7 +178,8 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
 
   void _doInsert(String url) async {
     log('https://pay.x50.fun$url');
-    // await CabSelectViewModel().doInsertQRPay(url: 'https://pay.x50.fun$url');
+    await CabSelectViewModel(repository: repository)
+        .doInsertQRPay(url: 'https://pay.x50.fun$url');
     return;
   }
 

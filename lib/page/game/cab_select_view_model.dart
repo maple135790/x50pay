@@ -23,13 +23,21 @@ class CabSelectViewModel extends BaseViewModel {
       showLoading();
       await Future.delayed(const Duration(milliseconds: 500));
       late _InsertResponse result;
-      BasicResponse rawResponse = BasicResponse.empty();
+      var rawResponse = BasicResponse.empty();
       log('url: $url', name: 'doInsertQRPay');
 
       if (kReleaseMode) {
         rawResponse = await repository.doInsertRawUrl(url);
       }
-      result = _resolveRawResponse(rawResponse);
+      result = kReleaseMode
+          ? _resolveRawResponse(rawResponse)
+          : (
+              is200: true,
+              response: (
+                msg: 'Test doInsertQRPay Success',
+                describe: 'no token is inserted'
+              )
+            );
       _showInsertResult(result);
       return true;
     } catch (e, stacktrace) {
@@ -40,23 +48,19 @@ class CabSelectViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool> doInsert(
-      {required bool isTicket,
-      required bool isUseRewardPoint,
-      required String id,
-      required int index,
-      required num mode}) async {
+  Future<bool> doInsert({
+    required bool isTicket,
+    required bool isUseRewardPoint,
+    required String id,
+    required int index,
+    required num mode,
+  }) async {
     try {
       showLoading();
       await Future.delayed(const Duration(milliseconds: 500));
       late _InsertResponse result;
       final sid = await Prefs.getString(PrefsToken.storeId);
-      BasicResponse rawResponse = kDebugMode
-          ? const BasicResponse(
-              code: 200,
-              message: "Test Success, no token is inserted",
-            )
-          : BasicResponse.empty();
+      var rawResponse = BasicResponse.empty();
 
       log(
         'index: $index, id: $id/$sid$index, mode: $mode, isTicket: $isTicket',
@@ -71,7 +75,15 @@ class CabSelectViewModel extends BaseViewModel {
           isUseRewardPoint,
         );
       }
-      result = _resolveRawResponse(rawResponse);
+      result = kReleaseMode
+          ? _resolveRawResponse(rawResponse)
+          : (
+              is200: true,
+              response: (
+                msg: 'Test doInsert Success',
+                describe: 'no token is inserted'
+              )
+            );
       _showInsertResult(result);
       return true;
     } catch (e, stacktrace) {
