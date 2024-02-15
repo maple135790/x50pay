@@ -16,7 +16,7 @@ import 'package:x50pay/common/widgets/persist_app_bar.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
-import 'package:x50pay/providers/theme_provider.dart';
+// import 'package:x50pay/providers/theme_provider.dart';
 import 'package:x50pay/r.g.dart';
 
 typedef MenuItem = ({IconData icon, String label, RouteProperty route});
@@ -152,20 +152,20 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
       // },
       child: Scaffold(
         appBar: _LoadedAppBar(selectedIndex),
-        floatingActionButton: kDebugMode
-            ? FloatingActionButton(
-                child: const Icon(Icons.brightness_6_rounded),
-                onPressed: () {
-                  Theme.of(context).brightness == Brightness.dark
-                      ? context
-                          .read<AppThemeProvider>()
-                          .changeBrightness(Brightness.light)
-                      : context
-                          .read<AppThemeProvider>()
-                          .changeBrightness(Brightness.dark);
-                },
-              )
-            : null,
+        // floatingActionButton: kDebugMode
+        //     ? FloatingActionButton(
+        //         child: const Icon(Icons.brightness_6_rounded),
+        //         onPressed: () {
+        //           Theme.of(context).brightness == Brightness.dark
+        //               ? context
+        //                   .read<AppThemeProvider>()
+        //                   .changeBrightness(Brightness.light)
+        //               : context
+        //                   .read<AppThemeProvider>()
+        //                   .changeBrightness(Brightness.dark);
+        //         },
+        //       )
+        //     : null,
         body: widget.body,
         bottomNavigationBar: Container(
           decoration: BoxDecoration(

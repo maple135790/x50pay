@@ -41,7 +41,6 @@ class _HomeState extends BaseStatefulState<Home> {
     return Material(
       color: scaffoldBackgroundColor,
       child: RefreshIndicator(
-        displacement: 80,
         onRefresh: onRefresh,
         child: ChangeNotifierProvider.value(
           value: viewModel,
