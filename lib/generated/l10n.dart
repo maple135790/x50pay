@@ -120,6 +120,26 @@ class S {
     );
   }
 
+  /// `大`
+  String get gameCabTileLarge {
+    return Intl.message(
+      '大',
+      name: 'gameCabTileLarge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `小`
+  String get gameCabTileSmall {
+    return Intl.message(
+      '小',
+      name: 'gameCabTileSmall',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `離峰時段`
   String get gameDiscountHour {
     return Intl.message(
@@ -841,6 +861,16 @@ class S {
     );
   }
 
+  /// `遊戲磚大小`
+  String get userAppSettingsGameCabTileStyle {
+    return Intl.message(
+      '遊戲磚大小',
+      name: 'userAppSettingsGameCabTileStyle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `App 內 NFC 標籤掃描`
   String get userAppSettingsInAppNfc {
     return Intl.message(
@@ -856,6 +886,26 @@ class S {
     return Intl.message(
       '掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項',
       name: 'userAppSettingsInAppNfcContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁\n預設為關閉`
+  String get userAppSettingsRememberGameTabInfo {
+    return Intl.message(
+      '如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁\n預設為關閉',
+      name: 'userAppSettingsRememberGameTabInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `紀錄上次的投幣標籤頁面`
+  String get userAppSettingsRememberGameTabTitle {
+    return Intl.message(
+      '紀錄上次的投幣標籤頁面',
+      name: 'userAppSettingsRememberGameTabTitle',
       desc: '',
       args: [],
     );

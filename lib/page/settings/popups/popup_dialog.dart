@@ -38,82 +38,78 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final buttomSheet = ValueListenableBuilder(
+      valueListenable: offsetNotifier,
+      builder: (context, offset, child) {
+        return AnimatedSlide(
+          offset: offset,
+          curve: Curves.easeOutExpo,
+          duration: const Duration(milliseconds: 300),
+          child: child,
+        );
+      },
+      child: BottomSheet(
+        onClosing: () {},
+        dragHandleSize: Size.zero,
+        backgroundColor: dialogButtomBarColor,
+        enableDrag: false,
+        shape: const RoundedRectangleBorder(),
+        builder: (context) => Container(
+          height: _kMaxBottomSheetHeight,
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: borderColor)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: isDarkTheme ? buttonStyleDark : buttonStyleLight,
+                    child: Text(i18n.dialogReturn)),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: widget.customConfirmButton == null
+                    ? TextButton(
+                        style: isDarkTheme ? buttonStyleDark : buttonStyleLight,
+                        onPressed: widget.onConfirm,
+                        child: Text(i18n.dialogSave),
+                      )
+                    : widget.customConfirmButton!,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
     return Scaffold(
       backgroundColor: isDarkTheme
           ? CustomColorThemes.pageDialogBackgroundColorDark
           : CustomColorThemes.pageDialogBackgroundColorLight,
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: _kMaxBottomSheetHeight),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 14, 28, 14),
-              child: Text(
-                widget.title,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(28, 14, 28, 14),
+            child: Text(
+              widget.title,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: widget.content.call(showButtonBar),
-              ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: _kMaxBottomSheetHeight),
+              child: widget.content.call(showButtonBar),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      bottomSheet: ValueListenableBuilder(
-        valueListenable: offsetNotifier,
-        builder: (context, offset, child) {
-          return AnimatedSlide(
-            offset: offset,
-            curve: Curves.easeOutExpo,
-            duration: const Duration(milliseconds: 300),
-            child: child,
-          );
-        },
-        child: BottomSheet(
-            onClosing: () {},
-            dragHandleSize: Size.zero,
-            backgroundColor: dialogButtomBarColor,
-            enableDrag: false,
-            shape: const RoundedRectangleBorder(),
-            builder: (context) => Container(
-                  height: _kMaxBottomSheetHeight,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    border: Border(top: BorderSide(color: borderColor)),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            style: isDarkTheme
-                                ? buttonStyleDark
-                                : buttonStyleLight,
-                            child: Text(i18n.dialogReturn)),
-                      ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: widget.customConfirmButton == null
-                            ? TextButton(
-                                style: isDarkTheme
-                                    ? buttonStyleDark
-                                    : buttonStyleLight,
-                                onPressed: widget.onConfirm,
-                                child: Text(i18n.dialogSave),
-                              )
-                            : widget.customConfirmButton!,
-                      ),
-                    ],
-                  ),
-                )),
-      ),
+      bottomSheet: widget.onConfirm != null ? buttomSheet : null,
     );
   }
 }

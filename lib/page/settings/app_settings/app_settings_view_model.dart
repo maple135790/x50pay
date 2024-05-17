@@ -77,6 +77,20 @@ class AppSettingsViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  GameCabTileStyle get tileStyle => _tileStyle;
+  GameCabTileStyle _tileStyle = GameCabTileStyle.small;
+  set tileStyle(GameCabTileStyle value) {
+    _tileStyle = value;
+    notifyListeners();
+  }
+
+  bool get isRememberGameTab => _isRememberGameTab;
+  bool _isRememberGameTab = false;
+  set isRememberGameTab(bool value) {
+    _isRememberGameTab = value;
+    notifyListeners();
+  }
+
   Future<bool> isBiomerticsAvailable() async {
     final auth = LocalAuthentication();
     final canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
@@ -106,6 +120,22 @@ class AppSettingsViewModel extends BaseViewModel {
   Future<bool> getIsEnableSummarizedRecord() async {
     final enabled = await Prefs.getBool(PrefsToken.enableSummarizedRecord);
     return enabled ?? PrefsToken.enableSummarizedRecord.defaultValue;
+  }
+
+  Future<bool> _getIsRememberGameTab() async {
+    final isRememberGameTab = await Prefs.getBool(PrefsToken.rememberGameTab);
+    if (isRememberGameTab == null) {
+      return PrefsToken.rememberGameTab.defaultValue;
+    }
+    return isRememberGameTab;
+  }
+
+  Future<GameCabTileStyle> _getTileStyle() async {
+    final tileStyle = await Prefs.getInt(PrefsToken.gameCabTileStyle);
+    if (tileStyle == null) {
+      return GameCabTileStyle.fromInt(PrefsToken.gameCabTileStyle.defaultValue);
+    }
+    return GameCabTileStyle.fromInt(tileStyle);
   }
 
   Future<String> _getCEInterval() async {
@@ -169,6 +199,18 @@ class AppSettingsViewModel extends BaseViewModel {
     await Prefs.setBool(PrefsToken.enableDarkTheme, isDarkTheme);
   }
 
+  void setRememberGameTab(bool value) {
+    Prefs.setBool(PrefsToken.rememberGameTab, value);
+
+    isRememberGameTab = value;
+  }
+
+  void setGameCabTileStyle(GameCabTileStyle tileStyle) {
+    Prefs.setInt(PrefsToken.gameCabTileStyle, tileStyle.value);
+
+    this.tileStyle = tileStyle;
+  }
+
   Future<void> getAppSettings() async {
     showLoading();
     await Future.delayed(const Duration(milliseconds: 300));
@@ -176,6 +218,9 @@ class AppSettingsViewModel extends BaseViewModel {
     isEnabledBiometricsLogin = await _getIsEnabledBiometricsLogin();
     isEnableInAppNfcScan = await _getIsEnableInAppNfcScan();
     isEnableSummarizedRecord = await getIsEnableSummarizedRecord();
+    isRememberGameTab = await _getIsRememberGameTab();
+    tileStyle = await _getTileStyle();
+
     final androidinfo = await DeviceInfoPlugin().androidInfo;
 
     isSupportCE = pixelProductNames.contains(androidinfo.product.toLowerCase());

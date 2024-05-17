@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 
 class Prefs {
@@ -71,14 +72,47 @@ class Prefs {
   }
 }
 
+enum GameCabTileStyle {
+  /// 一行一個遊戲
+  large(0),
+
+  /// 一行兩個遊戲
+  small(defaultValue);
+
+  final int value;
+  const GameCabTileStyle(this.value);
+
+  static const defaultValue = 1;
+
+  factory GameCabTileStyle.fromInt(int value) {
+    return switch (value) {
+      0 => GameCabTileStyle.large,
+      defaultValue => GameCabTileStyle.small,
+      _ => throw ArgumentError('Invalid value: $value'),
+    };
+  }
+
+  String get i18nName => switch (this) {
+        GameCabTileStyle.large => S.current.gameCabTileLarge,
+        GameCabTileStyle.small => S.current.gameCabTileSmall,
+      };
+}
+
 enum PrefsToken {
   cardEmulationInterval('card_emulation_interval', defaultValue: -1),
+  gameCabTileStyle(
+    'game_cab_tile_style',
+    defaultValue: GameCabTileStyle.defaultValue,
+  ),
+  rememberGameTab('remember_game_tab', defaultValue: false),
   enabledFastQRPay('fast_qrpay', defaultValue: true),
   enabledInAppNfcScan('in_app_nfc_scan', defaultValue: true),
   enableSummarizedRecord('summarized_record', defaultValue: false),
   enableDarkTheme('dark_theme', defaultValue: true),
-  seedColor('theme_seed_color',
-      defaultValue: AppThemeProvider.defaultSeedColor),
+  seedColor(
+    'theme_seed_color',
+    defaultValue: AppThemeProvider.defaultSeedColor,
+  ),
   favGameName('fav_game_name'),
   appLang('app_lang', defaultValue: 'zh-tw'),
   storeId('store_id'),

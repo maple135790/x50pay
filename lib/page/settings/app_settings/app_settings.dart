@@ -327,6 +327,10 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
     Prefs.setInt(PrefsToken.seedColor, newSeedColor!.value);
   }
 
+  void onRememberGameTabChanged(bool value) {
+    viewModel.setRememberGameTab(value);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -361,6 +365,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                 return Consumer<AppSettingsViewModel>(
                   builder: (context, vm, child) {
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CupertinoListSection.insetGrouped(
                           children: [
@@ -416,6 +421,37 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                                     .toList(),
                                 onChanged: onCEChanged,
                               ),
+                          ],
+                        ),
+                        CupertinoListSection.insetGrouped(
+                          footer: Text(
+                            i18n.userAppSettingsRememberGameTabInfo,
+                            style: const CupertinoTextThemeData()
+                                .tabLabelTextStyle,
+                          ),
+                          children: [
+                            DialogDropdown.ios(
+                              title: i18n.userAppSettingsGameCabTileStyle,
+                              value: vm.tileStyle.i18nName,
+                              avaliList: GameCabTileStyle.values
+                                  .map((e) => e.i18nName)
+                                  .toList(),
+                              onChanged: (value) {
+                                final tileStyle = GameCabTileStyle.values
+                                    .firstWhere(
+                                        (element) => element.i18nName == value);
+                                vm.setGameCabTileStyle(tileStyle);
+                              },
+                            ),
+                            CupertinoListTile.notched(
+                              title: Text(
+                                  i18n.userAppSettingsRememberGameTabTitle),
+                              trailing: CupertinoSwitch(
+                                activeColor: CupertinoColors.activeGreen,
+                                value: vm.isRememberGameTab,
+                                onChanged: onRememberGameTabChanged,
+                              ),
+                            ),
                           ],
                         ),
                         CupertinoListSection.insetGrouped(

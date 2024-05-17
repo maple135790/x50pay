@@ -44,6 +44,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialogSave": MessageLookupByLibrary.simpleMessage("Save"),
         "dressRoomTitle":
             MessageLookupByLibrary.simpleMessage("Change avater/clothes"),
+        "gameCabTileLarge": MessageLookupByLibrary.simpleMessage("Large"),
+        "gameCabTileSmall": MessageLookupByLibrary.simpleMessage("Small"),
         "gameDiscountHour": MessageLookupByLibrary.simpleMessage("Discount"),
         "gameLocation": MessageLookupByLibrary.simpleMessage("Your Location"),
         "gameMPass": MessageLookupByLibrary.simpleMessage("Monthly Pass"),
@@ -145,10 +147,17 @@ class MessageLookup extends MessageLookupByLibrary {
                 "The Fast Payment feature is different from the web-based payment process. No token verification will be performed when coins are deposited.\n\nAre you sure you want to enable the quick payment process?"),
         "userAppSettingsFastPaymentEnableTitle":
             MessageLookupByLibrary.simpleMessage("Enable Fast Payment"),
+        "userAppSettingsGameCabTileStyle":
+            MessageLookupByLibrary.simpleMessage("Game tile size"),
         "userAppSettingsInAppNfc":
             MessageLookupByLibrary.simpleMessage("In-App NFC tag read"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option."),
+        "userAppSettingsRememberGameTabInfo": MessageLookupByLibrary.simpleMessage(
+            "If enabled, the last visited tab will be displayed when entering the Game page.\nIf disabled, the Pinned Game tab will be displayed each time you enter.\nDefault is disabled."),
+        "userAppSettingsRememberGameTabTitle":
+            MessageLookupByLibrary.simpleMessage(
+                "Remember the last tab in Game page"),
         "userAppSettingsResetTheme":
             MessageLookupByLibrary.simpleMessage("Reset Theme"),
         "userAppSettingsSummarizedRecord": MessageLookupByLibrary.simpleMessage(
