@@ -35,48 +35,65 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsViewModel>(
-      builder: (context, vm, child) => PageDialog.ios(
-        title: 'QuiC 快速付款偏好設定',
-        onConfirm: () {
-          sendQuicConfirm(vm);
-        },
-        content: (showButtonBar) => FutureBuilder(
-            future: vm.getPaymentSettings(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const SizedBox();
-              }
-              if (snapshot.hasError) {
-                return const Center(child: Text('failed'));
-              }
-              showButtonBar(true);
+      builder: (context, vm, child) {
+        return PageDialog.ios(
+          title: 'QuiC 快速付款偏好設定',
+          onConfirm: () {
+            sendQuicConfirm(vm);
+          },
+          content: (showButtonBar) => FutureBuilder(
+              future: vm.getPaymentSettings(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox();
+                }
+                if (snapshot.hasError) {
+                  return const Center(child: Text('failed'));
+                }
+                showButtonBar(true);
 
-              final model = snapshot.data!;
-              isQuiCPayEnabled = model.nfcQuic;
-              nfcQlock = model.nfcQlock.toString();
+                final model = snapshot.data!;
+                isQuiCPayEnabled = model.nfcQuic;
+                nfcQlock = model.nfcQlock.toString();
 
-              return CupertinoListSection.insetGrouped(
-                children: [
-                  DialogSwitch.ios(
-                    value: isQuiCPayEnabled,
-                    title: '啟用 QuiC 靠卡扣款',
-                    onChanged: (value) {
-                      isQuiCPayEnabled = value;
-                    },
-                  ),
-                  DialogDropdown.ios(
-                    title: 'QuiC 刷卡間隔鎖',
-                    value: intervalMap[nfcQlock],
-                    avaliList: intervalMap.values.toList(),
-                    onChanged: (value) {
-                      nfcQlock = intervalMap.keys
-                          .firstWhere((key) => intervalMap[key] == value);
-                    },
-                  )
-                ],
-              );
-            }),
-      ),
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CupertinoListSection.insetGrouped(
+                      children: [
+                        DialogSwitch.ios(
+                          value: isQuiCPayEnabled,
+                          title: '啟用 QuiC 靠卡扣款',
+                          onChanged: (value) {
+                            isQuiCPayEnabled = value;
+                          },
+                        ),
+                        DialogDropdown.ios(
+                          title: 'QuiC 刷卡間隔鎖',
+                          value: intervalMap[nfcQlock],
+                          avaliList: intervalMap.values.toList(),
+                          onChanged: (value) {
+                            nfcQlock = intervalMap.keys
+                                .firstWhere((key) => intervalMap[key] == value);
+                          },
+                        )
+                      ],
+                    ),
+                    CupertinoListSection.insetGrouped(
+                      header: const Text('已綁定卡片管理'),
+                      children: const [
+                        CupertinoListTile(
+                          title: Text('title'),
+                          additionalInfo: Text('additionalInfo'),
+                          subtitle: Text('subtitle'),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              }),
+        );
+      },
     );
   }
 }

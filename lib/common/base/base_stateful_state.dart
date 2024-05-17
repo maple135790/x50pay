@@ -33,26 +33,26 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       isDarkTheme ? buttonStyleDark : buttonStyleLight;
 
   final buttonStyleDark = ButtonStyle(
-    shape: MaterialStatePropertyAll(
+    shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-    foregroundColor: MaterialStateColor.resolveWith((states) {
+    foregroundColor: WidgetStateColor.resolveWith((states) {
       if (states.isDisabled) return const Color(0xff1e1e1e).withOpacity(0.5);
       return const Color(0xff1e1e1e);
     }),
-    backgroundColor: MaterialStateColor.resolveWith((states) {
+    backgroundColor: WidgetStateColor.resolveWith((states) {
       if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
       return const Color(0xfffafafa);
     }),
   );
 
   final buttonStyleLight = ButtonStyle(
-    shape: MaterialStatePropertyAll(
+    shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-    foregroundColor: MaterialStateColor.resolveWith((states) {
+    foregroundColor: WidgetStateColor.resolveWith((states) {
       if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
       return const Color(0xfffafafa);
     }),
-    backgroundColor: MaterialStateColor.resolveWith((states) {
+    backgroundColor: WidgetStateColor.resolveWith((states) {
       if (states.isDisabled) return const Color(0xff3a3a3a).withOpacity(0.2);
       return const Color(0xff3a3a3a);
     }),

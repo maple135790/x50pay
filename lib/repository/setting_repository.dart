@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/api.dart';
 import 'package:x50pay/common/models/basic_response.dart';
@@ -299,5 +301,15 @@ class SettingRepository extends Api {
       },
     );
     return padSettingsModel;
+  }
+
+  Future<String> getQuicDocument() async {
+    final response = await Api.makeRequest(
+      dest: '/quic/view-v4',
+      method: HttpMethod.get,
+      withSession: true,
+      body: {},
+    );
+    return const Utf8Decoder().convert(response.bodyBytes);
   }
 }

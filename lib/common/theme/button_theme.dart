@@ -9,12 +9,12 @@ class CustomButtonThemes {
   }) {
     return isDarkMode
         ? ButtonStyle(
-            padding: MaterialStateProperty.all(padding),
+            padding: WidgetStateProperty.all(padding),
             splashFactory: NoSplash.splashFactory,
             visualDensity: vd,
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            foregroundColor: MaterialStateProperty.all(const Color(0xff1e1e1e)),
-            backgroundColor: MaterialStateProperty.resolveWith((states) {
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            foregroundColor: WidgetStateProperty.all(const Color(0xff1e1e1e)),
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.isDisabled) {
                 return const Color(0xfffafafa).withOpacity(0.5);
               }
@@ -22,12 +22,12 @@ class CustomButtonThemes {
             }),
           )
         : ButtonStyle(
-            padding: MaterialStateProperty.all(padding),
+            padding: WidgetStateProperty.all(padding),
             splashFactory: NoSplash.splashFactory,
             visualDensity: vd,
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor: MaterialStateProperty.resolveWith((states) {
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            foregroundColor: WidgetStateProperty.all(Colors.white),
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.isDisabled) {
                 return const Color(0xff373737).withOpacity(0.5);
               }
@@ -38,12 +38,12 @@ class CustomButtonThemes {
 
   static ButtonStyle grey({bool isDarkMode = true}) {
     return ButtonStyle(
-      shape: MaterialStatePropertyAll(
+      shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
       splashFactory: NoSplash.splashFactory,
-      foregroundColor: MaterialStateProperty.all(const Color(0xff5a5a5a)),
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
-      backgroundColor: MaterialStateProperty.resolveWith((states) {
+      foregroundColor: WidgetStateProperty.all(const Color(0xff5a5a5a)),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
+      backgroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.isPressed) return const Color(0xffbfbfbf);
         if (states.isDisabled) return const Color(0xffdcead3);
         return const Color(0xffc3c3c3);
@@ -60,20 +60,20 @@ class CustomButtonThemes {
   }) {
     if (isV4) {
       return ButtonStyle(
-        padding: MaterialStateProperty.all(padding),
+        padding: WidgetStateProperty.all(padding),
         shape: isRRect
-            ? MaterialStatePropertyAll(
+            ? WidgetStatePropertyAll(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)))
-            : MaterialStateProperty.all(outlinedBorder),
+            : WidgetStateProperty.all(outlinedBorder),
         foregroundColor: isRRect
-            ? const MaterialStatePropertyAll(Color(0xfffafafa))
-            : MaterialStateProperty.resolveWith((states) {
+            ? const WidgetStatePropertyAll(Color(0xfffafafa))
+            : WidgetStateProperty.resolveWith((states) {
                 if (states.isDisabled) return const Color(0xff8e8e8e);
                 return const Color(0xfffafafa);
               }),
         backgroundColor: isRRect
-            ? const MaterialStatePropertyAll(Color(0xffF5222D))
-            : MaterialStateProperty.resolveWith((states) {
+            ? const WidgetStatePropertyAll(Color(0xffF5222D))
+            : WidgetStateProperty.resolveWith((states) {
                 if (states.isDisabled) return const Color(0xff892025);
                 return const Color(0xffF5222D);
               }),
@@ -81,9 +81,9 @@ class CustomButtonThemes {
     } else {
       return ButtonStyle(
         splashFactory: NoSplash.splashFactory,
-        foregroundColor: MaterialStateProperty.all(const Color(0xfffafafa)),
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
-        backgroundColor: MaterialStateProperty.resolveWith((states) {
+        foregroundColor: WidgetStateProperty.all(const Color(0xfffafafa)),
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
+        backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.isPressed) return const Color(0xff8a3145);
           if (states.isDisabled) return const Color(0xffdcead3);
           return const Color(0xffB85052);
@@ -104,13 +104,13 @@ class CustomButtonThemes {
       backgroundColor = const Color(0xff3a3a3a);
     }
     return ButtonStyle(
-      shape: MaterialStatePropertyAll(
+      shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
-      foregroundColor: MaterialStateColor.resolveWith((states) {
+      foregroundColor: WidgetStateColor.resolveWith((states) {
         if (states.isDisabled) return foregroundColor.withOpacity(0.5);
         return foregroundColor;
       }),
-      backgroundColor: MaterialStateProperty.resolveWith((states) {
+      backgroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.isDisabled) return backgroundColor.withOpacity(0.5);
         return backgroundColor;
       }),

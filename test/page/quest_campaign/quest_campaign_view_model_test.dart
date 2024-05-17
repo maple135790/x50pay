@@ -413,8 +413,8 @@ void main() {
       return rawResponse;
     });
     when(() => mockRepo.redeemQuestCampaignItem(any(), any()))
-        .thenAnswer((_) async {
-      return "https://pay.x50.fun/coupon/changecheck/${_.positionalArguments[0]}/${_.positionalArguments[1]}";
+        .thenAnswer((result) async {
+      return "https://pay.x50.fun/coupon/changecheck/${result.positionalArguments[0]}/${result.positionalArguments[1]}";
     });
   });
   test('測試取得集點活動資料', () async {

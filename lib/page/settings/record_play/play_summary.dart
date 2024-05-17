@@ -140,7 +140,7 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                       builder: (context, snapshot) {
                         return Card(
                           clipBehavior: Clip.antiAlias,
-                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
                           child: InkWell(
                             onLongPress: () {
                               showAllGameSummaries(vm.favGameName);
@@ -168,7 +168,7 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
   Card pointSummary() {
     return Card(
       clipBehavior: Clip.antiAlias,
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: InkWell(
         onTap: onChangeShowPointSummary,
         child: SizedBox(

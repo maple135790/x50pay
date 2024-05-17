@@ -19,7 +19,7 @@ extension AppThemeMode on ThemeMode {
           }),
           scrollbarTheme: ScrollbarThemeData(
             radius: const Radius.circular(1.5),
-            thumbColor: MaterialStateProperty.all(const Color(0x80FFFFFF)),
+            thumbColor: WidgetStateProperty.all(const Color(0x80FFFFFF)),
           ),
           scaffoldBackgroundColor: const Color(0xfff2f2f2),
           bottomSheetTheme: const BottomSheetThemeData(
@@ -32,7 +32,7 @@ extension AppThemeMode on ThemeMode {
           ),
           dataTableTheme: DataTableThemeData(
             headingTextStyle: const TextStyle(color: Color(0xff5a5a5a)),
-            headingRowColor: MaterialStateProperty.all(const Color(0xfff2f2f2)),
+            headingRowColor: WidgetStateProperty.all(const Color(0xfff2f2f2)),
             decoration: BoxDecoration(
                 color: const Color(0xffffffff),
                 border: Border.all(color: CustomColorThemes.borderColorLight)),
@@ -40,7 +40,7 @@ extension AppThemeMode on ThemeMode {
           navigationBarTheme: NavigationBarThemeData(
             indicatorColor: Colors.transparent,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-            labelTextStyle: MaterialStateProperty.resolveWith((states) {
+            labelTextStyle: WidgetStateProperty.resolveWith((states) {
               if (states.isSelected) {
                 return TextStyle(
                     color: Color.alphaBlend(
@@ -85,7 +85,7 @@ extension AppThemeMode on ThemeMode {
           useMaterial3: true,
           scrollbarTheme: ScrollbarThemeData(
             radius: const Radius.circular(1.5),
-            thumbColor: MaterialStateProperty.all(const Color(0x80FFFFFF)),
+            thumbColor: WidgetStateProperty.all(const Color(0x80FFFFFF)),
           ),
           splashColor: Colors.white12,
           highlightColor: Colors.white12,
@@ -103,7 +103,7 @@ extension AppThemeMode on ThemeMode {
               )),
           dataTableTheme: DataTableThemeData(
             headingTextStyle: const TextStyle(color: Color(0xfffafafa)),
-            headingRowColor: MaterialStateProperty.all(const Color(0xff2a2a2a)),
+            headingRowColor: WidgetStateProperty.all(const Color(0xff2a2a2a)),
             decoration: BoxDecoration(
                 color: const Color(0xff1e1e1e),
                 border: Border.all(color: CustomColorThemes.borderColorDark)),
@@ -134,13 +134,13 @@ extension AppThemeMode on ThemeMode {
             indicatorColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-            labelTextStyle: MaterialStateProperty.resolveWith((states) {
+            labelTextStyle: WidgetStateProperty.resolveWith((states) {
               if (states.isSelected) {
                 return const TextStyle(color: Color(0xb3e3c81b), fontSize: 11);
               }
               return null;
             }),
-            iconTheme: MaterialStateProperty.resolveWith((states) {
+            iconTheme: WidgetStateProperty.resolveWith((states) {
               if (states.isSelected) {
                 return const IconThemeData(color: Color(0xfffafafa));
               }

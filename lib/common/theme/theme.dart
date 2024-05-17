@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 
-extension MaterialStateSet on Set<MaterialState> {
-  bool get isHovered => contains(MaterialState.hovered);
-  bool get isDisabled => contains(MaterialState.disabled);
-  bool get isPressed => contains(MaterialState.pressed);
-  bool get isSelected => contains(MaterialState.selected);
-  bool get isFocused => contains(MaterialState.focused);
+extension MaterialStateSet on Set<WidgetState> {
+  bool get isHovered => contains(WidgetState.hovered);
+  bool get isDisabled => contains(WidgetState.disabled);
+  bool get isPressed => contains(WidgetState.pressed);
+  bool get isSelected => contains(WidgetState.selected);
+  bool get isFocused => contains(WidgetState.focused);
 }
 
 class AppThemeData {
@@ -18,7 +18,7 @@ class AppThemeData {
     useMaterial3: true,
     scrollbarTheme: ScrollbarThemeData(
       radius: const Radius.circular(1.5),
-      thumbColor: MaterialStateProperty.all(const Color(0x80FFFFFF)),
+      thumbColor: WidgetStateProperty.all(const Color(0x80FFFFFF)),
     ),
     colorSchemeSeed: const Color(0xb3e3c81b),
     splashColor: Colors.white12,
@@ -36,7 +36,7 @@ class AppThemeData {
         )),
     dataTableTheme: DataTableThemeData(
       headingTextStyle: const TextStyle(color: Color(0xfffafafa)),
-      headingRowColor: MaterialStateProperty.all(const Color(0xff2a2a2a)),
+      headingRowColor: WidgetStateProperty.all(const Color(0xff2a2a2a)),
       decoration: BoxDecoration(
           color: const Color(0xff1e1e1e),
           border: Border.all(color: CustomColorThemes.borderColorDark)),
@@ -63,13 +63,13 @@ class AppThemeData {
       indicatorColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-      labelTextStyle: MaterialStateProperty.resolveWith((states) {
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
         if (states.isSelected) {
           return const TextStyle(color: Color(0xffe3c81b), fontSize: 11);
         }
         return null;
       }),
-      iconTheme: MaterialStateProperty.resolveWith((states) {
+      iconTheme: WidgetStateProperty.resolveWith((states) {
         if (states.isSelected) {
           return const IconThemeData(color: Color(0xfffafafa));
         }

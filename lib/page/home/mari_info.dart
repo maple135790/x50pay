@@ -145,9 +145,9 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                     ),
                                     color: const Color(0xffffc0cb),
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStatePropertyAll(
+                                      backgroundColor: WidgetStatePropertyAll(
                                           scaffoldBackgroundColor),
-                                      side: MaterialStatePropertyAll(BorderSide(
+                                      side: WidgetStatePropertyAll(BorderSide(
                                         color: borderColor,
                                         width: 1.5,
                                       )),
@@ -362,25 +362,25 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                     child: TextButton(
                                       onPressed: onGradeBoxPressed,
                                       style: ButtonStyle(
-                                        overlayColor: MaterialStateProperty.all(
+                                        overlayColor: WidgetStateProperty.all(
                                             Colors.transparent),
-                                        padding: MaterialStateProperty.all(
+                                        padding: WidgetStateProperty.all(
                                             const EdgeInsets.symmetric(
                                                 horizontal: 20)),
-                                        textStyle: MaterialStateProperty.all(
+                                        textStyle: WidgetStateProperty.all(
                                             const TextStyle(fontSize: 13)),
                                         visualDensity:
                                             VisualDensity.comfortable,
                                         splashFactory: NoSplash.splashFactory,
-                                        shape: MaterialStateProperty.all(
+                                        shape: WidgetStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(20))),
                                         foregroundColor:
-                                            MaterialStateProperty.all(
+                                            WidgetStateProperty.all(
                                                 const Color(0xfff5222d)),
                                         backgroundColor:
-                                            MaterialStateProperty.resolveWith(
+                                            WidgetStateProperty.resolveWith(
                                                 (states) {
                                           return isDarkTheme
                                               ? const Color(0x22f7f7f7)

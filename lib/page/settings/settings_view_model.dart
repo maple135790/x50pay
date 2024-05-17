@@ -16,6 +16,8 @@ import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
+typedef QuicPayPrefs = ({PaymentSettingsModel model, List<String> cards});
+
 enum NVSVPayment {
   light('Light', '0'),
   standard('Standard', '1'),
@@ -173,6 +175,19 @@ class SettingsViewModel extends BaseViewModel {
     } finally {
       dismissLoading();
     }
+  }
+
+  Future<QuicPayPrefs> getQuicPayPrefs() async {
+    // await Future.wait([
+    //   getPaymentSettings(enableDelay: false),
+    // ]);
+    final paymentSettingModel = await getPaymentSettings(enableDelay: false);
+    return (model: paymentSettingModel, cards: <String>[]);
+  }
+
+  Future<List<String>> getQuicPayCards() async {
+    final document = await settingRepo.getQuicDocument();
+    return [];
   }
 
   /// 取得快速付款偏好設定
