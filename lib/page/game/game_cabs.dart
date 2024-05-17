@@ -253,7 +253,7 @@ class _GameCabItem extends StatelessWidget with GameMixin {
     final i18n = S.of(context);
     final isWeekend =
         DateTime.now().weekday == 6 || DateTime.now().weekday == 7;
-    final time = machine.mode![0][3] == true
+    final time = machine.mode![0].length == 4 && machine.mode![0][3] == true
         ? i18n.gameDiscountHour
         : i18n.gameNormalHour;
     final addition = machine.vipb == true
