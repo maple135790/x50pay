@@ -154,7 +154,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。"),
         "userAppSettingsRememberGameTabInfo": MessageLookupByLibrary.simpleMessage(
-            "有効の場合、コインページに入るたびに前回のタブが表示されます。\n無効の場合、毎回ゲームページに入るとお気に入りゲームタブが表示されます。\nデフォルトは無効です。"),
+            "有効の場合、コインページに入るたびに前回のタブが表示されます。\n無効の場合、毎回ゲームページに入るとお気に入りゲームタブが表示されます。デフォルトは無効です。"),
         "userAppSettingsRememberGameTabTitle":
             MessageLookupByLibrary.simpleMessage("前回のゲームタブを記憶する"),
         "userAppSettingsResetTheme":

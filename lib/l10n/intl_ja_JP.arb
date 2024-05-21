@@ -137,7 +137,7 @@
   "userAppSettingsGameCabTileStyle": "ゲームタイルの大きさ",
   "userAppSettingsInAppNfc": "アプリ内の NFC タグ読み取り",
   "userAppSettingsInAppNfcContent": "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。",
-  "userAppSettingsRememberGameTabInfo": "有効の場合、コインページに入るたびに前回のタブが表示されます。\n無効の場合、毎回ゲームページに入るとお気に入りゲームタブが表示されます。\nデフォルトは無効です。",
+  "userAppSettingsRememberGameTabInfo": "有効の場合、コインページに入るたびに前回のタブが表示されます。\n無効の場合、毎回ゲームページに入るとお気に入りゲームタブが表示されます。デフォルトは無効です。",
   "userAppSettingsRememberGameTabTitle": "前回のゲームタブを記憶する",
   "userAppSettingsResetTheme": "デフォルトテーマに戻す",
   "userAppSettingsSummarizedRecord": "まとめた支払い履歴を表示",

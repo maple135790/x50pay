@@ -145,18 +145,8 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
     return "https://pay.x50.fun/static/storesimg/$storeId.jpg?v1.2";
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final store =
-        context.select<GameCabsViewModel, Store?>((vm) => vm.selectedStore);
-    final storeName = store?.name ?? '';
-    final machines = context.select<GameCabsViewModel, List<Machine>>(
-        (vm) => vm.gameList.machines!);
-    // if (GlobalSingleton.instance.recentPlayedCabinetData != null) {
-    //   showPlayAgainSnackBar();
-    // }
-
-    final gameCabs = ListView.builder(
+  Widget buildGameCabsSmall(List<Machine> machines, String storeName) {
+    return ListView.builder(
       itemCount: (machines.length / 2).ceil(),
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -191,6 +181,44 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
             const SizedBox(width: 12),
           ],
         );
+      },
+    );
+  }
+
+  Widget buildGameCabsLarge(List<Machine> machines, String storeName) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        children: machines
+            .map((e) => GameCabItem(
+                  e,
+                  storeName: storeName,
+                  onCoinInserted: showPlayAgainSnackBar,
+                  onItemPressed: clearSnackBar,
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final store =
+        context.select<GameCabsViewModel, Store?>((vm) => vm.selectedStore);
+    final storeName = store?.name ?? '';
+    final machines = context.select<GameCabsViewModel, List<Machine>>(
+        (vm) => vm.gameList.machines!);
+    // if (GlobalSingleton.instance.recentPlayedCabinetData != null) {
+    //   showPlayAgainSnackBar();
+    // }
+
+    final gameCabs = Selector<GameCabsViewModel, GameCabTileStyle>(
+      selector: (context, vm) => vm.gameCabTileStyle,
+      builder: (context, style, child) {
+        return switch (style) {
+          GameCabTileStyle.large => buildGameCabsLarge(machines, storeName),
+          GameCabTileStyle.small => buildGameCabsSmall(machines, storeName),
+        };
       },
     );
 

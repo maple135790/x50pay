@@ -30,6 +30,9 @@ class GameCabsViewModel extends BaseViewModel {
 
   bool _isRememberGameTab = false;
 
+  late GameCabTileStyle _gameCabTileStyle;
+  GameCabTileStyle get gameCabTileStyle => _gameCabTileStyle;
+
   Future<void> _getGamelist(String composedStoreId) async {
     try {
       showLoading();
@@ -64,11 +67,16 @@ class GameCabsViewModel extends BaseViewModel {
   }
 
   Future<void> init() async {
-    // 先取得店家資料，再取得投幣頁的記憶策略
+    // 先取得遊戲磚大小
+    // 再取得店家資料，再取得投幣頁的記憶策略
     // 完成後，依據記憶策略的結果：
     // 1. 若有記憶策略，則設定 segmentedControlIndex
     // 2. 若無記憶策略，則 segmentedControlIndex 為預設值 = 0
     // segmentedControlIndex 設定後，再讓各 TabView 自行取得資料
+    final rawStyle = await Prefs.getInt(PrefsToken.gameCabTileStyle);
+    _gameCabTileStyle =
+        GameCabTileStyle.fromInt(rawStyle ?? GameCabTileStyle.defaultValue);
+
     final storeData = await getStoreData();
     if (storeData == null || storeData.storelist == null) return;
     storeDetails.clear();

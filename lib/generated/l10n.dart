@@ -961,10 +961,10 @@ class S {
     );
   }
 
-  /// `如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁\n預設為關閉`
+  /// `如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁。預設為關閉`
   String get userAppSettingsRememberGameTabInfo {
     return Intl.message(
-      '如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁\n預設為關閉',
+      '如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁。預設為關閉',
       name: 'userAppSettingsRememberGameTabInfo',
       desc: '',
       args: [],

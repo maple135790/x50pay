@@ -154,7 +154,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項"),
         "userAppSettingsRememberGameTabInfo":
             MessageLookupByLibrary.simpleMessage(
-                "如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁\n預設為關閉"),
+                "如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁。預設為關閉"),
         "userAppSettingsRememberGameTabTitle":
             MessageLookupByLibrary.simpleMessage("紀錄上次的投幣標籤頁面"),
         "userAppSettingsResetTheme":

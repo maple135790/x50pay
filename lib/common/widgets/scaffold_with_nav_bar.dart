@@ -450,21 +450,26 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
         ),
         actions: [
           InkWell(
-              onTap: !GlobalSingleton.instance.isInCameraPage
-                  ? () async {
-                      var status = await Permission.camera.status;
-                      if (status.isDenied) await Permission.camera.request();
-                      if (context.mounted) {
-                        GlobalSingleton.instance.isInCameraPage = true;
-                        context.pushNamed(
-                          AppRoutes.scanQRCode.routeName,
-                          extra: status,
-                        );
-                      }
+            onTap: !GlobalSingleton.instance.isInCameraPage
+                ? () async {
+                    var status = await Permission.camera.status;
+                    if (status.isDenied) await Permission.camera.request();
+                    if (context.mounted) {
+                      GlobalSingleton.instance.isInCameraPage = true;
+                      context.pushNamed(
+                        AppRoutes.scanQRCode.routeName,
+                        extra: status,
+                      );
                     }
-                  : null,
-              splashFactory: NoSplash.splashFactory,
-              child: const Icon(Icons.qr_code_rounded, size: 28)),
+                  }
+                : null,
+            splashFactory: NoSplash.splashFactory,
+            child: Icon(
+              Icons.qr_code_rounded,
+              size: 28,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
+          ),
           const SizedBox(width: 15),
         ],
       ),

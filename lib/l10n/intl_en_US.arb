@@ -137,7 +137,7 @@
   "userAppSettingsGameCabTileStyle": "Game tile size",
   "userAppSettingsInAppNfc": "In-App NFC tag read",
   "userAppSettingsInAppNfcContent": "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option.",
-  "userAppSettingsRememberGameTabInfo": "If enabled, the last visited tab will be displayed when entering the Game page.\nIf disabled, the Pinned Game tab will be displayed each time you enter.\nDefault is disabled.",
+  "userAppSettingsRememberGameTabInfo": "If enabled, the last visited tab will be displayed when entering the Game page.\nIf disabled, the Pinned Game tab will be displayed each time you enter. Default is disabled.",
   "userAppSettingsRememberGameTabTitle": "Remember the last tab in Game page",
   "userAppSettingsResetTheme": "Reset Theme",
   "userAppSettingsSummarizedRecord": "Show summarized used point record",

@@ -166,7 +166,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option."),
         "userAppSettingsRememberGameTabInfo": MessageLookupByLibrary.simpleMessage(
-            "If enabled, the last visited tab will be displayed when entering the Game page.\nIf disabled, the Pinned Game tab will be displayed each time you enter.\nDefault is disabled."),
+            "If enabled, the last visited tab will be displayed when entering the Game page.\nIf disabled, the Pinned Game tab will be displayed each time you enter. Default is disabled."),
         "userAppSettingsRememberGameTabTitle":
             MessageLookupByLibrary.simpleMessage(
                 "Remember the last tab in Game page"),
