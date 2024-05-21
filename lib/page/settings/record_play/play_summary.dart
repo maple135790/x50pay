@@ -284,8 +284,7 @@ class SummaryFavGameModal extends StatefulWidget {
   State<SummaryFavGameModal> createState() => _SummaryFavGameModalState();
 }
 
-class _SummaryFavGameModalState
-    extends BaseStatefulState<SummaryFavGameModal> {
+class _SummaryFavGameModalState extends BaseStatefulState<SummaryFavGameModal> {
   String selectedFavGame = '';
 
   @override

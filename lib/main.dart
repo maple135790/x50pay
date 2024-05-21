@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LifecycleManager(
       callback: AppLifeCycles.instance,
-    child: MultiProvider(
+      child: MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: languageProvider),
           ChangeNotifierProvider.value(value: themeProvider),
