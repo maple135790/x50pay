@@ -8,23 +8,23 @@ part of 'user.dart';
 
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       message: json['message'] as String,
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       rawUserImgUrl: json['userimg'] as String?,
       email: json['email'] as String?,
       uid: json['uid'] as String?,
       point: (json['point'] as num?)?.toDouble(),
       name: json['name'] as String?,
-      ticketint: json['ticketint'] as int?,
+      ticketint: (json['ticketint'] as num?)?.toInt(),
       phoneactive: json['phoneactive'] as bool?,
       fpoint: (json['fpoint'] as num?)?.toDouble(),
-      givebool: json['givebool'] as int?,
+      givebool: (json['givebool'] as num?)?.toInt(),
       vip: json['vip'] as bool?,
       vipdate: json['vipdate'] == null
           ? null
           : VipDate.fromJson(json['vipdate'] as Map<String, dynamic>),
       sid: json['sid'] as String?,
       sixn: json['sixn'] as String?,
-      tphone: json['tphone'] as int?,
+      tphone: (json['tphone'] as num?)?.toInt(),
       doorpwd: json['doorpwd'] as String?,
     );
 
@@ -49,7 +49,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
     };
 
 VipDate _$VipDateFromJson(Map<String, dynamic> json) => VipDate(
-      date: json[r'$date'] as int,
+      date: (json[r'$date'] as num).toInt(),
     );
 
 Map<String, dynamic> _$VipDateToJson(VipDate instance) => <String, dynamic>{

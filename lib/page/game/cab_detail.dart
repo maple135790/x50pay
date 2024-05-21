@@ -44,13 +44,14 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
     required Cabinet cabData,
   }) {
     showCupertinoDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) => CabSelect.fromCabDetail(
-              caboid: caboid,
-              cabNum: cabData.num - 1,
-              cabinetData: cabData,
-            ));
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => CabSelect.fromCabDetail(
+        caboid: caboid,
+        cabNum: cabData.num - 1,
+        cabinetData: cabData,
+      ),
+    );
   }
 
   @override
@@ -381,41 +382,52 @@ class _CabDetailState extends BaseStatefulState<CabDetail> with GameMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(cabLabel,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        shadows: [
-                          Shadow(color: Colors.black, blurRadius: 18)
-                        ])),
-                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  const Icon(
-                    Icons.access_time_filled_rounded,
-                    size: 18,
-                    color: Color(0xe6ffffff),
+                Text(
+                  cabLabel,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    shadows: [
+                      Shadow(color: Colors.black, blurRadius: 18),
+                    ],
                   ),
-                  Text('  $tagName',
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.access_time_filled_rounded,
+                      size: 13.5,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                    Text(
+                      '  $tagName',
                       style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 13,
-                          shadows: const [
-                            Shadow(color: Colors.black, blurRadius: 15)
-                          ])),
-                  const SizedBox(width: 5),
-                  const Icon(Icons.attach_money_rounded,
-                      size: 18, color: Color(0xe6ffffff)),
-                  Text('${price.toInt()}P',
-                      textHeightBehavior: const TextHeightBehavior(
-                        applyHeightToFirstAscent: false,
-                        applyHeightToLastDescent: false,
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 13,
+                        shadows: const [
+                          Shadow(color: Colors.black, blurRadius: 15)
+                        ],
                       ),
+                    ),
+                    const SizedBox(width: 5),
+                    Icon(
+                      Icons.attach_money_rounded,
+                      size: 18,
+                      color: Colors.white.withOpacity(0.9),
+                    ),
+                    Text(
+                      '${price.toInt()}P',
                       style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 16,
-                          shadows: const [
-                            Shadow(color: Colors.black, blurRadius: 15)
-                          ]))
-                ]),
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 13.5,
+                        shadows: const [
+                          Shadow(color: Colors.black, blurRadius: 15)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

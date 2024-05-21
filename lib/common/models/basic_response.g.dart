@@ -8,7 +8,7 @@ part of 'basic_response.dart';
 
 BasicResponse _$BasicResponseFromJson(Map<String, dynamic> json) =>
     BasicResponse(
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       message: json['message'] as String,
     );
 

@@ -8,8 +8,8 @@ part of 'gamelist.dart';
 
 GameList _$GameListFromJson(Map<String, dynamic> json) => GameList(
       message: json['message'] as String?,
-      code: json['code'] as int?,
-      machine: (json['machinelist'] as List<dynamic>?)
+      code: (json['code'] as num?)?.toInt(),
+      machines: (json['machinelist'] as List<dynamic>?)
           ?.map((e) => Machine.fromJson(e as Map<String, dynamic>))
           .toList(),
       payMid: json['payMid'] as String?,
@@ -20,7 +20,7 @@ GameList _$GameListFromJson(Map<String, dynamic> json) => GameList(
 Map<String, dynamic> _$GameListToJson(GameList instance) => <String, dynamic>{
       'message': instance.message,
       'code': instance.code,
-      'machinelist': instance.machine,
+      'machinelist': instance.machines,
       'payMid': instance.payMid,
       'payLid': instance.payLid,
       'payCid': instance.payCid,
@@ -52,7 +52,7 @@ Machine _$MachineFromJson(Map<String, dynamic> json) => Machine(
     );
 
 Map<String, dynamic> _$MachineToJson(Machine instance) => <String, dynamic>{
-      'lable': instance.label,
+      'lable': instance.lable,
       'price': instance.price,
       'discount': instance.discount,
       'downprice': instance.downPrice,

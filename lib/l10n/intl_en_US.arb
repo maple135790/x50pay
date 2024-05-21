@@ -46,6 +46,10 @@
       }
     }
   },
+  "addFavGameSubtitle": "Select the machines you play most often!",
+  "addFavGameTitle": "Add Favorite Game",
+  "changeFavGameSubtitle": "Change the machines you play most often",
+  "changeFavGameTitle": "Change Favorite Game",
   "continuous": " Continuous : {day} days",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
@@ -96,7 +100,9 @@
   "nbusyS3": "Busy",
   "nextLv": " Next Lv : ",
   "officialNotify": "Offical ADs",
+  "pinnedGame": "Favorite game",
   "serviceError": "Server error, Please retry again.",
+  "setFavGameTitle": "Setup favorite game",
   "summaryGame": "Game",
   "summaryGameDetailed": "Game",
   "summaryGameFavGame": "Favorite Game",
@@ -110,6 +116,7 @@
   "summaryPeriod30": "30 Days",
   "summaryPeriod60": "60 Days",
   "summaryPeriod7": "7 Days",
+  "summaryPeriodAll": "All",
   "summaryPoint": "Used Point",
   "summaryShow": "Show",
   "ticketBalance": "Ticket Balance : ",

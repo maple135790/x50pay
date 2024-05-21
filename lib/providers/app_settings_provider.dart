@@ -10,12 +10,12 @@ class AppSettingsProvider extends ChangeNotifier {
   }
 
   void setFavGameName(String? name) {
-    Prefs.setString(PrefsToken.favGameName, name ?? '');
+    Prefs.setString(PrefsToken.summaryFavGameName, name ?? '');
     favGameName = name;
   }
 
-  Future<void> getFavGameName() async {
-    final name = await Prefs.getString(PrefsToken.favGameName);
+  Future<void> getSummaryFavGameName() async {
+    final name = await Prefs.getString(PrefsToken.summaryFavGameName);
     favGameName = name;
     return;
   }

@@ -133,6 +133,9 @@
   /// asset: assets/images/common/torii.svg
       // ignore: non_constant_identifier_names
       final torii = const AssetResource("assets/images/common/torii.svg", packageName: null);
+  /// asset: assets/images/game/heart-circle-plus-solid.svg
+      // ignore: non_constant_identifier_names
+      final heart_circle_plus_solid = const AssetResource("assets/images/game/heart-circle-plus-solid.svg", packageName: null);
   /// asset: assets/images/home/bolt-solid.svg
       // ignore: non_constant_identifier_names
       final bolt_solid = const AssetResource("assets/images/home/bolt-solid.svg", packageName: null);
@@ -236,6 +239,12 @@
       // ignore: non_constant_identifier_names
       AssetSvg torii({required double width, required double height}) {
         final imageProvider = AssetSvg(asset.torii.keyName, width: width, height: height);
+        return imageProvider;
+      }
+  /// asset: assets/images/game/heart-circle-plus-solid.svg
+      // ignore: non_constant_identifier_names
+      AssetSvg heart_circle_plus_solid({required double width, required double height}) {
+        final imageProvider = AssetSvg(asset.heart_circle_plus_solid.keyName, width: width, height: height);
         return imageProvider;
       }
   /// asset: assets/images/home/bolt-solid.svg

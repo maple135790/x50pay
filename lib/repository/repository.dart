@@ -527,4 +527,32 @@ class Repository extends Api {
     );
     return response.body;
   }
+
+  Future<GameList> favGameList() async {
+    late final GameList gameList;
+
+    await Api.makeRequest(
+      dest: '/favgamelist',
+      body: {},
+      method: HttpMethod.post,
+      withSession: true,
+      contentType: ContentType.json,
+      onSuccess: (json) {
+        gameList = GameList.fromJson(json);
+      },
+    );
+    return gameList;
+  }
+
+  Future<void> setFavGames(List<String> favGames) async {
+    await Api.makeRequest(
+      dest: '/settingFavConfirm',
+      body: {
+        "favlist": favGames,
+      },
+      method: HttpMethod.post,
+      withSession: true,
+      contentType: ContentType.json,
+    );
+  }
 }

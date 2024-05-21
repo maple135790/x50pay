@@ -7,7 +7,7 @@ part of 'gift_box.dart';
 // **************************************************************************
 
 GiftBoxModel _$GiftBoxModelFromJson(Map<String, dynamic> json) => GiftBoxModel(
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       alChange: (json['alchange'] as List<dynamic>)
           .map((e) => AlChange.fromJson(e as Map<String, dynamic>))
           .toList(),

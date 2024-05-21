@@ -8,7 +8,7 @@ part of 'entry.dart';
 
 EntryModel _$EntryModelFromJson(Map<String, dynamic> json) => EntryModel(
       message: json['message'] as String,
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       gr2: json['gr2'] as List<dynamic>,
       evlist: (json['evlist'] as List<dynamic>?)
           ?.map((e) => Evlist.fromJson(e as Map<String, dynamic>))
@@ -39,7 +39,7 @@ Evlist _$EvlistFromJson(Map<String, dynamic> json) => Evlist(
           ? null
           : EventTime.fromJson(json['end'] as Map<String, dynamic>),
       id: json['id'] as String?,
-      limit: json['limit'] as int?,
+      limit: (json['limit'] as num?)?.toInt(),
       name: json['name'] as String?,
       point: json['point'] as bool?,
       sid: json['sid'] as String?,
@@ -48,7 +48,7 @@ Evlist _$EvlistFromJson(Map<String, dynamic> json) => Evlist(
           : EventTime.fromJson(json['start'] as Map<String, dynamic>),
       ticMid: json['ticMid'] as List<dynamic>?,
       ticdis: json['ticdis'] as String?,
-      value: json['value'] as int?,
+      value: (json['value'] as num?)?.toInt(),
       which: json['which'] as List<dynamic>?,
       underscoreId: json['_id'] == null
           ? null
@@ -82,7 +82,7 @@ Map<String, dynamic> _$GiftListToJson(GiftList instance) => <String, dynamic>{
     };
 
 EventTime _$EventTimeFromJson(Map<String, dynamic> json) => EventTime(
-      date: json[r'$date'] as int,
+      date: (json[r'$date'] as num).toInt(),
     );
 
 Map<String, dynamic> _$EventTimeToJson(EventTime instance) => <String, dynamic>{
@@ -90,7 +90,7 @@ Map<String, dynamic> _$EventTimeToJson(EventTime instance) => <String, dynamic>{
     };
 
 EntryHistory _$EntryHistoryFromJson(Map<String, dynamic> json) => EntryHistory(
-      cid: json['cid'] as int?,
+      cid: (json['cid'] as num?)?.toInt(),
       disbool: json['disbool'] as bool?,
       done: json['done'] as bool?,
       freep: (json['freep'] as num?)?.toDouble(),

@@ -8,7 +8,7 @@ part of 'play.dart';
 
 PlayRecordModel _$PlayRecordModelFromJson(Map<String, dynamic> json) =>
     PlayRecordModel(
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       message: json['message'] as String,
       logs: (json['log'] as List<dynamic>)
           .map((e) => PlayLog.fromJson(e as Map<String, dynamic>))
@@ -23,7 +23,7 @@ Map<String, dynamic> _$PlayRecordModelToJson(PlayRecordModel instance) =>
     };
 
 PlayLog _$PlayLogFromJson(Map<String, dynamic> json) => PlayLog(
-      cid: json['cid'] as int,
+      cid: (json['cid'] as num).toInt(),
       disbool: json['disbool'] as bool,
       done: json['done'] as bool,
       freep: (json['freep'] as num).toDouble(),

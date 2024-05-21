@@ -24,4 +24,6 @@ class Svgs {
   static const stamp = AssetBytesLoader("assets/images/quest/stamp.svg.vec");
   static const pSoild =
       AssetBytesLoader("assets/images/scanPay/p-solid.svg.vec");
+  static const heartCirclePlus =
+      AssetBytesLoader("assets/images/game/heart-circle-plus-solid.svg.vec");
 }

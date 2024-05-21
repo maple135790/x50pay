@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
@@ -8,6 +9,7 @@ import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
+import 'package:x50pay/providers/coin_insertion_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 
 enum PaymentType {
@@ -219,6 +221,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
 
   void onPayConfirmPressed() async {
     final router = GoRouter.of(context);
+    final coinProvider = context.read<CoinInsertionProvider>();
     bool insertSuccess = false;
     isPayPressed = true;
     setState(() {});
@@ -236,7 +239,10 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
       );
     }
     if (widget._isFromCabDetail) router.pop();
-    if (insertSuccess) router.pop(true);
+    if (insertSuccess) {
+      coinProvider.isCoinInserted = true;
+      router.pop();
+    }
   }
 
   SizedBox selectPayment() {

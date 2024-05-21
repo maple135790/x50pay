@@ -8,7 +8,7 @@ part of 'tic_date.dart';
 
 TicDateLogModel _$TicDateLogModelFromJson(Map<String, dynamic> json) =>
     TicDateLogModel(
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       logs: (json['log'] as List<dynamic>)
           .map((e) => e as List<dynamic>)
           .toList(),

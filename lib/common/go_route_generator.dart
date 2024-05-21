@@ -79,7 +79,8 @@ RouterConfig<Object> goRouteConfig() {
             if (shouldRebuild ?? false) {
               return NoTransitionPage(
                 child: GameCabs(
-                    key: ValueKey(DateTime.now().millisecondsSinceEpoch)),
+                  key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+                ),
               );
             }
             return const NoTransitionPage(child: GameCabs());

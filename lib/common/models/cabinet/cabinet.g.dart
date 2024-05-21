@@ -8,7 +8,7 @@ part of 'cabinet.dart';
 
 CabinetModel _$CabinetModelFromJson(Map<String, dynamic> json) => CabinetModel(
       message: json['message'] as String,
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       note: json['note'] as List<dynamic>,
       caboid: json['caboid'] as String,
       spic: (json['spic'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -40,7 +40,7 @@ Map<String, dynamic> _$CabinetModelToJson(CabinetModel instance) =>
     };
 
 Cabinet _$CabinetFromJson(Map<String, dynamic> json) => Cabinet(
-      num: json['num'] as int,
+      num: (json['num'] as num).toInt(),
       id: json['id'] as String,
       label: json['lable'] as String,
       mode: (json['mode'] as List<dynamic>)

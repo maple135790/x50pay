@@ -46,6 +46,10 @@
       }
     }
   },
+  "addFavGameSubtitle": "よく遊ぶゲームを選んでください！",
+  "addFavGameTitle": "お気に入りのゲームを登録",
+  "changeFavGameSubtitle": "よく遊ぶゲームを変更します",
+  "changeFavGameTitle": "お気に入りのゲームを変更",
   "continuous": " ログイン日数 :  {day} 日",
   "dialogCancel": "キャンセル",
   "dialogConfirm": "OK",
@@ -96,7 +100,9 @@
   "nbusyS3": "混雑中",
   "nextLv": "次のランク : ",
   "officialNotify": "公式インフォメーション",
+  "pinnedGame": "お気に入り",
   "serviceError": "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。",
+  "setFavGameTitle": "お気に入りのゲーム",
   "summaryGame": "機種別",
   "summaryGameDetailed": "機種詳細",
   "summaryGameFavGame": "メイン機種",
@@ -110,6 +116,7 @@
   "summaryPeriod30": "30日",
   "summaryPeriod60": "60日",
   "summaryPeriod7": "7日",
+  "summaryPeriodAll": "すべて",
   "summaryPoint": "使用済ポイント",
   "summaryShow": "表示",
   "ticketBalance": "所持しているチケット : ",

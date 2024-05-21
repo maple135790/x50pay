@@ -3,7 +3,7 @@ version: 1.5.3+1
 publish_to: none
 description: X50Pay app
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: ">=3.2.0 <4.0.0"
   flutter: ^3.22.0
 dependencies:
   cached_network_image: ^3.2.3
@@ -13,7 +13,7 @@ dependencies:
   device_info_plus: ^10.1.0
   flutter_colorpicker:
     git:
-      url: 'https://github.com/maple135790/flutter_colorpicker.git'
+      url: "https://github.com/maple135790/flutter_colorpicker.git"
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.2.7
   flutter_secure_storage: ^9.0.0
@@ -62,56 +62,57 @@ dev_dependencies:
     sdk: flutter
 flutter:
   assets:
-  - assets/images/appIcon/appstore.png
-  - assets/images/appIcon/playstore.png
-  - assets/images/collab/shop-solid.svg
-  - assets/images/common/header_icon_rsz.png
-  - assets/images/common/logo_150.jpg
-  - assets/images/common/spinner-solid.svg
-  - assets/images/common/torii.svg
-  - assets/images/home/bolt-solid.svg
-  - assets/images/home/heart-regular.svg
-  - assets/images/home/heart-solid.svg
-  - assets/images/home/mari_level/ouo.png
-  - assets/images/home/shirt-solid.svg
-  - assets/images/home/top.png
-  - assets/images/home/vts.png
-  - assets/images/quest/stamp.svg
-  - assets/images/scanPay/jkopay_logo.png
-  - assets/images/scanPay/linepay_logo.png
-  - assets/images/scanPay/p-solid.svg
-  - assets/texts/license.txt
-  - assets/images/collab/shop-solid.svg.vec
-  - assets/images/common/spinner-solid.svg.vec
-  - assets/images/common/torii.svg.vec
-  - assets/images/home/bolt-solid.svg.vec
-  - assets/images/home/heart-regular.svg.vec
-  - assets/images/home/heart-solid.svg.vec
-  - assets/images/home/shirt-solid.svg.vec
-  - assets/images/quest/stamp.svg.vec
-  - assets/images/scanPay/p-solid.svg.vec
+    - assets/images/appIcon/appstore.png
+    - assets/images/appIcon/playstore.png
+    - assets/images/collab/shop-solid.svg
+    - assets/images/common/header_icon_rsz.png
+    - assets/images/common/logo_150.jpg
+    - assets/images/common/spinner-solid.svg
+    - assets/images/common/torii.svg
+    - assets/images/game/heart-circle-plus-solid.svg.vec
+    - assets/images/home/bolt-solid.svg
+    - assets/images/home/heart-regular.svg
+    - assets/images/home/heart-solid.svg
+    - assets/images/home/mari_level/ouo.png
+    - assets/images/home/shirt-solid.svg
+    - assets/images/home/top.png
+    - assets/images/home/vts.png
+    - assets/images/quest/stamp.svg
+    - assets/images/scanPay/jkopay_logo.png
+    - assets/images/scanPay/linepay_logo.png
+    - assets/images/scanPay/p-solid.svg
+    - assets/texts/license.txt
+    - assets/images/collab/shop-solid.svg.vec
+    - assets/images/common/spinner-solid.svg.vec
+    - assets/images/common/torii.svg.vec
+    - assets/images/home/bolt-solid.svg.vec
+    - assets/images/home/heart-regular.svg.vec
+    - assets/images/home/heart-solid.svg.vec
+    - assets/images/home/shirt-solid.svg.vec
+    - assets/images/quest/stamp.svg.vec
+    - assets/images/scanPay/p-solid.svg.vec
   uses-material-design: true
 flr:
   core_version: 3.2.0
   assets:
-  - /assets/images/
-  - /assets/texts/
+    - /assets/images/
+    - /assets/texts/
   fonts:
-  - /assets/fonts/
+    - /assets/fonts/
   dartfmt_line_length: 80
 flutter_icons:
   image_path: assets/images/appIcon/appstore.png
   adaptive_icon_foreground: assets/images/appIcon/playstore.png
-  adaptive_icon_background: '#1c1728'
+  adaptive_icon_background: "#1c1728"
   image_path_ios: assets/images/appIcon/appstore.png
   android: true
   ios: true
   min_sdk_android: 21
   remove_alpha_ios: true
 flutter_native_splash:
-  color: '#1e1e1e'
+  color: "#1e1e1e"
   android_12:
-    color: '#1e1e1e'
+    color: "#1e1e1e"
 flutter_intl:
   main_locale: zh_TW
   enabled: true

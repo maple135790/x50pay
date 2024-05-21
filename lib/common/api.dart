@@ -52,8 +52,8 @@ class Api {
     required String dest,
     required Map<String, dynamic> body,
     required HttpMethod method,
-    Function(Map<String, dynamic>)? onSuccess,
-    Function(String)? onSuccessString,
+    Function(Map<String, dynamic> json)? onSuccess,
+    Function(String rawValue)? onSuccessString,
     Function(int statusCode, String body)? onError,
     Function(Map<String, String> headers)? onResponseHeader,
   }) async {

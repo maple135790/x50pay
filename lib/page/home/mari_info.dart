@@ -55,9 +55,15 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
             runAlignment: WrapAlignment.start,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              Text(title, style: const TextStyle(fontSize: 11.5)),
-              Text(value,
-                  softWrap: false, style: const TextStyle(fontSize: 11.5)),
+              Text(
+                title,
+                style: const TextStyle(fontSize: 11.5),
+              ),
+              Text(
+                value,
+                softWrap: false,
+                style: const TextStyle(fontSize: 11.5),
+              ),
             ],
           ),
         ),

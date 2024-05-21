@@ -50,6 +50,46 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `選擇自己經常遊玩的機臺！`
+  String get addFavGameSubtitle {
+    return Intl.message(
+      '選擇自己經常遊玩的機臺！',
+      name: 'addFavGameSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `立即釘選機臺`
+  String get addFavGameTitle {
+    return Intl.message(
+      '立即釘選機臺',
+      name: 'addFavGameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `重新選擇釘選的機臺`
+  String get changeFavGameSubtitle {
+    return Intl.message(
+      '重新選擇釘選的機臺',
+      name: 'changeFavGameSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `重新釘選機臺`
+  String get changeFavGameTitle {
+    return Intl.message(
+      '重新釘選機臺',
+      name: 'changeFavGameTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// ` 已簽到 : {day} 天`
   String continuous(String day) {
     return Intl.message(
@@ -550,11 +590,31 @@ class S {
     );
   }
 
+  /// `釘選機臺`
+  String get pinnedGame {
+    return Intl.message(
+      '釘選機臺',
+      name: 'pinnedGame',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `伺服器錯誤，請嘗試重新整理或回報X50`
   String get serviceError {
     return Intl.message(
       '伺服器錯誤，請嘗試重新整理或回報X50',
       name: 'serviceError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `設定喜好機臺`
+  String get setFavGameTitle {
+    return Intl.message(
+      '設定喜好機臺',
+      name: 'setFavGameTitle',
       desc: '',
       args: [],
     );
@@ -686,6 +746,16 @@ class S {
     return Intl.message(
       '7天',
       name: 'summaryPeriod7',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `全期間`
+  String get summaryPeriodAll {
+    return Intl.message(
+      '全期間',
+      name: 'summaryPeriodAll',
       desc: '',
       args: [],
     );

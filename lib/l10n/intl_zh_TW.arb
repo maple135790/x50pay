@@ -45,6 +45,10 @@
       }
     }
   },
+  "addFavGameSubtitle": "選擇自己經常遊玩的機臺！",
+  "addFavGameTitle": "立即釘選機臺",
+  "changeFavGameSubtitle": "重新選擇釘選的機臺",
+  "changeFavGameTitle": "重新釘選機臺",
   "continuous": " 已簽到 : {day} 天",
   "dialogCancel": "取消",
   "dialogConfirm": "確定",
@@ -95,7 +99,9 @@
   "nbusyS3": "忙碌",
   "nextLv": "下一階 : ",
   "officialNotify": "官方資訊",
+  "pinnedGame": "釘選機臺",
   "serviceError": "伺服器錯誤，請嘗試重新整理或回報X50",
+  "setFavGameTitle": "設定喜好機臺",
   "summaryGame": "機種別",
   "summaryGameDetailed": "詳細機種別",
   "summaryGameFavGame": "喜好機台",
@@ -109,6 +115,7 @@
   "summaryPeriod30": "30天",
   "summaryPeriod60": "60天",
   "summaryPeriod7": "7天",
+  "summaryPeriodAll": "全期間",
   "summaryPoint": "使用點數",
   "summaryShow": "顯示",
   "ticketBalance": "券量 : ",

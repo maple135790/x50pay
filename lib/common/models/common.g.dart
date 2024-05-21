@@ -7,7 +7,7 @@ part of 'common.dart';
 // **************************************************************************
 
 InitTime _$InitTimeFromJson(Map<String, dynamic> json) => InitTime(
-      date: json[r'$date'] as int,
+      date: (json[r'$date'] as num).toInt(),
     );
 
 Map<String, dynamic> _$InitTimeToJson(InitTime instance) => <String, dynamic>{

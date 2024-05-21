@@ -35,6 +35,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addFavGameSubtitle":
+            MessageLookupByLibrary.simpleMessage("よく遊ぶゲームを選んでください！"),
+        "addFavGameTitle": MessageLookupByLibrary.simpleMessage("お気に入りのゲームを登録"),
+        "changeFavGameSubtitle":
+            MessageLookupByLibrary.simpleMessage("よく遊ぶゲームを変更します"),
+        "changeFavGameTitle":
+            MessageLookupByLibrary.simpleMessage("お気に入りのゲームを変更"),
         "continuous": m0,
         "dialogCancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
         "dialogConfirm": MessageLookupByLibrary.simpleMessage("OK"),
@@ -87,8 +94,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "nbusyS3": MessageLookupByLibrary.simpleMessage("混雑中"),
         "nextLv": MessageLookupByLibrary.simpleMessage("次のランク : "),
         "officialNotify": MessageLookupByLibrary.simpleMessage("公式インフォメーション"),
+        "pinnedGame": MessageLookupByLibrary.simpleMessage("お気に入り"),
         "serviceError": MessageLookupByLibrary.simpleMessage(
             "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。"),
+        "setFavGameTitle": MessageLookupByLibrary.simpleMessage("お気に入りのゲーム"),
         "summaryGame": MessageLookupByLibrary.simpleMessage("機種別"),
         "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("機種詳細"),
         "summaryGameFavGame": MessageLookupByLibrary.simpleMessage("メイン機種"),
@@ -104,6 +113,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30日"),
         "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60日"),
         "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7日"),
+        "summaryPeriodAll": MessageLookupByLibrary.simpleMessage("すべて"),
         "summaryPoint": MessageLookupByLibrary.simpleMessage("使用済ポイント"),
         "summaryShow": MessageLookupByLibrary.simpleMessage("表示"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("所持しているチケット : "),

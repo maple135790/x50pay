@@ -7,7 +7,7 @@ class GameList {
   final String? message;
   final int? code;
   @JsonKey(name: "machinelist")
-  final List<Machine>? machine;
+  final List<Machine>? machines;
   final String? payMid;
   final String? payLid;
   final String? payCid;
@@ -15,10 +15,18 @@ class GameList {
   const GameList(
       {this.message,
       this.code,
-      this.machine,
+      this.machines,
       this.payMid,
       this.payLid,
       this.payCid});
+
+  const GameList.empty()
+      : message = '',
+        code = 0,
+        machines = const [],
+        payMid = '',
+        payLid = '',
+        payCid = '';
 
   factory GameList.fromJson(Map<String, dynamic> json) =>
       _$GameListFromJson(json);
@@ -28,8 +36,7 @@ class GameList {
 
 @JsonSerializable()
 class Machine {
-  @JsonKey(name: "lable")
-  final String? label;
+  final String? lable;
   final double? price;
   final num? discount;
   @JsonKey(name: "downprice")
@@ -51,27 +58,30 @@ class Machine {
   final bool? vipb;
 
   const Machine(
-      this.label,
-      this.price,
-      this.discount,
-      this.downPrice,
-      this.mode,
-      this.note,
-      this.cabDatail,
-      this.cabinet,
-      this.enable,
-      this.id,
-      this.shop,
-      this.lora,
-      this.pad,
-      this.padlid,
-      this.padmid,
-      this.qcounter,
-      this.quic,
-      this.vipb);
+    this.lable,
+    this.price,
+    this.discount,
+    this.downPrice,
+    this.mode,
+    this.note,
+    this.cabDatail,
+    this.cabinet,
+    this.enable,
+    this.id,
+    this.shop,
+    this.lora,
+    this.pad,
+    this.padlid,
+    this.padmid,
+    this.qcounter,
+    this.quic,
+    this.vipb,
+  );
 
   factory Machine.fromJson(Map<String, dynamic> json) =>
       _$MachineFromJson(json);
 
   Map<String, dynamic> toJson() => _$MachineToJson(this);
+
+  String get storeId => shop ?? 'null storeId';
 }

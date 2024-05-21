@@ -35,6 +35,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addFavGameSubtitle":
+            MessageLookupByLibrary.simpleMessage("選擇自己經常遊玩的機臺！"),
+        "addFavGameTitle": MessageLookupByLibrary.simpleMessage("立即釘選機臺"),
+        "changeFavGameSubtitle":
+            MessageLookupByLibrary.simpleMessage("重新選擇釘選的機臺"),
+        "changeFavGameTitle": MessageLookupByLibrary.simpleMessage("重新釘選機臺"),
         "continuous": m0,
         "dialogCancel": MessageLookupByLibrary.simpleMessage("取消"),
         "dialogConfirm": MessageLookupByLibrary.simpleMessage("確定"),
@@ -86,8 +92,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "nbusyS3": MessageLookupByLibrary.simpleMessage("忙碌"),
         "nextLv": MessageLookupByLibrary.simpleMessage("下一階 : "),
         "officialNotify": MessageLookupByLibrary.simpleMessage("官方資訊"),
+        "pinnedGame": MessageLookupByLibrary.simpleMessage("釘選機臺"),
         "serviceError":
             MessageLookupByLibrary.simpleMessage("伺服器錯誤，請嘗試重新整理或回報X50"),
+        "setFavGameTitle": MessageLookupByLibrary.simpleMessage("設定喜好機臺"),
         "summaryGame": MessageLookupByLibrary.simpleMessage("機種別"),
         "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("詳細機種別"),
         "summaryGameFavGame": MessageLookupByLibrary.simpleMessage("喜好機台"),
@@ -104,6 +112,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30天"),
         "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60天"),
         "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7天"),
+        "summaryPeriodAll": MessageLookupByLibrary.simpleMessage("全期間"),
         "summaryPoint": MessageLookupByLibrary.simpleMessage("使用點數"),
         "summaryShow": MessageLookupByLibrary.simpleMessage("顯示"),
         "ticketBalance": MessageLookupByLibrary.simpleMessage("券量 : "),

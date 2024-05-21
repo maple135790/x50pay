@@ -7,7 +7,7 @@ part of 'tic_used.dart';
 // **************************************************************************
 
 TicUsedModel _$TicUsedModelFromJson(Map<String, dynamic> json) => TicUsedModel(
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       message: json['message'] as String,
       logs: (json['log'] as List<dynamic>)
           .map((e) => TicUsedLog.fromJson(e as Map<String, dynamic>))
@@ -22,7 +22,7 @@ Map<String, dynamic> _$TicUsedModelToJson(TicUsedModel instance) =>
     };
 
 TicUsedLog _$TicUsedLogFromJson(Map<String, dynamic> json) => TicUsedLog(
-      cid: json['cid'] as int,
+      cid: (json['cid'] as num).toInt(),
       disbool: json['disbool'] as bool,
       mid: json['mid'] as String,
       price: (json['price'] as num).toDouble(),

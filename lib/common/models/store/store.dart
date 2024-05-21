@@ -21,9 +21,9 @@ class StoreModel {
       _$StoreModelFromJson(json);
   Map<String, dynamic> toJson() => _$StoreModelToJson(this);
 
-  StoreModel.empty()
+  const StoreModel.empty()
       : prefix = null,
-        storelist = [];
+        storelist = const [];
 }
 
 @JsonSerializable()
@@ -39,6 +39,11 @@ class Store {
 
   /// 單一店家資料
   const Store({this.address, this.name, this.sid});
+
+  const Store.test()
+      : address = "台北市萬華区康定路10号1階",
+        name = "西門2号店",
+        sid = 37658;
 
   factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
   Map<String, dynamic> toJson() => _$StoreToJson(this);

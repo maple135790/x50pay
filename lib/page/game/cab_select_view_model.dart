@@ -38,6 +38,9 @@ class CabSelectViewModel extends BaseViewModel {
                 describe: 'no token is inserted'
               )
             );
+      if (result.is200) {
+        onInsertSuccess?.call();
+      }
       _showInsertResult(result);
       return true;
     } catch (e, stacktrace) {
@@ -84,6 +87,9 @@ class CabSelectViewModel extends BaseViewModel {
                 describe: 'no token is inserted'
               )
             );
+      if (result.is200) {
+        onInsertSuccess?.call();
+      }
       _showInsertResult(result);
       return true;
     } catch (e, stacktrace) {
@@ -123,7 +129,6 @@ class CabSelectViewModel extends BaseViewModel {
       case 200:
         msg = '投幣成功，感謝您的惠顧！';
         describe = '請等候約三秒鐘，若機台仍無反應請盡速與X50粉絲專頁聯絡';
-        onInsertSuccess?.call();
         break;
       case 601:
         msg = '機台鎖定中';

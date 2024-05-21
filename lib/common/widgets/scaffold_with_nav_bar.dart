@@ -40,7 +40,8 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
         (
           icon: Icons.sports_esports_rounded,
           label: i18n.navGame,
-          route: AppRoutes.gameStore
+          // route: AppRoutes.gameStore
+          route: AppRoutes.gameCabs,
         ),
         (
           icon: Icons.settings_rounded,

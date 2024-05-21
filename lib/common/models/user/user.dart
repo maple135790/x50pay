@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:x50pay/common/global_singleton.dart';
 part 'user.g.dart';
 
 @JsonSerializable()
@@ -62,6 +63,9 @@ class UserModel {
   bool get isInsertGod => uid != null && uid!.startsWith('v');
 
   String _getSettingsUserImageUrl() {
+    if (!GlobalSingleton.instance.isServiceOnline) {
+      return "https://pay.x50.fun/static/logo.jpg";
+    }
     if (rawUserImgUrl!.contains('size')) {
       return '${rawUserImgUrl!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
     } else {

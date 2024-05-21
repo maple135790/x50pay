@@ -28,7 +28,7 @@ GradeBoxModel _$GradeBoxModelFromJson(Map<String, dynamic> json) =>
               ? null
               : GradeBoxItem.fromJson(e as Map<String, dynamic>))
           .toList(),
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
     );
 
 Map<String, dynamic> _$GradeBoxModelToJson(GradeBoxModel instance) =>
@@ -43,11 +43,11 @@ Map<String, dynamic> _$GradeBoxModelToJson(GradeBoxModel instance) =>
 GradeBoxItem _$GradeBoxItemFromJson(Map<String, dynamic> json) => GradeBoxItem(
       rawPicUrl: json['pic'] as String,
       name: json['name'] as String,
-      much: json['much'] as int,
+      much: (json['much'] as num).toInt(),
       limit: (json['limit'] as num).toDouble(),
       gid: json['gid'] as String,
       eid: json['eid'] as String,
-      heart: json['heart'] as int,
+      heart: (json['heart'] as num).toInt(),
     );
 
 Map<String, dynamic> _$GradeBoxItemToJson(GradeBoxItem instance) =>

@@ -11,6 +11,7 @@ import 'package:x50pay/common/go_route_generator.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
+import 'package:x50pay/providers/coin_insertion_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 
@@ -75,11 +76,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LifecycleManager(
       callback: AppLifeCycles.instance,
-      child: MultiProvider(
+    child: MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: languageProvider),
           ChangeNotifierProvider.value(value: themeProvider),
           ChangeNotifierProvider(create: (_) => AppSettingsProvider()),
+          ChangeNotifierProvider(create: (_) => CoinInsertionProvider()),
         ],
         child: Consumer2<LanguageProvider, AppThemeProvider>(
           builder: (context, langVM, themeVM, child) {

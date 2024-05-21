@@ -7,7 +7,7 @@ part of 'bid.dart';
 // **************************************************************************
 
 BidLogModel _$BidLogModelFromJson(Map<String, dynamic> json) => BidLogModel(
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       logs: (json['log'] as List<dynamic>)
           .map((e) => BidLog.fromJson(e as Map<String, dynamic>))
           .toList(),

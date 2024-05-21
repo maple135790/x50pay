@@ -113,8 +113,11 @@ enum PrefsToken {
     'theme_seed_color',
     defaultValue: AppThemeProvider.defaultSeedColor,
   ),
-  favGameName('fav_game_name'),
+  summaryFavGameName('summary_fav_game_name'),
   appLang('app_lang', defaultValue: 'zh-tw'),
+  lastGameTabIndex('last_game_tab_index', defaultValue: 0),
+
+  /// 用戶選擇的店家編號，格式為 prefix + sid
   storeId('store_id'),
   storeName('store_name');
 

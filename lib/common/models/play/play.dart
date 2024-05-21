@@ -25,9 +25,13 @@ class PlayRecordModel {
   /// 回傳格式為 `總點數+總免費點數P`
   String? getPeriodPoints(int period) {
     final valueFormat = NumberFormat("#,###");
-    final Iterable<PlayLog> filteredLogs = logs.where((element) =>
-        DateTime.fromMillisecondsSinceEpoch(element.initTime.date)
-            .isAfter(DateTime.now().subtract(Duration(days: period))));
+    final filteredLogs = logs.where((element) {
+      if (period == -1) return true;
+      final rawSourceTime = element.initTime.date;
+      final sourceTime = DateTime.fromMillisecondsSinceEpoch(rawSourceTime);
+      final targetTime = DateTime.now().subtract(Duration(days: period));
+      return sourceTime.isAfter(targetTime);
+    });
     if (filteredLogs.isEmpty) return null;
     var totalPoint = 0;
     var totalfreep = 0;
@@ -41,9 +45,13 @@ class PlayRecordModel {
   List<GameSummary> getGameSummaries(int period) {
     Map<String, ({int playCount, int point, int freep})> map = {};
 
-    final Iterable<PlayLog> filteredLogs = logs.where((element) =>
-        DateTime.fromMillisecondsSinceEpoch(element.initTime.date)
-            .isAfter(DateTime.now().subtract(Duration(days: period))));
+    final filteredLogs = logs.where((element) {
+      if (period == -1) return true;
+      final rawSourceTime = element.initTime.date;
+      final sourceTime = DateTime.fromMillisecondsSinceEpoch(rawSourceTime);
+      final targetTime = DateTime.now().subtract(Duration(days: period));
+      return sourceTime.isAfter(targetTime);
+    });
     if (filteredLogs.isEmpty) return [];
 
     for (var log in filteredLogs) {

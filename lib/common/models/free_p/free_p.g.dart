@@ -8,7 +8,7 @@ part of 'free_p.dart';
 
 FreePointModel _$FreePointModelFromJson(Map<String, dynamic> json) =>
     FreePointModel(
-      code: json['code'] as int,
+      code: (json['code'] as num).toInt(),
       message: json['message'] as String,
       logs: (json['log'] as List<dynamic>)
           .map((e) => FreePLog.fromJson(e as Map<String, dynamic>))

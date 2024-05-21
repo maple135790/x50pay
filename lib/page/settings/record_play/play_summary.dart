@@ -8,10 +8,12 @@ import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 
 enum SummarizePeriod {
+  all(-1),
   twoMonth(60),
   oneMonth(30),
   oneWeek(7);
 
+  /// 這個值代表幾天，-1代表全部
   final int day;
 
   const SummarizePeriod(this.day);
@@ -68,7 +70,7 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
         return DraggableScrollableSheet(
           expand: false,
           maxChildSize: 0.8,
-          builder: (context, scrollController) => DetailedFavGameModal(
+          builder: (context, scrollController) => SummaryFavGameModal(
             gameSummaries: gameSummaries,
             period: selectedPeriod,
             scrollController: scrollController,
@@ -81,7 +83,12 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
   }
 
   List<Widget> buildPeriodChips() {
-    return [i18n.summaryPeriod60, i18n.summaryPeriod30, i18n.summaryPeriod7]
+    return [
+      i18n.summaryPeriodAll,
+      i18n.summaryPeriod60,
+      i18n.summaryPeriod30,
+      i18n.summaryPeriod7,
+    ]
         .mapIndexed(
           (index, element) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -136,11 +143,13 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                       "${vm.favGameName}\n${i18n.summaryGameRecordRecord(summary?.playCount ?? 0, summary?.totalPoints ?? "0P")}";
 
                   return FutureBuilder(
-                      future: vm.getFavGameName(),
+                      future: vm.getSummaryFavGameName(),
                       builder: (context, snapshot) {
                         return Card(
                           clipBehavior: Clip.antiAlias,
-                          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
                           child: InkWell(
                             onLongPress: () {
                               showAllGameSummaries(vm.favGameName);
@@ -255,14 +264,14 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
   }
 }
 
-class DetailedFavGameModal extends StatefulWidget {
+class SummaryFavGameModal extends StatefulWidget {
   final List<GameSummary> gameSummaries;
   final ScrollController scrollController;
   final String? currentFavGameName;
   final SummarizePeriod period;
   final void Function(String? value) onFavGameChanged;
 
-  const DetailedFavGameModal({
+  const SummaryFavGameModal({
     super.key,
     required this.gameSummaries,
     required this.period,
@@ -272,11 +281,11 @@ class DetailedFavGameModal extends StatefulWidget {
   });
 
   @override
-  State<DetailedFavGameModal> createState() => _DetailedFavGameModalState();
+  State<SummaryFavGameModal> createState() => _SummaryFavGameModalState();
 }
 
-class _DetailedFavGameModalState
-    extends BaseStatefulState<DetailedFavGameModal> {
+class _SummaryFavGameModalState
+    extends BaseStatefulState<SummaryFavGameModal> {
   String selectedFavGame = '';
 
   @override
@@ -336,6 +345,8 @@ class _DetailedFavGameModalState
         return i18n.summaryPeriod30;
       case SummarizePeriod.oneWeek:
         return i18n.summaryPeriod7;
+      case SummarizePeriod.all:
+        return i18n.summaryPeriodAll;
     }
   }
 

@@ -53,7 +53,7 @@ class CustomButtonThemes {
 
   static ButtonStyle severe({
     bool isDarkMode = true,
-    bool isV4 = false,
+    bool isV4 = true,
     bool isRRect = true,
     EdgeInsetsGeometry? padding,
     OutlinedBorder? outlinedBorder,

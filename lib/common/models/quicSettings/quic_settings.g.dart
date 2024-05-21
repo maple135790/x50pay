@@ -9,14 +9,14 @@ part of 'quic_settings.dart';
 PaymentSettingsModel _$PaymentSettingsModelFromJson(
         Map<String, dynamic> json) =>
     PaymentSettingsModel(
-      mtpMode: json['mtpMode'] as int,
+      mtpMode: (json['mtpMode'] as num).toInt(),
       nfcAuto: json['nfcAuto'] as bool,
       nfcTicket: json['nfcTicket'] as bool,
       nfcTwo: json['nfcTwo'] as String,
       nfcSDVX: json['nfcSDVX'] as String,
       nfcNVSV: json['nfcNVSV'] as String,
       nfcQuic: json['nfcQuic'] as bool,
-      nfcQlock: json['nfcQlock'] as int,
+      nfcQlock: (json['nfcQlock'] as num).toInt(),
       aGV: json['aGV'] as bool,
     );
 

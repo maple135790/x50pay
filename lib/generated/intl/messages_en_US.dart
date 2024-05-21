@@ -36,6 +36,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addFavGameSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Select the machines you play most often!"),
+        "addFavGameTitle":
+            MessageLookupByLibrary.simpleMessage("Add Favorite Game"),
+        "changeFavGameSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Change the machines you play most often"),
+        "changeFavGameTitle":
+            MessageLookupByLibrary.simpleMessage("Change Favorite Game"),
         "continuous": m0,
         "dialogCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "dialogConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
@@ -92,8 +100,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "nbusyS3": MessageLookupByLibrary.simpleMessage("Busy"),
         "nextLv": MessageLookupByLibrary.simpleMessage(" Next Lv : "),
         "officialNotify": MessageLookupByLibrary.simpleMessage("Offical ADs"),
+        "pinnedGame": MessageLookupByLibrary.simpleMessage("Favorite game"),
         "serviceError": MessageLookupByLibrary.simpleMessage(
             "Server error, Please retry again."),
+        "setFavGameTitle":
+            MessageLookupByLibrary.simpleMessage("Setup favorite game"),
         "summaryGame": MessageLookupByLibrary.simpleMessage("Game"),
         "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("Game"),
         "summaryGameFavGame":
@@ -112,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30 Days"),
         "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60 Days"),
         "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7 Days"),
+        "summaryPeriodAll": MessageLookupByLibrary.simpleMessage("All"),
         "summaryPoint": MessageLookupByLibrary.simpleMessage("Used Point"),
         "summaryShow": MessageLookupByLibrary.simpleMessage("Show"),
         "ticketBalance":

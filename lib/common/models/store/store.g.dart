@@ -22,7 +22,7 @@ Map<String, dynamic> _$StoreModelToJson(StoreModel instance) =>
 Store _$StoreFromJson(Map<String, dynamic> json) => Store(
       address: json['address'] as String?,
       name: json['name'] as String?,
-      sid: json['sid'] as int?,
+      sid: (json['sid'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
