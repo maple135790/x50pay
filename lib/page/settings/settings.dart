@@ -352,7 +352,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
             controller: controller,
             child: ListView.builder(
               // https://github.com/flutter/flutter/issues/25652
-              // 現在的workround，不然 Scrollbar 會跳
+              // 現在的workaround，不然 Scrollbar 會跳
               cacheExtent: 10000,
               controller: controller,
               padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -379,7 +379,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
                 : CustomColorThemes.borderColorLight,
             width: 2,
           ),
-          color: isDarkTheme ? scaffoldBackgroundColor : Colors.white,
+          color: Colors.transparent,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -524,6 +524,7 @@ class _SettingTile extends StatelessWidget {
 
     return Material(
       clipBehavior: Clip.antiAlias,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
         splashColor: splashColor.withOpacity(0.2),
@@ -533,23 +534,31 @@ class _SettingTile extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                  height: 42,
-                  width: 42,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: isDarkTheme
-                            ? CustomColorThemes.borderColorDark
-                            : CustomColorThemes.borderColorLight,
-                        width: 1,
-                      )),
-                  child: Icon(iconData, color: iconColor, size: 18)),
+                height: 42,
+                width: 42,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: isDarkTheme
+                        ? CustomColorThemes.borderColorDark
+                        : CustomColorThemes.borderColorLight,
+                    width: 1,
+                  ),
+                ),
+                child: Icon(
+                  iconData,
+                  color: iconColor,
+                  size: 18,
+                ),
+              ),
               const SizedBox(width: 15),
-              Text(title,
-                  style: const TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.w500,
-                  )),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14.5,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ],
           ),
         ),

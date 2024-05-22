@@ -49,10 +49,9 @@ class GameCabsViewModel extends BaseViewModel {
   }
 
   /// 取得店家資料
-  Future<StoreModel?> getStoreData() async {
+  Future<StoreModel?> _getStoreData() async {
     try {
       showLoading();
-      await Future.delayed(const Duration(milliseconds: 100));
 
       late final StoreModel stores;
       stores = await repository.getStores(currentLocale);
@@ -73,11 +72,11 @@ class GameCabsViewModel extends BaseViewModel {
     // 1. 若有記憶策略，則設定 segmentedControlIndex
     // 2. 若無記憶策略，則 segmentedControlIndex 為預設值 = 0
     // segmentedControlIndex 設定後，再讓各 TabView 自行取得資料
-    final rawStyle = await Prefs.getInt(PrefsToken.gameCabTileStyle);
-    _gameCabTileStyle =
-        GameCabTileStyle.fromInt(rawStyle ?? GameCabTileStyle.defaultValue);
+    final rawStyle = await Prefs.getInt(PrefsToken.storeGameCabTileStyle);
+    _gameCabTileStyle = GameCabTileStyle.fromInt(
+        rawStyle ?? GameCabTileStyle.storeDefaultValue);
 
-    final storeData = await getStoreData();
+    final storeData = await _getStoreData();
     if (storeData == null || storeData.storelist == null) return;
     storeDetails.clear();
     for (final store in storeData.storelist!) {

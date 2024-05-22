@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:x50pay/common/theme/theme.dart';
+import 'package:x50pay/providers/theme_provider.dart';
 
 class CustomButtonThemes {
   static ButtonStyle pale({

@@ -4,8 +4,15 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
-import 'package:x50pay/common/theme/theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
+
+extension MaterialStateSet on Set<WidgetState> {
+  bool get isHovered => contains(WidgetState.hovered);
+  bool get isDisabled => contains(WidgetState.disabled);
+  bool get isPressed => contains(WidgetState.pressed);
+  bool get isSelected => contains(WidgetState.selected);
+  bool get isFocused => contains(WidgetState.focused);
+}
 
 extension AppThemeMode on ThemeMode {
   ThemeData get themeData {
@@ -34,21 +41,28 @@ extension AppThemeMode on ThemeMode {
             headingTextStyle: const TextStyle(color: Color(0xff5a5a5a)),
             headingRowColor: WidgetStateProperty.all(const Color(0xfff2f2f2)),
             decoration: BoxDecoration(
-                color: const Color(0xffffffff),
-                border: Border.all(color: CustomColorThemes.borderColorLight)),
+              color: const Color(0xffffffff),
+              border: Border.all(
+                color: CustomColorThemes.borderColorLight,
+              ),
+            ),
           ),
           navigationBarTheme: NavigationBarThemeData(
             indicatorColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-            labelTextStyle: WidgetStateProperty.resolveWith((states) {
-              if (states.isSelected) {
+            labelTextStyle: WidgetStateProperty.resolveWith(
+              (states) {
+                if (!states.isSelected) return null;
                 return TextStyle(
-                    color: Color.alphaBlend(
-                        const Color(0x55000000), const Color(0xb3e3c81b)),
-                    fontSize: 11);
-              }
-              return null;
-            }),
+                  color: Color.alphaBlend(
+                    const Color(0x55000000),
+                    const Color(0xb3e3c81b),
+                  ),
+                  fontSize: 11,
+                );
+              },
+            ),
           ),
           tabBarTheme: const TabBarTheme(
             tabAlignment: TabAlignment.start,
@@ -57,25 +71,30 @@ extension AppThemeMode on ThemeMode {
             splashFactory: NoSplash.splashFactory,
             dividerColor: Colors.transparent,
           ),
-          // dialogTheme: const DialogTheme(
-          //   surfaceTintColor: Colors.transparent,
-          //   backgroundColor: Color(0xff1e1e1e),
-          //   titleTextStyle: TextStyle(
-          //       color: Color(0xfffafafa), fontSize: 20, wordSpacing: 0.15),
-          // ),
           inputDecorationTheme: const InputDecorationTheme(
             filled: true,
             fillColor: Color(0xffd2d2d2),
             hintStyle: TextStyle(color: Color(0xff757575)),
             enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xff505050), width: 3)),
+              borderSide: BorderSide(
+                color: Color(0xff505050),
+                width: 3,
+              ),
+            ),
             isDense: true,
             border: UnderlineInputBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
+            ),
             contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue, width: 3)),
+              borderSide: BorderSide(
+                color: Colors.blue,
+                width: 3,
+              ),
+            ),
           ),
         );
 
@@ -91,32 +110,39 @@ extension AppThemeMode on ThemeMode {
           highlightColor: Colors.white12,
           brightness: Brightness.dark,
           cupertinoOverrideTheme: const CupertinoThemeData(
-              primaryColor: CupertinoColors.activeBlue,
-              barBackgroundColor: Color(0xff1e1e1e),
-              scaffoldBackgroundColor: Color(0xff1e1e1e),
-              textTheme: CupertinoTextThemeData(
-                pickerTextStyle: TextStyle(color: Color(0xfffafafa)),
-                navTitleTextStyle: TextStyle(color: Color(0xfffafafa)),
-                navActionTextStyle:
-                    TextStyle(color: CupertinoColors.activeBlue),
-                textStyle: TextStyle(color: Color(0xfffafafa)),
-              )),
+            primaryColor: CupertinoColors.activeBlue,
+            barBackgroundColor: Color(0xff1e1e1e),
+            scaffoldBackgroundColor: Color(0xff1e1e1e),
+            textTheme: CupertinoTextThemeData(
+              pickerTextStyle: TextStyle(color: Color(0xfffafafa)),
+              navTitleTextStyle: TextStyle(color: Color(0xfffafafa)),
+              navActionTextStyle: TextStyle(color: CupertinoColors.activeBlue),
+              textStyle: TextStyle(color: Color(0xfffafafa)),
+            ),
+          ),
           dataTableTheme: DataTableThemeData(
             headingTextStyle: const TextStyle(color: Color(0xfffafafa)),
             headingRowColor: WidgetStateProperty.all(const Color(0xff2a2a2a)),
             decoration: BoxDecoration(
-                color: const Color(0xff1e1e1e),
-                border: Border.all(color: CustomColorThemes.borderColorDark)),
+              color: const Color(0xff1e1e1e),
+              border: Border.all(
+                color: CustomColorThemes.borderColorDark,
+              ),
+            ),
           ),
           pageTransitionsTheme: const PageTransitionsTheme(builders: {
             TargetPlatform.android: ZoomPageTransitionsBuilder(),
             TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
           }),
           dialogTheme: const DialogTheme(
-              surfaceTintColor: Colors.transparent,
-              backgroundColor: Color(0xff1e1e1e),
-              titleTextStyle: TextStyle(
-                  color: Color(0xfffafafa), fontSize: 20, wordSpacing: 0.15)),
+            surfaceTintColor: Colors.transparent,
+            backgroundColor: Color(0xff1e1e1e),
+            titleTextStyle: TextStyle(
+              color: Color(0xfffafafa),
+              fontSize: 20,
+              wordSpacing: 0.15,
+            ),
+          ),
           dialogBackgroundColor: const Color(0xff1e1e1e),
           dividerTheme: const DividerThemeData(color: Color(0xff3e3e3e)),
           tabBarTheme: const TabBarTheme(
@@ -135,10 +161,11 @@ extension AppThemeMode on ThemeMode {
             surfaceTintColor: Colors.transparent,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
             labelTextStyle: WidgetStateProperty.resolveWith((states) {
-              if (states.isSelected) {
-                return const TextStyle(color: Color(0xb3e3c81b), fontSize: 11);
-              }
-              return null;
+              if (!states.isSelected) return null;
+              return const TextStyle(
+                color: Color(0xb3e3c81b),
+                fontSize: 11,
+              );
             }),
             iconTheme: WidgetStateProperty.resolveWith((states) {
               if (states.isSelected) {
@@ -154,21 +181,31 @@ extension AppThemeMode on ThemeMode {
           textSelectionTheme:
               const TextSelectionThemeData(cursorColor: Colors.white),
           inputDecorationTheme: const InputDecorationTheme(
-              filled: true,
-              fillColor: Color(0xff2a2a2a),
-              hintStyle: TextStyle(color: Color(0xff757575)),
-              prefixIconColor: Color(0xfffafafa),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xff505050), width: 3)),
-              isDense: true,
-              border: UnderlineInputBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5))),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue, width: 3))),
+            filled: true,
+            fillColor: Color(0xff2a2a2a),
+            hintStyle: TextStyle(color: Color(0xff757575)),
+            prefixIconColor: Color(0xfffafafa),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Color(0xff505050),
+                width: 3,
+              ),
+            ),
+            isDense: true,
+            border: UnderlineInputBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
+            ),
+            contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.blue,
+                width: 3,
+              ),
+            ),
+          ),
         );
     }
   }

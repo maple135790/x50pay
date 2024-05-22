@@ -146,12 +146,12 @@ class MessageLookup extends MessageLookupByLibrary {
                 "快速支付流程有別於網頁版的支付流程，投幣時不會做 Token 驗證\n\n確定開啟快速支付流程？"),
         "userAppSettingsFastPaymentEnableTitle":
             MessageLookupByLibrary.simpleMessage("開啟快速支付"),
-        "userAppSettingsGameCabTileStyle":
-            MessageLookupByLibrary.simpleMessage("遊戲磚大小"),
         "userAppSettingsInAppNfc":
             MessageLookupByLibrary.simpleMessage("App 內 NFC 標籤掃描"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項"),
+        "userAppSettingsPinnedGameCabTileStyle":
+            MessageLookupByLibrary.simpleMessage("釘選機臺遊戲磚大小"),
         "userAppSettingsRememberGameTabInfo":
             MessageLookupByLibrary.simpleMessage(
                 "如果開啟，則進入投幣頁面時會顯示上次離開的分頁。\n若關閉，則每次進入都會顯示釘選遊戲頁。預設為關閉"),
@@ -159,6 +159,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("紀錄上次的投幣標籤頁面"),
         "userAppSettingsResetTheme":
             MessageLookupByLibrary.simpleMessage("重設主題"),
+        "userAppSettingsStoreGameCabTileStyle":
+            MessageLookupByLibrary.simpleMessage("店內遊戲磚大小"),
         "userAppSettingsSummarizedRecord":
             MessageLookupByLibrary.simpleMessage("顯示遊玩紀錄統計"),
         "userAppSettingsSummarizedRecordContent": m5,

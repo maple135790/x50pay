@@ -225,7 +225,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
     final storeBanner = Container(
       clipBehavior: Clip.hardEdge,
       height: 98,
-      margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      margin: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         border: Border.all(
           color: isDarkTheme
@@ -300,7 +300,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
     );
 
     final segmentedControl = Padding(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      padding: const EdgeInsets.all(12),
       child: Consumer<GameCabsViewModel>(
         builder: (context, vm, child) {
           var tabs = {

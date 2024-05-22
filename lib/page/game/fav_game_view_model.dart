@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class FavGameViewModel extends BaseViewModel {
@@ -19,6 +20,13 @@ class FavGameViewModel extends BaseViewModel {
   final storeNameMap = <String, String>{};
   var _storeModel = const StoreModel.empty();
   var _fetchedGameList = const GameList.empty();
+
+  GameList get favGameList => _favGameList;
+  GameList _favGameList = const GameList.empty();
+
+  GameCabTileStyle get tileStyle => _tileStyle;
+  GameCabTileStyle _tileStyle =
+      GameCabTileStyle.fromInt(GameCabTileStyle.pinnedDefaultValue);
 
   Future<Map<String, List<Machine>>> getAllGames() async {
     try {
@@ -56,7 +64,7 @@ class FavGameViewModel extends BaseViewModel {
     }
   }
 
-  Future<GameList> getFavGame() async {
+  Future<GameList> _getFavGame() async {
     try {
       showLoading();
       _storeModel = await _getStoreData();
@@ -85,6 +93,19 @@ class FavGameViewModel extends BaseViewModel {
       selectedFavMachines.add(id);
     }
     notifyListeners();
+  }
+
+  Future<void> init() async {
+    _favGameList = await _getFavGame();
+    _tileStyle = await _getTileStyle();
+    notifyListeners();
+  }
+
+  Future<GameCabTileStyle> _getTileStyle() async {
+    final tileStyleValue =
+        await Prefs.getInt(PrefsToken.pinnedGameCabTileStyle);
+    return GameCabTileStyle.fromInt(
+        tileStyleValue ?? GameCabTileStyle.pinnedDefaultValue);
   }
 
   Future<StoreModel> _getStoreData() async {

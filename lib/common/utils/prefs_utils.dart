@@ -77,17 +77,18 @@ enum GameCabTileStyle {
   large(0),
 
   /// 一行兩個遊戲
-  small(defaultValue);
+  small(1);
 
   final int value;
   const GameCabTileStyle(this.value);
 
-  static const defaultValue = 1;
+  static const storeDefaultValue = 1;
+  static const pinnedDefaultValue = 0;
 
   factory GameCabTileStyle.fromInt(int value) {
     return switch (value) {
       0 => GameCabTileStyle.large,
-      defaultValue => GameCabTileStyle.small,
+      1 => GameCabTileStyle.small,
       _ => throw ArgumentError('Invalid value: $value'),
     };
   }
@@ -100,10 +101,15 @@ enum GameCabTileStyle {
 
 enum PrefsToken {
   cardEmulationInterval('card_emulation_interval', defaultValue: -1),
-  gameCabTileStyle(
-    'game_cab_tile_style',
-    defaultValue: GameCabTileStyle.defaultValue,
+  storeGameCabTileStyle(
+    'store_game_cab_tile_style',
+    defaultValue: GameCabTileStyle.storeDefaultValue,
   ),
+  pinnedGameCabTileStyle(
+    'pinned_game_cab_tile_style',
+    defaultValue: GameCabTileStyle.pinnedDefaultValue,
+  ),
+
   rememberGameTab('remember_game_tab', defaultValue: false),
   enabledFastQRPay('fast_qrpay', defaultValue: true),
   enabledInAppNfcScan('in_app_nfc_scan', defaultValue: true),

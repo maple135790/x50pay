@@ -159,12 +159,12 @@ class MessageLookup extends MessageLookupByLibrary {
                 "The Fast Payment feature is different from the web-based payment process. No token verification will be performed when coins are deposited.\n\nAre you sure you want to enable the quick payment process?"),
         "userAppSettingsFastPaymentEnableTitle":
             MessageLookupByLibrary.simpleMessage("Enable Fast Payment"),
-        "userAppSettingsGameCabTileStyle":
-            MessageLookupByLibrary.simpleMessage("Game tile size"),
         "userAppSettingsInAppNfc":
             MessageLookupByLibrary.simpleMessage("In-App NFC tag read"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "When scanning NFC tags in the store, show payment methods, payment results dialog, etc. in the app.\nIf the speed is slow, please disable this option."),
+        "userAppSettingsPinnedGameCabTileStyle":
+            MessageLookupByLibrary.simpleMessage("Favorite game tile size"),
         "userAppSettingsRememberGameTabInfo": MessageLookupByLibrary.simpleMessage(
             "If enabled, the last visited tab will be displayed when entering the Game page.\nIf disabled, the Pinned Game tab will be displayed each time you enter. Default is disabled."),
         "userAppSettingsRememberGameTabTitle":
@@ -172,6 +172,8 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Remember the last tab in Game page"),
         "userAppSettingsResetTheme":
             MessageLookupByLibrary.simpleMessage("Reset Theme"),
+        "userAppSettingsStoreGameCabTileStyle":
+            MessageLookupByLibrary.simpleMessage("Store game tile size"),
         "userAppSettingsSummarizedRecord": MessageLookupByLibrary.simpleMessage(
             "Show summarized used point record"),
         "userAppSettingsSummarizedRecordContent": m5,

@@ -431,8 +431,8 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                           ),
                           children: [
                             DialogDropdown.ios(
-                              title: i18n.userAppSettingsGameCabTileStyle,
-                              value: vm.tileStyle.i18nName,
+                              title: i18n.userAppSettingsStoreGameCabTileStyle,
+                              value: vm.storeGameTileStyle.i18nName,
                               avaliList: GameCabTileStyle.values
                                   .map((e) => e.i18nName)
                                   .toList(),
@@ -440,7 +440,20 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                                 final tileStyle = GameCabTileStyle.values
                                     .firstWhere(
                                         (element) => element.i18nName == value);
-                                vm.setGameCabTileStyle(tileStyle);
+                                vm.setStoreGameCabTileStyle(tileStyle);
+                              },
+                            ),
+                            DialogDropdown.ios(
+                              title: i18n.userAppSettingsPinnedGameCabTileStyle,
+                              value: vm.pinnedGameTileStyle.i18nName,
+                              avaliList: GameCabTileStyle.values
+                                  .map((e) => e.i18nName)
+                                  .toList(),
+                              onChanged: (value) {
+                                final tileStyle = GameCabTileStyle.values
+                                    .firstWhere(
+                                        (element) => element.i18nName == value);
+                                vm.setPinnedGameCabTileStyle(tileStyle);
                               },
                             ),
                             CupertinoListTile.notched(

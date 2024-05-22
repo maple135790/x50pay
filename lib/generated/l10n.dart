@@ -931,16 +931,6 @@ class S {
     );
   }
 
-  /// `遊戲磚大小`
-  String get userAppSettingsGameCabTileStyle {
-    return Intl.message(
-      '遊戲磚大小',
-      name: 'userAppSettingsGameCabTileStyle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `App 內 NFC 標籤掃描`
   String get userAppSettingsInAppNfc {
     return Intl.message(
@@ -956,6 +946,16 @@ class S {
     return Intl.message(
       '掃描到店內的 NFC 標籤時，在 App 內顯示支付方式、支付結果等。\n若速度過慢，請取消此選項',
       name: 'userAppSettingsInAppNfcContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `釘選機臺遊戲磚大小`
+  String get userAppSettingsPinnedGameCabTileStyle {
+    return Intl.message(
+      '釘選機臺遊戲磚大小',
+      name: 'userAppSettingsPinnedGameCabTileStyle',
       desc: '',
       args: [],
     );
@@ -986,6 +986,16 @@ class S {
     return Intl.message(
       '重設主題',
       name: 'userAppSettingsResetTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `店內遊戲磚大小`
+  String get userAppSettingsStoreGameCabTileStyle {
+    return Intl.message(
+      '店內遊戲磚大小',
+      name: 'userAppSettingsStoreGameCabTileStyle',
       desc: '',
       args: [],
     );

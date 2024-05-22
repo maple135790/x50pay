@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
-import 'package:x50pay/common/theme/theme.dart';
+
 import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/providers/theme_provider.dart';
 
 abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   late final i18n = S.of(context);

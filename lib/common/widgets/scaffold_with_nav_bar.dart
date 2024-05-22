@@ -16,8 +16,6 @@ import 'package:x50pay/common/widgets/persist_app_bar.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
-// import 'package:x50pay/providers/theme_provider.dart';
-import 'package:x50pay/r.g.dart';
 
 typedef MenuItem = ({IconData icon, String label, RouteProperty route});
 
@@ -40,7 +38,6 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
         (
           icon: Icons.sports_esports_rounded,
           label: i18n.navGame,
-          // route: AppRoutes.gameStore
           route: AppRoutes.gameCabs,
         ),
         (
@@ -137,36 +134,8 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
           confirmPopup();
         }
       },
-      // onWillPop: () async {
-      //   final popTime = DateTime.now();
-      //   if (popTime.difference(lastPopTime) < _kMinPopInterval) return false;
-      //   if (selectedIndex != 2) {
-      //     selectedIndex = 2;
-      //     lastPopTime = popTime;
-      //     context.goNamed(AppRoutes.home.routeName);
-      //     setState(() {});
-      //     return false;
-      //   }
-      //   final shouldPop = await confirmPopup();
-      //   lastPopTime = popTime;
-      //   return shouldPop!;
-      // },
       child: Scaffold(
         appBar: _LoadedAppBar(selectedIndex),
-        // floatingActionButton: kDebugMode
-        //     ? FloatingActionButton(
-        //         child: const Icon(Icons.brightness_6_rounded),
-        //         onPressed: () {
-        //           Theme.of(context).brightness == Brightness.dark
-        //               ? context
-        //                   .read<AppThemeProvider>()
-        //                   .changeBrightness(Brightness.light)
-        //               : context
-        //                   .read<AppThemeProvider>()
-        //                   .changeBrightness(Brightness.dark);
-        //         },
-        //       )
-        //     : null,
         body: widget.body,
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -214,27 +183,147 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
   double get functionalHeaderHeight =>
       widget.menuIndex == 2 ? 0 : widget.preferredSize.height;
 
-  Widget buildDebugStatus() {
-    String serviceStatus =
+  void onQrScanButtonPressed() async {
+    final router = GoRouter.of(context);
+    var status = await Permission.camera.status;
+    if (status.isDenied) await Permission.camera.request();
+    if (context.mounted) {
+      GlobalSingleton.instance.isInCameraPage = true;
+      router.pushNamed(
+        AppRoutes.scanQRCode.routeName,
+        extra: status,
+      );
+    }
+  }
+
+  void onLanguagePressed(Locale currentLocale) async {
+    final langProvider = context.read<LanguageProvider>();
+    final changedLocale = await showDialog<Locale>(
+      context: context,
+      builder: (context) {
+        return LanguageSelectDialog(currentLocale);
+      },
+    );
+    if (changedLocale == null) return;
+    if (!mounted) return;
+    EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 800));
+    EasyLoading.dismiss();
+    langProvider.setUserPrefLocale(changedLocale);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final functionalHeader = ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
+      child: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: widget.preferredSize.height,
+        elevation: isDarkTheme ? 15 : 4,
+        scrolledUnderElevation: isDarkTheme ? 15 : 6.5,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: scaffoldBackgroundColor,
+        shadowColor: Colors.black,
+        title: Align(
+          alignment: Alignment.topRight,
+          child: Material(
+            elevation: 5,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
+              decoration: BoxDecoration(
+                color: isDarkTheme
+                    ? CustomColorThemes.appbarBoxColorDark
+                    : CustomColorThemes.appbarBoxColorLight,
+              ),
+              child: ValueListenableBuilder<UserModel?>(
+                valueListenable: GlobalSingleton.instance.userNotifier,
+                builder: (context, user, child) {
+                  final point = user?.point?.toInt() ?? -1;
+                  final fpoint = user?.fpoint?.toInt() ?? -1;
+
+                  return Text.rich(
+                    TextSpan(
+                      text: '$point + ',
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.labelLarge!.fontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '$fpoint',
+                          style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .fontSize,
+                            color: const Color(0xffd4b106),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' P',
+                          style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .fontSize,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          InkWell(
+            onTap: !GlobalSingleton.instance.isInCameraPage
+                ? onQrScanButtonPressed
+                : null,
+            splashFactory: NoSplash.splashFactory,
+            child: Icon(
+              Icons.qr_code_rounded,
+              size: 28,
+              color: Theme.of(context).iconTheme.color,
+            ),
+          ),
+          const SizedBox(width: 15),
+        ],
+      ),
+    );
+
+    final serviceStatus =
         GlobalSingleton.instance.isServiceOnline ? 'ONLINE' : 'OFFLINE';
-    Color statusColor = serviceStatus == 'ONLINE' ? Colors.green : Colors.grey;
-    return Padding(
+    final statusColor = serviceStatus == 'ONLINE' ? Colors.green : Colors.grey;
+
+    final debugStatus = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(GlobalSingleton.instance.appVersion,
-              textScaler: const TextScaler.linear(0.95),
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context)
-                    .textTheme
-                    .labelMedium
-                    ?.color
-                    ?.withOpacity(0.5),
-                fontWeight: FontWeight.bold,
-              )),
+          Text(
+            GlobalSingleton.instance.appVersion,
+            textScaler: const TextScaler.linear(0.95),
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.color
+                  ?.withOpacity(0.5),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           Row(
             children: [
               Icon(
@@ -257,227 +346,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
         ],
       ),
     );
-  }
 
-  void onLanguagePressed(Locale currentLocale) async {
-    final changedLocale = await showDialog<Locale>(
-      context: context,
-      builder: (context) => StatefulBuilder(builder: (context, setState) {
-        return AlertDialog(
-          title: Text(S.of(context).x50PayLanguage),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(
-              S.delegate.supportedLocales.length,
-              (index) => RadioListTile<Locale>(
-                visualDensity: VisualDensity.compact,
-                controlAffinity: ListTileControlAffinity.trailing,
-                value: S.delegate.supportedLocales[index],
-                title: Row(
-                  children: [
-                    CountryFlag.fromCountryCode(
-                      S.delegate.supportedLocales[index].countryCode ?? '',
-                      height: 25,
-                      width: 25,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(S.delegate.supportedLocales[index].displayText),
-                  ],
-                ),
-                groupValue: currentLocale,
-                onChanged: (value) {
-                  context.pop(value);
-                },
-              ),
-              growable: false,
-            ),
-          ),
-        );
-      }),
-    );
-    if (changedLocale == null) return;
-    if (!mounted) return;
-    EasyLoading.show();
-    Future.delayed(const Duration(milliseconds: 800), () {
-      EasyLoading.dismiss();
-      context.read<LanguageProvider>().setUserPrefLocale(changedLocale);
-    });
-  }
-
-  Widget buildFixedHeader() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: 50,
-          decoration: BoxDecoration(
-              color: scaffoldBackgroundColor,
-              border: Border(
-                bottom: BorderSide(
-                  color: isDarkTheme
-                      ? CustomColorThemes.borderColorDark
-                      : CustomColorThemes.borderColorLight,
-                  width: 1,
-                ),
-              )),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Spacer(),
-                Center(
-                  child: CircleAvatar(
-                      backgroundImage: R.image.header_icon_rsz(),
-                      backgroundColor: Colors.black,
-                      radius: 14),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Consumer<LanguageProvider>(
-                    builder: (context, vm, child) => Align(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () {
-                          onLanguagePressed(vm.currentLocale);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 6.75,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isDarkTheme
-                                    ? CustomColorThemes.appbarBoxColorDark
-                                    : CustomColorThemes.appbarBoxColorLight,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CountryFlag.fromCountryCode(
-                                    vm.currentLocale.countryCode ?? '',
-                                    height: 15,
-                                    width: 15,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    vm.currentLocale.displayText,
-                                    textScaler: const TextScaler.linear(0.85),
-                                  ),
-                                ],
-                              )),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget buildFunctionalHeader() {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
-      child: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: widget.preferredSize.height,
-        elevation: isDarkTheme ? 15 : 5,
-        scrolledUnderElevation: isDarkTheme ? 15 : 10,
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: scaffoldBackgroundColor,
-        shadowColor: Colors.black,
-        title: Align(
-          alignment: Alignment.topRight,
-          child: Material(
-            elevation: 5,
-            clipBehavior: Clip.antiAlias,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
-                decoration: BoxDecoration(
-                  color: isDarkTheme
-                      ? CustomColorThemes.appbarBoxColorDark
-                      : CustomColorThemes.appbarBoxColorLight,
-                ),
-                child: ValueListenableBuilder<UserModel?>(
-                  valueListenable: GlobalSingleton.instance.userNotifier,
-                  builder: (context, user, child) {
-                    final point = user?.point?.toInt() ?? -1;
-                    final fpoint = user?.fpoint?.toInt() ?? -1;
-
-                    return Text.rich(TextSpan(
-                        text: '$point + ',
-                        style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.labelLarge!.fontSize,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        children: [
-                          TextSpan(
-                              text: '$fpoint',
-                              style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .fontSize,
-                                color: const Color(0xffd4b106),
-                                fontWeight: FontWeight.bold,
-                              )),
-                          TextSpan(
-                            text: ' P',
-                            style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge!
-                                  .fontSize,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ]));
-                  },
-                )),
-          ),
-        ),
-        actions: [
-          InkWell(
-            onTap: !GlobalSingleton.instance.isInCameraPage
-                ? () async {
-                    var status = await Permission.camera.status;
-                    if (status.isDenied) await Permission.camera.request();
-                    if (context.mounted) {
-                      GlobalSingleton.instance.isInCameraPage = true;
-                      context.pushNamed(
-                        AppRoutes.scanQRCode.routeName,
-                        extra: status,
-                      );
-                    }
-                  }
-                : null,
-            splashFactory: NoSplash.splashFactory,
-            child: Icon(
-              Icons.qr_code_rounded,
-              size: 28,
-              color: Theme.of(context).primaryIconTheme.color,
-            ),
-          ),
-          const SizedBox(width: 15),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return AnnotatedRegion(
       value:
           isDarkTheme ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
@@ -491,10 +360,57 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
               duration: const Duration(milliseconds: 550),
               curve: Curves.easeInOutExpo,
               top: 0,
-              child: buildFunctionalHeader(),
+              child: functionalHeader,
             ),
-            if (kDebugMode) buildDebugStatus(),
+            if (kDebugMode) debugStatus,
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class LanguageSelectDialog extends StatefulWidget {
+  final Locale currentLocale;
+  const LanguageSelectDialog(this.currentLocale, {super.key});
+
+  @override
+  State<LanguageSelectDialog> createState() => _LanguageSelectDialogState();
+}
+
+class _LanguageSelectDialogState
+    extends BaseStatefulState<LanguageSelectDialog> {
+  late var selectedLocale = widget.currentLocale;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(i18n.x50PayLanguage),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+          S.delegate.supportedLocales.length,
+          (index) => RadioListTile<Locale>(
+            visualDensity: VisualDensity.compact,
+            controlAffinity: ListTileControlAffinity.trailing,
+            value: S.delegate.supportedLocales[index],
+            title: Row(
+              children: [
+                CountryFlag.fromCountryCode(
+                  S.delegate.supportedLocales[index].countryCode ?? '',
+                  height: 25,
+                  width: 25,
+                ),
+                const SizedBox(width: 10),
+                Text(S.delegate.supportedLocales[index].displayText),
+              ],
+            ),
+            groupValue: selectedLocale,
+            onChanged: (value) {
+              context.pop(value);
+            },
+          ),
+          growable: false,
         ),
       ),
     );

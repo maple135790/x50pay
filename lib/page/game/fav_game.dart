@@ -11,6 +11,7 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/fav_game_view_model.dart';
 import 'package:x50pay/page/game/game_cab_item.dart';
@@ -28,7 +29,7 @@ class FavGame extends StatefulWidget {
 class _FavGameState extends BaseStatefulState<FavGame> {
   final repo = Repository();
   late final FavGameViewModel viewModel;
-  late final Future<GameList> getFavGame;
+  late final Future<void> init;
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _FavGameState extends BaseStatefulState<FavGame> {
       repository: repo,
       currentLocale: context.read<LanguageProvider>().currentLocale,
     );
-    getFavGame = viewModel.getFavGame();
+    init = viewModel.init();
   }
 
   void showCabSelectDialog() {
@@ -110,6 +111,38 @@ class _FavGameState extends BaseStatefulState<FavGame> {
     );
   }
 
+  Widget buildLargeTileGames(GameList gameList, Widget changeFavGameButton) {
+    return ListView.builder(
+      // 最後一個是重新釘選按鈕
+      itemCount: gameList.machines!.length + 1,
+      padding: const EdgeInsets.all(12),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemExtent: 150,
+      itemBuilder: (context, index) {
+        return Selector<FavGameViewModel, Map<String, String>>(
+          selector: (context, vm) => vm.storeNameMap,
+          shouldRebuild: (previous, next) =>
+              previous.keys.hashCode != next.keys.hashCode,
+          builder: (context, storeNameMap, child) {
+            if (index == gameList.machines!.length) {
+              return changeFavGameButton;
+            }
+            final machine = gameList.machines![index];
+            final storeName =
+                storeNameMap[machine.shop ?? ''] ?? 'unknownStore';
+            return GameCabItem(
+              machine,
+              storeName: storeName,
+              onCoinInserted: showPlayAgainSnackBar,
+              onItemPressed: clearSnackBar,
+            );
+          },
+        );
+      },
+    );
+  }
+
   void clearSnackBar() {
     widget.scaffoldMessengerKey.currentState!.clearSnackBars();
   }
@@ -160,57 +193,120 @@ class _FavGameState extends BaseStatefulState<FavGame> {
         ),
       ),
     );
-    final changeFavGameButton = Padding(
-      padding: const EdgeInsets.only(top: 0),
-      child: SizedBox(
-        width: double.maxFinite,
-        height: 150,
-        child: Card.outlined(
-          color: Colors.transparent,
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: showAddFavGameBottomSheet,
-            child: Stack(
-              children: [
-                Positioned(
-                  right: -33.5,
-                  bottom: -33.5,
-                  child: SvgPicture(
-                    Svgs.heartCirclePlus,
-                    colorFilter: ColorFilter.mode(
-                      Theme.of(context).iconTheme.color!.withOpacity(0.2),
-                      BlendMode.srcIn,
-                    ),
-                    width: 112,
-                    height: 112,
+    final changeFavGameButton = SizedBox(
+      width: double.maxFinite,
+      height: 150,
+      child: Card.outlined(
+        margin: const EdgeInsets.only(top: 6),
+        color: Colors.transparent,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: showAddFavGameBottomSheet,
+          child: Stack(
+            children: [
+              Positioned(
+                right: -33.5,
+                bottom: -33.5,
+                child: SvgPicture(
+                  Svgs.heartCirclePlus,
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).iconTheme.color!.withOpacity(0.2),
+                    BlendMode.srcIn,
+                  ),
+                  width: 112,
+                  height: 112,
+                ),
+              ),
+              Positioned.fill(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        i18n.changeFavGameTitle,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        i18n.changeFavGameSubtitle,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xffb4b4b4),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Positioned.fill(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          i18n.changeFavGameTitle,
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        Text(
-                          i18n.changeFavGameSubtitle,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color(0xffb4b4b4),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
+
+    Widget buildSmallTileGames(GameList gameList, Widget changeFavGameButton) {
+      final machines = gameList.machines;
+      if (machines == null) return const SizedBox();
+      final rowCount = (machines.length / 2).ceil();
+
+      return ListView.builder(
+        // 最後一個是重新釘選按鈕
+        itemCount: rowCount + 1,
+        padding: EdgeInsets.zero,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          if (index == rowCount) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: changeFavGameButton,
+            );
+          }
+
+          final gameLeft = machines[index * 2];
+          final gameRight =
+              index * 2 + 1 < machines.length ? machines[index * 2 + 1] : null;
+          return Selector<FavGameViewModel, Map<String, String>>(
+              selector: (context, vm) => vm.storeNameMap,
+              builder: (context, storeNameMap, child) {
+                if (index == gameList.machines!.length) {
+                  return changeFavGameButton;
+                }
+                final storeNameLeft =
+                    storeNameMap[gameLeft.shop ?? ''] ?? 'unknownStore';
+                final storeNameRight =
+                    storeNameMap[gameRight?.shop ?? ''] ?? 'unknownStore';
+
+                return Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: GameCabItem(
+                          gameLeft,
+                          storeName: storeNameLeft,
+                          onCoinInserted: showPlayAgainSnackBar,
+                          onItemPressed: clearSnackBar,
+                        ),
+                      ),
+                    ),
+                    if (gameRight != null) ...[
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: GameCabItem(
+                          gameRight,
+                          storeName: storeNameRight,
+                          onCoinInserted: showPlayAgainSnackBar,
+                          onItemPressed: clearSnackBar,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(width: 12),
+                  ],
+                );
+              });
+        },
+      );
+    }
 
     return Material(
       type: MaterialType.transparency,
@@ -218,43 +314,26 @@ class _FavGameState extends BaseStatefulState<FavGame> {
         value: viewModel,
         builder: (context, child) {
           return FutureBuilder(
-            future: getFavGame,
+            future: init,
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const SizedBox();
               }
-              final gameList = snapshot.data as GameList;
+
+              final gameList = context
+                  .select<FavGameViewModel, GameList>((vm) => vm.favGameList);
+              final style = context.select<FavGameViewModel, GameCabTileStyle>(
+                  (vm) => vm.tileStyle);
               if (gameList.machines?.isEmpty ?? true) {
                 return addFavGameButton;
               }
-              return ListView.builder(
-                itemCount: gameList.machines!.length + 1,
-                padding: const EdgeInsets.all(12),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemExtent: 150,
-                itemBuilder: (context, index) {
-                  return Selector<FavGameViewModel, Map<String, String>>(
-                    selector: (context, vm) => vm.storeNameMap,
-                    shouldRebuild: (previous, next) =>
-                        previous.keys.hashCode != next.keys.hashCode,
-                    builder: (context, storeNameMap, child) {
-                      if (index == gameList.machines!.length) {
-                        return changeFavGameButton;
-                      }
-                      final machine = gameList.machines![index];
-                      final storeName =
-                          storeNameMap[machine.shop ?? ''] ?? 'unknownStore';
-                      return GameCabItem(
-                        machine,
-                        storeName: storeName,
-                        onCoinInserted: showPlayAgainSnackBar,
-                        onItemPressed: clearSnackBar,
-                      );
-                    },
-                  );
-                },
-              );
+
+              return switch (style) {
+                GameCabTileStyle.small =>
+                  buildSmallTileGames(gameList, changeFavGameButton),
+                GameCabTileStyle.large =>
+                  buildLargeTileGames(gameList, changeFavGameButton),
+              };
             },
           );
         },

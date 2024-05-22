@@ -77,10 +77,19 @@ class AppSettingsViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  GameCabTileStyle get tileStyle => _tileStyle;
-  GameCabTileStyle _tileStyle = GameCabTileStyle.small;
-  set tileStyle(GameCabTileStyle value) {
-    _tileStyle = value;
+  GameCabTileStyle get storeGameTileStyle => _storeGameTileStyle;
+  GameCabTileStyle _storeGameTileStyle =
+      GameCabTileStyle.fromInt(GameCabTileStyle.storeDefaultValue);
+  set storeGameTileStyle(GameCabTileStyle value) {
+    _storeGameTileStyle = value;
+    notifyListeners();
+  }
+
+  GameCabTileStyle get pinnedGameTileStyle => _pinnedGameTileStyle;
+  GameCabTileStyle _pinnedGameTileStyle =
+      GameCabTileStyle.fromInt(GameCabTileStyle.pinnedDefaultValue);
+  set pinnedGameTileStyle(GameCabTileStyle value) {
+    _pinnedGameTileStyle = value;
     notifyListeners();
   }
 
@@ -130,12 +139,24 @@ class AppSettingsViewModel extends BaseViewModel {
     return isRememberGameTab;
   }
 
-  Future<GameCabTileStyle> _getTileStyle() async {
-    final tileStyle = await Prefs.getInt(PrefsToken.gameCabTileStyle);
-    if (tileStyle == null) {
-      return GameCabTileStyle.fromInt(PrefsToken.gameCabTileStyle.defaultValue);
+  Future<(GameCabTileStyle, GameCabTileStyle)> _getTileStyle() async {
+    var storeStyle =
+        GameCabTileStyle.fromInt(PrefsToken.storeGameCabTileStyle.defaultValue);
+
+    var pinnedStyle =
+        GameCabTileStyle.fromInt(PrefsToken.storeGameCabTileStyle.defaultValue);
+
+    final rawStoreStyle = await Prefs.getInt(PrefsToken.storeGameCabTileStyle);
+    final rawPinnedStyle =
+        await Prefs.getInt(PrefsToken.pinnedGameCabTileStyle);
+
+    if (rawStoreStyle != null) {
+      storeStyle = GameCabTileStyle.fromInt(rawStoreStyle);
     }
-    return GameCabTileStyle.fromInt(tileStyle);
+    if (rawPinnedStyle != null) {
+      pinnedStyle = GameCabTileStyle.fromInt(rawPinnedStyle);
+    }
+    return (storeStyle, pinnedStyle);
   }
 
   Future<String> _getCEInterval() async {
@@ -205,10 +226,14 @@ class AppSettingsViewModel extends BaseViewModel {
     isRememberGameTab = value;
   }
 
-  void setGameCabTileStyle(GameCabTileStyle tileStyle) {
-    Prefs.setInt(PrefsToken.gameCabTileStyle, tileStyle.value);
+  void setStoreGameCabTileStyle(GameCabTileStyle tileStyle) {
+    Prefs.setInt(PrefsToken.storeGameCabTileStyle, tileStyle.value);
+    storeGameTileStyle = tileStyle;
+  }
 
-    this.tileStyle = tileStyle;
+  void setPinnedGameCabTileStyle(GameCabTileStyle tileStyle) {
+    Prefs.setInt(PrefsToken.pinnedGameCabTileStyle, tileStyle.value);
+    pinnedGameTileStyle = tileStyle;
   }
 
   Future<void> getAppSettings() async {
@@ -219,7 +244,9 @@ class AppSettingsViewModel extends BaseViewModel {
     isEnableInAppNfcScan = await _getIsEnableInAppNfcScan();
     isEnableSummarizedRecord = await getIsEnableSummarizedRecord();
     isRememberGameTab = await _getIsRememberGameTab();
-    tileStyle = await _getTileStyle();
+    final styles = await _getTileStyle();
+    storeGameTileStyle = styles.$1;
+    pinnedGameTileStyle = styles.$2;
 
     final androidinfo = await DeviceInfoPlugin().androidInfo;
 

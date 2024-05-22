@@ -147,18 +147,20 @@ class MessageLookup extends MessageLookupByLibrary {
                 "高速化決済は、Webベースの支払いプロセスとは異なります。コインを投入する際には、トークン認証は行われません。\n\n高速化決済を有効にしますか？"),
         "userAppSettingsFastPaymentEnableTitle":
             MessageLookupByLibrary.simpleMessage("高速化決済を有効化"),
-        "userAppSettingsGameCabTileStyle":
-            MessageLookupByLibrary.simpleMessage("ゲームタイルの大きさ"),
         "userAppSettingsInAppNfc":
             MessageLookupByLibrary.simpleMessage("アプリ内の NFC タグ読み取り"),
         "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
             "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。"),
+        "userAppSettingsPinnedGameCabTileStyle":
+            MessageLookupByLibrary.simpleMessage("お気に入りのゲームタイルの大きさ"),
         "userAppSettingsRememberGameTabInfo": MessageLookupByLibrary.simpleMessage(
             "有効の場合、コインページに入るたびに前回のタブが表示されます。\n無効の場合、毎回ゲームページに入るとお気に入りゲームタブが表示されます。デフォルトは無効です。"),
         "userAppSettingsRememberGameTabTitle":
             MessageLookupByLibrary.simpleMessage("前回のゲームタブを記憶する"),
         "userAppSettingsResetTheme":
             MessageLookupByLibrary.simpleMessage("デフォルトテーマに戻す"),
+        "userAppSettingsStoreGameCabTileStyle":
+            MessageLookupByLibrary.simpleMessage("店内のゲームタイルの大きさ"),
         "userAppSettingsSummarizedRecord":
             MessageLookupByLibrary.simpleMessage("まとめた支払い履歴を表示"),
         "userAppSettingsSummarizedRecordContent": m5,
