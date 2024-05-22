@@ -21,126 +21,131 @@ class _ChangePasswordDialogState
   final oldPwd = TextEditingController();
   final newPwd = TextEditingController();
   final renewPwd = TextEditingController();
-  String? _errorText;
+  String? errorText;
   String buttonText = '請輸入密碼';
   bool isEnabled = false;
 
-  Widget confirmButton(SettingsViewModel viewModel) {
-    return TextButton(
-      style: buttonStyle,
-      onPressed: isEnabled
-          ? () async {
-              final nav = GoRouter.of(context);
-              if (await viewModel.changePassword(
-                  oldPwd: oldPwd.text, pwd: newPwd.text, debugFlag: 200)) {
-                switch (viewModel.response!.code) {
-                  case 200:
-                    _errorText = null;
-                    await EasyLoading.showSuccess('密碼變更成功，請重新登入',
-                        dismissOnTap: false,
-                        duration: const Duration(seconds: 2));
-                    await Future.delayed(const Duration(seconds: 2));
-                    await EasyLoading.show(dismissOnTap: false);
-                    nav.goNamed(AppRoutes.login.routeName);
-                    break;
-                  case 700:
-                    setState(() {
-                      _errorText = '新密碼與舊密碼相同';
-                    });
-                    break;
-                  case 701:
-                    setState(() {
-                      _errorText = '舊密碼輸入錯誤';
-                    });
-                    break;
-                  default:
-                    showServiceError();
-                }
-              } else {
-                showServiceError();
-              }
-            }
-          : null,
-      child: Text(buttonText, style: const TextStyle(color: Color(0xff1e1e1e))),
+  void onChangePassword(SettingsViewModel viewModel) async {
+    final nav = GoRouter.of(context);
+    final isServerResponded = await viewModel.changePassword(
+      oldPwd: oldPwd.text,
+      pwd: newPwd.text,
+      debugFlag: 200,
     );
+    if (isServerResponded) {
+      switch (viewModel.response!.code) {
+        case 200:
+          errorText = null;
+          await EasyLoading.showSuccess('密碼變更成功，請重新登入',
+              dismissOnTap: false, duration: const Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 2));
+          await EasyLoading.show(dismissOnTap: false);
+          nav.goNamed(AppRoutes.login.routeName);
+          break;
+        case 700:
+          errorText = '新密碼與舊密碼相同';
+          break;
+        case 701:
+          errorText = '舊密碼輸入錯誤';
+          break;
+        default:
+          showServiceError();
+      }
+      setState(() {});
+    } else {
+      showServiceError();
+    }
+  }
+
+  void onNewPasswordChanged(String value) {
+    if (value.isEmpty) {
+      buttonText = '請輸入密碼';
+      isEnabled = false;
+    } else if (value != renewPwd.text) {
+      buttonText = '兩次輸入的密碼不同';
+      isEnabled = false;
+    } else {
+      buttonText = '送出';
+      isEnabled = true;
+    }
+
+    setState(() {});
+  }
+
+  void onReenterPasswordChanged(String value) {
+    if (value.isEmpty) {
+      buttonText = '請輸入密碼';
+      isEnabled = false;
+    } else if (value != newPwd.text) {
+      buttonText = '兩次輸入的密碼不同';
+      isEnabled = false;
+    } else {
+      buttonText = '送出';
+      isEnabled = true;
+    }
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsViewModel>(
-      builder: (context, viewModel, child) => PageDialog.ios(
+      builder: (context, viewModel, child) {
+        final confirmButton = TextButton(
+          style: buttonStyle,
+          onPressed: isEnabled
+              ? () {
+                  onChangePassword(viewModel);
+                }
+              : null,
+          child: Text(
+            buttonText,
+            style: const TextStyle(color: Color(0xff1e1e1e)),
+          ),
+        );
+
+        return PageDialog.ios(
           title: '密碼變更',
-          customConfirmButton: confirmButton(viewModel),
+          customConfirmButton: confirmButton,
           content: (showButtonBar) {
             showButtonBar(true);
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 50, 15, 0),
-                child: CupertinoFormSection.insetGrouped(
-                  footer: Text(_errorText ?? '',
-                      style: const TextStyle(
-                          color: CupertinoColors.destructiveRed)),
-                  key: _formKey,
-                  children: [
-                    CupertinoTextFormFieldRow(
-                      controller: oldPwd,
-                      prefix: const Text('您的舊密碼'),
-                      placeholder: '請輸入舊的密碼以確認身分',
-                      obscureText: true,
-                    ),
-                    CupertinoTextFormFieldRow(
-                      controller: newPwd,
-                      prefix: const Text('新密碼'),
-                      placeholder: '請輸入密碼',
-                      obscureText: true,
-                      onChanged: (s) {
-                        if (s.isEmpty) {
-                          setState(() {
-                            buttonText = '請輸入密碼';
-                            isEnabled = false;
-                          });
-                        } else if (s != renewPwd.text) {
-                          setState(() {
-                            buttonText = '兩次輸入的密碼不同';
-                            isEnabled = false;
-                          });
-                        } else {
-                          setState(() {
-                            buttonText = '送出';
-                            isEnabled = true;
-                          });
-                        }
-                      },
-                    ),
-                    CupertinoTextFormFieldRow(
-                      controller: renewPwd,
-                      prefix: const Text('再次輸入一次'),
-                      placeholder: '請重複輸入密碼',
-                      obscureText: true,
-                      onChanged: (s) {
-                        if (s.isEmpty) {
-                          setState(() {
-                            buttonText = '請輸入密碼';
-                            isEnabled = false;
-                          });
-                        } else if (s != newPwd.text) {
-                          setState(() {
-                            buttonText = '兩次輸入的密碼不同';
-                            isEnabled = false;
-                          });
-                        } else {
-                          setState(() {
-                            buttonText = '送出';
-                            isEnabled = true;
-                          });
-                        }
-                      },
-                    ),
-                  ],
+            return CupertinoFormSection.insetGrouped(
+              footer: Text(
+                errorText ?? '',
+                style: const TextStyle(
+                  color: CupertinoColors.destructiveRed,
                 ),
               ),
+              key: _formKey,
+              children: [
+                CupertinoTextFormFieldRow(
+                  controller: oldPwd,
+                  prefix: const Text('您的舊密碼'),
+                  placeholder: '請輸入舊的密碼以確認身分',
+                  textAlign: TextAlign.end,
+                  obscureText: true,
+                ),
+                CupertinoTextFormFieldRow(
+                  controller: newPwd,
+                  prefix: const Text('新密碼'),
+                  placeholder: '請輸入密碼',
+                  textAlign: TextAlign.end,
+                  obscureText: true,
+                  onChanged: onNewPasswordChanged,
+                ),
+                CupertinoTextFormFieldRow(
+                  controller: renewPwd,
+                  prefix: const Text('再次輸入一次'),
+                  placeholder: '請重複輸入密碼',
+                  textAlign: TextAlign.end,
+                  obscureText: true,
+                  onChanged: onReenterPasswordChanged,
+                ),
+              ],
             );
-          }),
+          },
+        );
+      },
     );
   }
 }

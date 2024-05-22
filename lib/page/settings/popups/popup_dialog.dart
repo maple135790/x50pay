@@ -38,6 +38,8 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final shouldShowBottomSheet = widget.customConfirmButton != null ||
+        (widget.customConfirmButton == null && widget.onConfirm != null);
     final buttomSheet = ValueListenableBuilder(
       valueListenable: offsetNotifier,
       builder: (context, offset, child) {
@@ -109,7 +111,7 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
           ),
         ],
       ),
-      bottomSheet: widget.onConfirm != null ? buttomSheet : null,
+      bottomSheet: shouldShowBottomSheet ? buttomSheet : null,
     );
   }
 }
