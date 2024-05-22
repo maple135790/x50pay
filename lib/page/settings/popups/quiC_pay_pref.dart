@@ -79,16 +79,16 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
                         )
                       ],
                     ),
-                    CupertinoListSection.insetGrouped(
-                      header: const Text('已綁定卡片管理'),
-                      children: const [
-                        CupertinoListTile(
-                          title: Text('title'),
-                          additionalInfo: Text('additionalInfo'),
-                          subtitle: Text('subtitle'),
-                        ),
-                      ],
-                    ),
+                    // CupertinoListSection.insetGrouped(
+                    //   header: const Text('已綁定卡片管理'),
+                    //   children: const [
+                    //     CupertinoListTile(
+                    //       title: Text('title'),
+                    //       additionalInfo: Text('additionalInfo'),
+                    //       subtitle: Text('subtitle'),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 );
               }),

@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -27,21 +28,22 @@ class ScanQRCode extends StatefulWidget {
 }
 
 class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
+  final controller = MobileScannerController(
+      // required options for the scanner
+      );
+
   late AnimationController animationController;
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   final isShowCameraPreviewNotifier = ValueNotifier(true);
-  QRViewController? qrViewController;
-  Barcode? result, lastEvent;
   bool isBusy = false;
 
-  void onRechargePressed() async {
-    qrViewController?.pauseCamera();
+  void onTopUpPressed() async {
+    controller.stop();
     isShowCameraPreviewNotifier.value = false;
     setState(() {});
     context.pushNamed(AppRoutes.ecPay.routeName).then((_) {
       isShowCameraPreviewNotifier.value = true;
-      qrViewController?.resumeCamera();
+      controller.start();
       setState(() {});
     });
   }
@@ -55,17 +57,18 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
       reverseDuration: const Duration(milliseconds: 300),
     );
     animationController.drive(CurveTween(curve: Curves.fastLinearToSlowEaseIn));
+    controller.start();
   }
 
   @override
   void dispose() {
     GlobalSingleton.instance.isInCameraPage = false;
-    qrViewController?.dispose();
     animationController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
-  void handleQRPay(String url, QRViewController controller) async {
+  void handleQRPay(String url, MobileScannerController controller) async {
     EasyLoading.show(status: '檢查');
     final args = url.replaceAll('https://pay.x50.fun/mid/', '').split('/');
     final repo = Repository();
@@ -76,7 +79,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
       repository: repo,
       settingRepo: SettingRepository(),
       onPaymentDone: () {
-        controller.resumeCamera();
+        controller.start();
       },
       onCabSelect: (qrPayData) {
         showDialog(
@@ -88,7 +91,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
                 EasyLoading.dismiss();
               },
               onDestroy: () {
-                controller.resumeCamera();
+                controller.start();
               },
             );
           },
@@ -109,7 +112,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
           redirection.url,
           mode: LaunchMode.externalApplication,
         );
-        controller.resumeCamera();
+        controller.start();
         EasyLoading.dismiss();
         break;
       case QRPayTPPRedirectType.linePay:
@@ -118,116 +121,111 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
     }
   }
 
-  Widget buildQrView() {
-    return QRView(
-      key: qrKey,
-      overlay: QrScannerOverlayShape(
-        overlayColor: Colors.black54,
-        borderColor: Colors.white,
-        borderWidth: 12,
-      ),
-      onQRViewCreated: (controller) {
-        qrViewController = controller;
-
-        controller.scannedDataStream.listen((event) async {
-          log("event: ${event.code}\nformat: ${event.format}");
-          if (isBusy) {
-            return;
-          } else {
-            isBusy = true;
-            final nav = GoRouter.of(context);
-            isShowCameraPreviewNotifier.value = false;
-
-            // QRPay
-            if (event.code!.startsWith('https://pay.x50.fun/mid/')) {
-              await controller.pauseCamera();
-              setState(() {});
-              handleQRPay(event.code!, controller);
-            } else {
-              // 平板排隊
-              String msg = await Repository().qrDecryt(event.code!);
-              if (msg != 'oof') {
-                setState(() {});
-                await EasyLoading.showInfo(msg,
-                    duration: const Duration(milliseconds: 1000));
-                await Future.delayed(const Duration(milliseconds: 1300));
-                nav.goNamed(AppRoutes.home.routeName);
-              }
-            }
-            result = event;
-            setState(() {});
-            isBusy = false;
-            isShowCameraPreviewNotifier.value = true;
-          }
-        });
-      },
-    );
-  }
-
   void debugQRPay() {
-    qrViewController!.pauseCamera();
+    controller.stop();
 
     handleQRPay(
       'https://pay.x50.fun/mid/5fcdcf800004a524c8fae000/703765460',
-      qrViewController!,
-    );
-  }
-
-  Widget buildButton() {
-    return ElevatedButton(
-      onPressed: onRechargePressed,
-      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-      child: const Text('信用卡 / ATM 線上加值'),
+      controller,
     );
   }
 
   void showQRPayModal(
-    QRViewController controller,
+    MobileScannerController controller,
     QRPayViewModel viewModel,
-  ) {
+  ) async {
     // log('https://pay.x50.fun/api/v1/pay/$mid/$cid/0', name: 'showScanPayModal');
-    showModalBottomSheet<bool>(
-        isScrollControlled: true,
-        isDismissible: false,
-        context: context,
-        showDragHandle: true,
-        enableDrag: true,
-        transitionAnimationController: animationController,
-        backgroundColor: scaffoldBackgroundColor,
-        builder: (context) => DraggableScrollableSheet(
-              initialChildSize: 0.8,
-              snap: true,
-              snapSizes: const [0.5, 0.8],
-              expand: false,
-              builder: (context, controller) {
-                return ChangeNotifierProvider.value(
-                  value: viewModel,
-                  builder: (context, child) => QRPayModal(
-                    scrollController: controller,
-                  ),
-                );
+    await showModalBottomSheet<bool>(
+      isScrollControlled: true,
+      isDismissible: false,
+      context: context,
+      showDragHandle: true,
+      enableDrag: true,
+      transitionAnimationController: animationController,
+      backgroundColor: scaffoldBackgroundColor,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          snap: true,
+          snapSizes: const [0.5, 0.8],
+          expand: false,
+          builder: (context, controller) {
+            return ChangeNotifierProvider.value(
+              value: viewModel,
+              builder: (context, child) {
+                return QRPayModal(scrollController: controller);
               },
-            )).then((_) {
-      controller.resumeCamera();
-    });
+            );
+          },
+        );
+      },
+    );
+
+    controller.start();
+  }
+
+  void handleBarcode(Barcode barcode) async {
+    final value = barcode.rawValue;
+    log("barcode: $value format: ${barcode.format}", name: 'handleBarcode');
+    log("format: ${barcode.format}", name: 'handleBarcode');
+    if (value == null) return;
+
+    if (isBusy) {
+      return;
+    } else {
+      isBusy = true;
+      final nav = GoRouter.of(context);
+      isShowCameraPreviewNotifier.value = false;
+
+      // QRPay
+      if (value.startsWith('https://pay.x50.fun/mid/')) {
+        await controller.stop();
+        setState(() {});
+        handleQRPay(value, controller);
+      } else {
+        // 平板排隊
+        final msg = await Repository().qrDecryt(value);
+        if (msg != 'oof') {
+          setState(() {});
+          await EasyLoading.showInfo(msg,
+              duration: const Duration(milliseconds: 1000));
+          await Future.delayed(const Duration(milliseconds: 1300));
+          nav.goNamed(AppRoutes.home.routeName);
+        }
+      }
+      isBusy = false;
+      isShowCameraPreviewNotifier.value = true;
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final topUpButton = ElevatedButton(
+      onPressed: onTopUpPressed,
+      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+      child: const Text('信用卡 / ATM 線上加值'),
+    );
+
+    final qrView = MobileScanner(
+      controller: controller,
+      fit: BoxFit.contain,
+      onDetect: (barcodes) => handleBarcode(barcodes.barcodes.first),
+    );
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: debugQRPay),
       body: Column(
         children: [
           ValueListenableBuilder(
             valueListenable: isShowCameraPreviewNotifier,
             builder: (context, isShowPreview, child) => Flexible(
               flex: 9,
-              child: isShowPreview ? buildQrView() : const SizedBox.expand(),
+              child: isShowPreview ? qrView : const SizedBox.expand(),
             ),
           ),
           Flexible(
             flex: 1,
-            child: Center(child: buildButton()),
+            child: Center(child: topUpButton),
           )
         ],
       ),
