@@ -127,9 +127,13 @@ enum PrefsToken {
   storeId('store_id'),
   storeName('store_name');
 
+  /// PrefsToken 的鍵值
   final String value;
+
+  /// PrefsToken 的預設值
   final dynamic defaultValue;
 
+  /// 偏好設定的 Token
   const PrefsToken(this.value, {this.defaultValue});
 }
 

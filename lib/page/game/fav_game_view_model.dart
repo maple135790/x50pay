@@ -1,6 +1,6 @@
 import 'dart:developer';
-import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
@@ -33,7 +33,7 @@ class FavGameViewModel extends BaseViewModel {
       showLoading();
 
       if (_storeModel.storelist == null) return {};
-      _initFavMachines(_fetchedGameList);
+      initFavMachines(_fetchedGameList);
       final storeMachines = <String, List<Machine>>{};
       final composedStoreIds = <String>[];
       for (final store in _storeModel.storelist!) {
@@ -64,14 +64,14 @@ class FavGameViewModel extends BaseViewModel {
     }
   }
 
-  Future<GameList> _getFavGame() async {
+  @visibleForTesting
+  Future<GameList> getFavGame() async {
     try {
       showLoading();
-      _storeModel = await _getStoreData();
 
       _buildStoreNameMap();
       _fetchedGameList = await repository.favGameList();
-      _initFavMachines(_fetchedGameList);
+      initFavMachines(_fetchedGameList);
       return _fetchedGameList;
     } catch (e) {
       log('', error: '$e', name: 'getFavCabs');
@@ -96,25 +96,29 @@ class FavGameViewModel extends BaseViewModel {
   }
 
   Future<void> init() async {
-    _favGameList = await _getFavGame();
-    _tileStyle = await _getTileStyle();
+    _storeModel = await getStoreData();
+    _favGameList = await getFavGame();
+    _tileStyle = await getTileStyle();
     notifyListeners();
   }
 
-  Future<GameCabTileStyle> _getTileStyle() async {
+  @visibleForTesting
+  Future<GameCabTileStyle> getTileStyle() async {
     final tileStyleValue =
         await Prefs.getInt(PrefsToken.pinnedGameCabTileStyle);
     return GameCabTileStyle.fromInt(
         tileStyleValue ?? GameCabTileStyle.pinnedDefaultValue);
   }
 
-  Future<StoreModel> _getStoreData() async {
+  @visibleForTesting
+  Future<StoreModel> getStoreData() async {
     final storeModel = await repository.getStores(currentLocale);
 
     return storeModel;
   }
 
-  void _initFavMachines(GameList favGameList) {
+  @visibleForTesting
+  void initFavMachines(GameList favGameList) {
     selectedFavMachines.clear();
     if (favGameList.machines == null) return;
     for (final machine in favGameList.machines!) {

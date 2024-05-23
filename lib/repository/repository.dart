@@ -82,7 +82,7 @@ class Repository extends Api {
 
   /// 取得店家資料API
   Future<StoreModel> getStores(Locale currentLocale) async {
-    late StoreModel store;
+    late final StoreModel store;
 
     await Api.makeRequest(
       dest: '/store/list/${currentLocale.tagName.toLowerCase()}',
@@ -91,6 +91,9 @@ class Repository extends Api {
       body: {},
       onSuccess: (json) {
         store = StoreModel.fromJson(json);
+      },
+      onError: (statusCode, body) {
+        store = const StoreModel.empty();
       },
     );
     return store;
@@ -102,7 +105,7 @@ class Repository extends Api {
   Future<GameList> getGameList({
     required String storeId,
   }) async {
-    late GameList gameList;
+    late final GameList gameList;
 
     await Api.makeRequest(
       dest: '/gamelist',
@@ -111,6 +114,9 @@ class Repository extends Api {
       body: {'sid': storeId},
       onSuccess: (json) {
         gameList = GameList.fromJson(json);
+      },
+      onError: (statusCode, body) {
+        gameList = const GameList.empty();
       },
     );
     return gameList;
@@ -539,6 +545,9 @@ class Repository extends Api {
       contentType: ContentType.json,
       onSuccess: (json) {
         gameList = GameList.fromJson(json);
+      },
+      onError: (statusCode, body) {
+        gameList = const GameList.empty();
       },
     );
     return gameList;
