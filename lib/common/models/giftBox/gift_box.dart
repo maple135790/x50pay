@@ -21,6 +21,12 @@ class GiftBoxModel {
     required this.alChange,
     required this.canChange,
   });
+
+  const GiftBoxModel.empty()
+      : code = 0,
+        alChange = const [],
+        canChange = const [];
+
   factory GiftBoxModel.fromJson(Map<String, dynamic> json) =>
       _$GiftBoxModelFromJson(json);
 

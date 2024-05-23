@@ -18,10 +18,15 @@ class LotteListModel {
         date = rawLotteList[1],
         tic = rawLotteList[2].toString();
 
+  const LotteListModel.empty()
+      : rawLotteList = const [],
+        self = 0,
+        name = '',
+        date = '',
+        tic = '';
+
   factory LotteListModel.fromJson(Map<String, dynamic> json) =>
       _$LotteListModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$LotteListModelToJson(this);
-
-  factory LotteListModel.empty() => LotteListModel(['', '', '', '', 0]);
 }

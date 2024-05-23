@@ -22,10 +22,11 @@ class _CollabShopListState extends BaseStatefulState<CollabShopList> {
   late final viewModel = CollabShopListViewModel(repository: repo);
 
   void showQRCodeScan() async {
+    final router = GoRouter.of(context);
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
     if (context.mounted) {
-      context.pushNamed(
+      router.pushNamed(
         AppRoutes.scanQRCode.routeName,
         extra: status,
       );

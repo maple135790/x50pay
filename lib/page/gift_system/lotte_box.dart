@@ -11,7 +11,7 @@ class LotteBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final lotteList = context.select<GiftSystemViewModel, LotteListModel>(
-        (vm) => vm.lotteList ?? LotteListModel.empty());
+        (vm) => vm.lotteList ?? const LotteListModel.empty());
 
     return Container(
       color: isDarkTheme ? const Color(0xff2a2a2a) : const Color(0xfff2f2f2),

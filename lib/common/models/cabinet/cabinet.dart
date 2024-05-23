@@ -22,18 +22,32 @@ class CabinetModel {
   @JsonKey(name: 're')
   final List<List<String>?> reservations;
 
-  const CabinetModel(
-      {required this.message,
-      required this.code,
-      required this.note,
-      required this.caboid,
-      this.spic,
-      this.surl,
-      required this.pad,
-      required this.padmid,
-      required this.padlid,
-      required this.cabinets,
-      required this.reservations});
+  const CabinetModel({
+    required this.message,
+    required this.code,
+    required this.note,
+    required this.caboid,
+    this.spic,
+    this.surl,
+    required this.pad,
+    required this.padmid,
+    required this.padlid,
+    required this.cabinets,
+    required this.reservations,
+  });
+
+  const CabinetModel.empty()
+      : message = '',
+        code = 0,
+        note = const [],
+        caboid = '',
+        spic = const [],
+        surl = const [],
+        pad = false,
+        padmid = '',
+        padlid = '',
+        cabinets = const [],
+        reservations = const [];
 
   factory CabinetModel.fromJson(Map<String, dynamic> json) =>
       _$CabinetModelFromJson(json);

@@ -124,7 +124,7 @@ class Repository extends Api {
 
   /// 取得遊戲機台資料API
   Future<CabinetModel> selGame(String machineId) async {
-    late CabinetModel cabinetModel;
+    late final CabinetModel cabinetModel;
 
     await Api.makeRequest(
       dest: '/cablist/$machineId',
@@ -133,6 +133,9 @@ class Repository extends Api {
       body: {},
       onSuccess: (json) {
         cabinetModel = CabinetModel.fromJson(json);
+      },
+      onError: (statusCode, body) {
+        cabinetModel = const CabinetModel.empty();
       },
     );
     return cabinetModel;
@@ -147,8 +150,8 @@ class Repository extends Api {
     num mode,
     bool isUseRewardPoint,
   ) async {
-    late BasicResponse response;
-    String insertUrl = isTicket ? 'tic' : 'pay';
+    late final BasicResponse response;
+    final insertUrl = isTicket ? 'tic' : 'pay';
     String url = '/$insertUrl/$id/${mode.toInt()}';
     if (!isTicket) {
       url += '/${isUseRewardPoint ? 1 : 0}';
@@ -162,6 +165,9 @@ class Repository extends Api {
       onSuccess: (json) {
         response = BasicResponse.fromJson(json);
       },
+      onError: (statusCode, body) {
+        response = BasicResponse.empty();
+      },
     );
     return response;
   }
@@ -170,7 +176,7 @@ class Repository extends Api {
   ///
   /// 需要傳入原始URL [url]，使用於 QRCode 掃描後 (QRPay) 的投幣
   Future<BasicResponse> doInsertRawUrl(String url) async {
-    late BasicResponse response;
+    late final BasicResponse response;
 
     await Api.makeRequest(
       dest: '',
@@ -180,6 +186,9 @@ class Repository extends Api {
       body: {},
       onSuccess: (json) {
         response = BasicResponse.fromJson(json);
+      },
+      onError: (statusCode, body) {
+        response = BasicResponse.empty();
       },
     );
     return response;
@@ -240,8 +249,10 @@ class Repository extends Api {
   /// 開門按鈕API
   ///
   /// 需要傳入與店家距離 [distance]、店門名稱 [doorName]
-  Future<String> remoteOpenDoor(double distance,
-      {required String doorName}) async {
+  Future<String> remoteOpenDoor(
+    double distance, {
+    required String doorName,
+  }) async {
     String result = '';
     await Api.makeRequest(
       customDest: 'https://pay.x50.fun/api/$doorName/open/$distance',
@@ -277,7 +288,7 @@ class Repository extends Api {
   ///
   /// 用於禮物系統頁面，回傳 [GiftBoxModel]
   Future<GiftBoxModel> getGiftBox() async {
-    late GiftBoxModel giftBoxModel;
+    late final GiftBoxModel giftBoxModel;
 
     await Api.makeRequest(
       dest: '/gift/box',
@@ -287,6 +298,9 @@ class Repository extends Api {
       onSuccess: (json) {
         giftBoxModel = GiftBoxModel.fromJson(json);
       },
+      onError: (statusCode, body) {
+        giftBoxModel = const GiftBoxModel.empty();
+      },
     );
     return giftBoxModel;
   }
@@ -295,7 +309,7 @@ class Repository extends Api {
   ///
   /// 用於禮物系統頁面，回傳 [LotteListModel]
   Future<LotteListModel> getLotteList() async {
-    late LotteListModel lotteListModel;
+    late final LotteListModel lotteListModel;
 
     await Api.makeRequest(
       dest: '/lotte/list',
@@ -305,6 +319,9 @@ class Repository extends Api {
       onSuccess: (json) {
         lotteListModel = LotteListModel.fromJson(json);
       },
+      onError: (statusCode, body) {
+        lotteListModel = const LotteListModel.empty();
+      },
     );
     return lotteListModel;
   }
@@ -312,20 +329,20 @@ class Repository extends Api {
   /// 選擇養成抽獎API
   ///
   /// 用於禮物系統頁面的養成抽獎箱
-  Future<String> lotteSave() async {
-    late String res;
+  // Future<String> lotteSave() async {
+  //   late String res;
 
-    await Api.makeRequest(
-      dest: '/lotte/save',
-      method: HttpMethod.post,
-      onSuccessString: (str) {
-        res = str;
-      },
-      withSession: true,
-      body: {},
-    );
-    return res;
-  }
+  //   await Api.makeRequest(
+  //     dest: '/lotte/save',
+  //     method: HttpMethod.post,
+  //     onSuccessString: (str) {
+  //       res = str;
+  //     },
+  //     withSession: true,
+  //     body: {},
+  //   );
+  //   return res;
+  // }
 
   /// 兌換禮物API
   ///
@@ -337,7 +354,6 @@ class Repository extends Api {
       withSession: true,
       body: {'contentgid': gid},
     );
-    return;
   }
 
   /// 取得更衣室的所有衣服API
@@ -440,7 +456,6 @@ class Repository extends Api {
       withSession: true,
       body: {},
     );
-    return;
   }
 
   /// 取得贊助商web document API
