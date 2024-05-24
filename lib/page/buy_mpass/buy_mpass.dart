@@ -98,7 +98,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                   '月票 Pass',
                   style: TextStyle(fontSize: 17),
                 ),
-              ),  
+              ),
               const SizedBox(height: 45),
               IntrinsicWidth(
                 child: Row(
