@@ -143,8 +143,8 @@ class AppSettingsViewModel extends BaseViewModel {
     var storeStyle =
         GameCabTileStyle.fromInt(PrefsToken.storeGameCabTileStyle.defaultValue);
 
-    var pinnedStyle =
-        GameCabTileStyle.fromInt(PrefsToken.storeGameCabTileStyle.defaultValue);
+    var pinnedStyle = GameCabTileStyle.fromInt(
+        PrefsToken.pinnedGameCabTileStyle.defaultValue);
 
     final rawStoreStyle = await Prefs.getInt(PrefsToken.storeGameCabTileStyle);
     final rawPinnedStyle =

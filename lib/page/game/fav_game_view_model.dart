@@ -67,8 +67,6 @@ class FavGameViewModel extends BaseViewModel {
   @visibleForTesting
   Future<GameList> getFavGame() async {
     try {
-      showLoading();
-
       _buildStoreNameMap();
       _fetchedGameList = await repository.favGameList();
       initFavMachines(_fetchedGameList);
@@ -96,9 +94,12 @@ class FavGameViewModel extends BaseViewModel {
   }
 
   Future<void> init() async {
+    showLoading();
     _storeModel = await getStoreData();
     _favGameList = await getFavGame();
     _tileStyle = await getTileStyle();
+
+    print(_tileStyle);
     notifyListeners();
   }
 
