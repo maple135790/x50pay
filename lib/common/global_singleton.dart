@@ -131,7 +131,7 @@ class GlobalSingleton {
           doorpwd: "本期門禁密碼爲 : 1743#",
           vip: false,
           phoneactive: true,
-          vipdate: UserModel.setVipDate(641865600000),
+          vipdate: UserModel.setVipDate(DateTime.timestamp().toIso8601String()),
           fpoint: 0,
           givebool: 0,
           name: "testUser",

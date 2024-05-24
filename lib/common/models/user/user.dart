@@ -46,8 +46,8 @@ class UserModel {
       this.tphone,
       this.doorpwd});
 
-  static VipDate setVipDate(int millisecondsSinceEpoch) =>
-      VipDate(date: millisecondsSinceEpoch);
+  static VipDate setVipDate(String unixTimestamp) =>
+      VipDate(rawDate: unixTimestamp);
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
@@ -101,9 +101,9 @@ class UserModel {
 @JsonSerializable()
 class VipDate {
   @JsonKey(name: "\$date")
-  final int date;
+  final String rawDate;
 
-  const VipDate({required this.date});
+  const VipDate({required this.rawDate});
 
   factory VipDate.fromJson(Map<String, dynamic> json) =>
       _$VipDateFromJson(json);

@@ -11,8 +11,8 @@ class TicketInfo extends StatelessWidget {
   /// 包含券量、月票、月票期限
   const TicketInfo({super.key});
 
-  String vipExpDate(int expDate) {
-    final date = DateTime.fromMillisecondsSinceEpoch(expDate);
+  String vipExpDate(String expDate) {
+    final date = DateTime.parse(expDate);
     return '${date.month}/${date.day} ${date.hour}:${date.minute}';
   }
 
@@ -118,7 +118,7 @@ class TicketInfo extends StatelessWidget {
                                   const WidgetSpan(child: SizedBox(width: 5)),
                                   TextSpan(
                                       text: user.vip!
-                                          ? vipExpDate(user.vipdate!.date)
+                                          ? vipExpDate(user.vipdate!.rawDate)
                                           : i18n.vipExpiredMsg)
                                 ])),
                               ],

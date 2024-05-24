@@ -49,9 +49,9 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
     };
 
 VipDate _$VipDateFromJson(Map<String, dynamic> json) => VipDate(
-      date: (json[r'$date'] as num).toInt(),
+      rawDate: json[r'$date'] as String,
     );
 
 Map<String, dynamic> _$VipDateToJson(VipDate instance) => <String, dynamic>{
-      r'$date': instance.date,
+      r'$date': instance.rawDate,
     };
