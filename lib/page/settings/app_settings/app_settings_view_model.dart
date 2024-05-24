@@ -40,6 +40,7 @@ class AppSettingsViewModel extends BaseViewModel {
     'lynx', // pixel 7a
     'shiba', // pixel 8
     'husky', // pixel 8 pro
+    'akita', // pixel 8a
   ];
 
   bool get isSupportCE => _isSupportCE;
