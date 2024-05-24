@@ -72,7 +72,10 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
   }
 
   Widget handleMariImageError(
-      BuildContext context, Object error, StackTrace? st) {
+    BuildContext context,
+    Object error,
+    StackTrace? st,
+  ) {
     log("", error: error, stackTrace: st);
     return const Tooltip(
       message: "資料錯誤",

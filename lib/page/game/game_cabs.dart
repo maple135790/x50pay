@@ -413,7 +413,6 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
             height: 0,
             indent: 12,
             endIndent: 12,
-            color: Color(0xff3e3e3e),
           ),
         ),
         gameCabs,

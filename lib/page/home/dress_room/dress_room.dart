@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_view_model.dart';
@@ -59,15 +60,30 @@ class _DressRoomState extends BaseStatefulState<DressRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return PageDialog.ios(
-        title: i18n.dressRoomTitle,
-        onConfirm: selectedAvater != null ? onConfirm : null,
-        content: (showButtonBar) {
-          return FutureBuilder(
+    return ChangeNotifierProvider.value(
+      value: viewModel,
+      builder: (context, child) {
+        return PageDialog.ios(
+          title: i18n.dressRoomTitle,
+          onConfirm: selectedAvater != null ? onConfirm : null,
+          content: (showButtonBar) {
+            return FutureBuilder(
               future: initDressRoom,
               builder: (context, snapshot) {
                 if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircularProgressIndicator(),
+                        Selector<DressRoomViewModel, String>(
+                          selector: (context, vm) => vm.loadingStatus,
+                          builder: (context, status, child) => Text(status),
+                        ),
+                      ],
+                    ),
+                  );
                 }
                 final avatars = snapshot.data!;
                 showButtonBar(true);
@@ -80,10 +96,11 @@ class _DressRoomState extends BaseStatefulState<DressRoom> {
                       itemCount: avatars.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 106 / 150,
-                              crossAxisSpacing: 18,
-                              mainAxisSpacing: 12),
+                        crossAxisCount: 3,
+                        childAspectRatio: 106 / 150,
+                        crossAxisSpacing: 18,
+                        mainAxisSpacing: 12,
+                      ),
                       itemBuilder: (context, index) {
                         final avatar = avatars[index];
                         final selected = selectedAvater != null &&
@@ -117,8 +134,12 @@ class _DressRoomState extends BaseStatefulState<DressRoom> {
                     ),
                   ),
                 );
-              });
-        });
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   Positioned checkMark() {
