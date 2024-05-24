@@ -82,20 +82,23 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        color: scaffoldBackgroundColor,
+    return Container(
+      color: scaffoldBackgroundColor,
+      child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(25),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Icon(Icons.calendar_today_rounded, size: 51),
               const SizedBox(height: 5),
               const Align(
-                  alignment: Alignment.center,
-                  child: Text('月票 Pass', style: TextStyle(fontSize: 17))),
+                alignment: Alignment.center,
+                child: Text(
+                  '月票 Pass',
+                  style: TextStyle(fontSize: 17),
+                ),
+              ),  
               const SizedBox(height: 45),
               IntrinsicWidth(
                 child: Row(
@@ -104,17 +107,24 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: iconColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: currentState.step > 1
-                                ? Icon(Icons.check_rounded,
-                                    size: 20, color: scaffoldBackgroundColor)
-                                : Icon(Icons.format_list_bulleted_rounded,
-                                    size: 20, color: scaffoldBackgroundColor)),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: iconColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: currentState.step > 1
+                              ? Icon(
+                                  Icons.check_rounded,
+                                  size: 20,
+                                  color: scaffoldBackgroundColor,
+                                )
+                              : Icon(
+                                  Icons.format_list_bulleted_rounded,
+                                  size: 20,
+                                  color: scaffoldBackgroundColor,
+                                ),
+                        ),
                         const SizedBox(width: 5),
                         const Text('讀條款'),
                         const SizedBox(width: 5),

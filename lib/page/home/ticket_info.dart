@@ -37,7 +37,7 @@ class TicketInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final i18n = S.of(context);
 
     return ValueListenableBuilder(
@@ -45,38 +45,51 @@ class TicketInfo extends StatelessWidget {
         builder: (context, user, child) {
           user = user!;
 
+          late final String vipMessage;
+          late final String vipStatus;
+          if (user.vip!) {
+            vipMessage = vipExpDate(user.vipdate!.rawDate);
+            vipStatus = i18n.mpassValid;
+          } else {
+            vipMessage = i18n.vipExpiredMsg;
+            vipStatus = i18n.mpassInvalid;
+          }
+
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
             child: Stack(children: [
               Positioned(
-                  bottom: -35,
-                  right: -20,
-                  child: Icon(
-                    Icons.east_rounded,
-                    size: 120,
-                    color: getIconColor(isDarkTheme),
-                  )),
+                bottom: -35,
+                right: -20,
+                child: Icon(
+                  Icons.east_rounded,
+                  size: 120,
+                  color: getIconColor(isDarkTheme),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: isDarkTheme
-                          ? CustomColorThemes.borderColorDark
-                          : CustomColorThemes.borderColorLight,
-                    )),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: isDarkTheme
+                        ? CustomColorThemes.borderColorDark
+                        : CustomColorThemes.borderColorLight,
+                  ),
+                ),
                 child: IntrinsicHeight(
                   child: Row(
                     children: [
                       GestureDetector(
-                          onTap: () {
-                            onMPassPressed(GoRouter.of(context));
-                          },
-                          child: Icon(
-                            Icons.confirmation_number_rounded,
-                            color: const Color(0xff237804).withOpacity(0.7),
-                            size: 50,
-                          )),
+                        onTap: () {
+                          onMPassPressed(GoRouter.of(context));
+                        },
+                        child: Icon(
+                          Icons.confirmation_number_rounded,
+                          color: const Color(0xff237804).withOpacity(0.7),
+                          size: 50,
+                        ),
+                      ),
                       const SizedBox(width: 16),
                       VerticalDivider(
                         thickness: 1,
@@ -96,31 +109,41 @@ class TicketInfo extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text.rich(TextSpan(children: [
-                                  TextSpan(text: i18n.ticketBalance),
-                                  const WidgetSpan(child: SizedBox(width: 5)),
-                                  TextSpan(text: user.ticketint!.toString()),
-                                  TextSpan(text: i18n.ticketUnit),
-                                ])),
-                                const SizedBox(height: 5),
-                                Text.rich(TextSpan(children: [
-                                  TextSpan(text: i18n.monthlyPass),
-                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                Text.rich(
                                   TextSpan(
-                                    text: user.vip!
-                                        ? i18n.mpassValid
-                                        : i18n.mpassInvalid,
-                                  )
-                                ])),
+                                    children: [
+                                      TextSpan(text: i18n.ticketBalance),
+                                      const WidgetSpan(
+                                        child: SizedBox(width: 5),
+                                      ),
+                                      TextSpan(
+                                          text: user.ticketint!.toString()),
+                                      TextSpan(text: i18n.ticketUnit),
+                                    ],
+                                  ),
+                                ),
                                 const SizedBox(height: 5),
-                                Text.rich(TextSpan(children: [
-                                  TextSpan(text: i18n.vipDate),
-                                  const WidgetSpan(child: SizedBox(width: 5)),
+                                Text.rich(
                                   TextSpan(
-                                      text: user.vip!
-                                          ? vipExpDate(user.vipdate!.rawDate)
-                                          : i18n.vipExpiredMsg)
-                                ])),
+                                    children: [
+                                      TextSpan(text: i18n.monthlyPass),
+                                      const WidgetSpan(
+                                          child: SizedBox(width: 5)),
+                                      TextSpan(text: vipStatus),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(text: i18n.vipDate),
+                                      const WidgetSpan(
+                                          child: SizedBox(width: 5)),
+                                      TextSpan(text: vipMessage),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
