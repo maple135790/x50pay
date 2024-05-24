@@ -185,10 +185,10 @@ class SettingsViewModel extends BaseViewModel {
     return (model: paymentSettingModel, cards: <String>[]);
   }
 
-  Future<List<String>> getQuicPayCards() async {
-    final document = await settingRepo.getQuicDocument();
-    return [];
-  }
+  // Future<List<String>> getQuicPayCards() async {
+  //   final document = await settingRepo.getQuicDocument();
+  //   return [];
+  // }
 
   /// 取得快速付款偏好設定
   Future<PaymentSettingsModel> getPaymentSettings({
