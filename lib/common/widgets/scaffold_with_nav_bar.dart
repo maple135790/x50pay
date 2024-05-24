@@ -67,21 +67,22 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('確認離開 ?'),
+          title: Text(i18n.confirmExitAppTitle),
+          content: Text(i18n.confirmExitAppContent),
           actions: [
             TextButton(
               style: CustomButtonThemes.severe(isV4: true),
               onPressed: () {
                 SystemNavigator.pop();
               },
-              child: const Text('是'),
+              child: Text(i18n.dialogConfirm),
             ),
             TextButton(
               style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
               onPressed: () {
                 Navigator.pop(context, false);
               },
-              child: const Text('否'),
+              child: Text(i18n.dialogCancel),
             ),
           ],
         );
@@ -124,40 +125,55 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: selectedIndex == 2,
-      onPopInvoked: (didPop) {
-        if (selectedIndex != 2) {
+    return BackButtonListener(
+      onBackButtonPressed: () async {
+        final currentLocation = GoRouterState.of(context).topRoute?.name;
+        if (currentLocation != AppRoutes.home.routeName) {
           context.goNamed(AppRoutes.home.routeName);
           setState(() {});
         } else {
           confirmPopup();
         }
+        // 攔截所有返回事件
+        return true;
       },
-      child: Scaffold(
-        appBar: _LoadedAppBar(selectedIndex),
-        body: widget.body,
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(width: 1, color: borderColor),
+      // TODO: 等待GoRouter 修復PopScope issue (flutter #138737)
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (selectedIndex != 2) {
+            context.goNamed(AppRoutes.home.routeName);
+            setState(() {});
+          } else {
+            confirmPopup();
+          }
+        },
+        child: Scaffold(
+          appBar: _LoadedAppBar(selectedIndex),
+          body: widget.body,
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(width: 1, color: borderColor),
+              ),
             ),
-          ),
-          child: NavigationBar(
-            selectedIndex: selectedIndex,
-            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-            onDestinationSelected: (index) async {
-              selectedIndex = index;
-              context.goNamed(_menus[index].route.routeName);
-              setState(() {});
-            },
-            destinations: _menus
-                .map((menu) => NavigationDestination(
-                      icon: Icon(menu.icon),
-                      label: menu.label,
-                      selectedIcon: Icon(menu.icon),
-                    ))
-                .toList(),
+            child: NavigationBar(
+              selectedIndex: selectedIndex,
+              labelBehavior:
+                  NavigationDestinationLabelBehavior.onlyShowSelected,
+              onDestinationSelected: (index) async {
+                selectedIndex = index;
+                context.goNamed(_menus[index].route.routeName);
+                setState(() {});
+              },
+              destinations: _menus
+                  .map((menu) => NavigationDestination(
+                        icon: Icon(menu.icon),
+                        label: menu.label,
+                        selectedIcon: Icon(menu.icon),
+                      ))
+                  .toList(),
+            ),
           ),
         ),
       ),

@@ -49,6 +49,8 @@
   "addFavGameTitle": "立即釘選機臺",
   "changeFavGameSubtitle": "重新選擇釘選的機臺",
   "changeFavGameTitle": "重新釘選機臺",
+  "confirmExitAppContent": "確定要離開 X50Pay 嗎?",
+  "confirmExitAppTitle": "結束X50Pay",
   "continuous": " 已簽到 : {day} 天",
   "dialogCancel": "取消",
   "dialogConfirm": "確定",

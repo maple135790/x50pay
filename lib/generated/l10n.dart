@@ -90,6 +90,26 @@ class S {
     );
   }
 
+  /// `確定要離開 X50Pay 嗎?`
+  String get confirmExitAppContent {
+    return Intl.message(
+      '確定要離開 X50Pay 嗎?',
+      name: 'confirmExitAppContent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `結束X50Pay`
+  String get confirmExitAppTitle {
+    return Intl.message(
+      '結束X50Pay',
+      name: 'confirmExitAppTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// ` 已簽到 : {day} 天`
   String continuous(String day) {
     return Intl.message(

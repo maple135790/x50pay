@@ -41,6 +41,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "changeFavGameSubtitle":
             MessageLookupByLibrary.simpleMessage("重新選擇釘選的機臺"),
         "changeFavGameTitle": MessageLookupByLibrary.simpleMessage("重新釘選機臺"),
+        "confirmExitAppContent":
+            MessageLookupByLibrary.simpleMessage("確定要離開 X50Pay 嗎?"),
+        "confirmExitAppTitle": MessageLookupByLibrary.simpleMessage("結束X50Pay"),
         "continuous": m0,
         "dialogCancel": MessageLookupByLibrary.simpleMessage("取消"),
         "dialogConfirm": MessageLookupByLibrary.simpleMessage("確定"),

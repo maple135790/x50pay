@@ -44,6 +44,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "Change the machines you play most often"),
         "changeFavGameTitle":
             MessageLookupByLibrary.simpleMessage("Change Favorite Game"),
+        "confirmExitAppContent":
+            MessageLookupByLibrary.simpleMessage("Do you want to exit X50Pay?"),
+        "confirmExitAppTitle":
+            MessageLookupByLibrary.simpleMessage("Closing X50Pay"),
         "continuous": m0,
         "dialogCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "dialogConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),

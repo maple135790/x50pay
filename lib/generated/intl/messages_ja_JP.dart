@@ -42,6 +42,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("よく遊ぶゲームを変更します"),
         "changeFavGameTitle":
             MessageLookupByLibrary.simpleMessage("お気に入りのゲームを変更"),
+        "confirmExitAppContent":
+            MessageLookupByLibrary.simpleMessage("アプリを終了します\nよろしいですか？"),
+        "confirmExitAppTitle":
+            MessageLookupByLibrary.simpleMessage("X50Pay アプリ終了"),
         "continuous": m0,
         "dialogCancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
         "dialogConfirm": MessageLookupByLibrary.simpleMessage("OK"),

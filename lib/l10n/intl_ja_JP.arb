@@ -50,6 +50,8 @@
   "addFavGameTitle": "お気に入りのゲームを登録",
   "changeFavGameSubtitle": "よく遊ぶゲームを変更します",
   "changeFavGameTitle": "お気に入りのゲームを変更",
+  "confirmExitAppContent": "アプリを終了します\nよろしいですか？",
+  "confirmExitAppTitle": "X50Pay アプリ終了",
   "continuous": " ログイン日数 :  {day} 日",
   "dialogCancel": "キャンセル",
   "dialogConfirm": "OK",
