@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
 import 'package:x50pay/common/models/free_p/free_p.dart';
-import 'package:x50pay/common/models/padSettings/pad_settings.dart';
 import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
@@ -63,11 +62,6 @@ void main() {
           """{"nfcAuto": true, "nfcTicket": true, "nfcTwo": "0", "nfcSDVX": "0", "nfcNVSV": "0", "nfcQuic": true, "aGV": false, "nfcQlock": 15, "mtpMode": 0}""";
       return PaymentSettingsModel.fromJson(json.decode(rawResponse));
     });
-    when(mockRepo.getPadSettings).thenAnswer((_) async {
-      const rawResponse =
-          """{"shid": false, "shcolor": "#abb3ff", "shname": "SABA.KEN"}""";
-      return PadSettingsModel.fromJson(json.decode(rawResponse));
-    });
   });
   final viewModel = SettingsViewModel(settingRepo: mockRepo);
 
@@ -112,10 +106,5 @@ void main() {
       final ticUsedLog = await viewModel.getTicUsedLog();
       expect(ticUsedLog, isNotNull);
     });
-  });
-
-  test('測試取得排隊平板設定', () async {
-    final quickPay = await viewModel.getPadSettings();
-    expect(quickPay, isNotNull);
   });
 }

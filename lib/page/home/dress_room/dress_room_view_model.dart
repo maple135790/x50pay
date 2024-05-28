@@ -18,7 +18,6 @@ class DressRoomViewModel extends BaseViewModel {
 
   set loadingStatus(String value) {
     _loadingStatus = value;
-    print('set!');
     notifyListeners();
   }
 

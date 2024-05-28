@@ -99,7 +99,6 @@ class FavGameViewModel extends BaseViewModel {
     _favGameList = await getFavGame();
     _tileStyle = await getTileStyle();
 
-    print(_tileStyle);
     notifyListeners();
   }
 

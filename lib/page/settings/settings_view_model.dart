@@ -8,7 +8,6 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
 import 'package:x50pay/common/models/free_p/free_p.dart';
-import 'package:x50pay/common/models/padSettings/pad_settings.dart';
 import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
@@ -102,38 +101,6 @@ class SettingsViewModel extends BaseViewModel {
     }
   }
 
-  /// 設定排隊平板偏好
-  Future<bool> setPadSettings({
-    required bool isNicknameShown,
-    required String showColor,
-    required String nickname,
-  }) async {
-    log('$isNicknameShown, $showColor, $nickname', name: 'setPadSettings');
-
-    await EasyLoading.show();
-    await Future.delayed(const Duration(milliseconds: 200));
-    late http.Response httpResponse;
-
-    try {
-      if (!kDebugMode || isForceFetch) {
-        httpResponse = await settingRepo.setPadSettings(
-          shname: nickname,
-          shid: isNicknameShown,
-          shcolor: showColor,
-        );
-      } else {
-        httpResponse = http.Response(testResponse(), 200);
-      }
-      await EasyLoading.dismiss();
-
-      return httpResponse.statusCode == 200;
-    } on Exception catch (e) {
-      log('', name: 'setPadSettings error', error: e);
-      await EasyLoading.dismiss();
-      return false;
-    }
-  }
-
   /// 回傳快速付款偏好設定
   Future<bool> confirmQuickPay({
     required bool autoPay,
@@ -185,10 +152,10 @@ class SettingsViewModel extends BaseViewModel {
     return (model: paymentSettingModel, cards: <String>[]);
   }
 
-  Future<List<String>> getQuicPayCards() async {
-    final document = await settingRepo.getQuicDocument();
-    return [];
-  }
+  // Future<List<String>> getQuicPayCards() async {
+  //   final document = await settingRepo.getQuicDocument();
+  //   return [];
+  // }
 
   /// 取得快速付款偏好設定
   Future<PaymentSettingsModel> getPaymentSettings({
@@ -202,23 +169,6 @@ class SettingsViewModel extends BaseViewModel {
       return paymentSettingModel;
     } catch (e, stacktrace) {
       log('', name: 'getQuicSettings', error: e, stackTrace: stacktrace);
-      rethrow;
-    } finally {
-      dismissLoading();
-    }
-  }
-
-  /// 取得排隊平板設定
-  Future<PadSettingsModel> getPadSettings() async {
-    showLoading();
-    await Future.delayed(const Duration(milliseconds: 200));
-    late final PadSettingsModel padSettingsModel;
-    try {
-      padSettingsModel = await settingRepo.getPadSettings();
-
-      return padSettingsModel;
-    } catch (e) {
-      log('', name: 'getPadSettings', error: e);
       rethrow;
     } finally {
       dismissLoading();

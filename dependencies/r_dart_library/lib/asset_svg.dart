@@ -62,9 +62,9 @@ class AssetSvg extends ImageProvider<AssetSvg> {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    final AssetSvg typedOther = other;
+    final typedOther = other as AssetSvg;
     return asset == typedOther.asset &&
         width == typedOther.width &&
         height == typedOther.height;

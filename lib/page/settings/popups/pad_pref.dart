@@ -1,13 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/models/padSettings/pad_settings.dart';
 import 'package:x50pay/mixins/color_picker_mixin.dart';
+import 'package:x50pay/page/settings/popups/pad_pref_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
-import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/repository/setting_repository.dart';
 
 class PadPrefDialog extends StatefulWidget {
   const PadPrefDialog({super.key});
@@ -17,66 +15,79 @@ class PadPrefDialog extends StatefulWidget {
 }
 
 class _PadPrefDialogState extends BaseStatefulState<PadPrefDialog> {
-  bool gotModel = false;
-  _PadPrefModalValue? modalValue;
+  final settingRepo = SettingRepository();
+  late final Future<void> getPadPrefs;
+  late final PadPrefsViewModel viewModel;
 
-  void savePadPref(SettingsViewModel viewModel) {
-    if (gotModel == false || modalValue == null) return;
+  void showNicknameNotSetSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Theme.of(context).colorScheme.errorContainer,
+        closeIconColor: Theme.of(context).colorScheme.error,
+        content: const Text('暱稱未設定'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void showNicknameHasSetSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        closeIconColor: Theme.of(context).colorScheme.primary,
+        content: const Text('暱稱已設定'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void savePadPref() {
     viewModel.setPadSettings(
-      isNicknameShown: modalValue!.isNameShown,
-      nickname: modalValue!.nickname,
-      showColor: "#${modalValue!.showColor}",
+      onNotSet: showNicknameNotSetSnackbar,
+      onSet: showNicknameHasSetSnackbar,
     );
   }
 
   @override
+  void initState() {
+    super.initState();
+    viewModel = PadPrefsViewModel(settingRepo);
+    getPadPrefs = viewModel.getPadSettings();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<SettingsViewModel>(builder: (context, viewModel, child) {
-      final getPadSettings = viewModel.getPadSettings();
+    return PageDialog.ios(
+      title: 'X50Pad 西門排隊平板偏好選項',
+      onConfirm: savePadPref,
+      content: (showButtonBar) => FutureBuilder(
+        future: getPadPrefs,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const SizedBox();
+          }
+          if (snapshot.hasError) {
+            return const Center(child: Text('failed'));
+          } else {
+            showButtonBar(true);
 
-      return PageDialog.ios(
-        title: 'X50Pad 西門排隊平板偏好選項',
-        onConfirm: () {
-          savePadPref(viewModel);
+            return ChangeNotifierProvider.value(
+              value: viewModel,
+              builder: (context, child) => const _PadPrefLoaded(),
+            );
+          }
         },
-        content: (showButtonBar) => FutureBuilder(
-          future: getPadSettings,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const SizedBox();
-            }
-            if (snapshot.hasError) {
-              return const Center(child: Text('failed'));
-            } else {
-              showButtonBar(true);
-
-              gotModel = true;
-              final model = snapshot.data!;
-              return _PadPrefLoaded(
-                model: model,
-                getValues: (value) {
-                  modalValue = value;
-                },
-              );
-            }
-          },
-        ),
-      );
-    });
+      ),
+    );
   }
 }
 
-typedef _PadPrefModalValue = ({
-  String nickname,
-  String showColor,
-  bool isNameShown
-});
-
 class _PadPrefLoaded extends StatefulWidget {
-  final PadSettingsModel model;
-  final void Function(_PadPrefModalValue value) getValues;
-
-  const _PadPrefLoaded({required this.model, required this.getValues});
+  const _PadPrefLoaded();
 
   @override
   State<_PadPrefLoaded> createState() => __PadPrefLoadedState();
@@ -84,101 +95,54 @@ class _PadPrefLoaded extends StatefulWidget {
 
 class __PadPrefLoadedState extends BaseStatefulState<_PadPrefLoaded>
     with ColorPickerMixin {
-  late String nickname;
-  late bool isNameShown;
   Color? showColor;
 
   void changeNicknamePage() async {
-    final nameController = TextEditingController(text: nickname);
+    final viewModel = context.read<PadPrefsViewModel>();
+    final nickname = viewModel.nickname;
 
-    final newNickname =
-        await Navigator.of(context).push<String?>(CupertinoPageRoute(
-      builder: (context) => PopScope(
-        canPop: true,
-        onPopInvoked: (didPop) {
-          nameController.dispose();
+    final newNickname = await Navigator.of(context).push<String?>(
+      CupertinoPageRoute(
+        builder: (context) {
+          return _ChangeNicknameDialog(nickname: nickname);
         },
-        child: PageDialog.ios(
-          title: '平板上顯示不同暱稱',
-          onConfirm: () {
-            Navigator.of(context)
-                .pop(nameController.text.isEmpty ? null : nameController.text);
-          },
-          content: (showButtonBar) {
-            showButtonBar(true);
-
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-              child: Column(
-                children: [
-                  CupertinoTextField(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 20),
-                    decoration: BoxDecoration(
-                      color: const Color(0xff1c1c1e),
-                      borderRadius: BorderRadius.circular(11),
-                    ),
-                    placeholder: nickname,
-                    controller: nameController,
-                    autofocus: true,
-                    style: const TextStyle(
-                        color: CupertinoColors.white,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            );
-          },
-        ),
       ),
-    ));
+    );
     if (newNickname == null) return;
-    nickname = newNickname;
-    log(nickname, name: 'changeNicknamePage nickname');
-    setState(() {});
-    return;
-  }
-
-  void updateValue() {
-    widget.getValues.call((
-      nickname: nickname,
-      isNameShown: isNameShown,
-      showColor: showColor!.value.toRadixString(16).substring(2),
-    ));
+    viewModel.onNicknameChanged(newNickname);
   }
 
   @override
   void onColorChanged(Color color) {
-    showColor = color;
-    setState(() {});
+    context.read<PadPrefsViewModel>().onShowColorChanged(color);
   }
 
   @override
-  Color pickerColor() => showColor ?? Colors.black;
+  Color pickerColor() => showColor ?? Colors.transparent;
 
   @override
   void initState() {
     super.initState();
-    nickname = widget.model.shname;
-    isNameShown = widget.model.shid;
-    showColor ??= _HexColor(widget.model.shcolor);
+    final viewModel = context.read<PadPrefsViewModel>();
+
+    showColor ??= viewModel.showColor;
   }
 
   @override
   Widget build(BuildContext context) {
-    updateValue();
+    final viewModel = context.read<PadPrefsViewModel>();
     return Column(
       children: [
         CupertinoListSection.insetGrouped(
           children: [
-            DialogSwitch.ios(
-              value: isNameShown,
-              title: '不顯示暱稱',
-              onChanged: (value) {
-                isNameShown = value;
-                setState(() {});
-                updateValue();
+            Selector<PadPrefsViewModel, bool>(
+              selector: (context, viewModel) => viewModel.isNameHidden,
+              builder: (context, isNameHidden, child) {
+                return DialogSwitch.ios(
+                  value: isNameHidden,
+                  title: '不顯示暱稱',
+                  onChanged: viewModel.onIsNameShownChanged,
+                );
               },
             ),
           ],
@@ -191,14 +155,20 @@ class __PadPrefLoadedState extends BaseStatefulState<_PadPrefLoaded>
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: showColor,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: borderColor, width: 1),
-                      )),
+                  Selector<PadPrefsViewModel, Color>(
+                    selector: (context, vm) => vm.showColor,
+                    builder: (context, showColor, child) {
+                      return Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: showColor,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: borderColor, width: 1),
+                        ),
+                      );
+                    },
+                  ),
                   const SizedBox(width: 10),
                   const CupertinoListTileChevron(),
                 ],
@@ -212,14 +182,19 @@ class __PadPrefLoadedState extends BaseStatefulState<_PadPrefLoaded>
                 children: [
                   LimitedBox(
                     maxWidth: 120,
-                    child: Text(nickname,
+                    child: Selector<PadPrefsViewModel, String>(
+                      selector: (context, vm) => vm.nickname,
+                      builder: (context, nickname, child) => Text(
+                        nickname,
                         overflow: TextOverflow.fade,
                         softWrap: false,
                         maxLines: 1,
                         style: const TextStyle(
                           color: CupertinoColors.systemGrey,
                           fontWeight: FontWeight.w500,
-                        )),
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   const CupertinoListTileChevron(),
@@ -233,13 +208,66 @@ class __PadPrefLoadedState extends BaseStatefulState<_PadPrefLoaded>
   }
 }
 
-class _HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll("#", "");
-    if (hexColor.length == 6) hexColor = "FF$hexColor";
+class _ChangeNicknameDialog extends StatefulWidget {
+  final String nickname;
+  const _ChangeNicknameDialog({required this.nickname});
 
-    return int.parse(hexColor, radix: 16);
+  @override
+  State<_ChangeNicknameDialog> createState() => _ChangeNicknameDialogState();
+}
+
+class _ChangeNicknameDialogState extends State<_ChangeNicknameDialog> {
+  late final TextEditingController nameController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.nickname);
   }
 
-  _HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageDialog.ios(
+      title: '平板上顯示不同暱稱',
+      onConfirm: () {
+        Navigator.of(context).pop(
+          nameController.text.isEmpty ? null : nameController.text,
+        );
+      },
+      content: (showButtonBar) {
+        showButtonBar(true);
+
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+          child: Column(
+            children: [
+              CupertinoTextField(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xff1c1c1e),
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                placeholder: widget.nickname,
+                controller: nameController,
+                autofocus: true,
+                style: const TextStyle(
+                  color: CupertinoColors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
