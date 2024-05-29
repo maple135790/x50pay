@@ -9,7 +9,7 @@ class PadPrefsViewModel extends BaseViewModel {
   final SettingRepository settingRepo;
 
   PadPrefsViewModel(this.settingRepo);
-  
+
   static const defaultColor = Colors.black;
 
   String _nickname = '';

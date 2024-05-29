@@ -504,28 +504,30 @@ class _MpassPurchaseDialogState
 
   void confirmSubmit() {
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text('購買確認'),
-              content: const Text('未填完全部的欄位？真的要送出嗎？沒填滿四人是你的損失喔!!!'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('關閉'),
-                ),
-                TextButton(
-                  onPressed: doBuyVip,
-                  child: const Text('送出'),
-                ),
-              ],
-            ));
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('購買確認'),
+        content: const Text('未填完全部的欄位？真的要送出嗎？沒填滿四人是你的損失喔!!!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('關閉'),
+          ),
+          TextButton(
+            onPressed: doBuyVip,
+            child: const Text('送出'),
+          ),
+        ],
+      ),
+    );
   }
 
   void doBuyVip() async {
     final repo = Repository();
-    final nav = GoRouter.of(context);
+    final nav = Navigator.of(context);
+    final router = GoRouter.of(context);
 
     switch (widget.program) {
       case _MpassProgram.loner:
@@ -560,11 +562,9 @@ class _MpassPurchaseDialogState
         }
         break;
     }
-    await Future.delayed(const Duration(seconds: 2)).then((_) {
-      nav
-        ..pop()
-        ..goNamed(AppRoutes.home.routeName);
-    });
+    await Future.delayed(const Duration(seconds: 2));
+    nav.pop();
+    router.goNamed(AppRoutes.home.routeName);
   }
 
   void parseResponse(http.Response response) {
