@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
+import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
-import 'package:x50pay/r.g.dart';
 
 class PersistentAppBar extends StatefulWidget {
   const PersistentAppBar({super.key});
@@ -71,15 +71,16 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
         Container(
           height: 50,
           decoration: BoxDecoration(
-              color: scaffoldBackgroundColor,
-              border: Border(
-                bottom: BorderSide(
-                  color: isDarkTheme
-                      ? CustomColorThemes.borderColorDark
-                      : CustomColorThemes.borderColorLight,
-                  width: 1,
-                ),
-              )),
+            color: scaffoldBackgroundColor,
+            border: Border(
+              bottom: BorderSide(
+                color: isDarkTheme
+                    ? CustomColorThemes.borderColorDark
+                    : CustomColorThemes.borderColorLight,
+                width: 1,
+              ),
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Row(
@@ -88,7 +89,7 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
                 const Spacer(),
                 Center(
                   child: CircleAvatar(
-                    backgroundImage: R.image.header_icon_rsz(),
+                    backgroundImage: R.images.common.headerIconRsz.provider(),
                     backgroundColor: Colors.black,
                     radius: 14,
                   ),
@@ -105,31 +106,32 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 6.75,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isDarkTheme
-                                    ? CustomColorThemes.appbarBoxColorDark
-                                    : CustomColorThemes.appbarBoxColorLight,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CountryFlag.fromCountryCode(
-                                    vm.currentLocale.countryCode ?? '',
-                                    height: 15,
-                                    width: 15,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    vm.currentLocale.displayText,
-                                    textScaler: const TextScaler.linear(0.85),
-                                  ),
-                                ],
-                              )),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 15,
+                              vertical: 6.75,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isDarkTheme
+                                  ? CustomColorThemes.appbarBoxColorDark
+                                  : CustomColorThemes.appbarBoxColorLight,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CountryFlag.fromCountryCode(
+                                  vm.currentLocale.countryCode ?? '',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  vm.currentLocale.displayText,
+                                  textScaler: const TextScaler.linear(0.85),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),

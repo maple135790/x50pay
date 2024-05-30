@@ -122,6 +122,101 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
 
   @override
   Widget build(BuildContext context) {
+    final selectPayment = SizedBox(
+      width: 400,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 150,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: CachedNetworkImage(
+                    imageUrl: gameCabImage,
+                    alignment: const Alignment(0, -0.25),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+                Positioned.fill(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        colors: [Colors.black, Colors.transparent],
+                        transform: GradientRotation(12),
+                        stops: [0, 0.6],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xffdcdcdc),
+                      ),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        size: 14,
+                        color: Color(0xff2a2a2a),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          cabLabel,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            shadows: [
+                              Shadow(color: Colors.black, blurRadius: 18),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '$cabNum號機',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                shadows: [
+                                  Shadow(color: Colors.black, blurRadius: 15),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 15),
+          _buildPlayMenu()
+        ],
+      ),
+    );
+
     return AlertDialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -129,7 +224,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
       contentPadding: isSelectPayment
           ? const EdgeInsets.only(top: 14)
           : const EdgeInsets.only(bottom: 20),
-      content: isSelectPayment ? confirmPayment() : selectPayment(),
+      content: isSelectPayment ? confirmPayment() : selectPayment,
     );
   }
 
@@ -197,19 +292,20 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
               children: [
                 Expanded(
                   child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-                      child: const Text('取消')),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+                    child: const Text('取消'),
+                  ),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: TextButton(
-                      onPressed: isPayPressed ? null : onPayConfirmPressed,
-                      style: CustomButtonThemes.severe(isV4: true),
-                      child:
-                          isPayPressed ? const Text('請稍等') : const Text('確認')),
+                    onPressed: isPayPressed ? null : onPayConfirmPressed,
+                    style: CustomButtonThemes.severe(isV4: true),
+                    child: isPayPressed ? const Text('請稍等') : const Text('確認'),
+                  ),
                 )
               ],
             ),
@@ -243,89 +339,6 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
       coinProvider.isCoinInserted = true;
       router.pop();
     }
-  }
-
-  SizedBox selectPayment() {
-    return SizedBox(
-      width: 400,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            height: 150,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                    child: CachedNetworkImage(
-                        imageUrl: gameCabImage,
-                        alignment: const Alignment(0, -0.25),
-                        fit: BoxFit.fitWidth)),
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        colors: [Colors.black, Colors.transparent],
-                        transform: GradientRotation(12),
-                        stops: [0, 0.6],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                    top: 8,
-                    right: 8,
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffdcdcdc),
-                          ),
-                          child: const Icon(
-                            Icons.close_rounded,
-                            size: 14,
-                            color: Color(0xff2a2a2a),
-                          ),
-                        ))),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(cabLabel,
-                            style: const TextStyle(fontSize: 18, shadows: [
-                              Shadow(color: Colors.black, blurRadius: 18)
-                            ])),
-                        Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text('$cabNum號機',
-                                  style:
-                                      const TextStyle(fontSize: 16, shadows: [
-                                    Shadow(color: Colors.black, blurRadius: 15)
-                                  ])),
-                            ]),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 15),
-          _buildPlayMenu()
-        ],
-      ),
-    );
   }
 
   Widget _buildPlayMenu() {

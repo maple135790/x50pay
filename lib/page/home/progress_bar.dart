@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:path_drawing/path_drawing.dart';
+import 'package:x50pay/gen/assets.gen.dart';
 import 'package:xml/xml.dart';
 
 typedef ProgressIcon = ({Path iconPath, Size iconSize});
@@ -68,7 +69,8 @@ class _ProgressBarState extends State<ProgressBar>
 
   Future<void> _loadImage() async {
     final doc = XmlDocument.parse(
-        await rootBundle.loadString('assets/images/home/heart-regular.svg'));
+        await rootBundle.loadString(R.images.home.heartRegular));
+
     final svgPath =
         doc.rootElement.getElement('path')!.getAttribute('d')!.toString();
     heartPath = parseSvgPathData(svgPath);

@@ -56,6 +56,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       final rawResponse = await repository.getDocument(_qrPayEntryUrl);
       _rawEntryDocument = const Utf8Decoder().convert(rawResponse.bodyBytes);
     } else {
+      // TODO: 移動至 test 並補上測試用asset
       _rawEntryDocument =
           await rootBundle.loadString('assets/tests/scan_pay.html');
     }
@@ -144,8 +145,13 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       log('jkoPayUrl: $jkoPayUrl', name: 'QRPayViewModel.init');
       log('linePayUrl: $linePayUrl', name: 'QRPayViewModel.init');
       return hasLogined;
-    } catch (e) {
-      log('', error: e, name: 'QRPayViewModel.init');
+    } catch (e, stacktrace) {
+      log(
+        '',
+        error: e,
+        stackTrace: stacktrace,
+        name: 'QRPayViewModel.init',
+      );
       return false;
     }
   }
@@ -239,6 +245,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       if (!kDebugMode || isForceFetch) {
         _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
       } else {
+        // TODO: 移動至 test 並補上測試用asset
         _rawMaybePayDoc =
             await rootBundle.loadString('assets/tests/scan_pay_x50pay.html');
       }
@@ -255,6 +262,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       if (!kDebugMode || isForceFetch) {
         _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
       } else {
+        // TODO: 移動至 test 並補上測試用asset
         _rawMaybePayDoc =
             await rootBundle.loadString('assets/tests/scan_pay_x50pay.html');
       }

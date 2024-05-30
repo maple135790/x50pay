@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/r.g.dart';
+import 'package:x50pay/gen/assets.gen.dart';
 
 class OfficialInfo extends StatelessWidget {
   /// 官方資訊區
@@ -25,7 +25,7 @@ class OfficialInfo extends StatelessWidget {
                   child: Stack(
                     children: [
                       Image(
-                        image: R.image.vts(),
+                        image: R.images.home.vts.provider(),
                         fit: BoxFit.fill,
                       ),
                       Positioned.fill(
@@ -55,7 +55,7 @@ class OfficialInfo extends StatelessWidget {
                   child: Stack(
                     children: [
                       Image(
-                        image: R.image.top(),
+                        image: R.images.home.top.provider(),
                         fit: BoxFit.fill,
                       ),
                       Positioned.fill(

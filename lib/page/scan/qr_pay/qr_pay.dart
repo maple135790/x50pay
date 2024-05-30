@@ -8,9 +8,9 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
+import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
-import 'package:x50pay/r.g.dart';
 
 class QRPayModal extends StatefulWidget {
   final ScrollController scrollController;
@@ -81,13 +81,14 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
             child: Stack(
               children: [
                 Positioned.fill(
-                    child: CachedNetworkImage(
-                  imageUrl: "https://pay.x50.fun/static/logo.jpg",
-                  color: const Color.fromARGB(35, 0, 0, 0),
-                  colorBlendMode: BlendMode.srcATop,
-                  fit: BoxFit.fitWidth,
-                  alignment: const Alignment(0, -0.25),
-                )),
+                  child: CachedNetworkImage(
+                    imageUrl: "https://pay.x50.fun/static/logo.jpg",
+                    color: const Color.fromARGB(35, 0, 0, 0),
+                    colorBlendMode: BlendMode.srcATop,
+                    fit: BoxFit.fitWidth,
+                    alignment: const Alignment(0, -0.25),
+                  ),
+                ),
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(
@@ -104,23 +105,38 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                   bottom: 15,
                   left: 15,
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('選擇付款方式',
-                            style: TextStyle(shadows: [
-                              Shadow(color: Colors.black, blurRadius: 25)
-                            ], fontSize: 17, color: Color(0xe6ffffff))),
-                        SizedBox(height: 5),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(Icons.schedule_rounded,
-                                  size: 12, color: Colors.white),
-                              Text(' 歡迎使用 X50MGS 多元付款平台',
-                                  style: TextStyle(
-                                      fontSize: 13, color: Color(0xe6ffffff)))
-                            ]),
-                      ]),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '選擇付款方式',
+                        style: TextStyle(
+                          shadows: [
+                            Shadow(color: Colors.black, blurRadius: 25)
+                          ],
+                          fontSize: 17,
+                          color: Color(0xe6ffffff),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.schedule_rounded,
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                          Text(
+                            ' 歡迎使用 X50MGS 多元付款平台',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xe6ffffff),
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -130,10 +146,11 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const Center(
-                    child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: CircularProgressIndicator.adaptive(),
-                ));
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                );
               }
               if (snapshot.data == false) {
                 return Center(child: Text(serviceErrorText));
@@ -148,9 +165,10 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                     margin: const EdgeInsets.all(12),
                     padding: const EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                        color: CustomColorThemes.pageDialogBackgroundColorDark,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: borderColor)),
+                      color: CustomColorThemes.pageDialogBackgroundColorDark,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: borderColor),
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -178,10 +196,11 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                           onPressed: onJKOPayPressed,
                           style: buttonStyleDark,
                           child: Center(
-                              child: Image(
-                            image: R.image.jkopay_logo(),
-                            height: 28,
-                          )),
+                            child: Image(
+                              image: R.images.scanPay.jkopayLogo.provider(),
+                              height: 28,
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 15),
                         TextButton(
@@ -191,10 +210,15 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                           style: buttonStyleDark,
                           child: Center(
                             child: ColorFiltered(
-                                colorFilter: const ColorFilter.mode(
-                                    Colors.black54, BlendMode.srcATop),
-                                child: Image(
-                                    image: R.image.linepay_logo(), height: 20)),
+                              colorFilter: const ColorFilter.mode(
+                                Colors.black54,
+                                BlendMode.srcATop,
+                              ),
+                              child: Image(
+                                image: R.images.scanPay.linepayLogo.provider(),
+                                height: 20,
+                              ),
+                            ),
                           ),
                         )
                       ],

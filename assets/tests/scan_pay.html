@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="is-dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="X50Pay" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/4.0.0-beta.2/tocas.min.css">        
+        <link rel="apple-touch-icon" href="/static/apple-touch-icon.png" />
+        <link rel="stylesheet" type="text/css" href="/static/css/style-v4.css?v2.6.1" />
+        <title>X50 Pay - X50 線上付款遊玩系統</title>
+    </head>
+    <style>
+        body {
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+    </style>
+    <body ontouchstart=””>
+        <div class="ts-box is-noborder" id="main">
+            <div class="ts-app-layout is-horizontal" style="height: 100vh; 
+                    height: calc(var(--vh, 1vh) * 100);">
+                <div class="cell is-vertical" style=""> 
+                <div class="cell" style="z-index:5;"> 
+		            <div id="navbar" class="ts-box" style="border:0px; padding:5px; font-size:14px;">
+        		    	<div class="ts-center">
+                            <span class="ts-avatar is-circular" style="height:30px;width:30px;">			
+                                <img src="/static/logo.jpg">		
+                            </span>
+            			</div>
+		            </div>
+                </div>
+                <div class="cell is-fluid is-scrollable">
+		            <div id="content" >
+<div class="ts-box gamesel" style="margin:0px; border:0px; border-radius:0px;">
+    <div class="ts-image" style="height:220px;">							
+        <img class="loginlogo" src="/static/logo.jpg">
+    </div>
+    <div class="ts-mask is-bottom">
+        <div class="ts-content" style="color: #FFF;">
+            <div class="ts-header">
+                選擇付款方式
+            </div>
+            <div class="ts-header is-gameinfo" style="color:rgba(255,255,255,0.9);">
+                <i class="ts-icon is-clock-icon is-margin-icon"></i> 歡迎使用 X50MGS 多元付款平台  <br/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ts-notice is-outlined" style="margin:12px;">
+    <div class="title">注意!</div>
+        <div class="content">
+            立刻註冊 X50Pay ，開通快速付款服務
+        </div>
+</div>
+<div class="ts-segment" style="margin:12px;">
+    <div class="ts-wrap is-vertical">
+        <div class="ts-button is-fluid is-negative is-start-icon" onclick="location.href='/'" style=" padding:10px;"><span class="ts-icon is-wallet-icon" style="
+                    margin-right: .1rem;
+                    "></span><span class="ts-icon is-p-icon"></span>X50Pay</div>
+        <div class="ts-divider is-fluid"></div>
+        <div class="ts-button is-fluid " onclick="location.href='https://onlinepay.jkopay.com/web/paymentRouter?j=OL%231%3AENT%23aXZKcHNLeVJzMG4xZ3c5WVc3NjhXQT09%3AS%23b8be1b9d-0b4b-11ee-bdc1-f8f21e0d1b98%3AA%2328%3ACUR%23TWD%3ASRC%23REDIRECT_MWEB%3AUNRDM%230%3AFX%230%3ATA%2328%3ATCUR%23TWD%3AFXR%231.00%3AUR%231%3AD%23D&amp;s=efa0dcb9edc261b01ab5aa6a9405c66fe8b7b870581d6520cb1e9913effa6456'"><img style="height:28px;" src="https://upload.wikimedia.org/wikipedia/zh/thumb/5/5a/JKOPAY_logo.svg/1200px-JKOPAY_logo.svg.png"></div>
+        <div class="ts-button is-fluid is-disabled" onclick="location.href='/reg'" ><img style="height:20px; margin:4px;" src="https://d.line-scdn.net/linepay/portal/v-230531/portal/assets/img/portal/tw/logo.svg"></div>
+    </div>
+</div>
+        		    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+        </script>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.3/html5-qrcode.min.js" integrity="sha512-uOj9C1++KO/GY58nW0CjDiUjLKWQG4yB/NJMj3PtJNmFA52Hg56lojRtvBpLgQyVByUD+1M3M/1tKdoGDKUBAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </body>
+</html>

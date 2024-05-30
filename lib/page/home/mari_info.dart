@@ -150,7 +150,8 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                       width: 17.875,
                                       height: 14.3,
                                       colorFilter: SvgsExtension.colorFilter(
-                                          const Color(0xffffc0cb)),
+                                        const Color(0xffffc0cb),
+                                      ),
                                     ),
                                     color: const Color(0xffffc0cb),
                                     style: ButtonStyle(
@@ -187,13 +188,17 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                       width: 17,
                                       height: 17,
                                       colorFilter: SvgsExtension.colorFilter(
-                                          const Color(0xbfff1100)),
+                                        const Color(0xbfff1100),
+                                      ),
                                     ),
                                     const SizedBox(width: 5),
-                                    Text(entry.gradeLv,
-                                        style: const TextStyle(
-                                            color: Color(0xff808080),
-                                            fontSize: 30)),
+                                    Text(
+                                      entry.gradeLv,
+                                      style: const TextStyle(
+                                        color: Color(0xff808080),
+                                        fontSize: 30,
+                                      ),
+                                    ),
                                     const SizedBox(width: 5),
                                   ],
                                 ),
@@ -204,32 +209,37 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                                     message: isVip ? '月票：剩餘的加成次數' : '剩餘的加成次數',
                                     verticalOffset: 25,
                                     child: Container(
-                                        decoration: BoxDecoration(
-                                            color: const Color(0xff2282e9),
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(4.0),
-                                                child: SvgPicture(
-                                                  Svgs.boltSoild,
-                                                  width: 9,
-                                                  height: 13,
-                                                  colorFilter:
-                                                      SvgsExtension.colorFilter(
-                                                          Colors.white),
-                                                ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xff2282e9),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: SvgPicture(
+                                              Svgs.boltSoild,
+                                              width: 9,
+                                              height: 13,
+                                              colorFilter:
+                                                  SvgsExtension.colorFilter(
+                                                Colors.white,
                                               ),
-                                              Text(entry.gr2BounsLimit,
-                                                  style: const TextStyle(
-                                                      color: Colors.white)),
-                                              const SizedBox(width: 3)
-                                            ])),
+                                            ),
+                                          ),
+                                          Text(
+                                            entry.gr2BounsLimit,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 3)
+                                        ],
+                                      ),
+                                    ),
                                   ),
                               ],
                             ),

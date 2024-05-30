@@ -13,10 +13,10 @@ import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
+import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/mixins/remote_open_mixin.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/r.g.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
 class Settings extends StatefulWidget {
@@ -43,7 +43,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
   void showEasterEgg() {
     Vibration.vibrate(duration: 50, amplitude: 128);
-    Fluttertoast.showToast(msg: '     🥳');
+    Fluttertoast.showToast(msg: '🥳');
   }
 
   void onQuicPayPrefPressed() {
@@ -98,25 +98,26 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           builder: (context) => ChangePhoneConfirmedDialog(viewModel, context));
     } else {
       showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) {
-            return ChangePhoneDialog(
-              viewModel,
-              callback: (isOk) async {
-                Navigator.of(context).pop();
-                if (isOk) {
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) =>
-                          ChangePhoneConfirmedDialog(viewModel, context));
-                } else {
-                  showServiceError();
-                }
-              },
-            );
-          });
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return ChangePhoneDialog(
+            viewModel,
+            callback: (isOk) async {
+              Navigator.of(context).pop();
+              if (isOk) {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) =>
+                        ChangePhoneConfirmedDialog(viewModel, context));
+              } else {
+                showServiceError();
+              }
+            },
+          );
+        },
+      );
     }
   }
 
@@ -129,45 +130,48 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   }
 
   void onLogoutPressed() {
-    showDialog(context: context, builder: (context) => askLogout());
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('登出'),
+        content: const Text('確定要登出?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.pop();
+            },
+            style: CustomButtonThemes.grey(),
+            child: const Text('取消'),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: doLogout,
+            style: CustomButtonThemes.severe(isV4: true),
+            child: const Text('登出'),
+          )
+        ],
+      ),
+    );
   }
 
-  void onLogout() {
+  void doLogout() async {
+    final isLogout = await viewModel.logout();
+
+    if (!isLogout) {
+      showServiceError();
+      return;
+    }
+    GlobalSingleton.instance.clearUser();
+    Prefs.secureDelete(SecurePrefsToken.session);
+    await EasyLoading.showSuccess(
+      '感謝\n登出成功！歡迎再光臨本小店',
+      dismissOnTap: false,
+      duration: const Duration(seconds: 2),
+    );
+    await Future.delayed(const Duration(seconds: 2));
     context
       ..pop()
       ..goNamed(AppRoutes.login.routeName);
-  }
-
-  Widget askLogout() {
-    return AlertDialog(
-      title: const Text('登出'),
-      content: const Text('確定要登出?'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            context.pop();
-          },
-          style: CustomButtonThemes.grey(),
-          child: const Text('取消'),
-        ),
-        const SizedBox(width: 8),
-        TextButton(
-            onPressed: () async {
-              if (await viewModel.logout()) {
-                GlobalSingleton.instance.clearUser();
-                await EasyLoading.showSuccess('感謝\n登出成功！歡迎再光臨本小店',
-                    dismissOnTap: false, duration: const Duration(seconds: 2));
-                Prefs.secureDelete(SecurePrefsToken.session);
-                await Future.delayed(const Duration(seconds: 2));
-                onLogout();
-              } else {
-                showServiceError();
-              }
-            },
-            style: CustomButtonThemes.severe(isV4: true),
-            child: const Text('登出'))
-      ],
-    );
   }
 
   @override
@@ -195,8 +199,62 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> settingsGroups = [
-      accountItem(),
+    late final Widget userAvatar;
+    if (user.rawUserImgUrl != null) {
+      userAvatar = CachedNetworkImage(
+        imageUrl: avatarUrl,
+        width: 60,
+        height: 60,
+        imageBuilder: (context, imageProvider) => CircleAvatar(
+          backgroundImage: imageProvider,
+          radius: 30,
+        ),
+      );
+    } else {
+      userAvatar = CircleAvatar(
+        foregroundImage: R.images.common.logo150.provider(),
+        radius: 30,
+      );
+    }
+
+    final accountItem = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isDarkTheme
+                ? CustomColorThemes.borderColorDark
+                : CustomColorThemes.borderColorLight,
+            width: 2,
+          ),
+          color: Colors.transparent,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Row(
+            children: [
+              userAvatar,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(user.name!),
+                    const SizedBox(height: 5),
+                    Text(user.email!),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+
+    final settingsGroups = [
+      accountItem,
       _SettingsGroup(children: [
         _SettingTile(
             iconData: Icons.remember_me_rounded,
@@ -241,14 +299,14 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           iconData: Icons.email_rounded,
           title: i18n.userEmail,
           subtitle: '換信箱了嗎，點我修改信箱。',
-          color: _SettingTileColor.white,
+          color: _SettingTileColor.blackOrWhite,
           onTap: onChangeEmailPressed,
         ),
         _SettingTile(
           iconData: Icons.call_rounded,
           title: i18n.userPhone,
           subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
-          color: _SettingTileColor.white,
+          color: _SettingTileColor.blackOrWhite,
           onTap: onChangePhonePressed,
         ),
       ]),
@@ -294,7 +352,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           iconData: Icons.tune_rounded,
           title: i18n.userInAppSetting,
           subtitle: '設定',
-          color: _SettingTileColor.white,
+          color: _SettingTileColor.blackOrWhite,
           onTap: onX50PayAppSettingPressed,
         ),
       ]),
@@ -303,21 +361,21 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           iconData: Icons.home_rounded,
           title: i18n.userOpenDoor1,
           subtitle: '就是個一店開門按鈕',
-          color: _SettingTileColor.white,
+          color: _SettingTileColor.blackOrWhite,
           onTap: onXimen1OpenPressed,
         ),
         _SettingTile(
           iconData: Icons.home_rounded,
           title: i18n.userOpenDoor2,
           subtitle: '就是個二店開門按鈕',
-          color: _SettingTileColor.white,
+          color: _SettingTileColor.blackOrWhite,
           onTap: onXimen2OpenPressed,
         ),
         _SettingTile(
           iconData: Icons.logout_rounded,
           title: i18n.userLogout,
           subtitle: '就是個登出',
-          color: _SettingTileColor.white,
+          color: _SettingTileColor.blackOrWhite,
           onTap: onLogoutPressed,
         ),
       ]),
@@ -351,8 +409,8 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           child: Scrollbar(
             controller: controller,
             child: ListView.builder(
+              // TODO: cacheExtent 是現在的workaround，不然 Scrollbar 會跳
               // https://github.com/flutter/flutter/issues/25652
-              // 現在的workaround，不然 Scrollbar 會跳
               cacheExtent: 10000,
               controller: controller,
               padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -364,55 +422,6 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           ),
         );
       },
-    );
-  }
-
-  Padding accountItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isDarkTheme
-                ? CustomColorThemes.borderColorDark
-                : CustomColorThemes.borderColorLight,
-            width: 2,
-          ),
-          color: Colors.transparent,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Row(
-            children: [
-              user.rawUserImgUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: avatarUrl,
-                      width: 60,
-                      height: 60,
-                      imageBuilder: (context, imageProvider) => CircleAvatar(
-                        backgroundImage: imageProvider,
-                        radius: 30,
-                      ),
-                    )
-                  : CircleAvatar(
-                      foregroundImage: R.image.logo_150_jpg(), radius: 30),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(user.name!),
-                    const SizedBox(height: 5),
-                    Text(user.email!),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
@@ -446,7 +455,7 @@ class _SettingsGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       children: [
@@ -471,56 +480,43 @@ class _SettingsGroup extends StatelessWidget {
   }
 }
 
-enum _SettingTileColor { green, red, yellow, blue, black, white }
+enum _SettingTileColor {
+  green,
+  red,
+  yellow,
+  blue,
+  blackOrWhite;
+}
 
 class _SettingTile extends StatelessWidget {
   final IconData iconData;
   final _SettingTileColor color;
   final String title;
   final String subtitle;
-  final void Function()? onTap;
+  final VoidCallback onTap;
 
-  const _SettingTile(
-      {required this.iconData,
-      required this.title,
-      required this.subtitle,
-      required this.color,
-      required this.onTap});
+  const _SettingTile({
+    required this.iconData,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    Color? iconColor;
-    bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    late final Color iconColor;
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final splashColor = isDarkTheme ? Colors.white24 : Colors.black26;
 
-    switch (color) {
-      case _SettingTileColor.green:
-        iconColor = const Color(0xff37970e);
-        break;
-      case _SettingTileColor.red:
-        iconColor = const Color(0xfff5222d);
-        break;
-      case _SettingTileColor.yellow:
-        iconColor = const Color(0xffd4b106);
-        break;
-      case _SettingTileColor.blue:
-        iconColor = const Color(0xff2492f7);
-        break;
-      case _SettingTileColor.black:
-        if (isDarkTheme) {
-          iconColor = const Color(0xff333333);
-        } else {
-          iconColor = const Color(0xff333333);
-        }
-        break;
-      case _SettingTileColor.white:
-        if (isDarkTheme) {
-          iconColor = const Color(0xfffafafa);
-        } else {
-          iconColor = const Color(0xff333333);
-        }
-        break;
-    }
+    iconColor = switch (color) {
+      _SettingTileColor.green => const Color(0xff37970e),
+      _SettingTileColor.red => const Color(0xfff5222d),
+      _SettingTileColor.yellow => const Color(0xffd4b106),
+      _SettingTileColor.blue => const Color(0xff2492f7),
+      _SettingTileColor.blackOrWhite =>
+        isDarkTheme ? const Color(0xfffafafa) : const Color(0xff333333),
+    };
 
     return Material(
       clipBehavior: Clip.antiAlias,
@@ -563,9 +559,6 @@ class _SettingTile extends StatelessWidget {
           ),
         ),
       ),
-
-      // subtitle:
-      //     Text(subtitle, style: const TextStyle(color: Color(0xffb7b7b7))),
     );
   }
 }

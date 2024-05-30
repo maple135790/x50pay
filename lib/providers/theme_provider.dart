@@ -318,11 +318,14 @@ class _SpinnerState extends State<_Spinner> with TickerProviderStateMixin {
     return RepaintBoundary(
       child: RotationTransition(
         turns: _animation,
-        child: const SvgPicture(
+        child: SvgPicture(
           Svgs.spinnerSolid,
           width: 42,
           height: 42,
-          colorFilter: ColorFilter.mode(Color(0xfffafafa), BlendMode.srcIn),
+          colorFilter: const ColorFilter.mode(
+            Color(0xfffafafa),
+            BlendMode.srcIn,
+          ),
         ),
       ),
     );
