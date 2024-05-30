@@ -40,14 +40,8 @@ class TopInfo extends StatelessWidget {
         user as UserModel;
 
         final unActivatedLabel = TextSpan(
-          text: user.name!,
-          children: [
-            TextSpan(
-              text: ' (未驗證)',
-              recognizer: TapGestureRecognizer()
-                ..onTap = onPhoneActivatePressed,
-            ),
-          ],
+          text: ' (未驗證)',
+          recognizer: TapGestureRecognizer()..onTap = onPhoneActivatePressed,
         );
 
         final nameInfo = Text.rich(
@@ -60,7 +54,12 @@ class TopInfo extends StatelessWidget {
                 ),
               ),
               const WidgetSpan(child: SizedBox(width: 5)),
-              if (user.phoneactive ?? true) unActivatedLabel,
+              TextSpan(
+                text: user.name!,
+                children: [
+                  if (!(user.phoneactive ?? false)) unActivatedLabel,
+                ],
+              ),
             ],
           ),
         );
