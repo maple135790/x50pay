@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/global_singleton.dart';
@@ -92,7 +91,7 @@ RouterConfig<Object> goRouteConfig() {
           ]),
           _route(
             AppRoutes.scanQRCode,
-            (_, state) => ScanQRCode(state.extra as PermissionStatus),
+            (_, state) => const ScanQRCode(),
           ),
           _route(AppRoutes.license, (_, __) => const License()),
           _routeTransition(

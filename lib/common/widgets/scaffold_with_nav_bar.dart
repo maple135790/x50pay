@@ -203,13 +203,10 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
     final router = GoRouter.of(context);
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
-    if (context.mounted) {
-      GlobalSingleton.instance.isInCameraPage = true;
-      router.pushNamed(
-        AppRoutes.scanQRCode.routeName,
-        extra: status,
-      );
-    }
+    router.pushNamed(
+      AppRoutes.scanQRCode.routeName,
+      extra: status,
+    );
   }
 
   void onLanguagePressed(Locale currentLocale) async {

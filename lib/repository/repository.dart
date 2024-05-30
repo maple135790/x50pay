@@ -502,6 +502,7 @@ class Repository extends Api {
   Future<http.Response> getDocument(String fullUrl) async {
     final response = await Api.makeRequestNoFR(
       method: HttpMethod.get,
+      withSession: true,
       customDest: fullUrl,
     );
     return response;
