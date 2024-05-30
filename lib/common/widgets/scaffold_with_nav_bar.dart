@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -123,20 +125,36 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
     return true;
   }
 
+  Future<bool> handleBackButton() async {
+    final currentRouteName = GoRouterState.of(context).topRoute?.name;
+    final currentfullPath = GoRouterState.of(context).fullPath;
+    if (currentfullPath == null || currentRouteName == null) return false;
+
+    log('currentLocation: $currentRouteName');
+    log('currentPath: $currentfullPath');
+    if (currentRouteName == AppRoutes.gameCab.routeName) {
+      context.pop();
+      setState(() {});
+    } else if (currentRouteName == AppRoutes.scanQRCode.routeName) {
+      context.pop();
+      setState(() {});
+    } else if (currentfullPath.contains(AppRoutes.settings.path)) {
+      context.pop();
+      setState(() {});
+    } else if (currentRouteName != AppRoutes.home.routeName) {
+      context.goNamed(AppRoutes.home.routeName);
+      setState(() {});
+    } else {
+      confirmPopup();
+    }
+    // 攔截所有返回事件
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BackButtonListener(
-      onBackButtonPressed: () async {
-        final currentLocation = GoRouterState.of(context).topRoute?.name;
-        if (currentLocation != AppRoutes.home.routeName) {
-          context.goNamed(AppRoutes.home.routeName);
-          setState(() {});
-        } else {
-          confirmPopup();
-        }
-        // 攔截所有返回事件
-        return true;
-      },
+      onBackButtonPressed: handleBackButton,
       // TODO: 等待GoRouter 修復PopScope issue (flutter #138737)
       child: PopScope(
         canPop: false,
