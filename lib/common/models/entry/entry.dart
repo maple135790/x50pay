@@ -67,22 +67,23 @@ class Evlist {
   @JsonKey(name: '_id')
   final UnderscoreId? underscoreId;
 
-  const Evlist(
-      {this.count,
-      this.countday,
-      this.describe,
-      this.end,
-      this.id,
-      this.limit,
-      this.name,
-      this.point,
-      this.sid,
-      this.start,
-      this.ticMid,
-      this.ticdis,
-      this.value,
-      this.which,
-      this.underscoreId});
+  const Evlist({
+    this.count,
+    this.countday,
+    this.describe,
+    this.end,
+    this.id,
+    this.limit,
+    this.name,
+    this.point,
+    this.sid,
+    this.start,
+    this.ticMid,
+    this.ticdis,
+    this.value,
+    this.which,
+    this.underscoreId,
+  });
 
   factory Evlist.fromJson(Map<String, dynamic> json) => _$EvlistFromJson(json);
   Map<String, dynamic> toJson() => _$EvlistToJson(this);
@@ -102,7 +103,7 @@ class GiftList {
 @JsonSerializable()
 class EventTime {
   @JsonKey(name: '\$date')
-  final int date;
+  final String date;
 
   const EventTime({required this.date});
 
@@ -128,20 +129,21 @@ class EntryHistory {
   @JsonKey(name: '_id')
   final UnderscoreId? underscoreId;
 
-  const EntryHistory(
-      {this.cid,
-      this.disbool,
-      this.done,
-      this.freep,
-      this.inittime,
-      this.mid,
-      this.ticn,
-      this.price,
-      this.sid,
-      this.status,
-      this.time,
-      this.uid,
-      this.underscoreId});
+  const EntryHistory({
+    this.cid,
+    this.disbool,
+    this.done,
+    this.freep,
+    this.inittime,
+    this.mid,
+    this.ticn,
+    this.price,
+    this.sid,
+    this.status,
+    this.time,
+    this.uid,
+    this.underscoreId,
+  });
 
   factory EntryHistory.fromJson(Map<String, dynamic> json) =>
       _$EntryHistoryFromJson(json);

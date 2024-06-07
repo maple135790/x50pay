@@ -5,7 +5,7 @@ part "common.g.dart";
 @JsonSerializable()
 class InitTime {
   @JsonKey(name: '\$date')
-  final int date;
+  final String date;
 
   const InitTime({required this.date});
 

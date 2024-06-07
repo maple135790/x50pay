@@ -28,7 +28,7 @@ class PlayRecordModel {
     final filteredLogs = logs.where((element) {
       if (period == -1) return true;
       final rawSourceTime = element.initTime.date;
-      final sourceTime = DateTime.fromMillisecondsSinceEpoch(rawSourceTime);
+      final sourceTime = DateTime.parse(rawSourceTime);
       final targetTime = DateTime.now().subtract(Duration(days: period));
       return sourceTime.isAfter(targetTime);
     });
@@ -48,7 +48,7 @@ class PlayRecordModel {
     final filteredLogs = logs.where((element) {
       if (period == -1) return true;
       final rawSourceTime = element.initTime.date;
-      final sourceTime = DateTime.fromMillisecondsSinceEpoch(rawSourceTime);
+      final sourceTime = DateTime.parse(rawSourceTime);
       final targetTime = DateTime.now().subtract(Duration(days: period));
       return sourceTime.isAfter(targetTime);
     });

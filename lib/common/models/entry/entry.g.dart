@@ -82,7 +82,7 @@ Map<String, dynamic> _$GiftListToJson(GiftList instance) => <String, dynamic>{
     };
 
 EventTime _$EventTimeFromJson(Map<String, dynamic> json) => EventTime(
-      date: (json[r'$date'] as num).toInt(),
+      date: json[r'$date'] as String,
     );
 
 Map<String, dynamic> _$EventTimeToJson(EventTime instance) => <String, dynamic>{
