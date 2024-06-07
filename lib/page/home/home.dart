@@ -94,7 +94,7 @@ class _HomeLoadedState extends BaseStatefulState<_HomeLoaded> {
     return ValueListenableBuilder(
       valueListenable: GlobalSingleton.instance.entryNotifier,
       builder: (context, entry, child) {
-        final recentQuests = entry?.questCampaign;
+        final recentQuests = entry?.questCampaign ?? [];
         final events = entry?.evlist;
 
         return Column(
@@ -105,8 +105,8 @@ class _HomeLoadedState extends BaseStatefulState<_HomeLoaded> {
             const TicketInfo(),
             const MariInfo(),
             if (events != null && events.isNotEmpty) EventInfo(events: events),
-            if (recentQuests != null) divider(i18n.infoNotify),
-            if (recentQuests != null) RecentQuests(quests: recentQuests),
+            if (recentQuests.isNotEmpty) divider(i18n.infoNotify),
+            if (recentQuests.isNotEmpty) RecentQuests(quests: recentQuests),
             divider(i18n.officialNotify),
             const OfficialInfo(),
             const SizedBox(height: 25),
