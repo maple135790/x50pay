@@ -6,6 +6,7 @@
 name: Flutter CI
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "v*.*.*"
@@ -28,7 +29,6 @@ jobs:
       - name: 💻 Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.0"
           channel: "stable"
 
       - name: 💻 Pub get
@@ -47,7 +47,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: "zulu"
-          java-version: "11"
+          java-version: "17"
 
       - name: 🔨 Build apk
         run: flutter build apk
