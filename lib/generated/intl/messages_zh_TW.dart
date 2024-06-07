@@ -20,13 +20,13 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_TW';
 
-  static String m0(day) => " 已簽到 : ${day} 天";
+  static String m0(day) => "已簽到 : ${day} 天";
 
-  static String m1(waitCount) => "X50Pad 排隊狀況 : ${waitCount} 人等待中";
+  static String m1(point) => "抽獎券 : 再 ${point} 點";
 
-  static String m2(point) => " 抽獎券 : 再 ${point} 點";
+  static String m2(waitCount) => "X50Pad 排隊狀況 : ${waitCount} 人等待中";
 
-  static String m3(limitTimes) => " 每日回饋 ${limitTimes} 次 每次 25 P ";
+  static String m3(limitTimes) => "每日回饋 ${limitTimes} 次 每次 25 P ";
 
   static String m4(summaryGameRecordTimes, summaryGameRecordTotal) =>
       "${summaryGameRecordTimes}次，共${summaryGameRecordTotal}";
@@ -51,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialogReturn": MessageLookupByLibrary.simpleMessage("返回"),
         "dialogSave": MessageLookupByLibrary.simpleMessage("保存"),
         "dressRoomTitle": MessageLookupByLibrary.simpleMessage("更換角色/衣裝"),
+        "gacha": m1,
         "gameCabTileLarge": MessageLookupByLibrary.simpleMessage("大"),
         "gameCabTileSmall": MessageLookupByLibrary.simpleMessage("小"),
         "gameDiscountHour": MessageLookupByLibrary.simpleMessage("離峰時段"),
@@ -60,14 +61,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "gameTicket": MessageLookupByLibrary.simpleMessage("遊玩券"),
         "gameUnlimit": MessageLookupByLibrary.simpleMessage("該機種當周有無限制台預約"),
         "gameUnlimitTitle": MessageLookupByLibrary.simpleMessage("已預約時段"),
-        "gameWait": m1,
+        "gameWait": m2,
         "gameWeekday": MessageLookupByLibrary.simpleMessage("平日"),
         "gameWeekends": MessageLookupByLibrary.simpleMessage("假日"),
-        "gatcha": m2,
         "gr2HeartBox": MessageLookupByLibrary.simpleMessage("養成點數商城"),
         "gr2Limit": m3,
-        "gr2ResetDate": MessageLookupByLibrary.simpleMessage(" 換季日: "),
-        "heart": MessageLookupByLibrary.simpleMessage(" 親密度 "),
+        "gr2ResetDate": MessageLookupByLibrary.simpleMessage("換季日: "),
+        "heart": MessageLookupByLibrary.simpleMessage("親密度"),
         "infoNotify": MessageLookupByLibrary.simpleMessage("最新活動"),
         "loginBiometrics": MessageLookupByLibrary.simpleMessage("使用生物辨識登入"),
         "loginBiometricsReason":

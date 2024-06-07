@@ -8,17 +8,17 @@
       }
     }
   },
+  "@gacha": {
+    "placeholders": {
+      "point": {
+        "type": "String"
+      }
+    }
+  },
   "@gameWait": {
     "placeholders": {
       "waitCount": {
         "type": "int"
-      }
-    }
-  },
-  "@gatcha": {
-    "placeholders": {
-      "point": {
-        "type": "String"
       }
     }
   },
@@ -52,13 +52,14 @@
   "changeFavGameTitle": "Change Favorite Game",
   "confirmExitAppContent": "Do you want to exit X50Pay?",
   "confirmExitAppTitle": "Closing X50Pay",
-  "continuous": " Continuous : {day} days",
+  "continuous": "Continuous : {day} days",
   "dialogCancel": "Cancel",
   "dialogConfirm": "Confirm",
   "dialogNext": "Next",
   "dialogReturn": "Return",
   "dialogSave": "Save",
   "dressRoomTitle": "Change avater/clothes",
+  "gacha": "Gacha : {point} points",
   "gameCabTileLarge": "Large",
   "gameCabTileSmall": "Small",
   "gameDiscountHour": "Discount",
@@ -71,11 +72,10 @@
   "gameWait": "X50Pad queue status : {waitCount} waiting",
   "gameWeekday": "Weekday",
   "gameWeekends": "Weekends",
-  "gatcha": " Gatcha : {point} points",
   "gr2HeartBox": "Hearts Shop",
-  "gr2Limit": " Point back {limitTimes} times , 25P/t",
-  "gr2ResetDate": " Reset Date : ",
-  "heart": " Hearts",
+  "gr2Limit": "Point back {limitTimes} times , 25P/t",
+  "gr2ResetDate": "Reset Date : ",
+  "heart": "Hearts",
   "infoNotify": "Informations",
   "loginBiometrics": "Biometric Login",
   "loginBiometricsReason": "Using Biometrics to login X50Pay app",
@@ -100,7 +100,7 @@
   "nbusyS1": "Idle",
   "nbusyS2": "Normal",
   "nbusyS3": "Busy",
-  "nextLv": " Next Lv : ",
+  "nextLv": "Next Lv : ",
   "officialNotify": "Offical ADs",
   "pinnedGame": "Favorite game",
   "serviceError": "Server error, Please retry again.",

@@ -20,13 +20,13 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en_US';
 
-  static String m0(day) => " Continuous : ${day} days";
+  static String m0(day) => "Continuous : ${day} days";
 
-  static String m1(waitCount) => "X50Pad queue status : ${waitCount} waiting";
+  static String m1(point) => "Gacha : ${point} points";
 
-  static String m2(point) => " Gatcha : ${point} points";
+  static String m2(waitCount) => "X50Pad queue status : ${waitCount} waiting";
 
-  static String m3(limitTimes) => " Point back ${limitTimes} times , 25P/t";
+  static String m3(limitTimes) => "Point back ${limitTimes} times , 25P/t";
 
   static String m4(summaryGameRecordTimes, summaryGameRecordTotal) =>
       "${summaryGameRecordTimes} times, total ${summaryGameRecordTotal}";
@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialogSave": MessageLookupByLibrary.simpleMessage("Save"),
         "dressRoomTitle":
             MessageLookupByLibrary.simpleMessage("Change avater/clothes"),
+        "gacha": m1,
         "gameCabTileLarge": MessageLookupByLibrary.simpleMessage("Large"),
         "gameCabTileSmall": MessageLookupByLibrary.simpleMessage("Small"),
         "gameDiscountHour": MessageLookupByLibrary.simpleMessage("Discount"),
@@ -67,14 +68,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "This game have reservation at this week"),
         "gameUnlimitTitle": MessageLookupByLibrary.simpleMessage(
             "Already reservation datetime"),
-        "gameWait": m1,
+        "gameWait": m2,
         "gameWeekday": MessageLookupByLibrary.simpleMessage("Weekday"),
         "gameWeekends": MessageLookupByLibrary.simpleMessage("Weekends"),
-        "gatcha": m2,
         "gr2HeartBox": MessageLookupByLibrary.simpleMessage("Hearts Shop"),
         "gr2Limit": m3,
-        "gr2ResetDate": MessageLookupByLibrary.simpleMessage(" Reset Date : "),
-        "heart": MessageLookupByLibrary.simpleMessage(" Hearts"),
+        "gr2ResetDate": MessageLookupByLibrary.simpleMessage("Reset Date : "),
+        "heart": MessageLookupByLibrary.simpleMessage("Hearts"),
         "infoNotify": MessageLookupByLibrary.simpleMessage("Informations"),
         "loginBiometrics":
             MessageLookupByLibrary.simpleMessage("Biometric Login"),
@@ -102,7 +102,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "nbusyS1": MessageLookupByLibrary.simpleMessage("Idle"),
         "nbusyS2": MessageLookupByLibrary.simpleMessage("Normal"),
         "nbusyS3": MessageLookupByLibrary.simpleMessage("Busy"),
-        "nextLv": MessageLookupByLibrary.simpleMessage(" Next Lv : "),
+        "nextLv": MessageLookupByLibrary.simpleMessage("Next Lv : "),
         "officialNotify": MessageLookupByLibrary.simpleMessage("Offical ADs"),
         "pinnedGame": MessageLookupByLibrary.simpleMessage("Favorite game"),
         "serviceError": MessageLookupByLibrary.simpleMessage(

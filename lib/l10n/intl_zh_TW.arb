@@ -7,17 +7,17 @@
       }
     }
   },
+  "@gacha": {
+    "placeholders": {
+      "point": {
+        "type": "String"
+      }
+    }
+  },
   "@gameWait": {
     "placeholders": {
       "waitCount": {
         "type": "int"
-      }
-    }
-  },
-  "@gatcha": {
-    "placeholders": {
-      "point": {
-        "type": "String"
       }
     }
   },
@@ -51,13 +51,14 @@
   "changeFavGameTitle": "重新釘選機臺",
   "confirmExitAppContent": "確定要離開 X50Pay 嗎?",
   "confirmExitAppTitle": "結束X50Pay",
-  "continuous": " 已簽到 : {day} 天",
+  "continuous": "已簽到 : {day} 天",
   "dialogCancel": "取消",
   "dialogConfirm": "確定",
   "dialogNext": "下一步",
   "dialogReturn": "返回",
   "dialogSave": "保存",
   "dressRoomTitle": "更換角色/衣裝",
+  "gacha": "抽獎券 : 再 {point} 點",
   "gameCabTileLarge": "大",
   "gameCabTileSmall": "小",
   "gameDiscountHour": "離峰時段",
@@ -70,11 +71,10 @@
   "gameWait": "X50Pad 排隊狀況 : {waitCount} 人等待中",
   "gameWeekday": "平日",
   "gameWeekends": "假日",
-  "gatcha": " 抽獎券 : 再 {point} 點",
   "gr2HeartBox": "養成點數商城",
-  "gr2Limit": " 每日回饋 {limitTimes} 次 每次 25 P ",
-  "gr2ResetDate": " 換季日: ",
-  "heart": " 親密度 ",
+  "gr2Limit": "每日回饋 {limitTimes} 次 每次 25 P ",
+  "gr2ResetDate": "換季日: ",
+  "heart": "親密度",
   "infoNotify": "最新活動",
   "loginBiometrics": "使用生物辨識登入",
   "loginBiometricsReason": "使用生物辨識登入 X50Pay",

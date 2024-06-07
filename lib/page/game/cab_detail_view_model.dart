@@ -8,14 +8,15 @@ import 'package:x50pay/repository/repository.dart';
 
 class CabDatailViewModel extends BaseViewModel {
   final Repository repository;
+  final String machineId;
   CabinetModel? cabinetModel;
   BasicResponse? response;
   int lineupCount = -1;
 
-  CabDatailViewModel({required this.repository});
+  CabDatailViewModel({required this.repository, required this.machineId});
 
   /// 取得遊戲機台資料
-  Future<bool> getSelGameCab(String machineId) async {
+  Future<bool> getSelGameCab() async {
     try {
       log('machineId: $machineId', name: 'getSelGame');
       showLoading();
@@ -23,8 +24,10 @@ class CabDatailViewModel extends BaseViewModel {
 
       cabinetModel = await repository.selGame(machineId);
       if (cabinetModel!.pad) {
-        lineupCount =
-            await getPadLineup(cabinetModel!.padmid, cabinetModel!.padlid);
+        lineupCount = await getPadLineup(
+          cabinetModel!.padmid,
+          cabinetModel!.padlid,
+        );
       }
       return true;
     } catch (e) {

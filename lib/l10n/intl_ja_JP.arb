@@ -8,17 +8,17 @@
       }
     }
   },
+  "@gacha": {
+    "placeholders": {
+      "point": {
+        "type": "String"
+      }
+    }
+  },
   "@gameWait": {
     "placeholders": {
       "waitCount": {
         "type": "int"
-      }
-    }
-  },
-  "@gatcha": {
-    "placeholders": {
-      "point": {
-        "type": "String"
       }
     }
   },
@@ -52,13 +52,14 @@
   "changeFavGameTitle": "お気に入りのゲームを変更",
   "confirmExitAppContent": "アプリを終了します\nよろしいですか？",
   "confirmExitAppTitle": "X50Pay アプリ終了",
-  "continuous": " ログイン日数 :  {day} 日",
+  "continuous": "ログイン日数 :  {day} 日",
   "dialogCancel": "キャンセル",
   "dialogConfirm": "OK",
   "dialogNext": "次へ",
   "dialogReturn": "戻る",
   "dialogSave": "セーフ",
   "dressRoomTitle": "キャラ変更/着せ替え",
+  "gacha": "抽選券 :  {point} 点",
   "gameCabTileLarge": "大きい",
   "gameCabTileSmall": "小さい",
   "gameDiscountHour": "オフピークタイム",
@@ -71,11 +72,10 @@
   "gameWait": "X50Pad 並び状況 : {waitCount} 人待ち",
   "gameWeekday": "平日",
   "gameWeekends": "休日",
-  "gatcha": " 抽選券 :  {point} 点",
   "gr2HeartBox": "絆ポイントショップ",
   "gr2Limit": "還元ポイント 25P / {limitTimes} ",
-  "gr2ResetDate": " シーズン変わる日 : ",
-  "heart": " 絆ランク",
+  "gr2ResetDate": "シーズン変わる日 : ",
+  "heart": "絆ランク",
   "infoNotify": "最新イベント",
   "loginBiometrics": "生体認証でログイン",
   "loginBiometricsReason": "X50Pay App で生体認証を使用",

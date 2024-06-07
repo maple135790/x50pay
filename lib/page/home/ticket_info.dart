@@ -16,17 +16,6 @@ class TicketInfo extends StatelessWidget {
     return '${date.month}/${date.day} ${date.hour}:${date.minute}';
   }
 
-  void onTicketInfoPressed(GoRouter router) {
-    router.goNamed(
-      AppRoutes.settings.routeName,
-      queryParameters: {'goTo': "ticketRecord"},
-    );
-  }
-
-  void onMPassPressed(GoRouter router) {
-    router.pushNamed(AppRoutes.buyMPass.routeName);
-  }
-
   Color getIconColor(bool isDarkTheme) {
     if (isDarkTheme) {
       return const Color(0xfffafafa).withOpacity(0.1);
@@ -40,24 +29,69 @@ class TicketInfo extends StatelessWidget {
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final i18n = S.of(context);
 
+    void onTicketInfoPressed() {
+      context.goNamed(
+        AppRoutes.settings.routeName,
+        queryParameters: {'goTo': "ticketRecord"},
+      );
+    }
+
+    void onMPassPressed() {
+      context.pushNamed(AppRoutes.buyMPass.routeName);
+    }
+
     return ValueListenableBuilder(
-        valueListenable: GlobalSingleton.instance.userNotifier,
-        builder: (context, user, child) {
-          user = user!;
+      valueListenable: GlobalSingleton.instance.userNotifier,
+      builder: (context, user, child) {
+        user = user!;
 
-          late final String vipMessage;
-          late final String vipStatus;
-          if (user.vip!) {
-            vipMessage = vipExpDate(user.vipdate!.rawDate);
-            vipStatus = i18n.mpassValid;
-          } else {
-            vipMessage = i18n.vipExpiredMsg;
-            vipStatus = i18n.mpassInvalid;
-          }
+        late final String vipMessage;
+        late final String vipStatus;
+        if (user.vip!) {
+          vipMessage = vipExpDate(user.vipdate!.rawDate);
+          vipStatus = i18n.mpassValid;
+        } else {
+          vipMessage = i18n.vipExpiredMsg;
+          vipStatus = i18n.mpassInvalid;
+        }
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-            child: Stack(children: [
+        final holdingTicketsInfo = Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: i18n.ticketBalance),
+              const WidgetSpan(
+                child: SizedBox(width: 5),
+              ),
+              TextSpan(text: user.ticketint!.toString()),
+              TextSpan(text: i18n.ticketUnit),
+            ],
+          ),
+        );
+
+        final vipStatusInfo = Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: i18n.monthlyPass),
+              const WidgetSpan(child: SizedBox(width: 5)),
+              TextSpan(text: vipStatus),
+            ],
+          ),
+        );
+
+        final vipDateInfo = Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: i18n.vipDate),
+              const WidgetSpan(child: SizedBox(width: 5)),
+              TextSpan(text: vipMessage),
+            ],
+          ),
+        );
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+          child: Stack(
+            children: [
               Positioned(
                 bottom: -35,
                 right: -20,
@@ -81,12 +115,10 @@ class TicketInfo extends StatelessWidget {
                   child: Row(
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          onMPassPressed(GoRouter.of(context));
-                        },
-                        child: Icon(
+                        onTap: onMPassPressed,
+                        child: const Icon(
                           Icons.confirmation_number_rounded,
-                          color: const Color(0xff237804).withOpacity(0.7),
+                          color: Color(0xff237804),
                           size: 50,
                         ),
                       ),
@@ -102,48 +134,16 @@ class TicketInfo extends StatelessWidget {
                       Expanded(
                         child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
-                          onTap: () {
-                            onTicketInfoPressed(GoRouter.of(context));
-                          },
+                          onTap: onTicketInfoPressed,
                           child: SizedBox(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(text: i18n.ticketBalance),
-                                      const WidgetSpan(
-                                        child: SizedBox(width: 5),
-                                      ),
-                                      TextSpan(
-                                          text: user.ticketint!.toString()),
-                                      TextSpan(text: i18n.ticketUnit),
-                                    ],
-                                  ),
-                                ),
+                                holdingTicketsInfo,
                                 const SizedBox(height: 5),
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(text: i18n.monthlyPass),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 5)),
-                                      TextSpan(text: vipStatus),
-                                    ],
-                                  ),
-                                ),
+                                vipStatusInfo,
                                 const SizedBox(height: 5),
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(text: i18n.vipDate),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 5)),
-                                      TextSpan(text: vipMessage),
-                                    ],
-                                  ),
-                                ),
+                                vipDateInfo,
                               ],
                             ),
                           ),
@@ -153,8 +153,10 @@ class TicketInfo extends StatelessWidget {
                   ),
                 ),
               ),
-            ]),
-          );
-        });
+            ],
+          ),
+        );
+      },
+    );
   }
 }

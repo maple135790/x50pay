@@ -110,10 +110,10 @@ class S {
     );
   }
 
-  /// ` 已簽到 : {day} 天`
+  /// `已簽到 : {day} 天`
   String continuous(String day) {
     return Intl.message(
-      ' 已簽到 : $day 天',
+      '已簽到 : $day 天',
       name: 'continuous',
       desc: '',
       args: [day],
@@ -177,6 +177,16 @@ class S {
       name: 'dressRoomTitle',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `抽獎券 : 再 {point} 點`
+  String gacha(String point) {
+    return Intl.message(
+      '抽獎券 : 再 $point 點',
+      name: 'gacha',
+      desc: '',
+      args: [point],
     );
   }
 
@@ -300,16 +310,6 @@ class S {
     );
   }
 
-  /// ` 抽獎券 : 再 {point} 點`
-  String gatcha(String point) {
-    return Intl.message(
-      ' 抽獎券 : 再 $point 點',
-      name: 'gatcha',
-      desc: '',
-      args: [point],
-    );
-  }
-
   /// `養成點數商城`
   String get gr2HeartBox {
     return Intl.message(
@@ -320,30 +320,30 @@ class S {
     );
   }
 
-  /// ` 每日回饋 {limitTimes} 次 每次 25 P `
+  /// `每日回饋 {limitTimes} 次 每次 25 P `
   String gr2Limit(String limitTimes) {
     return Intl.message(
-      ' 每日回饋 $limitTimes 次 每次 25 P ',
+      '每日回饋 $limitTimes 次 每次 25 P ',
       name: 'gr2Limit',
       desc: '',
       args: [limitTimes],
     );
   }
 
-  /// ` 換季日: `
+  /// `換季日: `
   String get gr2ResetDate {
     return Intl.message(
-      ' 換季日: ',
+      '換季日: ',
       name: 'gr2ResetDate',
       desc: '',
       args: [],
     );
   }
 
-  /// ` 親密度 `
+  /// `親密度`
   String get heart {
     return Intl.message(
-      ' 親密度 ',
+      '親密度',
       name: 'heart',
       desc: '',
       args: [],

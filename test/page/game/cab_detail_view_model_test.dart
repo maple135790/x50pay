@@ -12,7 +12,10 @@ class MockRepository extends Mock implements Repository {}
 final mockRepo = MockRepository();
 
 void main() {
-  final viewModel = CabDatailViewModel(repository: mockRepo);
+  final viewModel = CabDatailViewModel(
+    repository: mockRepo,
+    machineId: '2mmdx',
+  );
 
   setUp(() {
     SharedPreferences.setMockInitialValues({"store_id": "7037656"});
@@ -27,7 +30,7 @@ void main() {
     });
   });
   test('測試取得遊戲機台資料', () async {
-    final result = await viewModel.getSelGameCab('2mmdx');
+    final result = await viewModel.getSelGameCab();
     expect(result, true);
   });
   test('測試取得排隊人數', () async {

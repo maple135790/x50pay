@@ -20,11 +20,11 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja_JP';
 
-  static String m0(day) => " ログイン日数 :  ${day} 日";
+  static String m0(day) => "ログイン日数 :  ${day} 日";
 
-  static String m1(waitCount) => "X50Pad 並び状況 : ${waitCount} 人待ち";
+  static String m1(point) => "抽選券 :  ${point} 点";
 
-  static String m2(point) => " 抽選券 :  ${point} 点";
+  static String m2(waitCount) => "X50Pad 並び状況 : ${waitCount} 人待ち";
 
   static String m3(limitTimes) => "還元ポイント 25P / ${limitTimes} ";
 
@@ -53,6 +53,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialogReturn": MessageLookupByLibrary.simpleMessage("戻る"),
         "dialogSave": MessageLookupByLibrary.simpleMessage("セーフ"),
         "dressRoomTitle": MessageLookupByLibrary.simpleMessage("キャラ変更/着せ替え"),
+        "gacha": m1,
         "gameCabTileLarge": MessageLookupByLibrary.simpleMessage("大きい"),
         "gameCabTileSmall": MessageLookupByLibrary.simpleMessage("小さい"),
         "gameDiscountHour": MessageLookupByLibrary.simpleMessage("オフピークタイム"),
@@ -62,14 +63,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "gameTicket": MessageLookupByLibrary.simpleMessage("遊びチケット"),
         "gameUnlimit": MessageLookupByLibrary.simpleMessage("予約された無制限台があります"),
         "gameUnlimitTitle": MessageLookupByLibrary.simpleMessage("予約された時間帯"),
-        "gameWait": m1,
+        "gameWait": m2,
         "gameWeekday": MessageLookupByLibrary.simpleMessage("平日"),
         "gameWeekends": MessageLookupByLibrary.simpleMessage("休日"),
-        "gatcha": m2,
         "gr2HeartBox": MessageLookupByLibrary.simpleMessage("絆ポイントショップ"),
         "gr2Limit": m3,
-        "gr2ResetDate": MessageLookupByLibrary.simpleMessage(" シーズン変わる日 : "),
-        "heart": MessageLookupByLibrary.simpleMessage(" 絆ランク"),
+        "gr2ResetDate": MessageLookupByLibrary.simpleMessage("シーズン変わる日 : "),
+        "heart": MessageLookupByLibrary.simpleMessage("絆ランク"),
         "infoNotify": MessageLookupByLibrary.simpleMessage("最新イベント"),
         "loginBiometrics": MessageLookupByLibrary.simpleMessage("生体認証でログイン"),
         "loginBiometricsReason":
