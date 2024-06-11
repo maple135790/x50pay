@@ -8,33 +8,34 @@ import 'package:x50pay/generated/l10n.dart';
 class BaseViewModel extends ChangeNotifier {
   final isForceFetch = GlobalSingleton.instance.isServiceOnline;
 
-  bool get _duringTest => Platform.environment.containsKey('FLUTTER_TEST');
+  static bool get duringTest =>
+      Platform.environment.containsKey('FLUTTER_TEST');
 
-  String get serviceErrorMessage => _duringTest ? '' : S.current.serviceError;
+  String get serviceErrorMessage => duringTest ? '' : S.current.serviceError;
 
   void showLoading() {
-    if (_duringTest) return;
+    if (duringTest) return;
     dismissLoading();
     EasyLoading.show();
   }
 
   void dismissLoading() {
-    if (_duringTest) return;
+    if (duringTest) return;
     if (EasyLoading.isShow) EasyLoading.dismiss();
   }
 
   void showSuccess(String text) {
-    if (_duringTest) return;
+    if (duringTest) return;
     EasyLoading.showSuccess(text);
   }
 
   void showError(String text) {
-    if (_duringTest) return;
+    if (duringTest) return;
     EasyLoading.showError(text);
   }
 
   void showInfo(String text, {Duration duration = const Duration(seconds: 1)}) {
-    if (_duringTest) return;
+    if (duringTest) return;
     EasyLoading.showInfo(text, duration: duration);
   }
 

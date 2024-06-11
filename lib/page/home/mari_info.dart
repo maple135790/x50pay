@@ -3,12 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
+import 'package:x50pay/providers/entry_provider.dart';
+import 'package:x50pay/providers/user_provider.dart';
 
 class MariInfo extends StatefulWidget {
   /// 真璃養成點數資訊
@@ -23,7 +26,6 @@ class MariInfo extends StatefulWidget {
 class _MariInfoState extends BaseStatefulState<MariInfo> {
   static const avatarHeight = 270.0;
 
-  final isVip = GlobalSingleton.instance.userNotifier.value?.vip ?? false;
   final progressBarNotifier = ValueNotifier(false);
 
   void onProgressBarCreated() async {
@@ -79,7 +81,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
     Object error,
     StackTrace? st,
   ) {
-    log("", error: error, stackTrace: st);
+    log("", error: error, stackTrace: st, name: "MariInfo");
     return const Tooltip(
       message: "資料錯誤",
       child: SizedBox(
@@ -91,6 +93,10 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final isVip = context.select<UserProvider, bool>((provider) {
+      return provider.user?.vip ?? false;
+    });
+
     final gradeIcon = SvgPicture(
       Svgs.heartSoild,
       width: 17,
@@ -100,8 +106,8 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
       ),
     );
 
-    return ValueListenableBuilder(
-      valueListenable: GlobalSingleton.instance.entryNotifier,
+    return Selector<EntryProvider, EntryModel?>(
+      selector: (context, provider) => provider.entry,
       builder: (context, entry, child) {
         if (entry == null) return const Center(child: Text('未取得Entry 資料'));
 

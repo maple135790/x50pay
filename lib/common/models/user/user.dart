@@ -27,24 +27,44 @@ class UserModel {
   final int? tphone;
   final String? doorpwd;
 
-  const UserModel(
-      {required this.message,
-      required this.code,
-      this.rawUserImgUrl,
-      this.email,
-      this.uid,
-      this.point,
-      this.name,
-      this.ticketint,
-      this.phoneactive,
-      this.fpoint,
-      this.givebool,
-      this.vip,
-      this.vipdate,
-      this.sid,
-      this.sixn,
-      this.tphone,
-      this.doorpwd});
+  const UserModel({
+    required this.message,
+    required this.code,
+    this.rawUserImgUrl,
+    this.email,
+    this.uid,
+    this.point,
+    this.name,
+    this.ticketint,
+    this.phoneactive,
+    this.fpoint,
+    this.givebool,
+    this.vip,
+    this.vipdate,
+    this.sid,
+    this.sixn,
+    this.tphone,
+    this.doorpwd,
+  });
+
+  const UserModel.empty()
+      : message = "",
+        code = 0,
+        rawUserImgUrl = "",
+        email = "",
+        uid = "",
+        point = 0,
+        name = "",
+        ticketint = 0,
+        phoneactive = false,
+        fpoint = 0,
+        givebool = 0,
+        vip = false,
+        vipdate = null,
+        sid = "",
+        sixn = "",
+        tphone = 0,
+        doorpwd = "";
 
   static VipDate setVipDate(String unixTimestamp) =>
       VipDate(rawDate: unixTimestamp);
@@ -79,22 +99,30 @@ class UserModel {
     return 'UserModel(message: $message, code: $code, userimg: $rawUserImgUrl, email: $email, uid: $uid, point: $point, name: $name, ticketint: $ticketint, phoneactive: $phoneactive, vip: $vip, vipdate: $vipdate, sid: $sid, sixn: $sixn, tphone: $tphone, doorpwd: $doorpwd)';
   }
 
-  bool equals(UserModel user) {
-    return email == user.email &&
-        uid == user.uid &&
-        point == user.point &&
-        name == user.name &&
-        ticketint == user.ticketint &&
-        phoneactive == user.phoneactive &&
-        fpoint == user.fpoint &&
-        givebool == user.givebool &&
-        vip == user.vip &&
-        vipdate == user.vipdate &&
-        sid == user.sid &&
-        sixn == user.sixn &&
-        tphone == user.tphone &&
-        rawUserImgUrl == user.rawUserImgUrl &&
-        doorpwd == user.doorpwd;
+  @override
+  operator ==(other) {
+    return other is UserModel && other.hashCode == hashCode;
+  }
+
+  @override
+  int get hashCode {
+    return message.hashCode ^
+        code.hashCode ^
+        rawUserImgUrl.hashCode ^
+        email.hashCode ^
+        uid.hashCode ^
+        point.hashCode ^
+        name.hashCode ^
+        ticketint.hashCode ^
+        phoneactive.hashCode ^
+        fpoint.hashCode ^
+        givebool.hashCode ^
+        vip.hashCode ^
+        vipdate.hashCode ^
+        sid.hashCode ^
+        sixn.hashCode ^
+        tphone.hashCode ^
+        doorpwd.hashCode;
   }
 }
 

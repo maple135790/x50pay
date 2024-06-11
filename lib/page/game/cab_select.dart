@@ -10,6 +10,8 @@ import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
+import 'package:x50pay/providers/entry_provider.dart';
+import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 
 enum PaymentType {
@@ -21,6 +23,7 @@ enum PaymentType {
   const PaymentType(this.text);
 }
 
+// TODO: should refactor this to better writing style
 class CabSelect extends StatefulWidget {
   final String caboid;
   final Cabinet cabinetData;
@@ -80,11 +83,16 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
         caboid: widget.caboid
       );
     },
+    onAfterInserted: () async {
+      final userProvider = context.read<UserProvider>();
+      final entryProvider = context.read<EntryProvider>();
+      await userProvider.checkUser();
+      await entryProvider.checkEntry();
+    },
   );
   late final cabData = widget.cabinetData;
   late PaymentType paymentType;
-  late bool isUseRewardPoint = isUseRewardPoint =
-      GlobalSingleton.instance.userNotifier.value?.givebool == 1;
+  late bool isUseRewardPoint;
   String selectedRawPayUrl = '';
   bool isSelectPayment = false;
   bool isPayPressed = false;
@@ -120,8 +128,149 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
     super.dispose();
   }
 
+  Widget buildUseRewardPointCheckBox() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Checkbox.adaptive(
+          value: isUseRewardPoint,
+          onChanged: onUseRewardPointChanged,
+        ),
+        GestureDetector(
+          onTap: () {
+            onUseRewardPointChanged(!isUseRewardPoint);
+          },
+          child: const Text.rich(
+            TextSpan(
+              text: '用回饋',
+              children: [
+                TextSpan(
+                    text: ' (無法集計道數/參與部分活動)',
+                    style: TextStyle(
+                      color: Color(0xFFEAC912),
+                      fontWeight: FontWeight.bold,
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void onPayConfirmPressed() async {
+    final router = GoRouter.of(context);
+    final coinProvider = context.read<CoinInsertionProvider>();
+    bool insertSuccess = false;
+    isPayPressed = true;
+    setState(() {});
+
+    if (widget._isFromQRPay) {
+      insertSuccess = await viewModel.doInsertQRPay(url: selectedRawPayUrl);
+    } else {
+      insertSuccess = await viewModel.doInsert(
+        isUseRewardPoint: isUseRewardPoint,
+        id: widget.caboid,
+        index: widget.cabNum,
+        isTicket: paymentType == PaymentType.ticket,
+        mode:
+            paymentType != PaymentType.reloadCoin ? selectedMode!.first : 9999,
+      );
+    }
+    if (widget._isFromCabDetail) router.pop();
+    if (insertSuccess) {
+      coinProvider.isCoinInserted = true;
+      router.pop();
+    }
+  }
+
+  Widget _buildPlayMenu() {
+    List<Widget> children = [];
+
+    for (List mode in cabModes) {
+      final double price = double.parse(mode.last.toString());
+      children
+        ..add(const SizedBox(height: 20))
+        ..add(Text(mode[1]))
+        ..add(
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    if (widget._isFromQRPay) {
+                      selectedRawPayUrl = mode.first[0].toString();
+                    }
+                    selectedMode = mode;
+                    isSelectPayment = true;
+                    paymentType = PaymentType.point;
+                    setState(() {});
+                  },
+                  style: CustomButtonThemes.severe(isV4: true),
+                  child: Text('${price.toInt()}P')),
+              const SizedBox(width: 15),
+              Selector<UserProvider, bool>(
+                selector: (context, provider) =>
+                    provider.user?.hasTicket ?? false,
+                builder: (context, hasTicket, child) {
+                  return TextButton(
+                    onPressed: hasTicket
+                        ? () {
+                            if (widget._isFromQRPay) {
+                              selectedRawPayUrl = mode.first[1].toString();
+                            }
+                            selectedMode = mode;
+                            isSelectPayment = true;
+                            paymentType = PaymentType.ticket;
+                            setState(() {});
+                          }
+                        : null,
+                    style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+                    child: Text(i18n.gameTicket),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ...children,
+        Selector<UserProvider, bool>(
+          selector: (context, provider) => provider.user?.isStaff ?? false,
+          builder: (context, isStaff, child) {
+            if (!isStaff) return const SizedBox();
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 20),
+                const Text('工作人員補幣'),
+                const SizedBox(height: 5),
+                TextButton(
+                    onPressed: () {
+                      isSelectPayment = true;
+                      paymentType = PaymentType.reloadCoin;
+                      setState(() {});
+                    },
+                    style: CustomButtonThemes.severe(isV4: true),
+                    child: const Text('補幣')),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    isUseRewardPoint = context
+        .select<UserProvider, bool>((provider) => provider.user?.givebool == 1);
+
     final selectPayment = SizedBox(
       width: 400,
       child: Column(
@@ -217,49 +366,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
       ),
     );
 
-    return AlertDialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      clipBehavior: Clip.hardEdge,
-      contentPadding: isSelectPayment
-          ? const EdgeInsets.only(top: 14)
-          : const EdgeInsets.only(bottom: 20),
-      content: isSelectPayment ? confirmPayment() : selectPayment,
-    );
-  }
-
-  Widget buildUseRewardPointCheckBox() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Checkbox.adaptive(
-          value: isUseRewardPoint,
-          onChanged: onUseRewardPointChanged,
-        ),
-        GestureDetector(
-          onTap: () {
-            onUseRewardPointChanged(!isUseRewardPoint);
-          },
-          child: const Text.rich(
-            TextSpan(
-              text: '用回饋',
-              children: [
-                TextSpan(
-                    text: ' (無法集計道數/參與部分活動)',
-                    style: TextStyle(
-                      color: Color(0xFFEAC912),
-                      fontWeight: FontWeight.bold,
-                    ))
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Column confirmPayment() {
-    return Column(
+    final confirmPayment = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
@@ -313,107 +420,15 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
         )
       ],
     );
-  }
 
-  void onPayConfirmPressed() async {
-    final router = GoRouter.of(context);
-    final coinProvider = context.read<CoinInsertionProvider>();
-    bool insertSuccess = false;
-    isPayPressed = true;
-    setState(() {});
-
-    if (widget._isFromQRPay) {
-      insertSuccess = await viewModel.doInsertQRPay(url: selectedRawPayUrl);
-    } else {
-      insertSuccess = await viewModel.doInsert(
-        isUseRewardPoint: isUseRewardPoint,
-        id: widget.caboid,
-        index: widget.cabNum,
-        isTicket: paymentType == PaymentType.ticket,
-        mode:
-            paymentType != PaymentType.reloadCoin ? selectedMode!.first : 9999,
-      );
-    }
-    if (widget._isFromCabDetail) router.pop();
-    if (insertSuccess) {
-      coinProvider.isCoinInserted = true;
-      router.pop();
-    }
-  }
-
-  Widget _buildPlayMenu() {
-    List<Widget> children = [];
-
-    for (List mode in cabModes) {
-      final double price = double.parse(mode.last.toString());
-      children
-        ..add(const SizedBox(height: 20))
-        ..add(Text(mode[1]))
-        ..add(
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    if (widget._isFromQRPay) {
-                      selectedRawPayUrl = mode.first[0].toString();
-                    }
-                    selectedMode = mode;
-                    isSelectPayment = true;
-                    paymentType = PaymentType.point;
-                    setState(() {});
-                  },
-                  style: CustomButtonThemes.severe(isV4: true),
-                  child: Text('${price.toInt()}P')),
-              const SizedBox(width: 15),
-              ValueListenableBuilder(
-                valueListenable: GlobalSingleton.instance.userNotifier,
-                builder: (context, user, child) {
-                  return TextButton(
-                      onPressed: user?.hasTicket ?? false
-                          ? () {
-                              if (widget._isFromQRPay) {
-                                selectedRawPayUrl = mode.first[1].toString();
-                              }
-                              selectedMode = mode;
-                              isSelectPayment = true;
-                              paymentType = PaymentType.ticket;
-                              setState(() {});
-                            }
-                          : null,
-                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-                      child: Text(i18n.gameTicket));
-                },
-              ),
-            ],
-          ),
-        );
-    }
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      ...children,
-      ValueListenableBuilder(
-        valueListenable: GlobalSingleton.instance.userNotifier,
-        builder: (context, user, child) {
-          if (!(user?.isStaff ?? false)) return const SizedBox();
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 20),
-              const Text('工作人員補幣'),
-              const SizedBox(height: 5),
-              TextButton(
-                  onPressed: () {
-                    isSelectPayment = true;
-                    paymentType = PaymentType.reloadCoin;
-                    setState(() {});
-                  },
-                  style: CustomButtonThemes.severe(isV4: true),
-                  child: const Text('補幣')),
-            ],
-          );
-        },
-      ),
-    ]);
+    return AlertDialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      clipBehavior: Clip.hardEdge,
+      contentPadding: isSelectPayment
+          ? const EdgeInsets.only(top: 14)
+          : const EdgeInsets.only(bottom: 20),
+      content: isSelectPayment ? confirmPayment : selectPayment,
+    );
   }
 }

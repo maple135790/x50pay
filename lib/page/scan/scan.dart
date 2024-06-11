@@ -14,6 +14,8 @@ import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
+import 'package:x50pay/providers/entry_provider.dart';
+import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
@@ -92,6 +94,12 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
       mid: args[0],
       cid: args[1],
       repository: repo,
+      onAfterInserted: () async {
+        final userProvider = context.read<UserProvider>();
+        final entryProvider = context.read<EntryProvider>();
+        await userProvider.checkUser();
+        await entryProvider.checkEntry();
+      },
       settingRepo: SettingRepository(),
       onPaymentDone: () {
         controller.start();

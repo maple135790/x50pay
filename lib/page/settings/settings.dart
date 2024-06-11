@@ -5,18 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vibration/vibration.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base_stateful_state.dart';
 import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/mixins/remote_open_mixin.dart';
+import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
 class Settings extends StatefulWidget {
@@ -39,7 +43,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   late Future<void> intentDelay;
   final settingRepo = SettingRepository();
   final controller = ScrollController();
-  final user = GlobalSingleton.instance.userNotifier.value!;
+  late final UserModel user;
 
   void showEasterEgg() {
     Vibration.vibrate(duration: 50, amplitude: 128);
@@ -155,13 +159,15 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   }
 
   void doLogout() async {
-    final isLogout = await viewModel.logout();
+    final userProvider = context.read<UserProvider>();
+    final loginProvider = context.read<LoginProvider>();
+    final isLogout = await loginProvider.logout();
 
     if (!isLogout) {
       showServiceError();
       return;
     }
-    GlobalSingleton.instance.clearUser();
+    userProvider.clearUser();
     Prefs.secureDelete(SecurePrefsToken.session);
     await EasyLoading.showSuccess(
       '感謝\n登出成功！歡迎再光臨本小店',
@@ -178,6 +184,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   void initState() {
     super.initState();
     intentDelay = viewModel.init();
+    user = context.read<UserProvider>().user!;
 
     avatarUrl = user.settingsUserImageUrl;
     if (widget.shouldGoPhone ?? false) {

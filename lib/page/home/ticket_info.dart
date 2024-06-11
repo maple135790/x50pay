@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/providers/user_provider.dart';
 
 class TicketInfo extends StatelessWidget {
   /// 票券資訊
@@ -40,11 +42,9 @@ class TicketInfo extends StatelessWidget {
       context.pushNamed(AppRoutes.buyMPass.routeName);
     }
 
-    return ValueListenableBuilder(
-      valueListenable: GlobalSingleton.instance.userNotifier,
+    return Selector<UserProvider, UserModel>(
+      selector: (context, provider) => provider.user!,
       builder: (context, user, child) {
-        user = user!;
-
         late final String vipMessage;
         late final String vipStatus;
         if (user.vip!) {

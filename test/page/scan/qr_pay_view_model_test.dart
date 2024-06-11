@@ -27,6 +27,7 @@ void main() {
     mid: '',
     onCabSelect: (qrPayData) {},
     onPaymentDone: () {},
+    onAfterInserted: () {},
   );
   setUpAll(() {
     when(() => mockRepo.selGame(any())).thenAnswer((_) async {

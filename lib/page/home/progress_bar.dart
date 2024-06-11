@@ -156,9 +156,9 @@ class ProgressPainter extends CustomPainter {
             min((size.width * ((progress) / 100)), size.width))
         : max(textPainter.width + leadingPadding * 2,
             min((size.width * ((progress) / 100)), size.width));
+    final rect = Offset.zero & Size(progressWidth, barHeight);
     canvas.drawRRect(
-      RRect.fromRectAndRadius(Offset.zero & Size(progressWidth, barHeight),
-          const Radius.circular(24)),
+      RRect.fromRectAndRadius(rect, const Radius.circular(24)),
       Paint()..color = progressBarColor,
     );
     if (isUseIcon) {

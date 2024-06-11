@@ -12,7 +12,10 @@ class MockRepository extends Mock implements Repository {}
 final mockRepo = MockRepository();
 
 void main() {
-  final viewModel = CabSelectViewModel(repository: mockRepo);
+  final viewModel = CabSelectViewModel(
+    repository: mockRepo,
+    onAfterInserted: () {},
+  );
 
   setUp(() {
     SharedPreferences.setMockInitialValues({"store_id": "7037656"});

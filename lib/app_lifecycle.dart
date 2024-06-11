@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager/platform_tags.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
@@ -13,6 +14,7 @@ import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pad_mixin.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
+import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
@@ -43,7 +45,10 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   }
 
   Future<void> _handleNfc(NfcTag tag) async {
-    if (!GlobalSingleton.instance.isLogined) return;
+    final currentContext = GlobalSingleton.appNavigatorKey.currentContext;
+    if (currentContext == null) return;
+    final isLogined = currentContext.read<LoginProvider>().isLogined;
+    if (!isLogined) return;
     log('got tag', name: 'handleNfc');
 
     Ndef? ndef = Ndef.from(tag);
@@ -83,7 +88,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
       onCabSelect: (qrPayData) {
         GlobalSingleton.instance.isNfcPayDialogOpen = true;
         showDialog(
-          context: GlobalSingleton.navigatorKey.currentContext!,
+          context: GlobalSingleton.appNavigatorKey.currentContext!,
           builder: (context) {
             return CabSelect.fromQRPay(
               qrPayData: qrPayData,

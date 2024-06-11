@@ -5,14 +5,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
 
-class LoginViewModel extends BaseViewModel {
-  final _repo = Repository();
+class LoginProvider extends BaseViewModel {
+  final Repository repo;
   BasicResponse? response;
+
+  LoginProvider({required this.repo});
+
+  bool _isLogined = false;
+  bool get isLogined => _isLogined;
 
   /// 錯誤訊息，若無錯誤則為 null
   String? get errorMsg => _errorMsg;
@@ -31,15 +35,16 @@ class LoginViewModel extends BaseViewModel {
   }
 
   /// 是否隱藏密碼。使用於密碼欄位的眼睛
-  bool get hidePassword => _hidePassword;
+  bool get isPasswordObscure => _hidePassword;
   bool _hidePassword = true;
-  set hidePassword(bool value) {
+  set isPasswordObscure(bool value) {
     _hidePassword = value;
     notifyListeners();
   }
 
   /// 登入的實體方法
-  void _login(
+  @visibleForTesting
+  void doLogin(
     String email,
     String password,
     VoidCallback onLoginSuccess,
@@ -51,7 +56,7 @@ class LoginViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        response = await _repo.login(email: email, password: password);
+        response = await repo.login(email: email, password: password);
       } else {
         response =
             BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
@@ -70,7 +75,7 @@ class LoginViewModel extends BaseViewModel {
           break;
         case 200:
           errorMsg = null;
-          _successLogin(onLoginSuccess, isShowSuccessLogin);
+          successLogin(onLoginSuccess, isShowSuccessLogin);
           break;
         default:
           errorMsg = '未知錯誤';
@@ -92,26 +97,27 @@ class LoginViewModel extends BaseViewModel {
     required VoidCallback onLoginSuccess,
     bool isShowSuccessLogin = true,
   }) async {
-    _login(email, password, onLoginSuccess, isShowSuccessLogin);
+    doLogin(email, password, onLoginSuccess, isShowSuccessLogin);
   }
 
   /// 使用生物辨識的登入
   ///
   /// 會找尋儲存於 [FlutterSecureStorage] 的帳號及密碼。
-  /// 並傳至內部登入方法 [_login]
+  /// 並傳至內部登入方法 [doLogin]
   void biometricsLogin({required VoidCallback onLoginSuccess}) async {
     final email = await Prefs.secureRead(SecurePrefsToken.username) as String;
     final password =
         await Prefs.secureRead(SecurePrefsToken.password) as String;
-    _login(email, password, onLoginSuccess, true);
+    doLogin(email, password, onLoginSuccess, true);
   }
 
   /// 成功登入
-  void _successLogin(
+  @visibleForTesting
+  void successLogin(
     VoidCallback onLoginSuccess,
     bool isShowSuccessLogin,
   ) async {
-    GlobalSingleton.instance.isLogined = true;
+    _isLogined = true;
     if (isShowSuccessLogin) {
       EasyLoading.dismiss();
       await Future.delayed(const Duration(milliseconds: 150));
@@ -136,6 +142,23 @@ class LoginViewModel extends BaseViewModel {
     final canAuthenticate =
         canAuthenticateWithBiometrics || await auth.isDeviceSupported();
     enableBiometricsLogin = canAuthenticate && hasUsername && hasPwd;
+  }
+
+  Future<bool> logout({int debugFlag = 200}) async {
+    EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 200));
+
+    try {
+      await Repository().logout();
+
+      return true;
+    } on Exception catch (e) {
+      log('', name: 'LoginProvider logout', error: e);
+
+      return false;
+    } finally {
+      EasyLoading.dismiss();
+    }
   }
 
   String testResponse({int? code = 200}) =>

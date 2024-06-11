@@ -3,10 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
+import 'package:x50pay/providers/user_provider.dart';
 
 class TopInfo extends StatelessWidget {
   /// 頁面頂部的個人資訊
@@ -34,11 +35,9 @@ class TopInfo extends StatelessWidget {
       router.pushNamed(AppRoutes.scanQRCode.routeName);
     }
 
-    return ValueListenableBuilder(
-      valueListenable: GlobalSingleton.instance.userNotifier,
+    return Selector<UserProvider, UserModel>(
+      selector: (context, provider) => provider.user!,
       builder: (context, user, child) {
-        user as UserModel;
-
         final unActivatedLabel = TextSpan(
           text: ' (未驗證)',
           recognizer: TapGestureRecognizer()..onTap = onPhoneActivatePressed,
@@ -114,6 +113,10 @@ class TopInfo extends StatelessWidget {
                   decoration: const BoxDecoration(shape: BoxShape.circle),
                   child: CachedNetworkImage(
                     imageUrl: user.userImageUrl,
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.error_outline_rounded,
+                      size: 45,
+                    ),
                     alignment: Alignment.center,
                     fit: BoxFit.fill,
                   ),

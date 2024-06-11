@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/page/home/event_info.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/mari_info.dart';
@@ -9,6 +9,8 @@ import 'package:x50pay/page/home/official_info.dart';
 import 'package:x50pay/page/home/recent_quests.dart';
 import 'package:x50pay/page/home/ticket_info.dart';
 import 'package:x50pay/page/home/top_info.dart';
+import 'package:x50pay/providers/entry_provider.dart';
+import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class Home extends StatefulWidget {
@@ -28,7 +30,10 @@ class _HomeState extends BaseStatefulState<Home> {
   @override
   void initState() {
     super.initState();
-    viewModel = HomeViewModel(repository: repo)..isFunctionalHeader = false;
+    viewModel = HomeViewModel(
+      userProvider: context.read<UserProvider>(),
+      entryProvider: context.read<EntryProvider>(),
+    )..isFunctionalHeader = false;
   }
 
   Future<void> onRefresh() async {
@@ -44,24 +49,26 @@ class _HomeState extends BaseStatefulState<Home> {
         onRefresh: onRefresh,
         child: ChangeNotifierProvider.value(
           value: viewModel,
-          builder: (context, child) => FutureBuilder(
-            future: viewModel.initHome(),
-            key: refreshKey,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const SizedBox();
-              }
-              if (snapshot.hasError || snapshot.data == false) {
-                showServiceError();
-                return Center(child: Text(serviceErrorText));
-              }
-              return const Scrollbar(
-                child: SingleChildScrollView(
-                  child: _HomeLoaded(),
-                ),
-              );
-            },
-          ),
+          builder: (context, child) {
+            return FutureBuilder(
+              future: viewModel.initHome(),
+              key: refreshKey,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const SizedBox();
+                }
+                if (snapshot.hasError || snapshot.data == false) {
+                  showServiceError();
+                  return Center(child: Text(serviceErrorText));
+                }
+                return const Scrollbar(
+                  child: SingleChildScrollView(
+                    child: _HomeLoaded(),
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );
@@ -91,8 +98,8 @@ class _HomeLoadedState extends BaseStatefulState<_HomeLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: GlobalSingleton.instance.entryNotifier,
+    return Selector<EntryProvider, EntryModel?>(
+      selector: (context, provider) => provider.entry,
       builder: (context, entry, child) {
         final recentQuests = entry?.questCampaign ?? [];
         final events = entry?.evlist;

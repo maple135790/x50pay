@@ -106,82 +106,80 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
   Future<void> reloginDialog() async {
     final email = TextEditingController();
     final password = TextEditingController();
-    final loginViewModel = LoginViewModel();
 
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return ChangeNotifierProvider.value(
-          value: loginViewModel,
-          child: AlertDialog(
-            title: Text(i18n.userAppSettingsBiometricsLoginCred),
-            content: AutofillGroup(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(i18n.userAppSettingsBiometricsLoginCredContent),
-                  const SizedBox(height: 15),
-                  Consumer<LoginViewModel>(
-                    builder: (context, vm, child) => Visibility(
-                      visible: vm.errorMsg != null,
-                      child: Row(
-                        children: [
-                          const Icon(Icons.error_outline_rounded,
-                              color: Colors.red),
-                          const SizedBox(width: 5),
-                          Text(
-                            vm.errorMsg ?? '',
-                            style: const TextStyle(color: Colors.red),
-                          )
-                        ],
-                      ),
+        return AlertDialog(
+          title: Text(i18n.userAppSettingsBiometricsLoginCred),
+          content: AutofillGroup(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(i18n.userAppSettingsBiometricsLoginCredContent),
+                const SizedBox(height: 15),
+                Consumer<LoginProvider>(
+                  builder: (context, vm, child) => Visibility(
+                    visible: vm.errorMsg != null,
+                    child: Row(
+                      children: [
+                        const Icon(Icons.error_outline_rounded,
+                            color: Colors.red),
+                        const SizedBox(width: 5),
+                        Text(
+                          vm.errorMsg ?? '',
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  TextField(
-                      controller: email,
-                      textInputAction: TextInputAction.next,
-                      autofillHints: const [AutofillHints.username],
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.person_rounded))),
-                  const SizedBox(height: 15),
-                  TextField(
-                      controller: password,
-                      textInputAction: TextInputAction.done,
-                      obscureText: true,
-                      autofillHints: const [AutofillHints.password],
-                      decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.lock_rounded))),
-                ],
-              ),
+                ),
+                const SizedBox(height: 15),
+                TextField(
+                    controller: email,
+                    textInputAction: TextInputAction.next,
+                    autofillHints: const [AutofillHints.username],
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.person_rounded))),
+                const SizedBox(height: 15),
+                TextField(
+                  controller: password,
+                  textInputAction: TextInputAction.done,
+                  obscureText: true,
+                  autofillHints: const [AutofillHints.password],
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.lock_rounded),
+                  ),
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(i18n.dialogCancel),
-              ),
-              TextButton(
-                onPressed: () {
-                  loginViewModel.login(
-                    email: email.text,
-                    password: password.text,
-                    isShowSuccessLogin: false,
-                    onLoginSuccess: () {
-                      Navigator.of(context).pop();
-                      viewModel.enableBiometricsLogin(
-                          email.text, password.text);
-                    },
-                  );
-                },
-                child: Text(i18n.userAppSettingsBiometricsLoginTry),
-              ),
-            ],
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(i18n.dialogCancel),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<LoginProvider>().login(
+                      email: email.text,
+                      password: password.text,
+                      isShowSuccessLogin: false,
+                      onLoginSuccess: () {
+                        Navigator.of(context).pop();
+                        viewModel.enableBiometricsLogin(
+                            email.text, password.text);
+                      },
+                    );
+              },
+              child: Text(i18n.userAppSettingsBiometricsLoginTry),
+            ),
+          ],
         );
       },
     );

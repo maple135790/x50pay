@@ -23,7 +23,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   final SettingRepository settingRepo;
   final Repository repository;
   final void Function(QRPayData qrPayData) onCabSelect;
-
+  final VoidCallback onAfterInserted;
   final VoidCallback onPaymentDone;
 
   QRPayViewModel({
@@ -33,6 +33,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     required this.onPaymentDone,
     required this.settingRepo,
     required this.repository,
+    required this.onAfterInserted,
   });
 
   late final bool _enabledFastQRPay;
@@ -184,8 +185,11 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
 
   void _doInsert(String url) async {
     log('https://pay.x50.fun$url');
-    await CabSelectViewModel(repository: repository)
-        .doInsertQRPay(url: 'https://pay.x50.fun$url');
+    final cabSelectViewModel = CabSelectViewModel(
+      repository: repository,
+      onAfterInserted: onAfterInserted,
+    );
+    await cabSelectViewModel.doInsertQRPay(url: 'https://pay.x50.fun$url');
     return;
   }
 

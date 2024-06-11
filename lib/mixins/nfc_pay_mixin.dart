@@ -4,11 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:html/parser.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/providers/entry_provider.dart';
+import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
@@ -69,15 +72,26 @@ mixin NfcPayMixin {
 
       _doInsert(payUrl);
     } catch (e) {
-      log('', error: e, name: 'QRPayViewModel.handlePayment');
+      log('', error: e, name: 'NfcPayMixin.handlePayment');
       rethrow;
     }
   }
 
   void _doInsert(String url) async {
-    log('https://pay.x50.fun$url');
-    await CabSelectViewModel(repository: _repo)
-        .doInsertQRPay(url: 'https://pay.x50.fun$url');
+    log('https://pay.x50.fun$url', name: 'NfcPayMixin._doInsert');
+    final cabSelectViewModel = CabSelectViewModel(
+      repository: _repo,
+      onAfterInserted: () async {
+        final currentContext = GlobalSingleton.appNavigatorKey.currentContext!;
+        final userProvider = currentContext.read<UserProvider>();
+        final entryProvider = currentContext.read<EntryProvider>();
+        await userProvider.checkUser();
+        await entryProvider.checkEntry();
+      },
+    );
+    await cabSelectViewModel.doInsertQRPay(
+      url: 'https://pay.x50.fun$url',
+    );
     return;
   }
 

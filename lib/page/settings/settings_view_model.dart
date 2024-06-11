@@ -12,7 +12,6 @@ import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
-import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
 typedef QuicPayPrefs = ({PaymentSettingsModel model, List<String> cards});
@@ -393,33 +392,6 @@ class SettingsViewModel extends BaseViewModel {
       rethrow;
     } finally {
       dismissLoading();
-    }
-  }
-
-  Future<bool> logout({
-    int debugFlag = 200,
-  }) async {
-    await EasyLoading.show();
-    await Future.delayed(const Duration(milliseconds: 200));
-
-    try {
-      if (!kDebugMode || isForceFetch) {
-        await Repository().logout();
-      } else {
-        if (debugFlag != 200) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
-        } else {
-          response = BasicResponse.fromJson(jsonDecode(testResponse()));
-        }
-      }
-      await EasyLoading.dismiss();
-
-      return true;
-    } on Exception catch (e) {
-      log('', name: 'logout', error: e);
-      await EasyLoading.dismiss();
-      return false;
     }
   }
 

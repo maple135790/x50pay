@@ -26,25 +26,50 @@ class EntryModel {
     this.questCampaign,
   });
 
+  const EntryModel.empty()
+      : message = "",
+        code = 0,
+        gr2 = const [],
+        evlist = null,
+        giftlist = null,
+        questCampaign = null;
+
   factory EntryModel.fromJson(Map<String, dynamic> json) =>
       _$EntryModelFromJson(json);
   Map<String, dynamic> toJson() => _$EntryModelToJson(this);
 
-  String get gradeLv => gr2[0].toString();
-  String get gr2HowMuch => gr2[1].toInt().toString();
-  String get gr2Limit => gr2[2].toInt().toString();
-  String get gr2Next => gr2[3].toString();
-  String get gr2Day => gr2[4].toString().replaceAll('天', '');
-  String get gr2Date => gr2[5].toString();
-  String get gr2GradeBoxContent => gr2[6].toString();
-  String get _rawAva => gr2[7].toString().split(',').last;
-  bool get gr2ShouldShowBouns => gr2[8];
-  String get gr2VDay => gr2[9].toString();
-  String get gr2BounsLimit => gr2[10].toString();
-  String get gr2Timer => double.parse(gr2[12].toString()).toStringAsFixed(0);
-  String get gr2CountMuch => gr2[13].toString();
-  double get gr2ProgressV5 => (gr2[13] / gr2[1]) * 100;
-  double get gr2Progress => gr2[0] / 15;
+  String _getGR2StringAt(int index) {
+    if (gr2.length <= index) return '';
+    return gr2[index].toString();
+  }
+
+  num _getGR2NumAt(int index) {
+    if (gr2.length <= index) return 0;
+    return gr2[index];
+  }
+
+  String get gradeLv => _getGR2StringAt(0);
+  String get gr2HowMuch => int.tryParse(_getGR2StringAt(1))?.toString() ?? '';
+  String get gr2Limit => int.tryParse(_getGR2StringAt(2))?.toString() ?? '';
+  String get gr2Next => _getGR2StringAt(3);
+  String get gr2Day => _getGR2StringAt(4).replaceAll('天', '');
+  String get gr2Date => _getGR2StringAt(5);
+  String get gr2GradeBoxContent => _getGR2StringAt(6);
+  String get _rawAva => _getGR2StringAt(7).split(',').last;
+  bool get gr2ShouldShowBouns => gr2.elementAtOrNull(8) ?? true;
+  String get gr2VDay => _getGR2StringAt(9);
+  String get gr2BounsLimit => _getGR2StringAt(10);
+  String get gr2Timer =>
+      double.tryParse(_getGR2StringAt(12))?.toStringAsFixed(0) ?? '';
+  String get gr2CountMuch => _getGR2StringAt(13);
+  double get gr2ProgressV5 {
+    if (gr2.elementAtOrNull(13) == null || gr2.elementAtOrNull(1) == null) {
+      return 0.0;
+    }
+    return (_getGR2NumAt(13) / _getGR2NumAt(1)) * 100;
+  }
+
+  double get gr2Progress => _getGR2NumAt(0) / 15;
   Uint8List get ava => base64Decode(_rawAva);
 }
 

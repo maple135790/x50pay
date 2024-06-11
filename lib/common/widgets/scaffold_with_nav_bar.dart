@@ -18,6 +18,7 @@ import 'package:x50pay/common/widgets/persist_app_bar.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
+import 'package:x50pay/providers/user_provider.dart';
 
 typedef MenuItem = ({IconData icon, String label, RouteProperty route});
 
@@ -271,11 +272,13 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
                     ? CustomColorThemes.appbarBoxColorDark
                     : CustomColorThemes.appbarBoxColorLight,
               ),
-              child: ValueListenableBuilder<UserModel?>(
-                valueListenable: GlobalSingleton.instance.userNotifier,
+              child: Selector<UserProvider, UserModel?>(
+                selector: (context, provider) => provider.user,
                 builder: (context, user, child) {
-                  final point = user?.point?.toInt() ?? -1;
-                  final fpoint = user?.fpoint?.toInt() ?? -1;
+                  if (user == null) return const SizedBox();
+
+                  final point = user.point?.toInt() ?? -1;
+                  final fpoint = user.fpoint?.toInt() ?? -1;
 
                   return Text.rich(
                     TextSpan(
