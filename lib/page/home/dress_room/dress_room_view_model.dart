@@ -36,6 +36,8 @@ class DressRoomViewModel extends BaseViewModel {
       final doc = html.parse(rawDoc, encoding: 'utf8');
       final parents = doc.querySelectorAll(parentSelector);
       for (final parent in parents) {
+        // 有些父元素沒有子元素，例如沒有圖片的父元素
+        if (parent.children.length < 2) continue;
         avatars.add(
           (
             b64Image: parent.children[0].attributes['src']!
