@@ -8,12 +8,18 @@ import 'package:x50pay/common/models/cabinet/cabinet.dart';
 ///
 /// 用於儲存全域變數，例如最近遊玩的機台資料、服務連接位置等。
 class GlobalSingleton {
+  static GlobalSingleton? _instance;
+
+  GlobalSingleton._();
+
+  static GlobalSingleton get instance => _instance ??= GlobalSingleton._();
+
   static final duringTest = Platform.environment.containsKey('FLUTTER_TEST');
 
   /// 服務是否連接到X50Pay。
   ///
   /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
-  final isServiceOnline = (kReleaseMode || duringTest) || false;
+  final isServiceOnline = (kReleaseMode || duringTest) || true;
 
   /// 全域的 navigatorKey
   ///
@@ -25,12 +31,6 @@ class GlobalSingleton {
   ///
   /// 用來防止重複顯示 dialog
   bool isNfcPayDialogOpen = false;
-
-  /// 是否已經登入
-  ///
-  /// 用於確認是否要顯示登入頁面，於 app 啟動時檢查。
-  @Deprecated('Use UserProvider or LoginProvider instead')
-  bool isLogined = false;
 
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid, int cabNum})? recentPlayedCabinetData;
@@ -47,111 +47,4 @@ class GlobalSingleton {
   /// 由於go_router 在pushNamed 無法取得location，
   /// 因此使用此旗標來判斷是否在掃描QRCode頁面。
   bool isInCameraPage = false;
-
-  static GlobalSingleton? _instance;
-
-  GlobalSingleton._();
-
-  static GlobalSingleton get instance => _instance ??= GlobalSingleton._();
-
-  // /// 檢查使用者資料
-  // ///
-  // /// 取得使用者資料，並將資料存入 [userNotifier] 變數中。
-  // /// 回傳是否成功取得使用者資料。
-  // ///
-  // /// [force] 強制檢查使用者資料
-  // Future<bool> checkUser() async {
-  //   if (_duringTest) return true;
-  //   log('check user...', name: 'checkUser');
-
-  //   await Future.delayed(const Duration(milliseconds: 100));
-  //   try {
-  //     final current = DateTime.now().millisecondsSinceEpoch;
-  //     final isLess500ms =
-  //         Duration(milliseconds: current - _lastChkUser).inMilliseconds < 500;
-
-  //     if (isLess500ms) return true;
-  //     _lastChkUser = DateTime.now().millisecondsSinceEpoch;
-  //     if (!kDebugMode || isServiceOnline) {
-  //       final fetchedUser = await _repo.getUser();
-
-  //       // 未回傳UserModel
-  //       if (fetchedUser == null) return false;
-  //       // 回傳UserModel, 驗證失敗或是伺服器錯誤
-  //       if (fetchedUser.code != 200) return false;
-  //       // 與現有資料相同，不需要更新
-  //       if (userNotifier.value?.equals(fetchedUser) ?? false) return true;
-  //       userNotifier.value = fetchedUser;
-  //       return true;
-  //     } else {
-  //       userNotifier.value = UserModel(
-  //         message: "done",
-  //         code: 200,
-  //         doorpwd: "本期門禁密碼爲 : 1743#",
-  //         vip: false,
-  //         phoneactive: true,
-  //         vipdate: UserModel.setVipDate(DateTime.timestamp().toIso8601String()),
-  //         fpoint: 0,
-  //         givebool: 0,
-  //         name: "testUser",
-  //         email: "testUser@testUser",
-  //         point: _devPCostEnabled ? _devPoint -= 20 : _devPoint,
-  //         uid: _devUserToStaff ? "X938" : "938",
-  //         sid: "",
-  //         sixn: "805349",
-  //         tphone: 1,
-  //         ticketint: 10,
-  //       );
-  //       return true;
-  //     }
-  //   } catch (e, stacktrace) {
-  //     log('', error: e, stackTrace: stacktrace, name: 'checkUser');
-  //     return false;
-  //   }
-  // }
-
-  // /// 檢查 Entry 資料
-  // ///
-  // /// 取得 Entry 資料，並將資料存入 [entryNotifier] 變數中。
-  // /// 回傳是否成功取得 Entry 資料。
-  // Future<bool> checkEntry() async {
-  //   if (_duringTest) return true;
-  //   await Future.delayed(const Duration(milliseconds: 100));
-  //   log('check entry...', name: 'checkEntry');
-
-  //   try {
-  //     if (!kDebugMode || isServiceOnline) {
-  //       final fetchedEntry = await _repo.getEntry();
-  //       if (fetchedEntry == null || fetchedEntry.code != 200) return false;
-
-  //       entryNotifier.value = fetchedEntry;
-  //       return true;
-  //     } else {
-  //       entryNotifier.value = EntryModel(
-  //         message: "done",
-  //         code: 200,
-  //         gr2: [
-  //           _devGr2GainEnabled ? _devGr2Point += 30 : _devGr2GainEnabled,
-  //           220,
-  //           3,
-  //           "250",
-  //           "12/13 - 0",
-  //           "01/16",
-  //           "",
-  //           "",
-  //           true,
-  //           42.79,
-  //           15,
-  //           25,
-  //           0,
-  //           _devGr2GainEnabled ? _devfPPoint += 30 : _devfPPoint
-  //         ],
-  //       );
-  //       return true;
-  //     }
-  //   } catch (e, stacktrace) {
-  //     log('', error: e, stackTrace: stacktrace, name: 'checkEntry');
-  //     return false;
-  //   }
-  // }
 }

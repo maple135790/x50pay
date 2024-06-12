@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -49,6 +50,7 @@ class Api {
     String? customDest,
     bool verbose = false,
     bool withSession = false,
+    bool logRequestTime = false,
     required String dest,
     required Map<String, dynamic> body,
     required HttpMethod method,
@@ -60,6 +62,7 @@ class Api {
     http.Response response;
 
     final client = http.Client();
+    Stopwatch? stopwatch;
     bool isResponseString = onSuccessString != null;
     bool isEmptyBody = body.isEmpty;
     String? session;
@@ -112,7 +115,7 @@ class Api {
     if (withSession) {
       session = await Prefs.secureRead(SecurePrefsToken.session);
     }
-
+    if (logRequestTime) stopwatch = Stopwatch()..start();
     switch (method) {
       case HttpMethod.post:
         response = await client.post(
@@ -172,6 +175,10 @@ class Api {
       log(response.headers.toString(), name: 'Api response');
       log(response.body, name: 'Api response');
     }
+    if (logRequestTime) {
+      log('${stopwatch?.elapsedMilliseconds} ms', name: 'Api request time');
+    }
+    stopwatch?.reset();
     return response;
   }
 

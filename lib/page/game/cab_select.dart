@@ -23,7 +23,6 @@ enum PaymentType {
   const PaymentType(this.text);
 }
 
-// TODO: should refactor this to better writing style
 class CabSelect extends StatefulWidget {
   final String caboid;
   final Cabinet cabinetData;
@@ -74,27 +73,11 @@ class CabSelect extends StatefulWidget {
 
 class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
   final repo = Repository();
-  late final viewModel = CabSelectViewModel(
-    repository: repo,
-    onInsertSuccess: () {
-      GlobalSingleton.instance.recentPlayedCabinetData = (
-        cabinet: widget.cabinetData,
-        cabNum: widget.cabNum,
-        caboid: widget.caboid
-      );
-    },
-    onAfterInserted: () async {
-      final userProvider = context.read<UserProvider>();
-      final entryProvider = context.read<EntryProvider>();
-      await userProvider.checkUser();
-      await entryProvider.checkEntry();
-    },
-  );
+  late final CabSelectViewModel viewModel;
   late final cabData = widget.cabinetData;
-  late PaymentType paymentType;
   late bool isUseRewardPoint;
+  PaymentType? paymentType;
   String selectedRawPayUrl = '';
-  bool isSelectPayment = false;
   bool isPayPressed = false;
   List? selectedMode;
 
@@ -110,6 +93,17 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
   String get cabLabel =>
       widget._isFromQRPay ? widget.qrPayData.cabLabel : cabData.label;
 
+  void onSelectPaymentType(
+    List<dynamic> mode,
+    String qrPayUrl, {
+    required PaymentType type,
+  }) {
+    selectedRawPayUrl = qrPayUrl;
+    selectedMode = mode;
+    paymentType = type;
+    setState(() {});
+  }
+
   void onUseRewardPointChanged(bool? value) {
     if (value == null) return;
     isUseRewardPoint = value;
@@ -120,42 +114,29 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
   void initState() {
     super.initState();
     widget.onCreated?.call();
+    isUseRewardPoint = context.read<UserProvider>().user?.givebool == 1;
+    viewModel = CabSelectViewModel(
+      repository: repo,
+      onInsertSuccess: () {
+        GlobalSingleton.instance.recentPlayedCabinetData = (
+          cabinet: widget.cabinetData,
+          cabNum: widget.cabNum,
+          caboid: widget.caboid
+        );
+      },
+      onAfterInserted: () async {
+        final userProvider = context.read<UserProvider>();
+        final entryProvider = context.read<EntryProvider>();
+        await userProvider.checkUser();
+        await entryProvider.checkEntry();
+      },
+    );
   }
 
   @override
   void dispose() {
     widget.onDestroy?.call();
     super.dispose();
-  }
-
-  Widget buildUseRewardPointCheckBox() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Checkbox.adaptive(
-          value: isUseRewardPoint,
-          onChanged: onUseRewardPointChanged,
-        ),
-        GestureDetector(
-          onTap: () {
-            onUseRewardPointChanged(!isUseRewardPoint);
-          },
-          child: const Text.rich(
-            TextSpan(
-              text: '用回饋',
-              children: [
-                TextSpan(
-                    text: ' (無法集計道數/參與部分活動)',
-                    style: TextStyle(
-                      color: Color(0xFFEAC912),
-                      fontWeight: FontWeight.bold,
-                    ))
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
   }
 
   void onPayConfirmPressed() async {
@@ -184,31 +165,62 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
     }
   }
 
-  Widget _buildPlayMenu() {
-    List<Widget> children = [];
+  @override
+  Widget build(BuildContext context) {
+    final paymentOptions = <Widget>[];
 
-    for (List mode in cabModes) {
+    final staffOption = Selector<UserProvider, bool>(
+      selector: (context, provider) => provider.user?.isStaff ?? false,
+      builder: (context, isStaff, child) {
+        if (!isStaff) return const SizedBox();
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 20),
+            const Text('工作人員補幣'),
+            const SizedBox(height: 5),
+            TextButton(
+              onPressed: () {
+                paymentType = PaymentType.reloadCoin;
+                setState(() {});
+              },
+              style: CustomButtonThemes.severe(isV4: true),
+              child: const Text('補幣'),
+            ),
+          ],
+        );
+      },
+    );
+
+    for (final mode in cabModes) {
       final double price = double.parse(mode.last.toString());
-      children
+      paymentOptions
         ..add(const SizedBox(height: 20))
-        ..add(Text(mode[1]))
+        ..add(Text(
+          mode[1],
+          textAlign: TextAlign.center,
+        ))
         ..add(
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                  onPressed: () {
-                    if (widget._isFromQRPay) {
-                      selectedRawPayUrl = mode.first[0].toString();
-                    }
-                    selectedMode = mode;
-                    isSelectPayment = true;
-                    paymentType = PaymentType.point;
-                    setState(() {});
-                  },
-                  style: CustomButtonThemes.severe(isV4: true),
-                  child: Text('${price.toInt()}P')),
+                onPressed: () {
+                  var qrPayUrl = '';
+                  if (widget._isFromQRPay) {
+                    qrPayUrl = mode.first[0].toString();
+                  }
+                  onSelectPaymentType(
+                    mode,
+                    qrPayUrl,
+                    type: PaymentType.point,
+                  );
+                },
+                style: CustomButtonThemes.severe(isV4: true),
+                child: Text('${price.toInt()}P'),
+              ),
               const SizedBox(width: 15),
               Selector<UserProvider, bool>(
                 selector: (context, provider) =>
@@ -217,13 +229,15 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                   return TextButton(
                     onPressed: hasTicket
                         ? () {
+                            var qrPayUrl = '';
                             if (widget._isFromQRPay) {
-                              selectedRawPayUrl = mode.first[1].toString();
+                              qrPayUrl = mode.first[1].toString();
                             }
-                            selectedMode = mode;
-                            isSelectPayment = true;
-                            paymentType = PaymentType.ticket;
-                            setState(() {});
+                            onSelectPaymentType(
+                              mode,
+                              qrPayUrl,
+                              type: PaymentType.ticket,
+                            );
                           }
                         : null,
                     style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
@@ -235,41 +249,95 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
           ),
         );
     }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ...children,
-        Selector<UserProvider, bool>(
-          selector: (context, provider) => provider.user?.isStaff ?? false,
-          builder: (context, isStaff, child) {
-            if (!isStaff) return const SizedBox();
-
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 20),
-                const Text('工作人員補幣'),
-                const SizedBox(height: 5),
-                TextButton(
-                    onPressed: () {
-                      isSelectPayment = true;
-                      paymentType = PaymentType.reloadCoin;
-                      setState(() {});
-                    },
-                    style: CustomButtonThemes.severe(isV4: true),
-                    child: const Text('補幣')),
-              ],
-            );
-          },
-        ),
-      ],
+    final cabImage = SizedBox(
+      height: 150,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: CachedNetworkImage(
+              imageUrl: gameCabImage,
+              alignment: const Alignment(0, -0.25),
+              fit: BoxFit.fitWidth,
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  colors: [Colors.black, Colors.transparent],
+                  transform: GradientRotation(12),
+                  stops: [0, 0.6],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 8,
+            right: 8,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xffdcdcdc),
+                ),
+                child: const Icon(
+                  Icons.close_rounded,
+                  size: 14,
+                  color: Color(0xff2a2a2a),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    cabLabel,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black,
+                          blurRadius: 18,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '$cabNum號機',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black,
+                              blurRadius: 15,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    isUseRewardPoint = context
-        .select<UserProvider, bool>((provider) => provider.user?.givebool == 1);
 
     final selectPayment = SizedBox(
       width: 400,
@@ -277,93 +345,41 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            height: 150,
-            child: Stack(
+          cabImage,
+          const SizedBox(height: 15),
+          ...paymentOptions,
+          staffOption,
+        ],
+      ),
+    );
+
+    final useRewardPointCheckBox = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Checkbox.adaptive(
+          value: isUseRewardPoint,
+          onChanged: onUseRewardPointChanged,
+        ),
+        GestureDetector(
+          onTap: () {
+            onUseRewardPointChanged(!isUseRewardPoint);
+          },
+          child: const Text.rich(
+            TextSpan(
+              text: '用回饋',
               children: [
-                Positioned.fill(
-                  child: CachedNetworkImage(
-                    imageUrl: gameCabImage,
-                    alignment: const Alignment(0, -0.25),
-                    fit: BoxFit.fitWidth,
+                TextSpan(
+                  text: ' (無法集計道數/參與部分活動)',
+                  style: TextStyle(
+                    color: Color(0xFFEAC912),
+                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        colors: [Colors.black, Colors.transparent],
-                        transform: GradientRotation(12),
-                        stops: [0, 0.6],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xffdcdcdc),
-                      ),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        size: 14,
-                        color: Color(0xff2a2a2a),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          cabLabel,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            shadows: [
-                              Shadow(color: Colors.black, blurRadius: 18),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              '$cabNum號機',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                shadows: [
-                                  Shadow(color: Colors.black, blurRadius: 15),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                )
               ],
             ),
           ),
-          const SizedBox(height: 15),
-          _buildPlayMenu()
-        ],
-      ),
+        ),
+      ],
     );
 
     final confirmPayment = Column(
@@ -374,17 +390,31 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('注意！請確認是否有玩家正在遊玩。', style: TextStyle(fontSize: 18)),
+              const Text(
+                '注意！請確認是否有玩家正在遊玩。',
+                style: TextStyle(fontSize: 18),
+              ),
               const SizedBox(height: 14),
-              Text('機種：$cabLabel', style: const TextStyle(fontSize: 18)),
-              Text('編號：$cabNum號機', style: const TextStyle(fontSize: 18)),
-              Text('消費：${paymentType.text}',
-                  style: const TextStyle(fontSize: 18)),
+              Text(
+                '機種：$cabLabel',
+                style: const TextStyle(fontSize: 18),
+              ),
+              Text(
+                '編號：$cabNum號機',
+                style: const TextStyle(fontSize: 18),
+              ),
+              if (paymentType != null)
+                Text(
+                  '消費：${paymentType!.text}',
+                  style: const TextStyle(fontSize: 18),
+                ),
               const SizedBox(height: 12.6),
-              const Text('請勿影響他人權益。如投幣扣點後機台無動作請聯絡粉專！請勿再次點擊',
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 13)),
-              if (paymentType != PaymentType.ticket)
-                buildUseRewardPointCheckBox(),
+              const Text(
+                '請勿影響他人權益。如投幣扣點後機台無動作請聯絡粉專！請勿再次點擊',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13),
+              ),
+              if (paymentType != PaymentType.ticket) useRewardPointCheckBox,
               const SizedBox(height: 16),
             ],
           ),
@@ -425,10 +455,10 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
       insetPadding: const EdgeInsets.symmetric(horizontal: 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       clipBehavior: Clip.hardEdge,
-      contentPadding: isSelectPayment
+      contentPadding: paymentType != null
           ? const EdgeInsets.only(top: 14)
           : const EdgeInsets.only(bottom: 20),
-      content: isSelectPayment ? confirmPayment : selectPayment,
+      content: paymentType != null ? confirmPayment : selectPayment,
     );
   }
 }

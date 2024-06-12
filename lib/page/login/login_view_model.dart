@@ -16,6 +16,10 @@ class LoginProvider extends BaseViewModel {
   LoginProvider({required this.repo});
 
   bool _isLogined = false;
+
+  /// 是否已經登入
+  ///
+  /// 用於確認是否要顯示登入頁面，於 app 啟動時檢查。
   bool get isLogined => _isLogined;
 
   /// 錯誤訊息，若無錯誤則為 null
