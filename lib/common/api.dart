@@ -78,7 +78,7 @@ class Api {
 
     /// 建立請求的header
     Map<String, String> buildHeaders({bool httpGet = false}) {
-      Map<String, String> headers = {};
+      var headers = <String, String>{};
       if (withSession) {
         headers.addAll({
           'Accept-Language':

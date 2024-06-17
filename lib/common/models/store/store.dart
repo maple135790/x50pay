@@ -23,7 +23,7 @@ class StoreModel {
 
   const StoreModel.empty()
       : prefix = null,
-        storelist = const [];
+        storelist = null;
 }
 
 @JsonSerializable()

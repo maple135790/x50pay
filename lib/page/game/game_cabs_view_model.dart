@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
@@ -18,10 +19,12 @@ class GameCabsViewModel extends BaseViewModel {
     required this.currentLocale,
   });
 
+  static const favGameIndex = 0;
+
   Store? get selectedStore => _selectedStore;
   Store? _selectedStore;
 
-  int _segmentedControlIndex = 0;
+  int _segmentedControlIndex = favGameIndex;
   int get segmentedControlIndex => _segmentedControlIndex;
   final storeDetails = <StoreDetail>[];
 
@@ -33,7 +36,8 @@ class GameCabsViewModel extends BaseViewModel {
   late GameCabTileStyle _gameCabTileStyle;
   GameCabTileStyle get gameCabTileStyle => _gameCabTileStyle;
 
-  Future<void> _getGamelist(String composedStoreId) async {
+  @visibleForTesting
+  Future<void> getGamelist(String composedStoreId) async {
     try {
       showLoading();
 
@@ -49,7 +53,8 @@ class GameCabsViewModel extends BaseViewModel {
   }
 
   /// 取得店家資料
-  Future<StoreModel?> _getStoreData() async {
+  @visibleForTesting
+  Future<StoreModel> getStoreData() async {
     try {
       showLoading();
 
@@ -59,9 +64,22 @@ class GameCabsViewModel extends BaseViewModel {
       return stores;
     } catch (e, stacktrace) {
       log('', error: '$e', name: 'getStoreData', stackTrace: stacktrace);
-      return null;
+      return const StoreModel.empty();
     } finally {
       dismissLoading();
+    }
+  }
+
+  @visibleForTesting
+  void setStoreDetails(StoreModel storeData) {
+    storeDetails.clear();
+    for (final store in storeData.storelist!) {
+      storeDetails.add(
+        (
+          store: store,
+          composedStoreId: storeData.prefix! + store.sid.toString()
+        ),
+      );
     }
   }
 
@@ -70,21 +88,17 @@ class GameCabsViewModel extends BaseViewModel {
     // 再取得店家資料，再取得投幣頁的記憶策略
     // 完成後，依據記憶策略的結果：
     // 1. 若有記憶策略，則設定 segmentedControlIndex
-    // 2. 若無記憶策略，則 segmentedControlIndex 為預設值 = 0
+    // 2. 若無記憶策略，則 segmentedControlIndex 為預設值 = 0 (釘選機台)
     // segmentedControlIndex 設定後，再讓各 TabView 自行取得資料
     final rawStyle = await Prefs.getInt(PrefsToken.storeGameCabTileStyle);
     _gameCabTileStyle = GameCabTileStyle.fromInt(
         rawStyle ?? GameCabTileStyle.storeDefaultValue);
 
-    final storeData = await _getStoreData();
-    if (storeData == null || storeData.storelist == null) return;
-    storeDetails.clear();
-    for (final store in storeData.storelist!) {
-      storeDetails.add((
-        store: store,
-        composedStoreId: storeData.prefix! + store.sid.toString()
-      ));
+    final storeData = await getStoreData();
+    if (storeData == const StoreModel.empty() || storeData.storelist == null) {
+      return;
     }
+    setStoreDetails(storeData);
     _isRememberGameTab = await Prefs.getBool(PrefsToken.rememberGameTab) ??
         PrefsToken.rememberGameTab.defaultValue;
     final lastStoreId = await Prefs.getString(PrefsToken.storeId);
@@ -92,7 +106,7 @@ class GameCabsViewModel extends BaseViewModel {
 
     // 若無記憶策略，則預設tab 頁面為釘選機台
     if (!_isRememberGameTab || lastStoreId == null) {
-      _segmentedControlIndex = 0;
+      _segmentedControlIndex = favGameIndex;
       return;
     }
     // 有記憶策略，若 tab index = 0, 則直接設定 tab 頁面
@@ -109,7 +123,7 @@ class GameCabsViewModel extends BaseViewModel {
       assert(composedStoreId == lastStoreId, 'store id 不一致');
       storeIndex = i;
     }
-    await _getGamelist(lastStoreId);
+    await getGamelist(lastStoreId);
     _selectedStore = storeData.storelist![storeIndex];
     // index 0 是訂選機台，所以要加 1
     _segmentedControlIndex = 1 + storeIndex;
@@ -117,14 +131,15 @@ class GameCabsViewModel extends BaseViewModel {
 
   void onTabIndexChanged(int index) async {
     _segmentedControlIndex = index;
-    if (index == 0) {
+    if (index == favGameIndex) {
       _selectedStore = null;
       _gameList = const GameList.empty();
     } else {
+      assert(index > 0 && storeDetails.length >= index - 1, '');
       // 0 是釘選機台，所以要減 1
       final storeDetail = storeDetails[index - 1];
-      await _onStoreSelected(storeDetail.store, storeDetail.composedStoreId);
-      await _getGamelist(storeDetail.composedStoreId);
+      await onStoreSelected(storeDetail.store, storeDetail.composedStoreId);
+      await getGamelist(storeDetail.composedStoreId);
       _selectedStore = storeDetail.store;
     }
     if (_isRememberGameTab) {
@@ -133,7 +148,8 @@ class GameCabsViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> _onStoreSelected(
+  @visibleForTesting
+  Future<void> onStoreSelected(
     Store store,
     String composedStoreId,
   ) async {

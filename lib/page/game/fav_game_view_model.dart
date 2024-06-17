@@ -67,7 +67,6 @@ class FavGameViewModel extends BaseViewModel {
   @visibleForTesting
   Future<GameList> getFavGame() async {
     try {
-      _buildStoreNameMap();
       _fetchedGameList = await repository.favGameList();
       initFavMachines(_fetchedGameList);
       return _fetchedGameList;
@@ -96,6 +95,10 @@ class FavGameViewModel extends BaseViewModel {
   Future<void> init() async {
     showLoading();
     _storeModel = await getStoreData();
+    storeNameMap
+      ..clear()
+      ..addAll(buildStoreNameMap(_storeModel));
+
     _favGameList = await getFavGame();
     _tileStyle = await getTileStyle();
 
@@ -128,14 +131,20 @@ class FavGameViewModel extends BaseViewModel {
     }
   }
 
-  void _buildStoreNameMap() {
-    storeNameMap.clear();
+  @visibleForTesting
+  Map<String, String> buildStoreNameMap(StoreModel model) {
+    final maybeStoreList = model.storelist;
+    if (maybeStoreList == null) return {};
 
-    for (final store in _storeModel.storelist!) {
+    final nameMap = <String, String>{};
+    final storeList = maybeStoreList;
+    for (final store in storeList) {
       final storeName = store.name ?? 'unknown store';
-      final composedStoreId = _storeModel.prefix! + store.sid!.toString();
-      storeNameMap[composedStoreId] = storeName;
+      final composedStoreId = model.prefix! + store.sid!.toString();
+      nameMap[composedStoreId] = storeName;
     }
+
+    return nameMap;
   }
 
   void setFavGames() async {
