@@ -154,7 +154,7 @@ class _ChangePhoneConfirmedDialogState
 
     final nav = Navigator.of(context);
 
-    await viewModel.doChangePhone(
+    await viewModel.changePhone(
       phone: textController.text,
       onChangeFailed: () async {
         showServiceError();

@@ -50,7 +50,7 @@ class ChangePhoneViewModel extends BaseViewModel {
   /// 變更手機號碼
   ///
   /// 用於綁定新手機號碼，需要傳入新手機號碼 [phone]
-  Future<void> doChangePhone({
+  Future<void> changePhone({
     required String phone,
     required VoidCallback onChangeFailed,
     required VoidCallback onChangeSuccess,
@@ -78,7 +78,7 @@ class ChangePhoneViewModel extends BaseViewModel {
     } on Exception catch (e, s) {
       log(
         '',
-        name: 'doChangePhone',
+        name: 'changePhone',
         error: e,
         stackTrace: s,
       );
@@ -89,7 +89,7 @@ class ChangePhoneViewModel extends BaseViewModel {
     }
   }
 
-  /// 變更手機號碼
+  /// 驗證簡訊碼
   ///
   /// 用於驗證新手機號碼，需要傳入簡訊驗證碼 [smsCode]
   Future<void> smsActivate({
