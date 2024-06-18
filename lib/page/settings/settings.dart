@@ -25,13 +25,17 @@ import 'package:x50pay/repository/setting_repository.dart';
 
 class Settings extends StatefulWidget {
   /// 是否要跳轉到更換手機
-  final bool? shouldGoPhone;
+  final bool shouldGoPhone;
 
   /// 是否要跳轉到遊玩券記錄
-  final bool? shouldGoTicketRecord;
+  final bool shouldGoTicketRecord;
 
   /// 設定頁面
-  const Settings({super.key, this.shouldGoPhone, this.shouldGoTicketRecord});
+  const Settings({
+    super.key,
+    this.shouldGoPhone = false,
+    this.shouldGoTicketRecord = false,
+  });
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -40,10 +44,10 @@ class Settings extends StatefulWidget {
 class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   late final String avatarUrl;
   late final viewModel = SettingsViewModel(settingRepo: settingRepo);
+  late final UserModel user;
   late Future<void> intentDelay;
   final settingRepo = SettingRepository();
-  final controller = ScrollController();
-  late final UserModel user;
+  final scrollController = ScrollController();
 
   void showEasterEgg() {
     Vibration.vibrate(duration: 50, amplitude: 128);
@@ -94,30 +98,40 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
     context.pushNamed(AppRoutes.x50PayAppSetting.routeName);
   }
 
+  /// 顯示手機已移除的 Dialog。無論是否有添加過手機，都會顯示
+  void showPhoneRemovedDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => const ChangePhoneConfirmedDialog(),
+    );
+  }
+
   void onChangePhonePressed() async {
-    if (user.tphone != 0 && !user.phoneactive!) {
+    // 已經送出驗證碼，但使用者尚未進行驗證
+    final hasSentVerification = user.tphone != 0 && !user.phoneactive!;
+
+    if (hasSentVerification) {
       showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (context) => ChangePhoneConfirmedDialog(viewModel, context));
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const ChangePhoneConfirmedDialog();
+        },
+      );
     } else {
       showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) {
           return ChangePhoneDialog(
-            viewModel,
-            callback: (isOk) async {
+            onPhoneRemoved: (isRemoved) {
               Navigator.of(context).pop();
-              if (isOk) {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) =>
-                        ChangePhoneConfirmedDialog(viewModel, context));
-              } else {
+              if (!isRemoved) {
                 showServiceError();
+                return;
               }
+              showPhoneRemovedDialog();
             },
           );
         },
@@ -131,6 +145,13 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
   void onXimen2OpenPressed() {
     checkRemoteOpen(shop: RemoteOpenShop.secondShop);
+  }
+
+  void onChangeAvatarPressed() {
+    launchUrlString(
+      'https://en.gravatar.com/',
+      mode: LaunchMode.externalApplication,
+    );
   }
 
   void onLogoutPressed() {
@@ -187,11 +208,11 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
     user = context.read<UserProvider>().user!;
 
     avatarUrl = user.settingsUserImageUrl;
-    if (widget.shouldGoPhone ?? false) {
+    if (widget.shouldGoPhone) {
       Future.delayed(const Duration(milliseconds: 350), () {
         onChangePhonePressed.call();
       });
-    } else if (widget.shouldGoTicketRecord ?? false) {
+    } else if (widget.shouldGoTicketRecord) {
       Future.delayed(const Duration(milliseconds: 350), () {
         onTicketRecordPressed.call();
       });
@@ -200,7 +221,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
   @override
   void dispose() {
-    controller.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -264,32 +285,26 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
       accountItem,
       _SettingsGroup(children: [
         _SettingTile(
-            iconData: Icons.remember_me_rounded,
-            title: i18n.userAvatar,
-            subtitle: '外連至 Gravator 更換大頭貼相片',
-            color: _SettingTileColor.green,
-            onTap: () {
-              launchUrlString('https://en.gravatar.com/',
-                  mode: LaunchMode.externalApplication);
-            }),
+          iconData: Icons.remember_me_rounded,
+          title: i18n.userAvatar,
+          color: _SettingTileColor.green,
+          onTap: onChangeAvatarPressed,
+        ),
         _SettingTile(
           iconData: Icons.rss_feed_rounded,
           title: i18n.userNFC,
-          subtitle: 'X50MGS 多元付款喜好設定',
           color: _SettingTileColor.blue,
           onTap: onPaymentPrefPressed,
         ),
         _SettingTile(
           iconData: Icons.badge_rounded,
           title: i18n.userQUIC,
-          subtitle: 'QuiC 喜愛選項設定',
           color: _SettingTileColor.blue,
           onTap: onQuicPayPrefPressed,
         ),
         _SettingTile(
           iconData: Icons.tablet_mac_rounded,
           title: i18n.userPad,
-          subtitle: 'X50Pad 西門線上排隊系統偏好設定',
           color: _SettingTileColor.blue,
           onTap: onPadPrefPressed,
         ),
@@ -298,21 +313,18 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         _SettingTile(
           iconData: Icons.key_rounded,
           title: i18n.userPassword,
-          subtitle: '密碼不夠安全嗎？點我更改！',
           color: _SettingTileColor.red,
           onTap: onChangePasswordPressed,
         ),
         _SettingTile(
           iconData: Icons.email_rounded,
           title: i18n.userEmail,
-          subtitle: '換信箱了嗎，點我修改信箱。',
           color: _SettingTileColor.blackOrWhite,
           onTap: onChangeEmailPressed,
         ),
         _SettingTile(
           iconData: Icons.call_rounded,
           title: i18n.userPhone,
-          subtitle: '換手機號碼了嗎，點我修改號碼重新驗證。',
           color: _SettingTileColor.blackOrWhite,
           onTap: onChangePhonePressed,
         ),
@@ -321,35 +333,30 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         _SettingTile(
           iconData: Icons.local_atm_rounded,
           title: i18n.userBidLog,
-          subtitle: '查詢加值相關記錄。',
           color: _SettingTileColor.yellow,
           onTap: onBidRecordPressed,
         ),
         _SettingTile(
           iconData: Icons.redeem_rounded,
           title: i18n.userTicLog,
-          subtitle: '查詢可用遊玩券詳情 可用店鋪/機種/過期日。',
           color: _SettingTileColor.yellow,
           onTap: onTicketRecordPressed,
         ),
         _SettingTile(
           iconData: Icons.format_list_bulleted_rounded,
           title: i18n.userPlayLog,
-          subtitle: '查詢點數付款明細。',
           color: _SettingTileColor.yellow,
           onTap: onPlayRecordPressed,
         ),
         _SettingTile(
           iconData: Icons.list_alt_rounded,
           title: i18n.userFPlayLog,
-          subtitle: '查看回饋點數明細。',
           color: _SettingTileColor.yellow,
           onTap: onFreePointRecordPressed,
         ),
         _SettingTile(
           iconData: Icons.confirmation_num_rounded,
           title: i18n.userUTicLog,
-          subtitle: '查詢遊玩券使用明細。',
           color: _SettingTileColor.yellow,
           onTap: onTicketUseRecordPressed,
         ),
@@ -358,7 +365,6 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         _SettingTile(
           iconData: Icons.tune_rounded,
           title: i18n.userInAppSetting,
-          subtitle: '設定',
           color: _SettingTileColor.blackOrWhite,
           onTap: onX50PayAppSettingPressed,
         ),
@@ -367,21 +373,18 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         _SettingTile(
           iconData: Icons.home_rounded,
           title: i18n.userOpenDoor1,
-          subtitle: '就是個一店開門按鈕',
           color: _SettingTileColor.blackOrWhite,
           onTap: onXimen1OpenPressed,
         ),
         _SettingTile(
           iconData: Icons.home_rounded,
           title: i18n.userOpenDoor2,
-          subtitle: '就是個二店開門按鈕',
           color: _SettingTileColor.blackOrWhite,
           onTap: onXimen2OpenPressed,
         ),
         _SettingTile(
           iconData: Icons.logout_rounded,
           title: i18n.userLogout,
-          subtitle: '就是個登出',
           color: _SettingTileColor.blackOrWhite,
           onTap: onLogoutPressed,
         ),
@@ -414,12 +417,12 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         return Container(
           decoration: BoxDecoration(color: scaffoldBackgroundColor),
           child: Scrollbar(
-            controller: controller,
+            controller: scrollController,
             child: ListView.builder(
               // TODO: cacheExtent 是現在的workaround，不然 Scrollbar 會跳
               // https://github.com/flutter/flutter/issues/25652
               cacheExtent: 10000,
-              controller: controller,
+              controller: scrollController,
               padding: const EdgeInsets.symmetric(horizontal: 18),
               itemCount: settingsGroups.length,
               itemBuilder: (context, index) {
@@ -443,7 +446,6 @@ class _SettingsGroup extends StatelessWidget {
       list.add(_SettingTile(
         iconData: children[i].iconData,
         title: children[i].title,
-        subtitle: children[i].subtitle,
         color: children[i].color,
         onTap: children[i].onTap,
       ));
@@ -499,13 +501,11 @@ class _SettingTile extends StatelessWidget {
   final IconData iconData;
   final _SettingTileColor color;
   final String title;
-  final String subtitle;
   final VoidCallback onTap;
 
   const _SettingTile({
     required this.iconData,
     required this.title,
-    required this.subtitle,
     required this.color,
     required this.onTap,
   });

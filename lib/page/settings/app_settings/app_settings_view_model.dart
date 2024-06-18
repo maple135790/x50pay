@@ -13,8 +13,18 @@ enum CardEmulationIntervals {
 
   final int timeInMilliSeconds;
   final String text;
+
+  static const pixelPhoneDefaultValue = medium;
+
   const CardEmulationIntervals(this.timeInMilliSeconds)
       : text = timeInMilliSeconds == -1 ? "不模擬卡片" : "$timeInMilliSeconds ms";
+
+  factory CardEmulationIntervals.fromValue(int value) {
+    return CardEmulationIntervals.values.firstWhere(
+      (element) => element.timeInMilliSeconds == value,
+      orElse: () => disabled,
+    );
+  }
 }
 
 class AppSettingsViewModel extends BaseViewModel {
@@ -161,12 +171,14 @@ class AppSettingsViewModel extends BaseViewModel {
   }
 
   Future<String> _getCEInterval() async {
-    final interval = await Prefs.getInt(PrefsToken.cardEmulationInterval);
-    final intv = CardEmulationIntervals.values.firstWhere(
-      (element) => element.timeInMilliSeconds == interval,
-      orElse: () => CardEmulationIntervals.disabled,
+    if (!isSupportCE) return CardEmulationIntervals.disabled.text;
+
+    final rawIntv = await Prefs.getInt(PrefsToken.cardEmulationInterval);
+    final cardEmulationInterval = CardEmulationIntervals.fromValue(
+      rawIntv ??
+          CardEmulationIntervals.pixelPhoneDefaultValue.timeInMilliSeconds,
     );
-    return intv.text;
+    return cardEmulationInterval.text;
   }
 
   void setInAppNfcScan(bool value) async {
@@ -254,6 +266,5 @@ class AppSettingsViewModel extends BaseViewModel {
     isSupportCE = pixelProductNames.contains(androidinfo.product.toLowerCase());
     ceInterval = await _getCEInterval();
     dismissLoading();
-    return;
   }
 }

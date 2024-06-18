@@ -4,121 +4,132 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
-import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/page/settings/popups/change_phone_view_model.dart';
+import 'package:x50pay/repository/setting_repository.dart';
 
 class ChangePhoneDialog extends StatefulWidget {
-  final SettingsViewModel viewModel;
-  final Function(bool) callback;
-  const ChangePhoneDialog(this.viewModel, {super.key, required this.callback});
+  final void Function(bool isRemoved) onPhoneRemoved;
+
+  const ChangePhoneDialog({
+    super.key,
+    required this.onPhoneRemoved,
+  });
 
   @override
   State<ChangePhoneDialog> createState() => _ChangePhoneDialogState();
 }
 
 class _ChangePhoneDialogState extends BaseStatefulState<ChangePhoneDialog> {
-  late SettingsViewModel model;
+  late final ChangePhoneViewModel viewModel;
   final newEmail = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    model = widget.viewModel;
+    final settingRepo = SettingRepository();
+    viewModel = ChangePhoneViewModel(settingRepo);
+  }
+
+  void onRemovePhonePressed() async {
+    if (!kReleaseMode) {
+      widget.onPhoneRemoved(true);
+      log('dev onRemovePhone: true', name: 'ChangePhoneDialog');
+      return;
+    }
+    final isRemoved = await viewModel.removePhone();
+    log('onRemovePhone: $isRemoved', name: 'ChangePhoneDialog');
+    widget.onPhoneRemoved(isRemoved);
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      clipBehavior: Clip.hardEdge,
-      scrollable: true,
-      contentPadding: const EdgeInsets.only(top: 15),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.error, size: 50),
-          const SizedBox(height: 15),
-          Container(
-            padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text.rich(
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  TextSpan(
-                    text: '此選項會',
-                    children: [
+    return ChangeNotifierProvider.value(
+      value: viewModel,
+      builder: (context, child) {
+        return AlertDialog(
+          clipBehavior: Clip.hardEdge,
+          scrollable: true,
+          contentPadding: const EdgeInsets.only(top: 15),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error, size: 50),
+              const SizedBox(height: 15),
+              Container(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text.rich(
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                       TextSpan(
-                          text: "解除您的帳戶的手機綁定",
-                          style: TextStyle(color: Color(0xFFEAC912))),
-                      TextSpan(text: '，並且讓原先的手機號碼可以被再次使用')
-                    ],
-                  ),
+                        text: '此選項會',
+                        children: [
+                          TextSpan(
+                            text: "解除您的帳戶的手機綁定",
+                            style: TextStyle(color: Color(0xFFEAC912)),
+                          ),
+                          TextSpan(text: '，並且讓原先的手機號碼可以被再次使用')
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text('且您的帳戶會變成尚未簡訊驗證的狀況，直到您驗證完新的電話號碼。'),
+                    SizedBox(height: 20),
+                    Text(
+                      '您確定要取消手機綁定並重新驗證？',
+                      style: TextStyle(
+                        color: Color(0xFFEAC912),
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Text('且您的帳戶會變成尚未簡訊驗證的狀況，直到您驗證完新的電話號碼。'),
-                SizedBox(height: 20),
-                Text(
-                  '您確定要取消手機綁定並重新驗證？',
-                  style: TextStyle(
-                    color: Color(0xFFEAC912),
-                    fontWeight: FontWeight.w900,
-                  ),
+              ),
+              const Divider(thickness: 1, height: 0),
+              Container(
+                color: dialogButtomBarColor,
+                padding: const EdgeInsets.all(15),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style:
+                            CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+                        child: const Text('取消'),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: onRemovePhonePressed,
+                        style: CustomButtonThemes.severe(isV4: true),
+                        child: const Text('確認'),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const Divider(thickness: 1, height: 0),
-          Container(
-            color: dialogButtomBarColor,
-            padding: const EdgeInsets.all(15),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-                      child: const Text('取消')),
-                ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: TextButton(
-                    onPressed: onDetachPhoneTap,
-                    style: CustomButtonThemes.severe(isV4: true),
-                    child: const Text('確認'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
-  }
-
-  void onDetachPhoneTap() async {
-    if (kDebugMode) {
-      widget.callback(true);
-      log('dev isDetached: true', name: 'ChangePhoneDialog');
-      return;
-    }
-    final isDetached = await model.detachPhone();
-    log('isDetached: $isDetached', name: 'ChangePhoneDialog');
-    widget.callback(isDetached);
   }
 }
 
 class ChangePhoneConfirmedDialog extends StatefulWidget {
-  final BuildContext context;
-  final SettingsViewModel viewModel;
-
-  const ChangePhoneConfirmedDialog(this.viewModel, this.context, {super.key});
+  const ChangePhoneConfirmedDialog({super.key});
 
   @override
   State<ChangePhoneConfirmedDialog> createState() =>
@@ -128,191 +139,182 @@ class ChangePhoneConfirmedDialog extends StatefulWidget {
 class _ChangePhoneConfirmedDialogState
     extends BaseStatefulState<ChangePhoneConfirmedDialog> {
   final textController = TextEditingController();
-  String? _errorText;
-  bool isEnteredNewPhone = false;
+  late final ChangePhoneViewModel viewModel;
 
   @override
   void initState() {
     super.initState();
+    final settingRepo = SettingRepository();
+    viewModel = ChangePhoneViewModel(settingRepo);
   }
 
-  void _doChangePhone() async {
+  void changePhone() async {
+    final isValidPhone = viewModel.checkPhoneFormat(textController.text);
+    if (!isValidPhone) return;
+
     final nav = Navigator.of(context);
-    final model = widget.viewModel;
-    final gotResponse = await model.doChangePhone(phone: textController.text);
-    if (gotResponse) {
-      switch (model.response!.code) {
-        case 200:
-          EasyLoading.showSuccess('資料已送出，等候簡訊驗證');
-          isEnteredNewPhone = true;
-          textController.clear();
-          setState(() {});
-          break;
-        default:
-          showServiceError();
-          await Future.delayed(const Duration(milliseconds: 2300));
-          nav.pop();
-      }
-    } else {
-      showServiceError();
-      await Future.delayed(const Duration(milliseconds: 2300));
-      nav.pop();
-    }
+
+    await viewModel.doChangePhone(
+      phone: textController.text,
+      onChangeFailed: () async {
+        showServiceError();
+        await Future.delayed(const Duration(milliseconds: 2300));
+        nav.pop();
+      },
+      onChangeSuccess: () {
+        EasyLoading.showSuccess('資料已送出，等候簡訊驗證');
+        textController.clear();
+      },
+    );
   }
 
-  void _smsActivate() async {
-    final model = widget.viewModel;
+  void smsActivate() async {
     final nav = Navigator.of(context);
 
-    final gotResponse = await model.smsActivate(smsCode: textController.text);
-    if (gotResponse) {
-      switch (model.response!.code) {
-        case 200:
-          await EasyLoading.showSuccess('簡訊驗證成功！',
-              duration: const Duration(seconds: 2));
-          await Future.delayed(const Duration(seconds: 2));
-          nav.pop();
-          break;
-        case 700:
-          await EasyLoading.showError('驗證碼輸入錯誤，請檢查',
-              duration: const Duration(seconds: 2));
-          break;
-        default:
-          showServiceError();
-          await Future.delayed(const Duration(milliseconds: 2300));
-          nav.pop();
-      }
-    } else {
-      showServiceError();
-      await Future.delayed(const Duration(milliseconds: 2300));
-      nav.pop();
-    }
+    await viewModel.smsActivate(
+      smsCode: textController.text,
+      onActivateFailed: () async {
+        showServiceError();
+        await Future.delayed(const Duration(milliseconds: 2300));
+        nav.pop();
+      },
+      onActivateSuccess: () {
+        nav.pop();
+      },
+    );
+  }
+
+  Widget? noCounterBuilder(
+    BuildContext context, {
+    required int currentLength,
+    required int? maxLength,
+    required bool isFocused,
+  }) {
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return _Dialog(
-        onConfirm: () async {
-          if (isEnteredNewPhone) {
-            FocusManager.instance.primaryFocus?.unfocus();
-            _smsActivate();
-          } else {
-            bool isCorrectPhone = RegExp("^09\\d{2}-?\\d{3}-?\\d{3}\$")
-                .hasMatch(textController.text);
-            if (!isCorrectPhone) {
-              _errorText = '手機號碼格式錯誤';
-              setState(() {});
+    return ChangeNotifierProvider.value(
+      value: viewModel,
+      builder: (context, child) {
+        return Selector<ChangePhoneViewModel, bool>(
+          selector: (context, vm) => vm.isSentSmsCode,
+          builder: (context, isSentSmsCode, child) {
+            late VoidCallback onConfirmPressed;
+            late IconData textFieldIcon;
+            late String textFieldName;
+            late String hintText;
+            late int? textmaxLength;
+
+            if (isSentSmsCode) {
+              onConfirmPressed = smsActivate;
+              textFieldIcon = Icons.email_rounded;
+              textFieldName = '請輸入您的簡訊認證碼';
+              textmaxLength = 6;
+              hintText = '六位數字';
             } else {
-              _errorText = null;
-              FocusManager.instance.primaryFocus?.unfocus();
-              _doChangePhone();
+              onConfirmPressed = changePhone;
+              textFieldIcon = Icons.phone_rounded;
+              textFieldName = '請欲更改的手機號碼';
+              textmaxLength = 10;
+              hintText = '送出後，我們將會寄送簡訊驗證';
             }
-          }
-        },
-        content: (showButtonBar) => _DialogBody(
-              title: '更改手機',
-              children: [
-                const Text('請注意！只能發送一次簡訊驗證碼。若手機號碼輸入錯誤或30分鐘仍未收到請聯絡粉絲專頁',
+
+            return _Dialog(
+              onConfirm: onConfirmPressed,
+              content: _DialogBody(
+                title: '更改手機',
+                children: [
+                  const Text(
+                    '請注意！只能發送一次簡訊驗證碼。若手機號碼輸入錯誤或30分鐘仍未收到請聯絡粉絲專頁',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
-                    )),
-                const SizedBox(height: 15),
-                _DialogWidget(
-                  titleIcon: isEnteredNewPhone
-                      ? Icons.email_rounded
-                      : Icons.phone_rounded,
-                  title: isEnteredNewPhone ? '請輸入您的簡訊認證碼' : '請欲更改的手機號碼',
-                  isRequired: true,
-                  child: Row(children: [
-                    Expanded(
-                        child: TextFormField(
-                      maxLength: isEnteredNewPhone ? 6 : null,
-                      buildCounter: (
-                        context, {
-                        currentLength = 0,
-                        isFocused = true,
-                        maxLength,
-                      }) =>
-                          null,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      keyboardType: TextInputType.phone,
-                      controller: textController,
-                      decoration: InputDecoration(
-                          hintText:
-                              isEnteredNewPhone ? '六位數字' : '送出後，我們將會寄送簡訊驗證'),
-                    ))
-                  ]),
-                ),
-                _errorText != null
-                    ? Text(_errorText!,
-                        style: const TextStyle(color: Colors.red))
-                    : const SizedBox(),
-              ],
-            ));
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  _DialogWidget(
+                    icon: textFieldIcon,
+                    name: textFieldName,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            maxLength: textmaxLength,
+                            buildCounter: noCounterBuilder,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            keyboardType: TextInputType.phone,
+                            controller: textController,
+                            decoration: InputDecoration(hintText: hintText),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Selector<ChangePhoneViewModel, String>(
+                    selector: (context, vm) => vm.errorText ?? '',
+                    builder: (context, errorText, child) {
+                      return Text(
+                        errorText,
+                        style: const TextStyle(color: Colors.red),
+                      );
+                    },
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
 
 class _Dialog extends StatefulWidget {
-  final Widget Function(void Function(bool isShow) showButtonBar) content;
-  final bool scrollable;
-  final void Function()? onConfirm;
-  final Widget? customConfirmButton;
-  final String title;
+  final Widget content;
+  final VoidCallback onConfirm;
 
   const _Dialog({
     required this.content,
     required this.onConfirm,
-  })  : customConfirmButton = null,
-        scrollable = false,
-        title = '';
+  });
 
   @override
   State<_Dialog> createState() => _DialogState();
 }
 
 class _DialogState extends BaseStatefulState<_Dialog> {
-  static const _kMaxBottomSheetHeight = 80.0;
-  ValueNotifier<Offset> offsetNotifier =
-      ValueNotifier(const Offset(0, _kMaxBottomSheetHeight));
-
-  void showButtonBar(bool isShow) async {
-    await Future.delayed(const Duration(milliseconds: 50));
-    if (isShow) {
-      offsetNotifier.value = Offset.zero;
-    } else {
-      offsetNotifier.value = const Offset(0, 1);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      scrollable: widget.scrollable,
-      contentPadding:
-          const EdgeInsets.only(top: 28, left: 28, right: 28, bottom: 14),
-      actionsPadding:
-          const EdgeInsets.only(top: 0, left: 28, right: 28, bottom: 28),
+      contentPadding: const EdgeInsets.fromLTRB(28, 28, 28, 14),
+      actionsPadding: const EdgeInsets.fromLTRB(28, 0, 28, 28),
       content: GestureDetector(
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: widget.content.call(showButtonBar),
+        child: widget.content,
       ),
       actionsAlignment: MainAxisAlignment.start,
       actions: [
         TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-            child: const Text('取消')),
-        widget.customConfirmButton == null
-            ? TextButton(
-                onPressed: widget.onConfirm,
-                style: CustomButtonThemes.severe(isV4: true),
-                child: const Text('保存'))
-            : widget.customConfirmButton!
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+          child: const Text('取消'),
+        ),
+        TextButton(
+          onPressed: () {
+            primaryFocus?.unfocus();
+            widget.onConfirm.call();
+          },
+          style: CustomButtonThemes.severe(isV4: true),
+          child: const Text('保存'),
+        )
       ],
     );
   }
@@ -329,11 +331,12 @@ class _DialogBody extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.headlineSmall,
-            )),
+          alignment: Alignment.topLeft,
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        ),
         const SizedBox(height: 30),
         ...children,
       ],
@@ -342,16 +345,14 @@ class _DialogBody extends StatelessWidget {
 }
 
 class _DialogWidget extends StatefulWidget {
-  final String title;
+  final String name;
   final Widget child;
-  final IconData? titleIcon;
-  final bool isRequired;
+  final IconData icon;
 
   const _DialogWidget({
-    required this.title,
+    required this.name,
     required this.child,
-    this.isRequired = false,
-    this.titleIcon,
+    required this.icon,
   });
 
   @override
@@ -364,28 +365,26 @@ class _DialogWidgetState extends State<_DialogWidget> {
     return Column(
       children: [
         Align(
-            alignment: Alignment.centerLeft,
-            child: Text.rich(TextSpan(
-              children: widget.isRequired
-                  ? [
-                      widget.titleIcon == null
-                          ? const WidgetSpan(child: SizedBox())
-                          : WidgetSpan(
-                              child: Icon(widget.titleIcon!, size: 18)),
-                      const WidgetSpan(child: SizedBox(width: 5)),
-                      TextSpan(text: widget.title),
-                      const TextSpan(
-                          text: ' *', style: TextStyle(color: Colors.red))
-                    ]
-                  : [
-                      widget.titleIcon == null
-                          ? const WidgetSpan(child: SizedBox())
-                          : WidgetSpan(
-                              child: Icon(widget.titleIcon!,
-                                  color: const Color(0xff5a5a5a))),
-                      TextSpan(text: widget.title)
-                    ],
-            ))),
+          alignment: Alignment.centerLeft,
+          child: Text.rich(
+            TextSpan(
+              children: [
+                WidgetSpan(
+                  child: Icon(
+                    widget.icon,
+                    size: 18,
+                  ),
+                ),
+                const WidgetSpan(child: SizedBox(width: 5)),
+                TextSpan(text: widget.name),
+                const TextSpan(
+                  text: ' *',
+                  style: TextStyle(color: Colors.red),
+                )
+              ],
+            ),
+          ),
+        ),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),

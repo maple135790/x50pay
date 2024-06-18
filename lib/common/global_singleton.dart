@@ -19,7 +19,7 @@ class GlobalSingleton {
   /// 服務是否連接到X50Pay。
   ///
   /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
-  final isServiceOnline = (kReleaseMode || duringTest) || true;
+  final isServiceOnline = (kReleaseMode || duringTest) || false;
 
   /// 全域的 navigatorKey
   ///

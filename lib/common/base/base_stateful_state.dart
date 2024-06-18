@@ -60,7 +60,10 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   );
 
   void showServiceError() {
-    EasyLoading.showError(serviceErrorText,
-        dismissOnTap: false, duration: const Duration(seconds: 2));
+    EasyLoading.showError(
+      serviceErrorText,
+      dismissOnTap: false,
+      duration: const Duration(seconds: 2),
+    );
   }
 }
