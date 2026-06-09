@@ -159,7 +159,7 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
       // TODO: 等待GoRouter 修復PopScope issue (flutter #138737)
       child: PopScope(
         canPop: false,
-        onPopInvoked: (didPop) {
+        onPopInvokedWithResult: (didPop, result) {
           if (selectedIndex != 2) {
             context.goNamed(AppRoutes.home.routeName);
             setState(() {});

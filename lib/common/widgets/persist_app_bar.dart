@@ -59,6 +59,7 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
     EasyLoading.show();
     Future.delayed(const Duration(milliseconds: 800), () {
       EasyLoading.dismiss();
+      if (!mounted) return;
       context.read<LanguageProvider>().setUserPrefLocale(changedLocale);
     });
   }
