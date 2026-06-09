@@ -247,7 +247,7 @@ class _BuyMPassState extends BaseStatefulState<BuyMPass> {
                     bottom: -26,
                     right: -24,
                     child: Icon(trailIcon,
-                        size: 120, color: iconColor.withOpacity(0.1))),
+                        size: 120, color: iconColor.withValues(alpha: 0.1))),
                 Positioned(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

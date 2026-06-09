@@ -81,7 +81,7 @@ class _GiftBoxLoadedState extends BaseStatefulState<_GiftBoxLoaded> {
               child: Icon(
                 Icons.redeem_rounded,
                 size: 120,
-                color: IconTheme.of(context).color?.withOpacity(0.1),
+                color: IconTheme.of(context).color?.withValues(alpha: 0.1),
               ),
             ),
             Column(

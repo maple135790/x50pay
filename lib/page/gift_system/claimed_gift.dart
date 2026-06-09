@@ -57,10 +57,10 @@ class ClaimedGift extends StatelessWidget {
                   imageUrl: claimedList[index].pic,
                   errorWidget: (context, url, error) => Icon(
                       Icons.broken_image_rounded,
-                      color: const Color(0xff505050).withOpacity(0.7)),
+                      color: const Color(0xff505050).withValues(alpha: 0.7)),
                   placeholder: (context, url) => Icon(
                       Icons.hourglass_top_rounded,
-                      color: const Color(0xff505050).withOpacity(0.7)),
+                      color: const Color(0xff505050).withValues(alpha: 0.7)),
                   width: 50,
                 ),
               ),

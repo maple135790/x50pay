@@ -64,27 +64,15 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/appIcon/appstore.png
-    - assets/images/appIcon/playstore.png
-    - assets/images/common/header_icon_rsz.png
-    - assets/images/common/logo_150.jpg
-    - assets/images/home/mari_level/ouo.png
-    - assets/images/home/top.png
-    - assets/images/home/vts.png
-    - assets/images/scanPay/jkopay_logo.png
-    - assets/images/scanPay/linepay_logo.png
-    - assets/texts/license.txt
-    - assets/images/collab/shop-solid.svg.vec
-    - assets/images/common/spinner-solid.svg.vec
-    - assets/images/common/torii.svg.vec
-    - assets/images/game/heart-circle-plus-solid.svg.vec
-    - assets/images/home/heart-regular.svg
-    - assets/images/home/bolt-solid.svg.vec
-    - assets/images/home/heart-regular.svg.vec
-    - assets/images/home/heart-solid.svg.vec
-    - assets/images/home/shirt-solid.svg.vec
-    - assets/images/quest/stamp.svg.vec
-    - assets/images/scanPay/p-solid.svg.vec
+    - assets/texts/
+    - assets/images/appIcon/
+    - assets/images/collab/
+    - assets/images/common/
+    - assets/images/game/
+    - assets/images/home/
+    - assets/images/home/mari_level/
+    - assets/images/scanPay/
+    - assets/images/quest/
 flutter_icons:
   image_path: assets/images/appIcon/appstore.png
   adaptive_icon_foreground: assets/images/appIcon/playstore.png

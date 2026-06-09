@@ -16,7 +16,7 @@ class CustomButtonThemes {
             foregroundColor: WidgetStateProperty.all(const Color(0xff1e1e1e)),
             backgroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.isDisabled) {
-                return const Color(0xfffafafa).withOpacity(0.5);
+                return const Color(0xfffafafa).withValues(alpha: 0.5);
               }
               return const Color(0xfffafafa);
             }),
@@ -29,7 +29,7 @@ class CustomButtonThemes {
             foregroundColor: WidgetStateProperty.all(Colors.white),
             backgroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.isDisabled) {
-                return const Color(0xff373737).withOpacity(0.5);
+                return const Color(0xff373737).withValues(alpha: 0.5);
               }
               return const Color(0xff373737);
             }),
@@ -107,11 +107,11 @@ class CustomButtonThemes {
       shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
       foregroundColor: WidgetStateColor.resolveWith((states) {
-        if (states.isDisabled) return foregroundColor.withOpacity(0.5);
+        if (states.isDisabled) return foregroundColor.withValues(alpha: 0.5);
         return foregroundColor;
       }),
       backgroundColor: WidgetStateProperty.resolveWith((states) {
-        if (states.isDisabled) return backgroundColor.withOpacity(0.5);
+        if (states.isDisabled) return backgroundColor.withValues(alpha: 0.5);
         return backgroundColor;
       }),
     );

@@ -282,7 +282,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
                       Text(
                         '  | ${store?.address ?? ''}',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 12,
                           shadows: const [
                             Shadow(color: Colors.black, blurRadius: 15)

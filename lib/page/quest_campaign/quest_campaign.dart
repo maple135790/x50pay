@@ -34,7 +34,7 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
       isDarkTheme ? const Color(0xfffafafa) : const Color(0xffb2b2b2);
   Color get stampColor => isDarkTheme
       ? const Color(0xff373737)
-      : const Color(0xff373737).withOpacity(0.2);
+      : const Color(0xff373737).withValues(alpha: 0.2);
 
   Future<void> onAddStampRowTap() async {
     viewModel.onAddStampRowTap();
@@ -177,7 +177,7 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                         ? Icon(
                             Icons.circle_rounded,
                             size: stampSlotSize,
-                            color: stampSlotColor.withOpacity(0.2),
+                            color: stampSlotColor.withValues(alpha: 0.2),
                           )
                         : SizedBox.fromSize(
                             size: const Size.square(stampSlotSize),
@@ -341,7 +341,7 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                             const SizedBox(width: 8),
                             Text(data.campaignGoodThruDate ?? '',
                                 style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400)),
                             const SizedBox(width: 10.281),
@@ -353,7 +353,7 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                             const SizedBox(width: 8),
                             Text(data.minQuestPoints ?? '',
                                 style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     fontSize: 13,
                                     fontWeight: FontWeight.w400)),
                           ],
@@ -505,7 +505,7 @@ class _RedeemItemDetailState extends BaseStatefulState<_RedeemItemDetail> {
                         CachedNetworkImage(
                           imageUrl: widget.imgUrl ?? '',
                           fit: BoxFit.fitHeight,
-                          errorWidget: (_, __, ___) =>
+                          errorWidget: (_, _, _) =>
                               const Icon(Icons.broken_image_rounded),
                         ),
                         Expanded(

@@ -34,36 +34,30 @@ class ScaffoldWithNavBar extends StatefulWidget {
 class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
   DateTime lastPopTime = DateTime.fromMillisecondsSinceEpoch(0);
   static const _kMinPopInterval = Duration(milliseconds: 500);
-  late int selectedIndex = _menus.indexWhere((element) =>
-      GoRouterState.of(context).path?.contains(element.route.path) ?? false);
+  late int selectedIndex = _menus.indexWhere(
+    (element) =>
+        GoRouterState.of(context).path?.contains(element.route.path) ?? false,
+  );
 
   List<MenuItem> get _menus => [
-        (
-          icon: Icons.sports_esports_rounded,
-          label: i18n.navGame,
-          route: AppRoutes.gameCabs,
-        ),
-        (
-          icon: Icons.settings_rounded,
-          label: i18n.navSettings,
-          route: AppRoutes.settings,
-        ),
-        (
-          icon: Icons.home_rounded,
-          label: 'Me',
-          route: AppRoutes.home,
-        ),
-        (
-          icon: Icons.redeem_rounded,
-          label: i18n.navGift,
-          route: AppRoutes.gift,
-        ),
-        (
-          icon: Icons.handshake_rounded,
-          label: i18n.navCollab,
-          route: AppRoutes.collab
-        ),
-      ];
+    (
+      icon: Icons.sports_esports_rounded,
+      label: i18n.navGame,
+      route: AppRoutes.gameCabs,
+    ),
+    (
+      icon: Icons.settings_rounded,
+      label: i18n.navSettings,
+      route: AppRoutes.settings,
+    ),
+    (icon: Icons.home_rounded, label: 'Me', route: AppRoutes.home),
+    (icon: Icons.redeem_rounded, label: i18n.navGift, route: AppRoutes.gift),
+    (
+      icon: Icons.handshake_rounded,
+      label: i18n.navCollab,
+      route: AppRoutes.collab,
+    ),
+  ];
 
   Future<bool?> confirmPopup() {
     return showDialog<bool>(
@@ -172,9 +166,7 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
           body: widget.body,
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(width: 1, color: borderColor),
-              ),
+              border: Border(top: BorderSide(width: 1, color: borderColor)),
             ),
             child: NavigationBar(
               selectedIndex: selectedIndex,
@@ -186,11 +178,13 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
                 setState(() {});
               },
               destinations: _menus
-                  .map((menu) => NavigationDestination(
-                        icon: Icon(menu.icon),
-                        label: menu.label,
-                        selectedIcon: Icon(menu.icon),
-                      ))
+                  .map(
+                    (menu) => NavigationDestination(
+                      icon: Icon(menu.icon),
+                      label: menu.label,
+                      selectedIcon: Icon(menu.icon),
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -222,10 +216,7 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
     final router = GoRouter.of(context);
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
-    router.pushNamed(
-      AppRoutes.scanQRCode.routeName,
-      extra: status,
-    );
+    router.pushNamed(AppRoutes.scanQRCode.routeName, extra: status);
   }
 
   void onLanguagePressed(Locale currentLocale) async {
@@ -265,8 +256,10 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
               borderRadius: BorderRadius.circular(5),
             ),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 5.5, horizontal: 18),
+              padding: const EdgeInsets.symmetric(
+                vertical: 5.5,
+                horizontal: 18,
+              ),
               decoration: BoxDecoration(
                 color: isDarkTheme
                     ? CustomColorThemes.appbarBoxColorDark
@@ -284,18 +277,18 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
                     TextSpan(
                       text: '$point + ',
                       style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.labelLarge!.fontSize,
+                        fontSize: Theme.of(
+                          context,
+                        ).textTheme.labelLarge!.fontSize,
                         fontWeight: FontWeight.bold,
                       ),
                       children: [
                         TextSpan(
                           text: '$fpoint',
                           style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .fontSize,
+                            fontSize: Theme.of(
+                              context,
+                            ).textTheme.labelLarge!.fontSize,
                             color: const Color(0xffd4b106),
                             fontWeight: FontWeight.bold,
                           ),
@@ -303,10 +296,9 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
                         TextSpan(
                           text: ' P',
                           style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .fontSize,
+                            fontSize: Theme.of(
+                              context,
+                            ).textTheme.labelLarge!.fontSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -335,8 +327,9 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
       ),
     );
 
-    final serviceStatus =
-        GlobalSingleton.instance.isServiceOnline ? 'ONLINE' : 'OFFLINE';
+    final serviceStatus = GlobalSingleton.instance.isServiceOnline
+        ? 'ONLINE'
+        : 'OFFLINE';
     final statusColor = serviceStatus == 'ONLINE' ? Colors.green : Colors.grey;
 
     final debugStatus = Padding(
@@ -350,11 +343,9 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
             textScaler: const TextScaler.linear(0.95),
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context)
-                  .textTheme
-                  .labelMedium
-                  ?.color
-                  ?.withOpacity(0.5),
+              color: Theme.of(
+                context,
+              ).textTheme.labelMedium?.color?.withValues(alpha: 0.5),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -363,18 +354,18 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
               Icon(
                 Icons.circle_rounded,
                 size: 8,
-                color: statusColor.withOpacity(0.5),
+                color: statusColor.withValues(alpha: 0.5),
               ),
               const SizedBox(width: 2.5),
               Text(
                 'Service $serviceStatus',
                 textScaler: const TextScaler.linear(0.95),
                 style: TextStyle(
-                  color: statusColor.withOpacity(0.5),
+                  color: statusColor.withValues(alpha: 0.5),
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
-              )
+              ),
             ],
           ),
         ],
@@ -382,8 +373,9 @@ class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
     );
 
     return AnnotatedRegion(
-      value:
-          isDarkTheme ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      value: isDarkTheme
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
       child: SafeArea(
         child: Stack(
           clipBehavior: Clip.none,
@@ -420,31 +412,33 @@ class _LanguageSelectDialogState
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(i18n.x50PayLanguage),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(
-          S.delegate.supportedLocales.length,
-          (index) => RadioListTile<Locale>(
-            visualDensity: VisualDensity.compact,
-            controlAffinity: ListTileControlAffinity.trailing,
-            value: S.delegate.supportedLocales[index],
-            title: Row(
-              children: [
-                CountryFlag.fromCountryCode(
-                  S.delegate.supportedLocales[index].countryCode ?? '',
-                  height: 25,
-                  width: 25,
-                ),
-                const SizedBox(width: 10),
-                Text(S.delegate.supportedLocales[index].displayText),
-              ],
+      content: RadioGroup(
+        groupValue: selectedLocale,
+        onChanged: (value) {
+          context.pop(value);
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(
+            S.delegate.supportedLocales.length,
+            (index) => RadioListTile<Locale>(
+              visualDensity: VisualDensity.compact,
+              controlAffinity: ListTileControlAffinity.trailing,
+              value: S.delegate.supportedLocales[index],
+              title: Row(
+                children: [
+                  CountryFlag.fromCountryCode(
+                    S.delegate.supportedLocales[index].countryCode ?? '',
+                    height: 25,
+                    width: 25,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(S.delegate.supportedLocales[index].displayText),
+                ],
+              ),
             ),
-            groupValue: selectedLocale,
-            onChanged: (value) {
-              context.pop(value);
-            },
+            growable: false,
           ),
-          growable: false,
         ),
       ),
     );

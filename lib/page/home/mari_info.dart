@@ -305,7 +305,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                     child: Icon(
                       Icons.compost_rounded,
                       size: 140,
-                      color: iconColor.withOpacity(0.1),
+                      color: iconColor.withValues(alpha: 0.1),
                     ),
                   ),
                   Container(
