@@ -23,9 +23,9 @@ class GiftBoxModel {
   });
 
   const GiftBoxModel.empty()
-      : code = 0,
-        alChange = const [],
-        canChange = const [];
+    : code = 0,
+      alChange = const [],
+      canChange = const [];
 
   factory GiftBoxModel.fromJson(Map<String, dynamic> json) =>
       _$GiftBoxModelFromJson(json);
@@ -41,12 +41,13 @@ class AlChange {
   final String name;
   final String pic;
 
-  const AlChange(
-      {required this.auto,
-      required this.chid,
-      required this.gid,
-      required this.name,
-      required this.pic});
+  const AlChange({
+    required this.auto,
+    required this.chid,
+    required this.gid,
+    required this.name,
+    required this.pic,
+  });
   factory AlChange.fromJson(Map<String, dynamic> json) =>
       _$AlChangeFromJson(json);
 
@@ -60,11 +61,12 @@ class CanChange {
   final String name;
   final String pic;
 
-  const CanChange(
-      {required this.chid,
-      required this.gid,
-      required this.name,
-      required this.pic});
+  const CanChange({
+    required this.chid,
+    required this.gid,
+    required this.name,
+    required this.pic,
+  });
 
   factory CanChange.fromJson(Map<String, dynamic> json) =>
       _$CanChangeFromJson(json);

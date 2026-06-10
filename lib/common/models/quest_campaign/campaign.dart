@@ -40,13 +40,10 @@ class Campaign {
   String get campaignImageUrl => 'https://pay.x50.fun$rawImgUrl';
 
   int get ownedPoints =>
-      int.tryParse(pointInfo
-              ?.split(' , ')
-              .first
-              .split(' : ')
-              .last
-              .replaceAll(' 點', '') ??
-          '') ??
+      int.tryParse(
+        pointInfo?.split(' , ').first.split(' : ').last.replaceAll(' 點', '') ??
+            '',
+      ) ??
       -1;
 
   @override
@@ -55,11 +52,11 @@ class Campaign {
   }
 
   Campaign.empty()
-      : rawImgUrl = '',
-        campaignTitle = '',
-        campaignGoodThruDate = '',
-        minQuestPoints = '',
-        pointInfo = '',
-        stampRowCounts = 0,
-        redeemItems = const [];
+    : rawImgUrl = '',
+      campaignTitle = '',
+      campaignGoodThruDate = '',
+      minQuestPoints = '',
+      pointInfo = '',
+      stampRowCounts = 0,
+      redeemItems = const [];
 }

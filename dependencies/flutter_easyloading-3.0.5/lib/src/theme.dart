@@ -31,40 +31,40 @@ class EasyLoadingTheme {
   /// color of indicator
   static Color get indicatorColor =>
       EasyLoading.instance.loadingStyle == EasyLoadingStyle.custom
-          ? EasyLoading.instance.indicatorColor!
-          : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
-              ? Colors.white
-              : Colors.black;
+      ? EasyLoading.instance.indicatorColor!
+      : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
+      ? Colors.white
+      : Colors.black;
 
   /// progress color of loading
   static Color get progressColor =>
       EasyLoading.instance.loadingStyle == EasyLoadingStyle.custom
-          ? EasyLoading.instance.progressColor!
-          : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
-              ? Colors.white
-              : Colors.black;
+      ? EasyLoading.instance.progressColor!
+      : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
+      ? Colors.white
+      : Colors.black;
 
   /// background color of loading
   static Color get backgroundColor =>
       EasyLoading.instance.loadingStyle == EasyLoadingStyle.custom
-          ? EasyLoading.instance.backgroundColor!
-          : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
-              ? Colors.black.withValues(alpha: 0.9)
-              : Colors.white;
+      ? EasyLoading.instance.backgroundColor!
+      : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
+      ? Colors.black.withValues(alpha: 0.9)
+      : Colors.white;
 
   /// boxShadow color of loading
   static List<BoxShadow>? get boxShadow =>
       EasyLoading.instance.loadingStyle == EasyLoadingStyle.custom
-          ? EasyLoading.instance.boxShadow ?? [const BoxShadow()]
-          : null;
+      ? EasyLoading.instance.boxShadow ?? [const BoxShadow()]
+      : null;
 
   /// font color of status
   static Color get textColor =>
       EasyLoading.instance.loadingStyle == EasyLoadingStyle.custom
-          ? EasyLoading.instance.textColor!
-          : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
-              ? Colors.white
-              : Colors.black;
+      ? EasyLoading.instance.textColor!
+      : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
+      ? Colors.white
+      : Colors.black;
 
   /// mask color of loading
   static Color maskColor(EasyLoadingMaskType? maskType) {
@@ -72,8 +72,8 @@ class EasyLoadingTheme {
     return maskType == EasyLoadingMaskType.custom
         ? EasyLoading.instance.maskColor!
         : maskType == EasyLoadingMaskType.black
-            ? Colors.black.withValues(alpha: 0.5)
-            : Colors.transparent;
+        ? Colors.black.withValues(alpha: 0.5)
+        : Colors.transparent;
   }
 
   /// loading animation
@@ -119,10 +119,10 @@ class EasyLoadingTheme {
   /// toast position
   static AlignmentGeometry alignment(EasyLoadingToastPosition? position) =>
       position == EasyLoadingToastPosition.bottom
-          ? AlignmentDirectional.bottomCenter
-          : (position == EasyLoadingToastPosition.top
-              ? AlignmentDirectional.topCenter
-              : AlignmentDirectional.center);
+      ? AlignmentDirectional.bottomCenter
+      : (position == EasyLoadingToastPosition.top
+            ? AlignmentDirectional.topCenter
+            : AlignmentDirectional.center);
 
   /// display duration
   static Duration get displayDuration => EasyLoading.instance.displayDuration;

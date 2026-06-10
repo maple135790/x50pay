@@ -20,25 +20,23 @@ final mockRepo = MockSettingRepository();
 
 void main() {
   setUp(() {
-    when(() => mockRepo.getPadSettings()).thenAnswer(
-      (_) async {
-        const rawJson =
-            r'''{"shid": true, "shcolor": "#123456", "shname": "test"} ''';
-        return PadSettingsModel.fromJson(jsonDecode(rawJson));
-      },
-    );
-    when(() => mockRepo.setPadSettings(
-          shname: any(named: 'shname'),
-          shid: any(named: 'shid'),
-          shcolor: any(named: 'shcolor'),
-        )).thenAnswer(
-      (_) async {
-        const rawJson =
-            r'''{"shid": true, "shcolor": "#123456", "shname": "test"} ''';
+    when(() => mockRepo.getPadSettings()).thenAnswer((_) async {
+      const rawJson =
+          r'''{"shid": true, "shcolor": "#123456", "shname": "test"} ''';
+      return PadSettingsModel.fromJson(jsonDecode(rawJson));
+    });
+    when(
+      () => mockRepo.setPadSettings(
+        shname: any(named: 'shname'),
+        shid: any(named: 'shid'),
+        shcolor: any(named: 'shcolor'),
+      ),
+    ).thenAnswer((_) async {
+      const rawJson =
+          r'''{"shid": true, "shcolor": "#123456", "shname": "test"} ''';
 
-        return Response(rawJson, 200);
-      },
-    );
+      return Response(rawJson, 200);
+    });
   });
 
   test('測試取得排隊平板設定', () async {
@@ -76,13 +74,11 @@ void main() {
 
     test('允許的暱稱', () async {
       const acceptableName = 'name';
-      when(() => mockRepo.getPadSettings()).thenAnswer(
-        (_) async {
-          const rawJson =
-              '''{"shid": true, "shcolor": "#123456", "shname": "$acceptableName"} ''';
-          return PadSettingsModel.fromJson(jsonDecode(rawJson));
-        },
-      );
+      when(() => mockRepo.getPadSettings()).thenAnswer((_) async {
+        const rawJson =
+            '''{"shid": true, "shcolor": "#123456", "shname": "$acceptableName"} ''';
+        return PadSettingsModel.fromJson(jsonDecode(rawJson));
+      });
 
       viewModel.onNicknameChanged(acceptableName);
       expect(viewModel.nickname, acceptableName);

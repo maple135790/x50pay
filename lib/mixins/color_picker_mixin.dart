@@ -9,18 +9,19 @@ mixin ColorPickerMixin<T extends StatefulWidget> on BaseStatefulState<T> {
 
   Future<void> showColorPicker() {
     return showCupertinoDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            content: SingleChildScrollView(
-              child: ColorPicker(
-                enableAlpha: false,
-                pickerColor: pickerColor(),
-                onColorChanged: onColorChanged,
-              ),
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              enableAlpha: false,
+              pickerColor: pickerColor(),
+              onColorChanged: onColorChanged,
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

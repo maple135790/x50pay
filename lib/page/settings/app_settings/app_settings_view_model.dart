@@ -17,7 +17,7 @@ enum CardEmulationIntervals {
   static const pixelPhoneDefaultValue = medium;
 
   const CardEmulationIntervals(this.timeInMilliSeconds)
-      : text = timeInMilliSeconds == -1 ? "不模擬卡片" : "$timeInMilliSeconds ms";
+    : text = timeInMilliSeconds == -1 ? "不模擬卡片" : "$timeInMilliSeconds ms";
 
   factory CardEmulationIntervals.fromValue(int value) {
     return CardEmulationIntervals.values.firstWhere(
@@ -89,16 +89,18 @@ class AppSettingsViewModel extends BaseViewModel {
   }
 
   GameCabTileStyle get storeGameTileStyle => _storeGameTileStyle;
-  GameCabTileStyle _storeGameTileStyle =
-      GameCabTileStyle.fromInt(GameCabTileStyle.storeDefaultValue);
+  GameCabTileStyle _storeGameTileStyle = GameCabTileStyle.fromInt(
+    GameCabTileStyle.storeDefaultValue,
+  );
   set storeGameTileStyle(GameCabTileStyle value) {
     _storeGameTileStyle = value;
     notifyListeners();
   }
 
   GameCabTileStyle get pinnedGameTileStyle => _pinnedGameTileStyle;
-  GameCabTileStyle _pinnedGameTileStyle =
-      GameCabTileStyle.fromInt(GameCabTileStyle.pinnedDefaultValue);
+  GameCabTileStyle _pinnedGameTileStyle = GameCabTileStyle.fromInt(
+    GameCabTileStyle.pinnedDefaultValue,
+  );
   set pinnedGameTileStyle(GameCabTileStyle value) {
     _pinnedGameTileStyle = value;
     notifyListeners();
@@ -125,8 +127,9 @@ class AppSettingsViewModel extends BaseViewModel {
   }
 
   Future<bool> _getIsEnabledBiometricsLogin() async {
-    final hasUsername =
-        await Prefs.secureContainsKey(SecurePrefsToken.username);
+    final hasUsername = await Prefs.secureContainsKey(
+      SecurePrefsToken.username,
+    );
     final hasPwd = await Prefs.secureContainsKey(SecurePrefsToken.password);
 
     return hasUsername && hasPwd;
@@ -151,15 +154,18 @@ class AppSettingsViewModel extends BaseViewModel {
   }
 
   Future<(GameCabTileStyle, GameCabTileStyle)> _getTileStyle() async {
-    var storeStyle =
-        GameCabTileStyle.fromInt(PrefsToken.storeGameCabTileStyle.defaultValue);
+    var storeStyle = GameCabTileStyle.fromInt(
+      PrefsToken.storeGameCabTileStyle.defaultValue,
+    );
 
     var pinnedStyle = GameCabTileStyle.fromInt(
-        PrefsToken.pinnedGameCabTileStyle.defaultValue);
+      PrefsToken.pinnedGameCabTileStyle.defaultValue,
+    );
 
     final rawStoreStyle = await Prefs.getInt(PrefsToken.storeGameCabTileStyle);
-    final rawPinnedStyle =
-        await Prefs.getInt(PrefsToken.pinnedGameCabTileStyle);
+    final rawPinnedStyle = await Prefs.getInt(
+      PrefsToken.pinnedGameCabTileStyle,
+    );
 
     if (rawStoreStyle != null) {
       storeStyle = GameCabTileStyle.fromInt(rawStoreStyle);

@@ -21,7 +21,7 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
     "60": "60秒",
     "300": "5分鐘",
     "600": "10分鐘",
-    "0": "不限制"
+    "0": "不限制",
   };
 
   void sendQuicConfirm(SettingsViewModel viewModel) async {
@@ -42,56 +42,58 @@ class _QuiCPayPrefDialogState extends State<QuiCPayPrefDialog> {
             sendQuicConfirm(vm);
           },
           content: (showButtonBar) => FutureBuilder(
-              future: vm.getPaymentSettings(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const SizedBox();
-                }
-                if (snapshot.hasError) {
-                  return const Center(child: Text('failed'));
-                }
-                showButtonBar(true);
+            future: vm.getPaymentSettings(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const SizedBox();
+              }
+              if (snapshot.hasError) {
+                return const Center(child: Text('failed'));
+              }
+              showButtonBar(true);
 
-                final model = snapshot.data!;
-                isQuiCPayEnabled = model.nfcQuic;
-                nfcQlock = model.nfcQlock.toString();
+              final model = snapshot.data!;
+              isQuiCPayEnabled = model.nfcQuic;
+              nfcQlock = model.nfcQlock.toString();
 
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CupertinoListSection.insetGrouped(
-                      children: [
-                        DialogSwitch.ios(
-                          value: isQuiCPayEnabled,
-                          title: '啟用 QuiC 靠卡扣款',
-                          onChanged: (value) {
-                            isQuiCPayEnabled = value;
-                          },
-                        ),
-                        DialogDropdown.ios(
-                          title: 'QuiC 刷卡間隔鎖',
-                          value: intervalMap[nfcQlock],
-                          avaliList: intervalMap.values.toList(),
-                          onChanged: (value) {
-                            nfcQlock = intervalMap.keys
-                                .firstWhere((key) => intervalMap[key] == value);
-                          },
-                        )
-                      ],
-                    ),
-                    // CupertinoListSection.insetGrouped(
-                    //   header: const Text('已綁定卡片管理'),
-                    //   children: const [
-                    //     CupertinoListTile(
-                    //       title: Text('title'),
-                    //       additionalInfo: Text('additionalInfo'),
-                    //       subtitle: Text('subtitle'),
-                    //     ),
-                    //   ],
-                    // ),
-                  ],
-                );
-              }),
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CupertinoListSection.insetGrouped(
+                    children: [
+                      DialogSwitch.ios(
+                        value: isQuiCPayEnabled,
+                        title: '啟用 QuiC 靠卡扣款',
+                        onChanged: (value) {
+                          isQuiCPayEnabled = value;
+                        },
+                      ),
+                      DialogDropdown.ios(
+                        title: 'QuiC 刷卡間隔鎖',
+                        value: intervalMap[nfcQlock],
+                        avaliList: intervalMap.values.toList(),
+                        onChanged: (value) {
+                          nfcQlock = intervalMap.keys.firstWhere(
+                            (key) => intervalMap[key] == value,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  // CupertinoListSection.insetGrouped(
+                  //   header: const Text('已綁定卡片管理'),
+                  //   children: const [
+                  //     CupertinoListTile(
+                  //       title: Text('title'),
+                  //       additionalInfo: Text('additionalInfo'),
+                  //       subtitle: Text('subtitle'),
+                  //     ),
+                  //   ],
+                  // ),
+                ],
+              );
+            },
+          ),
         );
       },
     );

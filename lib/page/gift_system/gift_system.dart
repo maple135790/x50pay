@@ -31,24 +31,24 @@ class _GiftSystemState extends BaseStatefulState<GiftSystem> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-        value: viewModel,
-        builder: (context, child) {
-          return FutureBuilder(
-            future: init,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const Center(
-                    child: kDebugMode ? Text('not done') : null);
-              }
-              if (snapshot.hasError) {
-                showServiceError();
-                return Center(child: Text(serviceErrorText));
-              }
-              if (EasyLoading.isShow) EasyLoading.dismiss();
-              return const _GiftBoxLoaded();
-            },
-          );
-        });
+      value: viewModel,
+      builder: (context, child) {
+        return FutureBuilder(
+          future: init,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(child: kDebugMode ? Text('not done') : null);
+            }
+            if (snapshot.hasError) {
+              showServiceError();
+              return Center(child: Text(serviceErrorText));
+            }
+            if (EasyLoading.isShow) EasyLoading.dismiss();
+            return const _GiftBoxLoaded();
+          },
+        );
+      },
+    );
   }
 }
 
@@ -63,7 +63,7 @@ class _GiftBoxLoadedState extends BaseStatefulState<_GiftBoxLoaded> {
   final tabs = const <Widget>[
     Tab(text: '養成抽獎箱'),
     Tab(text: '領取禮物'),
-    Tab(text: '已領取')
+    Tab(text: '已領取'),
   ];
 
   @override
@@ -74,34 +74,39 @@ class _GiftBoxLoadedState extends BaseStatefulState<_GiftBoxLoaded> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Stack(children: [
-            Positioned(
-              bottom: -35,
-              right: -20,
-              child: Icon(
-                Icons.redeem_rounded,
-                size: 120,
-                color: IconTheme.of(context).color?.withValues(alpha: 0.1),
+          Stack(
+            children: [
+              Positioned(
+                bottom: -35,
+                right: -20,
+                child: Icon(
+                  Icons.redeem_rounded,
+                  size: 120,
+                  color: IconTheme.of(context).color?.withValues(alpha: 0.1),
+                ),
               ),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
                     color: isDarkTheme
                         ? const Color.fromARGB(12, 255, 255, 255)
                         : const Color.fromARGB(12, 0, 0, 0),
                     width: MediaQuery.of(context).size.width,
                     height: 89.19,
                     child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('禮物系統', style: TextStyle(fontSize: 17)),
-                          Text('X50Pay 禮物系統',
-                              style: TextStyle(color: Color(0xffb4b4b4)))
-                        ])),
-                Container(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('禮物系統', style: TextStyle(fontSize: 17)),
+                        Text(
+                          'X50Pay 禮物系統',
+                          style: TextStyle(color: Color(0xffb4b4b4)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
                     height: 42.5,
                     alignment: Alignment.centerLeft,
                     color: isDarkTheme
@@ -112,17 +117,15 @@ class _GiftBoxLoadedState extends BaseStatefulState<_GiftBoxLoaded> {
                       tabAlignment: TabAlignment.start,
                       tabs: tabs,
                       indicatorWeight: 3,
-                    )),
-              ],
-            ),
-          ]),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
           const Expanded(
             child: TabBarView(
-              children: [
-                LotteBox(),
-                GiftClaim(),
-                ClaimedGift(),
-              ],
+              children: [LotteBox(), GiftClaim(), ClaimedGift()],
             ),
           ),
         ],

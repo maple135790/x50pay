@@ -48,48 +48,55 @@ void main() {
   }
 
   void arrangeDoChangePhoneReturnsValidResponse() {
-    when(() => settingRepo.doChangePhone(phone: any(named: 'phone')))
-        .thenAnswer((_) async {
+    when(
+      () => settingRepo.doChangePhone(phone: any(named: 'phone')),
+    ).thenAnswer((_) async {
       return fakeSuccessResponse;
     });
   }
 
   void arrangeDoChangePhoneReturnsEmptyResponse() {
-    when(() => settingRepo.doChangePhone(phone: any(named: 'phone')))
-        .thenAnswer((_) async {
+    when(
+      () => settingRepo.doChangePhone(phone: any(named: 'phone')),
+    ).thenAnswer((_) async {
       return BasicResponse.empty();
     });
   }
 
   void arrangeDoChangePhoneThrowsException() {
-    when(() => settingRepo.doChangePhone(phone: any(named: 'phone')))
-        .thenThrow(Exception());
+    when(
+      () => settingRepo.doChangePhone(phone: any(named: 'phone')),
+    ).thenThrow(Exception());
   }
 
   void arrangeSmsActivateReturnsValidResponse() {
-    when(() => settingRepo.smsActivate(sms: any(named: 'sms')))
-        .thenAnswer((_) async {
+    when(() => settingRepo.smsActivate(sms: any(named: 'sms'))).thenAnswer((
+      _,
+    ) async {
       return fakeSuccessResponse;
     });
   }
 
   void arrangeSmsActivateReturnsEmptyResponse() {
-    when(() => settingRepo.smsActivate(sms: any(named: 'sms')))
-        .thenAnswer((_) async {
+    when(() => settingRepo.smsActivate(sms: any(named: 'sms'))).thenAnswer((
+      _,
+    ) async {
       return BasicResponse.empty();
     });
   }
 
   void arrangeSmsActivateReturnsInvalidSmsCodeResponse() {
-    when(() => settingRepo.smsActivate(sms: any(named: 'sms')))
-        .thenAnswer((_) async {
+    when(() => settingRepo.smsActivate(sms: any(named: 'sms'))).thenAnswer((
+      _,
+    ) async {
       return fakeSmsCodeInvalidResponse;
     });
   }
 
   void arrangeSmsActivateThrowsException() {
-    when(() => settingRepo.smsActivate(sms: any(named: 'sms')))
-        .thenThrow(Exception());
+    when(
+      () => settingRepo.smsActivate(sms: any(named: 'sms')),
+    ).thenThrow(Exception());
   }
 
   test('檢查手機號碼格式，若格式正確則沒有errorText，否則反之', () {

@@ -42,15 +42,17 @@ class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
               context.pop(true);
             },
             child: const Text('兌換'),
-          )
+          ),
         ],
       ),
     );
     if (!(isConfirm ?? false)) return;
     if (mounted) {
       final nav = GoRouter.of(context);
-      final isSuccess =
-          await context.read<GradeBoxViewModel>().doChangeGrade(gid, eid);
+      final isSuccess = await context.read<GradeBoxViewModel>().doChangeGrade(
+        gid,
+        eid,
+      );
       if (isSuccess) {
         EasyLoading.showSuccess(
           '成功兌換,將會回到首頁',
@@ -76,21 +78,23 @@ class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: CachedNetworkImage(
-                imageUrl: item.picUrl,
-                placeholder: (_, _) => const Icon(
-                  Icons.broken_image_rounded,
-                  size: 35,
-                  color: Color(0xff303030),
-                ),
-                errorWidget: (_, _, _) => const Icon(
-                    Icons.broken_image_rounded,
-                    size: 35,
-                    color: Color(0xff303030)),
-                width: 65,
-                height: 65,
-              )),
+            borderRadius: BorderRadius.circular(6),
+            child: CachedNetworkImage(
+              imageUrl: item.picUrl,
+              placeholder: (_, _) => const Icon(
+                Icons.broken_image_rounded,
+                size: 35,
+                color: Color(0xff303030),
+              ),
+              errorWidget: (_, _, _) => const Icon(
+                Icons.broken_image_rounded,
+                size: 35,
+                color: Color(0xff303030),
+              ),
+              width: 65,
+              height: 65,
+            ),
+          ),
           Flexible(
             fit: FlexFit.tight,
             child: Padding(
@@ -113,7 +117,7 @@ class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(Icons.favorite_rounded, size: 17),
-                Text(' ${item.heart} ')
+                Text(' ${item.heart} '),
               ],
             ),
           ),

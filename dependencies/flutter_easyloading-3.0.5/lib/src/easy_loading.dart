@@ -33,38 +33,20 @@ import 'package:flutter_easyloading/src/widgets/overlay_entry.dart';
 import 'package:flutter_easyloading/src/widgets/progress.dart';
 
 /// loading style
-enum EasyLoadingStyle {
-  light,
-  dark,
-  custom,
-}
+enum EasyLoadingStyle { light, dark, custom }
 
 /// toast position
-enum EasyLoadingToastPosition {
-  top,
-  center,
-  bottom,
-}
+enum EasyLoadingToastPosition { top, center, bottom }
 
 /// loading animation
-enum EasyLoadingAnimationStyle {
-  opacity,
-  offset,
-  scale,
-  custom,
-}
+enum EasyLoadingAnimationStyle { opacity, offset, scale, custom }
 
 /// loading mask type
 /// [none] default mask type, allow user interactions while loading is displayed
 /// [clear] don't allow user interactions while loading is displayed
 /// [black] don't allow user interactions while loading is displayed
 /// [custom] while mask type is custom, maskColor should not be null
-enum EasyLoadingMaskType {
-  none,
-  clear,
-  black,
-  custom,
-}
+enum EasyLoadingMaskType { none, clear, black, custom }
 
 /// loading indicator type. see [https://github.com/jogboms/flutter_spinkit#-showcase]
 enum EasyLoadingIndicatorType {
@@ -94,10 +76,7 @@ enum EasyLoadingIndicatorType {
 }
 
 /// loading status
-enum EasyLoadingStatus {
-  show,
-  dismiss,
-}
+enum EasyLoadingStatus { show, dismiss }
 
 typedef EasyLoadingStatusCallback = void Function(EasyLoadingStatus status);
 
@@ -232,9 +211,7 @@ class EasyLoading {
   static bool get isShow => _instance.w != null;
 
   /// init EasyLoading
-  static TransitionBuilder init({
-    TransitionBuilder? builder,
-  }) {
+  static TransitionBuilder init({TransitionBuilder? builder}) {
     return (BuildContext context, Widget? child) {
       if (builder != null) {
         return builder(context, FlutterEasyLoading(child: child));
@@ -267,10 +244,7 @@ class EasyLoading {
     String? status,
     EasyLoadingMaskType? maskType,
   }) async {
-    assert(
-      value >= 0.0 && value <= 1.0,
-      'progress value should be 0.0 ~ 1.0',
-    );
+    assert(value >= 0.0 && value <= 1.0, 'progress value should be 0.0 ~ 1.0');
 
     if (_instance.loadingStyle == EasyLoadingStyle.custom) {
       assert(
@@ -283,17 +257,9 @@ class EasyLoading {
       if (_instance.key != null) await dismiss(animation: false);
       GlobalKey<EasyLoadingProgressState> progressKey =
           GlobalKey<EasyLoadingProgressState>();
-      Widget w = EasyLoadingProgress(
-        key: progressKey,
-        value: value,
-      );
+      Widget w = EasyLoadingProgress(key: progressKey, value: value);
       _instance
-        .._show(
-          status: status,
-          maskType: maskType,
-          dismissOnTap: false,
-          w: w,
-        )
+        .._show(status: status, maskType: maskType, dismissOnTap: false, w: w)
         .._progressKey = progressKey;
     }
     // update progress
@@ -309,7 +275,8 @@ class EasyLoading {
     EasyLoadingMaskType? maskType,
     bool? dismissOnTap,
   }) {
-    Widget w = _instance.successWidget ??
+    Widget w =
+        _instance.successWidget ??
         Icon(
           Icons.done_rounded,
           color: EasyLoadingTheme.indicatorColor,
@@ -331,7 +298,8 @@ class EasyLoading {
     EasyLoadingMaskType? maskType,
     bool? dismissOnTap,
   }) {
-    Widget w = _instance.errorWidget ??
+    Widget w =
+        _instance.errorWidget ??
         Icon(
           Icons.clear_rounded,
           color: EasyLoadingTheme.indicatorColor,
@@ -353,7 +321,8 @@ class EasyLoading {
     EasyLoadingMaskType? maskType,
     bool? dismissOnTap,
   }) {
-    Widget w = _instance.infoWidget ??
+    Widget w =
+        _instance.infoWidget ??
         Icon(
           Icons.info_outline_rounded,
           color: EasyLoadingTheme.indicatorColor,
@@ -373,13 +342,12 @@ class EasyLoading {
     Duration? duration,
     EasyLoadingMaskType? maskType,
     bool? dismissOnTap,
-  }) =>
-      showInfo(
-        status,
-        duration: duration,
-        maskType: maskType,
-        dismissOnTap: dismissOnTap,
-      );
+  }) => showInfo(
+    status,
+    duration: duration,
+    maskType: maskType,
+    dismissOnTap: dismissOnTap,
+  );
 
   /// showToast [status] [duration] [toastPosition] [maskType]
   static Future<void> showToast(
@@ -399,9 +367,7 @@ class EasyLoading {
   }
 
   /// dismiss loading
-  static Future<void> dismiss({
-    bool animation = true,
-  }) {
+  static Future<void> dismiss({bool animation = true}) {
     // cancel timer
     _instance._cancelTimer();
     return _instance._dismiss(animation);

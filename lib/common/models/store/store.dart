@@ -21,9 +21,7 @@ class StoreModel {
       _$StoreModelFromJson(json);
   Map<String, dynamic> toJson() => _$StoreModelToJson(this);
 
-  const StoreModel.empty()
-      : prefix = null,
-        storelist = null;
+  const StoreModel.empty() : prefix = null, storelist = null;
 }
 
 @JsonSerializable()

@@ -13,8 +13,9 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion(
-      value:
-          isDarkTheme ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      value: isDarkTheme
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
       child: Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(50),
@@ -25,28 +26,26 @@ mixin BasePage<T extends StatefulWidget> on BaseStatefulState<T> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   FloatingActionButton(
-                      onPressed: debugFunction,
-                      child: const Icon(Icons.developer_mode_rounded)),
+                    onPressed: debugFunction,
+                    child: const Icon(Icons.developer_mode_rounded),
+                  ),
                   FloatingActionButton(
                     child: const Icon(Icons.brightness_6_rounded),
                     onPressed: () {
                       Theme.of(context).brightness == Brightness.dark
-                          ? context
-                              .read<AppThemeProvider>()
-                              .changeBrightness(Brightness.light)
-                          : context
-                              .read<AppThemeProvider>()
-                              .changeBrightness(Brightness.dark);
+                          ? context.read<AppThemeProvider>().changeBrightness(
+                              Brightness.light,
+                            )
+                          : context.read<AppThemeProvider>().changeBrightness(
+                              Brightness.dark,
+                            );
                     },
-                  )
+                  ),
                 ],
               )
             : null,
         body: SingleChildScrollView(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: body(context),
-          ),
+          child: Align(alignment: Alignment.topCenter, child: body(context)),
         ),
       ),
     );

@@ -24,7 +24,8 @@ mixin RemoteOpenMixin {
   double _getDistance(double lat1, double lng1, double lat2, double lng2) {
     var dLat = _deg2rad(lat2 - lat1); // deg2rad below
     var dLon = _deg2rad(lng2 - lng1);
-    var a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+    var a =
+        math.sin(dLat / 2) * math.sin(dLat / 2) +
         math.cos(_deg2rad(lat1)) *
             math.cos(_deg2rad(lat2)) *
             math.sin(dLon / 2) *

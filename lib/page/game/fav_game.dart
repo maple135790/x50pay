@@ -44,12 +44,13 @@ class _FavGameState extends BaseStatefulState<FavGame> {
   void showCabSelectDialog() {
     final recentPlayData = GlobalSingleton.instance.recentPlayedCabinetData!;
     showCupertinoDialog(
-        context: context,
-        builder: (_) => CabSelect(
-              caboid: recentPlayData.caboid,
-              cabNum: recentPlayData.cabNum,
-              cabinetData: recentPlayData.cabinet,
-            )).then((_) {
+      context: context,
+      builder: (_) => CabSelect(
+        caboid: recentPlayData.caboid,
+        cabNum: recentPlayData.cabNum,
+        cabinetData: recentPlayData.cabinet,
+      ),
+    ).then((_) {
       setState(() {});
     });
   }
@@ -77,10 +78,7 @@ class _FavGameState extends BaseStatefulState<FavGame> {
   }
 
   void reloadAfterSetFavGame() {
-    context.replaceNamed(
-      AppRoutes.gameCabs.routeName,
-      extra: true,
-    );
+    context.replaceNamed(AppRoutes.gameCabs.routeName, extra: true);
   }
 
   void showAddFavGameBottomSheet() async {
@@ -263,47 +261,49 @@ class _FavGameState extends BaseStatefulState<FavGame> {
           }
 
           final gameLeft = machines[index * 2];
-          final gameRight =
-              index * 2 + 1 < machines.length ? machines[index * 2 + 1] : null;
+          final gameRight = index * 2 + 1 < machines.length
+              ? machines[index * 2 + 1]
+              : null;
           return Selector<FavGameViewModel, Map<String, String>>(
-              selector: (context, vm) => vm.storeNameMap,
-              builder: (context, storeNameMap, child) {
-                if (index == gameList.machines!.length) {
-                  return changeFavGameButton;
-                }
-                final storeNameLeft =
-                    storeNameMap[gameLeft.shop ?? ''] ?? 'unknownStore';
-                final storeNameRight =
-                    storeNameMap[gameRight?.shop ?? ''] ?? 'unknownStore';
+            selector: (context, vm) => vm.storeNameMap,
+            builder: (context, storeNameMap, child) {
+              if (index == gameList.machines!.length) {
+                return changeFavGameButton;
+              }
+              final storeNameLeft =
+                  storeNameMap[gameLeft.shop ?? ''] ?? 'unknownStore';
+              final storeNameRight =
+                  storeNameMap[gameRight?.shop ?? ''] ?? 'unknownStore';
 
-                return Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 12),
-                        child: GameCabItem(
-                          gameLeft,
-                          storeName: storeNameLeft,
-                          onCoinInserted: showPlayAgainSnackBar,
-                          onItemPressed: clearSnackBar,
-                        ),
+              return Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: GameCabItem(
+                        gameLeft,
+                        storeName: storeNameLeft,
+                        onCoinInserted: showPlayAgainSnackBar,
+                        onItemPressed: clearSnackBar,
                       ),
                     ),
-                    if (gameRight != null) ...[
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: GameCabItem(
-                          gameRight,
-                          storeName: storeNameRight,
-                          onCoinInserted: showPlayAgainSnackBar,
-                          onItemPressed: clearSnackBar,
-                        ),
-                      ),
-                    ],
+                  ),
+                  if (gameRight != null) ...[
                     const SizedBox(width: 12),
+                    Expanded(
+                      child: GameCabItem(
+                        gameRight,
+                        storeName: storeNameRight,
+                        onCoinInserted: showPlayAgainSnackBar,
+                        onItemPressed: clearSnackBar,
+                      ),
+                    ),
                   ],
-                );
-              });
+                  const SizedBox(width: 12),
+                ],
+              );
+            },
+          );
         },
       );
     }
@@ -320,19 +320,25 @@ class _FavGameState extends BaseStatefulState<FavGame> {
                 return const SizedBox();
               }
 
-              final gameList = context
-                  .select<FavGameViewModel, GameList>((vm) => vm.favGameList);
+              final gameList = context.select<FavGameViewModel, GameList>(
+                (vm) => vm.favGameList,
+              );
               final style = context.select<FavGameViewModel, GameCabTileStyle>(
-                  (vm) => vm.tileStyle);
+                (vm) => vm.tileStyle,
+              );
               if (gameList.machines?.isEmpty ?? true) {
                 return addFavGameButton;
               }
 
               return switch (style) {
-                GameCabTileStyle.small =>
-                  buildSmallTileGames(gameList, changeFavGameButton),
-                GameCabTileStyle.large =>
-                  buildLargeTileGames(gameList, changeFavGameButton),
+                GameCabTileStyle.small => buildSmallTileGames(
+                  gameList,
+                  changeFavGameButton,
+                ),
+                GameCabTileStyle.large => buildLargeTileGames(
+                  gameList,
+                  changeFavGameButton,
+                ),
               };
             },
           );

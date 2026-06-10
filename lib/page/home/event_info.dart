@@ -43,10 +43,12 @@ class EventInfo extends StatelessWidget {
               ),
             ),
             // 訊息告知區塊不需要使用 Vertical Padding
-            ...events.map((evt) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text("> ${evt.name} : ${evt.describe}\n"),
-                ))
+            ...events.map(
+              (evt) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text("> ${evt.name} : ${evt.describe}\n"),
+              ),
+            ),
           ],
         ),
       ),

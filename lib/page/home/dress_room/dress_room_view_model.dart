@@ -38,18 +38,16 @@ class DressRoomViewModel extends BaseViewModel {
       for (final parent in parents) {
         // 有些父元素沒有子元素，例如沒有圖片的父元素
         if (parent.children.length < 2) continue;
-        avatars.add(
-          (
-            b64Image: parent.children[0].attributes['src']!
-                .split('data:image/webp;base64,')
-                .last,
-            id: parent.children[0].attributes['onclick']?.split("'")[1],
-            badgeText: parent.children[1]
-                .querySelector('div > div > div')!
-                .text
-                .trim(),
-          ),
-        );
+        avatars.add((
+          b64Image: parent.children[0].attributes['src']!
+              .split('data:image/webp;base64,')
+              .last,
+          id: parent.children[0].attributes['onclick']?.split("'")[1],
+          badgeText: parent.children[1]
+              .querySelector('div > div > div')!
+              .text
+              .trim(),
+        ));
       }
     } catch (e) {
       log('', name: 'DressRoomViewModel init', error: e);

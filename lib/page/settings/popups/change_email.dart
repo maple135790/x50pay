@@ -27,8 +27,11 @@ class _ChangeEmailDialogState extends BaseStatefulState<ChangeEmailDialog> {
       switch (viewModel.response!.code) {
         case 200:
           errorText = null;
-          await EasyLoading.showSuccess('信箱變更成功，請至您的 Email 信箱收取驗證信',
-              dismissOnTap: false, duration: const Duration(seconds: 2));
+          await EasyLoading.showSuccess(
+            '信箱變更成功，請至您的 Email 信箱收取驗證信',
+            dismissOnTap: false,
+            duration: const Duration(seconds: 2),
+          );
           await Future.delayed(const Duration(seconds: 2));
           await EasyLoading.show(dismissOnTap: false);
           nav.goNamed(AppRoutes.home.routeName);

@@ -125,25 +125,29 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                     visible: vm.errorMsg != null,
                     child: Row(
                       children: [
-                        const Icon(Icons.error_outline_rounded,
-                            color: Colors.red),
+                        const Icon(
+                          Icons.error_outline_rounded,
+                          color: Colors.red,
+                        ),
                         const SizedBox(width: 5),
                         Text(
                           vm.errorMsg ?? '',
                           style: const TextStyle(color: Colors.red),
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 15),
                 TextField(
-                    controller: email,
-                    textInputAction: TextInputAction.next,
-                    autofillHints: const [AutofillHints.username],
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.person_rounded))),
+                  controller: email,
+                  textInputAction: TextInputAction.next,
+                  autofillHints: const [AutofillHints.username],
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.person_rounded),
+                  ),
+                ),
                 const SizedBox(height: 15),
                 TextField(
                   controller: password,
@@ -167,15 +171,14 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
             TextButton(
               onPressed: () {
                 context.read<LoginProvider>().login(
-                      email: email.text,
-                      password: password.text,
-                      isShowSuccessLogin: false,
-                      onLoginSuccess: () {
-                        Navigator.of(context).pop();
-                        viewModel.enableBiometricsLogin(
-                            email.text, password.text);
-                      },
-                    );
+                  email: email.text,
+                  password: password.text,
+                  isShowSuccessLogin: false,
+                  onLoginSuccess: () {
+                    Navigator.of(context).pop();
+                    viewModel.enableBiometricsLogin(email.text, password.text);
+                  },
+                );
               },
               child: Text(i18n.userAppSettingsBiometricsLoginTry),
             ),
@@ -222,8 +225,11 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
       builder: (context) {
         return AlertDialog(
           title: Text(i18n.userAppSettingsSummarizedRecord),
-          content: Text(i18n.userAppSettingsSummarizedRecordContent(
-              "\n- ${i18n.userPlayLog}\n- ${i18n.userUTicLog}\n- ${i18n.userBidLog}")),
+          content: Text(
+            i18n.userAppSettingsSummarizedRecordContent(
+              "\n- ${i18n.userPlayLog}\n- ${i18n.userUTicLog}\n- ${i18n.userBidLog}",
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -278,8 +284,9 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
   }
 
   void onCEChanged(String ceText) async {
-    final ceInterval = CardEmulationIntervals.values
-        .firstWhere((element) => element.text == ceText);
+    final ceInterval = CardEmulationIntervals.values.firstWhere(
+      (element) => element.text == ceText,
+    );
     if (ceInterval == CardEmulationIntervals.disabled) {
       showDialog(
         context: context,
@@ -347,175 +354,180 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
     return ChangeNotifierProvider.value(
       value: viewModel,
       builder: (context, child) => FutureBuilder(
-          future: init,
-          builder: (context, snapshot) {
-            return PageDialog.ios(
-              title: i18n.userInAppSetting,
-              onConfirm: null,
-              content: (showButtonBar) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const Center(child: SizedBox());
-                }
-                if (snapshot.hasError) {
-                  return Center(child: Text(serviceErrorText));
-                }
+        future: init,
+        builder: (context, snapshot) {
+          return PageDialog.ios(
+            title: i18n.userInAppSetting,
+            onConfirm: null,
+            content: (showButtonBar) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(child: SizedBox());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text(serviceErrorText));
+              }
 
-                return Consumer<AppSettingsViewModel>(
-                  builder: (context, vm, child) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CupertinoListSection.insetGrouped(
-                          children: [
-                            FutureBuilder(
-                                future: vm.isBiomerticsAvailable(),
-                                initialData: false,
-                                builder: (context, snapshot) {
-                                  return CupertinoListTile.notched(
-                                    title: Text(i18n.userAppSettingsBiometrics),
-                                    trailing: CupertinoSwitch(
-                                      activeTrackColor: CupertinoColors.activeGreen,
-                                      value: vm.isEnabledBiometricsLogin,
-                                      onChanged: snapshot.data!
-                                          ? onBiometricsLoginChanged
-                                          : null,
-                                    ),
-                                  );
-                                }),
-                            CupertinoListTile.notched(
-                              title: Text(i18n.userAppSettingsFastPayment),
-                              trailing: CupertinoSwitch(
-                                activeTrackColor: CupertinoColors.activeGreen,
-                                value: vm.isEnabledFastQRPay,
-                                onChanged: onFastQRPayChanged,
-                              ),
-                            ),
-                            // TODO (kenneth) : 等待0mu web 版寫完後開放
-                            if (kDebugMode)
-                              CupertinoListTile.notched(
-                                title:
-                                    Text(i18n.userAppSettingsSummarizedRecord),
+              return Consumer<AppSettingsViewModel>(
+                builder: (context, vm, child) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CupertinoListSection.insetGrouped(
+                        children: [
+                          FutureBuilder(
+                            future: vm.isBiomerticsAvailable(),
+                            initialData: false,
+                            builder: (context, snapshot) {
+                              return CupertinoListTile.notched(
+                                title: Text(i18n.userAppSettingsBiometrics),
                                 trailing: CupertinoSwitch(
                                   activeTrackColor: CupertinoColors.activeGreen,
-                                  value: vm.isEnableSummarizedRecord,
-                                  onChanged: onSummarizedRecordChanged,
+                                  value: vm.isEnabledBiometricsLogin,
+                                  onChanged: snapshot.data!
+                                      ? onBiometricsLoginChanged
+                                      : null,
                                 ),
-                              ),
-                            CupertinoListTile.notched(
-                              title: Text(i18n.userAppSettingsInAppNfc),
-                              trailing: CupertinoSwitch(
-                                activeTrackColor: CupertinoColors.activeGreen,
-                                value: vm.isEnableInAppNfcScan,
-                                onChanged: onInAppNfcScanChanged,
-                              ),
-                            ),
-                            if (vm.isSupportCE)
-                              DialogDropdown.ios(
-                                title:
-                                    i18n.userAppSettingsCardEmulationInterval,
-                                value: vm.ceInterval,
-                                avaliList: CardEmulationIntervals.values
-                                    .map((e) => e.text)
-                                    .toList(),
-                                onChanged: onCEChanged,
-                              ),
-                          ],
-                        ),
-                        CupertinoListSection.insetGrouped(
-                          footer: Text(
-                            i18n.userAppSettingsRememberGameTabInfo,
-                            style: const CupertinoTextThemeData()
-                                .tabLabelTextStyle,
+                              );
+                            },
                           ),
-                          children: [
-                            DialogDropdown.ios(
-                              title: i18n.userAppSettingsStoreGameCabTileStyle,
-                              value: vm.storeGameTileStyle.i18nName,
-                              avaliList: GameCabTileStyle.values
-                                  .map((e) => e.i18nName)
-                                  .toList(),
-                              onChanged: (value) {
-                                final tileStyle = GameCabTileStyle.values
-                                    .firstWhere(
-                                        (element) => element.i18nName == value);
-                                vm.setStoreGameCabTileStyle(tileStyle);
-                              },
+                          CupertinoListTile.notched(
+                            title: Text(i18n.userAppSettingsFastPayment),
+                            trailing: CupertinoSwitch(
+                              activeTrackColor: CupertinoColors.activeGreen,
+                              value: vm.isEnabledFastQRPay,
+                              onChanged: onFastQRPayChanged,
                             ),
-                            DialogDropdown.ios(
-                              title: i18n.userAppSettingsPinnedGameCabTileStyle,
-                              value: vm.pinnedGameTileStyle.i18nName,
-                              avaliList: GameCabTileStyle.values
-                                  .map((e) => e.i18nName)
-                                  .toList(),
-                              onChanged: (value) {
-                                final tileStyle = GameCabTileStyle.values
-                                    .firstWhere(
-                                        (element) => element.i18nName == value);
-                                vm.setPinnedGameCabTileStyle(tileStyle);
-                              },
-                            ),
+                          ),
+                          // TODO (kenneth) : 等待0mu web 版寫完後開放
+                          if (kDebugMode)
                             CupertinoListTile.notched(
-                              title: Text(
-                                  i18n.userAppSettingsRememberGameTabTitle),
+                              title: Text(i18n.userAppSettingsSummarizedRecord),
                               trailing: CupertinoSwitch(
                                 activeTrackColor: CupertinoColors.activeGreen,
-                                value: vm.isRememberGameTab,
-                                onChanged: onRememberGameTabChanged,
+                                value: vm.isEnableSummarizedRecord,
+                                onChanged: onSummarizedRecordChanged,
                               ),
                             ),
-                          ],
+                          CupertinoListTile.notched(
+                            title: Text(i18n.userAppSettingsInAppNfc),
+                            trailing: CupertinoSwitch(
+                              activeTrackColor: CupertinoColors.activeGreen,
+                              value: vm.isEnableInAppNfcScan,
+                              onChanged: onInAppNfcScanChanged,
+                            ),
+                          ),
+                          if (vm.isSupportCE)
+                            DialogDropdown.ios(
+                              title: i18n.userAppSettingsCardEmulationInterval,
+                              value: vm.ceInterval,
+                              avaliList: CardEmulationIntervals.values
+                                  .map((e) => e.text)
+                                  .toList(),
+                              onChanged: onCEChanged,
+                            ),
+                        ],
+                      ),
+                      CupertinoListSection.insetGrouped(
+                        footer: Text(
+                          i18n.userAppSettingsRememberGameTabInfo,
+                          style:
+                              const CupertinoTextThemeData().tabLabelTextStyle,
                         ),
-                        CupertinoListSection.insetGrouped(
-                          children: [
-                            CupertinoListTile.notched(
-                              title: Text(i18n.userAppSettingsAccentColor),
-                              onTap: onChangeAccentColorPressed,
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        color: context
-                                            .read<AppThemeProvider>()
-                                            .seedColor,
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                          color: borderColor,
-                                          width: 1,
-                                        ),
-                                      )),
-                                  const SizedBox(width: 10),
-                                  const CupertinoListTileChevron(),
-                                ],
+                        children: [
+                          DialogDropdown.ios(
+                            title: i18n.userAppSettingsStoreGameCabTileStyle,
+                            value: vm.storeGameTileStyle.i18nName,
+                            avaliList: GameCabTileStyle.values
+                                .map((e) => e.i18nName)
+                                .toList(),
+                            onChanged: (value) {
+                              final tileStyle = GameCabTileStyle.values
+                                  .firstWhere(
+                                    (element) => element.i18nName == value,
+                                  );
+                              vm.setStoreGameCabTileStyle(tileStyle);
+                            },
+                          ),
+                          DialogDropdown.ios(
+                            title: i18n.userAppSettingsPinnedGameCabTileStyle,
+                            value: vm.pinnedGameTileStyle.i18nName,
+                            avaliList: GameCabTileStyle.values
+                                .map((e) => e.i18nName)
+                                .toList(),
+                            onChanged: (value) {
+                              final tileStyle = GameCabTileStyle.values
+                                  .firstWhere(
+                                    (element) => element.i18nName == value,
+                                  );
+                              vm.setPinnedGameCabTileStyle(tileStyle);
+                            },
+                          ),
+                          CupertinoListTile.notched(
+                            title: Text(
+                              i18n.userAppSettingsRememberGameTabTitle,
+                            ),
+                            trailing: CupertinoSwitch(
+                              activeTrackColor: CupertinoColors.activeGreen,
+                              value: vm.isRememberGameTab,
+                              onChanged: onRememberGameTabChanged,
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoListSection.insetGrouped(
+                        children: [
+                          CupertinoListTile.notched(
+                            title: Text(i18n.userAppSettingsAccentColor),
+                            onTap: onChangeAccentColorPressed,
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: context
+                                        .read<AppThemeProvider>()
+                                        .seedColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                      color: borderColor,
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                const CupertinoListTileChevron(),
+                              ],
+                            ),
+                          ),
+                          CupertinoListTile.notched(
+                            title: Text(i18n.userAppSettingsEnableDarkTheme),
+                            trailing: CupertinoSwitch(
+                              activeTrackColor: CupertinoColors.activeGreen,
+                              value: isDarkTheme,
+                              onChanged: onChangeThemeBrightness,
+                            ),
+                          ),
+                          CupertinoListTile.notched(
+                            title: Text(
+                              i18n.userAppSettingsResetTheme,
+                              style: const TextStyle(
+                                color: CupertinoColors.systemBlue,
                               ),
                             ),
-                            CupertinoListTile.notched(
-                              title: Text(i18n.userAppSettingsEnableDarkTheme),
-                              trailing: CupertinoSwitch(
-                                activeTrackColor: CupertinoColors.activeGreen,
-                                value: isDarkTheme,
-                                onChanged: onChangeThemeBrightness,
-                              ),
-                            ),
-                            CupertinoListTile.notched(
-                              title: Text(
-                                i18n.userAppSettingsResetTheme,
-                                style: const TextStyle(
-                                    color: CupertinoColors.systemBlue),
-                              ),
-                              onTap: onResetThemePressed,
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            );
-          }),
+                            onTap: onResetThemePressed,
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

@@ -102,9 +102,7 @@ class Repository extends Api {
   /// 取得該店家的遊戲列表API
   ///
   /// 需要傳入店家編號 [storeId]
-  Future<GameList> getGameList({
-    required String storeId,
-  }) async {
+  Future<GameList> getGameList({required String storeId}) async {
     late final GameList gameList;
 
     await Api.makeRequest(
@@ -488,14 +486,12 @@ class Repository extends Api {
   /// 需要傳入 [gid] 及 [grid]
   Future<String> chgGradev2(String gid, String grid) async {
     final response = await Api.makeRequest(
-        dest: '/grade/change',
-        body: {
-          'gid': gid,
-          'grid': grid,
-        },
-        method: HttpMethod.post,
-        withSession: true,
-        contentType: ContentType.json);
+      dest: '/grade/change',
+      body: {'gid': gid, 'grid': grid},
+      method: HttpMethod.post,
+      withSession: true,
+      contentType: ContentType.json,
+    );
     return response.body;
   }
 
@@ -529,9 +525,7 @@ class Repository extends Api {
       customDest: "https://pay.x50.fun$url",
       method: HttpMethod.get,
       withSession: true,
-      customHeaders: {
-        'Referer': refererUrl,
-      },
+      customHeaders: {'Referer': refererUrl},
       body: {},
     );
     return const Utf8Decoder().convert(response.bodyBytes);
@@ -572,9 +566,7 @@ class Repository extends Api {
   Future<void> setFavGames(List<String> favGames) async {
     await Api.makeRequest(
       dest: '/settingFavConfirm',
-      body: {
-        "favlist": favGames,
-      },
+      body: {"favlist": favGames},
       method: HttpMethod.post,
       withSession: true,
       contentType: ContentType.json,

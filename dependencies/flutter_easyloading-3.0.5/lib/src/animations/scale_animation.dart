@@ -35,10 +35,7 @@ class ScaleAnimation extends EasyLoadingAnimation {
   ) {
     return Opacity(
       opacity: controller.value,
-      child: ScaleTransition(
-        scale: controller,
-        child: child,
-      ),
+      child: ScaleTransition(scale: controller, child: child),
     );
   }
 }

@@ -62,9 +62,7 @@ class _HomeState extends BaseStatefulState<Home> {
                   return Center(child: Text(serviceErrorText));
                 }
                 return const Scrollbar(
-                  child: SingleChildScrollView(
-                    child: _HomeLoaded(),
-                  ),
+                  child: SingleChildScrollView(child: _HomeLoaded()),
                 );
               },
             );

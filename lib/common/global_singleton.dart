@@ -24,8 +24,9 @@ class GlobalSingleton {
   /// 全域的 navigatorKey
   ///
   /// 在不特定頁面顯示 dialog 時使用
-  static final appNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'Global navigatorKey');
+  static final appNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'Global navigatorKey',
+  );
 
   /// 是否正在顯示 NfcPay 的 dialog
   ///

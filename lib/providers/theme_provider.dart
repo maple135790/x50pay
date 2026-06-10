@@ -20,10 +20,12 @@ extension AppThemeMode on ThemeMode {
       case ThemeMode.light:
         return ThemeData(
           brightness: Brightness.light,
-          pageTransitionsTheme: const PageTransitionsTheme(builders: {
-            TargetPlatform.android: ZoomPageTransitionsBuilder(),
-            TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
-          }),
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: ZoomPageTransitionsBuilder(),
+              TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+            },
+          ),
           scrollbarTheme: ScrollbarThemeData(
             radius: const Radius.circular(1.5),
             thumbColor: WidgetStateProperty.all(const Color(0x80FFFFFF)),
@@ -42,27 +44,23 @@ extension AppThemeMode on ThemeMode {
             headingRowColor: WidgetStateProperty.all(const Color(0xfff2f2f2)),
             decoration: BoxDecoration(
               color: const Color(0xffffffff),
-              border: Border.all(
-                color: CustomColorThemes.borderColorLight,
-              ),
+              border: Border.all(color: CustomColorThemes.borderColorLight),
             ),
           ),
           navigationBarTheme: NavigationBarThemeData(
             indicatorColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-            labelTextStyle: WidgetStateProperty.resolveWith(
-              (states) {
-                if (!states.isSelected) return null;
-                return TextStyle(
-                  color: Color.alphaBlend(
-                    const Color(0x55000000),
-                    const Color(0xb3e3c81b),
-                  ),
-                  fontSize: 11,
-                );
-              },
-            ),
+            labelTextStyle: WidgetStateProperty.resolveWith((states) {
+              if (!states.isSelected) return null;
+              return TextStyle(
+                color: Color.alphaBlend(
+                  const Color(0x55000000),
+                  const Color(0xb3e3c81b),
+                ),
+                fontSize: 11,
+              );
+            }),
           ),
           tabBarTheme: const TabBarThemeData(
             tabAlignment: TabAlignment.start,
@@ -76,10 +74,7 @@ extension AppThemeMode on ThemeMode {
             fillColor: Color(0xffd2d2d2),
             hintStyle: TextStyle(color: Color(0xff757575)),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Color(0xff505050),
-                width: 3,
-              ),
+              borderSide: BorderSide(color: Color(0xff505050), width: 3),
             ),
             isDense: true,
             border: UnderlineInputBorder(
@@ -90,10 +85,7 @@ extension AppThemeMode on ThemeMode {
             ),
             contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.blue,
-                width: 3,
-              ),
+              borderSide: BorderSide(color: Colors.blue, width: 3),
             ),
           ),
         );
@@ -125,15 +117,15 @@ extension AppThemeMode on ThemeMode {
             headingRowColor: WidgetStateProperty.all(const Color(0xff2a2a2a)),
             decoration: BoxDecoration(
               color: const Color(0xff1e1e1e),
-              border: Border.all(
-                color: CustomColorThemes.borderColorDark,
-              ),
+              border: Border.all(color: CustomColorThemes.borderColorDark),
             ),
           ),
-          pageTransitionsTheme: const PageTransitionsTheme(builders: {
-            TargetPlatform.android: ZoomPageTransitionsBuilder(),
-            TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
-          }),
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: ZoomPageTransitionsBuilder(),
+              TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+            },
+          ),
           dialogTheme: const DialogThemeData(
             surfaceTintColor: Colors.transparent,
             backgroundColor: Color(0xff1e1e1e),
@@ -161,10 +153,7 @@ extension AppThemeMode on ThemeMode {
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
             labelTextStyle: WidgetStateProperty.resolveWith((states) {
               if (!states.isSelected) return null;
-              return const TextStyle(
-                color: Color(0xb3e3c81b),
-                fontSize: 11,
-              );
+              return const TextStyle(color: Color(0xb3e3c81b), fontSize: 11);
             }),
             iconTheme: WidgetStateProperty.resolveWith((states) {
               if (states.isSelected) {
@@ -177,18 +166,16 @@ extension AppThemeMode on ThemeMode {
             surfaceTintColor: Colors.transparent,
             backgroundColor: CustomColorThemes.pageDialogBackgroundColorDark,
           ),
-          textSelectionTheme:
-              const TextSelectionThemeData(cursorColor: Colors.white),
+          textSelectionTheme: const TextSelectionThemeData(
+            cursorColor: Colors.white,
+          ),
           inputDecorationTheme: const InputDecorationTheme(
             filled: true,
             fillColor: Color(0xff2a2a2a),
             hintStyle: TextStyle(color: Color(0xff757575)),
             prefixIconColor: Color(0xfffafafa),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Color(0xff505050),
-                width: 3,
-              ),
+              borderSide: BorderSide(color: Color(0xff505050), width: 3),
             ),
             isDense: true,
             border: UnderlineInputBorder(
@@ -199,10 +186,7 @@ extension AppThemeMode on ThemeMode {
             ),
             contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.blue,
-                width: 3,
-              ),
+              borderSide: BorderSide(color: Colors.blue, width: 3),
             ),
           ),
         );
@@ -248,12 +232,15 @@ class AppThemeProvider extends ChangeNotifier {
       ..backgroundColor = currentMode == ThemeMode.dark
           ? const Color(0xff2a2a2a)
           : const Color(0xfff2f2f2)
-      ..indicatorColor =
-          currentMode == ThemeMode.dark ? Colors.white : Colors.black
+      ..indicatorColor = currentMode == ThemeMode.dark
+          ? Colors.white
+          : Colors.black
       ..textColor = currentMode == ThemeMode.dark ? Colors.white : Colors.black
       ..indicatorSize = 80
-      ..contentPadding =
-          const EdgeInsets.symmetric(vertical: 22.5, horizontal: 15)
+      ..contentPadding = const EdgeInsets.symmetric(
+        vertical: 22.5,
+        horizontal: 15,
+      )
       ..indicatorWidget = const _Spinner()
       ..userInteractions = false
       ..dismissOnTap = false;
@@ -280,8 +267,9 @@ class AppThemeProvider extends ChangeNotifier {
   }
 
   void changeBrightness(Brightness brightness) {
-    currentMode =
-        brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
+    currentMode = brightness == Brightness.dark
+        ? ThemeMode.dark
+        : ThemeMode.light;
     configLoadingStyle();
     return;
   }

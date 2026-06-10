@@ -15,16 +15,13 @@ class Sponser {
     required this.rawMeta,
   });
 
-  Sponser.empty()
-      : rawSponserImgUrl = '',
-        sponserName = '',
-        rawMeta = '';
+  Sponser.empty() : rawSponserImgUrl = '', sponserName = '', rawMeta = '';
 
   String get sponserImgUrl => rawSponserImgUrl == null
       ? ''
       : rawSponserImgUrl!.startsWith('http')
-          ? rawSponserImgUrl!
-          : 'https://pay.x50.fun$rawSponserImgUrl';
+      ? rawSponserImgUrl!
+      : 'https://pay.x50.fun$rawSponserImgUrl';
 
   List<String> get meta =>
       rawMeta.trim().split('\n').map((e) => e.trim()).toList();
@@ -52,11 +49,13 @@ class CollabShopListViewModel extends BaseViewModel {
         final sponserName = rawItem.getElementsByClassName('header').first.text;
         final rawMeta = rawItem.getElementsByClassName('meta').first.text;
 
-        sponsers.add(Sponser(
-          rawSponserImgUrl: url,
-          sponserName: sponserName,
-          rawMeta: rawMeta,
-        ));
+        sponsers.add(
+          Sponser(
+            rawSponserImgUrl: url,
+            sponserName: sponserName,
+            rawMeta: rawMeta,
+          ),
+        );
       }
       return sponsers;
     } catch (e) {

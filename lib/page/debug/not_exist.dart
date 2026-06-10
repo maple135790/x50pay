@@ -5,8 +5,6 @@ class NotExist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('not exist yet')),
-    );
+    return const Scaffold(body: Center(child: Text('not exist yet')));
   }
 }

@@ -15,65 +15,63 @@ class OfficialInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-            padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-            child: Material(
-              elevation: 2.5,
-              clipBehavior: Clip.antiAlias,
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+          child: Material(
+            elevation: 2.5,
+            clipBehavior: Clip.antiAlias,
+            borderRadius: BorderRadius.circular(5),
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Stack(
-                    children: [
-                      Image(
-                        image: R.images.home.vts.provider(),
-                        fit: BoxFit.fill,
+              child: Stack(
+                children: [
+                  Image(image: R.images.home.vts.provider(), fit: BoxFit.fill),
+                  Positioned.fill(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          launchUrlString(
+                            'https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ',
+                            mode: LaunchMode.externalNonBrowserApplication,
+                          );
+                        },
                       ),
-                      Positioned.fill(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              launchUrlString(
-                                  'https://www.youtube.com/channel/UCEbHRn4kPMzODDgsMwGhYVQ',
-                                  mode:
-                                      LaunchMode.externalNonBrowserApplication);
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
         Padding(
-            padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-            child: Material(
-              elevation: 2.5,
-              clipBehavior: Clip.antiAlias,
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+          child: Material(
+            elevation: 2.5,
+            clipBehavior: Clip.antiAlias,
+            borderRadius: BorderRadius.circular(5),
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Stack(
-                    children: [
-                      Image(
-                        image: R.images.home.top.provider(),
-                        fit: BoxFit.fill,
+              child: Stack(
+                children: [
+                  Image(image: R.images.home.top.provider(), fit: BoxFit.fill),
+                  Positioned.fill(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          launchUrlString(
+                            'https://www.youtube.com/c/X50MusicGameStation-onAir',
+                            mode: LaunchMode.externalNonBrowserApplication,
+                          );
+                        },
                       ),
-                      Positioned.fill(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              launchUrlString(
-                                  'https://www.youtube.com/c/X50MusicGameStation-onAir',
-                                  mode:
-                                      LaunchMode.externalNonBrowserApplication);
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-            ))
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

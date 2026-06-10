@@ -38,12 +38,16 @@ class _TicketRecordsState extends BaseStatefulState<TicketRecords>
       dynamic maybeString = log.last;
       if (maybeString is String) details = maybeString;
 
-      rows.add(DataRow(cells: [
-        DataCell(Text(eventName)),
-        DataCell(Text(expDate)),
-        DataCell(Text(remainCount)),
-        DataCell(Text(details ?? '')),
-      ]));
+      rows.add(
+        DataRow(
+          cells: [
+            DataCell(Text(eventName)),
+            DataCell(Text(expDate)),
+            DataCell(Text(remainCount)),
+            DataCell(Text(details ?? '')),
+          ],
+        ),
+      );
     }
     return rows;
   }

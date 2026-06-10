@@ -74,8 +74,10 @@ class SettingsViewModel extends BaseViewModel {
   }
 
   /// 設定 QuicPay 偏好
-  Future<bool> quicConfirm(
-      {required bool autoQuic, required String autoQlock}) async {
+  Future<bool> quicConfirm({
+    required bool autoQuic,
+    required String autoQlock,
+  }) async {
     log('autoQuic $autoQuic', name: 'quicConfirm');
     log('autoQlock $autoQlock', name: 'quicConfirm');
 
@@ -85,8 +87,10 @@ class SettingsViewModel extends BaseViewModel {
 
     try {
       if (!kDebugMode || isForceFetch) {
-        httpResponse =
-            await settingRepo.quicConfirm(atq: autoQuic, atql: autoQlock);
+        httpResponse = await settingRepo.quicConfirm(
+          atq: autoQuic,
+          atql: autoQlock,
+        );
       } else {
         httpResponse = http.Response(testResponse(), 200);
       }
@@ -125,14 +129,15 @@ class SettingsViewModel extends BaseViewModel {
 
     try {
       httpResponse = await settingRepo.autoConfirm(
-          atc: autoTicket,
-          atn: autoNVSV,
-          atp: autoPay,
-          atq: autoQuicPay,
-          ats: autoSDVX,
-          att: autoTwo,
-          agv: autoRewardPoint,
-          mtp: mtp);
+        atc: autoTicket,
+        atn: autoNVSV,
+        atp: autoPay,
+        atq: autoQuicPay,
+        ats: autoSDVX,
+        att: autoTwo,
+        agv: autoRewardPoint,
+        mtp: mtp,
+      );
 
       return httpResponse.statusCode == 200;
     } catch (e, stacktrace) {
@@ -190,11 +195,13 @@ class SettingsViewModel extends BaseViewModel {
         response = await settingRepo.changePassword(oldPwd: oldPwd, pwd: pwd);
       } else {
         if (debugFlag == 700) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
+          response = BasicResponse.fromJson(
+            jsonDecode(testResponse(code: 700)),
+          );
         } else if (debugFlag == 701) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
+          response = BasicResponse.fromJson(
+            jsonDecode(testResponse(code: 701)),
+          );
         } else {
           response = BasicResponse.fromJson(jsonDecode(testResponse()));
         }
@@ -212,10 +219,7 @@ class SettingsViewModel extends BaseViewModel {
   /// 變更電子郵件
   ///
   /// 用於綁定新電子郵件，需要傳入新電子郵件 [email]
-  Future<bool> changeEmail({
-    required String email,
-    int debugFlag = 200,
-  }) async {
+  Future<bool> changeEmail({required String email, int debugFlag = 200}) async {
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
 
@@ -224,11 +228,13 @@ class SettingsViewModel extends BaseViewModel {
         response = await settingRepo.changeEmail(remail: email);
       } else {
         if (debugFlag == 700) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 700)));
+          response = BasicResponse.fromJson(
+            jsonDecode(testResponse(code: 700)),
+          );
         } else if (debugFlag == 701) {
-          response =
-              BasicResponse.fromJson(jsonDecode(testResponse(code: 701)));
+          response = BasicResponse.fromJson(
+            jsonDecode(testResponse(code: 701)),
+          );
         } else {
           response = BasicResponse.fromJson(jsonDecode(testResponse()));
         }

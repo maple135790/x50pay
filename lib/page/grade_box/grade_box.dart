@@ -64,7 +64,7 @@ class _GradeBoxLoadedState extends BaseStatefulState<_GradeBoxLoaded> {
     Tab(text: '卡片'),
     Tab(text: '物料'),
     Tab(text: '專輯'),
-    Tab(text: 'X50')
+    Tab(text: 'X50'),
   ];
   late List<Widget> tabViews;
 
@@ -88,33 +88,39 @@ class _GradeBoxLoadedState extends BaseStatefulState<_GradeBoxLoaded> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Stack(children: [
-            const Positioned(
+          Stack(
+            children: [
+              const Positioned(
                 right: 0,
                 child: Image(
                   image: CachedNetworkImageProvider(titleImageUrl),
                   height: 135,
                   opacity: AlwaysStoppedAnimation(0.8),
-                )),
-            SizedBox(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
+                ),
+              ),
+              SizedBox(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
                       color: isDarkTheme
                           ? const Color.fromARGB(12, 255, 255, 255)
                           : const Color.fromARGB(12, 0, 0, 0),
                       width: MediaQuery.of(context).size.width,
                       height: 89.19,
                       child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('養成商場', style: TextStyle(fontSize: 17)),
-                            Text('點數兌換商品',
-                                style: TextStyle(color: Color(0xff787878)))
-                          ])),
-                  Container(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('養成商場', style: TextStyle(fontSize: 17)),
+                          Text(
+                            '點數兌換商品',
+                            style: TextStyle(color: Color(0xff787878)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
                       height: 42.5,
                       alignment: Alignment.centerLeft,
                       color: isDarkTheme
@@ -125,17 +131,17 @@ class _GradeBoxLoadedState extends BaseStatefulState<_GradeBoxLoaded> {
                         isScrollable: true,
                         tabs: tabs,
                         indicatorWeight: 3,
-                      )),
-                ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ]),
+            ],
+          ),
           Expanded(
             child: Consumer<GradeBoxViewModel>(
               builder: (context, value, child) {
-                return TabBarView(
-                  children: tabViews,
-                );
+                return TabBarView(children: tabViews);
               },
             ),
           ),

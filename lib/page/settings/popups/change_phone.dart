@@ -13,10 +13,7 @@ import 'package:x50pay/repository/setting_repository.dart';
 class ChangePhoneDialog extends StatefulWidget {
   final void Function(bool isRemoved) onPhoneRemoved;
 
-  const ChangePhoneDialog({
-    super.key,
-    required this.onPhoneRemoved,
-  });
+  const ChangePhoneDialog({super.key, required this.onPhoneRemoved});
 
   @override
   State<ChangePhoneDialog> createState() => _ChangePhoneDialogState();
@@ -76,7 +73,7 @@ class _ChangePhoneDialogState extends BaseStatefulState<ChangePhoneDialog> {
                             text: "解除您的帳戶的手機綁定",
                             style: TextStyle(color: Color(0xFFEAC912)),
                           ),
-                          TextSpan(text: '，並且讓原先的手機號碼可以被再次使用')
+                          TextSpan(text: '，並且讓原先的手機號碼可以被再次使用'),
                         ],
                       ),
                     ),
@@ -104,8 +101,9 @@ class _ChangePhoneDialogState extends BaseStatefulState<ChangePhoneDialog> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        style:
-                            CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+                        style: CustomButtonThemes.cancel(
+                          isDarkMode: isDarkTheme,
+                        ),
                         child: const Text('取消'),
                       ),
                     ),
@@ -244,13 +242,13 @@ class _ChangePhoneConfirmedDialogState
                             maxLength: textmaxLength,
                             buildCounter: noCounterBuilder,
                             inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
+                              FilteringTextInputFormatter.digitsOnly,
                             ],
                             keyboardType: TextInputType.phone,
                             controller: textController,
                             decoration: InputDecoration(hintText: hintText),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -262,7 +260,7 @@ class _ChangePhoneConfirmedDialogState
                         style: const TextStyle(color: Colors.red),
                       );
                     },
-                  )
+                  ),
                 ],
               ),
             );
@@ -277,10 +275,7 @@ class _Dialog extends StatefulWidget {
   final Widget content;
   final VoidCallback onConfirm;
 
-  const _Dialog({
-    required this.content,
-    required this.onConfirm,
-  });
+  const _Dialog({required this.content, required this.onConfirm});
 
   @override
   State<_Dialog> createState() => _DialogState();
@@ -314,7 +309,7 @@ class _DialogState extends BaseStatefulState<_Dialog> {
           },
           style: CustomButtonThemes.severe(isV4: true),
           child: const Text('保存'),
-        )
+        ),
       ],
     );
   }
@@ -332,10 +327,7 @@ class _DialogBody extends StatelessWidget {
       children: [
         Align(
           alignment: Alignment.topLeft,
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
+          child: Text(title, style: Theme.of(context).textTheme.headlineSmall),
         ),
         const SizedBox(height: 30),
         ...children,
@@ -369,18 +361,13 @@ class _DialogWidgetState extends State<_DialogWidget> {
           child: Text.rich(
             TextSpan(
               children: [
-                WidgetSpan(
-                  child: Icon(
-                    widget.icon,
-                    size: 18,
-                  ),
-                ),
+                WidgetSpan(child: Icon(widget.icon, size: 18)),
                 const WidgetSpan(child: SizedBox(width: 5)),
                 TextSpan(text: widget.name),
                 const TextSpan(
                   text: ' *',
                   style: TextStyle(color: Colors.red),
-                )
+                ),
               ],
             ),
           ),

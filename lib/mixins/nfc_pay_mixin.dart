@@ -58,16 +58,21 @@ mixin NfcPayMixin {
 
   void _handlePayment(String rawDoc, String mid, String cid) async {
     try {
-      final prePayUrl =
-          rawDoc.split('location.replace("').last.split('")').first;
+      final prePayUrl = rawDoc
+          .split('location.replace("')
+          .last
+          .split('")')
+          .first;
       if (prePayUrl.isEmpty) throw Exception('payUrl is empty');
       final prePaymentDoc = await _repo.getDocumentWithDomainPrefix(
         prePayUrl,
         'https://pay.x50.fun/mid/$mid/$cid',
         descLabel: '取得支付前的頁面',
       );
-      final payUrl =
-          prePaymentDoc.split("\$.post('")[1].split("',function").first;
+      final payUrl = prePaymentDoc
+          .split("\$.post('")[1]
+          .split("',function")
+          .first;
       if (payUrl.isEmpty) throw Exception('payUrl is empty');
 
       _doInsert(payUrl);
@@ -89,9 +94,7 @@ mixin NfcPayMixin {
         await entryProvider.checkEntry();
       },
     );
-    await cabSelectViewModel.doInsertQRPay(
-      url: 'https://pay.x50.fun$url',
-    );
+    await cabSelectViewModel.doInsertQRPay(url: 'https://pay.x50.fun$url');
     return;
   }
 
@@ -120,19 +123,24 @@ mixin NfcPayMixin {
     try {
       final rawDoc = await _getNfcPayDocument(url);
       final doc = parse(rawDoc);
-      final imageUrl =
-          doc.querySelector('body > div > a > div > img')!.attributes['src']!;
-      final cabName =
-          doc.querySelector('body > div > a > div > div')!.text.trim();
+      final imageUrl = doc
+          .querySelector('body > div > a > div > img')!
+          .attributes['src']!;
+      final cabName = doc
+          .querySelector('body > div > a > div > div')!
+          .text
+          .trim();
       final cabNum = doc
           .querySelector(
-              'body > div > div.center.aligned.content > div > div > div.header > strong')!
+            'body > div > div.center.aligned.content > div > div > div.header > strong',
+          )!
           .text
           .trim()
           .split(' ')[1];
       final rawScript = doc.querySelectorAll("body > script")[3].text.trim();
       final rawModes = doc.querySelectorAll(
-          "body > div > div.center.aligned.content > div > div > p");
+        "body > div > div.center.aligned.content > div > div > p",
+      );
       List<List<dynamic>> modes = [];
       for (var rawMode in rawModes) {
         final modeName = rawMode.text.trim();
@@ -175,8 +183,12 @@ mixin NfcPayMixin {
         mode: modes,
       );
     } catch (e, stacktrace) {
-      log('',
-          error: e, stackTrace: stacktrace, name: 'NfcPayMixin._getQRPayData');
+      log(
+        '',
+        error: e,
+        stackTrace: stacktrace,
+        name: 'NfcPayMixin._getQRPayData',
+      );
       rethrow;
     } finally {
       EasyLoading.dismiss();

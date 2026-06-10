@@ -37,17 +37,17 @@ class CabinetModel {
   });
 
   const CabinetModel.empty()
-      : message = '',
-        code = 0,
-        note = const [],
-        caboid = '',
-        spic = const [],
-        surl = const [],
-        pad = false,
-        padmid = '',
-        padlid = '',
-        cabinets = const [],
-        reservations = const [];
+    : message = '',
+      code = 0,
+      note = const [],
+      caboid = '',
+      spic = const [],
+      surl = const [],
+      pad = false,
+      padmid = '',
+      padlid = '',
+      cabinets = const [],
+      reservations = const [];
 
   factory CabinetModel.fromJson(Map<String, dynamic> json) =>
       _$CabinetModelFromJson(json);
@@ -70,35 +70,36 @@ class Cabinet {
   final String nbusy;
   final bool pcl;
 
-  const Cabinet(
-      {required this.num,
-      required this.id,
-      required this.label,
-      required this.mode,
-      required this.card,
-      required this.isBool,
-      required this.vipbool,
-      required this.notice,
-      required this.busy,
-      required this.nbusy,
-      required this.pcl});
+  const Cabinet({
+    required this.num,
+    required this.id,
+    required this.label,
+    required this.mode,
+    required this.card,
+    required this.isBool,
+    required this.vipbool,
+    required this.notice,
+    required this.busy,
+    required this.nbusy,
+    required this.pcl,
+  });
 
   factory Cabinet.fromJson(Map<String, dynamic> json) =>
       _$CabinetFromJson(json);
   Map<String, dynamic> toJson() => _$CabinetToJson(this);
 
   const Cabinet.empty()
-      : num = 0,
-        id = '',
-        label = '',
-        mode = const [],
-        card = false,
-        isBool = false,
-        vipbool = false,
-        notice = '',
-        busy = '',
-        nbusy = '',
-        pcl = false;
+    : num = 0,
+      id = '',
+      label = '',
+      mode = const [],
+      card = false,
+      isBool = false,
+      vipbool = false,
+      notice = '',
+      busy = '',
+      nbusy = '',
+      pcl = false;
 
   @override
   String toString() {

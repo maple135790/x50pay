@@ -8,7 +8,7 @@ import 'package:x50pay/repository/repository.dart';
 
 typedef _InsertResponse = ({
   bool is200,
-  ({String msg, String describe}) response
+  ({String msg, String describe}) response,
 });
 
 class CabSelectViewModel extends BaseViewModel {
@@ -39,8 +39,8 @@ class CabSelectViewModel extends BaseViewModel {
               is200: true,
               response: (
                 msg: 'Test doInsertQRPay Success',
-                describe: 'no token is inserted'
-              )
+                describe: 'no token is inserted',
+              ),
             );
       if (result.is200) {
         onInsertSuccess?.call();
@@ -88,8 +88,8 @@ class CabSelectViewModel extends BaseViewModel {
               is200: true,
               response: (
                 msg: 'Test doInsert Success',
-                describe: 'no token is inserted'
-              )
+                describe: 'no token is inserted',
+              ),
             );
       if (result.is200) {
         onInsertSuccess?.call();

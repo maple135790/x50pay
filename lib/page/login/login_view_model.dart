@@ -62,8 +62,9 @@ class LoginProvider extends BaseViewModel {
       if (!kDebugMode || isForceFetch) {
         response = await repo.login(email: email, password: password);
       } else {
-        response =
-            BasicResponse.fromJson(jsonDecode(testResponse(code: debugFlag)));
+        response = BasicResponse.fromJson(
+          jsonDecode(testResponse(code: debugFlag)),
+        );
       }
       EasyLoading.dismiss();
       final code = response?.code ?? 0;
@@ -139,8 +140,9 @@ class LoginProvider extends BaseViewModel {
   /// 檢查是否可以開啟生物辨識登入
   Future<void> checkEnableBiometricsLogin() async {
     final auth = LocalAuthentication();
-    final hasUsername =
-        await Prefs.secureContainsKey(SecurePrefsToken.username);
+    final hasUsername = await Prefs.secureContainsKey(
+      SecurePrefsToken.username,
+    );
     final hasPwd = await Prefs.secureContainsKey(SecurePrefsToken.password);
     final canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
     final canAuthenticate =

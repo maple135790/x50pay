@@ -76,12 +76,7 @@ class ChangePhoneViewModel extends BaseViewModel {
       _isSentSmsCode = true;
       notifyListeners();
     } on Exception catch (e, s) {
-      log(
-        '',
-        name: 'changePhone',
-        error: e,
-        stackTrace: s,
-      );
+      log('', name: 'changePhone', error: e, stackTrace: s);
 
       onChangeFailed.call();
     } finally {
@@ -130,12 +125,7 @@ class ChangePhoneViewModel extends BaseViewModel {
       await Future.delayed(const Duration(seconds: 2));
       onActivateSuccess.call();
     } on Exception catch (e, s) {
-      log(
-        '',
-        name: 'smsActivate',
-        error: e,
-        stackTrace: s,
-      );
+      log('', name: 'smsActivate', error: e, stackTrace: s);
       onActivateFailed.call();
     } finally {
       dismissLoading();

@@ -27,11 +27,7 @@ void main() {
 
   void arrangeGetEntryReturnsErrorCode() {
     when(mockRepo.getEntry).thenAnswer((_) async {
-      return const EntryModel(
-        message: 'error test',
-        code: 404,
-        gr2: [],
-      );
+      return const EntryModel(message: 'error test', code: 404, gr2: []);
     });
   }
 

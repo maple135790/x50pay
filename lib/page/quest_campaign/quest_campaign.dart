@@ -25,8 +25,10 @@ class QuestCampaign extends StatefulWidget {
 class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
   static const stampSlotSize = 40.0;
   final repo = Repository();
-  late final viewModel =
-      QuestCampaignViewModel(repository: repo, campaignId: widget.campaignId);
+  late final viewModel = QuestCampaignViewModel(
+    repository: repo,
+    campaignId: widget.campaignId,
+  );
   late Future<Campaign?> init;
   int ownedPoints = 0;
 
@@ -54,23 +56,22 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: init,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox();
-          }
-          if (snapshot.hasError || snapshot.data == null) {
-            showServiceError();
-            return Center(child: Text(serviceErrorText));
-          }
-          final model = snapshot.data as Campaign;
-          ownedPoints = model.ownedPoints;
-          return Scrollbar(
-            child: SingleChildScrollView(
-              child: campaignLoaded(model),
-            ),
-          );
-        });
+      future: init,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SizedBox();
+        }
+        if (snapshot.hasError || snapshot.data == null) {
+          showServiceError();
+          return Center(child: Text(serviceErrorText));
+        }
+        final model = snapshot.data as Campaign;
+        ownedPoints = model.ownedPoints;
+        return Scrollbar(
+          child: SingleChildScrollView(child: campaignLoaded(model)),
+        );
+      },
+    );
   }
 
   Widget divider() => Divider(color: borderColor, height: 16);
@@ -83,18 +84,20 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
     required bool exchangeable,
     required VoidCallback onRedeemButtonPressed,
   }) {
-    Navigator.of(context).push(CupertinoPageRoute(
-      builder: (context) {
-        return _RedeemItemDetail(
-          imgUrl: imgUrl,
-          name: name,
-          extras: extras,
-          redeemRecords: redeemRecords,
-          redeemable: exchangeable,
-          onRedeemButtonPressed: onRedeemButtonPressed,
-        );
-      },
-    ));
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (context) {
+          return _RedeemItemDetail(
+            imgUrl: imgUrl,
+            name: name,
+            extras: extras,
+            redeemRecords: redeemRecords,
+            redeemable: exchangeable,
+            onRedeemButtonPressed: onRedeemButtonPressed,
+          );
+        },
+      ),
+    );
   }
 
   Widget buildStampRow(int stampRowCount, {required int ownedStampCount}) {
@@ -185,8 +188,9 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                               Svgs.stamp,
                               width: 25,
                               height: 25,
-                              colorFilter:
-                                  SvgsExtension.colorFilter(stampColor),
+                              colorFilter: SvgsExtension.colorFilter(
+                                stampColor,
+                              ),
                             ),
                           ),
                   ),
@@ -203,15 +207,12 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                 style: buttonStyle,
                 child: const Text(
                   '增加一行欄位',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -242,10 +243,11 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
               ),
               const SizedBox(width: 15),
               Expanded(
-                  child: Text(
-                '${item.name}\n所需點數 ${item.points} 點',
-                style: const TextStyle(height: 2),
-              )),
+                child: Text(
+                  '${item.name}\n所需點數 ${item.points} 點',
+                  style: const TextStyle(height: 2),
+                ),
+              ),
               const SizedBox(width: 15),
               SizedBox(
                 width: 75,
@@ -324,12 +326,15 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(data.campaignTitle ?? '',
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500)),
+                        Text(
+                          data.campaignTitle ?? '',
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -339,11 +344,14 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                               color: Colors.white,
                             ),
                             const SizedBox(width: 8),
-                            Text(data.campaignGoodThruDate ?? '',
-                                style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400)),
+                            Text(
+                              data.campaignGoodThruDate ?? '',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.9),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                             const SizedBox(width: 10.281),
                             const Icon(
                               Icons.workspace_premium_rounded,
@@ -351,11 +359,14 @@ class _QuestCampaignState extends BaseStatefulState<QuestCampaign> {
                               size: 14,
                             ),
                             const SizedBox(width: 8),
-                            Text(data.minQuestPoints ?? '',
-                                style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400)),
+                            Text(
+                              data.minQuestPoints ?? '',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.9),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -455,42 +466,46 @@ class _RedeemItemDetailState extends BaseStatefulState<_RedeemItemDetail> {
       ),
       child: Scaffold(
         bottomSheet: BottomSheet(
-            onClosing: () {},
-            enableDrag: false,
-            dragHandleSize: Size.zero,
-            shape: const RoundedRectangleBorder(),
-            builder: (context) => AnimatedSlide(
-                  offset: _offset,
-                  curve: Curves.easeOutExpo,
-                  duration: const Duration(milliseconds: 300),
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      border: Border(top: BorderSide(color: borderColor)),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(child: buildRedeemButton()),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              style: buttonStyle,
-                              child: const Text('思考一下')),
-                        ),
-                      ],
+          onClosing: () {},
+          enableDrag: false,
+          dragHandleSize: Size.zero,
+          shape: const RoundedRectangleBorder(),
+          builder: (context) => AnimatedSlide(
+            offset: _offset,
+            curve: Curves.easeOutExpo,
+            duration: const Duration(milliseconds: 300),
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border(top: BorderSide(color: borderColor)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(child: buildRedeemButton()),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: buttonStyle,
+                      child: const Text('思考一下'),
                     ),
                   ),
-                )),
+                ],
+              ),
+            ),
+          ),
+        ),
         body: Scrollbar(
           child: SingleChildScrollView(
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 22.5,
+              ),
               child: Column(
                 children: [
                   Container(
@@ -515,18 +530,24 @@ class _RedeemItemDetailState extends BaseStatefulState<_RedeemItemDetail> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Flexible(
-                                    child: Text(widget.name ?? '',
-                                        style: const TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w500))),
+                                  child: Text(
+                                    widget.name ?? '',
+                                    style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                                 if (widget.extras != null)
                                   const SizedBox(height: 5),
                                 if (widget.extras != null)
-                                  ...widget.extras!.map((e) => Text(
-                                        e,
-                                        textAlign: TextAlign.left,
-                                        style: const TextStyle(fontSize: 12),
-                                      )),
+                                  ...widget.extras!.map(
+                                    (e) => Text(
+                                      e,
+                                      textAlign: TextAlign.left,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
@@ -550,11 +571,13 @@ class _RedeemItemDetailState extends BaseStatefulState<_RedeemItemDetail> {
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Text('近期被兌換時間',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              )),
+                          child: Text(
+                            '近期被兌換時間',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                         Expanded(
                           child: Divider(
@@ -568,8 +591,10 @@ class _RedeemItemDetailState extends BaseStatefulState<_RedeemItemDetail> {
                   ),
                   if (widget.redeemRecords != null)
                     Column(
-                        children:
-                            widget.redeemRecords!.map((e) => Text(e)).toList()),
+                      children: widget.redeemRecords!
+                          .map((e) => Text(e))
+                          .toList(),
+                    ),
                 ],
               ),
             ),

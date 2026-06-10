@@ -23,19 +23,19 @@ Map<String, dynamic> _$FreePointModelToJson(FreePointModel instance) =>
     };
 
 FreePLog _$FreePLogFromJson(Map<String, dynamic> json) => FreePLog(
-      limitTime: json['limittime'] as String,
-      uid: json['uid'] as String,
-      expire: json['expire'] as bool,
-      fpoint: (json['fpoint'] as num).toDouble(),
-      much: (json['much'] as num).toDouble(),
-      id: UnderscoreId.fromJson(json['_id'] as Map<String, dynamic>),
-    );
+  limitTime: json['limittime'] as String,
+  uid: json['uid'] as String,
+  expire: json['expire'] as bool,
+  fpoint: (json['fpoint'] as num).toDouble(),
+  much: (json['much'] as num).toDouble(),
+  id: UnderscoreId.fromJson(json['_id'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$FreePLogToJson(FreePLog instance) => <String, dynamic>{
-      'limittime': instance.limitTime,
-      'fpoint': instance.fpoint,
-      'much': instance.much,
-      'expire': instance.expire,
-      'uid': instance.uid,
-      '_id': instance.id,
-    };
+  'limittime': instance.limitTime,
+  'fpoint': instance.fpoint,
+  'much': instance.much,
+  'expire': instance.expire,
+  'uid': instance.uid,
+  '_id': instance.id,
+};

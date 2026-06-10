@@ -59,9 +59,7 @@ class TicketInfo extends StatelessWidget {
           TextSpan(
             children: [
               TextSpan(text: i18n.ticketBalance),
-              const WidgetSpan(
-                child: SizedBox(width: 5),
-              ),
+              const WidgetSpan(child: SizedBox(width: 5)),
               TextSpan(text: user.ticketint!.toString()),
               TextSpan(text: i18n.ticketUnit),
             ],

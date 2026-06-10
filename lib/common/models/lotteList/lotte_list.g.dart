@@ -7,11 +7,7 @@ part of 'lotte_list.dart';
 // **************************************************************************
 
 LotteListModel _$LotteListModelFromJson(Map<String, dynamic> json) =>
-    LotteListModel(
-      json['list'] as List<dynamic>,
-    );
+    LotteListModel(json['list'] as List<dynamic>);
 
 Map<String, dynamic> _$LotteListModelToJson(LotteListModel instance) =>
-    <String, dynamic>{
-      'list': instance.rawLotteList,
-    };
+    <String, dynamic>{'list': instance.rawLotteList};

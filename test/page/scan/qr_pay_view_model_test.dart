@@ -43,11 +43,13 @@ void main() {
       const rawResponse = '''{"code":200,"message":"smth"}''';
       return BasicResponse.fromJson(json.decode(rawResponse));
     });
-    when(() => mockRepo.getDocumentWithDomainPrefix(
-          any(),
-          any(),
-          descLabel: any(named: 'descLabel'),
-        )).thenAnswer((_) async {
+    when(
+      () => mockRepo.getDocumentWithDomainPrefix(
+        any(),
+        any(),
+        descLabel: any(named: 'descLabel'),
+      ),
+    ).thenAnswer((_) async {
       return r'''<script type="text/javascript"> 
         $.post('/api/v1/pay/5fcdcf800004a524c8fae000/70376560/0',function(data){});
         function myfc() {

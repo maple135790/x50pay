@@ -38,16 +38,20 @@ class _PlayRecordsState extends BaseStatefulState<PlayRecords>
     for (PlayLog log in model.logs) {
       String cab = '${log.mid}-${log.cid}號機';
       if (cab.length > 20) cab = '${log.mid}-\n${log.cid}號機';
-      rows.add(DataRow(cells: [
-        DataCell(Text(log.time)),
-        DataCell(
-          Text(
-            cab,
-            textScaler: TextScaler.linear(cab.length > 20 ? 0.9 : 1),
-          ),
+      rows.add(
+        DataRow(
+          cells: [
+            DataCell(Text(log.time)),
+            DataCell(
+              Text(
+                cab,
+                textScaler: TextScaler.linear(cab.length > 20 ? 0.9 : 1),
+              ),
+            ),
+            DataCell(Text('${log.price.toInt()}+${log.freep.toInt()}P')),
+          ],
         ),
-        DataCell(Text('${log.price.toInt()}+${log.freep.toInt()}P')),
-      ]));
+      );
     }
     return rows;
   }

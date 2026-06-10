@@ -46,8 +46,11 @@ mixin NfcPadMixin {
   void handleNfcPad(String padmid) async {
     final url = 'https://pay.x50.fun/nfcPad/byMid/$padmid';
     final rawDoc = await _getNfcPadDocument(url);
-    final internalUrl =
-        rawDoc.split('location.replace("').last.split('")').first;
+    final internalUrl = rawDoc
+        .split('location.replace("')
+        .last
+        .split('")')
+        .first;
     if (internalUrl.isEmpty) throw Exception('trueUrl is empty');
     final resultDoc = await _getNfcPadConfirmDocument(internalUrl, url);
     if (resultDoc.contains('平板點選確認')) {

@@ -46,18 +46,11 @@ class TopInfo extends StatelessWidget {
         final nameInfo = Text.rich(
           TextSpan(
             children: [
-              const WidgetSpan(
-                child: Icon(
-                  Icons.person_rounded,
-                  size: 20,
-                ),
-              ),
+              const WidgetSpan(child: Icon(Icons.person_rounded, size: 20)),
               const WidgetSpan(child: SizedBox(width: 5)),
               TextSpan(
                 text: user.name!,
-                children: [
-                  if (!(user.phoneactive ?? false)) unActivatedLabel,
-                ],
+                children: [if (!(user.phoneactive ?? false)) unActivatedLabel],
               ),
             ],
           ),
@@ -67,13 +60,10 @@ class TopInfo extends StatelessWidget {
           TextSpan(
             children: [
               const WidgetSpan(
-                child: Icon(
-                  Icons.perm_contact_cal_rounded,
-                  size: 20,
-                ),
+                child: Icon(Icons.perm_contact_cal_rounded, size: 20),
               ),
               const WidgetSpan(child: SizedBox(width: 5)),
-              TextSpan(text: user.uid!)
+              TextSpan(text: user.uid!),
             ],
           ),
         );
@@ -82,10 +72,7 @@ class TopInfo extends StatelessWidget {
           TextSpan(
             children: [
               const WidgetSpan(
-                child: Icon(
-                  Icons.currency_yen_rounded,
-                  size: 20,
-                ),
+                child: Icon(Icons.currency_yen_rounded, size: 20),
               ),
               const WidgetSpan(child: SizedBox(width: 5)),
               TextSpan(text: user.point!.toInt().toString()),
@@ -94,7 +81,7 @@ class TopInfo extends StatelessWidget {
                 text: user.fpoint!.toInt().toString(),
                 style: const TextStyle(color: Color(0xffd4b106)),
               ),
-              const TextSpan(text: ' P')
+              const TextSpan(text: ' P'),
             ],
           ),
         );
@@ -113,10 +100,8 @@ class TopInfo extends StatelessWidget {
                   decoration: const BoxDecoration(shape: BoxShape.circle),
                   child: CachedNetworkImage(
                     imageUrl: user.userImageUrl,
-                    errorWidget: (context, url, error) => const Icon(
-                      Icons.error_outline_rounded,
-                      size: 45,
-                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error_outline_rounded, size: 45),
                     alignment: Alignment.center,
                     fit: BoxFit.fill,
                   ),
@@ -160,10 +145,7 @@ class TopInfo extends StatelessWidget {
                         const SizedBox(width: 16),
                         GestureDetector(
                           onTap: onScannerPressed,
-                          child: const Icon(
-                            Icons.qr_code_rounded,
-                            size: 45,
-                          ),
+                          child: const Icon(Icons.qr_code_rounded, size: 45),
                         ),
                       ],
                     ),

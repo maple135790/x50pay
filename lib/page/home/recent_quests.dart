@@ -22,48 +22,51 @@ class RecentQuests extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: quests
-          .map((q) => Padding(
-                padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-                child: Material(
-                  elevation: 5,
-                  borderRadius: BorderRadius.circular(6),
+          .map(
+            (q) => Padding(
+              padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+              child: Material(
+                elevation: 5,
+                borderRadius: BorderRadius.circular(6),
+                clipBehavior: Clip.antiAlias,
+                child: Container(
                   clipBehavior: Clip.antiAlias,
-                  child: Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: isDarkTheme
-                            ? CustomColorThemes.borderColorDark
-                            : CustomColorThemes.borderColorLight,
-                        strokeAlign: BorderSide.strokeAlignOutside,
-                      ),
-                      borderRadius: BorderRadius.circular(6),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: isDarkTheme
+                          ? CustomColorThemes.borderColorDark
+                          : CustomColorThemes.borderColorLight,
+                      strokeAlign: BorderSide.strokeAlignOutside,
                     ),
-                    child: Stack(
-                      children: [
-                        CachedNetworkImage(
-                          imageUrl: q.lpic,
-                          height: 55,
-                          width: MediaQuery.sizeOf(context).width,
-                          fit: BoxFit.fitWidth,
-                        ),
-                        Positioned.fill(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {
-                                context.goNamed(
-                                    AppRoutes.questCampaign.routeName,
-                                    pathParameters: {'couid': q.couid});
-                              },
-                            ),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Stack(
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: q.lpic,
+                        height: 55,
+                        width: MediaQuery.sizeOf(context).width,
+                        fit: BoxFit.fitWidth,
+                      ),
+                      Positioned.fill(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              context.goNamed(
+                                AppRoutes.questCampaign.routeName,
+                                pathParameters: {'couid': q.couid},
+                              );
+                            },
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ))
+              ),
+            ),
+          )
           .toList(),
     );
   }

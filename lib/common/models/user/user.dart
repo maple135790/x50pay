@@ -48,23 +48,23 @@ class UserModel {
   });
 
   const UserModel.empty()
-      : message = "",
-        code = 0,
-        rawUserImgUrl = "",
-        email = "",
-        uid = "",
-        point = 0,
-        name = "",
-        ticketint = 0,
-        phoneactive = false,
-        fpoint = 0,
-        givebool = 0,
-        vip = false,
-        vipdate = null,
-        sid = "",
-        sixn = "",
-        tphone = 0,
-        doorpwd = "";
+    : message = "",
+      code = 0,
+      rawUserImgUrl = "",
+      email = "",
+      uid = "",
+      point = 0,
+      name = "",
+      ticketint = 0,
+      phoneactive = false,
+      fpoint = 0,
+      givebool = 0,
+      vip = false,
+      vipdate = null,
+      sid = "",
+      sixn = "",
+      tphone = 0,
+      doorpwd = "";
 
   static VipDate setVipDate(String unixTimestamp) =>
       VipDate(rawDate: unixTimestamp);

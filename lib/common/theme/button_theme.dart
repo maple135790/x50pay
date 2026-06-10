@@ -39,7 +39,8 @@ class CustomButtonThemes {
   static ButtonStyle grey({bool isDarkMode = true}) {
     return ButtonStyle(
       shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      ),
       splashFactory: NoSplash.splashFactory,
       foregroundColor: WidgetStateProperty.all(const Color(0xff5a5a5a)),
       overlayColor: WidgetStateProperty.all(Colors.transparent),
@@ -63,7 +64,8 @@ class CustomButtonThemes {
         padding: WidgetStateProperty.all(padding),
         shape: isRRect
             ? WidgetStatePropertyAll(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)))
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              )
             : WidgetStateProperty.all(outlinedBorder),
         foregroundColor: isRRect
             ? const WidgetStatePropertyAll(Color(0xfffafafa))
@@ -105,7 +107,8 @@ class CustomButtonThemes {
     }
     return ButtonStyle(
       shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      ),
       foregroundColor: WidgetStateColor.resolveWith((states) {
         if (states.isDisabled) return foregroundColor.withValues(alpha: 0.5);
         return foregroundColor;

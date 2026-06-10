@@ -10,10 +10,7 @@ class EcPay extends StatefulWidget {
 }
 
 class _EcPayState extends BaseStatefulState<EcPay> {
-  Widget paymentTile({
-    required String point,
-    required String price,
-  }) {
+  Widget paymentTile({required String point, required String price}) {
     return GestureDetector(
       onTap: () {
         launchUrlString(
@@ -52,11 +49,11 @@ class _EcPayState extends BaseStatefulState<EcPay> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("$point P",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge!
-                            .copyWith(fontWeight: FontWeight.w500)),
+                    Text(
+                      "$point P",
+                      style: Theme.of(context).textTheme.headlineLarge!
+                          .copyWith(fontWeight: FontWeight.w500),
+                    ),
                     Text('$price NTD  (可信用卡 / ATM付款)'),
                   ],
                 ),
@@ -78,8 +75,10 @@ class _EcPayState extends BaseStatefulState<EcPay> {
         paymentTile(point: "291", price: "300"),
         paymentTile(point: "485", price: "500"),
         paymentTile(point: "970", price: "1000"),
-        const Text('1. 如付款成功無加值成功請聯絡粉絲專頁\n2. 付款由 ECPay 金流進行',
-            textAlign: TextAlign.left)
+        const Text(
+          '1. 如付款成功無加值成功請聯絡粉絲專頁\n2. 付款由 ECPay 金流進行',
+          textAlign: TextAlign.left,
+        ),
       ],
     );
   }
