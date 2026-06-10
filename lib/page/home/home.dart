@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/event_info.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/mari_info.dart';
@@ -21,7 +23,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends BaseStatefulState<Home> {
+class _HomeState extends State<Home> with AppThemeMixin, AppServiceMixin {
   final repo = Repository();
   late final HomeViewModel viewModel;
 
@@ -80,7 +82,9 @@ class _HomeLoaded extends StatefulWidget {
   State<_HomeLoaded> createState() => _HomeLoadedState();
 }
 
-class _HomeLoadedState extends BaseStatefulState<_HomeLoaded> {
+class _HomeLoadedState extends State<_HomeLoaded> with AppThemeMixin {
+  S get i18n => S.of(context);
+
   Widget divider(String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),

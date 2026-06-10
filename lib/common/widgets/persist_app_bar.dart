@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/gen/assets.gen.dart';
@@ -17,8 +17,10 @@ class PersistentAppBar extends StatefulWidget {
   State<PersistentAppBar> createState() => _PersistentAppBarState();
 }
 
-class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
+class _PersistentAppBarState extends State<PersistentAppBar>
+    with AppThemeMixin {
   void onLanguagePressed(Locale currentLocale) async {
+    final langProvider = context.read<LanguageProvider>();
     final changedLocale = await showDialog<Locale>(
       context: context,
       builder: (context) => StatefulBuilder(
@@ -60,11 +62,10 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
     if (changedLocale == null) return;
     if (!mounted) return;
     EasyLoading.show();
-    Future.delayed(const Duration(milliseconds: 800), () {
-      EasyLoading.dismiss();
-      if (!mounted) return;
-      context.read<LanguageProvider>().setUserPrefLocale(changedLocale);
-    });
+    await Future.delayed(const Duration(milliseconds: 800));
+    EasyLoading.dismiss();
+    if (!mounted) return;
+    langProvider.setUserPrefLocale(changedLocale);
   }
 
   @override

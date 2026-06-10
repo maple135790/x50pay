@@ -4,7 +4,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
@@ -21,7 +22,8 @@ class QRPayModal extends StatefulWidget {
   State<QRPayModal> createState() => _QRPayModalState();
 }
 
-class _QRPayModalState extends BaseStatefulState<QRPayModal> {
+class _QRPayModalState extends State<QRPayModal>
+    with AppThemeMixin, AppServiceMixin {
   late Future<bool> checkLogined;
   late final QRPayViewModel viewModel = context.read<QRPayViewModel>();
 

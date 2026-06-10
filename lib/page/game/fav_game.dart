@@ -6,12 +6,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/fav_game_view_model.dart';
 import 'package:x50pay/page/game/game_cab_item.dart';
@@ -26,10 +27,12 @@ class FavGame extends StatefulWidget {
   State<FavGame> createState() => _FavGameState();
 }
 
-class _FavGameState extends BaseStatefulState<FavGame> {
+class _FavGameState extends State<FavGame> with AppThemeMixin {
   final repo = Repository();
   late final FavGameViewModel viewModel;
   late final Future<void> init;
+
+  S get i18n => S.of(context);
 
   @override
   void initState() {
@@ -362,8 +365,10 @@ class AddFavGameModal extends StatefulWidget {
   State<AddFavGameModal> createState() => _AddFavGameModalState();
 }
 
-class _AddFavGameModalState extends BaseStatefulState<AddFavGameModal> {
+class _AddFavGameModalState extends State<AddFavGameModal> {
   late final Future<Map<String, List<Machine>>> getStoreGames;
+
+  S get i18n => S.of(context);
 
   @override
   void initState() {

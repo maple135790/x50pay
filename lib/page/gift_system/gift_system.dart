@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/page/gift_system/claimed_gift.dart';
 import 'package:x50pay/page/gift_system/gift_claim.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
@@ -17,7 +18,7 @@ class GiftSystem extends StatefulWidget {
   State<GiftSystem> createState() => _GiftSystemState();
 }
 
-class _GiftSystemState extends BaseStatefulState<GiftSystem> {
+class _GiftSystemState extends State<GiftSystem> with AppServiceMixin {
   final repo = Repository();
   late final viewModel = GiftSystemViewModel(repository: repo);
   late Future<void> init;
@@ -59,7 +60,7 @@ class _GiftBoxLoaded extends StatefulWidget {
   State<_GiftBoxLoaded> createState() => _GiftBoxLoadedState();
 }
 
-class _GiftBoxLoadedState extends BaseStatefulState<_GiftBoxLoaded> {
+class _GiftBoxLoadedState extends State<_GiftBoxLoaded> with AppThemeMixin {
   final tabs = const <Widget>[
     Tab(text: '養成抽獎箱'),
     Tab(text: '領取禮物'),

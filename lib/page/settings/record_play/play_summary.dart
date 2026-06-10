@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base_stateful_state.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/play/play.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 
 enum SummarizePeriod {
@@ -27,7 +28,9 @@ class PlaySummary extends StatefulWidget {
   State<PlaySummary> createState() => _PlaySummaryState();
 }
 
-class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
+class _PlaySummaryState extends State<PlaySummary> with AppThemeMixin {
+  S get i18n => S.of(context);
+
   SummarizePeriod selectedPeriod = SummarizePeriod.twoMonth;
   bool isShowPointSummary = false;
   bool isShowFavGameSummary = false;
@@ -286,7 +289,9 @@ class SummaryFavGameModal extends StatefulWidget {
   State<SummaryFavGameModal> createState() => _SummaryFavGameModalState();
 }
 
-class _SummaryFavGameModalState extends BaseStatefulState<SummaryFavGameModal> {
+class _SummaryFavGameModalState extends State<SummaryFavGameModal> {
+  S get i18n => S.of(context);
+
   String selectedFavGame = '';
 
   @override

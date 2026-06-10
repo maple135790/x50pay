@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/page/settings/record_mixin.dart';
 import 'package:x50pay/page/settings/record_play/play_summary.dart';
@@ -13,8 +14,11 @@ class PlayRecords extends StatefulWidget {
   State<PlayRecords> createState() => _PlayRecordsState();
 }
 
-class _PlayRecordsState extends BaseStatefulState<PlayRecords>
-    with RecordPageMixin<PlayRecordModel, PlayRecords> {
+class _PlayRecordsState extends State<PlayRecords>
+    with
+        AppThemeMixin,
+        AppServiceMixin,
+        RecordPageMixin<PlayRecordModel, PlayRecords> {
   @override
   String pageTitle() => '近兩個月的扣點明細如下';
 

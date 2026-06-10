@@ -4,7 +4,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 
@@ -15,8 +16,8 @@ class ChangePasswordDialog extends StatefulWidget {
   State<ChangePasswordDialog> createState() => _ChangePasswordDialogState();
 }
 
-class _ChangePasswordDialogState
-    extends BaseStatefulState<ChangePasswordDialog> {
+class _ChangePasswordDialogState extends State<ChangePasswordDialog>
+    with AppThemeMixin, AppServiceMixin {
   final _formKey = GlobalKey<FormState>();
   final oldPwd = TextEditingController();
   final newPwd = TextEditingController();

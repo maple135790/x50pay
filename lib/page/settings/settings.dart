@@ -9,13 +9,15 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vibration/vibration.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base_stateful_state.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/gen/assets.gen.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/remote_open_mixin.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
@@ -41,7 +43,10 @@ class Settings extends StatefulWidget {
   State<Settings> createState() => _SettingsState();
 }
 
-class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
+class _SettingsState extends State<Settings>
+    with AppThemeMixin, AppServiceMixin, RemoteOpenMixin {
+  S get i18n => S.of(context);
+
   late final String avatarUrl;
   late final viewModel = SettingsViewModel(settingRepo: settingRepo);
   late final UserModel user;

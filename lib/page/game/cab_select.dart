@@ -2,10 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
@@ -71,7 +72,7 @@ class CabSelect extends StatefulWidget {
   State<CabSelect> createState() => _CabSelectState();
 }
 
-class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
+class _CabSelectState extends State<CabSelect> with AppThemeMixin, GameMixin {
   final repo = Repository();
   late final CabSelectViewModel viewModel;
   late final cabData = widget.cabinetData;
@@ -235,7 +236,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                           }
                         : null,
                     style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-                    child: Text(i18n.gameTicket),
+                    child: Text(S.of(context).gameTicket),
                   );
                 },
               ),

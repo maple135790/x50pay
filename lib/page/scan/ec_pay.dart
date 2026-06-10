@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 
 class EcPay extends StatefulWidget {
   const EcPay({super.key});
@@ -9,7 +9,7 @@ class EcPay extends StatefulWidget {
   State<EcPay> createState() => _EcPayState();
 }
 
-class _EcPayState extends BaseStatefulState<EcPay> {
+class _EcPayState extends State<EcPay> with AppThemeMixin {
   Widget paymentTile({required String point, required String price}) {
     return GestureDetector(
       onTap: () {

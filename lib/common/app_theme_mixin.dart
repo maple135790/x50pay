@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter/services.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
-
-import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 
-abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
-  late final i18n = S.of(context);
-  late String serviceErrorText = i18n.serviceError;
+mixin AppThemeMixin {
+  BuildContext get context;
 
-  bool get isDarkTheme => Theme.of(context).brightness == Brightness.dark;
+  bool get isDarkTheme => Theme.brightnessOf(context) == Brightness.dark;
+
+  SystemUiOverlayStyle get overlayStyle =>
+      isDarkTheme ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
 
   Color get iconColor => isDarkTheme
       ? CustomColorThemes.iconColorDark
@@ -33,7 +33,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
   ButtonStyle get buttonStyle =>
       isDarkTheme ? buttonStyleDark : buttonStyleLight;
 
-  final buttonStyleDark = ButtonStyle(
+  ButtonStyle get buttonStyleDark => ButtonStyle(
     shape: WidgetStatePropertyAll(
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
     ),
@@ -51,7 +51,7 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     }),
   );
 
-  final buttonStyleLight = ButtonStyle(
+  ButtonStyle get buttonStyleLight => ButtonStyle(
     shape: WidgetStatePropertyAll(
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
     ),
@@ -68,12 +68,4 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
       return const Color(0xff3a3a3a);
     }),
   );
-
-  void showServiceError() {
-    EasyLoading.showError(
-      serviceErrorText,
-      dismissOnTap: false,
-      duration: const Duration(seconds: 2),
-    );
-  }
 }

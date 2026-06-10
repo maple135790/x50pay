@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
@@ -113,8 +113,8 @@ class _ConfirmChangeDialog extends StatefulWidget {
   State<_ConfirmChangeDialog> createState() => _ConfirmChangeDialogState();
 }
 
-class _ConfirmChangeDialogState
-    extends BaseStatefulState<_ConfirmChangeDialog> {
+class _ConfirmChangeDialogState extends State<_ConfirmChangeDialog>
+    with AppThemeMixin {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

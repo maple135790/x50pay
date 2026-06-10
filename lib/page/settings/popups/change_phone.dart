@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/settings/popups/change_phone_view_model.dart';
 import 'package:x50pay/repository/setting_repository.dart';
@@ -19,7 +20,8 @@ class ChangePhoneDialog extends StatefulWidget {
   State<ChangePhoneDialog> createState() => _ChangePhoneDialogState();
 }
 
-class _ChangePhoneDialogState extends BaseStatefulState<ChangePhoneDialog> {
+class _ChangePhoneDialogState extends State<ChangePhoneDialog>
+    with AppThemeMixin {
   late final ChangePhoneViewModel viewModel;
   final newEmail = TextEditingController();
 
@@ -134,8 +136,8 @@ class ChangePhoneConfirmedDialog extends StatefulWidget {
       _ChangePhoneConfirmedDialogState();
 }
 
-class _ChangePhoneConfirmedDialogState
-    extends BaseStatefulState<ChangePhoneConfirmedDialog> {
+class _ChangePhoneConfirmedDialogState extends State<ChangePhoneConfirmedDialog>
+    with AppServiceMixin {
   final textController = TextEditingController();
   late final ChangePhoneViewModel viewModel;
 
@@ -281,7 +283,7 @@ class _Dialog extends StatefulWidget {
   State<_Dialog> createState() => _DialogState();
 }
 
-class _DialogState extends BaseStatefulState<_Dialog> {
+class _DialogState extends State<_Dialog> with AppThemeMixin {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

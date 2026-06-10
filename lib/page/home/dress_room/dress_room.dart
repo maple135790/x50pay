@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -20,7 +20,9 @@ class DressRoom extends StatefulWidget {
   State<DressRoom> createState() => _DressRoomState();
 }
 
-class _DressRoomState extends BaseStatefulState<DressRoom> {
+class _DressRoomState extends State<DressRoom> {
+  S get i18n => S.of(context);
+
   final repo = Repository();
   late final viewModel = DressRoomViewModel(repository: repo);
   String? selectedAvater;

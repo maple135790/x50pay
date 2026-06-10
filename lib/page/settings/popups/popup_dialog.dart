@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
+import 'package:x50pay/generated/l10n.dart';
 
 class PageDialog extends StatefulWidget {
   final Widget Function(void Function(bool isShow) showButtonBar) content;
@@ -22,7 +23,9 @@ class PageDialog extends StatefulWidget {
   State<PageDialog> createState() => _PageDialogState();
 }
 
-class _PageDialogState extends BaseStatefulState<PageDialog> {
+class _PageDialogState extends State<PageDialog> with AppThemeMixin {
+  S get i18n => S.of(context);
+
   static const _kMaxBottomSheetHeight = 80.0;
   ValueNotifier<Offset> offsetNotifier = ValueNotifier(
     const Offset(0, _kMaxBottomSheetHeight),

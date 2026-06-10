@@ -7,10 +7,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
@@ -44,7 +45,7 @@ class CabDetail extends StatefulWidget {
   State<CabDetail> createState() => _CabDetailState();
 }
 
-class _CabDetailState extends BaseStatefulState<CabDetail> {
+class _CabDetailState extends State<CabDetail> with AppThemeMixin {
   final repo = Repository();
   late final viewModel = CabDatailViewModel(
     repository: repo,
@@ -107,8 +108,10 @@ class _RSVPDialog extends StatefulWidget {
   State<_RSVPDialog> createState() => _RSVPDialogState();
 }
 
-class _RSVPDialogState extends BaseStatefulState<_RSVPDialog> {
+class _RSVPDialogState extends State<_RSVPDialog> with AppThemeMixin {
   String get title => widget.rsvp[0]![1];
+
+  S get i18n => S.of(context);
 
   List<Widget> buildRSVPs() {
     var widgets = <Widget>[];
@@ -196,8 +199,10 @@ class CabDetailLoaded extends StatefulWidget {
   State<CabDetailLoaded> createState() => _CabDetailLoadedState();
 }
 
-class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
-    with GameMixin {
+class _CabDetailLoadedState extends State<CabDetailLoaded>
+    with AppThemeMixin, GameMixin {
+  S get i18n => S.of(context);
+
   void onCabSelect({required String caboid, required Cabinet cabData}) {
     showCupertinoDialog(
       context: context,

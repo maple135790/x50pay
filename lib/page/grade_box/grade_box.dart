@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/page/grade_box/box_tab.dart';
 import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
@@ -16,7 +17,7 @@ class GradeBox extends StatefulWidget {
   State<GradeBox> createState() => _GradeBoxState();
 }
 
-class _GradeBoxState extends BaseStatefulState<GradeBox> {
+class _GradeBoxState extends State<GradeBox> with AppServiceMixin {
   final repo = Repository();
   late final viewModel = GradeBoxViewModel(repository: repo);
   late Future<GradeBoxModel> init;
@@ -57,7 +58,7 @@ class _GradeBoxLoaded extends StatefulWidget {
   State<_GradeBoxLoaded> createState() => _GradeBoxLoadedState();
 }
 
-class _GradeBoxLoadedState extends BaseStatefulState<_GradeBoxLoaded> {
+class _GradeBoxLoadedState extends State<_GradeBoxLoaded> with AppThemeMixin {
   static const titleImageUrl = 'https://pay.x50.fun/static/grade/gdebox.png';
   final tabs = const <Widget>[
     Tab(text: '全部'),

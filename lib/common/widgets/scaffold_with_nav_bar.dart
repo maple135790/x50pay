@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base_stateful_state.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
@@ -20,7 +20,18 @@ import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
 
-typedef MenuItem = ({IconData icon, String label, RouteProperty route});
+enum MenuItem {
+  game(icon: Icons.sports_esports_rounded, route: AppRoutes.gameCabs),
+  settings(icon: Icons.settings_rounded, route: AppRoutes.settings),
+  home(icon: Icons.home_rounded, route: AppRoutes.home),
+  gift(icon: Icons.redeem_rounded, route: AppRoutes.gift),
+  collab(icon: Icons.handshake_rounded, route: AppRoutes.collab);
+
+  final IconData icon;
+  final RouteProperty route;
+
+  const MenuItem({required this.icon, required this.route});
+}
 
 class ScaffoldWithNavBar extends StatefulWidget {
   final Widget body;
@@ -31,33 +42,15 @@ class ScaffoldWithNavBar extends StatefulWidget {
   State<ScaffoldWithNavBar> createState() => _ScaffoldWithNavBarState();
 }
 
-class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
+class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
+    with AppThemeMixin {
   DateTime lastPopTime = DateTime.fromMillisecondsSinceEpoch(0);
   static const _kMinPopInterval = Duration(milliseconds: 500);
-  late int selectedIndex = _menus.indexWhere(
-    (element) =>
-        GoRouterState.of(context).path?.contains(element.route.path) ?? false,
+  late int selectedIndex = MenuItem.values.indexWhere(
+    (e) => GoRouterState.of(context).path?.contains(e.route.path) ?? false,
   );
 
-  List<MenuItem> get _menus => [
-    (
-      icon: Icons.sports_esports_rounded,
-      label: i18n.navGame,
-      route: AppRoutes.gameCabs,
-    ),
-    (
-      icon: Icons.settings_rounded,
-      label: i18n.navSettings,
-      route: AppRoutes.settings,
-    ),
-    (icon: Icons.home_rounded, label: 'Me', route: AppRoutes.home),
-    (icon: Icons.redeem_rounded, label: i18n.navGift, route: AppRoutes.gift),
-    (
-      icon: Icons.handshake_rounded,
-      label: i18n.navCollab,
-      route: AppRoutes.collab,
-    ),
-  ];
+  S get i18n => S.of(context);
 
   Future<bool?> confirmPopup() {
     return showDialog<bool>(
@@ -95,8 +88,8 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
     // 如果頁面有更換，則重新計算 selectedIndex。
     // 最明顯的例子是用於 [home] 的 養成點數商場頁面。
     final currentLocation = GoRouterState.of(context).matchedLocation;
-    selectedIndex = _menus.indexWhere((element) {
-      return currentLocation.contains(element.route.path.split('/')[1]);
+    selectedIndex = MenuItem.values.indexWhere((e) {
+      return currentLocation.contains(e.route.path.split('/')[1]);
     });
     setState(() {});
   }
@@ -174,18 +167,22 @@ class _ScaffoldWithNavBarState extends BaseStatefulState<ScaffoldWithNavBar> {
                   NavigationDestinationLabelBehavior.onlyShowSelected,
               onDestinationSelected: (index) async {
                 selectedIndex = index;
-                context.goNamed(_menus[index].route.routeName);
+                context.goNamed(MenuItem.values[index].route.routeName);
                 setState(() {});
               },
-              destinations: _menus
-                  .map(
-                    (menu) => NavigationDestination(
-                      icon: Icon(menu.icon),
-                      label: menu.label,
-                      selectedIcon: Icon(menu.icon),
-                    ),
-                  )
-                  .toList(),
+              destinations: MenuItem.values.map((menu) {
+                return NavigationDestination(
+                  icon: Icon(menu.icon),
+                  label: switch (menu) {
+                    MenuItem.game => i18n.navGame,
+                    MenuItem.settings => i18n.navSettings,
+                    MenuItem.home => 'Me',
+                    MenuItem.gift => i18n.navGift,
+                    MenuItem.collab => i18n.navCollab,
+                  },
+                  selectedIcon: Icon(menu.icon),
+                );
+              }).toList(),
             ),
           ),
         ),
@@ -206,7 +203,7 @@ class _LoadedAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<_LoadedAppBar> createState() => _LoadedAppBarState();
 }
 
-class _LoadedAppBarState extends BaseStatefulState<_LoadedAppBar> {
+class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
   String get currentLocation => GoRouterState.of(context).matchedLocation;
 
   double get functionalHeaderHeight =>
@@ -404,14 +401,13 @@ class LanguageSelectDialog extends StatefulWidget {
   State<LanguageSelectDialog> createState() => _LanguageSelectDialogState();
 }
 
-class _LanguageSelectDialogState
-    extends BaseStatefulState<LanguageSelectDialog> {
+class _LanguageSelectDialogState extends State<LanguageSelectDialog> {
   late var selectedLocale = widget.currentLocale;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(i18n.x50PayLanguage),
+      title: Text(S.of(context).x50PayLanguage),
       content: RadioGroup(
         groupValue: selectedLocale,
         onChanged: (value) {

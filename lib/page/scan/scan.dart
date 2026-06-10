@@ -8,7 +8,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
@@ -27,8 +27,8 @@ class ScanQRCode extends StatefulWidget {
   State<ScanQRCode> createState() => _ScanQRCodeState();
 }
 
-class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
-    with TickerProviderStateMixin, WidgetsBindingObserver {
+class _ScanQRCodeState extends State<ScanQRCode>
+    with AppThemeMixin, TickerProviderStateMixin, WidgetsBindingObserver {
   final controller = MobileScannerController(autoStart: false);
 
   late final Animation<double> blinkAnimation;

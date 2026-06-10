@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/page/settings/record_mixin.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
@@ -13,8 +14,11 @@ class TicketRecords extends StatefulWidget {
   State<TicketRecords> createState() => _TicketRecordsState();
 }
 
-class _TicketRecordsState extends BaseStatefulState<TicketRecords>
-    with RecordPageMixin<TicDateLogModel, TicketRecords> {
+class _TicketRecordsState extends State<TicketRecords>
+    with
+        AppThemeMixin,
+        AppServiceMixin,
+        RecordPageMixin<TicDateLogModel, TicketRecords> {
   @override
   String pageTitle() => '以下是您尚未使用的遊玩券記錄';
 

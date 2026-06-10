@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
@@ -18,10 +18,12 @@ class GradeBoxTab extends StatefulWidget {
   State<GradeBoxTab> createState() => _GradeBoxTabState();
 }
 
-class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
+class _GradeBoxTabState extends State<GradeBoxTab> with AppThemeMixin {
   bool get isEmptyItems => widget.items.isEmpty;
 
   void onChangeItemPressed(String gid, String eid) async {
+    final nav = GoRouter.of(context);
+    final viewModel = context.read<GradeBoxViewModel>();
     final isConfirm = await showDialog<bool?>(
       context: context,
       barrierDismissible: true,
@@ -48,11 +50,7 @@ class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
     );
     if (!(isConfirm ?? false)) return;
     if (mounted) {
-      final nav = GoRouter.of(context);
-      final isSuccess = await context.read<GradeBoxViewModel>().doChangeGrade(
-        gid,
-        eid,
-      );
+      final isSuccess = await viewModel.doChangeGrade(gid, eid);
       if (isSuccess) {
         EasyLoading.showSuccess(
           '成功兌換,將會回到首頁',

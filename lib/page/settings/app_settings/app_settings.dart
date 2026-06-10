@@ -5,8 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/color_picker_mixin.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/app_settings/app_settings_view_model.dart';
@@ -20,8 +22,10 @@ class AppSettings extends StatefulWidget {
   State<AppSettings> createState() => _AppSettingsState();
 }
 
-class _AppSettingsState extends BaseStatefulState<AppSettings>
-    with ColorPickerMixin<AppSettings> {
+class _AppSettingsState extends State<AppSettings>
+    with AppThemeMixin, AppServiceMixin, ColorPickerMixin<AppSettings> {
+  S get i18n => S.of(context);
+
   final viewModel = AppSettingsViewModel();
   late Future<void> init;
   Color? newSeedColor;

@@ -6,7 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -79,7 +79,7 @@ class BuyMPass extends StatefulWidget {
   State<BuyMPass> createState() => _BuyMPassState();
 }
 
-class _BuyMPassState extends BaseStatefulState<BuyMPass> {
+class _BuyMPassState extends State<BuyMPass> with AppThemeMixin {
   _MpassProgressState currentState = _MpassProgressState.info;
   int stateIndex = 1;
 
@@ -496,8 +496,8 @@ class _MpassPurchaseDialog extends StatefulWidget {
   State<_MpassPurchaseDialog> createState() => _MpassPurchaseDialogState();
 }
 
-class _MpassPurchaseDialogState
-    extends BaseStatefulState<_MpassPurchaseDialog> {
+class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog>
+    with AppThemeMixin {
   late List<TextEditingController> emails;
   ValueNotifier<String?> errorMsgNotifier = ValueNotifier(null);
 
