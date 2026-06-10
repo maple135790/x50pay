@@ -14,10 +14,7 @@ class GameCabsViewModel extends BaseViewModel {
   final Repository repository;
   final Locale currentLocale;
 
-  GameCabsViewModel({
-    required this.repository,
-    required this.currentLocale,
-  });
+  GameCabsViewModel({required this.repository, required this.currentLocale});
 
   static const favGameIndex = 0;
 
@@ -74,12 +71,10 @@ class GameCabsViewModel extends BaseViewModel {
   void setStoreDetails(StoreModel storeData) {
     storeDetails.clear();
     for (final store in storeData.storelist!) {
-      storeDetails.add(
-        (
-          store: store,
-          composedStoreId: storeData.prefix! + store.sid.toString()
-        ),
-      );
+      storeDetails.add((
+        store: store,
+        composedStoreId: storeData.prefix! + store.sid.toString(),
+      ));
     }
   }
 
@@ -92,14 +87,16 @@ class GameCabsViewModel extends BaseViewModel {
     // segmentedControlIndex 設定後，再讓各 TabView 自行取得資料
     final rawStyle = await Prefs.getInt(PrefsToken.storeGameCabTileStyle);
     _gameCabTileStyle = GameCabTileStyle.fromInt(
-        rawStyle ?? GameCabTileStyle.storeDefaultValue);
+      rawStyle ?? GameCabTileStyle.storeDefaultValue,
+    );
 
     final storeData = await getStoreData();
     if (storeData == const StoreModel.empty() || storeData.storelist == null) {
       return;
     }
     setStoreDetails(storeData);
-    _isRememberGameTab = await Prefs.getBool(PrefsToken.rememberGameTab) ??
+    _isRememberGameTab =
+        await Prefs.getBool(PrefsToken.rememberGameTab) ??
         PrefsToken.rememberGameTab.defaultValue;
     final lastStoreId = await Prefs.getString(PrefsToken.storeId);
     final lastTabIndex = await Prefs.getInt(PrefsToken.lastGameTabIndex);
@@ -149,10 +146,7 @@ class GameCabsViewModel extends BaseViewModel {
   }
 
   @visibleForTesting
-  Future<void> onStoreSelected(
-    Store store,
-    String composedStoreId,
-  ) async {
+  Future<void> onStoreSelected(Store store, String composedStoreId) async {
     showInfo(
       '已切換至${store.name}\n\n少女祈禱中...',
       duration: const Duration(milliseconds: 650),

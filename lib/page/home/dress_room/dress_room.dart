@@ -43,18 +43,21 @@ class _DressRoomState extends BaseStatefulState<DressRoom> {
   }
 
   void onConfirm() async {
-    assert(selectedAvater != null,
-        'selectedAvater should be selected before confirm');
+    assert(
+      selectedAvater != null,
+      'selectedAvater should be selected before confirm',
+    );
     final nav = GoRouter.of(context);
     final data = await viewModel.setAvatar(selectedAvater!);
     Fluttertoast.showToast(
-        msg: data,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg: data,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
     nav.goNamed(AppRoutes.home.routeName, extra: true);
   }
 
@@ -96,14 +99,15 @@ class _DressRoomState extends BaseStatefulState<DressRoom> {
                       itemCount: avatars.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 106 / 150,
-                        crossAxisSpacing: 18,
-                        mainAxisSpacing: 12,
-                      ),
+                            crossAxisCount: 3,
+                            childAspectRatio: 106 / 150,
+                            crossAxisSpacing: 18,
+                            mainAxisSpacing: 12,
+                          ),
                       itemBuilder: (context, index) {
                         final avatar = avatars[index];
-                        final selected = selectedAvater != null &&
+                        final selected =
+                            selectedAvater != null &&
                             selectedAvater == avatar.id;
 
                         return GestureDetector(
@@ -126,7 +130,7 @@ class _DressRoomState extends BaseStatefulState<DressRoom> {
                                   ),
                                 ),
                               ),
-                              if (selected) checkMark()
+                              if (selected) checkMark(),
                             ],
                           ),
                         );
@@ -152,10 +156,7 @@ class _DressRoomState extends BaseStatefulState<DressRoom> {
           color: Colors.white,
           shape: BoxShape.circle,
         ),
-        child: const Icon(
-          Icons.check_circle_rounded,
-          color: Colors.blue,
-        ),
+        child: const Icon(Icons.check_circle_rounded, color: Colors.blue),
       ),
     );
   }
@@ -166,11 +167,12 @@ class DressedAvatar extends StatefulWidget {
   final String imageSrc;
   final String amount;
 
-  const DressedAvatar(
-      {super.key,
-      required this.id,
-      required this.imageSrc,
-      required this.amount});
+  const DressedAvatar({
+    super.key,
+    required this.id,
+    required this.imageSrc,
+    required this.amount,
+  });
 
   @override
   State<DressedAvatar> createState() => _DressedAvatarState();
@@ -205,15 +207,19 @@ class _DressedAvatarState extends State<DressedAvatar> {
           ),
         ),
         Positioned(
-            bottom: 7.5,
-            right: 7.5,
-            child: SizedBox(
-                child: Chip(
+          bottom: 7.5,
+          right: 7.5,
+          child: SizedBox(
+            child: Chip(
               visualDensity: VisualDensity.compact,
-              label: Text(widget.amount,
-                  style: const TextStyle(color: Colors.black)),
+              label: Text(
+                widget.amount,
+                style: const TextStyle(color: Colors.black),
+              ),
               backgroundColor: Colors.white,
-            )))
+            ),
+          ),
+        ),
       ],
     );
   }

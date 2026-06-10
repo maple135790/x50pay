@@ -11,10 +11,7 @@ class FavGameViewModel extends BaseViewModel {
   final Repository repository;
   final Locale currentLocale;
 
-  FavGameViewModel({
-    required this.repository,
-    required this.currentLocale,
-  });
+  FavGameViewModel({required this.repository, required this.currentLocale});
 
   final selectedFavMachines = <String>[];
   final storeNameMap = <String, String>{};
@@ -25,8 +22,9 @@ class FavGameViewModel extends BaseViewModel {
   GameList _favGameList = const GameList.empty();
 
   GameCabTileStyle get tileStyle => _tileStyle;
-  GameCabTileStyle _tileStyle =
-      GameCabTileStyle.fromInt(GameCabTileStyle.pinnedDefaultValue);
+  GameCabTileStyle _tileStyle = GameCabTileStyle.fromInt(
+    GameCabTileStyle.pinnedDefaultValue,
+  );
 
   Future<Map<String, List<Machine>>> getAllGames() async {
     try {
@@ -107,10 +105,12 @@ class FavGameViewModel extends BaseViewModel {
 
   @visibleForTesting
   Future<GameCabTileStyle> getTileStyle() async {
-    final tileStyleValue =
-        await Prefs.getInt(PrefsToken.pinnedGameCabTileStyle);
+    final tileStyleValue = await Prefs.getInt(
+      PrefsToken.pinnedGameCabTileStyle,
+    );
     return GameCabTileStyle.fromInt(
-        tileStyleValue ?? GameCabTileStyle.pinnedDefaultValue);
+      tileStyleValue ?? GameCabTileStyle.pinnedDefaultValue,
+    );
   }
 
   @visibleForTesting

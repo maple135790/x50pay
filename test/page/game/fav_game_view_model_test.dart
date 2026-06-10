@@ -56,61 +56,53 @@ void main() {
     registerFallbackValue(fakeLocale);
   });
 
-  group(
-    '取得TileStyle',
-    () {
-      final defaultValue =
-          GameCabTileStyle.fromInt(GameCabTileStyle.pinnedDefaultValue);
-      test('無設定值', () async {
-        final tileStyle = await viewModel.getTileStyle();
-        expect(tileStyle, equals(defaultValue));
+  group('取得TileStyle', () {
+    final defaultValue = GameCabTileStyle.fromInt(
+      GameCabTileStyle.pinnedDefaultValue,
+    );
+    test('無設定值', () async {
+      final tileStyle = await viewModel.getTileStyle();
+      expect(tileStyle, equals(defaultValue));
+    });
+    test('有設定值', () async {
+      SharedPreferences.setMockInitialValues({
+        PrefsToken.pinnedGameCabTileStyle.value: GameCabTileStyle.large.value,
       });
-      test('有設定值', () async {
-        SharedPreferences.setMockInitialValues({
-          PrefsToken.pinnedGameCabTileStyle.value: GameCabTileStyle.large.value,
-        });
-        final viewModel = FavGameViewModel(
-          repository: mockRepo,
-          currentLocale: fakeLocale,
-        );
-        final tileStyle = await viewModel.getTileStyle();
-        expect(tileStyle, equals(GameCabTileStyle.large));
-      });
-    },
-  );
+      final viewModel = FavGameViewModel(
+        repository: mockRepo,
+        currentLocale: fakeLocale,
+      );
+      final tileStyle = await viewModel.getTileStyle();
+      expect(tileStyle, equals(GameCabTileStyle.large));
+    });
+  });
 
-  group(
-    '取得店家資料',
-    () {
-      test('當沒有取得店家資料，預期得到空StoreModel', () async {
-        arrageGetStoresReturnsEmptyStoreModel();
-        final storeModel = await viewModel.getStoreData();
-        expect(storeModel, equals(const StoreModel.empty()));
-      });
-      test('當取得店家資料，預期得到不為空的StoreModel', () async {
-        arrangeGetStoresReturnsStoreModel();
-        final storeModel = await viewModel.getStoreData();
-        expect(storeModel, isNot(const StoreModel.empty()));
-      });
-    },
-  );
+  group('取得店家資料', () {
+    test('當沒有取得店家資料，預期得到空StoreModel', () async {
+      arrageGetStoresReturnsEmptyStoreModel();
+      final storeModel = await viewModel.getStoreData();
+      expect(storeModel, equals(const StoreModel.empty()));
+    });
+    test('當取得店家資料，預期得到不為空的StoreModel', () async {
+      arrangeGetStoresReturnsStoreModel();
+      final storeModel = await viewModel.getStoreData();
+      expect(storeModel, isNot(const StoreModel.empty()));
+    });
+  });
 
-  group(
-    '取得釘選遊戲',
-    () {
-      test('當沒有釘選遊戲，預期取得空GameList', () async {
-        arrangeGetFavGameListReturnsEmptyGameList();
-        final favGame = await viewModel.getFavGame();
-        expect(favGame, equals(const GameList.empty()));
-      });
+  group('取得釘選遊戲', () {
+    test('當沒有釘選遊戲，預期取得空GameList', () async {
+      arrangeGetFavGameListReturnsEmptyGameList();
+      final favGame = await viewModel.getFavGame();
+      expect(favGame, equals(const GameList.empty()));
+    });
 
-      test('當有釘選遊戲，預期取得的GameList 不為空', () async {
-        arrangeGetFavGameListReturnsGameList();
-        final favGame = await viewModel.getFavGame();
-        expect(favGame, isNot(const GameList.empty()));
-      });
-    },
-  );
+    test('當有釘選遊戲，預期取得的GameList 不為空', () async {
+      arrangeGetFavGameListReturnsGameList();
+      final favGame = await viewModel.getFavGame();
+      expect(favGame, isNot(const GameList.empty()));
+    });
+  });
 
   group('製作Store 和name 的Map', () {
     test('當有回傳Store，取得不為空的Map', () async {

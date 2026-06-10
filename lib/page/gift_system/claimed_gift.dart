@@ -12,7 +12,8 @@ class ClaimedGift extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final claimedList = context.select<GiftSystemViewModel, List<AlChange>>(
-        (vm) => vm.giftBox?.alChange ?? []);
+      (vm) => vm.giftBox?.alChange ?? [],
+    );
 
     return Scrollbar(
       child: ListView.builder(
@@ -27,13 +28,14 @@ class ClaimedGift extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 4),
-                Text('', style: TextStyle(fontSize: 14))
+                Text('', style: TextStyle(fontSize: 14)),
               ],
             ),
             trailing: ElevatedButton(
-                onPressed: null,
-                style: CustomButtonThemes.grey(),
-                child: const Text('已領取')),
+              onPressed: null,
+              style: CustomButtonThemes.grey(),
+              child: const Text('已領取'),
+            ),
           ),
         ),
         itemBuilder: (context, index) {
@@ -56,16 +58,20 @@ class ClaimedGift extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: claimedList[index].pic,
                   errorWidget: (context, url, error) => Icon(
-                      Icons.broken_image_rounded,
-                      color: const Color(0xff505050).withValues(alpha: 0.7)),
+                    Icons.broken_image_rounded,
+                    color: const Color(0xff505050).withValues(alpha: 0.7),
+                  ),
                   placeholder: (context, url) => Icon(
-                      Icons.hourglass_top_rounded,
-                      color: const Color(0xff505050).withValues(alpha: 0.7)),
+                    Icons.hourglass_top_rounded,
+                    color: const Color(0xff505050).withValues(alpha: 0.7),
+                  ),
                   width: 50,
                 ),
               ),
-              title: Text(claimedList[index].name,
-                  style: const TextStyle(fontSize: 14)),
+              title: Text(
+                claimedList[index].name,
+                style: const TextStyle(fontSize: 14),
+              ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -75,9 +81,10 @@ class ClaimedGift extends StatelessWidget {
                 ],
               ),
               trailing: ElevatedButton(
-                  onPressed: null,
-                  style: CustomButtonThemes.grey(),
-                  child: const Text('已領取')),
+                onPressed: null,
+                style: CustomButtonThemes.grey(),
+                child: const Text('已領取'),
+              ),
             ),
           );
         },

@@ -9,8 +9,10 @@ class LanguageProvider extends ChangeNotifier {
   LanguageProvider();
 
   /// 預設語系
-  static const _defaultAppLocale =
-      Locale.fromSubtags(languageCode: 'en', countryCode: 'US');
+  static const _defaultAppLocale = Locale.fromSubtags(
+    languageCode: 'en',
+    countryCode: 'US',
+  );
 
   /// 當前語系
   Locale get currentLocale => _currentLocale;
@@ -29,8 +31,9 @@ class LanguageProvider extends ChangeNotifier {
     final supportLocales = S.delegate.supportedLocales;
     final systemLanguageCode = Platform.localeName.split('_').first;
     if (supportLocales.any((l) => l.languageCode == systemLanguageCode)) {
-      locale = supportLocales
-          .firstWhere((l) => l.languageCode == systemLanguageCode);
+      locale = supportLocales.firstWhere(
+        (l) => l.languageCode == systemLanguageCode,
+      );
     } else {
       locale = _defaultAppLocale;
     }

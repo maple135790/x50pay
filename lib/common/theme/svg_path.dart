@@ -17,6 +17,7 @@ class Svgs {
   static final shirtSolid = AssetBytesLoader(R.images.home.shirtSolidSvg);
   static final stamp = AssetBytesLoader(R.images.quest.stampSvg);
   static final pSoild = AssetBytesLoader(R.images.scanPay.pSolidSvg);
-  static final heartCirclePlus =
-      AssetBytesLoader(R.images.game.heartCirclePlusSolidSvg);
+  static final heartCirclePlus = AssetBytesLoader(
+    R.images.game.heartCirclePlusSolidSvg,
+  );
 }

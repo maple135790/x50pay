@@ -15,10 +15,7 @@ import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
 class QRPayModal extends StatefulWidget {
   final ScrollController scrollController;
 
-  const QRPayModal({
-    super.key,
-    required this.scrollController,
-  });
+  const QRPayModal({super.key, required this.scrollController});
 
   @override
   State<QRPayModal> createState() => _QRPayModalState();
@@ -111,7 +108,7 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                         '選擇付款方式',
                         style: TextStyle(
                           shadows: [
-                            Shadow(color: Colors.black, blurRadius: 25)
+                            Shadow(color: Colors.black, blurRadius: 25),
                           ],
                           fontSize: 17,
                           color: Color(0xe6ffffff),
@@ -132,7 +129,7 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                               fontSize: 13,
                               color: Color(0xe6ffffff),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ],
@@ -183,8 +180,9 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                                 Svgs.pSoild,
                                 width: 21,
                                 height: 15,
-                                colorFilter:
-                                    SvgsExtension.colorFilter(Colors.white),
+                                colorFilter: SvgsExtension.colorFilter(
+                                  Colors.white,
+                                ),
                               ),
                               const SizedBox(width: 7.5),
                               const Text('X50Pay'),
@@ -220,14 +218,14 @@ class _QRPayModalState extends BaseStatefulState<QRPayModal> {
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ],
               );
             },
-          )
+          ),
         ],
       ),
     );

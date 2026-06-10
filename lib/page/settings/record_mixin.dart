@@ -33,8 +33,9 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
   void initState() {
     super.initState();
     _init = getRecord();
-    _getIsEnableSummarizedRecord =
-        context.read<AppSettingsProvider>().getIsEnableSummarizedRecord();
+    _getIsEnableSummarizedRecord = context
+        .read<AppSettingsProvider>()
+        .getIsEnableSummarizedRecord();
   }
 
   @override
@@ -103,8 +104,9 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
               margin: const EdgeInsets.symmetric(horizontal: 15),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
               decoration: BoxDecoration(
-                  color: scaffoldBackgroundColor,
-                  border: Border.all(color: borderColor, width: 1)),
+                color: scaffoldBackgroundColor,
+                border: Border.all(color: borderColor, width: 1),
+              ),
               child: Row(
                 children: [
                   const CircleAvatar(
@@ -121,7 +123,7 @@ mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
                       pageTitle(),
                       style: const TextStyle(fontSize: 18),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

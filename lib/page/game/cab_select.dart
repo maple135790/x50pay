@@ -41,9 +41,9 @@ class CabSelect extends StatefulWidget {
     required this.cabinetData,
     this.onCreated,
     this.onDestroy,
-  })  : _isFromCabDetail = false,
-        _isFromQRPay = false,
-        qrPayData = _emptyQRPayData;
+  }) : _isFromCabDetail = false,
+       _isFromQRPay = false,
+       qrPayData = _emptyQRPayData;
 
   const CabSelect.fromCabDetail({
     super.key,
@@ -52,20 +52,20 @@ class CabSelect extends StatefulWidget {
     required this.cabinetData,
     this.onCreated,
     this.onDestroy,
-  })  : _isFromCabDetail = true,
-        _isFromQRPay = false,
-        qrPayData = _emptyQRPayData;
+  }) : _isFromCabDetail = true,
+       _isFromQRPay = false,
+       qrPayData = _emptyQRPayData;
 
   const CabSelect.fromQRPay({
     super.key,
     required this.qrPayData,
     this.onCreated,
     this.onDestroy,
-  })  : _isFromCabDetail = false,
-        _isFromQRPay = true,
-        caboid = '',
-        cabNum = -1,
-        cabinetData = const Cabinet.empty();
+  }) : _isFromCabDetail = false,
+       _isFromQRPay = true,
+       caboid = '',
+       cabNum = -1,
+       cabinetData = const Cabinet.empty();
 
   @override
   State<CabSelect> createState() => _CabSelectState();
@@ -121,7 +121,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
         GlobalSingleton.instance.recentPlayedCabinetData = (
           cabinet: widget.cabinetData,
           cabNum: widget.cabNum,
-          caboid: widget.caboid
+          caboid: widget.caboid,
         );
       },
       onAfterInserted: () async {
@@ -154,8 +154,9 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
         id: widget.caboid,
         index: widget.cabNum,
         isTicket: paymentType == PaymentType.ticket,
-        mode:
-            paymentType != PaymentType.reloadCoin ? selectedMode!.first : 9999,
+        mode: paymentType != PaymentType.reloadCoin
+            ? selectedMode!.first
+            : 9999,
       );
     }
     if (widget._isFromCabDetail) router.pop();
@@ -197,10 +198,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
       final double price = double.parse(mode.last.toString());
       paymentOptions
         ..add(const SizedBox(height: 20))
-        ..add(Text(
-          mode[1],
-          textAlign: TextAlign.center,
-        ))
+        ..add(Text(mode[1], textAlign: TextAlign.center))
         ..add(
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -212,11 +210,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                   if (widget._isFromQRPay) {
                     qrPayUrl = mode.first[0].toString();
                   }
-                  onSelectPaymentType(
-                    mode,
-                    qrPayUrl,
-                    type: PaymentType.point,
-                  );
+                  onSelectPaymentType(mode, qrPayUrl, type: PaymentType.point);
                 },
                 style: CustomButtonThemes.severe(isV4: true),
                 child: Text('${price.toInt()}P'),
@@ -306,12 +300,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                     cabLabel,
                     style: const TextStyle(
                       fontSize: 18,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black,
-                          blurRadius: 18,
-                        ),
-                      ],
+                      shadows: [Shadow(color: Colors.black, blurRadius: 18)],
                     ),
                   ),
                   Row(
@@ -322,10 +311,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                         style: const TextStyle(
                           fontSize: 16,
                           shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              blurRadius: 15,
-                            ),
+                            Shadow(color: Colors.black, blurRadius: 15),
                           ],
                         ),
                       ),
@@ -374,7 +360,7 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                     color: Color(0xFFEAC912),
                     fontWeight: FontWeight.bold,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -390,19 +376,10 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                '注意！請確認是否有玩家正在遊玩。',
-                style: TextStyle(fontSize: 18),
-              ),
+              const Text('注意！請確認是否有玩家正在遊玩。', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 14),
-              Text(
-                '機種：$cabLabel',
-                style: const TextStyle(fontSize: 18),
-              ),
-              Text(
-                '編號：$cabNum號機',
-                style: const TextStyle(fontSize: 18),
-              ),
+              Text('機種：$cabLabel', style: const TextStyle(fontSize: 18)),
+              Text('編號：$cabNum號機', style: const TextStyle(fontSize: 18)),
               if (paymentType != null)
                 Text(
                   '消費：${paymentType!.text}',
@@ -443,11 +420,11 @@ class _CabSelectState extends BaseStatefulState<CabSelect> with GameMixin {
                     style: CustomButtonThemes.severe(isV4: true),
                     child: isPayPressed ? const Text('請稍等') : const Text('確認'),
                   ),
-                )
+                ),
               ],
             ),
           ),
-        )
+        ),
       ],
     );
 

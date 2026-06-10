@@ -27,12 +27,12 @@ class EntryModel {
   });
 
   const EntryModel.empty()
-      : message = "",
-        code = 0,
-        gr2 = const [],
-        evlist = null,
-        giftlist = null,
-        questCampaign = null;
+    : message = "",
+      code = 0,
+      gr2 = const [],
+      evlist = null,
+      giftlist = null,
+      questCampaign = null;
 
   factory EntryModel.fromJson(Map<String, dynamic> json) =>
       _$EntryModelFromJson(json);

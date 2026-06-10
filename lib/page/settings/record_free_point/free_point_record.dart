@@ -24,11 +24,15 @@ class _FreePointRecordsState extends BaseStatefulState<FreePointRecords>
   List<DataRow> buildRows(FreePointModel model) {
     List<DataRow> rows = [];
     for (var log in model.logs) {
-      rows.add(DataRow(cells: [
-        DataCell(Text('${log.fpoint.toInt()}P')),
-        DataCell(Text('${log.much.toInt()}P')),
-        DataCell(Text(log.limitTime)),
-      ]));
+      rows.add(
+        DataRow(
+          cells: [
+            DataCell(Text('${log.fpoint.toInt()}P')),
+            DataCell(Text('${log.much.toInt()}P')),
+            DataCell(Text(log.limitTime)),
+          ],
+        ),
+      );
     }
     return rows;
   }

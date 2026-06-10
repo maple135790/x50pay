@@ -13,10 +13,10 @@ class QRPayData {
   String get gameCabImageUrl => 'https://pay.x50.fun$rawGameCabImageUrl';
 
   const QRPayData.empty()
-      : rawGameCabImageUrl = '',
-        cabNum = 0,
-        mode = const [],
-        cabLabel = '';
+    : rawGameCabImageUrl = '',
+      cabNum = 0,
+      mode = const [],
+      cabLabel = '';
   @override
   String toString() =>
       'QRPayData(rawGameCabImageUrl: $rawGameCabImageUrl, cabNum: $cabNum, mode: $mode, cabLabel: $cabLabel)';

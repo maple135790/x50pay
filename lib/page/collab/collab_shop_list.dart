@@ -26,10 +26,7 @@ class _CollabShopListState extends BaseStatefulState<CollabShopList> {
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
     if (context.mounted) {
-      router.pushNamed(
-        AppRoutes.scanQRCode.routeName,
-        extra: status,
-      );
+      router.pushNamed(AppRoutes.scanQRCode.routeName, extra: status);
     }
   }
 
@@ -69,12 +66,15 @@ class _CollabShopListState extends BaseStatefulState<CollabShopList> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Text(data.sponserName,
-                            style: const TextStyle(height: 2))
+                        Text(
+                          data.sponserName,
+                          style: const TextStyle(height: 2),
+                        ),
                       ],
                     ),
-                    ...data.meta
-                        .map((e) => Text(e, style: const TextStyle(height: 2))),
+                    ...data.meta.map(
+                      (e) => Text(e, style: const TextStyle(height: 2)),
+                    ),
                   ],
                 ),
               ],
@@ -84,60 +84,56 @@ class _CollabShopListState extends BaseStatefulState<CollabShopList> {
       );
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: tiles,
-    );
+    return Column(mainAxisSize: MainAxisSize.min, children: tiles);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: viewModel.init(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: SizedBox());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text(serviceErrorText));
-          }
+      future: viewModel.init(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(child: SizedBox());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text(serviceErrorText));
+        }
 
-          final data = snapshot.data!;
+        final data = snapshot.data!;
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 12),
-                  child: GestureDetector(
-                    onTap: showQRCodeScan,
-                    child: Container(
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                          color: cardColor,
-                          borderRadius: BorderRadius.circular(5)),
-                      alignment: Alignment.center,
-                      height: 93.86,
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.qr_code_rounded,
-                            size: 28,
-                          ),
-                          Text('點我掃店鋪 QRCode', style: TextStyle(fontSize: 17)),
-                        ],
-                      ),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 12),
+                child: GestureDetector(
+                  onTap: showQRCodeScan,
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: cardColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    alignment: Alignment.center,
+                    height: 93.86,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.qr_code_rounded, size: 28),
+                        Text('點我掃店鋪 QRCode', style: TextStyle(fontSize: 17)),
+                      ],
                     ),
                   ),
                 ),
-                const Divider(),
-                buildSponserTiles(data),
-              ],
-            ),
-          );
-        });
+              ),
+              const Divider(),
+              buildSponserTiles(data),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

@@ -68,9 +68,7 @@ void main() async {
 
   await themeProvider.init();
 
-  runApp(MyApp(
-    AppRouter.config(isInitiallyLogin),
-  ));
+  runApp(MyApp(AppRouter.config(isInitiallyLogin)));
 }
 
 class MyApp extends StatelessWidget {
@@ -86,12 +84,14 @@ class MyApp extends StatelessWidget {
 
     switch (locale.languageCode) {
       case 'zh':
-        resolvedTextTheme =
-            GoogleFonts.notoSansTcTextTheme(baseTheme.textTheme);
+        resolvedTextTheme = GoogleFonts.notoSansTcTextTheme(
+          baseTheme.textTheme,
+        );
         break;
       case 'ja':
-        resolvedTextTheme =
-            GoogleFonts.notoSansJpTextTheme(baseTheme.textTheme);
+        resolvedTextTheme = GoogleFonts.notoSansJpTextTheme(
+          baseTheme.textTheme,
+        );
         break;
       case 'en':
       default:

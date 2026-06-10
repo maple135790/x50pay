@@ -59,10 +59,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
               runAlignment: WrapAlignment.start,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 11.5),
-                ),
+                Text(title, style: const TextStyle(fontSize: 11.5)),
                 Text(
                   value,
                   softWrap: false,
@@ -101,9 +98,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
       Svgs.heartSoild,
       width: 17,
       height: 17,
-      colorFilter: SvgsExtension.colorFilter(
-        const Color(0xbfff1100),
-      ),
+      colorFilter: SvgsExtension.colorFilter(const Color(0xbfff1100)),
     );
 
     return Selector<EntryProvider, EntryModel?>(
@@ -139,10 +134,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
             style: ButtonStyle(
               backgroundColor: WidgetStatePropertyAll(scaffoldBackgroundColor),
               side: WidgetStatePropertyAll(
-                BorderSide(
-                  color: borderColor,
-                  width: 1.5,
-                ),
+                BorderSide(color: borderColor, width: 1.5),
               ),
             ),
           ),
@@ -150,10 +142,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
 
         final gradeInfo = Text(
           entry.gradeLv,
-          style: const TextStyle(
-            color: Color(0xff808080),
-            fontSize: 30,
-          ),
+          style: const TextStyle(color: Color(0xff808080), fontSize: 30),
         );
 
         final vipBonusInfo = Tooltip(
@@ -176,18 +165,14 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
                     Svgs.boltSoild,
                     width: 9,
                     height: 13,
-                    colorFilter: SvgsExtension.colorFilter(
-                      Colors.white,
-                    ),
+                    colorFilter: SvgsExtension.colorFilter(Colors.white),
                   ),
                 ),
                 Text(
                   entry.gr2BounsLimit,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(color: Colors.white),
                 ),
-                const SizedBox(width: 3)
+                const SizedBox(width: 3),
               ],
             ),
           ),
@@ -241,10 +226,7 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
           ),
           child: Text(
             entry.gr2Timer,
-            style: const TextStyle(
-              fontSize: 10,
-              color: Colors.black,
-            ),
+            style: const TextStyle(fontSize: 10, color: Colors.black),
           ),
         );
 
@@ -267,13 +249,14 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
           style: ButtonStyle(
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             padding: WidgetStateProperty.all(
-                const EdgeInsets.symmetric(horizontal: 20)),
+              const EdgeInsets.symmetric(horizontal: 20),
+            ),
             textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 13)),
             visualDensity: VisualDensity.comfortable,
             splashFactory: NoSplash.splashFactory,
-            shape: WidgetStateProperty.all(RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            )),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            ),
             foregroundColor: WidgetStateProperty.all(const Color(0xfff5222d)),
             backgroundColor: WidgetStateProperty.resolveWith((states) {
               return isDarkTheme
@@ -298,117 +281,120 @@ class _MariInfoState extends BaseStatefulState<MariInfo> {
             builder: (context, constraint) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: Stack(children: [
-                  Positioned(
-                    bottom: -25,
-                    right: -40,
-                    child: Icon(
-                      Icons.compost_rounded,
-                      size: 140,
-                      color: iconColor.withValues(alpha: 0.1),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      bottom: -25,
+                      right: -40,
+                      child: Icon(
+                        Icons.compost_rounded,
+                        size: 140,
+                        color: iconColor.withValues(alpha: 0.1),
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: constraint.maxWidth,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: borderColor),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: SizedBox(
-                            width: double.maxFinite,
-                            child: Stack(
-                              fit: StackFit.passthrough,
+                    Container(
+                      width: constraint.maxWidth,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: borderColor),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              width: double.maxFinite,
+                              child: Stack(
+                                fit: StackFit.passthrough,
+                                children: [
+                                  mariImage,
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: dressRoomButton,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                mariImage,
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  child: dressRoomButton,
+                                Wrap(
+                                  runAlignment: WrapAlignment.start,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        gradeIcon,
+                                        const SizedBox(width: 5),
+                                        gradeInfo,
+                                        const SizedBox(width: 5),
+                                      ],
+                                    ),
+                                    if (entry.gr2ShouldShowBouns) vipBonusInfo,
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                gradeProgressBar,
+                                const SizedBox(height: 8),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(child: bonusProgressBar),
+                                    bounsCounter,
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      bounsInfo,
+                                      infoItem(
+                                        icon: Icons.favorite_rounded,
+                                        title: i18n.nextLv,
+                                        value: "${entry.gr2Next} ${i18n.heart}",
+                                      ),
+                                      infoItem(
+                                        icon: Icons.calendar_today_rounded,
+                                        title: "$loginDayTitle : ",
+                                        value: loginDayValue,
+                                      ),
+                                      infoItem(
+                                        icon: Icons.how_to_vote_rounded,
+                                        title: "$gachaTitle : ",
+                                        value: gachaValue,
+                                      ),
+                                      infoItem(
+                                        icon: Icons.sync_rounded,
+                                        title: i18n.gr2ResetDate,
+                                        value: entry.gr2Date,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: gradeBoxShopButton,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Wrap(
-                                runAlignment: WrapAlignment.start,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      gradeIcon,
-                                      const SizedBox(width: 5),
-                                      gradeInfo,
-                                      const SizedBox(width: 5),
-                                    ],
-                                  ),
-                                  if (entry.gr2ShouldShowBouns) vipBonusInfo,
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              gradeProgressBar,
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Expanded(child: bonusProgressBar),
-                                  bounsCounter,
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    bounsInfo,
-                                    infoItem(
-                                      icon: Icons.favorite_rounded,
-                                      title: i18n.nextLv,
-                                      value: "${entry.gr2Next} ${i18n.heart}",
-                                    ),
-                                    infoItem(
-                                      icon: Icons.calendar_today_rounded,
-                                      title: "$loginDayTitle : ",
-                                      value: loginDayValue,
-                                    ),
-                                    infoItem(
-                                      icon: Icons.how_to_vote_rounded,
-                                      title: "$gachaTitle : ",
-                                      value: gachaValue,
-                                    ),
-                                    infoItem(
-                                      icon: Icons.sync_rounded,
-                                      title: i18n.gr2ResetDate,
-                                      value: entry.gr2Date,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: gradeBoxShopButton,
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ]),
+                  ],
+                ),
               );
             },
           ),

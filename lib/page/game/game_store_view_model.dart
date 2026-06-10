@@ -36,11 +36,16 @@ class GameStoreViewModel extends BaseViewModel {
     }
   }
 
-  Future<void> onStoreSelected(Store store, String prefix,
-      {required VoidCallback onPageChange}) async {
+  Future<void> onStoreSelected(
+    Store store,
+    String prefix, {
+    required VoidCallback onPageChange,
+  }) async {
     isStoreSelected = true;
-    showInfo('已切換至${store.name}\n\n少女祈禱中...',
-        duration: const Duration(milliseconds: 650));
+    showInfo(
+      '已切換至${store.name}\n\n少女祈禱中...',
+      duration: const Duration(milliseconds: 650),
+    );
     Prefs.setString(PrefsToken.storeName, store.name!);
     Prefs.setString(PrefsToken.storeId, prefix + (store.sid!.toString()));
     await Future.delayed(const Duration(milliseconds: 800));

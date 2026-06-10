@@ -202,7 +202,7 @@ class __PadPrefLoadedState extends BaseStatefulState<_PadPrefLoaded>
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -236,9 +236,9 @@ class _ChangeNicknameDialogState extends State<_ChangeNicknameDialog> {
     return PageDialog.ios(
       title: '平板上顯示不同暱稱',
       onConfirm: () {
-        Navigator.of(context).pop(
-          nameController.text.isEmpty ? null : nameController.text,
-        );
+        Navigator.of(
+          context,
+        ).pop(nameController.text.isEmpty ? null : nameController.text);
       },
       content: (showButtonBar) {
         showButtonBar(true);

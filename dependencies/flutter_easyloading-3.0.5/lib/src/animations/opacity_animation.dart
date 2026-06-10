@@ -33,9 +33,6 @@ class OpacityAnimation extends EasyLoadingAnimation {
     AnimationController controller,
     AlignmentGeometry alignment,
   ) {
-    return Opacity(
-      opacity: controller.value,
-      child: child,
-    );
+    return Opacity(opacity: controller.value, child: child);
   }
 }

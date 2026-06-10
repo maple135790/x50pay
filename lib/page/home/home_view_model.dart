@@ -8,10 +8,7 @@ class HomeViewModel extends BaseViewModel {
   final UserProvider userProvider;
   final EntryProvider entryProvider;
 
-  HomeViewModel({
-    required this.userProvider,
-    required this.entryProvider,
-  });
+  HomeViewModel({required this.userProvider, required this.entryProvider});
 
   Future<bool> initHome() async {
     showLoading();

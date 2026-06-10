@@ -13,17 +13,17 @@ class LotteListModel {
 
   /// 養成抽獎箱資料
   LotteListModel(this.rawLotteList)
-      : self = rawLotteList[4],
-        name = rawLotteList[0],
-        date = rawLotteList[1],
-        tic = rawLotteList[2].toString();
+    : self = rawLotteList[4],
+      name = rawLotteList[0],
+      date = rawLotteList[1],
+      tic = rawLotteList[2].toString();
 
   const LotteListModel.empty()
-      : rawLotteList = const [],
-        self = 0,
-        name = '',
-        date = '',
-        tic = '';
+    : rawLotteList = const [],
+      self = 0,
+      name = '',
+      date = '',
+      tic = '';
 
   factory LotteListModel.fromJson(Map<String, dynamic> json) =>
       _$LotteListModelFromJson(json);

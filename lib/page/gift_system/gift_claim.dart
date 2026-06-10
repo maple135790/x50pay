@@ -18,7 +18,8 @@ class GiftClaim extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final canChangeList = context.select<GiftSystemViewModel, List<CanChange>>(
-        (vm) => vm.giftBox?.canChange ?? []);
+      (vm) => vm.giftBox?.canChange ?? [],
+    );
 
     return Scrollbar(
       child: ListView.builder(
@@ -34,7 +35,7 @@ class GiftClaim extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 4),
-                Text('', style: TextStyle(fontSize: 14))
+                Text('', style: TextStyle(fontSize: 14)),
               ],
             ),
             trailing: ElevatedButton(
@@ -62,10 +63,14 @@ class GiftClaim extends StatelessWidget {
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(4),
                 child: CachedNetworkImage(
-                    imageUrl: canChangeList[index].pic, width: 50),
+                  imageUrl: canChangeList[index].pic,
+                  width: 50,
+                ),
               ),
-              title: Text(canChangeList[index].name,
-                  style: const TextStyle(fontSize: 14)),
+              title: Text(
+                canChangeList[index].name,
+                style: const TextStyle(fontSize: 14),
+              ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -77,11 +82,13 @@ class GiftClaim extends StatelessWidget {
               trailing: ElevatedButton(
                 onPressed: () {
                   showDialog(
-                      context: context,
-                      builder: (context) {
-                        return _ConfirmChangeDialog(
-                            gid: canChangeList[index].gid);
-                      });
+                    context: context,
+                    builder: (context) {
+                      return _ConfirmChangeDialog(
+                        gid: canChangeList[index].gid,
+                      );
+                    },
+                  );
                   getGiftDialog(canChangeList[index].gid);
                 },
                 style: CustomButtonThemes.severe(isV4: true),
@@ -127,9 +134,13 @@ class _ConfirmChangeDialogState
               children: [
                 Text('請確認已經出示給工作人員看過'),
                 SizedBox(height: 16),
-                Text('您確定要兌換禮物嗎？',
-                    style: TextStyle(
-                        color: Color(0xfffad814), fontWeight: FontWeight.bold)),
+                Text(
+                  '您確定要兌換禮物嗎？',
+                  style: TextStyle(
+                    color: Color(0xfffad814),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ),
@@ -141,28 +152,32 @@ class _ConfirmChangeDialogState
               children: [
                 Expanded(
                   child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-                      child: const Text('取消')),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+                    child: const Text('取消'),
+                  ),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
                   child: TextButton(
-                      onPressed: () async {
-                        final nav = GoRouter.of(context);
-                        kDebugMode
-                            ? null
-                            : await Repository().giftExchange(widget.gid);
-                        await EasyLoading.showSuccess('成功兌換,將會回到首頁',
-                            duration: const Duration(milliseconds: 800));
-                        await Future.delayed(const Duration(milliseconds: 800));
+                    onPressed: () async {
+                      final nav = GoRouter.of(context);
+                      kDebugMode
+                          ? null
+                          : await Repository().giftExchange(widget.gid);
+                      await EasyLoading.showSuccess(
+                        '成功兌換,將會回到首頁',
+                        duration: const Duration(milliseconds: 800),
+                      );
+                      await Future.delayed(const Duration(milliseconds: 800));
 
-                        nav.goNamed(AppRoutes.home.routeName);
-                      },
-                      style: CustomButtonThemes.severe(isV4: true),
-                      child: const Text('確認')),
+                      nav.goNamed(AppRoutes.home.routeName);
+                    },
+                    style: CustomButtonThemes.severe(isV4: true),
+                    child: const Text('確認'),
+                  ),
                 ),
               ],
             ),

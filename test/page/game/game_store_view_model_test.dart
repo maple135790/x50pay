@@ -28,8 +28,9 @@ void main() {
 
   test('測試取得店家資料', () async {
     final viewModel = GameStoreViewModel(repository: mockRepo);
-    final storeModel =
-        await viewModel.getStoreData(currentLocale: const Locale('zh', 'TW'));
+    final storeModel = await viewModel.getStoreData(
+      currentLocale: const Locale('zh', 'TW'),
+    );
     expect(storeModel, isNotNull);
   });
 }

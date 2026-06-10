@@ -13,8 +13,11 @@ class PlayRecordModel {
   @JsonKey(name: 'log')
   final List<PlayLog> logs;
 
-  const PlayRecordModel(
-      {required this.code, required this.message, required this.logs});
+  const PlayRecordModel({
+    required this.code,
+    required this.message,
+    required this.logs,
+  });
 
   factory PlayRecordModel.fromJson(Map<String, dynamic> json) =>
       _$PlayRecordModelFromJson(json);
@@ -65,7 +68,7 @@ class PlayRecordModel {
         map[log.mid] = (
           playCount: map[log.mid]!.playCount + 1,
           point: map[log.mid]!.point + log.price.toInt(),
-          freep: map[log.mid]!.freep + log.freep.toInt()
+          freep: map[log.mid]!.freep + log.freep.toInt(),
         );
       }
     }
@@ -100,19 +103,20 @@ class PlayLog {
   @JsonKey(name: '_id')
   final UnderscoreId id;
 
-  const PlayLog(
-      {required this.cid,
-      required this.disbool,
-      required this.done,
-      required this.freep,
-      required this.initTime,
-      required this.mid,
-      required this.price,
-      required this.sid,
-      required this.status,
-      required this.time,
-      required this.uid,
-      required this.id});
+  const PlayLog({
+    required this.cid,
+    required this.disbool,
+    required this.done,
+    required this.freep,
+    required this.initTime,
+    required this.mid,
+    required this.price,
+    required this.sid,
+    required this.status,
+    required this.time,
+    required this.uid,
+    required this.id,
+  });
 
   factory PlayLog.fromJson(Map<String, dynamic> json) =>
       _$PlayLogFromJson(json);

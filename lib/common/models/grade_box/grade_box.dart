@@ -20,11 +20,11 @@ class GradeBoxModel {
   });
 
   const GradeBoxModel.empty()
-      : card = const [],
-        cd = const [],
-        x50 = const [],
-        gifts = const [],
-        code = 0;
+    : card = const [],
+      cd = const [],
+      x50 = const [],
+      gifts = const [],
+      code = 0;
 
   /// 所有兌換物品
   ///
@@ -83,12 +83,12 @@ class GradeBoxItem {
   Map<String, dynamic> toJson() => _$GradeBoxItemToJson(this);
 
   factory GradeBoxItem.empty() => const GradeBoxItem(
-        rawPicUrl: '',
-        name: '',
-        much: 0,
-        limit: 0,
-        gid: '',
-        eid: '',
-        heart: 0,
-      );
+    rawPicUrl: '',
+    name: '',
+    much: 0,
+    limit: 0,
+    gid: '',
+    eid: '',
+    heart: 0,
+  );
 }

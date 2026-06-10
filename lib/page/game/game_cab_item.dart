@@ -37,10 +37,10 @@ class GameCabItem extends StatelessWidget with GameMixin {
     final addition = machine.vipb == true
         ? " [${i18n.gameMPass}]"
         : time == i18n.gameNormalHour
-            ? ''
-            : isWeekend
-                ? " [${i18n.gameWeekends}]"
-                : " [${i18n.gameWeekday}]";
+        ? ''
+        : isWeekend
+        ? " [${i18n.gameWeekends}]"
+        : " [${i18n.gameWeekday}]";
 
     onItemPressed.call();
     return Padding(
@@ -54,26 +54,28 @@ class GameCabItem extends StatelessWidget with GameMixin {
             borderRadius: BorderRadius.circular(5),
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: isDarkTheme
-                        ? CustomColorThemes.borderColorDark
-                        : CustomColorThemes.borderColorLight,
-                    strokeAlign: BorderSide.strokeAlignOutside,
-                  )),
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                  color: isDarkTheme
+                      ? CustomColorThemes.borderColorDark
+                      : CustomColorThemes.borderColorLight,
+                  strokeAlign: BorderSide.strokeAlignOutside,
+                ),
+              ),
               height: 155,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Stack(
                   children: [
                     Positioned.fill(
-                        child: CachedNetworkImage(
-                      imageUrl: getGameCabImage(machine.id!),
-                      color: const Color.fromARGB(35, 0, 0, 0),
-                      colorBlendMode: BlendMode.srcATop,
-                      fit: BoxFit.fitWidth,
-                      alignment: const Alignment(0, -0.25),
-                    )),
+                      child: CachedNetworkImage(
+                        imageUrl: getGameCabImage(machine.id!),
+                        color: const Color.fromARGB(35, 0, 0, 0),
+                        colorBlendMode: BlendMode.srcATop,
+                        fit: BoxFit.fitWidth,
+                        alignment: const Alignment(0, -0.25),
+                      ),
+                    ),
                     Positioned.fill(
                       child: Container(
                         decoration: const BoxDecoration(
@@ -100,7 +102,7 @@ class GameCabItem extends StatelessWidget with GameMixin {
                                 color: Colors.white,
                                 fontSize: 15,
                                 shadows: [
-                                  Shadow(color: Colors.black, blurRadius: 18)
+                                  Shadow(color: Colors.black, blurRadius: 18),
                                 ],
                               ),
                             ),
@@ -118,10 +120,12 @@ class GameCabItem extends StatelessWidget with GameMixin {
                                     fontSize: 12,
                                     shadows: const [
                                       Shadow(
-                                          color: Colors.black, blurRadius: 15)
+                                        color: Colors.black,
+                                        blurRadius: 15,
+                                      ),
                                     ],
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ],
@@ -133,16 +137,18 @@ class GameCabItem extends StatelessWidget with GameMixin {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () async {
-                            final coinProvider =
-                                context.read<CoinInsertionProvider>();
+                            final coinProvider = context
+                                .read<CoinInsertionProvider>();
                             await GoRouter.of(context).pushNamed<bool>(
                               AppRoutes.gameCab.routeName,
                               pathParameters: {'mid': machine.id!},
                             );
 
                             final isInsertToken = coinProvider.isCoinInserted;
-                            log('isInsertToken: $isInsertToken',
-                                name: 'GameCabItem');
+                            log(
+                              'isInsertToken: $isInsertToken',
+                              name: 'GameCabItem',
+                            );
                             if (isInsertToken == true) {
                               onCoinInserted.call();
                               coinProvider.isCoinInserted = false;

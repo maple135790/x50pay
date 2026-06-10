@@ -73,10 +73,7 @@ class _GameStoreLoaded extends StatelessWidget {
         child: ListView.builder(
           itemCount: storeList.length,
           itemBuilder: (context, index) {
-            return _StoreItem(
-              store: storeList[index],
-              prefix: stores.prefix!,
-            );
+            return _StoreItem(store: storeList[index], prefix: stores.prefix!);
           },
         ),
       ),
@@ -107,12 +104,13 @@ class _StoreItem extends StatelessWidget {
         child: Container(
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
-              border: Border.all(
-                color: isDarkTheme
-                    ? CustomColorThemes.borderColorDark
-                    : CustomColorThemes.borderColorLight,
-              ),
-              borderRadius: BorderRadius.circular(5)),
+            border: Border.all(
+              color: isDarkTheme
+                  ? CustomColorThemes.borderColorDark
+                  : CustomColorThemes.borderColorLight,
+            ),
+            borderRadius: BorderRadius.circular(5),
+          ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: SizedBox(
@@ -121,11 +119,13 @@ class _StoreItem extends StatelessWidget {
               child: Stack(
                 children: [
                   Positioned.fill(
-                      child: CachedNetworkImage(
-                          imageUrl: getStoreImage(store.sid!),
-                          alignment: const Alignment(0, -0.25),
-                          fit: BoxFit.fitWidth,
-                          colorBlendMode: BlendMode.modulate)),
+                    child: CachedNetworkImage(
+                      imageUrl: getStoreImage(store.sid!),
+                      alignment: const Alignment(0, -0.25),
+                      fit: BoxFit.fitWidth,
+                      colorBlendMode: BlendMode.modulate,
+                    ),
+                  ),
                   Positioned.fill(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -144,42 +144,54 @@ class _StoreItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(store.name!,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                shadows: [
-                                  Shadow(color: Colors.black, blurRadius: 18)
-                                ])),
-                        Row(children: [
-                          const Icon(Icons.near_me_rounded,
-                              size: 15, color: Color(0xe6ffffff)),
-                          Text('  | ${store.address!}',
+                        Text(
+                          store.name!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            shadows: [
+                              Shadow(color: Colors.black, blurRadius: 18),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.near_me_rounded,
+                              size: 15,
+                              color: Color(0xe6ffffff),
+                            ),
+                            Text(
+                              '  | ${store.address!}',
                               style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.9),
-                                  fontSize: 13,
-                                  shadows: const [
-                                    Shadow(color: Colors.black, blurRadius: 15)
-                                  ]))
-                        ]),
+                                color: Colors.white.withValues(alpha: 0.9),
+                                fontSize: 13,
+                                shadows: const [
+                                  Shadow(color: Colors.black, blurRadius: 15),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                   Positioned.fill(
-                      child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () async {
-                        context.read<GameStoreViewModel>().onStoreSelected(
-                          store,
-                          prefix,
-                          onPageChange: () {
-                            context.goNamed(AppRoutes.gameCabs.routeName);
-                          },
-                        );
-                      },
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () async {
+                          context.read<GameStoreViewModel>().onStoreSelected(
+                            store,
+                            prefix,
+                            onPageChange: () {
+                              context.goNamed(AppRoutes.gameCabs.routeName);
+                            },
+                          );
+                        },
+                      ),
                     ),
-                  )),
+                  ),
                 ],
               ),
             ),

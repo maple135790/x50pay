@@ -12,21 +12,22 @@ class GameList {
   final String? payLid;
   final String? payCid;
 
-  const GameList(
-      {this.message,
-      this.code,
-      this.machines,
-      this.payMid,
-      this.payLid,
-      this.payCid});
+  const GameList({
+    this.message,
+    this.code,
+    this.machines,
+    this.payMid,
+    this.payLid,
+    this.payCid,
+  });
 
   const GameList.empty()
-      : message = '',
-        code = 0,
-        machines = const [],
-        payMid = '',
-        payLid = '',
-        payCid = '';
+    : message = '',
+      code = 0,
+      machines = const [],
+      payMid = '',
+      payLid = '',
+      payCid = '';
 
   factory GameList.fromJson(Map<String, dynamic> json) =>
       _$GameListFromJson(json);

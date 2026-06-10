@@ -73,7 +73,7 @@ class Api {
     const fixHeaders = {
       "Host": "pay.x50.fun",
       "Origin": "https://pay.x50.fun",
-      "Referer": "https://pay.x50.fun/"
+      "Referer": "https://pay.x50.fun/",
     };
 
     /// 建立請求的header
@@ -131,13 +131,15 @@ class Api {
               : onSuccess?.call(jsonDecode(response.body));
         } else {
           onError?.call(response.statusCode, response.body);
-          log('',
-              error: 'statusCode: ${response.statusCode},\n${response.body}');
+          log(
+            '',
+            error: 'statusCode: ${response.statusCode},\n${response.body}',
+          );
           throw Exception([
             'response code: ',
             response.statusCode,
             '\nresponse body: ',
-            response.body
+            response.body,
           ]);
         }
         _checkNewSession(response.headers);
@@ -145,10 +147,7 @@ class Api {
         break;
 
       case HttpMethod.get:
-        response = await client.get(
-          url,
-          headers: buildHeaders(httpGet: true),
-        );
+        response = await client.get(url, headers: buildHeaders(httpGet: true));
         if (response.statusCode == 200) {
           isResponseString
               ? onSuccessString.call(response.body)
@@ -159,7 +158,7 @@ class Api {
             'response code: ',
             response.statusCode,
             '\nresponse body: ',
-            response.body
+            response.body,
           ]);
         }
         _checkNewSession(response.headers);
@@ -168,8 +167,10 @@ class Api {
     }
     if (verbose && kDebugMode) {
       log('request:', name: 'Api request');
-      log("headers: ${response.request?.headers.toString()}",
-          name: 'Api request');
+      log(
+        "headers: ${response.request?.headers.toString()}",
+        name: 'Api request',
+      );
       log("${response.request}", name: 'Api request');
       log('response: ${response.statusCode}', name: 'Api response');
       log(response.headers.toString(), name: 'Api response');
@@ -209,10 +210,7 @@ class Api {
   }
 }
 
-enum HttpMethod {
-  post,
-  get;
-}
+enum HttpMethod { post, get }
 
 enum ContentType {
   json('application/json'),

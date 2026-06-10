@@ -412,8 +412,9 @@ void main() {
     </script>''';
       return rawResponse;
     });
-    when(() => mockRepo.redeemQuestCampaignItem(any(), any()))
-        .thenAnswer((result) async {
+    when(() => mockRepo.redeemQuestCampaignItem(any(), any())).thenAnswer((
+      result,
+    ) async {
       return "https://pay.x50.fun/coupon/changecheck/${result.positionalArguments[0]}/${result.positionalArguments[1]}";
     });
   });

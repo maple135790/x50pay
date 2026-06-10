@@ -58,16 +58,19 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       _rawEntryDocument = const Utf8Decoder().convert(rawResponse.bodyBytes);
     } else {
       // TODO: 移動至 test 並補上測試用asset
-      _rawEntryDocument =
-          await rootBundle.loadString('assets/tests/scan_pay.html');
+      _rawEntryDocument = await rootBundle.loadString(
+        'assets/tests/scan_pay.html',
+      );
     }
 
     return _rawEntryDocument;
   }
 
   QRPayTPPRedirect _decideRedirectType(String redirectURL) {
-    log('redirectURL: $redirectURL',
-        name: 'QRPayViewModel._decideRedirectType');
+    log(
+      'redirectURL: $redirectURL',
+      name: 'QRPayViewModel._decideRedirectType',
+    );
     if (redirectURL.contains('onlinepay.jkopay.com')) {
       return (type: QRPayTPPRedirectType.jkoPay, url: redirectURL);
     } else if (redirectURL.contains('line.me')) {
@@ -112,10 +115,12 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       }
       return (type: QRPayTPPRedirectType.unknown, url: '');
     } catch (e, stacktrace) {
-      log('',
-          error: e,
-          stackTrace: stacktrace,
-          name: 'QRPayViewModel.checkThirdPartyPaymentRedirect');
+      log(
+        '',
+        error: e,
+        stackTrace: stacktrace,
+        name: 'QRPayViewModel.checkThirdPartyPaymentRedirect',
+      );
       throw Exception('checkThirdPartyPaymentRedirect failed');
     }
   }
@@ -127,18 +132,15 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       final doc = parse(rawDoc);
       hasLogined = doc.getElementsByClassName("ts-notice is-outlined").isEmpty;
       final webButtons = doc.getElementsByClassName("ts-button is-fluid");
-      _x50PayUrl = webButtons[0]
-          .attributes['onclick']!
+      _x50PayUrl = webButtons[0].attributes['onclick']!
           .split('location.href=')
           .last
           .replaceAll("'", '');
-      _jkoPayUrl = webButtons[1]
-          .attributes['onclick']!
+      _jkoPayUrl = webButtons[1].attributes['onclick']!
           .split('location.href=')
           .last
           .replaceAll("'", '');
-      _linePayUrl = webButtons[2]
-          .attributes['onclick']!
+      _linePayUrl = webButtons[2].attributes['onclick']!
           .split('location.href=')
           .last
           .replaceAll("'", '');
@@ -147,12 +149,7 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
       log('linePayUrl: $linePayUrl', name: 'QRPayViewModel.init');
       return hasLogined;
     } catch (e, stacktrace) {
-      log(
-        '',
-        error: e,
-        stackTrace: stacktrace,
-        name: 'QRPayViewModel.init',
-      );
+      log('', error: e, stackTrace: stacktrace, name: 'QRPayViewModel.init');
       return false;
     }
   }
@@ -204,16 +201,21 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
     assert(_rawMaybePayDoc.contains('付款中...'));
 
     try {
-      final prePayUrl =
-          _rawMaybePayDoc.split('location.replace("').last.split('")').first;
+      final prePayUrl = _rawMaybePayDoc
+          .split('location.replace("')
+          .last
+          .split('")')
+          .first;
       if (prePayUrl.isEmpty) throw Exception('payUrl is empty');
       final prePaymentDoc = await repository.getDocumentWithDomainPrefix(
         prePayUrl,
         _qrPayEntryUrl,
         descLabel: '取得支付前的頁面',
       );
-      final payUrl =
-          prePaymentDoc.split("\$.post('")[1].split("',function").first;
+      final payUrl = prePaymentDoc
+          .split("\$.post('")[1]
+          .split("',function")
+          .first;
       if (payUrl.isEmpty) throw Exception('payUrl is empty');
 
       _doInsert(payUrl);
@@ -250,8 +252,9 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
         _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
       } else {
         // TODO: 移動至 test 並補上測試用asset
-        _rawMaybePayDoc =
-            await rootBundle.loadString('assets/tests/scan_pay_x50pay.html');
+        _rawMaybePayDoc = await rootBundle.loadString(
+          'assets/tests/scan_pay_x50pay.html',
+        );
       }
       log(_rawMaybePayDoc);
       return _rawMaybePayDoc.contains('付款中...');
@@ -267,23 +270,29 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
         _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
       } else {
         // TODO: 移動至 test 並補上測試用asset
-        _rawMaybePayDoc =
-            await rootBundle.loadString('assets/tests/scan_pay_x50pay.html');
+        _rawMaybePayDoc = await rootBundle.loadString(
+          'assets/tests/scan_pay_x50pay.html',
+        );
       }
       final doc = parse(_rawMaybePayDoc);
-      final imageUrl =
-          doc.querySelector('body > div > a > div > img')!.attributes['src']!;
-      final cabName =
-          doc.querySelector('body > div > a > div > div')!.text.trim();
+      final imageUrl = doc
+          .querySelector('body > div > a > div > img')!
+          .attributes['src']!;
+      final cabName = doc
+          .querySelector('body > div > a > div > div')!
+          .text
+          .trim();
       final cabNum = doc
           .querySelector(
-              'body > div > div.center.aligned.content > div > div > div.header > strong')!
+            'body > div > div.center.aligned.content > div > div > div.header > strong',
+          )!
           .text
           .trim()
           .split(' ')[1];
       final rawScript = doc.querySelectorAll("body > script")[3].text.trim();
       final rawModes = doc.querySelectorAll(
-          "body > div > div.center.aligned.content > div > div > p");
+        "body > div > div.center.aligned.content > div > div > p",
+      );
       List<List<dynamic>> modes = [];
       for (var rawMode in rawModes) {
         final modeName = rawMode.text.trim();
@@ -326,8 +335,12 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
         mode: modes,
       );
     } on Exception catch (e, stacktrace) {
-      log('',
-          error: e, stackTrace: stacktrace, name: 'QRPayViewModel.gameSelect');
+      log(
+        '',
+        error: e,
+        stackTrace: stacktrace,
+        name: 'QRPayViewModel.gameSelect',
+      );
       rethrow;
     } finally {
       EasyLoading.dismiss();
@@ -335,10 +348,4 @@ class QRPayViewModel extends BaseViewModel with NfcPayMixin {
   }
 }
 
-enum QRPayTPPRedirectType {
-  none,
-  unknown,
-  x50Pay,
-  jkoPay,
-  linePay;
-}
+enum QRPayTPPRedirectType { none, unknown, x50Pay, jkoPay, linePay }

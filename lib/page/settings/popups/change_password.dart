@@ -36,8 +36,11 @@ class _ChangePasswordDialogState
       switch (viewModel.response!.code) {
         case 200:
           errorText = null;
-          await EasyLoading.showSuccess('密碼變更成功，請重新登入',
-              dismissOnTap: false, duration: const Duration(seconds: 2));
+          await EasyLoading.showSuccess(
+            '密碼變更成功，請重新登入',
+            dismissOnTap: false,
+            duration: const Duration(seconds: 2),
+          );
           await Future.delayed(const Duration(seconds: 2));
           await EasyLoading.show(dismissOnTap: false);
           nav.goNamed(AppRoutes.login.routeName);
@@ -112,9 +115,7 @@ class _ChangePasswordDialogState
             return CupertinoFormSection.insetGrouped(
               footer: Text(
                 errorText ?? '',
-                style: const TextStyle(
-                  color: CupertinoColors.destructiveRed,
-                ),
+                style: const TextStyle(color: CupertinoColors.destructiveRed),
               ),
               key: _formKey,
               children: [

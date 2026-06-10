@@ -18,16 +18,18 @@ final mockRepo = MockSettingRepository();
 
 void main() {
   setUp(() {
-    when(() => mockRepo.autoConfirm(
-          agv: any(named: 'agv'),
-          atq: any(named: 'atq'),
-          atc: any(named: 'atc'),
-          atn: any(named: 'atn'),
-          atp: any(named: 'atp'),
-          ats: any(named: 'ats'),
-          att: any(named: 'att'),
-          mtp: any(named: 'mtp'),
-        )).thenAnswer((_) async {
+    when(
+      () => mockRepo.autoConfirm(
+        agv: any(named: 'agv'),
+        atq: any(named: 'atq'),
+        atc: any(named: 'atc'),
+        atn: any(named: 'atn'),
+        atp: any(named: 'atp'),
+        ats: any(named: 'ats'),
+        att: any(named: 'att'),
+        mtp: any(named: 'mtp'),
+      ),
+    ).thenAnswer((_) async {
       const rawResponse =
           r'''{"nfcAuto": true, "nfcTicket": false, "nfcTwo": "0", "nfcSDVX": "0", "nfcNVSV": "0", "nfcQuic": true, "aGV": false, "nfcQlock": 15, "mtpMode": 0}''';
       return http.Response(rawResponse, 200);

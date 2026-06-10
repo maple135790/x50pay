@@ -13,7 +13,4 @@ BasicResponse _$BasicResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$BasicResponseToJson(BasicResponse instance) =>
-    <String, dynamic>{
-      'code': instance.code,
-      'message': instance.message,
-    };
+    <String, dynamic>{'code': instance.code, 'message': instance.message};

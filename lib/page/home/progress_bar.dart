@@ -17,13 +17,14 @@ class ProgressBar extends StatefulWidget {
   final double height;
   final Color? progressColor;
 
-  const ProgressBar(
-      {super.key,
-      required this.currentValue,
-      required this.height,
-      this.progressColor,
-      this.progressText,
-      required this.onProgressBarCreated});
+  const ProgressBar({
+    super.key,
+    required this.currentValue,
+    required this.height,
+    this.progressColor,
+    this.progressText,
+    required this.onProgressBarCreated,
+  });
 
   @override
   State<ProgressBar> createState() => _ProgressBarState();
@@ -36,8 +37,10 @@ class _ProgressBarState extends State<ProgressBar>
   late Future<void> loadImageInit;
   late Animation<double> animation;
   late ProgressIcon defaultHeartIcon;
-  late final Animation<double> curve =
-      CurvedAnimation(parent: controller, curve: Curves.linear);
+  late final Animation<double> curve = CurvedAnimation(
+    parent: controller,
+    curve: Curves.linear,
+  );
   late final AnimationController controller = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,
@@ -69,13 +72,18 @@ class _ProgressBarState extends State<ProgressBar>
 
   Future<void> _loadImage() async {
     final doc = XmlDocument.parse(
-        await rootBundle.loadString(R.images.home.heartRegular));
+      await rootBundle.loadString(R.images.home.heartRegular),
+    );
 
-    final svgPath =
-        doc.rootElement.getElement('path')!.getAttribute('d')!.toString();
+    final svgPath = doc.rootElement
+        .getElement('path')!
+        .getAttribute('d')!
+        .toString();
     heartPath = parseSvgPathData(svgPath);
-    defaultHeartIcon =
-        (iconPath: heartPath, iconSize: heartPath.getBounds().size);
+    defaultHeartIcon = (
+      iconPath: heartPath,
+      iconSize: heartPath.getBounds().size,
+    );
 
     setState(() {});
   }
@@ -136,8 +144,10 @@ class ProgressPainter extends CustomPainter {
     final yScale = defaultIconWidth / iconSize.height;
     final offsetX = progressWidth - defaultIconWidth - leadingPadding;
     final offsetY = (barHeight - iconSize.height * yScale) / 2;
-    final scalingMatrix =
-        Matrix4Transform().scaleBy(x: xScale, y: yScale).m.storage;
+    final scalingMatrix = Matrix4Transform()
+        .scaleBy(x: xScale, y: yScale)
+        .m
+        .storage;
     return iconPath.transform(scalingMatrix).shift(Offset(offsetX, offsetY));
   }
 
@@ -145,17 +155,22 @@ class ProgressPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final progressBarColor = progressColor ?? const Color(0xffff9bad);
     final textPainter = TextPainter(
-        textDirection: TextDirection.ltr,
-        text: TextSpan(
-          text: text,
-          style: const TextStyle(color: Color(0xffff5070), fontSize: 10),
-        ));
+      textDirection: TextDirection.ltr,
+      text: TextSpan(
+        text: text,
+        style: const TextStyle(color: Color(0xffff5070), fontSize: 10),
+      ),
+    );
     if (!isUseIcon) textPainter.layout();
     final progressWidth = isUseIcon
-        ? max(defaultIconWidth + leadingPadding * 2,
-            min((size.width * ((progress) / 100)), size.width))
-        : max(textPainter.width + leadingPadding * 2,
-            min((size.width * ((progress) / 100)), size.width));
+        ? max(
+            defaultIconWidth + leadingPadding * 2,
+            min((size.width * ((progress) / 100)), size.width),
+          )
+        : max(
+            textPainter.width + leadingPadding * 2,
+            min((size.width * ((progress) / 100)), size.width),
+          );
     final rect = Offset.zero & Size(progressWidth, barHeight);
     canvas.drawRRect(
       RRect.fromRectAndRadius(rect, const Radius.circular(24)),
@@ -163,15 +178,20 @@ class ProgressPainter extends CustomPainter {
     );
     if (isUseIcon) {
       canvas.drawPath(
-          _getScaledIconPath(progressWidth),
-          Paint()
-            ..colorFilter =
-                const ColorFilter.mode(Colors.white, BlendMode.srcATop));
+        _getScaledIconPath(progressWidth),
+        Paint()
+          ..colorFilter = const ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcATop,
+          ),
+      );
     } else {
       textPainter.paint(
         canvas,
-        Offset(progressWidth - textPainter.width - leadingPadding,
-            ((size.height - textPainter.height) / 2)),
+        Offset(
+          progressWidth - textPainter.width - leadingPadding,
+          ((size.height - textPainter.height) / 2),
+        ),
       );
     }
   }

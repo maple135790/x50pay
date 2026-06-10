@@ -84,11 +84,11 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
 
   List<Widget> buildPeriodChips() {
     return [
-      i18n.summaryPeriodAll,
-      i18n.summaryPeriod60,
-      i18n.summaryPeriod30,
-      i18n.summaryPeriod7,
-    ]
+          i18n.summaryPeriodAll,
+          i18n.summaryPeriod60,
+          i18n.summaryPeriod30,
+          i18n.summaryPeriod7,
+        ]
         .mapIndexed(
           (index, element) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -137,37 +137,38 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
               child: Consumer<AppSettingsProvider>(
                 builder: (context, vm, child) {
                   var summary = gameSummaries.firstWhereOrNull(
-                      (element) => element.gameName == vm.favGameName);
+                    (element) => element.gameName == vm.favGameName,
+                  );
 
                   var favGameSummary =
                       "${vm.favGameName}\n${i18n.summaryGameRecordRecord(summary?.playCount ?? 0, summary?.totalPoints ?? "0P")}";
 
                   return FutureBuilder(
-                      future: vm.getSummaryFavGameName(),
-                      builder: (context, snapshot) {
-                        return Card(
-                          clipBehavior: Clip.antiAlias,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest,
-                          child: InkWell(
-                            onLongPress: () {
-                              showAllGameSummaries(vm.favGameName);
-                            },
-                            onTap: vm.favGameName != null
-                                ? onChangeShowFavGameSummary
-                                : () {},
-                            child: buildGameSummary(
-                              hasSetFavGame:
-                                  vm.favGameName?.isNotEmpty ?? false,
-                              favGameSummary: favGameSummary,
-                            ),
+                    future: vm.getSummaryFavGameName(),
+                    builder: (context, snapshot) {
+                      return Card(
+                        clipBehavior: Clip.antiAlias,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
+                        child: InkWell(
+                          onLongPress: () {
+                            showAllGameSummaries(vm.favGameName);
+                          },
+                          onTap: vm.favGameName != null
+                              ? onChangeShowFavGameSummary
+                              : () {},
+                          child: buildGameSummary(
+                            hasSetFavGame: vm.favGameName?.isNotEmpty ?? false,
+                            favGameSummary: favGameSummary,
                           ),
-                        );
-                      });
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
-            )
+            ),
           ],
         ),
       ],
@@ -206,7 +207,7 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                   child: isShowPointSummary
                       ? Text(i18n.summaryHide)
                       : Text(i18n.summaryShow),
-                )
+                ),
               ],
             ),
           ),
@@ -243,22 +244,23 @@ class _PlaySummaryState extends BaseStatefulState<PlaySummary> {
                     child: isShowFavGameSummary
                         ? Text(i18n.summaryHide)
                         : Text(i18n.summaryShow),
-                  )
+                  ),
                 ],
               )
             : Center(
                 child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(i18n.summaryGame),
-                  const SizedBox(height: 8),
-                  Text(
-                    i18n.summaryGameFavGameSetup,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ],
-              )),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(i18n.summaryGame),
+                    const SizedBox(height: 8),
+                    Text(
+                      i18n.summaryGameFavGameSetup,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -304,25 +306,27 @@ class _SummaryFavGameModalState extends BaseStatefulState<SummaryFavGameModal> {
       return [Text(i18n.summaryGameNoData)];
     }
     return widget.gameSummaries
-        .map((e) => Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: ChoiceChip(
-                  label: Text(e.gameName),
-                  visualDensity: VisualDensity.compact,
-                  selected: selectedFavGame == e.gameName,
-                  onSelected: (value) {
-                    if (!value) {
-                      selectedFavGame = '';
-                    } else {
-                      selectedFavGame = e.gameName;
-                    }
-                    setState(() {});
-                  },
-                ),
+        .map(
+          (e) => Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: ChoiceChip(
+                label: Text(e.gameName),
+                visualDensity: VisualDensity.compact,
+                selected: selectedFavGame == e.gameName,
+                onSelected: (value) {
+                  if (!value) {
+                    selectedFavGame = '';
+                  } else {
+                    selectedFavGame = e.gameName;
+                  }
+                  setState(() {});
+                },
               ),
-            ))
+            ),
+          ),
+        )
         .toList();
   }
 
@@ -331,8 +335,11 @@ class _SummaryFavGameModalState extends BaseStatefulState<SummaryFavGameModal> {
       return [Text(i18n.summaryGameNoData)];
     }
     return widget.gameSummaries
-        .map((e) => Text(
-            '${e.gameName} : ${i18n.summaryGameRecordRecord(e.playCount, e.totalPoints)}'))
+        .map(
+          (e) => Text(
+            '${e.gameName} : ${i18n.summaryGameRecordRecord(e.playCount, e.totalPoints)}',
+          ),
+        )
         .toList();
   }
 

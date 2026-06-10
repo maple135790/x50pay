@@ -23,34 +23,39 @@ class _CollabState extends BaseStatefulState<Collab> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Stack(children: [
-              const Positioned(
+            Stack(
+              children: [
+                const Positioned(
                   right: 0,
                   child: Image(
                     image: CachedNetworkImageProvider(titleImageUrl),
                     height: 135,
                     opacity: AlwaysStoppedAnimation(0.8),
-                  )),
-              SizedBox(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
+                  ),
+                ),
+                SizedBox(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
                         color: isDarkTheme
                             ? const Color.fromARGB(12, 255, 255, 255)
                             : const Color.fromARGB(12, 0, 0, 0),
                         width: MediaQuery.of(context).size.width,
                         height: 89.19,
                         child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('X50Pay 合作商家',
-                                  style: TextStyle(fontSize: 17)),
-                              Text('查看 & 兌換合作商家優惠',
-                                  style: TextStyle(color: Color(0xff787878)))
-                            ])),
-                    Container(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('X50Pay 合作商家', style: TextStyle(fontSize: 17)),
+                            Text(
+                              '查看 & 兌換合作商家優惠',
+                              style: TextStyle(color: Color(0xff787878)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
                         height: 42.5,
                         alignment: Alignment.centerLeft,
                         color: isDarkTheme
@@ -61,18 +66,14 @@ class _CollabState extends BaseStatefulState<Collab> {
                           isScrollable: true,
                           tabs: tabs,
                           indicatorWeight: 3,
-                        )),
-                  ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ]),
-            const Expanded(
-              child: TabBarView(
-                children: [
-                  CollabShopList(),
-                ],
-              ),
+              ],
             ),
+            const Expanded(child: TabBarView(children: [CollabShopList()])),
           ],
         ),
       ),

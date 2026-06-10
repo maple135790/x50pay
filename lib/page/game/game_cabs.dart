@@ -109,12 +109,13 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
   void showCabSelectDialog() {
     final recentPlayData = GlobalSingleton.instance.recentPlayedCabinetData!;
     showCupertinoDialog(
-        context: context,
-        builder: (_) => CabSelect(
-              caboid: recentPlayData.caboid,
-              cabNum: recentPlayData.cabNum,
-              cabinetData: recentPlayData.cabinet,
-            )).then((_) {
+      context: context,
+      builder: (_) => CabSelect(
+        caboid: recentPlayData.caboid,
+        cabNum: recentPlayData.cabNum,
+        cabinetData: recentPlayData.cabinet,
+      ),
+    ).then((_) {
       setState(() {});
     });
   }
@@ -131,9 +132,10 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
           dismissDirection: DismissDirection.startToEnd,
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
-              label: '玩',
-              onPressed: showCabSelectDialog,
-              textColor: const Color(0xfff5222d)),
+            label: '玩',
+            onPressed: showCabSelectDialog,
+            textColor: const Color(0xfff5222d),
+          ),
           duration: const Duration(days: 1),
           content: const Text('再一道？'),
         ),
@@ -152,8 +154,9 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
       shrinkWrap: true,
       itemBuilder: (context, index) {
         final gameLeft = machines[index * 2];
-        final gameRight =
-            index * 2 + 1 < machines.length ? machines[index * 2 + 1] : null;
+        final gameRight = index * 2 + 1 < machines.length
+            ? machines[index * 2 + 1]
+            : null;
         return Row(
           children: [
             Expanded(
@@ -190,12 +193,14 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         children: machines
-            .map((e) => GameCabItem(
-                  e,
-                  storeName: storeName,
-                  onCoinInserted: showPlayAgainSnackBar,
-                  onItemPressed: clearSnackBar,
-                ))
+            .map(
+              (e) => GameCabItem(
+                e,
+                storeName: storeName,
+                onCoinInserted: showPlayAgainSnackBar,
+                onItemPressed: clearSnackBar,
+              ),
+            )
             .toList(),
       ),
     );
@@ -203,11 +208,13 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
 
   @override
   Widget build(BuildContext context) {
-    final store =
-        context.select<GameCabsViewModel, Store?>((vm) => vm.selectedStore);
+    final store = context.select<GameCabsViewModel, Store?>(
+      (vm) => vm.selectedStore,
+    );
     final storeName = store?.name ?? '';
     final machines = context.select<GameCabsViewModel, List<Machine>>(
-        (vm) => vm.gameList.machines!);
+      (vm) => vm.gameList.machines!,
+    );
     // if (GlobalSingleton.instance.recentPlayedCabinetData != null) {
     //   showPlayAgainSnackBar();
     // }
@@ -285,10 +292,10 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
                           color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 12,
                           shadows: const [
-                            Shadow(color: Colors.black, blurRadius: 15)
+                            Shadow(color: Colors.black, blurRadius: 15),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -303,20 +310,21 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
       padding: const EdgeInsets.all(12),
       child: Consumer<GameCabsViewModel>(
         builder: (context, vm, child) {
-          var tabs = {
-            0: Text(i18n.pinnedGame),
-          };
+          var tabs = {0: Text(i18n.pinnedGame)};
           vm.storeDetails.map((details) {
-            tabs[vm.storeDetails.indexOf(details) + 1] =
-                Text(details.store.name ?? '');
+            tabs[vm.storeDetails.indexOf(details) + 1] = Text(
+              details.store.name ?? '',
+            );
           }).toList();
           return CupertinoSlidingSegmentedControl(
             groupValue: vm.segmentedControlIndex,
             children: tabs,
             backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
             thumbColor: Theme.of(context).colorScheme.primaryContainer,
-            padding:
-                const EdgeInsets.symmetric(vertical: 3.75, horizontal: 7.5),
+            padding: const EdgeInsets.symmetric(
+              vertical: 3.75,
+              horizontal: 7.5,
+            ),
             onValueChanged: (value) {
               if (value == null) return;
               vm.onTabIndexChanged(value);
@@ -367,10 +375,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
           margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
           padding: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: borderColor,
-              width: 1,
-            ),
+            border: Border.all(color: borderColor, width: 1),
             borderRadius: BorderRadius.circular(5),
             shape: BoxShape.rectangle,
           ),
@@ -381,10 +386,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
           child: Container(
             color: scaffoldBackgroundColor,
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: const Text(
-              '離峰時段',
-              style: TextStyle(fontSize: 13),
-            ),
+            child: const Text('離峰時段', style: TextStyle(fontSize: 13)),
           ),
         ),
         const Positioned(
@@ -399,7 +401,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
               Text('●   詳情請見粉絲專頁更新貼文'),
             ],
           ),
-        )
+        ),
       ],
     );
 
@@ -409,11 +411,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
         storeBanner,
         const Padding(
           padding: EdgeInsets.only(top: 10, bottom: 7),
-          child: Divider(
-            height: 0,
-            indent: 12,
-            endIndent: 12,
-          ),
+          child: Divider(height: 0, indent: 12, endIndent: 12),
         ),
         gameCabs,
         discountHourCaution,
@@ -432,9 +430,7 @@ class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
                 child: SingleChildScrollView(
                   child: store != null
                       ? storeGame
-                      : FavGame(
-                          scaffoldMessengerKey: _scaffoldMessengerKey,
-                        ),
+                      : FavGame(scaffoldMessengerKey: _scaffoldMessengerKey),
                 ),
               ),
             ],

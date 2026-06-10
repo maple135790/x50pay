@@ -24,8 +24,9 @@ class PageDialog extends StatefulWidget {
 
 class _PageDialogState extends BaseStatefulState<PageDialog> {
   static const _kMaxBottomSheetHeight = 80.0;
-  ValueNotifier<Offset> offsetNotifier =
-      ValueNotifier(const Offset(0, _kMaxBottomSheetHeight));
+  ValueNotifier<Offset> offsetNotifier = ValueNotifier(
+    const Offset(0, _kMaxBottomSheetHeight),
+  );
 
   void showButtonBar(bool isShow) async {
     await Future.delayed(const Duration(milliseconds: 50));
@@ -38,7 +39,8 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final shouldShowBottomSheet = widget.customConfirmButton != null ||
+    final shouldShowBottomSheet =
+        widget.customConfirmButton != null ||
         (widget.customConfirmButton == null && widget.onConfirm != null);
     final buttomSheet = ValueListenableBuilder(
       valueListenable: offsetNotifier,
@@ -68,11 +70,12 @@ class _PageDialogState extends BaseStatefulState<PageDialog> {
             children: [
               Expanded(
                 child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: isDarkTheme ? buttonStyleDark : buttonStyleLight,
-                    child: Text(i18n.dialogReturn)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: isDarkTheme ? buttonStyleDark : buttonStyleLight,
+                  child: Text(i18n.dialogReturn),
+                ),
               ),
               const SizedBox(width: 15),
               Expanded(
@@ -146,13 +149,14 @@ class _DialogSwitchState extends State<DialogSwitch> {
     return CupertinoListTile.notched(
       title: Text(widget.title),
       trailing: CupertinoSwitch(
-          activeTrackColor: CupertinoColors.systemGreen,
-          value: v,
-          onChanged: (newValue) {
-            v = newValue;
-            setState(() {});
-            widget.onChanged?.call(newValue);
-          }),
+        activeTrackColor: CupertinoColors.systemGreen,
+        value: v,
+        onChanged: (newValue) {
+          v = newValue;
+          setState(() {});
+          widget.onChanged?.call(newValue);
+        },
+      ),
     );
   }
 }
@@ -201,7 +205,8 @@ class _DialogDropdownState<T> extends State<DialogDropdown<T>> {
         widget.onChanged?.call(v as T);
       },
       itemBuilder: (context, index) => Center(
-          child: Text(widget.avaliList[index].toString().split('.').last)),
+        child: Text(widget.avaliList[index].toString().split('.').last),
+      ),
     );
   }
 
@@ -211,13 +216,11 @@ class _DialogDropdownState<T> extends State<DialogDropdown<T>> {
       builder: (BuildContext context) => Container(
         height: 216,
         padding: const EdgeInsets.only(top: 6.0),
-        margin:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        child: SafeArea(
-          top: false,
-          child: buildCupertinoPicker(),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(top: false, child: buildCupertinoPicker()),
       ),
     );
   }
@@ -233,7 +236,9 @@ class _DialogDropdownState<T> extends State<DialogDropdown<T>> {
           Text(
             v.toString().split('.').last,
             style: const TextStyle(
-                color: CupertinoColors.systemGrey, fontWeight: FontWeight.w500),
+              color: CupertinoColors.systemGrey,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(width: 10),
           const CupertinoListTileChevron(),

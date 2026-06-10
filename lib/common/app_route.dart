@@ -15,17 +15,25 @@ class AppRoutes {
   static const quicPayPref = (routeName: 'quicPayPref', path: 'quicPayPref');
   static const paymentPref = (routeName: 'paymentPref', path: 'paymentPref');
   static const padPref = (routeName: 'padPref', path: 'padPref');
-  static const changePassword =
-      (routeName: 'changePassword', path: 'changePassword');
+  static const changePassword = (
+    routeName: 'changePassword',
+    path: 'changePassword',
+  );
   static const changeEmail = (routeName: 'changeEmail', path: 'changeEmail');
   static const bidRecords = (routeName: 'bidRecords', path: 'bidRecords');
-  static const ticketRecords =
-      (routeName: 'ticketRecords', path: 'ticketRecords');
+  static const ticketRecords = (
+    routeName: 'ticketRecords',
+    path: 'ticketRecords',
+  );
   static const playRecords = (routeName: 'playRecords', path: 'playRecords');
-  static const x50PayAppSetting =
-      (routeName: 'x50PayAppSetting', path: 'x50PayAppSetting');
-  static const ticketUsedRecords =
-      (routeName: 'ticketUsedRecords', path: 'ticketUsedRecords');
+  static const x50PayAppSetting = (
+    routeName: 'x50PayAppSetting',
+    path: 'x50PayAppSetting',
+  );
+  static const ticketUsedRecords = (
+    routeName: 'ticketUsedRecords',
+    path: 'ticketUsedRecords',
+  );
   static const gameStore = (routeName: 'gameStore', path: '/game/store');
   static const gameCabs = (routeName: 'gameCabs', path: '/game/cabs');
   static const gameCab = (routeName: 'gameCab', path: ':mid');
@@ -33,9 +41,13 @@ class AppRoutes {
   static const gradeBox = (routeName: 'gradeBox', path: '/gift/gradeBox');
   static const collab = (routeName: 'collab', path: '/collab');
   static const scanQRCode = (routeName: 'scanQRCode', path: '/scanQRCode');
-  static const questCampaign =
-      (routeName: 'questCampaign', path: 'questCampaign/:couid');
+  static const questCampaign = (
+    routeName: 'questCampaign',
+    path: 'questCampaign/:couid',
+  );
   static const qrPay = (routeName: 'qrPay', path: '/qrPay/:caboid/:sid');
-  static const freePointRecords =
-      (routeName: 'freePointRecords', path: 'freePointRecords');
+  static const freePointRecords = (
+    routeName: 'freePointRecords',
+    path: 'freePointRecords',
+  );
 }

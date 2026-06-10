@@ -30,10 +30,14 @@ class _BidRecordsState extends BaseStatefulState<BidRecords>
   List<DataRow> buildRows(BidLogModel model) {
     List<DataRow> rows = [];
     for (BidLog log in model.logs) {
-      rows.add(DataRow(cells: [
-        DataCell(Text(log.time!)),
-        DataCell(Text(log.point!.toInt().toString())),
-      ]));
+      rows.add(
+        DataRow(
+          cells: [
+            DataCell(Text(log.time!)),
+            DataCell(Text(log.point!.toInt().toString())),
+          ],
+        ),
+      );
     }
     return rows;
   }

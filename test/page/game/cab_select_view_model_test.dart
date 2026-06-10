@@ -20,12 +20,9 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({"store_id": "7037656"});
 
-    when(() => mockRepo.doInsert(
-          any(),
-          any(),
-          any(),
-          any(),
-        )).thenAnswer((_) async {
+    when(() => mockRepo.doInsert(any(), any(), any(), any())).thenAnswer((
+      _,
+    ) async {
       const rawResponse = '''{"code":200,"message":"smth"}''';
       return BasicResponse.fromJson(json.decode(rawResponse));
     });

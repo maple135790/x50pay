@@ -10,8 +10,11 @@ class FreePointModel {
   @JsonKey(name: 'log')
   final List<FreePLog> logs;
 
-  const FreePointModel(
-      {required this.code, required this.message, required this.logs});
+  const FreePointModel({
+    required this.code,
+    required this.message,
+    required this.logs,
+  });
 
   factory FreePointModel.fromJson(Map<String, dynamic> json) =>
       _$FreePointModelFromJson(json);
@@ -29,13 +32,14 @@ class FreePLog {
   @JsonKey(name: '_id')
   final UnderscoreId id;
 
-  const FreePLog(
-      {required this.limitTime,
-      required this.uid,
-      required this.expire,
-      required this.fpoint,
-      required this.much,
-      required this.id});
+  const FreePLog({
+    required this.limitTime,
+    required this.uid,
+    required this.expire,
+    required this.fpoint,
+    required this.much,
+    required this.id,
+  });
 
   factory FreePLog.fromJson(Map<String, dynamic> json) =>
       _$FreePLogFromJson(json);

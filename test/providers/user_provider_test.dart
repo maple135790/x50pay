@@ -27,10 +27,7 @@ void main() {
 
   void arrangeGetUserReturnsErrorCode() {
     when(mockRepo.getUser).thenAnswer((_) async {
-      return const UserModel(
-        message: 'error test',
-        code: 404,
-      );
+      return const UserModel(message: 'error test', code: 404);
     });
   }
 

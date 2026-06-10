@@ -9,8 +9,11 @@ class TicDateLogModel {
   final List<List<dynamic>> logs;
   final String message;
 
-  const TicDateLogModel(
-      {required this.code, required this.logs, required this.message});
+  const TicDateLogModel({
+    required this.code,
+    required this.logs,
+    required this.message,
+  });
 
   factory TicDateLogModel.fromJson(Map<String, dynamic> json) =>
       _$TicDateLogModelFromJson(json);
