@@ -49,7 +49,7 @@ class EasyLoadingTheme {
       EasyLoading.instance.loadingStyle == EasyLoadingStyle.custom
           ? EasyLoading.instance.backgroundColor!
           : EasyLoading.instance.loadingStyle == EasyLoadingStyle.dark
-              ? Colors.black.withOpacity(0.9)
+              ? Colors.black.withValues(alpha: 0.9)
               : Colors.white;
 
   /// boxShadow color of loading
@@ -72,28 +72,28 @@ class EasyLoadingTheme {
     return maskType == EasyLoadingMaskType.custom
         ? EasyLoading.instance.maskColor!
         : maskType == EasyLoadingMaskType.black
-            ? Colors.black.withOpacity(0.5)
+            ? Colors.black.withValues(alpha: 0.5)
             : Colors.transparent;
   }
 
   /// loading animation
   static EasyLoadingAnimation get loadingAnimation {
-    EasyLoadingAnimation _animation;
+    EasyLoadingAnimation animation;
     switch (EasyLoading.instance.animationStyle) {
       case EasyLoadingAnimationStyle.custom:
-        _animation = EasyLoading.instance.customAnimation!;
+        animation = EasyLoading.instance.customAnimation!;
         break;
       case EasyLoadingAnimationStyle.offset:
-        _animation = OffsetAnimation();
+        animation = OffsetAnimation();
         break;
       case EasyLoadingAnimationStyle.scale:
-        _animation = ScaleAnimation();
+        animation = ScaleAnimation();
         break;
       default:
-        _animation = OpacityAnimation();
+        animation = OpacityAnimation();
         break;
     }
-    return _animation;
+    return animation;
   }
 
   /// font size of status

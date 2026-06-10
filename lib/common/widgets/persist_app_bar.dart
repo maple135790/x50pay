@@ -42,8 +42,7 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
                       children: [
                         CountryFlag.fromCountryCode(
                           S.delegate.supportedLocales[index].countryCode ?? '',
-                          height: 25,
-                          width: 25,
+                          theme: const ImageTheme(height: 15, width: 15),
                         ),
                         const SizedBox(width: 10),
                         Text(S.delegate.supportedLocales[index].displayText),
@@ -126,8 +125,10 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
                               children: [
                                 CountryFlag.fromCountryCode(
                                   vm.currentLocale.countryCode ?? '',
-                                  height: 15,
-                                  width: 15,
+                                  theme: const ImageTheme(
+                                    height: 15,
+                                    width: 15,
+                                  ),
                                 ),
                                 const SizedBox(width: 5),
                                 Text(

@@ -33,19 +33,19 @@ class OffsetAnimation extends EasyLoadingAnimation {
     AnimationController controller,
     AlignmentGeometry alignment,
   ) {
-    Offset _begin = alignment == AlignmentDirectional.topCenter
+    Offset begin = alignment == AlignmentDirectional.topCenter
         ? const Offset(0, -1)
         : alignment == AlignmentDirectional.bottomCenter
             ? const Offset(0, 1)
             : const Offset(0, 0);
-    Animation<Offset> _animation = Tween(
-      begin: _begin,
+    Animation<Offset> animation = Tween(
+      begin: begin,
       end: const Offset(0, 0),
     ).animate(controller);
     return Opacity(
       opacity: controller.value,
       child: SlideTransition(
-        position: _animation,
+        position: animation,
         child: child,
       ),
     );

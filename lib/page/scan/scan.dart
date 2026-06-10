@@ -65,8 +65,9 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
       lowerBound: 0.4,
     );
 
-    qrPayModalTransistionController
-        .drive(CurveTween(curve: Curves.fastLinearToSlowEaseIn));
+    qrPayModalTransistionController.drive(
+      CurveTween(curve: Curves.fastLinearToSlowEaseIn),
+    );
     scannerBlinkController.repeat(reverse: true);
     blinkAnimation = CurvedAnimation(
       parent: scannerBlinkController,
@@ -131,10 +132,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
         showQRPayModal(controller, viewModel);
         break;
       case QRPayTPPRedirectType.jkoPay:
-        launchUrlString(
-          redirection.url,
-          mode: LaunchMode.externalApplication,
-        );
+        launchUrlString(redirection.url, mode: LaunchMode.externalApplication);
         controller.start();
         EasyLoading.dismiss();
         break;
@@ -210,8 +208,10 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
         final msg = await Repository().qrDecryt(value);
         if (msg != 'oof') {
           setState(() {});
-          await EasyLoading.showInfo(msg,
-              duration: const Duration(milliseconds: 1000));
+          await EasyLoading.showInfo(
+            msg,
+            duration: const Duration(milliseconds: 1000),
+          );
           await Future.delayed(const Duration(milliseconds: 1300));
           nav.goNamed(AppRoutes.home.routeName);
         }
@@ -225,7 +225,6 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
   Widget qrViewErrorBuilder(
     BuildContext context,
     MobileScannerException error,
-    Widget? _,
   ) {
     log('', name: 'MobileScanner', error: error);
 
@@ -258,10 +257,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
     final qrView = LayoutBuilder(
       builder: (context, constraints) {
         final scanWindow = Rect.fromCenter(
-          center: Offset(
-            constraints.maxWidth / 2,
-            constraints.maxHeight / 2,
-          ),
+          center: Offset(constraints.maxWidth / 2, constraints.maxHeight / 2),
           width: constraints.maxWidth * 0.65,
           height: constraints.maxWidth * 0.65,
         );
@@ -273,7 +269,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
               fit: BoxFit.contain,
               scanWindow: scanWindow,
               errorBuilder: qrViewErrorBuilder,
-              placeholderBuilder: (context, child) {
+              placeholderBuilder: (context) {
                 return const SizedBox.expand();
               },
               onDetect: (barcodes) => handleBarcode(barcodes.barcodes.first),
@@ -282,9 +278,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
               valueListenable: controller,
               builder: (context, controller, child) {
                 if (!controller.isRunning) return const SizedBox();
-                return CustomPaint(
-                  painter: ScannerOverlayPainter(scanWindow),
-                );
+                return CustomPaint(painter: ScannerOverlayPainter(scanWindow));
               },
             ),
             ValueListenableBuilder(
@@ -293,9 +287,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
                 if (!controller.isRunning) return const SizedBox();
                 return FadeTransition(
                   opacity: blinkAnimation,
-                  child: CustomPaint(
-                    painter: ScannerBorderPainter(scanWindow),
-                  ),
+                  child: CustomPaint(painter: ScannerBorderPainter(scanWindow)),
                 );
               },
             ),
@@ -316,10 +308,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
               );
             },
           ),
-          Flexible(
-            flex: 1,
-            child: Center(child: topUpButton),
-          )
+          Flexible(flex: 1, child: Center(child: topUpButton)),
         ],
       ),
     );
@@ -336,7 +325,8 @@ class ScannerOverlayPainter extends CustomPainter {
     final backgroundPath = Path()..addRect(Rect.largest);
     final rrCutoutPath = Path()..addRect(scanWindow);
 
-    final backgroundPaint = Paint()..color = Colors.black.withValues(alpha: 0.35);
+    final backgroundPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.35);
 
     final backgroundWithCutout = Path.combine(
       PathOperation.difference,

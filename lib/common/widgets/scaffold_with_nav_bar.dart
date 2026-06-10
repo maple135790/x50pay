@@ -429,8 +429,7 @@ class _LanguageSelectDialogState
                 children: [
                   CountryFlag.fromCountryCode(
                     S.delegate.supportedLocales[index].countryCode ?? '',
-                    height: 25,
-                    width: 25,
+                    theme: const ImageTheme(height: 15, width: 15),
                   ),
                   const SizedBox(width: 10),
                   Text(S.delegate.supportedLocales[index].displayText),

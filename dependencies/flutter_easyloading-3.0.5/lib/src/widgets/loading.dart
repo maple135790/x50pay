@@ -28,14 +28,11 @@ import 'package:flutter_easyloading/src/widgets/overlay_entry.dart';
 class FlutterEasyLoading extends StatefulWidget {
   final Widget? child;
 
-  const FlutterEasyLoading({
-    Key? key,
-    required this.child,
-  })  : assert(child != null),
-        super(key: key);
+  const FlutterEasyLoading({super.key, required this.child})
+    : assert(child != null);
 
   @override
-  _FlutterEasyLoadingState createState() => _FlutterEasyLoadingState();
+  State<FlutterEasyLoading> createState() => _FlutterEasyLoadingState();
 }
 
 class _FlutterEasyLoadingState extends State<FlutterEasyLoading> {

@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nfc_manager/ndef_record.dart';
 import 'package:nfc_manager/nfc_manager.dart';
-import 'package:nfc_manager/platform_tags.dart';
+import 'package:nfc_manager/nfc_manager_android.dart';
+import 'package:nfc_manager_ndef/nfc_manager_ndef.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/global_singleton.dart';
@@ -53,7 +56,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
 
     Ndef? ndef = Ndef.from(tag);
     if (ndef == null) {
-      MifareClassic.from(tag);
+      MifareClassicAndroid.from(tag);
       if (!kDebugMode) {
         log('not capable of this tag', name: 'handleNfc');
         return;
@@ -129,10 +132,11 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     }
 
     for (var record in message.records) {
-      if (record.typeNameFormat != NdefTypeNameFormat.nfcWellknown) continue;
-      final scheme = NdefRecord.URI_PREFIX_LIST[record.payload[0]].toString();
-      final url = String.fromCharCodes(record.payload);
-      if (Uri.tryParse(scheme + url) == null) continue;
+      if (record.typeNameFormat != TypeNameFormat.wellKnown) continue;
+      // TODO: nfc api 變更，需要重新測試
+      // final scheme = NdefRecord.URI_PREFIX_LIST[record.payload[0]].toString();
+      // final url = String.fromCharCodes(record.payload);
+      // if (Uri.tryParse(scheme + url) == null) continue;
       urlRecord = record;
     }
     // 沒找到符合的record
@@ -161,7 +165,8 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   void _startNfcScan() async {
     NfcManager.instance.stopSession();
 
-    cardEmuInterval = await Prefs.getInt(PrefsToken.cardEmulationInterval) ??
+    cardEmuInterval =
+        await Prefs.getInt(PrefsToken.cardEmulationInterval) ??
         PrefsToken.cardEmulationInterval.defaultValue;
     log('card Emu Interval: $cardEmuInterval', name: 'startNfcScan');
 
@@ -188,22 +193,14 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   }
 
   Future<void> _nfcTest(NfcTag tag) async {
-    final ndef = Ndef(
-      tag: tag,
-      isWritable: true,
-      maxSize: 137,
-      cachedMessage: NdefMessage([
-        NdefRecord.createUri(
-          Uri.parse('https://pay.x50.fun/nfcPad/byMid/50Pad'),
-        ),
-      ]),
-      additionalData: {},
-    );
+    final ndef = CustomNdef.from(tag);
+    if (ndef == null) return;
     _handleNfcEvent(ndef);
   }
 
-  Future<bool> _checkNfcAvailable() {
-    return NfcManager.instance.isAvailable();
+  Future<bool> _checkNfcAvailable() async {
+    final result = await NfcManager.instance.checkAvailability();
+    return result == NfcAvailability.enabled;
   }
 
   Future<void> _tryActivateNfc() async {
@@ -242,8 +239,42 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   }
 
   Future<bool> _getNfcPreferTicketSetting(SettingRepository settingRepo) async {
-    final settings =
-        await SettingsViewModel(settingRepo: settingRepo).getPaymentSettings();
+    final settings = await SettingsViewModel(
+      settingRepo: settingRepo,
+    ).getPaymentSettings();
     return settings.nfcTicket;
+  }
+}
+
+abstract class CustomNdef extends Ndef {
+  @override
+  Map<String, dynamic> get additionalData => {};
+
+  @override
+  NdefMessage? get cachedMessage {
+    const uri = 'https://pay.x50.fun/nfcPad/byMid/50Pad';
+    const prefixIndex = 4;
+    return NdefMessage(
+      records: [
+        NdefRecord(
+          typeNameFormat: TypeNameFormat.wellKnown,
+          type: Uint8List.fromList([0x55]),
+          identifier: Uint8List.fromList([]),
+          payload: Uint8List.fromList(
+            [prefixIndex] + utf8.encode(uri.substring("https://".length)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  bool get isWritable => true;
+
+  @override
+  int get maxSize => 137;
+
+  static Ndef? from(NfcTag tag) {
+    return Ndef.from(tag);
   }
 }

@@ -281,10 +281,10 @@ class EasyLoading {
 
     if (_instance.w == null || _instance.progressKey == null) {
       if (_instance.key != null) await dismiss(animation: false);
-      GlobalKey<EasyLoadingProgressState> _progressKey =
+      GlobalKey<EasyLoadingProgressState> progressKey =
           GlobalKey<EasyLoadingProgressState>();
       Widget w = EasyLoadingProgress(
-        key: _progressKey,
+        key: progressKey,
         value: value,
       );
       _instance
@@ -294,7 +294,7 @@ class EasyLoading {
           dismissOnTap: false,
           w: w,
         )
-        .._progressKey = _progressKey;
+        .._progressKey = progressKey;
     }
     // update progress
     _instance.progressKey?.currentState?.updateProgress(min(1.0, value));
