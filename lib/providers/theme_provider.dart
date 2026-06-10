@@ -64,7 +64,7 @@ extension AppThemeMode on ThemeMode {
               },
             ),
           ),
-          tabBarTheme: const TabBarTheme(
+          tabBarTheme: const TabBarThemeData(
             tabAlignment: TabAlignment.start,
             dividerHeight: 0,
             indicatorSize: TabBarIndicatorSize.tab,
@@ -134,7 +134,7 @@ extension AppThemeMode on ThemeMode {
             TargetPlatform.android: ZoomPageTransitionsBuilder(),
             TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
           }),
-          dialogTheme: const DialogTheme(
+          dialogTheme: const DialogThemeData(
             surfaceTintColor: Colors.transparent,
             backgroundColor: Color(0xff1e1e1e),
             titleTextStyle: TextStyle(
@@ -143,9 +143,8 @@ extension AppThemeMode on ThemeMode {
               wordSpacing: 0.15,
             ),
           ),
-          dialogBackgroundColor: const Color(0xff1e1e1e),
           dividerTheme: const DividerThemeData(color: Color(0xff3e3e3e)),
-          tabBarTheme: const TabBarTheme(
+          tabBarTheme: const TabBarThemeData(
             tabAlignment: TabAlignment.start,
             labelColor: Colors.white,
             dividerColor: Colors.transparent,

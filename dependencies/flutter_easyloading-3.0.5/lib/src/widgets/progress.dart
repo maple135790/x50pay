@@ -29,10 +29,7 @@ import 'package:flutter_easyloading/src/theme.dart';
 class EasyLoadingProgress extends StatefulWidget {
   final double value;
 
-  const EasyLoadingProgress({
-    Key? key,
-    required this.value,
-  }) : super(key: key);
+  const EasyLoadingProgress({super.key, required this.value});
 
   @override
   EasyLoadingProgressState createState() => EasyLoadingProgressState();
@@ -73,14 +70,12 @@ class EasyLoadingProgressState extends State<EasyLoadingProgress> {
 }
 
 class _CircleProgress extends ProgressIndicator {
-  final double value;
   final double width;
-  final Color color;
 
-  _CircleProgress({
-    required this.value,
+  const _CircleProgress({
+    required super.value,
+    required super.color,
     required this.width,
-    required this.color,
   });
 
   @override
@@ -102,8 +97,11 @@ class __CircleProgressState extends State<_CircleProgress> {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _CirclePainter(
-        color: widget.color,
-        value: widget.value,
+        color:
+            widget.color ??
+            ProgressIndicatorTheme.of(context).color ??
+            Theme.of(context).colorScheme.primary,
+        value: widget.value ?? 0.5,
         width: widget.width,
       ),
     );

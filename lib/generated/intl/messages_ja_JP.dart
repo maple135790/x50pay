@@ -35,161 +35,173 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "addFavGameSubtitle":
-            MessageLookupByLibrary.simpleMessage("よく遊ぶゲームを選んでください！"),
-        "addFavGameTitle": MessageLookupByLibrary.simpleMessage("お気に入りのゲームを登録"),
-        "changeFavGameSubtitle":
-            MessageLookupByLibrary.simpleMessage("よく遊ぶゲームを変更します"),
-        "changeFavGameTitle":
-            MessageLookupByLibrary.simpleMessage("お気に入りのゲームを変更"),
-        "confirmExitAppContent":
-            MessageLookupByLibrary.simpleMessage("アプリを終了します\nよろしいですか？"),
-        "confirmExitAppTitle":
-            MessageLookupByLibrary.simpleMessage("X50Pay アプリ終了"),
-        "continuous": m0,
-        "dialogCancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
-        "dialogConfirm": MessageLookupByLibrary.simpleMessage("OK"),
-        "dialogNext": MessageLookupByLibrary.simpleMessage("次へ"),
-        "dialogReturn": MessageLookupByLibrary.simpleMessage("戻る"),
-        "dialogSave": MessageLookupByLibrary.simpleMessage("セーフ"),
-        "dressRoomTitle": MessageLookupByLibrary.simpleMessage("キャラ変更/着せ替え"),
-        "gacha": m1,
-        "gameCabTileLarge": MessageLookupByLibrary.simpleMessage("大きい"),
-        "gameCabTileSmall": MessageLookupByLibrary.simpleMessage("小さい"),
-        "gameDiscountHour": MessageLookupByLibrary.simpleMessage("オフピークタイム"),
-        "gameLocation": MessageLookupByLibrary.simpleMessage("ロケーション"),
-        "gameMPass": MessageLookupByLibrary.simpleMessage("お得パス"),
-        "gameNormalHour": MessageLookupByLibrary.simpleMessage("ピークタイム"),
-        "gameTicket": MessageLookupByLibrary.simpleMessage("遊びチケット"),
-        "gameUnlimit": MessageLookupByLibrary.simpleMessage("予約された無制限台があります"),
-        "gameUnlimitTitle": MessageLookupByLibrary.simpleMessage("予約された時間帯"),
-        "gameWait": m2,
-        "gameWeekday": MessageLookupByLibrary.simpleMessage("平日"),
-        "gameWeekends": MessageLookupByLibrary.simpleMessage("休日"),
-        "gr2HeartBox": MessageLookupByLibrary.simpleMessage("絆ポイントショップ"),
-        "gr2Limit": m3,
-        "gr2ResetDate": MessageLookupByLibrary.simpleMessage("シーズン変わる日 : "),
-        "heart": MessageLookupByLibrary.simpleMessage("絆ランク"),
-        "infoNotify": MessageLookupByLibrary.simpleMessage("最新イベント"),
-        "loginBiometrics": MessageLookupByLibrary.simpleMessage("生体認証でログイン"),
-        "loginBiometricsReason":
-            MessageLookupByLibrary.simpleMessage("X50Pay App で生体認証を使用"),
-        "loginEmail": MessageLookupByLibrary.simpleMessage("メールアドレス"),
-        "loginError": MessageLookupByLibrary.simpleMessage("ログインエラー"),
-        "loginForgotPassword":
-            MessageLookupByLibrary.simpleMessage("パスワードを忘れたお方"),
-        "loginLogin": MessageLookupByLibrary.simpleMessage("ログイン"),
-        "loginPassword": MessageLookupByLibrary.simpleMessage("パスワード"),
-        "loginSignUp": MessageLookupByLibrary.simpleMessage("会員登録"),
-        "loginSub": MessageLookupByLibrary.simpleMessage("24時間年中無休"),
-        "loginWelcome": MessageLookupByLibrary.simpleMessage("おかえりなさい！"),
-        "monthlyPass": MessageLookupByLibrary.simpleMessage("お得パス : "),
-        "mpassInvalid": MessageLookupByLibrary.simpleMessage("未購入"),
-        "mpassValid": MessageLookupByLibrary.simpleMessage("購入済み"),
-        "msgNotify": MessageLookupByLibrary.simpleMessage("お知らせ"),
-        "navCollab": MessageLookupByLibrary.simpleMessage("コラボ"),
-        "navGame": MessageLookupByLibrary.simpleMessage("コインを\n  入れる"),
-        "navGift": MessageLookupByLibrary.simpleMessage("プレゼント"),
-        "navSettings": MessageLookupByLibrary.simpleMessage("オプション"),
-        "nbusyCoin": MessageLookupByLibrary.simpleMessage("ゲーム中"),
-        "nbusyNoCoin": MessageLookupByLibrary.simpleMessage("空いています"),
-        "nbusyS1": MessageLookupByLibrary.simpleMessage("空いている"),
-        "nbusyS2": MessageLookupByLibrary.simpleMessage("やや空いている"),
-        "nbusyS3": MessageLookupByLibrary.simpleMessage("混雑中"),
-        "nextLv": MessageLookupByLibrary.simpleMessage("次のランク : "),
-        "officialNotify": MessageLookupByLibrary.simpleMessage("公式インフォメーション"),
-        "pinnedGame": MessageLookupByLibrary.simpleMessage("お気に入り"),
-        "serviceError": MessageLookupByLibrary.simpleMessage(
-            "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。"),
-        "setFavGameTitle": MessageLookupByLibrary.simpleMessage("お気に入りのゲーム"),
-        "summaryGame": MessageLookupByLibrary.simpleMessage("機種別"),
-        "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("機種詳細"),
-        "summaryGameFavGame": MessageLookupByLibrary.simpleMessage("メイン機種"),
-        "summaryGameFavGameSetup":
-            MessageLookupByLibrary.simpleMessage("メイン機種設定できます"),
-        "summaryGameNoData": MessageLookupByLibrary.simpleMessage(
-            "合算期間中にプレー記録がありません。別の合算期間を選んでください"),
-        "summaryGameRecordRecord": m4,
-        "summaryGameRecordTitle": MessageLookupByLibrary.simpleMessage("機種記録:"),
-        "summaryHide": MessageLookupByLibrary.simpleMessage("非表示"),
-        "summaryNoData": MessageLookupByLibrary.simpleMessage("データなし"),
-        "summaryPeriod": MessageLookupByLibrary.simpleMessage("通算期間"),
-        "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30日"),
-        "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60日"),
-        "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7日"),
-        "summaryPeriodAll": MessageLookupByLibrary.simpleMessage("すべて"),
-        "summaryPoint": MessageLookupByLibrary.simpleMessage("使用済ポイント"),
-        "summaryShow": MessageLookupByLibrary.simpleMessage("表示"),
-        "ticketBalance": MessageLookupByLibrary.simpleMessage("所持しているチケット : "),
-        "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
-        "userAppSettingsAccentColor":
-            MessageLookupByLibrary.simpleMessage("アクセントカラー"),
-        "userAppSettingsBiometrics":
-            MessageLookupByLibrary.simpleMessage("生体認証ログイン"),
-        "userAppSettingsBiometricsDisable":
-            MessageLookupByLibrary.simpleMessage("生体認証ログイン解除"),
-        "userAppSettingsBiometricsDisableContent":
-            MessageLookupByLibrary.simpleMessage(
-                "生体認証ログインを解除しますか？\n再利用の場合は、ログイン情報を再び入力します"),
-        "userAppSettingsBiometricsEnableContent":
-            MessageLookupByLibrary.simpleMessage(
-                "注意：\n\nこの機能は、ログイン情報を暗号化して携帯電話に保存します。生体認証でログインすると、ログイン情報が自動的に入力されます。\n\nAndroid は KeyStore を使用して保存します。\niOS は KeyChain を使用して保存します。\n\nログイン情報を変更した場合は、再度設定する必要があります。\n\nこの機能を使用してもよろしいですか？"),
-        "userAppSettingsBiometricsLoginCred":
-            MessageLookupByLibrary.simpleMessage("ログイン情報"),
-        "userAppSettingsBiometricsLoginCredContent":
-            MessageLookupByLibrary.simpleMessage("ログイン情報を再入力してください"),
-        "userAppSettingsBiometricsLoginTry":
-            MessageLookupByLibrary.simpleMessage("ログインを試みる"),
-        "userAppSettingsCardEmulationInterval":
-            MessageLookupByLibrary.simpleMessage("Card Emulation 間隔"),
-        "userAppSettingsEnableDarkTheme":
-            MessageLookupByLibrary.simpleMessage("ダークテーマ"),
-        "userAppSettingsFastPayment":
-            MessageLookupByLibrary.simpleMessage("高速化決済"),
-        "userAppSettingsFastPaymentEnableContent":
-            MessageLookupByLibrary.simpleMessage(
-                "高速化決済は、Webベースの支払いプロセスとは異なります。コインを投入する際には、トークン認証は行われません。\n\n高速化決済を有効にしますか？"),
-        "userAppSettingsFastPaymentEnableTitle":
-            MessageLookupByLibrary.simpleMessage("高速化決済を有効化"),
-        "userAppSettingsInAppNfc":
-            MessageLookupByLibrary.simpleMessage("アプリ内の NFC タグ読み取り"),
-        "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
-            "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。"),
-        "userAppSettingsPinnedGameCabTileStyle":
-            MessageLookupByLibrary.simpleMessage("お気に入りのゲームタイルの大きさ"),
-        "userAppSettingsRememberGameTabInfo": MessageLookupByLibrary.simpleMessage(
-            "有効の場合、コインページに入るたびに前回のタブが表示されます。\n無効の場合、毎回ゲームページに入るとお気に入りゲームタブが表示されます。デフォルトは無効です。"),
-        "userAppSettingsRememberGameTabTitle":
-            MessageLookupByLibrary.simpleMessage("前回のゲームタブを記憶する"),
-        "userAppSettingsResetTheme":
-            MessageLookupByLibrary.simpleMessage("デフォルトテーマに戻す"),
-        "userAppSettingsStoreGameCabTileStyle":
-            MessageLookupByLibrary.simpleMessage("店内のゲームタイルの大きさ"),
-        "userAppSettingsSummarizedRecord":
-            MessageLookupByLibrary.simpleMessage("まとめた支払い履歴を表示"),
-        "userAppSettingsSummarizedRecordContent": m5,
-        "userAvatar": MessageLookupByLibrary.simpleMessage("アイコン変更"),
-        "userBidLog": MessageLookupByLibrary.simpleMessage("チャージ履歴"),
-        "userEmail": MessageLookupByLibrary.simpleMessage("ユーザーメールアドレス変更"),
-        "userFPlayLog": MessageLookupByLibrary.simpleMessage("還元履歴"),
-        "userInAppSetting":
-            MessageLookupByLibrary.simpleMessage("X50Pay アプリ設定"),
-        "userLogout": MessageLookupByLibrary.simpleMessage("X50Payからログアウト"),
-        "userNFC": MessageLookupByLibrary.simpleMessage("支払い設定"),
-        "userOpenDoor1":
-            MessageLookupByLibrary.simpleMessage("西門\"一号店\"のドアを開く"),
-        "userOpenDoor2":
-            MessageLookupByLibrary.simpleMessage("西門\"二号店\"のドアを開く"),
-        "userPad": MessageLookupByLibrary.simpleMessage("オンライン並ぶ表示設定"),
-        "userPassword": MessageLookupByLibrary.simpleMessage("ユーザーパスワード変更"),
-        "userPhone": MessageLookupByLibrary.simpleMessage("ユーザー携帯番号変更"),
-        "userPlayLog": MessageLookupByLibrary.simpleMessage("支払い履歴"),
-        "userQUIC": MessageLookupByLibrary.simpleMessage("QUICアイコン変更"),
-        "userTicLog": MessageLookupByLibrary.simpleMessage("所持チケット"),
-        "userUTicLog": MessageLookupByLibrary.simpleMessage("チケット利用履歴"),
-        "vipDate": MessageLookupByLibrary.simpleMessage("有効期限 : "),
-        "vipExpiredMsg":
-            MessageLookupByLibrary.simpleMessage("左側のアイコンをクリックして購入"),
-        "x50PayLanguage": MessageLookupByLibrary.simpleMessage("X50Pay 言語")
-      };
+    "addFavGameSubtitle": MessageLookupByLibrary.simpleMessage(
+      "よく遊ぶゲームを選んでください！",
+    ),
+    "addFavGameTitle": MessageLookupByLibrary.simpleMessage("お気に入りのゲームを登録"),
+    "changeFavGameSubtitle": MessageLookupByLibrary.simpleMessage(
+      "よく遊ぶゲームを変更します",
+    ),
+    "changeFavGameTitle": MessageLookupByLibrary.simpleMessage("お気に入りのゲームを変更"),
+    "confirmExitAppContent": MessageLookupByLibrary.simpleMessage(
+      "アプリを終了します\nよろしいですか？",
+    ),
+    "confirmExitAppTitle": MessageLookupByLibrary.simpleMessage("X50Pay アプリ終了"),
+    "continuous": m0,
+    "dialogCancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
+    "dialogConfirm": MessageLookupByLibrary.simpleMessage("OK"),
+    "dialogNext": MessageLookupByLibrary.simpleMessage("次へ"),
+    "dialogReturn": MessageLookupByLibrary.simpleMessage("戻る"),
+    "dialogSave": MessageLookupByLibrary.simpleMessage("セーフ"),
+    "dressRoomTitle": MessageLookupByLibrary.simpleMessage("キャラ変更/着せ替え"),
+    "gacha": m1,
+    "gameCabTileLarge": MessageLookupByLibrary.simpleMessage("大きい"),
+    "gameCabTileSmall": MessageLookupByLibrary.simpleMessage("小さい"),
+    "gameDiscountHour": MessageLookupByLibrary.simpleMessage("オフピークタイム"),
+    "gameLocation": MessageLookupByLibrary.simpleMessage("ロケーション"),
+    "gameMPass": MessageLookupByLibrary.simpleMessage("お得パス"),
+    "gameNormalHour": MessageLookupByLibrary.simpleMessage("ピークタイム"),
+    "gameTicket": MessageLookupByLibrary.simpleMessage("遊びチケット"),
+    "gameUnlimit": MessageLookupByLibrary.simpleMessage("予約された無制限台があります"),
+    "gameUnlimitTitle": MessageLookupByLibrary.simpleMessage("予約された時間帯"),
+    "gameWait": m2,
+    "gameWeekday": MessageLookupByLibrary.simpleMessage("平日"),
+    "gameWeekends": MessageLookupByLibrary.simpleMessage("休日"),
+    "gr2HeartBox": MessageLookupByLibrary.simpleMessage("絆ポイントショップ"),
+    "gr2Limit": m3,
+    "gr2ResetDate": MessageLookupByLibrary.simpleMessage("シーズン変わる日 : "),
+    "heart": MessageLookupByLibrary.simpleMessage("絆ランク"),
+    "infoNotify": MessageLookupByLibrary.simpleMessage("最新イベント"),
+    "loginBiometrics": MessageLookupByLibrary.simpleMessage("生体認証でログイン"),
+    "loginBiometricsReason": MessageLookupByLibrary.simpleMessage(
+      "X50Pay App で生体認証を使用",
+    ),
+    "loginEmail": MessageLookupByLibrary.simpleMessage("メールアドレス"),
+    "loginError": MessageLookupByLibrary.simpleMessage("ログインエラー"),
+    "loginForgotPassword": MessageLookupByLibrary.simpleMessage("パスワードを忘れたお方"),
+    "loginLogin": MessageLookupByLibrary.simpleMessage("ログイン"),
+    "loginPassword": MessageLookupByLibrary.simpleMessage("パスワード"),
+    "loginSignUp": MessageLookupByLibrary.simpleMessage("会員登録"),
+    "loginSub": MessageLookupByLibrary.simpleMessage("24時間年中無休"),
+    "loginWelcome": MessageLookupByLibrary.simpleMessage("おかえりなさい！"),
+    "monthlyPass": MessageLookupByLibrary.simpleMessage("お得パス : "),
+    "mpassInvalid": MessageLookupByLibrary.simpleMessage("未購入"),
+    "mpassValid": MessageLookupByLibrary.simpleMessage("購入済み"),
+    "msgNotify": MessageLookupByLibrary.simpleMessage("お知らせ"),
+    "navCollab": MessageLookupByLibrary.simpleMessage("コラボ"),
+    "navGame": MessageLookupByLibrary.simpleMessage("コインを\n  入れる"),
+    "navGift": MessageLookupByLibrary.simpleMessage("プレゼント"),
+    "navSettings": MessageLookupByLibrary.simpleMessage("オプション"),
+    "nbusyCoin": MessageLookupByLibrary.simpleMessage("ゲーム中"),
+    "nbusyNoCoin": MessageLookupByLibrary.simpleMessage("空いています"),
+    "nbusyS1": MessageLookupByLibrary.simpleMessage("空いている"),
+    "nbusyS2": MessageLookupByLibrary.simpleMessage("やや空いている"),
+    "nbusyS3": MessageLookupByLibrary.simpleMessage("混雑中"),
+    "nextLv": MessageLookupByLibrary.simpleMessage("次のランク : "),
+    "officialNotify": MessageLookupByLibrary.simpleMessage("公式インフォメーション"),
+    "pinnedGame": MessageLookupByLibrary.simpleMessage("お気に入り"),
+    "serviceError": MessageLookupByLibrary.simpleMessage(
+      "サーバーエラー、ページをリロードもしくはスタッフまでお声掛けください。",
+    ),
+    "setFavGameTitle": MessageLookupByLibrary.simpleMessage("お気に入りのゲーム"),
+    "summaryGame": MessageLookupByLibrary.simpleMessage("機種別"),
+    "summaryGameDetailed": MessageLookupByLibrary.simpleMessage("機種詳細"),
+    "summaryGameFavGame": MessageLookupByLibrary.simpleMessage("メイン機種"),
+    "summaryGameFavGameSetup": MessageLookupByLibrary.simpleMessage(
+      "メイン機種設定できます",
+    ),
+    "summaryGameNoData": MessageLookupByLibrary.simpleMessage(
+      "合算期間中にプレー記録がありません。別の合算期間を選んでください",
+    ),
+    "summaryGameRecordRecord": m4,
+    "summaryGameRecordTitle": MessageLookupByLibrary.simpleMessage("機種記録:"),
+    "summaryHide": MessageLookupByLibrary.simpleMessage("非表示"),
+    "summaryNoData": MessageLookupByLibrary.simpleMessage("データなし"),
+    "summaryPeriod": MessageLookupByLibrary.simpleMessage("通算期間"),
+    "summaryPeriod30": MessageLookupByLibrary.simpleMessage("30日"),
+    "summaryPeriod60": MessageLookupByLibrary.simpleMessage("60日"),
+    "summaryPeriod7": MessageLookupByLibrary.simpleMessage("7日"),
+    "summaryPeriodAll": MessageLookupByLibrary.simpleMessage("すべて"),
+    "summaryPoint": MessageLookupByLibrary.simpleMessage("使用済ポイント"),
+    "summaryShow": MessageLookupByLibrary.simpleMessage("表示"),
+    "ticketBalance": MessageLookupByLibrary.simpleMessage("所持しているチケット : "),
+    "ticketUnit": MessageLookupByLibrary.simpleMessage(" "),
+    "userAppSettingsAccentColor": MessageLookupByLibrary.simpleMessage(
+      "アクセントカラー",
+    ),
+    "userAppSettingsBiometrics": MessageLookupByLibrary.simpleMessage(
+      "生体認証ログイン",
+    ),
+    "userAppSettingsBiometricsDisable": MessageLookupByLibrary.simpleMessage(
+      "生体認証ログイン解除",
+    ),
+    "userAppSettingsBiometricsDisableContent":
+        MessageLookupByLibrary.simpleMessage(
+          "生体認証ログインを解除しますか？\n再利用の場合は、ログイン情報を再び入力します",
+        ),
+    "userAppSettingsBiometricsEnableContent": MessageLookupByLibrary.simpleMessage(
+      "注意：\n\nこの機能は、ログイン情報を暗号化して携帯電話に保存します。生体認証でログインすると、ログイン情報が自動的に入力されます。\n\nAndroid は KeyStore を使用して保存します。\niOS は KeyChain を使用して保存します。\n\nログイン情報を変更した場合は、再度設定する必要があります。\n\nこの機能を使用してもよろしいですか？",
+    ),
+    "userAppSettingsBiometricsLoginCred": MessageLookupByLibrary.simpleMessage(
+      "ログイン情報",
+    ),
+    "userAppSettingsBiometricsLoginCredContent":
+        MessageLookupByLibrary.simpleMessage("ログイン情報を再入力してください"),
+    "userAppSettingsBiometricsLoginTry": MessageLookupByLibrary.simpleMessage(
+      "ログインを試みる",
+    ),
+    "userAppSettingsCardEmulationInterval":
+        MessageLookupByLibrary.simpleMessage("Card Emulation 間隔"),
+    "userAppSettingsEnableDarkTheme": MessageLookupByLibrary.simpleMessage(
+      "ダークテーマ",
+    ),
+    "userAppSettingsFastPayment": MessageLookupByLibrary.simpleMessage("高速化決済"),
+    "userAppSettingsFastPaymentEnableContent": MessageLookupByLibrary.simpleMessage(
+      "高速化決済は、Webベースの支払いプロセスとは異なります。コインを投入する際には、トークン認証は行われません。\n\n高速化決済を有効にしますか？",
+    ),
+    "userAppSettingsFastPaymentEnableTitle":
+        MessageLookupByLibrary.simpleMessage("高速化決済を有効化"),
+    "userAppSettingsInAppNfc": MessageLookupByLibrary.simpleMessage(
+      "アプリ内の NFC タグ読み取り",
+    ),
+    "userAppSettingsInAppNfcContent": MessageLookupByLibrary.simpleMessage(
+      "店内にあるNFCタグをスキャンすると、アプリ内に支払い方法、支払い結果などを表示します。\n速度が遅い場合は、このオプションを無効にしてください。",
+    ),
+    "userAppSettingsPinnedGameCabTileStyle":
+        MessageLookupByLibrary.simpleMessage("お気に入りのゲームタイルの大きさ"),
+    "userAppSettingsRememberGameTabInfo": MessageLookupByLibrary.simpleMessage(
+      "有効の場合、コインページに入るたびに前回のタブが表示されます。\n無効の場合、毎回ゲームページに入るとお気に入りゲームタブが表示されます。デフォルトは無効です。",
+    ),
+    "userAppSettingsRememberGameTabTitle": MessageLookupByLibrary.simpleMessage(
+      "前回のゲームタブを記憶する",
+    ),
+    "userAppSettingsResetTheme": MessageLookupByLibrary.simpleMessage(
+      "デフォルトテーマに戻す",
+    ),
+    "userAppSettingsStoreGameCabTileStyle":
+        MessageLookupByLibrary.simpleMessage("店内のゲームタイルの大きさ"),
+    "userAppSettingsSummarizedRecord": MessageLookupByLibrary.simpleMessage(
+      "まとめた支払い履歴を表示",
+    ),
+    "userAppSettingsSummarizedRecordContent": m5,
+    "userAvatar": MessageLookupByLibrary.simpleMessage("アイコン変更"),
+    "userBidLog": MessageLookupByLibrary.simpleMessage("チャージ履歴"),
+    "userEmail": MessageLookupByLibrary.simpleMessage("ユーザーメールアドレス変更"),
+    "userFPlayLog": MessageLookupByLibrary.simpleMessage("還元履歴"),
+    "userInAppSetting": MessageLookupByLibrary.simpleMessage("X50Pay アプリ設定"),
+    "userLogout": MessageLookupByLibrary.simpleMessage("X50Payからログアウト"),
+    "userNFC": MessageLookupByLibrary.simpleMessage("支払い設定"),
+    "userOpenDoor1": MessageLookupByLibrary.simpleMessage("西門\"一号店\"のドアを開く"),
+    "userOpenDoor2": MessageLookupByLibrary.simpleMessage("西門\"二号店\"のドアを開く"),
+    "userPad": MessageLookupByLibrary.simpleMessage("オンライン並ぶ表示設定"),
+    "userPassword": MessageLookupByLibrary.simpleMessage("ユーザーパスワード変更"),
+    "userPhone": MessageLookupByLibrary.simpleMessage("ユーザー携帯番号変更"),
+    "userPlayLog": MessageLookupByLibrary.simpleMessage("支払い履歴"),
+    "userQUIC": MessageLookupByLibrary.simpleMessage("QUICアイコン変更"),
+    "userTicLog": MessageLookupByLibrary.simpleMessage("所持チケット"),
+    "userUTicLog": MessageLookupByLibrary.simpleMessage("チケット利用履歴"),
+    "vipDate": MessageLookupByLibrary.simpleMessage("有効期限 : "),
+    "vipExpiredMsg": MessageLookupByLibrary.simpleMessage("左側のアイコンをクリックして購入"),
+    "x50PayLanguage": MessageLookupByLibrary.simpleMessage("X50Pay 言語"),
+  };
 }

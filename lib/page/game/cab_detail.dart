@@ -20,10 +20,19 @@ extension on Color {
   Color invert(double value) {
     assert(value >= 0 && value <= 1, 'value must be between 0 and 1');
     final intensity = value * 255;
-    final r = (intensity - red).abs();
-    final g = (intensity - green).abs();
-    final b = (intensity - blue).abs();
-    return Color.fromARGB(alpha, r.toInt(), g.toInt(), b.toInt());
+    final r = (intensity - _red).abs();
+    final g = (intensity - _green).abs();
+    final b = (intensity - _blue).abs();
+    return Color.fromARGB(_alpha, r.toInt(), g.toInt(), b.toInt());
+  }
+
+  int get _red => _lagacyARGB(r);
+  int get _green => _lagacyARGB(g);
+  int get _blue => _lagacyARGB(b);
+  int get _alpha => _lagacyARGB(a);
+
+  int _lagacyARGB(double color) {
+    return (color * 255.0).round().clamp(0, 255);
   }
 }
 
@@ -110,8 +119,10 @@ class _RSVPDialogState extends BaseStatefulState<_RSVPDialog> {
   }
 
   void doRSVP() {
-    launchUrlString('https://m.me/X50MGS',
-        mode: LaunchMode.externalNonBrowserApplication);
+    launchUrlString(
+      'https://m.me/X50MGS',
+      mode: LaunchMode.externalNonBrowserApplication,
+    );
     Navigator.of(context).pop();
   }
 
@@ -127,8 +138,10 @@ class _RSVPDialogState extends BaseStatefulState<_RSVPDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15, vertical: 22.5),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 22.5,
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -149,12 +162,12 @@ class _RSVPDialogState extends BaseStatefulState<_RSVPDialog> {
                 children: [
                   Expanded(
                     child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        style:
-                            CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-                        child: const Text('關閉')),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
+                      child: const Text('關閉'),
+                    ),
                   ),
                   const SizedBox(width: 15),
                   Expanded(
@@ -185,10 +198,7 @@ class CabDetailLoaded extends StatefulWidget {
 
 class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
     with GameMixin {
-  void onCabSelect({
-    required String caboid,
-    required Cabinet cabData,
-  }) {
+  void onCabSelect({required String caboid, required Cabinet cabData}) {
     showCupertinoDialog(
       context: context,
       barrierDismissible: true,
@@ -276,7 +286,7 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
                         imageUrl: getMachineIcon(machineId),
                         errorWidget: (context, url, error) => const SizedBox(),
                         height: 95,
-                        color: iconColor.withOpacity(0.15).invert(0.28),
+                        color: iconColor.withValues(alpha: 0.15).invert(0.28),
                       ),
                     ),
                     Positioned.fill(
@@ -313,10 +323,7 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-                            onCabSelect(
-                              caboid: caboid,
-                              cabData: cab,
-                            );
+                            onCabSelect(caboid: caboid, cabData: cab);
                           },
                         ),
                       ),
@@ -362,8 +369,9 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
         }
       }
     }
-    final price =
-        double.parse(widget.model.cabinets.first.mode[0][2].toString());
+    final price = double.parse(
+      widget.model.cabinets.first.mode[0][2].toString(),
+    );
     final note = widget.model.note;
     final revbool = note.reversed.elementAt(1) as bool;
     var rrbool = note.reversed.elementAt(2);
@@ -409,7 +417,7 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
               children: [
                 const Expanded(child: Divider(thickness: 1, endIndent: 15)),
                 Text(divText),
-                const Expanded(child: Divider(thickness: 1, indent: 15))
+                const Expanded(child: Divider(thickness: 1, indent: 15)),
               ],
             ),
           ),
@@ -442,33 +450,33 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
           margin: const EdgeInsets.fromLTRB(15, 0, 15, 8),
           padding: const EdgeInsets.fromLTRB(15, 8, 10, 8),
           decoration: BoxDecoration(
-              color: scaffoldBackgroundColor,
-              border: Border.all(color: borderColor, width: 1),
-              borderRadius: BorderRadius.circular(5)),
+            color: scaffoldBackgroundColor,
+            border: Border.all(color: borderColor, width: 1),
+            borderRadius: BorderRadius.circular(5),
+          ),
           child: Row(
             children: [
               Text('  ${i18n.gameWait(lineCount)}'),
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  onLineupPressed(
-                    widget.model.padmid,
-                    widget.model.padlid,
-                  );
+                  onLineupPressed(widget.model.padmid, widget.model.padlid);
                 },
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color(0xfffafafa),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   child: const Icon(
                     Icons.tablet_mac_rounded,
                     color: Color(0xff1e1e1e),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         );
@@ -501,10 +509,7 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
               ),
             ),
             const SizedBox(width: 15),
-            Text(
-              i18n.gameUnlimit,
-              style: const TextStyle(color: Colors.white),
-            ),
+            Text(i18n.gameUnlimit, style: const TextStyle(color: Colors.white)),
             const Spacer(),
             GestureDetector(
               onTap: showRSVPPopup,
@@ -585,22 +590,23 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Selector<CabDatailViewModel, String>(
-                selector: (context, vm) => vm.machineId,
-                builder: (context, machineId, child) {
-                  return CachedNetworkImage(
-                    imageUrl: getGameCabImage(machineId),
-                    alignment: const Alignment(0, -0.25),
-                    fit: BoxFit.fitWidth,
-                    errorWidget: (context, url, error) {
-                      log(
-                        '',
-                        name: 'err cabDetailLoaded',
-                        error: 'error loading gamecab image: $error',
-                      );
-                      return const SizedBox();
-                    },
-                  );
-                }),
+              selector: (context, vm) => vm.machineId,
+              builder: (context, machineId, child) {
+                return CachedNetworkImage(
+                  imageUrl: getGameCabImage(machineId),
+                  alignment: const Alignment(0, -0.25),
+                  fit: BoxFit.fitWidth,
+                  errorWidget: (context, url, error) {
+                    log(
+                      '',
+                      name: 'err cabDetailLoaded',
+                      error: 'error loading gamecab image: $error',
+                    );
+                    return const SizedBox();
+                  },
+                );
+              },
+            ),
           ),
         ),
         Positioned.fill(
@@ -626,9 +632,7 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
-                  shadows: [
-                    Shadow(color: Colors.black, blurRadius: 18),
-                  ],
+                  shadows: [Shadow(color: Colors.black, blurRadius: 18)],
                 ),
               ),
               Row(
@@ -637,15 +641,15 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
                   Icon(
                     Icons.access_time_filled_rounded,
                     size: 13.5,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                   ),
                   Text(
                     '  $tagLabel$addition',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 13,
                       shadows: const [
-                        Shadow(color: Colors.black, blurRadius: 15)
+                        Shadow(color: Colors.black, blurRadius: 15),
                       ],
                     ),
                   ),
@@ -653,15 +657,15 @@ class _CabDetailLoadedState extends BaseStatefulState<CabDetailLoaded>
                   Icon(
                     Icons.attach_money_rounded,
                     size: 18,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                   ),
                   Text(
                     '${price.toInt()}P',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 13.5,
                       shadows: const [
-                        Shadow(color: Colors.black, blurRadius: 15)
+                        Shadow(color: Colors.black, blurRadius: 15),
                       ],
                     ),
                   ),
@@ -743,7 +747,7 @@ class LineUpDialog extends StatelessWidget {
                   TextSpan(
                     text: '『排隊』',
                     style: TextStyle(color: Colors.red),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -767,15 +771,14 @@ class LineUpDialog extends StatelessWidget {
                 Expanded(
                   child: TextButton(
                     onPressed: () {
-                      context
-                          .read<CabDatailViewModel>()
-                          .confirmPadCheck(padmid, padlid);
+                      context.read<CabDatailViewModel>().confirmPadCheck(
+                        padmid,
+                        padlid,
+                      );
                       Navigator.of(context).pop();
                     },
                     style: CustomButtonThemes.severe(isV4: true),
-                    child: const Text(
-                      '排隊',
-                    ),
+                    child: const Text('排隊'),
                   ),
                 ),
               ],

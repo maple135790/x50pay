@@ -173,7 +173,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
             onPressed: doLogout,
             style: CustomButtonThemes.severe(isV4: true),
             child: const Text('登出'),
-          )
+          ),
         ],
       ),
     );
@@ -233,10 +233,8 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         imageUrl: avatarUrl,
         width: 60,
         height: 60,
-        imageBuilder: (context, imageProvider) => CircleAvatar(
-          backgroundImage: imageProvider,
-          radius: 30,
-        ),
+        imageBuilder: (context, imageProvider) =>
+            CircleAvatar(backgroundImage: imageProvider, radius: 30),
       );
     } else {
       userAvatar = CircleAvatar(
@@ -274,7 +272,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
                     Text(user.email!),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -283,121 +281,130 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
     final settingsGroups = [
       accountItem,
-      _SettingsGroup(children: [
-        _SettingTile(
-          iconData: Icons.remember_me_rounded,
-          title: i18n.userAvatar,
-          color: _SettingTileColor.green,
-          onTap: onChangeAvatarPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.rss_feed_rounded,
-          title: i18n.userNFC,
-          color: _SettingTileColor.blue,
-          onTap: onPaymentPrefPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.badge_rounded,
-          title: i18n.userQUIC,
-          color: _SettingTileColor.blue,
-          onTap: onQuicPayPrefPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.tablet_mac_rounded,
-          title: i18n.userPad,
-          color: _SettingTileColor.blue,
-          onTap: onPadPrefPressed,
-        ),
-      ]),
-      _SettingsGroup(children: [
-        _SettingTile(
-          iconData: Icons.key_rounded,
-          title: i18n.userPassword,
-          color: _SettingTileColor.red,
-          onTap: onChangePasswordPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.email_rounded,
-          title: i18n.userEmail,
-          color: _SettingTileColor.blackOrWhite,
-          onTap: onChangeEmailPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.call_rounded,
-          title: i18n.userPhone,
-          color: _SettingTileColor.blackOrWhite,
-          onTap: onChangePhonePressed,
-        ),
-      ]),
-      _SettingsGroup(children: [
-        _SettingTile(
-          iconData: Icons.local_atm_rounded,
-          title: i18n.userBidLog,
-          color: _SettingTileColor.yellow,
-          onTap: onBidRecordPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.redeem_rounded,
-          title: i18n.userTicLog,
-          color: _SettingTileColor.yellow,
-          onTap: onTicketRecordPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.format_list_bulleted_rounded,
-          title: i18n.userPlayLog,
-          color: _SettingTileColor.yellow,
-          onTap: onPlayRecordPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.list_alt_rounded,
-          title: i18n.userFPlayLog,
-          color: _SettingTileColor.yellow,
-          onTap: onFreePointRecordPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.confirmation_num_rounded,
-          title: i18n.userUTicLog,
-          color: _SettingTileColor.yellow,
-          onTap: onTicketUseRecordPressed,
-        ),
-      ]),
-      _SettingsGroup(children: [
-        _SettingTile(
-          iconData: Icons.tune_rounded,
-          title: i18n.userInAppSetting,
-          color: _SettingTileColor.blackOrWhite,
-          onTap: onX50PayAppSettingPressed,
-        ),
-      ]),
-      _SettingsGroup(children: [
-        _SettingTile(
-          iconData: Icons.home_rounded,
-          title: i18n.userOpenDoor1,
-          color: _SettingTileColor.blackOrWhite,
-          onTap: onXimen1OpenPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.home_rounded,
-          title: i18n.userOpenDoor2,
-          color: _SettingTileColor.blackOrWhite,
-          onTap: onXimen2OpenPressed,
-        ),
-        _SettingTile(
-          iconData: Icons.logout_rounded,
-          title: i18n.userLogout,
-          color: _SettingTileColor.blackOrWhite,
-          onTap: onLogoutPressed,
-        ),
-      ]),
+      _SettingsGroup(
+        children: [
+          _SettingTile(
+            iconData: Icons.remember_me_rounded,
+            title: i18n.userAvatar,
+            color: _SettingTileColor.green,
+            onTap: onChangeAvatarPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.rss_feed_rounded,
+            title: i18n.userNFC,
+            color: _SettingTileColor.blue,
+            onTap: onPaymentPrefPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.badge_rounded,
+            title: i18n.userQUIC,
+            color: _SettingTileColor.blue,
+            onTap: onQuicPayPrefPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.tablet_mac_rounded,
+            title: i18n.userPad,
+            color: _SettingTileColor.blue,
+            onTap: onPadPrefPressed,
+          ),
+        ],
+      ),
+      _SettingsGroup(
+        children: [
+          _SettingTile(
+            iconData: Icons.key_rounded,
+            title: i18n.userPassword,
+            color: _SettingTileColor.red,
+            onTap: onChangePasswordPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.email_rounded,
+            title: i18n.userEmail,
+            color: _SettingTileColor.blackOrWhite,
+            onTap: onChangeEmailPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.call_rounded,
+            title: i18n.userPhone,
+            color: _SettingTileColor.blackOrWhite,
+            onTap: onChangePhonePressed,
+          ),
+        ],
+      ),
+      _SettingsGroup(
+        children: [
+          _SettingTile(
+            iconData: Icons.local_atm_rounded,
+            title: i18n.userBidLog,
+            color: _SettingTileColor.yellow,
+            onTap: onBidRecordPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.redeem_rounded,
+            title: i18n.userTicLog,
+            color: _SettingTileColor.yellow,
+            onTap: onTicketRecordPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.format_list_bulleted_rounded,
+            title: i18n.userPlayLog,
+            color: _SettingTileColor.yellow,
+            onTap: onPlayRecordPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.list_alt_rounded,
+            title: i18n.userFPlayLog,
+            color: _SettingTileColor.yellow,
+            onTap: onFreePointRecordPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.confirmation_num_rounded,
+            title: i18n.userUTicLog,
+            color: _SettingTileColor.yellow,
+            onTap: onTicketUseRecordPressed,
+          ),
+        ],
+      ),
+      _SettingsGroup(
+        children: [
+          _SettingTile(
+            iconData: Icons.tune_rounded,
+            title: i18n.userInAppSetting,
+            color: _SettingTileColor.blackOrWhite,
+            onTap: onX50PayAppSettingPressed,
+          ),
+        ],
+      ),
+      _SettingsGroup(
+        children: [
+          _SettingTile(
+            iconData: Icons.home_rounded,
+            title: i18n.userOpenDoor1,
+            color: _SettingTileColor.blackOrWhite,
+            onTap: onXimen1OpenPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.home_rounded,
+            title: i18n.userOpenDoor2,
+            color: _SettingTileColor.blackOrWhite,
+            onTap: onXimen2OpenPressed,
+          ),
+          _SettingTile(
+            iconData: Icons.logout_rounded,
+            title: i18n.userLogout,
+            color: _SettingTileColor.blackOrWhite,
+            onTap: onLogoutPressed,
+          ),
+        ],
+      ),
       GestureDetector(
         onLongPress: showEasterEgg,
         child: Center(
           child: Text(
             GlobalSingleton.instance.appVersion,
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall!
-                .copyWith(color: const Color(0xff505050).withOpacity(0.7)),
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+              color: const Color(0xff505050).withValues(alpha: 0.7),
+            ),
           ),
         ),
       ),
@@ -419,9 +426,9 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           child: Scrollbar(
             controller: scrollController,
             child: ListView.builder(
-              // TODO: cacheExtent 是現在的workaround，不然 Scrollbar 會跳
+              // TODO: 應 cache item height
               // https://github.com/flutter/flutter/issues/25652
-              cacheExtent: 10000,
+              // scrollCacheExtent: ScrollCacheExtent.pixels(10000),
               controller: scrollController,
               padding: const EdgeInsets.symmetric(horizontal: 18),
               itemCount: settingsGroups.length,
@@ -443,20 +450,24 @@ class _SettingsGroup extends StatelessWidget {
   List<Widget> buildTiles(bool isDarkTheme) {
     final list = <Widget>[];
     for (var i = 0; i < children.length; i++) {
-      list.add(_SettingTile(
-        iconData: children[i].iconData,
-        title: children[i].title,
-        color: children[i].color,
-        onTap: children[i].onTap,
-      ));
+      list.add(
+        _SettingTile(
+          iconData: children[i].iconData,
+          title: children[i].title,
+          color: children[i].color,
+          onTap: children[i].onTap,
+        ),
+      );
       if (i != children.length - 1) {
-        list.add(Divider(
-          thickness: 2,
-          height: 1,
-          color: isDarkTheme
-              ? CustomColorThemes.borderColorDark
-              : CustomColorThemes.borderColorLight,
-        ));
+        list.add(
+          Divider(
+            thickness: 2,
+            height: 1,
+            color: isDarkTheme
+                ? CustomColorThemes.borderColorDark
+                : CustomColorThemes.borderColorLight,
+          ),
+        );
       }
     }
     return list;
@@ -489,13 +500,7 @@ class _SettingsGroup extends StatelessWidget {
   }
 }
 
-enum _SettingTileColor {
-  green,
-  red,
-  yellow,
-  blue,
-  blackOrWhite;
-}
+enum _SettingTileColor { green, red, yellow, blue, blackOrWhite }
 
 class _SettingTile extends StatelessWidget {
   final IconData iconData;
@@ -530,8 +535,8 @@ class _SettingTile extends StatelessWidget {
       type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
-        splashColor: splashColor.withOpacity(0.2),
-        highlightColor: splashColor.withOpacity(0.1),
+        splashColor: splashColor.withValues(alpha: 0.2),
+        highlightColor: splashColor.withValues(alpha: 0.1),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 15),
           child: Row(
@@ -548,11 +553,7 @@ class _SettingTile extends StatelessWidget {
                     width: 1,
                   ),
                 ),
-                child: Icon(
-                  iconData,
-                  color: iconColor,
-                  size: 18,
-                ),
+                child: Icon(iconData, color: iconColor, size: 18),
               ),
               const SizedBox(width: 15),
               Text(

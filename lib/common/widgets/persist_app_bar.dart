@@ -21,44 +21,48 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
   void onLanguagePressed(Locale currentLocale) async {
     final changedLocale = await showDialog<Locale>(
       context: context,
-      builder: (context) => StatefulBuilder(builder: (context, setState) {
-        return AlertDialog(
-          title: Text(S.of(context).x50PayLanguage),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(
-              S.delegate.supportedLocales.length,
-              (index) => RadioListTile<Locale>(
-                visualDensity: VisualDensity.compact,
-                controlAffinity: ListTileControlAffinity.trailing,
-                value: S.delegate.supportedLocales[index],
-                title: Row(
-                  children: [
-                    CountryFlag.fromCountryCode(
-                      S.delegate.supportedLocales[index].countryCode ?? '',
-                      height: 25,
-                      width: 25,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text(S.of(context).x50PayLanguage),
+            content: RadioGroup(
+              groupValue: currentLocale,
+              onChanged: (value) {
+                context.pop(value);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                  S.delegate.supportedLocales.length,
+                  (index) => RadioListTile<Locale>(
+                    visualDensity: VisualDensity.compact,
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    value: S.delegate.supportedLocales[index],
+                    title: Row(
+                      children: [
+                        CountryFlag.fromCountryCode(
+                          S.delegate.supportedLocales[index].countryCode ?? '',
+                          theme: const ImageTheme(height: 15, width: 15),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(S.delegate.supportedLocales[index].displayText),
+                      ],
                     ),
-                    const SizedBox(width: 10),
-                    Text(S.delegate.supportedLocales[index].displayText),
-                  ],
+                  ),
+                  growable: false,
                 ),
-                groupValue: currentLocale,
-                onChanged: (value) {
-                  context.pop(value);
-                },
               ),
-              growable: false,
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
     if (changedLocale == null) return;
     if (!mounted) return;
     EasyLoading.show();
     Future.delayed(const Duration(milliseconds: 800), () {
       EasyLoading.dismiss();
+      if (!mounted) return;
       context.read<LanguageProvider>().setUserPrefLocale(changedLocale);
     });
   }
@@ -121,8 +125,10 @@ class _PersistentAppBarState extends BaseStatefulState<PersistentAppBar> {
                               children: [
                                 CountryFlag.fromCountryCode(
                                   vm.currentLocale.countryCode ?? '',
-                                  height: 15,
-                                  width: 15,
+                                  theme: const ImageTheme(
+                                    height: 15,
+                                    width: 15,
+                                  ),
                                 ),
                                 const SizedBox(width: 5),
                                 Text(

@@ -322,7 +322,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
     await showColorPicker();
     if (newSeedColor == null) return;
     appThemeProvider.seedColor = newSeedColor!;
-    Prefs.setInt(PrefsToken.seedColor, newSeedColor!.value);
+    Prefs.setInt(PrefsToken.seedColor, newSeedColor!.toARGB32());
   }
 
   void onRememberGameTabChanged(bool value) {
@@ -374,7 +374,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                                   return CupertinoListTile.notched(
                                     title: Text(i18n.userAppSettingsBiometrics),
                                     trailing: CupertinoSwitch(
-                                      activeColor: CupertinoColors.activeGreen,
+                                      activeTrackColor: CupertinoColors.activeGreen,
                                       value: vm.isEnabledBiometricsLogin,
                                       onChanged: snapshot.data!
                                           ? onBiometricsLoginChanged
@@ -385,7 +385,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                             CupertinoListTile.notched(
                               title: Text(i18n.userAppSettingsFastPayment),
                               trailing: CupertinoSwitch(
-                                activeColor: CupertinoColors.activeGreen,
+                                activeTrackColor: CupertinoColors.activeGreen,
                                 value: vm.isEnabledFastQRPay,
                                 onChanged: onFastQRPayChanged,
                               ),
@@ -396,7 +396,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                                 title:
                                     Text(i18n.userAppSettingsSummarizedRecord),
                                 trailing: CupertinoSwitch(
-                                  activeColor: CupertinoColors.activeGreen,
+                                  activeTrackColor: CupertinoColors.activeGreen,
                                   value: vm.isEnableSummarizedRecord,
                                   onChanged: onSummarizedRecordChanged,
                                 ),
@@ -404,7 +404,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                             CupertinoListTile.notched(
                               title: Text(i18n.userAppSettingsInAppNfc),
                               trailing: CupertinoSwitch(
-                                activeColor: CupertinoColors.activeGreen,
+                                activeTrackColor: CupertinoColors.activeGreen,
                                 value: vm.isEnableInAppNfcScan,
                                 onChanged: onInAppNfcScanChanged,
                               ),
@@ -458,7 +458,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                               title: Text(
                                   i18n.userAppSettingsRememberGameTabTitle),
                               trailing: CupertinoSwitch(
-                                activeColor: CupertinoColors.activeGreen,
+                                activeTrackColor: CupertinoColors.activeGreen,
                                 value: vm.isRememberGameTab,
                                 onChanged: onRememberGameTabChanged,
                               ),
@@ -494,7 +494,7 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                             CupertinoListTile.notched(
                               title: Text(i18n.userAppSettingsEnableDarkTheme),
                               trailing: CupertinoSwitch(
-                                activeColor: CupertinoColors.activeGreen,
+                                activeTrackColor: CupertinoColors.activeGreen,
                                 value: isDarkTheme,
                                 onChanged: onChangeThemeBrightness,
                               ),

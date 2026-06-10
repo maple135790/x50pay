@@ -37,11 +37,11 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
     foregroundColor: WidgetStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xff1e1e1e).withOpacity(0.5);
+      if (states.isDisabled) return const Color(0xff1e1e1e).withValues(alpha: 0.5);
       return const Color(0xff1e1e1e);
     }),
     backgroundColor: WidgetStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
+      if (states.isDisabled) return const Color(0xfffafafa).withValues(alpha: 0.5);
       return const Color(0xfffafafa);
     }),
   );
@@ -50,11 +50,11 @@ abstract class BaseStatefulState<T extends StatefulWidget> extends State<T> {
     shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))),
     foregroundColor: WidgetStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xfffafafa).withOpacity(0.5);
+      if (states.isDisabled) return const Color(0xfffafafa).withValues(alpha: 0.5);
       return const Color(0xfffafafa);
     }),
     backgroundColor: WidgetStateColor.resolveWith((states) {
-      if (states.isDisabled) return const Color(0xff3a3a3a).withOpacity(0.2);
+      if (states.isDisabled) return const Color(0xff3a3a3a).withValues(alpha: 0.2);
       return const Color(0xff3a3a3a);
     }),
   );

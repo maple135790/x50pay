@@ -156,7 +156,7 @@ class _StoreItem extends StatelessWidget {
                               size: 15, color: Color(0xe6ffffff)),
                           Text('  | ${store.address!}',
                               style: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
+                                  color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: 13,
                                   shadows: const [
                                     Shadow(color: Colors.black, blurRadius: 15)

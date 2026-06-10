@@ -210,7 +210,7 @@ class _FavGameState extends BaseStatefulState<FavGame> {
                 child: SvgPicture(
                   Svgs.heartCirclePlus,
                   colorFilter: ColorFilter.mode(
-                    Theme.of(context).iconTheme.color!.withOpacity(0.2),
+                    Theme.of(context).iconTheme.color!.withValues(alpha: 0.2),
                     BlendMode.srcIn,
                   ),
                   width: 112,

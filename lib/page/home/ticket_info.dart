@@ -20,9 +20,9 @@ class TicketInfo extends StatelessWidget {
 
   Color getIconColor(bool isDarkTheme) {
     if (isDarkTheme) {
-      return const Color(0xfffafafa).withOpacity(0.1);
+      return const Color(0xfffafafa).withValues(alpha: 0.1);
     } else {
-      return const Color(0xff373737).withOpacity(0.1);
+      return const Color(0xff373737).withValues(alpha: 0.1);
     }
   }
 

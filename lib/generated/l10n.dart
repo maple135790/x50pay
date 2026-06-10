@@ -18,8 +18,10 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(
+      _current != null,
+      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
+    );
     return _current!;
   }
 
@@ -41,8 +43,10 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
@@ -62,12 +66,7 @@ class S {
 
   /// `立即釘選機臺`
   String get addFavGameTitle {
-    return Intl.message(
-      '立即釘選機臺',
-      name: 'addFavGameTitle',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('立即釘選機臺', name: 'addFavGameTitle', desc: '', args: []);
   }
 
   /// `重新選擇釘選的機臺`
@@ -122,62 +121,32 @@ class S {
 
   /// `取消`
   String get dialogCancel {
-    return Intl.message(
-      '取消',
-      name: 'dialogCancel',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('取消', name: 'dialogCancel', desc: '', args: []);
   }
 
   /// `確定`
   String get dialogConfirm {
-    return Intl.message(
-      '確定',
-      name: 'dialogConfirm',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('確定', name: 'dialogConfirm', desc: '', args: []);
   }
 
   /// `下一步`
   String get dialogNext {
-    return Intl.message(
-      '下一步',
-      name: 'dialogNext',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('下一步', name: 'dialogNext', desc: '', args: []);
   }
 
   /// `返回`
   String get dialogReturn {
-    return Intl.message(
-      '返回',
-      name: 'dialogReturn',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('返回', name: 'dialogReturn', desc: '', args: []);
   }
 
   /// `保存`
   String get dialogSave {
-    return Intl.message(
-      '保存',
-      name: 'dialogSave',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('保存', name: 'dialogSave', desc: '', args: []);
   }
 
   /// `更換角色/衣裝`
   String get dressRoomTitle {
-    return Intl.message(
-      '更換角色/衣裝',
-      name: 'dressRoomTitle',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('更換角色/衣裝', name: 'dressRoomTitle', desc: '', args: []);
   }
 
   /// `抽獎券 : 再 {point} 點`
@@ -192,72 +161,37 @@ class S {
 
   /// `大`
   String get gameCabTileLarge {
-    return Intl.message(
-      '大',
-      name: 'gameCabTileLarge',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('大', name: 'gameCabTileLarge', desc: '', args: []);
   }
 
   /// `小`
   String get gameCabTileSmall {
-    return Intl.message(
-      '小',
-      name: 'gameCabTileSmall',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('小', name: 'gameCabTileSmall', desc: '', args: []);
   }
 
   /// `離峰時段`
   String get gameDiscountHour {
-    return Intl.message(
-      '離峰時段',
-      name: 'gameDiscountHour',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('離峰時段', name: 'gameDiscountHour', desc: '', args: []);
   }
 
   /// `目前所在`
   String get gameLocation {
-    return Intl.message(
-      '目前所在',
-      name: 'gameLocation',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('目前所在', name: 'gameLocation', desc: '', args: []);
   }
 
   /// `月票`
   String get gameMPass {
-    return Intl.message(
-      '月票',
-      name: 'gameMPass',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('月票', name: 'gameMPass', desc: '', args: []);
   }
 
   /// `通常時段`
   String get gameNormalHour {
-    return Intl.message(
-      '通常時段',
-      name: 'gameNormalHour',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('通常時段', name: 'gameNormalHour', desc: '', args: []);
   }
 
   /// `遊玩券`
   String get gameTicket {
-    return Intl.message(
-      '遊玩券',
-      name: 'gameTicket',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('遊玩券', name: 'gameTicket', desc: '', args: []);
   }
 
   /// `該機種當周有無限制台預約`
@@ -272,12 +206,7 @@ class S {
 
   /// `已預約時段`
   String get gameUnlimitTitle {
-    return Intl.message(
-      '已預約時段',
-      name: 'gameUnlimitTitle',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('已預約時段', name: 'gameUnlimitTitle', desc: '', args: []);
   }
 
   /// `X50Pad 排隊狀況 : {waitCount} 人等待中`
@@ -292,32 +221,17 @@ class S {
 
   /// `平日`
   String get gameWeekday {
-    return Intl.message(
-      '平日',
-      name: 'gameWeekday',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('平日', name: 'gameWeekday', desc: '', args: []);
   }
 
   /// `假日`
   String get gameWeekends {
-    return Intl.message(
-      '假日',
-      name: 'gameWeekends',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('假日', name: 'gameWeekends', desc: '', args: []);
   }
 
   /// `養成點數商城`
   String get gr2HeartBox {
-    return Intl.message(
-      '養成點數商城',
-      name: 'gr2HeartBox',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('養成點數商城', name: 'gr2HeartBox', desc: '', args: []);
   }
 
   /// `每日回饋 {limitTimes} 次 每次 25 P `
@@ -332,32 +246,17 @@ class S {
 
   /// `換季日: `
   String get gr2ResetDate {
-    return Intl.message(
-      '換季日: ',
-      name: 'gr2ResetDate',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('換季日: ', name: 'gr2ResetDate', desc: '', args: []);
   }
 
   /// `親密度`
   String get heart {
-    return Intl.message(
-      '親密度',
-      name: 'heart',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('親密度', name: 'heart', desc: '', args: []);
   }
 
   /// `最新活動`
   String get infoNotify {
-    return Intl.message(
-      '最新活動',
-      name: 'infoNotify',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('最新活動', name: 'infoNotify', desc: '', args: []);
   }
 
   /// `使用生物辨識登入`
@@ -382,22 +281,12 @@ class S {
 
   /// `電子郵件`
   String get loginEmail {
-    return Intl.message(
-      '電子郵件',
-      name: 'loginEmail',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('電子郵件', name: 'loginEmail', desc: '', args: []);
   }
 
   /// `登入錯誤`
   String get loginError {
-    return Intl.message(
-      '登入錯誤',
-      name: 'loginError',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('登入錯誤', name: 'loginError', desc: '', args: []);
   }
 
   /// `忘記密碼嗎?`
@@ -412,212 +301,107 @@ class S {
 
   /// `登入`
   String get loginLogin {
-    return Intl.message(
-      '登入',
-      name: 'loginLogin',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('登入', name: 'loginLogin', desc: '', args: []);
   }
 
   /// `密碼`
   String get loginPassword {
-    return Intl.message(
-      '密碼',
-      name: 'loginPassword',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('密碼', name: 'loginPassword', desc: '', args: []);
   }
 
   /// `註冊`
   String get loginSignUp {
-    return Intl.message(
-      '註冊',
-      name: 'loginSignUp',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('註冊', name: 'loginSignUp', desc: '', args: []);
   }
 
   /// `24Hr 年中無休`
   String get loginSub {
-    return Intl.message(
-      '24Hr 年中無休',
-      name: 'loginSub',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('24Hr 年中無休', name: 'loginSub', desc: '', args: []);
   }
 
   /// `歡迎回來!`
   String get loginWelcome {
-    return Intl.message(
-      '歡迎回來!',
-      name: 'loginWelcome',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('歡迎回來!', name: 'loginWelcome', desc: '', args: []);
   }
 
   /// `月票 : `
   String get monthlyPass {
-    return Intl.message(
-      '月票 : ',
-      name: 'monthlyPass',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('月票 : ', name: 'monthlyPass', desc: '', args: []);
   }
 
   /// `未購買`
   String get mpassInvalid {
-    return Intl.message(
-      '未購買',
-      name: 'mpassInvalid',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('未購買', name: 'mpassInvalid', desc: '', args: []);
   }
 
   /// `已購買`
   String get mpassValid {
-    return Intl.message(
-      '已購買',
-      name: 'mpassValid',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('已購買', name: 'mpassValid', desc: '', args: []);
   }
 
   /// `訊息告知`
   String get msgNotify {
-    return Intl.message(
-      '訊息告知',
-      name: 'msgNotify',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('訊息告知', name: 'msgNotify', desc: '', args: []);
   }
 
   /// `合作`
   String get navCollab {
-    return Intl.message(
-      '合作',
-      name: 'navCollab',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('合作', name: 'navCollab', desc: '', args: []);
   }
 
   /// `投幣`
   String get navGame {
-    return Intl.message(
-      '投幣',
-      name: 'navGame',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('投幣', name: 'navGame', desc: '', args: []);
   }
 
   /// `禮物`
   String get navGift {
-    return Intl.message(
-      '禮物',
-      name: 'navGift',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('禮物', name: 'navGift', desc: '', args: []);
   }
 
   /// `設定`
   String get navSettings {
-    return Intl.message(
-      '設定',
-      name: 'navSettings',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('設定', name: 'navSettings', desc: '', args: []);
   }
 
   /// `已投幣`
   String get nbusyCoin {
-    return Intl.message(
-      '已投幣',
-      name: 'nbusyCoin',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('已投幣', name: 'nbusyCoin', desc: '', args: []);
   }
 
   /// `未投幣`
   String get nbusyNoCoin {
-    return Intl.message(
-      '未投幣',
-      name: 'nbusyNoCoin',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('未投幣', name: 'nbusyNoCoin', desc: '', args: []);
   }
 
   /// `空閒`
   String get nbusyS1 {
-    return Intl.message(
-      '空閒',
-      name: 'nbusyS1',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('空閒', name: 'nbusyS1', desc: '', args: []);
   }
 
   /// `適中`
   String get nbusyS2 {
-    return Intl.message(
-      '適中',
-      name: 'nbusyS2',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('適中', name: 'nbusyS2', desc: '', args: []);
   }
 
   /// `忙碌`
   String get nbusyS3 {
-    return Intl.message(
-      '忙碌',
-      name: 'nbusyS3',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('忙碌', name: 'nbusyS3', desc: '', args: []);
   }
 
   /// `下一階 : `
   String get nextLv {
-    return Intl.message(
-      '下一階 : ',
-      name: 'nextLv',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('下一階 : ', name: 'nextLv', desc: '', args: []);
   }
 
   /// `官方資訊`
   String get officialNotify {
-    return Intl.message(
-      '官方資訊',
-      name: 'officialNotify',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('官方資訊', name: 'officialNotify', desc: '', args: []);
   }
 
   /// `釘選機臺`
   String get pinnedGame {
-    return Intl.message(
-      '釘選機臺',
-      name: 'pinnedGame',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('釘選機臺', name: 'pinnedGame', desc: '', args: []);
   }
 
   /// `伺服器錯誤，請嘗試重新整理或回報X50`
@@ -632,22 +416,12 @@ class S {
 
   /// `設定喜好機臺`
   String get setFavGameTitle {
-    return Intl.message(
-      '設定喜好機臺',
-      name: 'setFavGameTitle',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('設定喜好機臺', name: 'setFavGameTitle', desc: '', args: []);
   }
 
   /// `機種別`
   String get summaryGame {
-    return Intl.message(
-      '機種別',
-      name: 'summaryGame',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('機種別', name: 'summaryGame', desc: '', args: []);
   }
 
   /// `詳細機種別`
@@ -662,12 +436,7 @@ class S {
 
   /// `喜好機台`
   String get summaryGameFavGame {
-    return Intl.message(
-      '喜好機台',
-      name: 'summaryGameFavGame',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('喜好機台', name: 'summaryGameFavGame', desc: '', args: []);
   }
 
   /// `可設定喜好機台`
@@ -692,7 +461,9 @@ class S {
 
   /// `{summaryGameRecordTimes}次，共{summaryGameRecordTotal}`
   String summaryGameRecordRecord(
-      int summaryGameRecordTimes, String summaryGameRecordTotal) {
+    int summaryGameRecordTimes,
+    String summaryGameRecordTotal,
+  ) {
     return Intl.message(
       '$summaryGameRecordTimes次，共$summaryGameRecordTotal',
       name: 'summaryGameRecordRecord',
@@ -713,112 +484,57 @@ class S {
 
   /// `隱藏`
   String get summaryHide {
-    return Intl.message(
-      '隱藏',
-      name: 'summaryHide',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('隱藏', name: 'summaryHide', desc: '', args: []);
   }
 
   /// `無資料`
   String get summaryNoData {
-    return Intl.message(
-      '無資料',
-      name: 'summaryNoData',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('無資料', name: 'summaryNoData', desc: '', args: []);
   }
 
   /// `計算期間`
   String get summaryPeriod {
-    return Intl.message(
-      '計算期間',
-      name: 'summaryPeriod',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('計算期間', name: 'summaryPeriod', desc: '', args: []);
   }
 
   /// `30天`
   String get summaryPeriod30 {
-    return Intl.message(
-      '30天',
-      name: 'summaryPeriod30',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('30天', name: 'summaryPeriod30', desc: '', args: []);
   }
 
   /// `60天`
   String get summaryPeriod60 {
-    return Intl.message(
-      '60天',
-      name: 'summaryPeriod60',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('60天', name: 'summaryPeriod60', desc: '', args: []);
   }
 
   /// `7天`
   String get summaryPeriod7 {
-    return Intl.message(
-      '7天',
-      name: 'summaryPeriod7',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('7天', name: 'summaryPeriod7', desc: '', args: []);
   }
 
   /// `全期間`
   String get summaryPeriodAll {
-    return Intl.message(
-      '全期間',
-      name: 'summaryPeriodAll',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('全期間', name: 'summaryPeriodAll', desc: '', args: []);
   }
 
   /// `使用點數`
   String get summaryPoint {
-    return Intl.message(
-      '使用點數',
-      name: 'summaryPoint',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('使用點數', name: 'summaryPoint', desc: '', args: []);
   }
 
   /// `顯示`
   String get summaryShow {
-    return Intl.message(
-      '顯示',
-      name: 'summaryShow',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('顯示', name: 'summaryShow', desc: '', args: []);
   }
 
   /// `券量 : `
   String get ticketBalance {
-    return Intl.message(
-      '券量 : ',
-      name: 'ticketBalance',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('券量 : ', name: 'ticketBalance', desc: '', args: []);
   }
 
   /// `張`
   String get ticketUnit {
-    return Intl.message(
-      '張',
-      name: 'ticketUnit',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('張', name: 'ticketUnit', desc: '', args: []);
   }
 
   /// `主題色`
@@ -1043,42 +759,22 @@ class S {
 
   /// `修改顯示頭貼`
   String get userAvatar {
-    return Intl.message(
-      '修改顯示頭貼',
-      name: 'userAvatar',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('修改顯示頭貼', name: 'userAvatar', desc: '', args: []);
   }
 
   /// `店鋪儲值紀錄`
   String get userBidLog {
-    return Intl.message(
-      '店鋪儲值紀錄',
-      name: 'userBidLog',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('店鋪儲值紀錄', name: 'userBidLog', desc: '', args: []);
   }
 
   /// `更改使用者信箱`
   String get userEmail {
-    return Intl.message(
-      '更改使用者信箱',
-      name: 'userEmail',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('更改使用者信箱', name: 'userEmail', desc: '', args: []);
   }
 
   /// `回饋點數紀錄`
   String get userFPlayLog {
-    return Intl.message(
-      '回饋點數紀錄',
-      name: 'userFPlayLog',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('回饋點數紀錄', name: 'userFPlayLog', desc: '', args: []);
   }
 
   /// `X50Pay App 設定`
@@ -1093,122 +789,62 @@ class S {
 
   /// `登出 X50Pay`
   String get userLogout {
-    return Intl.message(
-      '登出 X50Pay',
-      name: 'userLogout',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('登出 X50Pay', name: 'userLogout', desc: '', args: []);
   }
 
   /// `多元付款設定`
   String get userNFC {
-    return Intl.message(
-      '多元付款設定',
-      name: 'userNFC',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('多元付款設定', name: 'userNFC', desc: '', args: []);
   }
 
   /// `西門"一店"開門`
   String get userOpenDoor1 {
-    return Intl.message(
-      '西門"一店"開門',
-      name: 'userOpenDoor1',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('西門"一店"開門', name: 'userOpenDoor1', desc: '', args: []);
   }
 
   /// `西門"二店"開門`
   String get userOpenDoor2 {
-    return Intl.message(
-      '西門"二店"開門',
-      name: 'userOpenDoor2',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('西門"二店"開門', name: 'userOpenDoor2', desc: '', args: []);
   }
 
   /// `線上排隊設定`
   String get userPad {
-    return Intl.message(
-      '線上排隊設定',
-      name: 'userPad',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('線上排隊設定', name: 'userPad', desc: '', args: []);
   }
 
   /// `更改使用者密碼`
   String get userPassword {
-    return Intl.message(
-      '更改使用者密碼',
-      name: 'userPassword',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('更改使用者密碼', name: 'userPassword', desc: '', args: []);
   }
 
   /// `更改使用者手機`
   String get userPhone {
-    return Intl.message(
-      '更改使用者手機',
-      name: 'userPhone',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('更改使用者手機', name: 'userPhone', desc: '', args: []);
   }
 
   /// `付費遊玩紀錄`
   String get userPlayLog {
-    return Intl.message(
-      '付費遊玩紀錄',
-      name: 'userPlayLog',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('付費遊玩紀錄', name: 'userPlayLog', desc: '', args: []);
   }
 
   /// `QuIC付款設定`
   String get userQUIC {
-    return Intl.message(
-      'QuIC付款設定',
-      name: 'userQUIC',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('QuIC付款設定', name: 'userQUIC', desc: '', args: []);
   }
 
   /// `未使用券紀錄`
   String get userTicLog {
-    return Intl.message(
-      '未使用券紀錄',
-      name: 'userTicLog',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('未使用券紀錄', name: 'userTicLog', desc: '', args: []);
   }
 
   /// `已使用券明細`
   String get userUTicLog {
-    return Intl.message(
-      '已使用券明細',
-      name: 'userUTicLog',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('已使用券明細', name: 'userUTicLog', desc: '', args: []);
   }
 
   /// `期限 : `
   String get vipDate {
-    return Intl.message(
-      '期限 : ',
-      name: 'vipDate',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('期限 : ', name: 'vipDate', desc: '', args: []);
   }
 
   /// `點左側票券圖樣立刻購買`

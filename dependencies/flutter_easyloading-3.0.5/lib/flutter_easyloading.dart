@@ -20,7 +20,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-library flutter_easyloading;
+library;
 
 export 'src/animations/animation.dart';
 export 'src/easy_loading.dart';

@@ -114,7 +114,7 @@ class GameCabItem extends StatelessWidget with GameMixin {
                                 Text(
                                   '  $time$addition',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
+                                    color: Colors.white.withValues(alpha: 0.9),
                                     fontSize: 12,
                                     shadows: const [
                                       Shadow(

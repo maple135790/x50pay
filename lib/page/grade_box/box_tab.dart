@@ -79,12 +79,12 @@ class _GradeBoxTabState extends BaseStatefulState<GradeBoxTab> {
               borderRadius: BorderRadius.circular(6),
               child: CachedNetworkImage(
                 imageUrl: item.picUrl,
-                placeholder: (_, __) => const Icon(
+                placeholder: (_, _) => const Icon(
                   Icons.broken_image_rounded,
                   size: 35,
                   color: Color(0xff303030),
                 ),
-                errorWidget: (_, __, ___) => const Icon(
+                errorWidget: (_, _, _) => const Icon(
                     Icons.broken_image_rounded,
                     size: 35,
                     color: Color(0xff303030)),

@@ -8,11 +8,6 @@
             "name": "x50pay",
             "request": "launch",
             "type": "dart"
-        },{
-            "name": "x50pay p4a5g",
-            "request": "launch",
-            "deviceId": "0B281JECB01804",
-            "type": "dart"
         },
         {
             "name": "x50pay (profile mode)",

@@ -9,9 +9,8 @@ class Prefs {
   static bool get _duringTest =>
       Platform.environment.containsKey('FLUTTER_TEST');
 
-  static FlutterSecureStorage get _secureStorage => const FlutterSecureStorage(
-        aOptions: AndroidOptions(encryptedSharedPreferences: true),
-      );
+  static FlutterSecureStorage get _secureStorage =>
+      const FlutterSecureStorage();
 
   static Future<String?> getString(PrefsToken token) async {
     final pref = await SharedPreferences.getInstance();
@@ -94,9 +93,9 @@ enum GameCabTileStyle {
   }
 
   String get i18nName => switch (this) {
-        GameCabTileStyle.large => S.current.gameCabTileLarge,
-        GameCabTileStyle.small => S.current.gameCabTileSmall,
-      };
+    GameCabTileStyle.large => S.current.gameCabTileLarge,
+    GameCabTileStyle.small => S.current.gameCabTileSmall,
+  };
 }
 
 enum PrefsToken {

@@ -3,13 +3,10 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
-import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences_debugger/shared_preferences_debugger.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/base/base.dart';
@@ -36,17 +33,6 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
       mode: LaunchMode.externalApplication,
     );
   }
-
-  @override
-  void Function()? get debugFunction => () {
-        emailController.text = 'test';
-        password.text = 'test';
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const SharedPreferencesDebugPage(),
-          ),
-        );
-      };
 
   @override
   void initState() {
@@ -78,14 +64,14 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
           context.goNamed(AppRoutes.home.routeName);
         },
       );
-    } on PlatformException catch (e) {
-      if (e.code == auth_error.notAvailable) {
+    } on LocalAuthException catch (e) {
+      if (e.code == LocalAuthExceptionCode.noBiometricHardware) {
         EasyLoading.showError('此裝置不支援生物辨識登入');
-      } else if (e.code == auth_error.notEnrolled) {
+      } else if (e.code == LocalAuthExceptionCode.noBiometricsEnrolled) {
         EasyLoading.showError('此裝置尚未設定生物辨識登入');
-      } else {
-        log('', error: e, name: 'doBiometricsLogin');
       }
+    } catch (e) {
+      log('', error: e, name: 'doBiometricsLogin');
     }
   }
 
@@ -158,7 +144,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
             children: [
               Text(i18n.loginBiometrics),
               const SizedBox(width: 15),
-              const Icon(Icons.fingerprint_rounded)
+              const Icon(Icons.fingerprint_rounded),
             ],
           ),
         );
@@ -221,11 +207,9 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
           TextSpan(
             text: i18n.loginForgotPassword,
             recognizer: TapGestureRecognizer()..onTap = onForgetPasswordTap,
-            style: const TextStyle(
-              decoration: TextDecoration.underline,
-            ),
+            style: const TextStyle(decoration: TextDecoration.underline),
           ),
-          const TextSpan(text: ' )')
+          const TextSpan(text: ' )'),
         ],
       ),
     );
@@ -260,10 +244,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
             children: [
               Text(
                 i18n.loginWelcome,
-                style: const TextStyle(
-                  fontSize: 17,
-                  color: Colors.white,
-                ),
+                style: const TextStyle(fontSize: 17, color: Colors.white),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -280,7 +261,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                       fontSize: 13,
                       color: Color(0xe6ffffff),
                     ),
-                  )
+                  ),
                 ],
               ),
             ],

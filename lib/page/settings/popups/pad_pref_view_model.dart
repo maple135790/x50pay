@@ -97,7 +97,7 @@ class PadPrefsViewModel extends BaseViewModel {
 
   @visibleForTesting
   String convertColorToHex(Color color) {
-    return color.value.toRadixString(16).substring(2).padLeft(7, '#');
+    return color.toARGB32().toRadixString(16).substring(2).padLeft(7, '#');
   }
 }
 
