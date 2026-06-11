@@ -6,27 +6,32 @@ part of 'user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
-  message: json['message'] as String,
-  code: (json['code'] as num).toInt(),
-  rawUserImgUrl: json['userimg'] as String?,
-  email: json['email'] as String?,
-  uid: json['uid'] as String?,
-  point: (json['point'] as num?)?.toDouble(),
-  name: json['name'] as String?,
-  ticketint: (json['ticketint'] as num?)?.toInt(),
-  phoneactive: json['phoneactive'] as bool?,
-  fpoint: (json['fpoint'] as num?)?.toDouble(),
-  givebool: (json['givebool'] as num?)?.toInt(),
-  vip: json['vip'] as bool?,
-  vipdate: json['vipdate'] == null
-      ? null
-      : VipDate.fromJson(json['vipdate'] as Map<String, dynamic>),
-  sid: json['sid'] as String?,
-  sixn: json['sixn'] as String?,
-  tphone: (json['tphone'] as num?)?.toInt(),
-  doorpwd: json['doorpwd'] as String?,
-);
+UserModel _$UserModelFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('UserModel', json, ($checkedConvert) {
+      final val = UserModel(
+        message: $checkedConvert('message', (v) => v as String),
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        rawUserImgUrl: $checkedConvert('userimg', (v) => v as String?),
+        email: $checkedConvert('email', (v) => v as String?),
+        uid: $checkedConvert('uid', (v) => v as String?),
+        point: $checkedConvert('point', (v) => (v as num?)?.toDouble()),
+        name: $checkedConvert('name', (v) => v as String?),
+        ticketint: $checkedConvert('ticketint', (v) => (v as num?)?.toInt()),
+        phoneactive: $checkedConvert('phoneactive', (v) => v as bool?),
+        fpoint: $checkedConvert('fpoint', (v) => (v as num?)?.toDouble()),
+        givebool: $checkedConvert('givebool', (v) => (v as num?)?.toInt()),
+        vip: $checkedConvert('vip', (v) => v as bool?),
+        vipdate: $checkedConvert(
+          'vipdate',
+          (v) => v == null ? null : VipDate.fromJson(v as Map<String, dynamic>),
+        ),
+        sid: $checkedConvert('sid', (v) => v as String?),
+        sixn: $checkedConvert('sixn', (v) => v as String?),
+        tphone: $checkedConvert('tphone', (v) => v as String?),
+        doorpwd: $checkedConvert('doorpwd', (v) => v as String?),
+      );
+      return val;
+    }, fieldKeyMap: const {'rawUserImgUrl': 'userimg'});
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   'message': instance.message,
@@ -48,8 +53,15 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   'doorpwd': instance.doorpwd,
 };
 
-VipDate _$VipDateFromJson(Map<String, dynamic> json) =>
-    VipDate(rawDate: json[r'$date'] as String);
+VipDate _$VipDateFromJson(Map<String, dynamic> json) => $checkedCreate(
+  'VipDate',
+  json,
+  ($checkedConvert) {
+    final val = VipDate(rawDate: $checkedConvert(r'$date', (v) => v as String));
+    return val;
+  },
+  fieldKeyMap: const {'rawDate': r'$date'},
+);
 
 Map<String, dynamic> _$VipDateToJson(VipDate instance) => <String, dynamic>{
   r'$date': instance.rawDate,

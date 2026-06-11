@@ -24,7 +24,7 @@ class UserModel {
   final VipDate? vipdate;
   final String? sid;
   final String? sixn;
-  final int? tphone;
+  final String? tphone;
   final String? doorpwd;
 
   const UserModel({
@@ -63,7 +63,7 @@ class UserModel {
       vipdate = null,
       sid = "",
       sixn = "",
-      tphone = 0,
+      tphone = "0",
       doorpwd = "";
 
   static VipDate setVipDate(String unixTimestamp) =>

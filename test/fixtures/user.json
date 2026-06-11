@@ -1,0 +1,23 @@
+{
+    "code": 200,
+    "email": "fake-mail@example.com",
+    "fpoint": 0,
+    "givebool": 0,
+    "message": "done",
+    "name": "fake-name",
+    "phoneactive": true,
+    "phonetimes": "1",
+    "point": 5050,
+    "region": "",
+    "sid": "",
+    "sixn": "000000",
+    "ticketint": 8,
+    "tphone": "fake_phone",
+    "uid": "fake-uid",
+    "userbimg": "https://picsum.photos/id/237/200/300",
+    "userimg": "https://picsum.photos/id/237/200/300",
+    "vip": false,
+    "vipdate": {
+        "$date": "1990-05-05T08:00:00.000Z"
+    }
+}
