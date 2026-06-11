@@ -1,10 +1,12 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
@@ -56,6 +58,9 @@ Future<bool> getLoginStatus() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   themeProvider.configLoadingStyle();
+
+  hierarchicalLoggingEnabled = true;
+  _initLogger();
 
   final appLocale = await languageProvider.getUserPrefLocale();
   final packageInfo = await PackageInfo.fromPlatform();
@@ -153,4 +158,21 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+void _initLogger() {
+  Logger.root.level = kReleaseMode ? Level.WARNING : Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    log(
+      record.message,
+      time: record.time,
+      level: record.level.value,
+      error: record.error,
+      stackTrace: record.stackTrace,
+      name: record.loggerName,
+    );
+    if (kReleaseMode) {
+      // TODO: 新增 FirebaseCrashlytics
+    }
+  });
 }
