@@ -7,14 +7,22 @@ part of 'common.dart';
 // **************************************************************************
 
 InitTime _$InitTimeFromJson(Map<String, dynamic> json) =>
-    InitTime(date: json[r'$date'] as String);
+    $checkedCreate('InitTime', json, ($checkedConvert) {
+      final val = InitTime(date: $checkedConvert(r'$date', (v) => v as String));
+      return val;
+    }, fieldKeyMap: const {'date': r'$date'});
 
 Map<String, dynamic> _$InitTimeToJson(InitTime instance) => <String, dynamic>{
   r'$date': instance.date,
 };
 
 UnderscoreId _$UnderscoreIdFromJson(Map<String, dynamic> json) =>
-    UnderscoreId(oid: json[r'$oid'] as String);
+    $checkedCreate('UnderscoreId', json, ($checkedConvert) {
+      final val = UnderscoreId(
+        oid: $checkedConvert(r'$oid', (v) => v as String),
+      );
+      return val;
+    }, fieldKeyMap: const {'oid': r'$oid'});
 
 Map<String, dynamic> _$UnderscoreIdToJson(UnderscoreId instance) =>
     <String, dynamic>{r'$oid': instance.oid};

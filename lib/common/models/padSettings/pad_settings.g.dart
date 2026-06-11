@@ -7,11 +7,14 @@ part of 'pad_settings.dart';
 // **************************************************************************
 
 PadSettingsModel _$PadSettingsModelFromJson(Map<String, dynamic> json) =>
-    PadSettingsModel(
-      shcolor: json['shcolor'] as String,
-      shid: json['shid'] as bool,
-      shname: json['shname'] as String,
-    );
+    $checkedCreate('PadSettingsModel', json, ($checkedConvert) {
+      final val = PadSettingsModel(
+        shcolor: $checkedConvert('shcolor', (v) => v as String),
+        shid: $checkedConvert('shid', (v) => v as bool),
+        shname: $checkedConvert('shname', (v) => v as String),
+      );
+      return val;
+    });
 
 Map<String, dynamic> _$PadSettingsModelToJson(PadSettingsModel instance) =>
     <String, dynamic>{

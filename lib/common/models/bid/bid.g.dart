@@ -6,13 +6,20 @@ part of 'bid.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-BidLogModel _$BidLogModelFromJson(Map<String, dynamic> json) => BidLogModel(
-  code: (json['code'] as num).toInt(),
-  logs: (json['log'] as List<dynamic>)
-      .map((e) => BidLog.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  message: json['message'] as String,
-);
+BidLogModel _$BidLogModelFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('BidLogModel', json, ($checkedConvert) {
+      final val = BidLogModel(
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        logs: $checkedConvert(
+          'log',
+          (v) => (v as List<dynamic>)
+              .map((e) => BidLog.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
+        message: $checkedConvert('message', (v) => v as String),
+      );
+      return val;
+    }, fieldKeyMap: const {'logs': 'log'});
 
 Map<String, dynamic> _$BidLogModelToJson(BidLogModel instance) =>
     <String, dynamic>{
@@ -21,16 +28,21 @@ Map<String, dynamic> _$BidLogModelToJson(BidLogModel instance) =>
       'message': instance.message,
     };
 
-BidLog _$BidLogFromJson(Map<String, dynamic> json) => BidLog(
-  point: (json['point'] as num?)?.toDouble(),
-  threekcred: json['3kcred'] as bool?,
-  shop: json['shop'] as String?,
-  time: json['time'] as String?,
-  uid: json['uid'] as String?,
-  id: json['_id'] == null
-      ? null
-      : BidId.fromJson(json['_id'] as Map<String, dynamic>),
-);
+BidLog _$BidLogFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('BidLog', json, ($checkedConvert) {
+      final val = BidLog(
+        point: $checkedConvert('point', (v) => (v as num?)?.toDouble()),
+        threekcred: $checkedConvert('3kcred', (v) => v as bool?),
+        shop: $checkedConvert('shop', (v) => v as String?),
+        time: $checkedConvert('time', (v) => v as String?),
+        uid: $checkedConvert('uid', (v) => v as String?),
+        id: $checkedConvert(
+          '_id',
+          (v) => v == null ? null : BidId.fromJson(v as Map<String, dynamic>),
+        ),
+      );
+      return val;
+    }, fieldKeyMap: const {'threekcred': '3kcred', 'id': '_id'});
 
 Map<String, dynamic> _$BidLogToJson(BidLog instance) => <String, dynamic>{
   'point': instance.point,
@@ -42,7 +54,10 @@ Map<String, dynamic> _$BidLogToJson(BidLog instance) => <String, dynamic>{
 };
 
 BidId _$BidIdFromJson(Map<String, dynamic> json) =>
-    BidId(oid: json[r'$oid'] as String);
+    $checkedCreate('BidId', json, ($checkedConvert) {
+      final val = BidId(oid: $checkedConvert(r'$oid', (v) => v as String));
+      return val;
+    }, fieldKeyMap: const {'oid': r'$oid'});
 
 Map<String, dynamic> _$BidIdToJson(BidId instance) => <String, dynamic>{
   r'$oid': instance.oid,

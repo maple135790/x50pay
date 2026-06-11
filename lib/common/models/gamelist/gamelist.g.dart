@@ -6,16 +6,23 @@ part of 'gamelist.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GameList _$GameListFromJson(Map<String, dynamic> json) => GameList(
-  message: json['message'] as String?,
-  code: (json['code'] as num?)?.toInt(),
-  machines: (json['machinelist'] as List<dynamic>?)
-      ?.map((e) => Machine.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  payMid: json['payMid'] as String?,
-  payLid: json['payLid'] as String?,
-  payCid: json['payCid'] as String?,
-);
+GameList _$GameListFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('GameList', json, ($checkedConvert) {
+      final val = GameList(
+        message: $checkedConvert('message', (v) => v as String?),
+        code: $checkedConvert('code', (v) => (v as num?)?.toInt()),
+        machines: $checkedConvert(
+          'machinelist',
+          (v) => (v as List<dynamic>?)
+              ?.map((e) => Machine.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
+        payMid: $checkedConvert('payMid', (v) => v as String?),
+        payLid: $checkedConvert('payLid', (v) => v as String?),
+        payCid: $checkedConvert('payCid', (v) => v as String?),
+      );
+      return val;
+    }, fieldKeyMap: const {'machines': 'machinelist'});
 
 Map<String, dynamic> _$GameListToJson(GameList instance) => <String, dynamic>{
   'message': instance.message,
@@ -26,29 +33,45 @@ Map<String, dynamic> _$GameListToJson(GameList instance) => <String, dynamic>{
   'payCid': instance.payCid,
 };
 
-Machine _$MachineFromJson(Map<String, dynamic> json) => Machine(
-  json['lable'] as String?,
-  (json['price'] as num?)?.toDouble(),
-  json['discount'] as num?,
-  json['downprice'],
-  (json['mode'] as List<dynamic>?)?.map((e) => e as List<dynamic>).toList(),
-  json['note'] as List<dynamic>?,
-  (json['cabinet_detail'] as Map<String, dynamic>?)?.map(
-    (k, e) => MapEntry(k, e as Map<String, dynamic>),
-  ),
-  json['cabinet'] as num?,
-  json['enable'] as bool?,
-  json['id'] as String?,
-  json['shop'] as String?,
-  json['lora'] as bool?,
-  json['pad'] as bool?,
-  json['padlid'] as String?,
-  json['padmid'] as String?,
-  (json['qcounter'] as List<dynamic>?)
-      ?.map((e) => (e as num).toDouble())
-      .toList(),
-  json['quic'] as bool?,
-  json['vipb'] as bool?,
+Machine _$MachineFromJson(Map<String, dynamic> json) => $checkedCreate(
+  'Machine',
+  json,
+  ($checkedConvert) {
+    final val = Machine(
+      $checkedConvert('lable', (v) => v as String?),
+      $checkedConvert('price', (v) => (v as num?)?.toDouble()),
+      $checkedConvert('discount', (v) => v as num?),
+      $checkedConvert('downprice', (v) => v),
+      $checkedConvert(
+        'mode',
+        (v) => (v as List<dynamic>?)?.map((e) => e as List<dynamic>).toList(),
+      ),
+      $checkedConvert('note', (v) => v as List<dynamic>?),
+      $checkedConvert(
+        'cabinet_detail',
+        (v) => (v as Map<String, dynamic>?)?.map(
+          (k, e) => MapEntry(k, e as Map<String, dynamic>),
+        ),
+      ),
+      $checkedConvert('cabinet', (v) => v as num?),
+      $checkedConvert('enable', (v) => v as bool?),
+      $checkedConvert('id', (v) => v as String?),
+      $checkedConvert('shop', (v) => v as String?),
+      $checkedConvert('lora', (v) => v as bool?),
+      $checkedConvert('pad', (v) => v as bool?),
+      $checkedConvert('padlid', (v) => v as String?),
+      $checkedConvert('padmid', (v) => v as String?),
+      $checkedConvert(
+        'qcounter',
+        (v) =>
+            (v as List<dynamic>?)?.map((e) => (e as num).toDouble()).toList(),
+      ),
+      $checkedConvert('quic', (v) => v as bool?),
+      $checkedConvert('vipb', (v) => v as bool?),
+    );
+    return val;
+  },
+  fieldKeyMap: const {'downPrice': 'downprice', 'cabDatail': 'cabinet_detail'},
 );
 
 Map<String, dynamic> _$MachineToJson(Machine instance) => <String, dynamic>{

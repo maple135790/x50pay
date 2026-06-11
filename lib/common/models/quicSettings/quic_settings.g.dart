@@ -8,17 +8,20 @@ part of 'quic_settings.dart';
 
 PaymentSettingsModel _$PaymentSettingsModelFromJson(
   Map<String, dynamic> json,
-) => PaymentSettingsModel(
-  mtpMode: (json['mtpMode'] as num).toInt(),
-  nfcAuto: json['nfcAuto'] as bool,
-  nfcTicket: json['nfcTicket'] as bool,
-  nfcTwo: json['nfcTwo'] as String,
-  nfcSDVX: json['nfcSDVX'] as String,
-  nfcNVSV: json['nfcNVSV'] as String,
-  nfcQuic: json['nfcQuic'] as bool,
-  nfcQlock: (json['nfcQlock'] as num).toInt(),
-  aGV: json['aGV'] as bool,
-);
+) => $checkedCreate('PaymentSettingsModel', json, ($checkedConvert) {
+  final val = PaymentSettingsModel(
+    mtpMode: $checkedConvert('mtpMode', (v) => (v as num).toInt()),
+    nfcAuto: $checkedConvert('nfcAuto', (v) => v as bool),
+    nfcTicket: $checkedConvert('nfcTicket', (v) => v as bool),
+    nfcTwo: $checkedConvert('nfcTwo', (v) => v as String),
+    nfcSDVX: $checkedConvert('nfcSDVX', (v) => v as String),
+    nfcNVSV: $checkedConvert('nfcNVSV', (v) => v as String),
+    nfcQuic: $checkedConvert('nfcQuic', (v) => v as bool),
+    nfcQlock: $checkedConvert('nfcQlock', (v) => (v as num).toInt()),
+    aGV: $checkedConvert('aGV', (v) => v as bool),
+  );
+  return val;
+});
 
 Map<String, dynamic> _$PaymentSettingsModelToJson(
   PaymentSettingsModel instance,
