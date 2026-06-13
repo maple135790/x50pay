@@ -13,7 +13,7 @@ import 'package:x50pay/common/go_route_generator.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
-import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
+import 'package:x50pay/page/scan/qr_pay/qr_pay_service.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
 import 'package:x50pay/providers/entry_provider.dart';

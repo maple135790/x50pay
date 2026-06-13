@@ -12,7 +12,7 @@ import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
-import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
+import 'package:x50pay/page/scan/qr_pay/qr_pay_service.dart';
 import 'package:x50pay/page/scan/scan.dart';
 
 class QRPayModal extends StatefulWidget {
