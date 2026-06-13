@@ -17,7 +17,7 @@ class PlayRecords extends StatefulWidget {
 class _PlayRecordsState extends State<PlayRecords>
     with
         AppThemeMixin,
-        AppServiceMixin,
+        AppFeedbackMixin,
         RecordPageMixin<PlayRecordModel, PlayRecords> {
   @override
   String pageTitle() => '近兩個月的扣點明細如下';

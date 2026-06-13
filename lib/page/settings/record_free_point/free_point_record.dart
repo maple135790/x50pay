@@ -16,7 +16,7 @@ class FreePointRecords extends StatefulWidget {
 class _FreePointRecordsState extends State<FreePointRecords>
     with
         AppThemeMixin,
-        AppServiceMixin,
+        AppFeedbackMixin,
         RecordPageMixin<FreePointModel, FreePointRecords> {
   late SettingsViewModel viewModel;
 

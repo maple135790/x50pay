@@ -46,17 +46,17 @@ class CabDetail extends StatefulWidget {
 }
 
 class _CabDetailState extends State<CabDetail> with AppThemeMixin {
-  final repo = Repository();
-  late final viewModel = CabDatailViewModel(
-    repository: repo,
-    machineId: widget.machineId,
-  );
+  late final CabDatailViewModel viewModel;
   late Future<bool> cabInit;
   var key = GlobalKey();
 
   @override
   void initState() {
     super.initState();
+    viewModel = CabDatailViewModel(
+      repository: context.read<Repository>(),
+      machineId: widget.machineId,
+    );
     cabInit = viewModel.getSelGameCab();
   }
 

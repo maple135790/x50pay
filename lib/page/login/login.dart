@@ -64,7 +64,7 @@ class _LoginState extends State<Login> with AppThemeMixin {
       );
       if (!didAuthenticate) return;
       loginProvider.biometricsLogin(
-        onLoginSuccess: () {
+        onLoggedIn: () {
           context.goNamed(AppRoutes.home.routeName);
         },
       );
@@ -82,15 +82,11 @@ class _LoginState extends State<Login> with AppThemeMixin {
   /// 輸入帳號密碼的登入
   void doLogin() async {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (emailController.text.isEmpty || password.text.isEmpty) {
-      loginProvider.errorMsg = '帳密不得為空';
-      return;
-    }
-
     loginProvider.login(
       email: emailController.text,
       password: password.text,
-      onLoginSuccess: () {
+      showSuccessDialog: true,
+      onLoggedIn: () {
         context.goNamed(AppRoutes.home.routeName);
       },
     );
@@ -155,10 +151,10 @@ class _LoginState extends State<Login> with AppThemeMixin {
       },
     );
 
-    final errorLabel = Selector<LoginProvider, String?>(
-      selector: (context, vm) => vm.errorMsg,
-      builder: (context, errorMsg, child) {
-        if (errorMsg == null) return const SizedBox();
+    final errorLabel = Selector<LoginProvider, LoginErrorType?>(
+      selector: (context, vm) => vm.errorType,
+      builder: (context, errorType, child) {
+        if (errorType == null) return const SizedBox();
 
         return Container(
           margin: const EdgeInsets.all(14),
@@ -181,7 +177,7 @@ class _LoginState extends State<Login> with AppThemeMixin {
                 ),
               ),
               const SizedBox(width: 15),
-              Text(errorMsg),
+              Text(errorType.message),
             ],
           ),
         );
@@ -353,4 +349,15 @@ class _LoginState extends State<Login> with AppThemeMixin {
       ),
     );
   }
+}
+
+extension LoginErrorTypeExt on LoginErrorType {
+  String get message => switch (this) {
+    LoginErrorType.emptyField => '帳密不得為空',
+    LoginErrorType.credentialError => '帳號或密碼錯誤',
+    LoginErrorType.emailNotVerified => 'Email尚未驗證，請先驗證信箱\n若有問題請聯絡X50粉絲團',
+    LoginErrorType.unknown => '未知錯誤，請通知開發者',
+    LoginErrorType.noLogin => 'nologin',
+    LoginErrorType.credentialCorrupted => '請重新登入 ($code)',
+  };
 }

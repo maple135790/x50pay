@@ -17,7 +17,7 @@ class BidRecords extends StatefulWidget {
 class _BidRecordsState extends State<BidRecords>
     with
         AppThemeMixin,
-        AppServiceMixin,
+        AppFeedbackMixin,
         RecordPageMixin<BidLogModel, BidRecords> {
   @override
   String pageTitle() => '近兩個月的儲值紀錄如下';

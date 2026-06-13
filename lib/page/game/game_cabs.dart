@@ -28,7 +28,6 @@ class GameCabs extends StatefulWidget {
 }
 
 class _GameCabsState extends State<GameCabs> {
-  final repo = Repository();
   late final GameCabsViewModel viewModel;
   late List<Machine> machine;
   var key = GlobalKey();
@@ -37,7 +36,7 @@ class _GameCabsState extends State<GameCabs> {
   void initState() {
     super.initState();
     viewModel = GameCabsViewModel(
-      repository: repo,
+      repository: context.read<Repository>(),
       currentLocale: context.read<LanguageProvider>().currentLocale,
     );
   }

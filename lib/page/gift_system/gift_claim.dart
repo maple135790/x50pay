@@ -164,9 +164,11 @@ class _ConfirmChangeDialogState extends State<_ConfirmChangeDialog>
                   child: TextButton(
                     onPressed: () async {
                       final nav = GoRouter.of(context);
-                      kDebugMode
-                          ? null
-                          : await Repository().giftExchange(widget.gid);
+                      if (!kDebugMode) {
+                        await context.read<Repository>().giftExchange(
+                          widget.gid,
+                        );
+                      }
                       await EasyLoading.showSuccess(
                         '成功兌換,將會回到首頁',
                         duration: const Duration(milliseconds: 800),

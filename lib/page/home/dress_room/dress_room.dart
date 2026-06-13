@@ -23,14 +23,14 @@ class DressRoom extends StatefulWidget {
 class _DressRoomState extends State<DressRoom> {
   S get i18n => S.of(context);
 
-  final repo = Repository();
-  late final viewModel = DressRoomViewModel(repository: repo);
+  late final DressRoomViewModel viewModel;
   String? selectedAvater;
   late Future<List<Avatar>> initDressRoom;
 
   @override
   void initState() {
     super.initState();
+    viewModel = DressRoomViewModel(repository: context.read<Repository>());
     initDressRoom = viewModel.getAvatars();
   }
 

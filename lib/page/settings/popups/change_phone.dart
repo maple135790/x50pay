@@ -137,7 +137,7 @@ class ChangePhoneConfirmedDialog extends StatefulWidget {
 }
 
 class _ChangePhoneConfirmedDialogState extends State<ChangePhoneConfirmedDialog>
-    with AppServiceMixin {
+    with AppFeedbackMixin {
   final textController = TextEditingController();
   late final ChangePhoneViewModel viewModel;
 

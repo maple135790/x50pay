@@ -10,7 +10,7 @@ import 'package:x50pay/providers/app_settings_provider.dart';
 ///
 /// 用於簡化紀錄頁面，提供標準的頁面結構。
 mixin RecordPageMixin<M, T extends StatefulWidget>
-    on State<T>, AppThemeMixin, AppServiceMixin {
+    on State<T>, AppThemeMixin, AppFeedbackMixin {
   late final Future<M> _init;
   late final Future<bool> _getIsEnableSummarizedRecord;
 

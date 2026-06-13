@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
@@ -19,9 +20,14 @@ class CollabShopList extends StatefulWidget {
 }
 
 class _CollabShopListState extends State<CollabShopList>
-    with AppThemeMixin, AppServiceMixin {
-  final repo = Repository();
-  late final viewModel = CollabShopListViewModel(repository: repo);
+    with AppThemeMixin, AppFeedbackMixin {
+  late final CollabShopListViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = CollabShopListViewModel(repository: context.read<Repository>());
+  }
 
   void showQRCodeScan() async {
     final router = GoRouter.of(context);

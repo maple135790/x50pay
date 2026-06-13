@@ -5,11 +5,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:x50pay/repository/repository.dart';
 
 mixin NfcPadMixin {
-  final _repo = Repository();
+  Repository get repository;
 
   Future<String> _getNfcPadDocument(String url) async {
     try {
-      final response = await _repo.getDocument(url);
+      final response = await repository.getDocument(url);
       if (response.statusCode != 200) {
         throw Exception('statusCode: ${response.statusCode}');
       }
@@ -29,7 +29,7 @@ mixin NfcPadMixin {
     late final String doc;
     try {
       if (!kDebugMode) {
-        doc = await _repo.getDocumentWithDomainPrefix(
+        doc = await repository.getDocumentWithDomainPrefix(
           internalUrl,
           refererUrl,
           descLabel: '使用nfc pad 排隊api',

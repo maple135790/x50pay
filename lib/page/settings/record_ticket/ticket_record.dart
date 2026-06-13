@@ -17,7 +17,7 @@ class TicketRecords extends StatefulWidget {
 class _TicketRecordsState extends State<TicketRecords>
     with
         AppThemeMixin,
-        AppServiceMixin,
+        AppFeedbackMixin,
         RecordPageMixin<TicDateLogModel, TicketRecords> {
   @override
   String pageTitle() => '以下是您尚未使用的遊玩券記錄';

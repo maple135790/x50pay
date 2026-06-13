@@ -28,7 +28,6 @@ class FavGame extends StatefulWidget {
 }
 
 class _FavGameState extends State<FavGame> with AppThemeMixin {
-  final repo = Repository();
   late final FavGameViewModel viewModel;
   late final Future<void> init;
 
@@ -38,7 +37,7 @@ class _FavGameState extends State<FavGame> with AppThemeMixin {
   void initState() {
     super.initState();
     viewModel = FavGameViewModel(
-      repository: repo,
+      repository: context.read<Repository>(),
       currentLocale: context.read<LanguageProvider>().currentLocale,
     );
     init = viewModel.init();

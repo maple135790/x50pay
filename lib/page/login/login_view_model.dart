@@ -1,34 +1,42 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:logging/logging.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/storage/app_storage/app_storage.dart';
+import 'package:x50pay/storage/cookie_storage.dart';
 
 class LoginProvider extends BaseViewModel {
-  final Repository repo;
-  BasicResponse? response;
+  final Repository _repo;
+  final AppStorage _storage;
+  final CookieStorage _cookieStorage;
+  final VoidCallback _onInvalidCookie;
+  final Future<void> Function() _onShowLoginSuccessDialog;
 
-  LoginProvider({required this.repo});
+  LoginProvider(
+    this._repo,
+    this._cookieStorage, {
+    required this._onInvalidCookie,
+    required this._onShowLoginSuccessDialog,
+  }) : _storage = AppStorage.secure();
 
-  bool _isLogined = false;
+  final _logger = Logger('LoginProvider');
+
+  bool _isLoggedIn = false;
 
   /// 是否已經登入
   ///
   /// 用於確認是否要顯示登入頁面，於 app 啟動時檢查。
-  bool get isLogined => _isLogined;
+  bool get isLoggedIn => _isLoggedIn;
 
-  /// 錯誤訊息，若無錯誤則為 null
-  String? get errorMsg => _errorMsg;
-  String? _errorMsg;
-  set errorMsg(String? value) {
-    _errorMsg = value;
-    notifyListeners();
-  }
+  LoginErrorType? _errorType;
+
+  LoginErrorType? get errorType => _errorType;
 
   /// 是否開啟生物辨識登入
   bool get enableBiometricsLogin => _enableBiometricsLogin;
@@ -46,74 +54,67 @@ class LoginProvider extends BaseViewModel {
     notifyListeners();
   }
 
-  /// 登入的實體方法
-  @visibleForTesting
-  void doLogin(
-    String email,
-    String password,
-    VoidCallback onLoginSuccess,
-    bool isShowSuccessLogin, {
-    int debugFlag = 200,
-  }) async {
-    EasyLoading.show();
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    try {
-      if (!kDebugMode || isForceFetch) {
-        response = await repo.login(email: email, password: password);
-      } else {
-        response = BasicResponse.fromJson(
-          jsonDecode(testResponse(code: debugFlag)),
-        );
-      }
-      EasyLoading.dismiss();
-      final code = response?.code ?? 0;
-      switch (code) {
-        case 400:
-          errorMsg = '帳號或密碼錯誤';
-          break;
-        case 401:
-          errorMsg = 'Email尚未驗證，請先驗證信箱\n若有問題請聯絡X50粉絲團';
-          break;
-        case 402:
-          errorMsg = 'nologin';
-          break;
-        case 200:
-          errorMsg = null;
-          successLogin(onLoginSuccess, isShowSuccessLogin);
-          break;
-        default:
-          errorMsg = '未知錯誤';
-      }
-    } catch (e, stacktrace) {
-      errorMsg = '未知錯誤，請通知開發者';
-      log('', error: e, stackTrace: stacktrace, name: 'LoginViewModel.login');
-    } finally {
-      EasyLoading.dismiss();
-    }
-  }
-
   /// 帳號密碼的登入
   ///
   /// 需傳入帳號 [email] 及密碼 [password]。
   void login({
     required String email,
     required String password,
-    required VoidCallback onLoginSuccess,
-    bool isShowSuccessLogin = true,
+    VoidCallback? onLoggedIn,
+    bool showSuccessDialog = true,
   }) async {
-    doLogin(email, password, onLoginSuccess, isShowSuccessLogin);
+    if (email.isEmpty || password.isEmpty) {
+      _errorType = LoginErrorType.emptyField;
+      return;
+    }
+    BasicResponse? response;
+    EasyLoading.show();
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    try {
+      if (!kDebugMode || isForceFetch) {
+        response = await _repo.login(email: email, password: password);
+      }
+    } catch (e, stacktrace) {
+      _errorType = LoginErrorType.unknown;
+      log('', error: e, stackTrace: stacktrace, name: 'LoginViewModel.login');
+    }
+
+    EasyLoading.dismiss();
+    final code = response?.code;
+    if (code == null) {
+      _errorType = LoginErrorType.unknown;
+    } else if (code != 200) {
+      _errorType = LoginErrorType.fromCode(code);
+    } else {
+      _errorType = null;
+      _isLoggedIn = true;
+      if (showSuccessDialog) await _onShowLoginSuccessDialog();
+      onLoggedIn?.call();
+    }
+    notifyListeners();
   }
 
   /// 使用生物辨識的登入
   ///
   /// 會找尋儲存於 [FlutterSecureStorage] 的帳號及密碼。
   /// 並傳至內部登入方法 [doLogin]
-  void biometricsLogin({required VoidCallback onLoginSuccess}) async {
-    final email = await Prefs.secureRead(SecurePrefsToken.username) as String;
-    final password =
-        await Prefs.secureRead(SecurePrefsToken.password) as String;
-    doLogin(email, password, onLoginSuccess, true);
+  void biometricsLogin({VoidCallback? onLoggedIn}) async {
+    final map = await _storage.readAll([
+      StorageKey.username,
+      StorageKey.password,
+    ]);
+
+    final email = map[StorageKey.username]?.toString();
+    final password = map[StorageKey.password]?.toString();
+
+    if (email == null || password == null) {
+      _errorType = LoginErrorType.credentialCorrupted;
+      notifyListeners();
+      return;
+    }
+
+    login(email: email, password: password, onLoggedIn: onLoggedIn);
   }
 
   /// 成功登入
@@ -122,17 +123,9 @@ class LoginProvider extends BaseViewModel {
     VoidCallback onLoginSuccess,
     bool isShowSuccessLogin,
   ) async {
-    _isLogined = true;
+    _isLoggedIn = true;
     if (isShowSuccessLogin) {
-      EasyLoading.dismiss();
-      await Future.delayed(const Duration(milliseconds: 150));
-      EasyLoading.showSuccess(
-        '登入成功，歡迎回來',
-        duration: const Duration(milliseconds: 800),
-      );
-      await Future.delayed(const Duration(milliseconds: 800));
-      EasyLoading.dismiss();
-      await Future.delayed(const Duration(milliseconds: 350));
+      _onShowLoginSuccessDialog();
     }
     onLoginSuccess.call();
   }
@@ -155,7 +148,7 @@ class LoginProvider extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      await Repository().logout();
+      await _repo.logout();
 
       return true;
     } on Exception catch (e) {
@@ -167,6 +160,57 @@ class LoginProvider extends BaseViewModel {
     }
   }
 
-  String testResponse({int? code = 200}) =>
-      """{"code": $code,"message": "smth"}""";
+  Future<void> autoLogin() async {
+    bool isValidCookie = false;
+    try {
+      final cookie = await _cookieStorage.getStoredCookie(
+        validate: true,
+        setCacheAfterValidate: true,
+      );
+      isValidCookie = cookie != null;
+    } on CookieExpiredException {
+      _logger.info('cookie expired.');
+    } catch (e, s) {
+      _logger.warning('unknown error.', e, s);
+    }
+
+    if (!isValidCookie) {
+      _onAutoLoginFailed();
+      return;
+    }
+
+    final res = await _repo.getUser();
+    if (res.result.isError) {
+      _onAutoLoginFailed();
+      return;
+    }
+
+    _logger.info('Has valid cookie!');
+    _isLoggedIn = true;
+    notifyListeners();
+  }
+
+  void _onAutoLoginFailed() {
+    _isLoggedIn = false;
+    _cookieStorage.clear();
+    _onInvalidCookie();
+    notifyListeners();
+  }
+}
+
+enum LoginErrorType {
+  credentialError(400),
+  emailNotVerified(401),
+  noLogin(402),
+  unknown(-1),
+  emptyField(-2),
+  credentialCorrupted(-3);
+
+  final int code;
+
+  const LoginErrorType(this.code);
+
+  factory LoginErrorType.fromCode(int code) {
+    return values.firstWhere((e) => e.code == code, orElse: () => unknown);
+  }
 }

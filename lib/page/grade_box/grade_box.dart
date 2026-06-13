@@ -17,14 +17,14 @@ class GradeBox extends StatefulWidget {
   State<GradeBox> createState() => _GradeBoxState();
 }
 
-class _GradeBoxState extends State<GradeBox> with AppServiceMixin {
-  final repo = Repository();
-  late final viewModel = GradeBoxViewModel(repository: repo);
+class _GradeBoxState extends State<GradeBox> with AppFeedbackMixin {
+  late final GradeBoxViewModel viewModel;
   late Future<GradeBoxModel> init;
 
   @override
   void initState() {
     super.initState();
+    viewModel = GradeBoxViewModel(repository: context.read<Repository>());
     init = viewModel.getGradeBox();
   }
 

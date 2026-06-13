@@ -19,11 +19,16 @@ class GameStore extends StatefulWidget {
 }
 
 class _GameStoreState extends State<GameStore> {
-  final repo = Repository();
-  late final viewModel = GameStoreViewModel(repository: repo);
+  late final GameStoreViewModel viewModel;
   var key = GlobalKey();
 
   Locale get currentLocale => context.read<LanguageProvider>().currentLocale;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = GameStoreViewModel(repository: context.read<Repository>());
+  }
 
   Future<void> onRefresh() async {
     key = GlobalKey();

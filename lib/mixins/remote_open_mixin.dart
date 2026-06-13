@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:location/location.dart';
-import 'package:x50pay/repository/repository.dart';
 
 enum RemoteOpenShop {
   firstShop((lat: 25.0455991, lng: 121.5027702), doorName: 'door'),
@@ -16,12 +15,11 @@ enum RemoteOpenShop {
 mixin RemoteOpenMixin {
   /// Radius of the earth in km
   static const R = 6371;
-  final _repo = Repository();
   final _location = Location();
 
   double _deg2rad(double deg) => deg * (math.pi / 180);
 
-  double _getDistance(double lat1, double lng1, double lat2, double lng2) {
+  double getDistance(double lat1, double lng1, double lat2, double lng2) {
     var dLat = _deg2rad(lat2 - lat1); // deg2rad below
     var dLon = _deg2rad(lng2 - lng1);
     var a =
@@ -34,6 +32,8 @@ mixin RemoteOpenMixin {
     var d = R * c; // Distance in km
     return d;
   }
+
+  Future<String> onOpenDoor(LocationData currentLocation, RemoteOpenShop shop);
 
   void checkRemoteOpen({required RemoteOpenShop shop}) async {
     bool serviceEnabled;
@@ -59,12 +59,7 @@ mixin RemoteOpenMixin {
     }
 
     locationData = await _location.getLocation();
-    double myLat = locationData.latitude!;
-    double myLng = locationData.longitude!;
-    String result = await _repo.remoteOpenDoor(
-      _getDistance(25.0455991, 121.5027702, myLat, myLng),
-      doorName: shop.doorName,
-    );
+    String result = await onOpenDoor(locationData, shop);
     EasyLoading.dismiss();
     await Future.delayed(const Duration(milliseconds: 250));
     EasyLoading.showInfo(result.replaceFirst(',', '\n'));

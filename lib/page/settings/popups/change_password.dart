@@ -17,7 +17,7 @@ class ChangePasswordDialog extends StatefulWidget {
 }
 
 class _ChangePasswordDialogState extends State<ChangePasswordDialog>
-    with AppThemeMixin, AppServiceMixin {
+    with AppThemeMixin, AppFeedbackMixin {
   final _formKey = GlobalKey<FormState>();
   final oldPwd = TextEditingController();
   final newPwd = TextEditingController();

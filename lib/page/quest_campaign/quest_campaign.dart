@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
@@ -24,13 +25,9 @@ class QuestCampaign extends StatefulWidget {
 }
 
 class _QuestCampaignState extends State<QuestCampaign>
-    with AppThemeMixin, AppServiceMixin {
+    with AppThemeMixin, AppFeedbackMixin {
   static const stampSlotSize = 40.0;
-  final repo = Repository();
-  late final viewModel = QuestCampaignViewModel(
-    repository: repo,
-    campaignId: widget.campaignId,
-  );
+  late final QuestCampaignViewModel viewModel;
   late Future<Campaign?> init;
   int ownedPoints = 0;
 
@@ -52,6 +49,10 @@ class _QuestCampaignState extends State<QuestCampaign>
   @override
   void initState() {
     super.initState();
+    viewModel = QuestCampaignViewModel(
+      repository: context.read<Repository>(),
+      campaignId: widget.campaignId,
+    );
     init = viewModel.init();
   }
 

@@ -13,7 +13,6 @@ import 'package:x50pay/page/home/ticket_info.dart';
 import 'package:x50pay/page/home/top_info.dart';
 import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/repository.dart';
 
 class Home extends StatefulWidget {
   /// 首頁
@@ -23,8 +22,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with AppThemeMixin, AppServiceMixin {
-  final repo = Repository();
+class _HomeState extends State<Home> with AppThemeMixin, AppFeedbackMixin {
   late final HomeViewModel viewModel;
 
   var refreshKey = GlobalKey();

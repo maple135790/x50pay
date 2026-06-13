@@ -17,7 +17,7 @@ class ChangeEmailDialog extends StatefulWidget {
 }
 
 class _ChangeEmailDialogState extends State<ChangeEmailDialog>
-    with AppThemeMixin, AppServiceMixin {
+    with AppThemeMixin, AppFeedbackMixin {
   String? errorText;
   bool isEnabled = false;
   final newEmail = TextEditingController();

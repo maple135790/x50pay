@@ -16,7 +16,7 @@ class TicketUsedRecords extends StatefulWidget {
 class _TicketUsedRecordsState extends State<TicketUsedRecords>
     with
         AppThemeMixin,
-        AppServiceMixin,
+        AppFeedbackMixin,
         RecordPageMixin<TicUsedModel, TicketUsedRecords> {
   @override
   List<DataColumn> buildColumns() => ['日期', '機台', '消耗']

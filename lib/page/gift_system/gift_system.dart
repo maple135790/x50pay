@@ -18,14 +18,14 @@ class GiftSystem extends StatefulWidget {
   State<GiftSystem> createState() => _GiftSystemState();
 }
 
-class _GiftSystemState extends State<GiftSystem> with AppServiceMixin {
-  final repo = Repository();
-  late final viewModel = GiftSystemViewModel(repository: repo);
+class _GiftSystemState extends State<GiftSystem> with AppFeedbackMixin {
+  late final GiftSystemViewModel viewModel;
   late Future<void> init;
 
   @override
   void initState() {
     super.initState();
+    viewModel = GiftSystemViewModel(repository: context.read<Repository>());
     init = viewModel.giftSystemInit();
   }
 
@@ -33,22 +33,20 @@ class _GiftSystemState extends State<GiftSystem> with AppServiceMixin {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: viewModel,
-      builder: (context, child) {
-        return FutureBuilder(
-          future: init,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: kDebugMode ? Text('not done') : null);
-            }
-            if (snapshot.hasError) {
-              showServiceError();
-              return Center(child: Text(serviceErrorText));
-            }
-            if (EasyLoading.isShow) EasyLoading.dismiss();
-            return const _GiftBoxLoaded();
-          },
-        );
-      },
+      child: FutureBuilder(
+        future: init,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: kDebugMode ? Text('not done') : null);
+          }
+          if (snapshot.hasError) {
+            showServiceError();
+            return Center(child: Text(serviceErrorText));
+          }
+          if (EasyLoading.isShow) EasyLoading.dismiss();
+          return const _GiftBoxLoaded();
+        },
+      ),
     );
   }
 }
