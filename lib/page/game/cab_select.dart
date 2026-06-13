@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
@@ -11,9 +12,7 @@ import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
-import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/repository.dart';
 
 enum PaymentType {
   point('點數'),
@@ -31,8 +30,6 @@ class CabSelect extends StatefulWidget {
   final QRPayData qrPayData;
   final bool _isFromCabDetail;
   final bool _isFromQRPay;
-  final VoidCallback? onDestroy;
-  final VoidCallback? onCreated;
   static const _emptyQRPayData = QRPayData.empty();
 
   const CabSelect({
@@ -40,8 +37,6 @@ class CabSelect extends StatefulWidget {
     required this.caboid,
     required this.cabNum,
     required this.cabinetData,
-    this.onCreated,
-    this.onDestroy,
   }) : _isFromCabDetail = false,
        _isFromQRPay = false,
        qrPayData = _emptyQRPayData;
@@ -51,30 +46,24 @@ class CabSelect extends StatefulWidget {
     required this.caboid,
     required this.cabNum,
     required this.cabinetData,
-    this.onCreated,
-    this.onDestroy,
   }) : _isFromCabDetail = true,
        _isFromQRPay = false,
        qrPayData = _emptyQRPayData;
 
-  const CabSelect.fromQRPay({
-    super.key,
-    required this.qrPayData,
-    this.onCreated,
-    this.onDestroy,
-  }) : _isFromCabDetail = false,
-       _isFromQRPay = true,
-       caboid = '',
-       cabNum = -1,
-       cabinetData = const Cabinet.empty();
+  const CabSelect.fromQRPay({super.key, required this.qrPayData})
+    : _isFromCabDetail = false,
+      _isFromQRPay = true,
+      caboid = '',
+      cabNum = -1,
+      cabinetData = const Cabinet.empty();
 
   @override
   State<CabSelect> createState() => _CabSelectState();
 }
 
-class _CabSelectState extends State<CabSelect> with AppThemeMixin, GameMixin {
-  final repo = Repository();
-  late final CabSelectViewModel viewModel;
+class _CabSelectState extends State<CabSelect>
+    with AppThemeMixin, GameMixin, AppFeedbackMixin {
+  late final GameInsertService viewModel;
   late final cabData = widget.cabinetData;
   late bool isUseRewardPoint;
   PaymentType? paymentType;
@@ -114,30 +103,8 @@ class _CabSelectState extends State<CabSelect> with AppThemeMixin, GameMixin {
   @override
   void initState() {
     super.initState();
-    widget.onCreated?.call();
     isUseRewardPoint = context.read<UserProvider>().user?.givebool == 1;
-    viewModel = CabSelectViewModel(
-      repository: repo,
-      onInsertSuccess: () {
-        GlobalSingleton.instance.recentPlayedCabinetData = (
-          cabinet: widget.cabinetData,
-          cabNum: widget.cabNum,
-          caboid: widget.caboid,
-        );
-      },
-      onAfterInserted: () async {
-        final userProvider = context.read<UserProvider>();
-        final entryProvider = context.read<EntryProvider>();
-        await userProvider.checkUser();
-        await entryProvider.checkEntry();
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    widget.onDestroy?.call();
-    super.dispose();
+    viewModel = context.read<GameInsertService>();
   }
 
   void onPayConfirmPressed() async {
@@ -158,6 +125,13 @@ class _CabSelectState extends State<CabSelect> with AppThemeMixin, GameMixin {
         mode: paymentType != PaymentType.reloadCoin
             ? selectedMode!.first
             : 9999,
+        onInsertSuccess: () {
+          GlobalSingleton.instance.recentPlayedCabinetData = (
+            cabinet: widget.cabinetData,
+            cabNum: widget.cabNum,
+            caboid: widget.caboid,
+          );
+        },
       );
     }
     if (widget._isFromCabDetail) router.pop();
