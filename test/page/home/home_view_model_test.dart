@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:x50pay/common/models/api_response.dart';
@@ -13,14 +12,12 @@ class MockRepository extends Mock implements Repository {}
 
 class FakeUserModel extends Fake implements UserModel {}
 
-class FakeEntryModel extends Fake implements EntryModel {}
-
 final mockRepo = MockRepository();
 
 void main() {
   void arrangeGetEntryReturnsData() {
     when(mockRepo.getEntry).thenAnswer((_) async {
-      return FakeEntryModel();
+      return const EntryModel(message: 'done', code: 200, gr2: []);
     });
   }
 
