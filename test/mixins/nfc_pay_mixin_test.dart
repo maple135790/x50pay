@@ -5,21 +5,38 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
+import 'package:x50pay/page/game/cab_select_view_model.dart';
+import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
-class MockNfcPayMixin with NfcPayMixin {}
+class MockNfcPayMixin with NfcPayMixin {
+  @override
+  final Repository repository;
+
+  @override
+  final GameInsertService gameInsertService;
+
+  MockNfcPayMixin({required this.repository, required this.gameInsertService});
+}
 
 class MockRepository extends Mock implements Repository {}
 
 class MockSettingRepository extends Mock implements SettingRepository {}
 
+class MockGameInsertService extends Mock implements GameInsertService {}
+
 void main() {
   final mockSettingRepo = MockSettingRepository();
   final mockRepo = MockRepository();
-  final mockMixin = MockNfcPayMixin();
+  final mockGameInsertService = MockGameInsertService();
+  final mockMixin = MockNfcPayMixin(
+    repository: mockRepo,
+    gameInsertService: mockGameInsertService,
+  );
 
   setUp(() {
     when(() => mockRepo.getQRPayDocument(any())).thenAnswer((_) async {
@@ -30,6 +47,9 @@ void main() {
       const rawResponse = '''{"code":200,"message":"smth"}''';
       return BasicResponse.fromJson(json.decode(rawResponse));
     });
+    when(
+      () => mockGameInsertService.doInsertQRPay(url: any(named: 'url')),
+    ).thenAnswer((_) async => true);
     when(
       () => mockRepo.getDocumentWithDomainPrefix(
         any(),
@@ -51,7 +71,6 @@ void main() {
   test('當快速付款無設定、自動付款開啟，預期自動完成付款', () async {
     SharedPreferences.setMockInitialValues({});
 
-    var log = <String>[];
     when(mockSettingRepo.getQuickPaySettings).thenAnswer((_) async {
       return PaymentSettingsModel(
         mtpMode: DefaultCabPayment.x50pay.value,
@@ -66,25 +85,19 @@ void main() {
       );
     });
 
-    await mockMixin.handleNfcPay(
+    final result = await mockMixin.handleNfcPay(
       mid: '',
       cid: '',
       settingRepo: mockSettingRepo,
-      onCabSelect: (qrPayData) {
-        log.add('onCabSelect');
-      },
-      onNfcAutoPaymentDone: () {
-        log.add('onPaymentDone');
-      },
       isPreferTicket: false,
       repository: mockRepo,
     );
-    expect(log.contains('onCabSelect'), false);
-    expect(log.contains('onPaymentDone'), true);
+    expect(result, isA<CabPaymentCompleted>());
   });
   test('當快速付款開啟、自動付款開啟，預期自動完成付款', () async {
-    var log = <String>[];
-    SharedPreferences.setMockInitialValues({"fastQRPay": true});
+    SharedPreferences.setMockInitialValues({
+      PrefsToken.enabledFastQRPay.value: true,
+    });
 
     when(mockSettingRepo.getQuickPaySettings).thenAnswer((_) async {
       return PaymentSettingsModel(
@@ -100,25 +113,19 @@ void main() {
       );
     });
 
-    await mockMixin.handleNfcPay(
+    final result = await mockMixin.handleNfcPay(
       mid: '',
       cid: '',
       settingRepo: mockSettingRepo,
-      onCabSelect: (qrPayData) {
-        log.add('onCabSelect');
-      },
-      onNfcAutoPaymentDone: () {
-        log.add('onPaymentDone');
-      },
       isPreferTicket: false,
       repository: mockRepo,
     );
-    expect(log.contains('onCabSelect'), false);
-    expect(log.contains('onPaymentDone'), true);
+    expect(result, isA<CabPaymentCompleted>());
   });
   test('當快速付款關閉、自動付款開啟，預期自動完成付款', () async {
-    var log = <String>[];
-    SharedPreferences.setMockInitialValues({"fastQRPay": false});
+    SharedPreferences.setMockInitialValues({
+      PrefsToken.enabledFastQRPay.value: false,
+    });
 
     when(mockSettingRepo.getQuickPaySettings).thenAnswer((_) async {
       return PaymentSettingsModel(
@@ -134,26 +141,18 @@ void main() {
       );
     });
 
-    await mockMixin.handleNfcPay(
+    final result = await mockMixin.handleNfcPay(
       mid: '',
       cid: '',
       settingRepo: mockSettingRepo,
-      onCabSelect: (qrPayData) {
-        log.add('onCabSelect');
-      },
-      onNfcAutoPaymentDone: () {
-        log.add('onPaymentDone');
-      },
       isPreferTicket: false,
       repository: mockRepo,
     );
-    expect(log.contains('onCabSelect'), false);
-    expect(log.contains('onPaymentDone'), true);
+    expect(result, isA<CabPaymentCompleted>());
   });
-  test('當自動付款關閉，預期彈出onCabSelect', () async {
+  test('當自動付款關閉，預期回傳需要選擇機台付款模式', () async {
     SharedPreferences.setMockInitialValues({});
 
-    var log = <String>[];
     when(() => mockRepo.getQRPayDocument(any())).thenAnswer((_) async {
       const rawResponse = r'''<html><head>
     <meta charset="UTF-8">
@@ -425,21 +424,15 @@ $("#canceltic1").click(function(){
       );
     });
 
-    await mockMixin.handleNfcPay(
+    final result = await mockMixin.handleNfcPay(
       mid: '',
       cid: '',
       settingRepo: mockSettingRepo,
-      onCabSelect: (qrPayData) {
-        log.add('onCabSelect');
-        expect(qrPayData, isNotNull);
-      },
-      onNfcAutoPaymentDone: () {
-        log.add('onPaymentDone');
-      },
       isPreferTicket: false,
       repository: mockRepo,
     );
-    expect(log.contains('onCabSelect'), true);
-    expect(log.contains('onPaymentDone'), false);
+    expect(result, isA<CabPaymentNeedsSelection>());
+    final selectionResult = result as CabPaymentNeedsSelection;
+    expect(selectionResult.qrPayData, isNotNull);
   });
 }

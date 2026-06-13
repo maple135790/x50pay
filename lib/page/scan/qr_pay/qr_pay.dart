@@ -11,41 +11,50 @@ import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/page/game/cab_select.dart';
+import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
+import 'package:x50pay/page/scan/scan.dart';
 
 class QRPayModal extends StatefulWidget {
   final ScrollController scrollController;
+  final MachineData machineData;
 
-  const QRPayModal({super.key, required this.scrollController});
+  const QRPayModal(
+    this.machineData, {
+    super.key,
+    required this.scrollController,
+  });
 
   @override
   State<QRPayModal> createState() => _QRPayModalState();
 }
 
 class _QRPayModalState extends State<QRPayModal>
-    with AppThemeMixin, AppServiceMixin {
+    with AppThemeMixin, AppFeedbackMixin {
   late Future<bool> checkLogined;
-  late final QRPayViewModel viewModel = context.read<QRPayViewModel>();
+  late final QRPayService viewModel = context.read<QRPayService>();
 
   void onX50PayPressed() async {
-    viewModel.handleX50PayPayment(
-      onPaymentFinished: () {
-        Navigator.of(context).pop();
-      },
-      onCabSelect: (qrPayData) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return CabSelect.fromQRPay(
-              qrPayData: qrPayData,
-              onCreated: () {
-                EasyLoading.dismiss();
-              },
-            );
-          },
-        );
-      },
+    final sheetNavigator = Navigator.of(context);
+    final rootContext = Navigator.of(context, rootNavigator: true).context;
+    EasyLoading.show(status: '處理 X50Pay 支付');
+    final result = await viewModel.handleX50PayPayment(
+      mid: widget.machineData.mid,
+      cid: widget.machineData.cid,
     );
+    if (!mounted || !rootContext.mounted) return;
+
+    switch (result) {
+      case CabPaymentCompleted():
+        sheetNavigator.pop();
+      case CabPaymentNeedsSelection(:final qrPayData):
+        EasyLoading.dismiss();
+        sheetNavigator.pop();
+        await showDialog(
+          context: rootContext,
+          builder: (context) => CabSelect.fromQRPay(qrPayData: qrPayData),
+        );
+    }
   }
 
   void onLinePayPressed() {
@@ -65,7 +74,10 @@ class _QRPayModalState extends State<QRPayModal>
   @override
   void initState() {
     super.initState();
-    checkLogined = viewModel.checkSessionValid();
+    checkLogined = viewModel.checkSessionValid(
+      mid: widget.machineData.mid,
+      cid: widget.machineData.cid,
+    );
   }
 
   @override
