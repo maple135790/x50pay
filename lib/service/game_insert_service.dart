@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/models/basic_response.dart';
+import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 
@@ -11,14 +12,13 @@ typedef _InsertResponse = ({
   ({String msg, String describe}) response,
 });
 
+typedef RecentPlayedData = ({Cabinet cabinet, String cabOid, int cabNum});
+
 class GameInsertService {
   final VoidCallback onAfterInserted;
   final MainRepository repository;
 
-  const GameInsertService({
-    required this.repository,
-    required this.onAfterInserted,
-  });
+  GameInsertService({required this.repository, required this.onAfterInserted});
 
   static late AppFeedbackMixin _feedbackService;
 
@@ -27,6 +27,9 @@ class GameInsertService {
   ) {
     _feedbackService = rootUserFeedbackService;
   }
+
+  RecentPlayedData? _recentPlayedData;
+  RecentPlayedData? get recentPlayedData => _recentPlayedData;
 
   Future<bool> doInsertQRPay({required String url}) async {
     try {
@@ -61,10 +64,10 @@ class GameInsertService {
   Future<bool> doInsert({
     required bool isTicket,
     required bool isUseRewardPoint,
-    required String id,
+    required String oid,
     required int index,
     required num mode,
-    VoidCallback? onInsertSuccess,
+    required Cabinet cabinet,
   }) async {
     try {
       _feedbackService.showLoading();
@@ -74,14 +77,14 @@ class GameInsertService {
       var rawResponse = BasicResponse.empty();
 
       log(
-        'index: $index, id: $id/$sid$index, mode: $mode, isTicket: $isTicket',
+        'index: $index, oid: $oid/$sid$index, mode: $mode, isTicket: $isTicket',
         name: 'doInsert',
       );
 
       if (kReleaseMode) {
         rawResponse = await repository.doInsert(
           isTicket,
-          '$id/$sid$index',
+          '$oid/$sid$index',
           mode,
           isUseRewardPoint,
         );
@@ -96,7 +99,7 @@ class GameInsertService {
               ),
             );
       if (result.is200) {
-        onInsertSuccess?.call();
+        _recentPlayedData = (cabinet: cabinet, cabNum: index, cabOid: oid);
       }
       _showInsertResult(result);
       return true;
@@ -177,5 +180,9 @@ class GameInsertService {
     }
 
     return (is200: is200, response: (msg: msg, describe: describe));
+  }
+
+  void clearRecentPlayedData() {
+    _recentPlayedData = null;
   }
 }

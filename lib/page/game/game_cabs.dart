@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
@@ -19,6 +18,7 @@ import 'package:x50pay/page/game/game_cabs_view_model.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/route/app_route.dart';
+import 'package:x50pay/service/game_insert_service.dart';
 
 class GameCabs extends StatefulWidget {
   const GameCabs({super.key});
@@ -84,12 +84,10 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded>
 
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
-  // int currentTabIndex = 0;
-
   @override
   void dispose() {
-    GlobalSingleton.instance.recentPlayedCabinetData = null;
     _scaffoldMessengerKey.currentState?.clearSnackBars();
+    context.read<GameInsertService>().clearRecentPlayedData();
     super.dispose();
   }
 
@@ -109,11 +107,12 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded>
   }
 
   void showCabSelectDialog() {
-    final recentPlayData = GlobalSingleton.instance.recentPlayedCabinetData!;
+    final recentPlayData = context.read<GameInsertService>().recentPlayedData;
+    if (recentPlayData == null) return;
     showCupertinoDialog(
       context: context,
       builder: (_) => CabSelect(
-        caboid: recentPlayData.caboid,
+        caboid: recentPlayData.cabOid,
         cabNum: recentPlayData.cabNum,
         cabinetData: recentPlayData.cabinet,
       ),
