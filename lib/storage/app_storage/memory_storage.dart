@@ -28,4 +28,9 @@ class MemoryStorage implements Storage {
   Future<void> write(String key, String value) async {
     _storage[key] = value;
   }
+
+  @override
+  Future<Map<String, Object?>> readAll(Set<String> keys) async {
+    return Map.of(_storage)..removeWhere((k, _) => !keys.contains(k));
+  }
 }

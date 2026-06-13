@@ -5,4 +5,5 @@ abstract interface class Storage {
   Future<void> write(String key, String value);
   Future<void> delete(String key);
   Future<void> clear();
+  Future<Map<String, Object?>> readAll(Set<String> keys);
 }

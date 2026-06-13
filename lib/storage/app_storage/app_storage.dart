@@ -1,4 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
+import 'package:x50pay/providers/language_provider.dart';
+import 'package:x50pay/providers/theme_provider.dart';
 import 'package:x50pay/storage/app_storage/memory_storage.dart';
 import 'package:x50pay/storage/app_storage/prefs_storage.dart';
 import 'package:x50pay/storage/app_storage/secure_storage.dart';
@@ -26,6 +29,19 @@ class AppStorage {
     return _storage.read(key.name);
   }
 
+  Future<Map<StorageKey, Object?>> readAll(List<StorageKey> keys) async {
+    final keySet = keys.toSet();
+    final response = await _storage.readAll(keySet.map((e) => e.name).toSet());
+    final entries = <MapEntry<StorageKey, Object?>>[];
+
+    for (var entry in response.entries) {
+      final key = keySet.firstWhereOrNull((e) => entry.key == e.name);
+      if (key == null) continue;
+      entries.add(MapEntry(key, entry.value));
+    }
+    return Map.fromEntries(entries);
+  }
+
   Future<void> write(StorageKey key, String value) {
     return _storage.write(key.name, value);
   }
@@ -46,4 +62,19 @@ class AppStorage {
   }
 }
 
-enum StorageKey { cookie }
+enum StorageKey {
+  cookie,
+  enableDarkTheme(defaultValue: true),
+  appLang(defaultValue: LanguageProvider.defaultAppLocale),
+
+  /// 用戶選擇的店家編號，格式為 prefix + sid
+  storeId,
+  storeName,
+  username,
+  password,
+  seedColor(defaultValue: AppThemeProvider.defaultSeedColor);
+
+  final Object? defaultValue;
+
+  const StorageKey({this.defaultValue});
+}

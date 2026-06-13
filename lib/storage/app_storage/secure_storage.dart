@@ -8,23 +8,29 @@ class SecureStorage implements Storage {
   static const _secure = FlutterSecureStorage();
 
   @override
-  Future<String?> read(String key) async {
-    return await _secure.read(key: key);
+  Future<String?> read(String key) {
+    return _secure.read(key: key);
   }
 
   @override
-  Future<void> write(String key, String value) async {
-    await _secure.write(key: key, value: value);
+  Future<void> write(String key, String value) {
+    return _secure.write(key: key, value: value);
   }
 
   @override
-  Future<void> delete(String key) async {
-    await _secure.delete(key: key);
+  Future<void> delete(String key) {
+    return _secure.delete(key: key);
   }
 
   @override
   @visibleForTesting
-  Future<void> clear() async {
-    await _secure.deleteAll();
+  Future<void> clear() {
+    return _secure.deleteAll();
+  }
+
+  @override
+  Future<Map<String, dynamic>> readAll(Set<String> keys) async {
+    final map = await _secure.readAll();
+    return map..removeWhere((k, _) => !keys.contains(k));
   }
 }

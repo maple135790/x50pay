@@ -15,18 +15,23 @@ class PrefsStorage implements Storage {
   }
 
   @override
-  Future<void> write(String key, String value) async {
-    await _sp.setString(key, value);
+  Future<void> write(String key, String value) {
+    return _sp.setString(key, value);
   }
 
   @override
-  Future<void> delete(String key) async {
-    await _sp.remove(key);
+  Future<void> delete(String key) {
+    return _sp.remove(key);
   }
 
   @override
   @visibleForTesting
-  Future<void> clear() async {
-    await _sp.clear();
+  Future<void> clear() {
+    return _sp.clear();
+  }
+
+  @override
+  Future<Map<String, Object?>> readAll(Set<String> keys) {
+    return _sp.getAll(allowList: keys);
   }
 }

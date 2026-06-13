@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:x50pay/common/api.dart';
+import 'package:x50pay/common/client/request_handler.dart';
+import 'package:x50pay/common/models/api_response.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
@@ -12,12 +13,23 @@ import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
+import 'package:x50pay/repository/base_repository.dart';
 
 /// 存放 Api 呼叫的地方
 ///
-/// Api 呼叫細節請參考 [Api.makeRequest]
+/// Api 呼叫細節請參考 [client.request]
 /// [Repository] 只顯示使用呼叫，不顯示細節。
-class Repository extends Api {
+class Repository extends BaseRepository {
+  const Repository(super.client);
+
+  Uri _endpoint(String path) {
+    return Uri.parse('https://pay.x50.fun/api/v1$path');
+  }
+
+  Map<String, dynamic> _decodeRes(http.Response res) {
+    return json.decode(res.body);
+  }
+
   /// 登入API
   ///
   /// 需要傳入 [email] 和 [password]。
@@ -25,118 +37,70 @@ class Repository extends Api {
     required String email,
     required String password,
   }) async {
-    BasicResponse? res;
-    await Api.makeRequest(
-      dest: '/login',
-      body: {'email': email, 'pwd': password},
+    final res = await client.request(
+      _endpoint('/login'),
+      rawBody: {'email': email, 'pwd': password},
+      withSession: false,
       method: HttpMethod.post,
-      onSuccess: (json) {
-        res = BasicResponse.fromJson(json);
-      },
     );
-    return res;
+    return BasicResponse.fromJson(_decodeRes(res));
   }
 
   /// 取得使用者資料API
-  Future<UserModel?> getUser() async {
-    UserModel? user;
-
-    await Api.makeRequest(
-      dest: '/me',
+  Future<ApiResponse<UserModel>> getUser() async {
+    final res = await client.request(
+      _endpoint('/user/me'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccess: (json) {
-        user = UserModel.fromJson(json);
-      },
+      rawBody: {},
     );
-    return user;
+    return ApiResponse.fromJson(res, fromJson: UserModel.fromJson);
   }
 
   /// 取得首頁資料API
   Future<EntryModel?> getEntry() async {
-    late EntryModel? entry;
-
-    await Api.makeRequest(
-      dest: '/entry',
+    final res = await client.request(
+      _endpoint('/user/entry'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccess: (json) {
-        entry = EntryModel.fromJson(json);
-      },
+      rawBody: {},
     );
-    return entry;
+    return EntryModel.fromJson(_decodeRes(res));
   }
 
   /// 登出API
-  Future<void> logout() async {
-    await Api.makeRequest(
-      dest: '/fuckout',
-      method: HttpMethod.get,
-      withSession: true,
-      body: {},
-    );
-    return;
+  Future<void> logout() {
+    return client.request(_endpoint('/fuckout'), method: HttpMethod.get);
   }
 
   /// 取得店家資料API
   Future<StoreModel> getStores(Locale currentLocale) async {
-    late final StoreModel store;
-
-    await Api.makeRequest(
-      dest: '/store/list/${currentLocale.tagName.toLowerCase()}',
+    final res = await client.request(
+      _endpoint('/store/list/${currentLocale.tagName.toLowerCase()}'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccess: (json) {
-        store = StoreModel.fromJson(json);
-      },
-      onError: (statusCode, body) {
-        store = const StoreModel.empty();
-      },
+      rawBody: {},
     );
-    return store;
+    return StoreModel.fromJson(_decodeRes(res));
   }
 
   /// 取得該店家的遊戲列表API
   ///
   /// 需要傳入店家編號 [storeId]
   Future<GameList> getGameList({required String storeId}) async {
-    late final GameList gameList;
-
-    await Api.makeRequest(
-      dest: '/gamelist',
+    final res = await client.request(
+      _endpoint('/gamelist'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {'sid': storeId},
-      onSuccess: (json) {
-        gameList = GameList.fromJson(json);
-      },
-      onError: (statusCode, body) {
-        gameList = const GameList.empty();
-      },
+      rawBody: {'sid': storeId},
     );
-    return gameList;
+    return GameList.fromJson(_decodeRes(res));
   }
 
   /// 取得遊戲機台資料API
   Future<CabinetModel> selGame(String machineId) async {
-    late final CabinetModel cabinetModel;
-
-    await Api.makeRequest(
-      dest: '/cablist/$machineId',
+    final res = await client.request(
+      _endpoint('/cablist/$machineId'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccess: (json) {
-        cabinetModel = CabinetModel.fromJson(json);
-      },
-      onError: (statusCode, body) {
-        cabinetModel = const CabinetModel.empty();
-      },
+      rawBody: {},
     );
-    return cabinetModel;
+    return CabinetModel.fromJson(_decodeRes(res));
   }
 
   /// 投幣API
@@ -148,77 +112,52 @@ class Repository extends Api {
     num mode,
     bool isUseRewardPoint,
   ) async {
-    late final BasicResponse response;
     final insertUrl = isTicket ? 'tic' : 'pay';
     String url = '/$insertUrl/$id/${mode.toInt()}';
     if (!isTicket) {
       url += '/${isUseRewardPoint ? 1 : 0}';
     }
 
-    await Api.makeRequest(
-      dest: url,
+    final res = await client.request(
+      _endpoint(url),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccess: (json) {
-        response = BasicResponse.fromJson(json);
-      },
-      onError: (statusCode, body) {
-        response = BasicResponse.empty();
-      },
+      rawBody: {},
     );
-    return response;
+    return BasicResponse.fromJson(_decodeRes(res));
   }
 
   /// 投幣API
   ///
   /// 需要傳入原始URL [url]，使用於 QRCode 掃描後 (QRPay) 的投幣
   Future<BasicResponse> doInsertRawUrl(String url) async {
-    late final BasicResponse response;
-
-    await Api.makeRequest(
-      dest: '',
-      customDest: url,
+    final res = await client.request(
+      Uri.parse(url),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccess: (json) {
-        response = BasicResponse.fromJson(json);
-      },
-      onError: (statusCode, body) {
-        response = BasicResponse.empty();
-      },
+      rawBody: {},
     );
-    return response;
+    return BasicResponse.fromJson(_decodeRes(res));
   }
 
   /// 取得排隊人數API
   ///
   /// 需要傳入 [padmid] 和 [padlid]
   Future<int> getPadLineup(String padmid, String padlid) async {
-    int lineupCount = -1;
-
-    await Api.makeRequest(
-      dest: '/pad/getCount/$padmid/$padlid',
+    final res = await client.request(
+      _endpoint('/pad/getCount/$padmid/$padlid'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccessString: (text) {
-        lineupCount = int.parse(text);
-      },
+      rawBody: {},
     );
-    return lineupCount;
+    return int.tryParse(res.body) ?? -1;
   }
 
   /// 確認平板排隊API
   ///
   /// 需要傳入 [padmid] 和 [padlid]
   Future<void> confirmPadCheck(String padmid, String padlid) async {
-    await Api.makeRequest(
-      dest: '/pad/onCheck/$padmid/$padlid',
+    await client.request(
+      _endpoint('/pad/onCheck/$padmid/$padlid'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
+      rawBody: {},
     );
   }
 
@@ -230,18 +169,13 @@ class Repository extends Api {
   ///
   /// 回傳解析結果 [String]
   Future<String> qrDecryt(String rawText) async {
-    String result = '';
-    await Api.makeRequest(
-      dest: '/qrDecryt/',
+    final res = await client.request(
+      _endpoint('/qrDecryt/'),
       method: HttpMethod.post,
       contentType: ContentType.xForm,
-      withSession: true,
-      body: {'code': rawText},
-      onSuccessString: (text) {
-        result = text;
-      },
+      rawBody: {'code': rawText},
     );
-    return result;
+    return res.body;
   }
 
   /// 開門按鈕API
@@ -251,138 +185,70 @@ class Repository extends Api {
     double distance, {
     required String doorName,
   }) async {
-    String result = '';
-    await Api.makeRequest(
-      customDest: 'https://pay.x50.fun/api/$doorName/open/$distance',
-      dest: '',
+    final res = await client.request(
+      Uri.parse('https://pay.x50.fun/api/$doorName/open/$distance'),
       method: HttpMethod.post,
       contentType: ContentType.xForm,
-      withSession: true,
-      body: {},
-      onSuccessString: (text) {
-        result = text;
-      },
+      rawBody: {},
     );
-    return result;
+    return res.body;
   }
-
-  // Future<BasicResponse> chgGradev2(
-  //     {required String gid, required String grid}) async {
-  //   late BasicResponse basicResponse;
-
-  //   await Api.makeRequest(
-  //     dest: '/change/Gradev2',
-  //     method: HttpMethod.post,
-  //     withSession: true,
-  //     body: {'grid': grid, 'gid': gid},
-  //     onSuccess: (json) {
-  //       basicResponse = BasicResponse.fromJson(json);
-  //     },
-  //   );
-  //   return basicResponse;
-  // }
 
   /// 取得禮物箱API
   ///
   /// 用於禮物系統頁面，回傳 [GiftBoxModel]
   Future<GiftBoxModel> getGiftBox() async {
-    late final GiftBoxModel giftBoxModel;
-
-    await Api.makeRequest(
-      dest: '/gift/box',
+    final res = await client.request(
+      _endpoint('/gift/box'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccess: (json) {
-        giftBoxModel = GiftBoxModel.fromJson(json);
-      },
-      onError: (statusCode, body) {
-        giftBoxModel = const GiftBoxModel.empty();
-      },
+      rawBody: {},
     );
-    return giftBoxModel;
+    return GiftBoxModel.fromJson(_decodeRes(res));
   }
 
   /// 取得養成抽獎箱API
   ///
   /// 用於禮物系統頁面，回傳 [LotteListModel]
   Future<LotteListModel> getLotteList() async {
-    late final LotteListModel lotteListModel;
-
-    await Api.makeRequest(
-      dest: '/lotte/list',
+    final res = await client.request(
+      _endpoint('/lotte/list'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {},
-      onSuccess: (json) {
-        lotteListModel = LotteListModel.fromJson(json);
-      },
-      onError: (statusCode, body) {
-        lotteListModel = const LotteListModel.empty();
-      },
+      rawBody: {},
     );
-    return lotteListModel;
+    return LotteListModel.fromJson(_decodeRes(res));
   }
-
-  /// 選擇養成抽獎API
-  ///
-  /// 用於禮物系統頁面的養成抽獎箱
-  // Future<String> lotteSave() async {
-  //   late String res;
-
-  //   await Api.makeRequest(
-  //     dest: '/lotte/save',
-  //     method: HttpMethod.post,
-  //     onSuccessString: (str) {
-  //       res = str;
-  //     },
-  //     withSession: true,
-  //     body: {},
-  //   );
-  //   return res;
-  // }
 
   /// 兌換禮物API
   ///
   /// 用於禮物系統頁面，需要傳入禮物編號 [gid]
-  Future<void> giftExchange(String gid) async {
-    await Api.makeRequest(
-      dest: '/confirmGFID',
+  Future<void> giftExchange(String gid) {
+    return client.request(
+      _endpoint('/confirmGFID'),
       method: HttpMethod.post,
-      withSession: true,
-      body: {'contentgid': gid},
+      rawBody: {'contentgid': gid},
     );
   }
 
   /// 取得更衣室的所有衣服API
-  Future<http.Response> getAvatar() async {
-    final response = await Api.makeRequest(
-      dest: '/list/avater',
-      body: {},
-      method: HttpMethod.get,
-      withSession: true,
-    );
-    return response;
+  Future<http.Response> getAvatar() {
+    return client.request(_endpoint('/list/avater'), method: HttpMethod.get);
   }
 
   /// 設定角色衣服API
-  Future<http.Response> setAvatar(String id) async {
-    final response = await Api.makeRequest(
-      dest: '/cgAva/$id',
-      body: {},
+  Future<http.Response> setAvatar(String id) {
+    return client.request(
+      _endpoint('/cgAva/$id'),
+      rawBody: {},
       method: HttpMethod.post,
-      withSession: true,
       contentType: ContentType.json,
     );
-    return response;
   }
 
   /// 月票人際帝方案的購買API
   ///
   /// 需要傳入參加人[applicants]
-  Future<http.Response> buyVipMany(List<String>? applicants) async {
-    Map<String, String> body = {};
-
+  Future<http.Response> buyVipMany(List<String>? applicants) {
+    final body = <String, String>{};
     if (applicants != null) {
       int count = 0;
       for (var applicant in applicants) {
@@ -391,40 +257,32 @@ class Repository extends Api {
       }
     }
 
-    final response = await Api.makeRequest(
-      dest: '/vip/buymany',
-      body: body,
+    return client.request(
+      _endpoint('/vip/buymany'),
+      rawBody: body,
       method: HttpMethod.post,
-      withSession: true,
       contentType: ContentType.json,
     );
-    return response;
   }
 
   /// 月票月養成方案的購買API
-  Future<http.Response> buyVipGradeOne() async {
-    final response = await Api.makeRequest(
-      dest: '/vip/buygrdone',
-      body: {},
+  Future<http.Response> buyVipGradeOne() {
+    return client.request(
+      _endpoint('/vip/buygrdone'),
+      rawBody: {},
       method: HttpMethod.post,
-      withSession: true,
       contentType: ContentType.json,
     );
-
-    return response;
   }
 
   /// 月票邊緣人方案的購買API
-  Future<http.Response> buyVipOne() async {
-    final response = await Api.makeRequest(
-      dest: '/vip/buyone',
-      body: {},
+  Future<http.Response> buyVipOne() {
+    return client.request(
+      _endpoint('/vip/buyone'),
+      rawBody: {},
       method: HttpMethod.post,
-      withSession: true,
       contentType: ContentType.json,
     );
-
-    return response;
   }
 
   /// 取得最新活動web document API
@@ -433,12 +291,9 @@ class Repository extends Api {
   ///
   /// 因目前還沒有最新活動的相關API，故使用此方式取得最新活動頁面的HTML。
   Future<String> getCampaignDocument(String cid) async {
-    final response = await Api.makeRequest(
-      dest: '',
-      customDest: 'https://pay.x50.fun/coupon/$cid',
+    final response = await client.request(
+      Uri.parse('https://pay.x50.fun/coupon/$cid'),
       method: HttpMethod.get,
-      withSession: true,
-      body: {},
     );
     return response.body;
   }
@@ -446,13 +301,10 @@ class Repository extends Api {
   /// 新增最新活動印章列API
   ///
   /// 需要傳入活動編號 [cid]。
-  Future<void> addCampaignStampRow(String cid) async {
-    await Api.makeRequest(
-      dest: '',
-      customDest: 'https://pay.x50.fun/li/ev/$cid',
+  Future<void> addCampaignStampRow(String cid) {
+    return client.request(
+      Uri.parse('https://pay.x50.fun/li/ev/$cid'),
       method: HttpMethod.get,
-      withSession: true,
-      body: {},
     );
   }
 
@@ -460,22 +312,19 @@ class Repository extends Api {
   ///
   /// 因目前還沒有贊助商的相關API，故使用此方式取得贊助商頁面的HTML。
   Future<String> getSponserDocument() async {
-    final response = await Api.makeRequest(
-      dest: '',
-      customDest: 'https://pay.x50.fun/static/templates-v4/sponser.html?v1.1',
+    final response = await client.request(
+      Uri.parse('https://pay.x50.fun/static/templates-v4/sponser.html?v1.1'),
       method: HttpMethod.get,
-      body: {},
     );
     return const Utf8Decoder().convert(response.bodyBytes);
   }
 
   /// 取得養成商場內，點數兌換商品資料API
   Future<String> fetchGradeBox() async {
-    final response = await Api.makeRequest(
-      dest: '/grade/box',
+    final response = await client.request(
+      _endpoint('/grade/box'),
       method: HttpMethod.post,
-      body: {},
-      withSession: true,
+      rawBody: {},
       contentType: ContentType.json,
     );
     return response.body;
@@ -485,32 +334,28 @@ class Repository extends Api {
   ///
   /// 需要傳入 [gid] 及 [grid]
   Future<String> chgGradev2(String gid, String grid) async {
-    final response = await Api.makeRequest(
-      dest: '/grade/change',
-      body: {'gid': gid, 'grid': grid},
+    final response = await client.request(
+      _endpoint('/grade/change'),
+      rawBody: {'gid': gid, 'grid': grid},
       method: HttpMethod.post,
-      withSession: true,
+
       contentType: ContentType.json,
     );
     return response.body;
   }
 
   Future<http.Response> getDocument(String fullUrl) async {
-    final response = await Api.makeRequestNoFR(
+    final response = await client.request(
+      Uri.parse(fullUrl),
       method: HttpMethod.get,
-      withSession: true,
-      customDest: fullUrl,
     );
     return response;
   }
 
   Future<String> getQRPayDocument(String url) async {
-    final response = await Api.makeRequest(
-      dest: '',
-      customDest: url,
+    final response = await client.request(
+      Uri.parse(url),
       method: HttpMethod.get,
-      withSession: true,
-      body: {},
     );
     return const Utf8Decoder().convert(response.bodyBytes);
   }
@@ -520,13 +365,10 @@ class Repository extends Api {
     String refererUrl, {
     required String descLabel,
   }) async {
-    final response = await Api.makeRequest(
-      dest: '',
-      customDest: "https://pay.x50.fun$url",
+    final response = await client.request(
+      Uri.parse("https://pay.x50.fun$url"),
       method: HttpMethod.get,
-      withSession: true,
       customHeaders: {'Referer': refererUrl},
-      body: {},
     );
     return const Utf8Decoder().convert(response.bodyBytes);
   }
@@ -535,40 +377,28 @@ class Repository extends Api {
     String campaignId,
     String itemId,
   ) async {
-    final response = await Api.makeRequest(
-      dest: "https://pay.x50.fun/coupon/changecheck/$campaignId/$itemId",
+    final response = await client.request(
+      Uri.parse("https://pay.x50.fun/coupon/changecheck/$campaignId/$itemId"),
       method: HttpMethod.get,
-      withSession: true,
-      body: {},
     );
     return response.body;
   }
 
   Future<GameList> favGameList() async {
-    late final GameList gameList;
-
-    await Api.makeRequest(
-      dest: '/favgamelist',
-      body: {},
+    final res = await client.request(
+      _endpoint('/favgamelist'),
+      rawBody: {},
       method: HttpMethod.post,
-      withSession: true,
       contentType: ContentType.json,
-      onSuccess: (json) {
-        gameList = GameList.fromJson(json);
-      },
-      onError: (statusCode, body) {
-        gameList = const GameList.empty();
-      },
     );
-    return gameList;
+    return GameList.fromJson(_decodeRes(res));
   }
 
-  Future<void> setFavGames(List<String> favGames) async {
-    await Api.makeRequest(
-      dest: '/settingFavConfirm',
-      body: {"favlist": favGames},
+  Future<void> setFavGames(List<String> favGames) {
+    return client.request(
+      _endpoint('/settingFavConfirm'),
+      rawBody: {"favlist": favGames},
       method: HttpMethod.post,
-      withSession: true,
       contentType: ContentType.json,
     );
   }
