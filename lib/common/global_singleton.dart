@@ -14,11 +14,6 @@ class GlobalSingleton {
 
   static final duringTest = Platform.environment.containsKey('FLUTTER_TEST');
 
-  /// 是否正在顯示 NfcPay 的 dialog
-  ///
-  /// 用來防止重複顯示 dialog
-  bool isNfcPayDialogOpen = false;
-
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid, int cabNum})? recentPlayedCabinetData;
 

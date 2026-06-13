@@ -212,11 +212,11 @@ class _SettingsState extends State<Settings>
   @override
   void initState() {
     super.initState();
-    intentDelay = viewModel.init();
     final user = context.read<UserProvider>().user!;
     viewModel = SettingsViewModel(
       settingRepo: context.read<SettingRepository>(),
     );
+    intentDelay = viewModel.init();
     avatarUrl = user.settingsUserImageUrl(
       context.read<EnvironmentProvider>().isServiceOnline,
     );

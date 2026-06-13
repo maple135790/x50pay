@@ -8,7 +8,6 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager/nfc_manager_android.dart';
 import 'package:nfc_manager_ndef/nfc_manager_ndef.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pad_mixin.dart';
@@ -53,6 +52,8 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
 
   static const _kNfcSessionTime = 800;
 
+  bool _isNfcPayDialogOpen = false;
+
   Future<bool> _isEnableInAppNfcScan() async {
     final enabled = await Prefs.getBool(PrefsToken.enabledInAppNfcScan);
     return enabled ?? false;
@@ -89,7 +90,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     final cid = url.split('nfcpay/').last.split('/').last;
     if (mid.isEmpty || cid.isEmpty) return;
     final isPreferTicket = await _getNfcPreferTicketSetting(settingRepo);
-    GlobalSingleton.instance.isNfcPayDialogOpen = true;
+    _isNfcPayDialogOpen = true;
     try {
       final result = await handleNfcPay(
         mid: mid,
@@ -100,7 +101,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
       );
       await _handleNfcPayResult(result);
     } finally {
-      GlobalSingleton.instance.isNfcPayDialogOpen = false;
+      _isNfcPayDialogOpen = false;
     }
   }
 
@@ -130,7 +131,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     }
     NdefRecord? urlRecord;
 
-    if (GlobalSingleton.instance.isNfcPayDialogOpen) {
+    if (_isNfcPayDialogOpen) {
       log('nfcPay dialog already opened', name: '_nfcTest');
       return;
     }
