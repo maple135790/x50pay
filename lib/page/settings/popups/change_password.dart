@@ -44,7 +44,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog>
           );
           await Future.delayed(const Duration(seconds: 2));
           await EasyLoading.show(dismissOnTap: false);
-          nav.goNamed(AppRoutes.login.routeName);
+          nav.goNamed(AppRoute.login.routeName);
           break;
         case 700:
           errorText = '新密碼與舊密碼相同';

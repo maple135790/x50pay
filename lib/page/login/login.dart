@@ -65,7 +65,7 @@ class _LoginState extends State<Login> with AppThemeMixin {
       if (!didAuthenticate) return;
       loginProvider.biometricsLogin(
         onLoggedIn: () {
-          context.goNamed(AppRoutes.home.routeName);
+          context.goNamed(AppRoute.home.routeName);
         },
       );
     } on LocalAuthException catch (e) {
@@ -87,7 +87,7 @@ class _LoginState extends State<Login> with AppThemeMixin {
       password: password.text,
       showSuccessDialog: true,
       onLoggedIn: () {
-        context.goNamed(AppRoutes.home.routeName);
+        context.goNamed(AppRoute.home.routeName);
       },
     );
   }

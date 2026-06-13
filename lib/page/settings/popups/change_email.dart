@@ -36,7 +36,7 @@ class _ChangeEmailDialogState extends State<ChangeEmailDialog>
           );
           await Future.delayed(const Duration(seconds: 2));
           await EasyLoading.show(dismissOnTap: false);
-          nav.goNamed(AppRoutes.home.routeName);
+          nav.goNamed(AppRoute.home.routeName);
           break;
         case 700:
           errorText = '新信箱與舊信箱相同';

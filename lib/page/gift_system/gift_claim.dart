@@ -175,7 +175,7 @@ class _ConfirmChangeDialogState extends State<_ConfirmChangeDialog>
                       );
                       await Future.delayed(const Duration(milliseconds: 800));
 
-                      nav.goNamed(AppRoutes.home.routeName);
+                      nav.goNamed(AppRoute.home.routeName);
                     },
                     style: CustomButtonThemes.severe(isV4: true),
                     child: const Text('確認'),

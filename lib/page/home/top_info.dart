@@ -21,7 +21,7 @@ class TopInfo extends StatelessWidget {
 
     void onPhoneActivatePressed() {
       context.goNamed(
-        AppRoutes.settings.routeName,
+        AppRoute.settings.routeName,
         queryParameters: {'goTo': 'phoneChange'},
       );
     }
@@ -32,7 +32,7 @@ class TopInfo extends StatelessWidget {
       if (status.isDenied) {
         await Permission.camera.request();
       }
-      router.pushNamed(AppRoutes.scanQRCode.routeName);
+      router.pushNamed(AppRoute.scanQRCode.routeName);
     }
 
     return Selector<UserProvider, UserModel>(

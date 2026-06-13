@@ -38,11 +38,11 @@ class _MariInfoState extends State<MariInfo> with AppThemeMixin {
   }
 
   void onGradeBoxPressed() {
-    context.goNamed(AppRoutes.gradeBox.routeName);
+    context.goNamed(AppRoute.gradeBox.routeName);
   }
 
   void onDressRoomPressed() async {
-    context.goNamed(AppRoutes.dressRoom.routeName);
+    context.goNamed(AppRoute.dressRoom.routeName);
   }
 
   Widget infoItem({

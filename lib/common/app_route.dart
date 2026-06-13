@@ -1,38 +1,38 @@
-enum AppRoutes {
-  login(routeName: 'login', path: '/login'),
-  home(routeName: 'home', path: '/home'),
-  dressRoom(routeName: 'dressRoom', path: 'dressRoom'),
-  forgotPassword(routeName: 'forgotPassword', path: '/iforgot'),
-  license(routeName: 'license', path: '/lic'),
-  signUp(routeName: 'signUp', path: '/signUp'),
-  buyMPass(routeName: 'buyMPass', path: 'buyMPass'),
-  ecPay(routeName: 'ecpay', path: 'ecpay'),
-  settings(routeName: 'setting', path: '/setting'),
-  quicPayPref(routeName: 'quicPayPref', path: 'quicPayPref'),
-  paymentPref(routeName: 'paymentPref', path: 'paymentPref'),
-  padPref(routeName: 'padPref', path: 'padPref'),
-  changePassword(routeName: 'changePassword', path: 'changePassword'),
-  changeEmail(routeName: 'changeEmail', path: 'changeEmail'),
-  bidRecords(routeName: 'bidRecords', path: 'bidRecords'),
-  ticketRecords(routeName: 'ticketRecords', path: 'ticketRecords'),
-  playRecords(routeName: 'playRecords', path: 'playRecords'),
-  x50PayAppSetting(routeName: 'x50PayAppSetting', path: 'x50PayAppSetting'),
-  ticketUsedRecords(routeName: 'ticketUsedRecords', path: 'ticketUsedRecords'),
-  gameStore(routeName: 'gameStore', path: '/game/store'),
-  gameCabs(routeName: 'gameCabs', path: '/game/cabs'),
-  gameCab(routeName: 'gameCab', path: ':mid'),
-  gift(routeName: 'gift', path: '/gift'),
-  gradeBox(routeName: 'gradeBox', path: '/gift/gradeBox'),
-  collab(routeName: 'collab', path: '/collab'),
-  scanQRCode(routeName: 'scanQRCode', path: '/scanQRCode'),
-  questCampaign(routeName: 'questCampaign', path: 'questCampaign/:couid'),
-  qrPay(routeName: 'qrPay', path: '/qrPay/:caboid/:sid'),
-  freePointRecords(routeName: 'freePointRecords', path: 'freePointRecords');
+enum AppRoute {
+  login('login', path: '/login'),
+  home('home', path: '/home'),
+  dressRoom('dressRoom', path: 'dressRoom'),
+  forgotPassword('forgotPassword', path: '/iforgot'),
+  license('license', path: '/lic'),
+  signUp('signUp', path: '/signUp'),
+  buyMPass('buyMPass', path: 'buyMPass'),
+  ecPay('ecpay', path: 'ecpay'),
+  settings('setting', path: '/setting'),
+  quicPayPref('quicPayPref', path: 'quicPayPref'),
+  paymentPref('paymentPref', path: 'paymentPref'),
+  padPref('padPref', path: 'padPref'),
+  changePassword('changePassword', path: 'changePassword'),
+  changeEmail('changeEmail', path: 'changeEmail'),
+  bidRecords('bidRecords', path: 'bidRecords'),
+  ticketRecords('ticketRecords', path: 'ticketRecords'),
+  playRecords('playRecords', path: 'playRecords'),
+  x50PayAppSetting('x50PayAppSetting', path: 'x50PayAppSetting'),
+  ticketUsedRecords('ticketUsedRecords', path: 'ticketUsedRecords'),
+  gameStore('gameStore', path: '/game/store'),
+  gameCabs('gameCabs', path: '/game/cabs'),
+  gameCab('gameCab', path: ':mid'),
+  gift('gift', path: '/gift'),
+  gradeBox('gradeBox', path: '/gift/gradeBox'),
+  collab('collab', path: '/collab'),
+  scanQRCode('scanQRCode', path: '/scanQRCode'),
+  questCampaign('questCampaign', path: 'questCampaign/:couid'),
+  qrPay('qrPay', path: '/qrPay/:caboid/:sid'),
+  freePointRecords('freePointRecords', path: 'freePointRecords');
 
   static const noLoginPages = [login, forgotPassword, signUp, license];
 
   final String routeName;
   final String path;
 
-  const AppRoutes({required this.routeName, required this.path});
+  const AppRoute(this.routeName, {required this.path});
 }

@@ -59,47 +59,47 @@ class _SettingsState extends State<Settings>
   }
 
   void onQuicPayPrefPressed() {
-    context.pushNamed(AppRoutes.quicPayPref.routeName);
+    context.pushNamed(AppRoute.quicPayPref.routeName);
   }
 
   void onPaymentPrefPressed() {
-    context.pushNamed(AppRoutes.paymentPref.routeName);
+    context.pushNamed(AppRoute.paymentPref.routeName);
   }
 
   void onPadPrefPressed() {
-    context.pushNamed(AppRoutes.padPref.routeName);
+    context.pushNamed(AppRoute.padPref.routeName);
   }
 
   void onChangePasswordPressed() {
-    context.pushNamed(AppRoutes.changePassword.routeName);
+    context.pushNamed(AppRoute.changePassword.routeName);
   }
 
   void onChangeEmailPressed() {
-    context.pushNamed(AppRoutes.changeEmail.routeName);
+    context.pushNamed(AppRoute.changeEmail.routeName);
   }
 
   void onBidRecordPressed() {
-    context.pushNamed(AppRoutes.bidRecords.routeName);
+    context.pushNamed(AppRoute.bidRecords.routeName);
   }
 
   void onTicketRecordPressed() {
-    context.pushNamed(AppRoutes.ticketRecords.routeName);
+    context.pushNamed(AppRoute.ticketRecords.routeName);
   }
 
   void onPlayRecordPressed() {
-    context.pushNamed(AppRoutes.playRecords.routeName);
+    context.pushNamed(AppRoute.playRecords.routeName);
   }
 
   void onFreePointRecordPressed() {
-    context.pushNamed(AppRoutes.freePointRecords.routeName);
+    context.pushNamed(AppRoute.freePointRecords.routeName);
   }
 
   void onTicketUseRecordPressed() {
-    context.pushNamed(AppRoutes.ticketUsedRecords.routeName);
+    context.pushNamed(AppRoute.ticketUsedRecords.routeName);
   }
 
   void onX50PayAppSettingPressed() {
-    context.pushNamed(AppRoutes.x50PayAppSetting.routeName);
+    context.pushNamed(AppRoute.x50PayAppSetting.routeName);
   }
 
   /// 顯示手機已移除的 Dialog。無論是否有添加過手機，都會顯示
@@ -204,7 +204,7 @@ class _SettingsState extends State<Settings>
     await Future.delayed(const Duration(seconds: 2));
     context
       ..pop()
-      ..goNamed(AppRoutes.login.routeName);
+      ..goNamed(AppRoute.login.routeName);
   }
 
   @override

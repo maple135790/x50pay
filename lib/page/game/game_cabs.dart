@@ -105,7 +105,7 @@ class _GameCabsLoadedState extends State<_GameCabsLoaded>
     final router = GoRouter.of(context);
     Prefs.remove(PrefsToken.storeName);
     Prefs.remove(PrefsToken.storeId);
-    router.goNamed(AppRoutes.gameStore.routeName, extra: true);
+    router.goNamed(AppRoute.gameStore.routeName, extra: true);
   }
 
   void showCabSelectDialog() {

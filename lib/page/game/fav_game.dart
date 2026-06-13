@@ -80,7 +80,7 @@ class _FavGameState extends State<FavGame> with AppThemeMixin {
   }
 
   void reloadAfterSetFavGame() {
-    context.replaceNamed(AppRoutes.gameCabs.routeName, extra: true);
+    context.replaceNamed(AppRoute.gameCabs.routeName, extra: true);
   }
 
   void showAddFavGameBottomSheet() async {

@@ -54,7 +54,7 @@ class RecentQuests extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               context.goNamed(
-                                AppRoutes.questCampaign.routeName,
+                                AppRoute.questCampaign.routeName,
                                 pathParameters: {'couid': q.couid},
                               );
                             },

@@ -65,7 +65,7 @@ class _GradeBoxTabState extends State<GradeBoxTab> with AppThemeMixin {
         );
       }
       await Future.delayed(const Duration(milliseconds: 2500));
-      nav.goNamed(AppRoutes.home.routeName);
+      nav.goNamed(AppRoute.home.routeName);
     }
   }
 

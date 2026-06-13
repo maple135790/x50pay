@@ -40,7 +40,7 @@ class _QuestCampaignState extends State<QuestCampaign>
   Future<void> onAddStampRowTap() async {
     viewModel.onAddStampRowTap();
     context.goNamed(
-      AppRoutes.questCampaign.routeName,
+      AppRoute.questCampaign.routeName,
       pathParameters: {'couid': widget.campaignId},
       extra: true,
     );

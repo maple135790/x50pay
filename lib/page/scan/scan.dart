@@ -41,7 +41,7 @@ class _ScanQRCodeState extends State<ScanQRCode>
     controller.stop();
     isShowCameraPreviewNotifier.value = false;
     setState(() {});
-    await context.pushNamed(AppRoutes.ecPay.routeName).then((_) {});
+    await context.pushNamed(AppRoute.ecPay.routeName).then((_) {});
     isShowCameraPreviewNotifier.value = true;
     controller.start();
     setState(() {});
@@ -184,7 +184,7 @@ class _ScanQRCodeState extends State<ScanQRCode>
           duration: const Duration(milliseconds: 1000),
         );
         await Future.delayed(const Duration(milliseconds: 1300));
-        nav.goNamed(AppRoutes.home.routeName);
+        nav.goNamed(AppRoute.home.routeName);
       }
     }
     isBusy = false;

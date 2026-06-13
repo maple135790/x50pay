@@ -16,7 +16,7 @@ import 'package:x50pay/repository/setting_repository.dart';
 class AppRouter {
   /// GoRouter 路由 wrapper
   GoRoute _route(
-    AppRoutes rp,
+    AppRoute rp,
     GoRouterWidgetBuilder? builder, {
     List<RouteBase>? innerRoutes,
     GoRouterRedirect? redirect,
@@ -34,7 +34,7 @@ class AppRouter {
   ///
   /// 可提供跳轉時的轉場動畫
   GoRoute _routeTransition(
-    AppRoutes rp,
+    AppRoute rp,
     GoRouterPageBuilder? pageBuilder, {
     List<RouteBase>? innerRoutes,
     GoRouterRedirect? redirect,
@@ -51,10 +51,10 @@ class AppRouter {
   /// 路由設定
   late final router = GoRouter(
     navigatorKey: GlobalSingleton.appNavigatorKey,
-    initialLocation: AppRoutes.home.path,
+    initialLocation: AppRoute.home.path,
     redirect: (context, state) async {
       if (!context.read<LoginProvider>().isLoggedIn) {
-        return AppRoutes.login.path;
+        return AppRoute.login.path;
       }
       return null;
     },
@@ -62,16 +62,16 @@ class AppRouter {
     routes: [
       ShellRoute(
         routes: [
-          _route(AppRoutes.forgotPassword, (_, _) => const ForgotPassword()),
-          _route(AppRoutes.signUp, (_, _) => const SignUp()),
-          _route(AppRoutes.login, (_, _) => const Login()),
+          _route(AppRoute.forgotPassword, (_, _) => const ForgotPassword()),
+          _route(AppRoute.signUp, (_, _) => const SignUp()),
+          _route(AppRoute.login, (_, _) => const Login()),
           _routeTransition(
-            AppRoutes.gameStore,
+            AppRoute.gameStore,
             (_, _) => const NoTransitionPage(child: GameStore()),
             redirect: gameStoreRedirect,
           ),
           _routeTransition(
-            AppRoutes.gameCabs,
+            AppRoute.gameCabs,
             (_, state) {
               final shouldRebuild = state.extra as bool?;
               if (shouldRebuild ?? false) {
@@ -84,16 +84,16 @@ class AppRouter {
               return const NoTransitionPage(child: GameCabs());
             },
             innerRoutes: [
-              _routeTransition(AppRoutes.gameCab, (_, state) {
+              _routeTransition(AppRoute.gameCab, (_, state) {
                 final machineId = state.pathParameters['mid']!;
                 return CupertinoPage(child: CabDetail(machineId));
               }),
             ],
           ),
-          _route(AppRoutes.scanQRCode, (_, state) => const ScanQRCode()),
-          _route(AppRoutes.license, (_, _) => const License()),
+          _route(AppRoute.scanQRCode, (_, state) => const ScanQRCode()),
+          _route(AppRoute.license, (_, _) => const License()),
           _routeTransition(
-            AppRoutes.settings,
+            AppRoute.settings,
             (_, state) {
               final shouldGoPhone =
                   state.uri.queryParameters['goTo'] == 'phoneChange';
@@ -110,7 +110,7 @@ class AppRouter {
               );
             },
             innerRoutes: [
-              _routeTransition(AppRoutes.padPref, (_, _) {
+              _routeTransition(AppRoute.padPref, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -121,7 +121,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.quicPayPref, (_, _) {
+              _routeTransition(AppRoute.quicPayPref, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -132,7 +132,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.paymentPref, (_, _) {
+              _routeTransition(AppRoute.paymentPref, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -143,7 +143,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.changePassword, (_, _) {
+              _routeTransition(AppRoute.changePassword, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -154,7 +154,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.changeEmail, (_, _) {
+              _routeTransition(AppRoute.changeEmail, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -165,7 +165,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.bidRecords, (_, _) {
+              _routeTransition(AppRoute.bidRecords, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -176,7 +176,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.ticketRecords, (_, _) {
+              _routeTransition(AppRoute.ticketRecords, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -187,7 +187,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.playRecords, (_, _) {
+              _routeTransition(AppRoute.playRecords, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -198,7 +198,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.freePointRecords, (_, _) {
+              _routeTransition(AppRoute.freePointRecords, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -209,7 +209,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.ticketUsedRecords, (_, _) {
+              _routeTransition(AppRoute.ticketUsedRecords, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -220,7 +220,7 @@ class AppRouter {
                   ),
                 );
               }),
-              _routeTransition(AppRoutes.x50PayAppSetting, (_, _) {
+              _routeTransition(AppRoute.x50PayAppSetting, (_, _) {
                 return CupertinoPage(
                   child: ChangeNotifierProvider(
                     create: (context) {
@@ -234,7 +234,7 @@ class AppRouter {
             ],
           ),
           _routeTransition(
-            AppRoutes.home,
+            AppRoute.home,
             (_, state) {
               final shouldRebuild = state.extra as bool?;
               if (shouldRebuild == true) {
@@ -247,16 +247,16 @@ class AppRouter {
               return const NoTransitionPage(child: Home());
             },
             innerRoutes: [
-              _route(AppRoutes.ecPay, (_, state) => const EcPay()),
+              _route(AppRoute.ecPay, (_, state) => const EcPay()),
               _routeTransition(
-                AppRoutes.dressRoom,
+                AppRoute.dressRoom,
                 (_, _) => const CupertinoPage(child: DressRoom()),
               ),
               _routeTransition(
-                AppRoutes.buyMPass,
+                AppRoute.buyMPass,
                 (_, state) => const CupertinoPage(child: BuyMPass()),
               ),
-              _route(AppRoutes.questCampaign, (_, state) {
+              _route(AppRoute.questCampaign, (_, state) {
                 final shouldRebuild = state.extra as bool?;
                 if (shouldRebuild == true) {
                   return QuestCampaign(
@@ -271,20 +271,20 @@ class AppRouter {
             ],
           ),
           _routeTransition(
-            AppRoutes.gift,
+            AppRoute.gift,
             (_, _) => const NoTransitionPage(child: GiftSystem()),
           ),
           _routeTransition(
-            AppRoutes.gradeBox,
+            AppRoute.gradeBox,
             (_, _) => const NoTransitionPage(child: GradeBox()),
           ),
           _routeTransition(
-            AppRoutes.collab,
+            AppRoute.collab,
             (_, _) => const NoTransitionPage(child: Collab()),
           ),
         ],
         builder: (context, state, child) {
-          if (AppRoutes.noLoginPages.any(
+          if (AppRoute.noLoginPages.any(
             (p) => p.path == state.uri.toString(),
           )) {
             return child;
@@ -301,7 +301,7 @@ class AppRouter {
   ///
   /// 如果使用者有設定 [store_id] 或 [store_name]，則導向遊戲商店頁面。
   ///
-  /// 若判定為須導向至遊戲商店頁面，則回傳 [AppRoutes.gameCabs.path]，若判定為不須導向，則回傳 null。
+  /// 若判定為須導向至遊戲商店頁面，則回傳 [AppRoute.gameCabs.path]，若判定為不須導向，則回傳 null。
   FutureOr<String?> gameStoreRedirect(
     BuildContext context,
     GoRouterState state,
@@ -309,7 +309,7 @@ class AppRouter {
     final storeId = await Prefs.getString(PrefsToken.storeId);
     final storeName = await Prefs.getString(PrefsToken.storeName);
     final shouldRedirect = storeId != null || storeName != null;
-    if (shouldRedirect) return AppRoutes.gameCabs.path;
+    if (shouldRedirect) return AppRoute.gameCabs.path;
     return null;
   }
 }

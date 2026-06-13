@@ -33,13 +33,13 @@ class TicketInfo extends StatelessWidget {
 
     void onTicketInfoPressed() {
       context.goNamed(
-        AppRoutes.settings.routeName,
+        AppRoute.settings.routeName,
         queryParameters: {'goTo': "ticketRecord"},
       );
     }
 
     void onMPassPressed() {
-      context.pushNamed(AppRoutes.buyMPass.routeName);
+      context.pushNamed(AppRoute.buyMPass.routeName);
     }
 
     return Selector<UserProvider, UserModel>(

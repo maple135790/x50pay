@@ -189,7 +189,7 @@ class _StoreItem extends StatelessWidget {
                             store,
                             prefix,
                             onPageChange: () {
-                              context.goNamed(AppRoutes.gameCabs.routeName);
+                              context.goNamed(AppRoute.gameCabs.routeName);
                             },
                           );
                         },

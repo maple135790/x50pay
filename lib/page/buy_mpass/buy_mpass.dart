@@ -634,7 +634,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog>
     }
     await Future.delayed(const Duration(seconds: 2));
     nav.pop();
-    router.goNamed(AppRoutes.home.routeName);
+    router.goNamed(AppRoute.home.routeName);
   }
 
   void parseResponse(http.Response response) {

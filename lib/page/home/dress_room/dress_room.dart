@@ -60,7 +60,7 @@ class _DressRoomState extends State<DressRoom> {
       textColor: Colors.white,
       fontSize: 16.0,
     );
-    nav.goNamed(AppRoutes.home.routeName, extra: true);
+    nav.goNamed(AppRoute.home.routeName, extra: true);
   }
 
   @override

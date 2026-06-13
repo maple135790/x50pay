@@ -224,7 +224,7 @@ class _CabDetailLoadedState extends State<CabDetailLoaded>
       return;
     }
     context.pushNamed(
-      AppRoutes.questCampaign.routeName,
+      AppRoute.questCampaign.routeName,
       pathParameters: {'couid': url.replaceAll('\'', '')},
     );
   }

@@ -21,14 +21,14 @@ import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
 
 enum MenuItem {
-  game(icon: Icons.sports_esports_rounded, route: AppRoutes.gameCabs),
-  settings(icon: Icons.settings_rounded, route: AppRoutes.settings),
-  home(icon: Icons.home_rounded, route: AppRoutes.home),
-  gift(icon: Icons.redeem_rounded, route: AppRoutes.gift),
-  collab(icon: Icons.handshake_rounded, route: AppRoutes.collab);
+  game(icon: Icons.sports_esports_rounded, route: AppRoute.gameCabs),
+  settings(icon: Icons.settings_rounded, route: AppRoute.settings),
+  home(icon: Icons.home_rounded, route: AppRoute.home),
+  gift(icon: Icons.redeem_rounded, route: AppRoute.gift),
+  collab(icon: Icons.handshake_rounded, route: AppRoute.collab);
 
   final IconData icon;
-  final AppRoutes route;
+  final AppRoute route;
 
   const MenuItem({required this.icon, required this.route});
 }
@@ -106,7 +106,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
     if (selectedIndex != 2) {
       selectedIndex = 2;
       lastPopTime = popTime;
-      context.goNamed(AppRoutes.home.routeName);
+      context.goNamed(AppRoute.home.routeName);
       setState(() {});
       return false;
     }
@@ -120,17 +120,17 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
 
     log('currentLocation: $currentRouteName');
     log('currentPath: $currentfullPath');
-    if (currentRouteName == AppRoutes.gameCab.routeName) {
+    if (currentRouteName == AppRoute.gameCab.routeName) {
       context.pop();
       setState(() {});
-    } else if (currentRouteName == AppRoutes.scanQRCode.routeName) {
+    } else if (currentRouteName == AppRoute.scanQRCode.routeName) {
       context.pop();
       setState(() {});
-    } else if (currentfullPath.contains(AppRoutes.settings.path)) {
+    } else if (currentfullPath.contains(AppRoute.settings.path)) {
       context.pop();
       setState(() {});
-    } else if (currentRouteName != AppRoutes.home.routeName) {
-      context.goNamed(AppRoutes.home.routeName);
+    } else if (currentRouteName != AppRoute.home.routeName) {
+      context.goNamed(AppRoute.home.routeName);
       setState(() {});
     } else {
       confirmPopup();
@@ -148,7 +148,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (selectedIndex != 2) {
-            context.goNamed(AppRoutes.home.routeName);
+            context.goNamed(AppRoute.home.routeName);
             setState(() {});
           } else {
             confirmPopup();
@@ -213,7 +213,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
     final router = GoRouter.of(context);
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
-    router.pushNamed(AppRoutes.scanQRCode.routeName, extra: status);
+    router.pushNamed(AppRoute.scanQRCode.routeName, extra: status);
   }
 
   void onLanguagePressed(Locale currentLocale) async {

@@ -34,7 +34,7 @@ class _CollabShopListState extends State<CollabShopList>
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
     if (context.mounted) {
-      router.pushNamed(AppRoutes.scanQRCode.routeName, extra: status);
+      router.pushNamed(AppRoute.scanQRCode.routeName, extra: status);
     }
   }
 

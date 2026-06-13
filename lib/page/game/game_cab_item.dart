@@ -140,7 +140,7 @@ class GameCabItem extends StatelessWidget with GameMixin {
                             final coinProvider = context
                                 .read<CoinInsertionProvider>();
                             await GoRouter.of(context).pushNamed<bool>(
-                              AppRoutes.gameCab.routeName,
+                              AppRoute.gameCab.routeName,
                               pathParameters: {'mid': machine.id!},
                             );
 
