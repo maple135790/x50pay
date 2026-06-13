@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
@@ -14,43 +13,16 @@ import 'package:x50pay/repository/setting_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class AppRouter {
-  /// GoRouter 路由 wrapper
-  GoRoute _route(
-    AppRoute rp,
-    GoRouterWidgetBuilder? builder, {
-    List<RouteBase>? innerRoutes,
-    GoRouterRedirect? redirect,
-  }) {
-    return GoRoute(
-      path: rp.path,
-      name: rp.routeName,
-      routes: innerRoutes ?? [],
-      builder: builder,
-      redirect: redirect,
-    );
-  }
-
-  /// GoRouter 路由 wrapper
+  /// 全域的 navigatorKey
   ///
-  /// 可提供跳轉時的轉場動畫
-  GoRoute _routeTransition(
-    AppRoute rp,
-    GoRouterPageBuilder? pageBuilder, {
-    List<RouteBase>? innerRoutes,
-    GoRouterRedirect? redirect,
-  }) {
-    return GoRoute(
-      path: rp.path,
-      name: rp.routeName,
-      routes: innerRoutes ?? [],
-      pageBuilder: pageBuilder,
-      redirect: redirect,
-    );
-  }
+  /// 在不特定頁面顯示 dialog 時使用
+  static final rootNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'Global navigatorKey',
+  );
 
   /// 路由設定
   late final router = GoRouter(
-    navigatorKey: GlobalSingleton.appNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     initialLocation: AppRoute.home.path,
     redirect: (context, state) async {
       if (!context.read<LoginProvider>().isLoggedIn) {
@@ -311,5 +283,39 @@ class AppRouter {
     final shouldRedirect = storeId != null || storeName != null;
     if (shouldRedirect) return AppRoute.gameCabs.path;
     return null;
+  }
+
+  /// GoRouter 路由 wrapper
+  GoRoute _route(
+    AppRoute rp,
+    GoRouterWidgetBuilder? builder, {
+    List<RouteBase>? innerRoutes,
+    GoRouterRedirect? redirect,
+  }) {
+    return GoRoute(
+      path: rp.path,
+      name: rp.routeName,
+      routes: innerRoutes ?? [],
+      builder: builder,
+      redirect: redirect,
+    );
+  }
+
+  /// GoRouter 路由 wrapper
+  ///
+  /// 可提供跳轉時的轉場動畫
+  GoRoute _routeTransition(
+    AppRoute rp,
+    GoRouterPageBuilder? pageBuilder, {
+    List<RouteBase>? innerRoutes,
+    GoRouterRedirect? redirect,
+  }) {
+    return GoRoute(
+      path: rp.path,
+      name: rp.routeName,
+      routes: innerRoutes ?? [],
+      pageBuilder: pageBuilder,
+      redirect: redirect,
+    );
   }
 }

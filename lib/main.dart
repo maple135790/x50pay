@@ -11,6 +11,7 @@ import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/client/app_client.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
@@ -75,7 +76,19 @@ void main() async {
     settingRepo: settingsRepo,
     gameInsertService: gameInsertService,
   );
-  final appLifeCycles = AppLifeCycles(repo, settingsRepo, gameInsertService);
+  final appLifeCycles = AppLifeCycles(
+    repo,
+    settingsRepo,
+    gameInsertService,
+    loginProvider,
+    onShowQrPayCabSelectDialog: (qrPayData) async {
+      EasyLoading.dismiss();
+      await showDialog(
+        context: AppRouter.rootNavigatorKey.currentContext!,
+        builder: (context) => CabSelect.fromQRPay(qrPayData: qrPayData),
+      );
+    },
+  );
   final initializer = AppInitializer(
     languageProvider,
     themeProvider,

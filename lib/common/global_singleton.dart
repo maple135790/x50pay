@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 
 /// 全域變數
@@ -20,13 +19,6 @@ class GlobalSingleton {
   ///
   /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
   final isServiceOnline = (kReleaseMode || duringTest) || false;
-
-  /// 全域的 navigatorKey
-  ///
-  /// 在不特定頁面顯示 dialog 時使用
-  static final appNavigatorKey = GlobalKey<NavigatorState>(
-    debugLabel: 'Global navigatorKey',
-  );
 
   /// 是否正在顯示 NfcPay 的 dialog
   ///
