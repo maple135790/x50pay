@@ -6,11 +6,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 enum _MpassProgressState {
   info(1),

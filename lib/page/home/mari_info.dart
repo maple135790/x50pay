@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
@@ -13,6 +12,7 @@ import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class MariInfo extends StatefulWidget {
   /// 真璃養成點數資訊

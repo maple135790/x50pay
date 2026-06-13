@@ -9,7 +9,6 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vibration/vibration.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -25,6 +24,7 @@ import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class Settings extends StatefulWidget {
   /// 是否要跳轉到更換手機

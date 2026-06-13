@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
@@ -18,6 +17,7 @@ import 'package:x50pay/page/game/fav_game_view_model.dart';
 import 'package:x50pay/page/game/game_cab_item.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class FavGame extends StatefulWidget {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;

@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
@@ -15,6 +14,7 @@ import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/route/app_route.dart';
 import 'package:x50pay/service/qr_pay_service.dart';
 
 typedef MachineData = ({String mid, String cid});

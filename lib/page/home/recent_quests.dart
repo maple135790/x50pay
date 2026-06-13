@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class RecentQuests extends StatelessWidget {
   /// 活動列表

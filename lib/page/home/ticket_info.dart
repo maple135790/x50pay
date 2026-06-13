@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/user_provider.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class TicketInfo extends StatelessWidget {
   /// 票券資訊

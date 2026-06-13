@@ -8,12 +8,12 @@ import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

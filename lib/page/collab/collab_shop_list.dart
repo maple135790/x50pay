@@ -4,12 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class CollabShopList extends StatefulWidget {
   /// 商家清單/兌換頁面

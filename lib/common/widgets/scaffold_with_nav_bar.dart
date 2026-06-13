@@ -8,7 +8,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -19,6 +18,7 @@ import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
+import 'package:x50pay/route/app_route.dart';
 
 enum MenuItem {
   game(icon: Icons.sports_esports_rounded, route: AppRoute.gameCabs),
