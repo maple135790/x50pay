@@ -14,7 +14,7 @@ import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 extension on Color {
@@ -54,7 +54,7 @@ class _CabDetailState extends State<CabDetail> with AppThemeMixin {
   void initState() {
     super.initState();
     viewModel = CabDatailViewModel(
-      repository: context.read<Repository>(),
+      repository: context.read<MainRepository>(),
       machineId: widget.machineId,
     );
     cabInit = viewModel.getSelGameCab();

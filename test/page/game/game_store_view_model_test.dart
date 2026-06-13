@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class MockRepository extends Mock implements Repository {}
+class MockRepository extends Mock implements MainRepository {}
 
 class FakeLocale extends Fake implements Locale {}
 

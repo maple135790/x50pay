@@ -13,7 +13,7 @@ import 'package:x50pay/common/models/user/user.dart';
 /// 存放主要 API 呼叫的介面。
 ///
 /// API 呼叫細節請參考各實作類別。
-abstract interface class Repository {
+abstract interface class MainRepository {
   /// 登入API
   ///
   /// 需要傳入 [email] 和 [password]。

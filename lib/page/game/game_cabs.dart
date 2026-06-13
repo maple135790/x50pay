@@ -17,7 +17,7 @@ import 'package:x50pay/page/game/fav_game.dart';
 import 'package:x50pay/page/game/game_cab_item.dart';
 import 'package:x50pay/page/game/game_cabs_view_model.dart';
 import 'package:x50pay/providers/language_provider.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class GameCabs extends StatefulWidget {
@@ -36,7 +36,7 @@ class _GameCabsState extends State<GameCabs> {
   void initState() {
     super.initState();
     viewModel = GameCabsViewModel(
-      repository: context.read<Repository>(),
+      repository: context.read<MainRepository>(),
       currentLocale: context.read<LanguageProvider>().currentLocale,
     );
   }

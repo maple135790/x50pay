@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class CabDatailViewModel extends BaseViewModel {
-  final Repository repository;
+  final MainRepository repository;
   final String machineId;
   CabinetModel? cabinetModel;
   BasicResponse? response;

@@ -24,7 +24,7 @@ import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/providers/app_info_provider.dart';
 import 'package:x50pay/providers/environment_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
@@ -472,7 +472,7 @@ class _SettingsState extends State<Settings>
 
   @override
   Future<String> onOpenDoor(LocationData currentLocation, RemoteOpenShop shop) {
-    return context.read<Repository>().remoteOpenDoor(
+    return context.read<MainRepository>().remoteOpenDoor(
       getDistance(
         25.0455991,
         121.5027702,

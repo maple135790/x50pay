@@ -3,10 +3,10 @@ import 'dart:developer';
 
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class GradeBoxViewModel extends BaseViewModel {
-  final Repository repository;
+  final MainRepository repository;
 
   GradeBoxViewModel({required this.repository});
 

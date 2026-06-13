@@ -17,7 +17,7 @@ import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 
@@ -25,7 +25,7 @@ typedef QrPayCabSelectCallback = void Function(QRPayData qrPayData);
 
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   @override
-  final Repository repository;
+  final MainRepository repository;
   final SettingRepository settingRepo;
   @override
   final GameInsertService gameInsertService;

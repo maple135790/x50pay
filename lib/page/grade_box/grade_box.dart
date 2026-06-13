@@ -7,7 +7,7 @@ import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/page/grade_box/box_tab.dart';
 import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class GradeBox extends StatefulWidget {
   /// 養成商場頁面
@@ -24,7 +24,7 @@ class _GradeBoxState extends State<GradeBox> with AppFeedbackMixin {
   @override
   void initState() {
     super.initState();
-    viewModel = GradeBoxViewModel(repository: context.read<Repository>());
+    viewModel = GradeBoxViewModel(repository: context.read<MainRepository>());
     init = viewModel.getGradeBox();
   }
 

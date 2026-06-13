@@ -11,9 +11,9 @@ import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class LocalMainRepository implements Repository {
+class LocalMainRepository implements MainRepository {
   @override
   Future<void> addCampaignStampRow(String cid) {
     throw UnimplementedError();

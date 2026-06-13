@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:html/parser.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class Sponser {
   final String? rawSponserImgUrl;
@@ -28,7 +28,7 @@ class Sponser {
 }
 
 class CollabShopListViewModel extends BaseViewModel {
-  final Repository repository;
+  final MainRepository repository;
 
   CollabShopListViewModel({required this.repository});
 

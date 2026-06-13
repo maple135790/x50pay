@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/providers/environment_provider.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 enum _MpassProgressState {
@@ -595,7 +595,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog>
   }
 
   void doBuyVip() async {
-    final repo = context.read<Repository>();
+    final repo = context.read<MainRepository>();
     final nav = Navigator.of(context);
     final router = GoRouter.of(context);
     final isServiceOnline = context.read<EnvironmentProvider>().isServiceOnline;

@@ -13,7 +13,7 @@ import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 import 'package:x50pay/service/qr_pay_service.dart';
 
@@ -176,7 +176,7 @@ class _ScanQRCodeState extends State<ScanQRCode>
       handleQRPay(value);
     } else {
       // 平板排隊
-      final msg = await context.read<Repository>().qrDecryt(value);
+      final msg = await context.read<MainRepository>().qrDecryt(value);
       if (msg != 'oof') {
         setState(() {});
         await EasyLoading.showInfo(

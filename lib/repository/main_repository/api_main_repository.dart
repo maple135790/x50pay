@@ -14,13 +14,13 @@ import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/repository/base_repository.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 /// 存放 Api 呼叫的地方
 ///
 /// Api 呼叫細節請參考 [client.request]
-/// [Repository] 只顯示使用呼叫，不顯示細節。
-class ApiMainRepository extends BaseRepository implements Repository {
+/// [MainRepository] 只顯示使用呼叫，不顯示細節。
+class ApiMainRepository extends BaseRepository implements MainRepository {
   const ApiMainRepository(super.client);
 
   Uri _endpoint(String path) {

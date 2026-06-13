@@ -9,13 +9,13 @@ import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 
 class MockNfcPayMixin with NfcPayMixin {
   @override
-  final Repository repository;
+  final MainRepository repository;
 
   @override
   final GameInsertService gameInsertService;
@@ -26,7 +26,7 @@ class MockNfcPayMixin with NfcPayMixin {
   });
 }
 
-class MockRepository extends Mock implements Repository {}
+class MockRepository extends Mock implements MainRepository {}
 
 class MockSettingRepository extends Mock implements SettingRepository {}
 

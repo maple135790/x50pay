@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class EntryProvider extends BaseViewModel {
-  final Repository repo;
+  final MainRepository repo;
 
   EntryProvider({required this.repo});
 

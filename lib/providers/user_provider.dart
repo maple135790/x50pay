@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:x50pay/common/models/user/user.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class UserProvider extends ChangeNotifier {
   UserModel? _user;
   UserModel? get user => _user;
 
-  final Repository repo;
+  final MainRepository repo;
   final _logger = Logger('UserProvider');
 
   UserProvider({required this.repo});

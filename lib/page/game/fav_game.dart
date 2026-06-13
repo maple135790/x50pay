@@ -16,7 +16,7 @@ import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/fav_game_view_model.dart';
 import 'package:x50pay/page/game/game_cab_item.dart';
 import 'package:x50pay/providers/language_provider.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class FavGame extends StatefulWidget {
@@ -37,7 +37,7 @@ class _FavGameState extends State<FavGame> with AppThemeMixin {
   void initState() {
     super.initState();
     viewModel = FavGameViewModel(
-      repository: context.read<Repository>(),
+      repository: context.read<MainRepository>(),
       currentLocale: context.read<LanguageProvider>().currentLocale,
     );
     init = viewModel.init();

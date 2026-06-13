@@ -4,11 +4,11 @@ import 'package:html/parser.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/quest_campaign/campaign.dart';
 import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class QuestCampaignViewModel extends BaseViewModel {
   final String campaignId;
-  final Repository repository;
+  final MainRepository repository;
 
   QuestCampaignViewModel({required this.repository, required this.campaignId});
 

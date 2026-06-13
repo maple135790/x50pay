@@ -8,7 +8,7 @@ import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
-import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class CollabShopList extends StatefulWidget {
@@ -26,7 +26,7 @@ class _CollabShopListState extends State<CollabShopList>
   @override
   void initState() {
     super.initState();
-    viewModel = CollabShopListViewModel(repository: context.read<Repository>());
+    viewModel = CollabShopListViewModel(repository: context.read<MainRepository>());
   }
 
   void showQRCodeScan() async {
