@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
@@ -215,7 +214,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
     final router = GoRouter.of(context);
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
-    router.pushNamed(AppRoute.scanQRCode.routeName, extra: status);
+    router.pushNamed(AppRoute.scanQRCode.routeName);
   }
 
   void onLanguagePressed(Locale currentLocale) async {
@@ -310,16 +309,22 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
           ),
         ),
         actions: [
-          InkWell(
-            onTap: !GlobalSingleton.instance.isInCameraPage
-                ? onQrScanButtonPressed
-                : null,
-            splashFactory: NoSplash.splashFactory,
-            child: Icon(
-              Icons.qr_code_rounded,
-              size: 28,
-              color: Theme.of(context).iconTheme.color,
-            ),
+          ValueListenableBuilder(
+            valueListenable: GoRouter.of(context).routeInformationProvider,
+            builder: (context, infoProvider, child) {
+              log('!!!${infoProvider.uri.path}', name: 'DEBUG');
+              final isInScanPage =
+                  infoProvider.uri.path == AppRoute.scanQRCode.path;
+              return InkWell(
+                onTap: !isInScanPage ? onQrScanButtonPressed : null,
+                splashFactory: NoSplash.splashFactory,
+                child: Icon(
+                  Icons.qr_code_rounded,
+                  size: 28,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+              );
+            },
           ),
           const SizedBox(width: 15),
         ],

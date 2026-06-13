@@ -62,7 +62,7 @@ class AppRouter {
               }),
             ],
           ),
-          _route(AppRoute.scanQRCode, (_, state) => const ScanQRCode()),
+          _route(AppRoute.scanQRCode, (_, _) => const ScanQRCode()),
           _route(AppRoute.license, (_, _) => const License()),
           _routeTransition(
             AppRoute.settings,

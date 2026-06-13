@@ -8,7 +8,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
@@ -50,8 +49,6 @@ class _ScanQRCodeState extends State<ScanQRCode>
   @override
   void initState() {
     super.initState();
-    GlobalSingleton.instance.isInCameraPage = true;
-
     qrPayModalTransistionController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 350),
@@ -79,7 +76,6 @@ class _ScanQRCodeState extends State<ScanQRCode>
   @override
   void dispose() {
     log('dispose', name: 'ScanQRCode');
-    GlobalSingleton.instance.isInCameraPage = false;
     qrPayModalTransistionController.dispose();
     controller.dispose();
     super.dispose();

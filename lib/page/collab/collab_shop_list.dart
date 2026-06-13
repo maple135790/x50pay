@@ -26,16 +26,16 @@ class _CollabShopListState extends State<CollabShopList>
   @override
   void initState() {
     super.initState();
-    viewModel = CollabShopListViewModel(repository: context.read<MainRepository>());
+    viewModel = CollabShopListViewModel(
+      repository: context.read<MainRepository>(),
+    );
   }
 
   void showQRCodeScan() async {
     final router = GoRouter.of(context);
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
-    if (context.mounted) {
-      router.pushNamed(AppRoute.scanQRCode.routeName, extra: status);
-    }
+    router.pushNamed(AppRoute.scanQRCode.routeName);
   }
 
   Widget buildSponserTiles(List<Sponser> sponserData) {
