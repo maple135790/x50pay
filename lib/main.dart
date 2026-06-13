@@ -13,7 +13,6 @@ import 'package:x50pay/common/go_route_generator.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
-import 'package:x50pay/page/scan/qr_pay/qr_pay_service.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
 import 'package:x50pay/providers/entry_provider.dart';
@@ -23,6 +22,7 @@ import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
+import 'package:x50pay/service/qr_pay_service.dart';
 import 'package:x50pay/storage/cookie_storage.dart';
 
 void main() async {
