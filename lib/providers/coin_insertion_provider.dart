@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// TODO: merge with Game insert service
 class CoinInsertionProvider extends ChangeNotifier {
   bool _isCoinInserted = false;
 

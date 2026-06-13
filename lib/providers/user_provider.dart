@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -10,6 +9,7 @@ class UserProvider extends ChangeNotifier {
   UserModel? get user => _user;
 
   final Repository repo;
+  final _logger = Logger('UserProvider');
 
   UserProvider({required this.repo});
 
@@ -26,27 +26,26 @@ class UserProvider extends ChangeNotifier {
   ///
   /// [force] 強制檢查使用者資料
   Future<bool> checkUser() async {
-    log('check user...', name: 'checkUser');
+    _logger.info('check user...');
 
     await Future.delayed(const Duration(milliseconds: 100));
     try {
       if (GlobalSingleton.instance.isServiceOnline) {
-        final fetchedUser = await repo.getUser();
+        final res = await repo.getUser();
+        final result = res.result;
 
-        // 未回傳UserModel
-        if (fetchedUser == null) return false;
-        // 回傳UserModel, 驗證失敗或是伺服器錯誤
-        if (fetchedUser.code != 200) return false;
+        if (result.isError) return false;
+
         // 與現有資料相同，不需要更新
-        if (user == fetchedUser) return true;
+        if (user == result.successData) return true;
 
-        _user = fetchedUser;
+        _user = result.successData;
       } else {
         _user = const UserModel.empty();
       }
       return true;
     } catch (e, stacktrace) {
-      log('', error: e, stackTrace: stacktrace, name: 'checkUser');
+      _logger.warning('', e, stacktrace);
       return false;
     } finally {
       notifyListeners();

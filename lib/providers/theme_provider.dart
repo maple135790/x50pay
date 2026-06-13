@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
-import 'package:x50pay/common/utils/prefs_utils.dart';
+import 'package:x50pay/storage/app_storage/app_storage.dart';
 
 extension MaterialStateSet on Set<WidgetState> {
   bool get isHovered => contains(WidgetState.hovered);
@@ -195,6 +195,13 @@ extension AppThemeMode on ThemeMode {
 }
 
 class AppThemeProvider extends ChangeNotifier {
+  final AppStorage _storage;
+
+  @visibleForTesting
+  AppThemeProvider.internal(this._storage);
+
+  AppThemeProvider() : _storage = AppStorage.prefs();
+
   static const defaultSeedColor = Color(0xffE3C81B);
 
   ThemeData get themeData => currentMode.themeData;
@@ -208,6 +215,7 @@ class AppThemeProvider extends ChangeNotifier {
 
   ThemeMode get currentMode => _currentMode;
   ThemeMode _currentMode = ThemeMode.dark;
+
   set currentMode(ThemeMode value) {
     _currentMode = value;
     notifyListeners();
@@ -247,8 +255,15 @@ class AppThemeProvider extends ChangeNotifier {
   }
 
   Future<void> init() async {
-    final isEnabledDarkTheme = await Prefs.getBool(PrefsToken.enableDarkTheme);
-    final seedColor = await Prefs.getInt(PrefsToken.seedColor);
+    final settings = await _storage.readAll([
+      StorageKey.enableDarkTheme,
+      StorageKey.seedColor,
+    ]);
+    final isEnabledDarkTheme = bool.tryParse(
+      settings[StorageKey.enableDarkTheme].toString(),
+    );
+
+    final seedColor = int.tryParse(settings[StorageKey.seedColor].toString());
     if (isEnabledDarkTheme != null) {
       currentMode = isEnabledDarkTheme ? ThemeMode.dark : ThemeMode.light;
     }
