@@ -15,7 +15,10 @@ class GameInsertService {
   final VoidCallback onAfterInserted;
   final Repository repository;
 
-  GameInsertService({required this.repository, required this.onAfterInserted});
+  const GameInsertService({
+    required this.repository,
+    required this.onAfterInserted,
+  });
 
   static late AppFeedbackMixin _feedbackService;
 

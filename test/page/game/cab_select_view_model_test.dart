@@ -8,8 +8,8 @@ import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
-import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/service/game_insert_service.dart';
 
 class MockRepository extends Mock implements Repository {}
 
