@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
 class ChangePhoneViewModel extends BaseViewModel {
   final SettingRepository settingRepo;
@@ -18,28 +18,17 @@ class ChangePhoneViewModel extends BaseViewModel {
   bool _isSentSmsCode = false;
   bool get isSentSmsCode => _isSentSmsCode;
 
-  static const _fakeResponse = BasicResponse(
-    code: 200,
-    message: 'fake success, no api is called.',
-  );
-
   /// 變更手機號碼API
   ///
   /// 用於取消綁定手機號碼
   Future<bool> removePhone() async {
-    late final BasicResponse response;
     showLoading();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (kReleaseMode || isForceFetch) {
-        response = await settingRepo.changePhone();
-      } else {
-        response = _fakeResponse;
-      }
-
+      final response = await settingRepo.changePhone();
       return response.code == 200;
-    } on Exception catch (e) {
+    } catch (e) {
       log('', name: 'detachPhone', error: e);
       return false;
     } finally {
@@ -59,14 +48,7 @@ class ChangePhoneViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      late final BasicResponse response;
-
-      if (!kDebugMode || isForceFetch) {
-        response = await settingRepo.doChangePhone(phone: phone);
-      } else {
-        response = _fakeResponse;
-      }
-
+      final response = await settingRepo.doChangePhone(phone: phone);
       if (response == BasicResponse.empty() || response.code != 200) {
         onChangeFailed.call();
         return;
@@ -98,17 +80,11 @@ class ChangePhoneViewModel extends BaseViewModel {
       return;
     }
 
-    late final BasicResponse response;
-
     showLoading();
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForceFetch) {
-        response = await settingRepo.smsActivate(sms: smsCode);
-      } else {
-        response = _fakeResponse;
-      }
+      final response = await settingRepo.smsActivate(sms: smsCode);
 
       if (response == BasicResponse.empty()) {
         onActivateFailed.call();

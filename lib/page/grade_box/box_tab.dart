@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class GradeBoxTab extends StatefulWidget {
   final List<GradeBoxItem?> items;
@@ -65,7 +65,7 @@ class _GradeBoxTabState extends State<GradeBoxTab> with AppThemeMixin {
         );
       }
       await Future.delayed(const Duration(milliseconds: 2500));
-      nav.goNamed(AppRoutes.home.routeName);
+      nav.goNamed(AppRoute.home.routeName);
     }
   }
 

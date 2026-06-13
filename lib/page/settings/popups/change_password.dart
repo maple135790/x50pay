@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class ChangePasswordDialog extends StatefulWidget {
   const ChangePasswordDialog({super.key});
@@ -44,7 +44,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog>
           );
           await Future.delayed(const Duration(seconds: 2));
           await EasyLoading.show(dismissOnTap: false);
-          nav.goNamed(AppRoutes.login.routeName);
+          nav.goNamed(AppRoute.login.routeName);
           break;
         case 700:
           errorText = '新密碼與舊密碼相同';

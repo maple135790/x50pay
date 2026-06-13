@@ -8,27 +8,28 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/widgets/persist_app_bar.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/providers/app_info_provider.dart';
+import 'package:x50pay/providers/environment_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
+import 'package:x50pay/route/app_route.dart';
 
 enum MenuItem {
-  game(icon: Icons.sports_esports_rounded, route: AppRoutes.gameCabs),
-  settings(icon: Icons.settings_rounded, route: AppRoutes.settings),
-  home(icon: Icons.home_rounded, route: AppRoutes.home),
-  gift(icon: Icons.redeem_rounded, route: AppRoutes.gift),
-  collab(icon: Icons.handshake_rounded, route: AppRoutes.collab);
+  game(icon: Icons.sports_esports_rounded, route: AppRoute.gameCabs),
+  settings(icon: Icons.settings_rounded, route: AppRoute.settings),
+  home(icon: Icons.home_rounded, route: AppRoute.home),
+  gift(icon: Icons.redeem_rounded, route: AppRoute.gift),
+  collab(icon: Icons.handshake_rounded, route: AppRoute.collab);
 
   final IconData icon;
-  final AppRoutes route;
+  final AppRoute route;
 
   const MenuItem({required this.icon, required this.route});
 }
@@ -106,7 +107,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
     if (selectedIndex != 2) {
       selectedIndex = 2;
       lastPopTime = popTime;
-      context.goNamed(AppRoutes.home.routeName);
+      context.goNamed(AppRoute.home.routeName);
       setState(() {});
       return false;
     }
@@ -120,17 +121,17 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
 
     log('currentLocation: $currentRouteName');
     log('currentPath: $currentfullPath');
-    if (currentRouteName == AppRoutes.gameCab.routeName) {
+    if (currentRouteName == AppRoute.gameCab.routeName) {
       context.pop();
       setState(() {});
-    } else if (currentRouteName == AppRoutes.scanQRCode.routeName) {
+    } else if (currentRouteName == AppRoute.scanQRCode.routeName) {
       context.pop();
       setState(() {});
-    } else if (currentfullPath.contains(AppRoutes.settings.path)) {
+    } else if (currentfullPath.contains(AppRoute.settings.path)) {
       context.pop();
       setState(() {});
-    } else if (currentRouteName != AppRoutes.home.routeName) {
-      context.goNamed(AppRoutes.home.routeName);
+    } else if (currentRouteName != AppRoute.home.routeName) {
+      context.goNamed(AppRoute.home.routeName);
       setState(() {});
     } else {
       confirmPopup();
@@ -148,7 +149,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (selectedIndex != 2) {
-            context.goNamed(AppRoutes.home.routeName);
+            context.goNamed(AppRoute.home.routeName);
             setState(() {});
           } else {
             confirmPopup();
@@ -213,7 +214,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
     final router = GoRouter.of(context);
     var status = await Permission.camera.status;
     if (status.isDenied) await Permission.camera.request();
-    router.pushNamed(AppRoutes.scanQRCode.routeName, extra: status);
+    router.pushNamed(AppRoute.scanQRCode.routeName);
   }
 
   void onLanguagePressed(Locale currentLocale) async {
@@ -308,66 +309,84 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
           ),
         ),
         actions: [
-          InkWell(
-            onTap: !GlobalSingleton.instance.isInCameraPage
-                ? onQrScanButtonPressed
-                : null,
-            splashFactory: NoSplash.splashFactory,
-            child: Icon(
-              Icons.qr_code_rounded,
-              size: 28,
-              color: Theme.of(context).iconTheme.color,
-            ),
+          ValueListenableBuilder(
+            valueListenable: GoRouter.of(context).routeInformationProvider,
+            builder: (context, infoProvider, child) {
+              log('!!!${infoProvider.uri.path}', name: 'DEBUG');
+              final isInScanPage =
+                  infoProvider.uri.path == AppRoute.scanQRCode.path;
+              return InkWell(
+                onTap: !isInScanPage ? onQrScanButtonPressed : null,
+                splashFactory: NoSplash.splashFactory,
+                child: Icon(
+                  Icons.qr_code_rounded,
+                  size: 28,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+              );
+            },
           ),
           const SizedBox(width: 15),
         ],
       ),
     );
-
-    final serviceStatus = GlobalSingleton.instance.isServiceOnline
-        ? 'ONLINE'
-        : 'OFFLINE';
-    final statusColor = serviceStatus == 'ONLINE' ? Colors.green : Colors.grey;
-
-    final debugStatus = Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'app version deprecated. need to use another method',
-            textScaler: const TextScaler.linear(0.95),
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(
-                context,
-              ).textTheme.labelMedium?.color?.withValues(alpha: 0.5),
-              fontWeight: FontWeight.bold,
+    Widget? debugStatus;
+    if (kDebugMode) {
+      debugStatus = Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Selector<AppInfoProvider, String>(
+              selector: (context, provider) => provider.appVersion,
+              builder: (context, appVersion, child) {
+                return Text(
+                  appVersion,
+                  textScaler: const TextScaler.linear(0.95),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(
+                      context,
+                    ).textTheme.labelMedium?.color?.withValues(alpha: 0.5),
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
             ),
-          ),
-          Row(
-            children: [
-              Icon(
-                Icons.circle_rounded,
-                size: 8,
-                color: statusColor.withValues(alpha: 0.5),
-              ),
-              const SizedBox(width: 2.5),
-              Text(
-                'Service $serviceStatus',
-                textScaler: const TextScaler.linear(0.95),
-                style: TextStyle(
-                  color: statusColor.withValues(alpha: 0.5),
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+            Selector<EnvironmentProvider, bool>(
+              selector: (context, provider) => provider.isServiceOnline,
+              builder: (context, isServiceOnline, child) {
+                final serviceStatus = isServiceOnline ? 'ONLINE' : 'OFFLINE';
+                final statusColor = isServiceOnline
+                    ? Colors.green
+                    : Colors.grey;
+
+                return Row(
+                  children: [
+                    Icon(
+                      Icons.circle_rounded,
+                      size: 8,
+                      color: statusColor.withValues(alpha: 0.5),
+                    ),
+                    const SizedBox(width: 2.5),
+                    Text(
+                      'Service $serviceStatus',
+                      textScaler: const TextScaler.linear(0.95),
+                      style: TextStyle(
+                        color: statusColor.withValues(alpha: 0.5),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
 
     return AnnotatedRegion(
       value: isDarkTheme
@@ -385,7 +404,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
               top: 0,
               child: functionalHeader,
             ),
-            if (kDebugMode) debugStatus,
+            ?debugStatus,
           ],
         ),
       ),

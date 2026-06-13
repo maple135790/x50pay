@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/quest_campaign/campaign.dart';
@@ -14,7 +13,8 @@ import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/page/quest_campaign/quest_campaign_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class QuestCampaign extends StatefulWidget {
   final String campaignId;
@@ -40,7 +40,7 @@ class _QuestCampaignState extends State<QuestCampaign>
   Future<void> onAddStampRowTap() async {
     viewModel.onAddStampRowTap();
     context.goNamed(
-      AppRoutes.questCampaign.routeName,
+      AppRoute.questCampaign.routeName,
       pathParameters: {'couid': widget.campaignId},
       extra: true,
     );
@@ -50,7 +50,7 @@ class _QuestCampaignState extends State<QuestCampaign>
   void initState() {
     super.initState();
     viewModel = QuestCampaignViewModel(
-      repository: context.read<Repository>(),
+      repository: context.read<MainRepository>(),
       campaignId: widget.campaignId,
     );
     init = viewModel.init();

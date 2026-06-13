@@ -3,9 +3,12 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:logging/logging.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/theme_provider.dart';
+
+typedef InitializedData = (PackageInfo packageInfo,);
 
 class AppInitializer {
   final LanguageProvider _langProvider;
@@ -16,12 +19,13 @@ class AppInitializer {
 
   bool _splashRemoved = false;
 
-  Future<void> initialize() async {
+  Future<InitializedData> initialize() async {
     _initLogger();
     _themeProvider.configLoadingStyle();
 
-    final (appLocale, _, _) = await (
+    final (appLocale, packageInfo, _, _) = await (
       _langProvider.getUserPrefLocale(),
+      PackageInfo.fromPlatform(),
       _themeProvider.init(),
       _loginProvider.autoLogin(),
     ).wait;
@@ -32,6 +36,8 @@ class AppInitializer {
       _splashRemoved = true;
       FlutterNativeSplash.remove();
     }
+
+    return (packageInfo,);
   }
 
   void _initLogger() {

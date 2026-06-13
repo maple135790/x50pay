@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class GiftClaim extends StatelessWidget {
   /// 領取禮物頁面
@@ -165,7 +165,7 @@ class _ConfirmChangeDialogState extends State<_ConfirmChangeDialog>
                     onPressed: () async {
                       final nav = GoRouter.of(context);
                       if (!kDebugMode) {
-                        await context.read<Repository>().giftExchange(
+                        await context.read<MainRepository>().giftExchange(
                           widget.gid,
                         );
                       }
@@ -175,7 +175,7 @@ class _ConfirmChangeDialogState extends State<_ConfirmChangeDialog>
                       );
                       await Future.delayed(const Duration(milliseconds: 800));
 
-                      nav.goNamed(AppRoutes.home.routeName);
+                      nav.goNamed(AppRoute.home.routeName);
                     },
                     style: CustomButtonThemes.severe(isV4: true),
                     child: const Text('確認'),

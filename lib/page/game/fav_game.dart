@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
@@ -17,7 +15,9 @@ import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/fav_game_view_model.dart';
 import 'package:x50pay/page/game/game_cab_item.dart';
 import 'package:x50pay/providers/language_provider.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/route/app_route.dart';
+import 'package:x50pay/service/game_insert_service.dart';
 
 class FavGame extends StatefulWidget {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
@@ -37,18 +37,19 @@ class _FavGameState extends State<FavGame> with AppThemeMixin {
   void initState() {
     super.initState();
     viewModel = FavGameViewModel(
-      repository: context.read<Repository>(),
+      repository: context.read<MainRepository>(),
       currentLocale: context.read<LanguageProvider>().currentLocale,
     );
     init = viewModel.init();
   }
 
   void showCabSelectDialog() {
-    final recentPlayData = GlobalSingleton.instance.recentPlayedCabinetData!;
+    final recentPlayData = context.read<GameInsertService>().recentPlayedData;
+    if (recentPlayData == null) return;
     showCupertinoDialog(
       context: context,
       builder: (_) => CabSelect(
-        caboid: recentPlayData.caboid,
+        caboid: recentPlayData.cabOid,
         cabNum: recentPlayData.cabNum,
         cabinetData: recentPlayData.cabinet,
       ),
@@ -80,7 +81,7 @@ class _FavGameState extends State<FavGame> with AppThemeMixin {
   }
 
   void reloadAfterSetFavGame() {
-    context.replaceNamed(AppRoutes.gameCabs.routeName, extra: true);
+    context.replaceNamed(AppRoute.gameCabs.routeName, extra: true);
   }
 
   void showAddFavGameBottomSheet() async {

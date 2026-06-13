@@ -1,13 +1,12 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class CabDatailViewModel extends BaseViewModel {
-  final Repository repository;
+  final MainRepository repository;
   final String machineId;
   CabinetModel? cabinetModel;
   BasicResponse? response;
@@ -40,20 +39,12 @@ class CabDatailViewModel extends BaseViewModel {
 
   /// 確定平板排隊
   Future<void> confirmPadCheck(String padmid, String padlid) async {
-    if (!kDebugMode || isForceFetch) {
-      await repository.confirmPadCheck(padmid, padlid);
-    }
+    await repository.confirmPadCheck(padmid, padlid);
     return;
   }
 
   /// 取得排隊人數
   Future<int> getPadLineup(String padmid, String padlid) async {
-    int count = -1;
-    if (!kDebugMode || isForceFetch) {
-      count = await repository.getPadLineup(padmid, padlid);
-    } else {
-      count = 0;
-    }
-    return count;
+    return await repository.getPadLineup(padmid, padlid);
   }
 }

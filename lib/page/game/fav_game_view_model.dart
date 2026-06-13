@@ -5,10 +5,10 @@ import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class FavGameViewModel extends BaseViewModel {
-  final Repository repository;
+  final MainRepository repository;
   final Locale currentLocale;
 
   FavGameViewModel({required this.repository, required this.currentLocale});

@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 typedef Avatar = ({String b64Image, String? id, String badgeText});
 
@@ -30,7 +30,7 @@ class _DressRoomState extends State<DressRoom> {
   @override
   void initState() {
     super.initState();
-    viewModel = DressRoomViewModel(repository: context.read<Repository>());
+    viewModel = DressRoomViewModel(repository: context.read<MainRepository>());
     initDressRoom = viewModel.getAvatars();
   }
 
@@ -60,7 +60,7 @@ class _DressRoomState extends State<DressRoom> {
       textColor: Colors.white,
       fontSize: 16.0,
     );
-    nav.goNamed(AppRoutes.home.routeName, extra: true);
+    nav.goNamed(AppRoute.home.routeName, extra: true);
   }
 
   @override

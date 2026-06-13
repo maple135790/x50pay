@@ -14,13 +14,14 @@ import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/repository/base_repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 /// 存放 Api 呼叫的地方
 ///
 /// Api 呼叫細節請參考 [client.request]
-/// [Repository] 只顯示使用呼叫，不顯示細節。
-class Repository extends BaseRepository {
-  const Repository(super.client);
+/// [MainRepository] 只顯示使用呼叫，不顯示細節。
+class ApiMainRepository extends BaseRepository implements MainRepository {
+  const ApiMainRepository(super.client);
 
   Uri _endpoint(String path) {
     return Uri.parse('https://pay.x50.fun/api/v1$path');
@@ -33,6 +34,7 @@ class Repository extends BaseRepository {
   /// 登入API
   ///
   /// 需要傳入 [email] 和 [password]。
+  @override
   Future<BasicResponse?> login({
     required String email,
     required String password,
@@ -47,6 +49,7 @@ class Repository extends BaseRepository {
   }
 
   /// 取得使用者資料API
+  @override
   Future<ApiResponse<UserModel>> getUser() async {
     final res = await client.request(
       _endpoint('/user/me'),
@@ -57,6 +60,7 @@ class Repository extends BaseRepository {
   }
 
   /// 取得首頁資料API
+  @override
   Future<EntryModel?> getEntry() async {
     final res = await client.request(
       _endpoint('/user/entry'),
@@ -67,11 +71,13 @@ class Repository extends BaseRepository {
   }
 
   /// 登出API
+  @override
   Future<void> logout() {
     return client.request(_endpoint('/fuckout'), method: HttpMethod.get);
   }
 
   /// 取得店家資料API
+  @override
   Future<StoreModel> getStores(Locale currentLocale) async {
     final res = await client.request(
       _endpoint('/store/list/${currentLocale.tagName.toLowerCase()}'),
@@ -84,6 +90,7 @@ class Repository extends BaseRepository {
   /// 取得該店家的遊戲列表API
   ///
   /// 需要傳入店家編號 [storeId]
+  @override
   Future<GameList> getGameList({required String storeId}) async {
     final res = await client.request(
       _endpoint('/gamelist'),
@@ -94,6 +101,7 @@ class Repository extends BaseRepository {
   }
 
   /// 取得遊戲機台資料API
+  @override
   Future<CabinetModel> selGame(String machineId) async {
     final res = await client.request(
       _endpoint('/cablist/$machineId'),
@@ -106,6 +114,7 @@ class Repository extends BaseRepository {
   /// 投幣API
   ///
   /// 需要傳入是否用券[isTicket]、機台編號[id]、投幣模式[mode]
+  @override
   Future<BasicResponse> doInsert(
     bool isTicket,
     String id,
@@ -129,6 +138,7 @@ class Repository extends BaseRepository {
   /// 投幣API
   ///
   /// 需要傳入原始URL [url]，使用於 QRCode 掃描後 (QRPay) 的投幣
+  @override
   Future<BasicResponse> doInsertRawUrl(String url) async {
     final res = await client.request(
       Uri.parse(url),
@@ -141,6 +151,7 @@ class Repository extends BaseRepository {
   /// 取得排隊人數API
   ///
   /// 需要傳入 [padmid] 和 [padlid]
+  @override
   Future<int> getPadLineup(String padmid, String padlid) async {
     final res = await client.request(
       _endpoint('/pad/getCount/$padmid/$padlid'),
@@ -153,6 +164,7 @@ class Repository extends BaseRepository {
   /// 確認平板排隊API
   ///
   /// 需要傳入 [padmid] 和 [padlid]
+  @override
   Future<void> confirmPadCheck(String padmid, String padlid) async {
     await client.request(
       _endpoint('/pad/onCheck/$padmid/$padlid'),
@@ -168,6 +180,7 @@ class Repository extends BaseRepository {
   /// 需要傳入QRCode解析後的String [rawText]
   ///
   /// 回傳解析結果 [String]
+  @override
   Future<String> qrDecryt(String rawText) async {
     final res = await client.request(
       _endpoint('/qrDecryt/'),
@@ -181,6 +194,7 @@ class Repository extends BaseRepository {
   /// 開門按鈕API
   ///
   /// 需要傳入與店家距離 [distance]、店門名稱 [doorName]
+  @override
   Future<String> remoteOpenDoor(
     double distance, {
     required String doorName,
@@ -197,6 +211,7 @@ class Repository extends BaseRepository {
   /// 取得禮物箱API
   ///
   /// 用於禮物系統頁面，回傳 [GiftBoxModel]
+  @override
   Future<GiftBoxModel> getGiftBox() async {
     final res = await client.request(
       _endpoint('/gift/box'),
@@ -209,6 +224,7 @@ class Repository extends BaseRepository {
   /// 取得養成抽獎箱API
   ///
   /// 用於禮物系統頁面，回傳 [LotteListModel]
+  @override
   Future<LotteListModel> getLotteList() async {
     final res = await client.request(
       _endpoint('/lotte/list'),
@@ -221,6 +237,7 @@ class Repository extends BaseRepository {
   /// 兌換禮物API
   ///
   /// 用於禮物系統頁面，需要傳入禮物編號 [gid]
+  @override
   Future<void> giftExchange(String gid) {
     return client.request(
       _endpoint('/confirmGFID'),
@@ -230,11 +247,13 @@ class Repository extends BaseRepository {
   }
 
   /// 取得更衣室的所有衣服API
+  @override
   Future<http.Response> getAvatar() {
     return client.request(_endpoint('/list/avater'), method: HttpMethod.get);
   }
 
   /// 設定角色衣服API
+  @override
   Future<http.Response> setAvatar(String id) {
     return client.request(
       _endpoint('/cgAva/$id'),
@@ -247,6 +266,7 @@ class Repository extends BaseRepository {
   /// 月票人際帝方案的購買API
   ///
   /// 需要傳入參加人[applicants]
+  @override
   Future<http.Response> buyVipMany(List<String>? applicants) {
     final body = <String, String>{};
     if (applicants != null) {
@@ -266,6 +286,7 @@ class Repository extends BaseRepository {
   }
 
   /// 月票月養成方案的購買API
+  @override
   Future<http.Response> buyVipGradeOne() {
     return client.request(
       _endpoint('/vip/buygrdone'),
@@ -276,6 +297,7 @@ class Repository extends BaseRepository {
   }
 
   /// 月票邊緣人方案的購買API
+  @override
   Future<http.Response> buyVipOne() {
     return client.request(
       _endpoint('/vip/buyone'),
@@ -290,6 +312,7 @@ class Repository extends BaseRepository {
   /// 需要傳入活動編號 [cid]。
   ///
   /// 因目前還沒有最新活動的相關API，故使用此方式取得最新活動頁面的HTML。
+  @override
   Future<String> getCampaignDocument(String cid) async {
     final response = await client.request(
       Uri.parse('https://pay.x50.fun/coupon/$cid'),
@@ -301,6 +324,7 @@ class Repository extends BaseRepository {
   /// 新增最新活動印章列API
   ///
   /// 需要傳入活動編號 [cid]。
+  @override
   Future<void> addCampaignStampRow(String cid) {
     return client.request(
       Uri.parse('https://pay.x50.fun/li/ev/$cid'),
@@ -311,6 +335,7 @@ class Repository extends BaseRepository {
   /// 取得贊助商web document API
   ///
   /// 因目前還沒有贊助商的相關API，故使用此方式取得贊助商頁面的HTML。
+  @override
   Future<String> getSponserDocument() async {
     final response = await client.request(
       Uri.parse('https://pay.x50.fun/static/templates-v4/sponser.html?v1.1'),
@@ -320,6 +345,7 @@ class Repository extends BaseRepository {
   }
 
   /// 取得養成商場內，點數兌換商品資料API
+  @override
   Future<String> fetchGradeBox() async {
     final response = await client.request(
       _endpoint('/grade/box'),
@@ -333,6 +359,7 @@ class Repository extends BaseRepository {
   /// 兌換養成商場內商品API
   ///
   /// 需要傳入 [gid] 及 [grid]
+  @override
   Future<String> chgGradev2(String gid, String grid) async {
     final response = await client.request(
       _endpoint('/grade/change'),
@@ -344,6 +371,7 @@ class Repository extends BaseRepository {
     return response.body;
   }
 
+  @override
   Future<http.Response> getDocument(String fullUrl) async {
     final response = await client.request(
       Uri.parse(fullUrl),
@@ -352,6 +380,7 @@ class Repository extends BaseRepository {
     return response;
   }
 
+  @override
   Future<String> getQRPayDocument(String url) async {
     final response = await client.request(
       Uri.parse(url),
@@ -360,6 +389,7 @@ class Repository extends BaseRepository {
     return const Utf8Decoder().convert(response.bodyBytes);
   }
 
+  @override
   Future<String> getDocumentWithDomainPrefix(
     String url,
     String refererUrl, {
@@ -373,6 +403,7 @@ class Repository extends BaseRepository {
     return const Utf8Decoder().convert(response.bodyBytes);
   }
 
+  @override
   Future<String> redeemQuestCampaignItem(
     String campaignId,
     String itemId,
@@ -384,6 +415,7 @@ class Repository extends BaseRepository {
     return response.body;
   }
 
+  @override
   Future<GameList> favGameList() async {
     final res = await client.request(
       _endpoint('/favgamelist'),
@@ -394,6 +426,7 @@ class Repository extends BaseRepository {
     return GameList.fromJson(_decodeRes(res));
   }
 
+  @override
   Future<void> setFavGames(List<String> favGames) {
     return client.request(
       _endpoint('/settingFavConfirm'),

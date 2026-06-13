@@ -2,36 +2,42 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nfc_manager/ndef_record.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:nfc_manager/nfc_manager_android.dart';
 import 'package:nfc_manager_ndef/nfc_manager_ndef.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pad_mixin.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
-import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
+import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
+
+typedef QrPayCabSelectCallback = void Function(QRPayData qrPayData);
 
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   @override
-  final Repository repository;
+  final MainRepository repository;
   final SettingRepository settingRepo;
   @override
   final GameInsertService gameInsertService;
+  final LoginProvider _loginProvider;
+  final QrPayCabSelectCallback _onShowQrPayCabSelectDialog;
 
-  AppLifeCycles(this.repository, this.settingRepo, this.gameInsertService);
+  AppLifeCycles(
+    this.repository,
+    this.settingRepo,
+    this.gameInsertService,
+    this._loginProvider, {
+    required this._onShowQrPayCabSelectDialog,
+  });
 
   var _lastScanTime = DateTime.fromMillisecondsSinceEpoch(0);
   int cardEmuInterval = 0;
@@ -46,16 +52,15 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
 
   static const _kNfcSessionTime = 800;
 
+  bool _isNfcPayDialogOpen = false;
+
   Future<bool> _isEnableInAppNfcScan() async {
     final enabled = await Prefs.getBool(PrefsToken.enabledInAppNfcScan);
     return enabled ?? false;
   }
 
   Future<void> _handleNfc(NfcTag tag) async {
-    final currentContext = GlobalSingleton.appNavigatorKey.currentContext;
-    if (currentContext == null) return;
-    final isLogined = currentContext.read<LoginProvider>().isLoggedIn;
-    if (!isLogined) return;
+    if (!_loginProvider.isLoggedIn) return;
     log('got tag', name: 'handleNfc');
 
     Ndef? ndef = Ndef.from(tag);
@@ -85,7 +90,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     final cid = url.split('nfcpay/').last.split('/').last;
     if (mid.isEmpty || cid.isEmpty) return;
     final isPreferTicket = await _getNfcPreferTicketSetting(settingRepo);
-    GlobalSingleton.instance.isNfcPayDialogOpen = true;
+    _isNfcPayDialogOpen = true;
     try {
       final result = await handleNfcPay(
         mid: mid,
@@ -96,7 +101,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
       );
       await _handleNfcPayResult(result);
     } finally {
-      GlobalSingleton.instance.isNfcPayDialogOpen = false;
+      _isNfcPayDialogOpen = false;
     }
   }
 
@@ -105,13 +110,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
       case CabPaymentCompleted():
         return;
       case CabPaymentNeedsSelection(:final qrPayData):
-        EasyLoading.dismiss();
-        final currentContext = GlobalSingleton.appNavigatorKey.currentContext;
-        if (currentContext == null) return;
-        await showDialog(
-          context: currentContext,
-          builder: (context) => CabSelect.fromQRPay(qrPayData: qrPayData),
-        );
+        _onShowQrPayCabSelectDialog(qrPayData);
     }
   }
 
@@ -132,7 +131,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     }
     NdefRecord? urlRecord;
 
-    if (GlobalSingleton.instance.isNfcPayDialogOpen) {
+    if (_isNfcPayDialogOpen) {
       log('nfcPay dialog already opened', name: '_nfcTest');
       return;
     }

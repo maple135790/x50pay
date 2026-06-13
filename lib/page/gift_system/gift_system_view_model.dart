@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class GiftSystemViewModel extends BaseViewModel {
-  final Repository repository;
+  final MainRepository repository;
 
   GiftSystemViewModel({required this.repository});
 

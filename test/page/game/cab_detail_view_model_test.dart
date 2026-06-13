@@ -5,9 +5,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class MockRepository extends Mock implements Repository {}
+class MockRepository extends Mock implements MainRepository {}
 
 final mockRepo = MockRepository();
 

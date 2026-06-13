@@ -1,18 +1,16 @@
 import 'dart:developer';
 
 import 'package:html/parser.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 
 mixin NfcPayMixin {
-  bool get isForceFetch => GlobalSingleton.instance.isServiceOnline;
-  Repository get repository;
+  MainRepository get repository;
   GameInsertService get gameInsertService;
 
   Future<CabPaymentResult> handleNfcPay({
@@ -20,7 +18,7 @@ mixin NfcPayMixin {
     required String cid,
     required SettingRepository settingRepo,
     required bool isPreferTicket,
-    required Repository repository,
+    required MainRepository repository,
     bool? isNfcAutoOn,
   }) async {
     if (cid == '703765460') cid = '70376560';

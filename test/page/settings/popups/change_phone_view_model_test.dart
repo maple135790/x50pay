@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/page/settings/popups/change_phone_view_model.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
 abstract class Callable {
   void call();

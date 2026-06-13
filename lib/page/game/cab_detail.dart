@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
@@ -15,7 +14,8 @@ import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 extension on Color {
   Color invert(double value) {
@@ -54,7 +54,7 @@ class _CabDetailState extends State<CabDetail> with AppThemeMixin {
   void initState() {
     super.initState();
     viewModel = CabDatailViewModel(
-      repository: context.read<Repository>(),
+      repository: context.read<MainRepository>(),
       machineId: widget.machineId,
     );
     cabInit = viewModel.getSelGameCab();
@@ -224,7 +224,7 @@ class _CabDetailLoadedState extends State<CabDetailLoaded>
       return;
     }
     context.pushNamed(
-      AppRoutes.questCampaign.routeName,
+      AppRoute.questCampaign.routeName,
       pathParameters: {'couid': url.replaceAll('\'', '')},
     );
   }

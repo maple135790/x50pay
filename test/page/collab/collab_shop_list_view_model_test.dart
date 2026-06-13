@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class MockRepository extends Mock implements Repository {}
+class MockRepository extends Mock implements MainRepository {}
 
 final mockRepo = MockRepository();
 

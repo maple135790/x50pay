@@ -9,7 +9,6 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vibration/vibration.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -22,9 +21,12 @@ import 'package:x50pay/mixins/remote_open_mixin.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/providers/app_info_provider.dart';
+import 'package:x50pay/providers/environment_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/repository.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class Settings extends StatefulWidget {
   /// 是否要跳轉到更換手機
@@ -59,47 +61,47 @@ class _SettingsState extends State<Settings>
   }
 
   void onQuicPayPrefPressed() {
-    context.pushNamed(AppRoutes.quicPayPref.routeName);
+    context.pushNamed(AppRoute.quicPayPref.routeName);
   }
 
   void onPaymentPrefPressed() {
-    context.pushNamed(AppRoutes.paymentPref.routeName);
+    context.pushNamed(AppRoute.paymentPref.routeName);
   }
 
   void onPadPrefPressed() {
-    context.pushNamed(AppRoutes.padPref.routeName);
+    context.pushNamed(AppRoute.padPref.routeName);
   }
 
   void onChangePasswordPressed() {
-    context.pushNamed(AppRoutes.changePassword.routeName);
+    context.pushNamed(AppRoute.changePassword.routeName);
   }
 
   void onChangeEmailPressed() {
-    context.pushNamed(AppRoutes.changeEmail.routeName);
+    context.pushNamed(AppRoute.changeEmail.routeName);
   }
 
   void onBidRecordPressed() {
-    context.pushNamed(AppRoutes.bidRecords.routeName);
+    context.pushNamed(AppRoute.bidRecords.routeName);
   }
 
   void onTicketRecordPressed() {
-    context.pushNamed(AppRoutes.ticketRecords.routeName);
+    context.pushNamed(AppRoute.ticketRecords.routeName);
   }
 
   void onPlayRecordPressed() {
-    context.pushNamed(AppRoutes.playRecords.routeName);
+    context.pushNamed(AppRoute.playRecords.routeName);
   }
 
   void onFreePointRecordPressed() {
-    context.pushNamed(AppRoutes.freePointRecords.routeName);
+    context.pushNamed(AppRoute.freePointRecords.routeName);
   }
 
   void onTicketUseRecordPressed() {
-    context.pushNamed(AppRoutes.ticketUsedRecords.routeName);
+    context.pushNamed(AppRoute.ticketUsedRecords.routeName);
   }
 
   void onX50PayAppSettingPressed() {
-    context.pushNamed(AppRoutes.x50PayAppSetting.routeName);
+    context.pushNamed(AppRoute.x50PayAppSetting.routeName);
   }
 
   /// 顯示手機已移除的 Dialog。無論是否有添加過手機，都會顯示
@@ -204,18 +206,20 @@ class _SettingsState extends State<Settings>
     await Future.delayed(const Duration(seconds: 2));
     context
       ..pop()
-      ..goNamed(AppRoutes.login.routeName);
+      ..goNamed(AppRoute.login.routeName);
   }
 
   @override
   void initState() {
     super.initState();
-    intentDelay = viewModel.init();
     final user = context.read<UserProvider>().user!;
     viewModel = SettingsViewModel(
       settingRepo: context.read<SettingRepository>(),
     );
-    avatarUrl = user.settingsUserImageUrl;
+    intentDelay = viewModel.init();
+    avatarUrl = user.settingsUserImageUrl(
+      context.read<EnvironmentProvider>().isServiceOnline,
+    );
     if (widget.shouldGoPhone) {
       Future.delayed(const Duration(milliseconds: 350), () {
         onChangePhonePressed.call();
@@ -419,11 +423,16 @@ class _SettingsState extends State<Settings>
       GestureDetector(
         onLongPress: showEasterEgg,
         child: Center(
-          child: Text(
-            'GlobalSingleton.instance.appVersion',
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-              color: const Color(0xff505050).withValues(alpha: 0.7),
-            ),
+          child: Selector<AppInfoProvider, String>(
+            selector: (context, provider) => provider.appVersion,
+            builder: (context, appVersion, child) {
+              return Text(
+                appVersion,
+                style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                  color: const Color(0xff505050).withValues(alpha: 0.7),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -463,7 +472,7 @@ class _SettingsState extends State<Settings>
 
   @override
   Future<String> onOpenDoor(LocationData currentLocation, RemoteOpenShop shop) {
-    return context.read<Repository>().remoteOpenDoor(
+    return context.read<MainRepository>().remoteOpenDoor(
       getDistance(
         25.0455991,
         121.5027702,
@@ -600,5 +609,19 @@ class _SettingTile extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+extension on UserModel {
+  String settingsUserImageUrl(bool isServiceOnline) {
+    if (!isServiceOnline) {
+      return "https://pay.x50.fun/static/logo.jpg";
+    }
+    if (rawUserImgUrl!.contains('size')) {
+      return '${rawUserImgUrl!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
+    } else {
+      return rawUserImgUrl! +
+          r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+    }
   }
 }

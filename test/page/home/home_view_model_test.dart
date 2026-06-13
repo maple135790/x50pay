@@ -6,9 +6,9 @@ import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class MockRepository extends Mock implements Repository {}
+class MockRepository extends Mock implements MainRepository {}
 
 class FakeUserModel extends Fake implements UserModel {}
 

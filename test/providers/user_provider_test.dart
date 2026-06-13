@@ -3,9 +3,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:x50pay/common/models/api_response.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class MockRepo extends Mock implements Repository {}
+class MockRepo extends Mock implements MainRepository {}
 
 class FakeUserModel extends Fake implements UserModel {}
 

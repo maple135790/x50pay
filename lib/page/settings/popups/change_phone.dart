@@ -9,7 +9,7 @@ import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/settings/popups/change_phone_view_model.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
 class ChangePhoneDialog extends StatefulWidget {
   final void Function(bool isRemoved) onPhoneRemoved;

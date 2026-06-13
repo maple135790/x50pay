@@ -1,14 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/user/user.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class UserProvider extends ChangeNotifier {
   UserModel? _user;
   UserModel? get user => _user;
 
-  final Repository repo;
+  final MainRepository repo;
   final _logger = Logger('UserProvider');
 
   UserProvider({required this.repo});
@@ -23,26 +22,20 @@ class UserProvider extends ChangeNotifier {
   ///
   /// 取得使用者資料，並將資料存入 [userNotifier] 變數中。
   /// 回傳是否成功取得使用者資料。
-  ///
-  /// [force] 強制檢查使用者資料
   Future<bool> checkUser() async {
     _logger.info('check user...');
 
     await Future.delayed(const Duration(milliseconds: 100));
     try {
-      if (GlobalSingleton.instance.isServiceOnline) {
-        final res = await repo.getUser();
-        final result = res.result;
+      final res = await repo.getUser();
+      final result = res.result;
 
-        if (result.isError) return false;
+      if (result.isError) return false;
 
-        // 與現有資料相同，不需要更新
-        if (user == result.successData) return true;
+      // 與現有資料相同，不需要更新
+      if (user == result.successData) return true;
 
-        _user = result.successData;
-      } else {
-        _user = const UserModel.empty();
-      }
+      _user = result.successData;
       return true;
     } catch (e, stacktrace) {
       _logger.warning('', e, stacktrace);

@@ -7,14 +7,13 @@ import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 import 'package:x50pay/service/qr_pay_service.dart';
 
 typedef MachineData = ({String mid, String cid});
@@ -41,7 +40,7 @@ class _ScanQRCodeState extends State<ScanQRCode>
     controller.stop();
     isShowCameraPreviewNotifier.value = false;
     setState(() {});
-    await context.pushNamed(AppRoutes.ecPay.routeName).then((_) {});
+    await context.pushNamed(AppRoute.ecPay.routeName).then((_) {});
     isShowCameraPreviewNotifier.value = true;
     controller.start();
     setState(() {});
@@ -50,8 +49,6 @@ class _ScanQRCodeState extends State<ScanQRCode>
   @override
   void initState() {
     super.initState();
-    GlobalSingleton.instance.isInCameraPage = true;
-
     qrPayModalTransistionController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 350),
@@ -79,7 +76,6 @@ class _ScanQRCodeState extends State<ScanQRCode>
   @override
   void dispose() {
     log('dispose', name: 'ScanQRCode');
-    GlobalSingleton.instance.isInCameraPage = false;
     qrPayModalTransistionController.dispose();
     controller.dispose();
     super.dispose();
@@ -176,7 +172,7 @@ class _ScanQRCodeState extends State<ScanQRCode>
       handleQRPay(value);
     } else {
       // 平板排隊
-      final msg = await context.read<Repository>().qrDecryt(value);
+      final msg = await context.read<MainRepository>().qrDecryt(value);
       if (msg != 'oof') {
         setState(() {});
         await EasyLoading.showInfo(
@@ -184,7 +180,7 @@ class _ScanQRCodeState extends State<ScanQRCode>
           duration: const Duration(milliseconds: 1000),
         );
         await Future.delayed(const Duration(milliseconds: 1300));
-        nav.goNamed(AppRoutes.home.routeName);
+        nav.goNamed(AppRoute.home.routeName);
       }
     }
     isBusy = false;

@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
 import 'package:x50pay/providers/language_provider.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class GameStore extends StatefulWidget {
   /// 選店頁面
@@ -27,7 +27,7 @@ class _GameStoreState extends State<GameStore> {
   @override
   void initState() {
     super.initState();
-    viewModel = GameStoreViewModel(repository: context.read<Repository>());
+    viewModel = GameStoreViewModel(repository: context.read<MainRepository>());
   }
 
   Future<void> onRefresh() async {
@@ -189,7 +189,7 @@ class _StoreItem extends StatelessWidget {
                             store,
                             prefix,
                             onPageChange: () {
-                              context.goNamed(AppRoutes.gameCabs.routeName);
+                              context.goNamed(AppRoute.gameCabs.routeName);
                             },
                           );
                         },

@@ -6,11 +6,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/providers/environment_provider.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
+import 'package:x50pay/route/app_route.dart';
 
 enum _MpassProgressState {
   info(1),
@@ -595,13 +595,14 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog>
   }
 
   void doBuyVip() async {
-    final repo = context.read<Repository>();
+    final repo = context.read<MainRepository>();
     final nav = Navigator.of(context);
     final router = GoRouter.of(context);
+    final isServiceOnline = context.read<EnvironmentProvider>().isServiceOnline;
 
     switch (widget.program) {
       case _MpassProgram.loner:
-        if (GlobalSingleton.instance.isServiceOnline) {
+        if (isServiceOnline) {
           final rawResponse = await repo.buyVipOne();
           parseResponse(rawResponse);
         } else {
@@ -616,7 +617,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog>
           emailList.add(email.text);
         }
         log("email: $emailList", name: "doBuyVip");
-        if (GlobalSingleton.instance.isServiceOnline) {
+        if (isServiceOnline) {
           final rawResponse = await repo.buyVipMany(emailList);
           parseResponse(rawResponse);
         } else {
@@ -624,7 +625,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog>
         }
         break;
       case _MpassProgram.monthlyRaising:
-        if (GlobalSingleton.instance.isServiceOnline) {
+        if (isServiceOnline) {
           final rawResponse = await repo.buyVipGradeOne();
           parseResponse(rawResponse);
         } else {
@@ -634,7 +635,7 @@ class _MpassPurchaseDialogState extends State<_MpassPurchaseDialog>
     }
     await Future.delayed(const Duration(seconds: 2));
     nav.pop();
-    router.goNamed(AppRoutes.home.routeName);
+    router.goNamed(AppRoute.home.routeName);
   }
 
   void parseResponse(http.Response response) {

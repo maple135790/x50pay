@@ -5,13 +5,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 
-class MockRepository extends Mock implements Repository {}
+class MockRepository extends Mock implements MainRepository {}
 
 class TestFeedbackService with AppFeedbackMixin {
   @override
@@ -47,7 +46,7 @@ void main() {
 
   setUp(() {
     SharedPreferences.setMockInitialValues({"store_id": "7037656"});
-    GlobalSingleton.instance.recentPlayedCabinetData = null;
+    viewModel.clearRecentPlayedData();
 
     when(() => mockRepo.doInsert(any(), any(), any(), any())).thenAnswer((
       _,
@@ -61,38 +60,43 @@ void main() {
     });
   });
 
-  test('一般投幣成功時會呼叫單次 onInsertSuccess', () async {
-    var isInsertSuccessCalled = false;
+  test('一般投幣成功時會記錄最近遊玩機台', () async {
+    const cabinet = Cabinet.empty();
 
     final result = await viewModel.doInsert(
       isTicket: false,
       isUseRewardPoint: false,
-      id: 'id',
+      oid: 'id',
       index: 0,
       mode: 0,
-      onInsertSuccess: () {
-        isInsertSuccessCalled = true;
-      },
+      cabinet: cabinet,
     );
 
     expect(result, true);
-    expect(isInsertSuccessCalled, true);
+    expect(viewModel.recentPlayedData, (
+      cabinet: cabinet,
+      cabOid: 'id',
+      cabNum: 0,
+    ));
   });
 
-  test('QRPay 投幣成功時不會寫入最近遊玩機台', () async {
+  test('QRPay 投幣成功時不會覆蓋最近遊玩機台', () async {
     const recentCabinet = Cabinet.empty();
-    GlobalSingleton.instance.recentPlayedCabinetData = (
+    await viewModel.doInsert(
+      isTicket: false,
+      isUseRewardPoint: false,
+      oid: 'recent-caboid',
+      index: 7,
+      mode: 0,
       cabinet: recentCabinet,
-      caboid: 'recent-caboid',
-      cabNum: 7,
     );
 
     final result = await viewModel.doInsertQRPay(url: 'url');
 
     expect(result, true);
-    expect(GlobalSingleton.instance.recentPlayedCabinetData, (
+    expect(viewModel.recentPlayedData, (
       cabinet: recentCabinet,
-      caboid: 'recent-caboid',
+      cabOid: 'recent-caboid',
       cabNum: 7,
     ));
   });

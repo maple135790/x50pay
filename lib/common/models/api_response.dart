@@ -15,7 +15,6 @@ class ApiResponse<T> {
 
   const ApiResponse._(this.result, {this.code});
 
-  @visibleForTesting
   factory ApiResponse.createSuccess(T data) {
     return ApiResponse<T>._(Result.ok(data), code: 200);
   }

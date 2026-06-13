@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_route.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/providers/user_provider.dart';
+import 'package:x50pay/route/app_route.dart';
 
 class TopInfo extends StatelessWidget {
   /// 頁面頂部的個人資訊
@@ -21,7 +21,7 @@ class TopInfo extends StatelessWidget {
 
     void onPhoneActivatePressed() {
       context.goNamed(
-        AppRoutes.settings.routeName,
+        AppRoute.settings.routeName,
         queryParameters: {'goTo': 'phoneChange'},
       );
     }
@@ -32,7 +32,7 @@ class TopInfo extends StatelessWidget {
       if (status.isDenied) {
         await Permission.camera.request();
       }
-      router.pushNamed(AppRoutes.scanQRCode.routeName);
+      router.pushNamed(AppRoute.scanQRCode.routeName);
     }
 
     return Selector<UserProvider, UserModel>(

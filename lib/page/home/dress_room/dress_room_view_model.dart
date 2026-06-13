@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:html/parser.dart' as html;
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/page/home/dress_room/dress_room.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class DressRoomViewModel extends BaseViewModel {
-  final Repository repository;
+  final MainRepository repository;
 
   DressRoomViewModel({required this.repository});
 

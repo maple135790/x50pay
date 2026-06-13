@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/generated/l10n.dart';
@@ -63,7 +62,7 @@ class CabSelect extends StatefulWidget {
 
 class _CabSelectState extends State<CabSelect>
     with AppThemeMixin, GameMixin, AppFeedbackMixin {
-  late final GameInsertService viewModel;
+  late final GameInsertService gameService;
   late final cabData = widget.cabinetData;
   late bool isUseRewardPoint;
   PaymentType? paymentType;
@@ -104,7 +103,7 @@ class _CabSelectState extends State<CabSelect>
   void initState() {
     super.initState();
     isUseRewardPoint = context.read<UserProvider>().user?.givebool == 1;
-    viewModel = context.read<GameInsertService>();
+    gameService = context.read<GameInsertService>();
   }
 
   void onPayConfirmPressed() async {
@@ -115,23 +114,17 @@ class _CabSelectState extends State<CabSelect>
     setState(() {});
 
     if (widget._isFromQRPay) {
-      insertSuccess = await viewModel.doInsertQRPay(url: selectedRawPayUrl);
+      insertSuccess = await gameService.doInsertQRPay(url: selectedRawPayUrl);
     } else {
-      insertSuccess = await viewModel.doInsert(
+      insertSuccess = await gameService.doInsert(
         isUseRewardPoint: isUseRewardPoint,
-        id: widget.caboid,
+        cabinet: widget.cabinetData,
+        oid: widget.caboid,
         index: widget.cabNum,
         isTicket: paymentType == PaymentType.ticket,
         mode: paymentType != PaymentType.reloadCoin
             ? selectedMode!.first
             : 9999,
-        onInsertSuccess: () {
-          GlobalSingleton.instance.recentPlayedCabinetData = (
-            cabinet: widget.cabinetData,
-            cabNum: widget.cabNum,
-            caboid: widget.caboid,
-          );
-        },
       );
     }
     if (widget._isFromCabDetail) router.pop();

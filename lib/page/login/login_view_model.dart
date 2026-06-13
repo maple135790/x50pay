@@ -7,12 +7,12 @@ import 'package:logging/logging.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/storage/app_storage/app_storage.dart';
 import 'package:x50pay/storage/cookie_storage.dart';
 
 class LoginProvider extends BaseViewModel {
-  final Repository _repo;
+  final MainRepository _repo;
   final AppStorage _storage;
   final CookieStorage _cookieStorage;
   final VoidCallback _onInvalidCookie;
@@ -72,9 +72,7 @@ class LoginProvider extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 100));
 
     try {
-      if (!kDebugMode || isForceFetch) {
-        response = await _repo.login(email: email, password: password);
-      }
+      response = await _repo.login(email: email, password: password);
     } catch (e, stacktrace) {
       _errorType = LoginErrorType.unknown;
       log('', error: e, stackTrace: stacktrace, name: 'LoginViewModel.login');
