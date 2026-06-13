@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/page/gift_system/claimed_gift.dart';
 import 'package:x50pay/page/gift_system/gift_claim.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
@@ -17,14 +18,14 @@ class GiftSystem extends StatefulWidget {
   State<GiftSystem> createState() => _GiftSystemState();
 }
 
-class _GiftSystemState extends BaseStatefulState<GiftSystem> {
-  final repo = Repository();
-  late final viewModel = GiftSystemViewModel(repository: repo);
+class _GiftSystemState extends State<GiftSystem> with AppFeedbackMixin {
+  late final GiftSystemViewModel viewModel;
   late Future<void> init;
 
   @override
   void initState() {
     super.initState();
+    viewModel = GiftSystemViewModel(repository: context.read<Repository>());
     init = viewModel.giftSystemInit();
   }
 
@@ -32,22 +33,20 @@ class _GiftSystemState extends BaseStatefulState<GiftSystem> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: viewModel,
-      builder: (context, child) {
-        return FutureBuilder(
-          future: init,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: kDebugMode ? Text('not done') : null);
-            }
-            if (snapshot.hasError) {
-              showServiceError();
-              return Center(child: Text(serviceErrorText));
-            }
-            if (EasyLoading.isShow) EasyLoading.dismiss();
-            return const _GiftBoxLoaded();
-          },
-        );
-      },
+      child: FutureBuilder(
+        future: init,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: kDebugMode ? Text('not done') : null);
+          }
+          if (snapshot.hasError) {
+            showServiceError();
+            return Center(child: Text(serviceErrorText));
+          }
+          if (EasyLoading.isShow) EasyLoading.dismiss();
+          return const _GiftBoxLoaded();
+        },
+      ),
     );
   }
 }
@@ -59,7 +58,7 @@ class _GiftBoxLoaded extends StatefulWidget {
   State<_GiftBoxLoaded> createState() => _GiftBoxLoadedState();
 }
 
-class _GiftBoxLoadedState extends BaseStatefulState<_GiftBoxLoaded> {
+class _GiftBoxLoadedState extends State<_GiftBoxLoaded> with AppThemeMixin {
   final tabs = const <Widget>[
     Tab(text: '養成抽獎箱'),
     Tab(text: '領取禮物'),

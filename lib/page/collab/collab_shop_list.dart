@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/page/collab/collab_shop_list_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -17,9 +19,15 @@ class CollabShopList extends StatefulWidget {
   State<CollabShopList> createState() => _CollabShopListState();
 }
 
-class _CollabShopListState extends BaseStatefulState<CollabShopList> {
-  final repo = Repository();
-  late final viewModel = CollabShopListViewModel(repository: repo);
+class _CollabShopListState extends State<CollabShopList>
+    with AppThemeMixin, AppFeedbackMixin {
+  late final CollabShopListViewModel viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = CollabShopListViewModel(repository: context.read<Repository>());
+  }
 
   void showQRCodeScan() async {
     final router = GoRouter.of(context);

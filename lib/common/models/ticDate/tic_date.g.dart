@@ -7,13 +7,17 @@ part of 'tic_date.dart';
 // **************************************************************************
 
 TicDateLogModel _$TicDateLogModelFromJson(Map<String, dynamic> json) =>
-    TicDateLogModel(
-      code: (json['code'] as num).toInt(),
-      logs: (json['log'] as List<dynamic>)
-          .map((e) => e as List<dynamic>)
-          .toList(),
-      message: json['message'] as String,
-    );
+    $checkedCreate('TicDateLogModel', json, ($checkedConvert) {
+      final val = TicDateLogModel(
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        logs: $checkedConvert(
+          'log',
+          (v) => (v as List<dynamic>).map((e) => e as List<dynamic>).toList(),
+        ),
+        message: $checkedConvert('message', (v) => v as String),
+      );
+      return val;
+    }, fieldKeyMap: const {'logs': 'log'});
 
 Map<String, dynamic> _$TicDateLogModelToJson(TicDateLogModel instance) =>
     <String, dynamic>{

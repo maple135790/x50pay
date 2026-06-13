@@ -1,0 +1,25 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          checked: true
+          # Options configure how source code is generated for every
+          # `@JsonSerializable`-annotated class in the package.
+          #
+          # The default value for each is listed.
+          any_map: false
+          constructor: ""
+          create_factory: true
+          create_field_map: false
+          create_json_keys: false
+          create_json_schema: false
+          create_per_field_to_json: false
+          create_to_json: true
+          date_time_utc: false
+          disallow_unrecognized_keys: false
+          explicit_to_json: false
+          field_rename: none
+          generic_argument_factories: false
+          ignore_unannotated: false
+          include_if_null: true

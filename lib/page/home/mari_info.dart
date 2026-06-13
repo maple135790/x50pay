@@ -6,9 +6,10 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/progress_bar.dart';
 import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
@@ -23,7 +24,9 @@ class MariInfo extends StatefulWidget {
   State<MariInfo> createState() => _MariInfoState();
 }
 
-class _MariInfoState extends BaseStatefulState<MariInfo> {
+class _MariInfoState extends State<MariInfo> with AppThemeMixin {
+  S get i18n => S.of(context);
+
   static const avatarHeight = 270.0;
 
   final progressBarNotifier = ValueNotifier(false);

@@ -6,20 +6,33 @@ part of 'entry.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-EntryModel _$EntryModelFromJson(Map<String, dynamic> json) => EntryModel(
-  message: json['message'] as String,
-  code: (json['code'] as num).toInt(),
-  gr2: json['gr2'] as List<dynamic>,
-  evlist: (json['evlist'] as List<dynamic>?)
-      ?.map((e) => Evlist.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  giftlist: json['giftlist'] == null
-      ? null
-      : GiftList.fromJson(json['giftlist'] as Map<String, dynamic>),
-  questCampaign: (json['rqc'] as List<dynamic>?)
-      ?.map((e) => QuestCampaign.fromJson(e as Map<String, dynamic>))
-      .toList(),
-);
+EntryModel _$EntryModelFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('EntryModel', json, ($checkedConvert) {
+      final val = EntryModel(
+        message: $checkedConvert('message', (v) => v as String),
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        gr2: $checkedConvert('gr2', (v) => v as List<dynamic>),
+        evlist: $checkedConvert(
+          'evlist',
+          (v) => (v as List<dynamic>?)
+              ?.map((e) => Evlist.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
+        giftlist: $checkedConvert(
+          'giftlist',
+          (v) => (v as List<dynamic>?)
+              ?.map((e) => GiftList.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
+        questCampaign: $checkedConvert(
+          'rqc',
+          (v) => (v as List<dynamic>?)
+              ?.map((e) => QuestCampaign.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
+      );
+      return val;
+    }, fieldKeyMap: const {'questCampaign': 'rqc'});
 
 Map<String, dynamic> _$EntryModelToJson(EntryModel instance) =>
     <String, dynamic>{
@@ -31,28 +44,40 @@ Map<String, dynamic> _$EntryModelToJson(EntryModel instance) =>
       'rqc': instance.questCampaign,
     };
 
-Evlist _$EvlistFromJson(Map<String, dynamic> json) => Evlist(
-  count: json['count'] as String?,
-  countday: json['countday'] as String?,
-  describe: json['describe'] as String?,
-  end: json['end'] == null
-      ? null
-      : EventTime.fromJson(json['end'] as Map<String, dynamic>),
-  id: json['id'] as String?,
-  limit: (json['limit'] as num?)?.toInt(),
-  name: json['name'] as String?,
-  point: json['point'] as bool?,
-  sid: json['sid'] as String?,
-  start: json['start'] == null
-      ? null
-      : EventTime.fromJson(json['start'] as Map<String, dynamic>),
-  ticMid: json['ticMid'] as List<dynamic>?,
-  ticdis: json['ticdis'] as String?,
-  value: (json['value'] as num?)?.toInt(),
-  which: json['which'] as List<dynamic>?,
-  underscoreId: json['_id'] == null
-      ? null
-      : UnderscoreId.fromJson(json['_id'] as Map<String, dynamic>),
+Evlist _$EvlistFromJson(Map<String, dynamic> json) => $checkedCreate(
+  'Evlist',
+  json,
+  ($checkedConvert) {
+    final val = Evlist(
+      count: $checkedConvert('count', (v) => v as String?),
+      countday: $checkedConvert('countday', (v) => v as String?),
+      describe: $checkedConvert('describe', (v) => v as String?),
+      end: $checkedConvert(
+        'end',
+        (v) => v == null ? null : EventTime.fromJson(v as Map<String, dynamic>),
+      ),
+      id: $checkedConvert('id', (v) => v as String?),
+      limit: $checkedConvert('limit', (v) => (v as num?)?.toInt()),
+      name: $checkedConvert('name', (v) => v as String?),
+      point: $checkedConvert('point', (v) => v as bool?),
+      sid: $checkedConvert('sid', (v) => v as String?),
+      start: $checkedConvert(
+        'start',
+        (v) => v == null ? null : EventTime.fromJson(v as Map<String, dynamic>),
+      ),
+      ticMid: $checkedConvert('ticMid', (v) => v as List<dynamic>?),
+      ticdis: $checkedConvert('ticdis', (v) => v as String?),
+      value: $checkedConvert('value', (v) => (v as num?)?.toInt()),
+      which: $checkedConvert('which', (v) => v as List<dynamic>?),
+      underscoreId: $checkedConvert(
+        '_id',
+        (v) =>
+            v == null ? null : UnderscoreId.fromJson(v as Map<String, dynamic>),
+      ),
+    );
+    return val;
+  },
+  fieldKeyMap: const {'underscoreId': '_id'},
 );
 
 Map<String, dynamic> _$EvlistToJson(Evlist instance) => <String, dynamic>{
@@ -74,38 +99,57 @@ Map<String, dynamic> _$EvlistToJson(Evlist instance) => <String, dynamic>{
 };
 
 GiftList _$GiftListFromJson(Map<String, dynamic> json) =>
-    GiftList(gift: json['gift'] as bool?);
+    $checkedCreate('GiftList', json, ($checkedConvert) {
+      final val = GiftList(gift: $checkedConvert('gift', (v) => v as bool?));
+      return val;
+    });
 
 Map<String, dynamic> _$GiftListToJson(GiftList instance) => <String, dynamic>{
   'gift': instance.gift,
 };
 
-EventTime _$EventTimeFromJson(Map<String, dynamic> json) =>
-    EventTime(date: json[r'$date'] as String);
+EventTime _$EventTimeFromJson(Map<String, dynamic> json) => $checkedCreate(
+  'EventTime',
+  json,
+  ($checkedConvert) {
+    final val = EventTime(date: $checkedConvert(r'$date', (v) => v as String));
+    return val;
+  },
+  fieldKeyMap: const {'date': r'$date'},
+);
 
 Map<String, dynamic> _$EventTimeToJson(EventTime instance) => <String, dynamic>{
   r'$date': instance.date,
 };
 
-EntryHistory _$EntryHistoryFromJson(Map<String, dynamic> json) => EntryHistory(
-  cid: (json['cid'] as num?)?.toInt(),
-  disbool: json['disbool'] as bool?,
-  done: json['done'] as bool?,
-  freep: (json['freep'] as num?)?.toDouble(),
-  inittime: json['inittime'] == null
-      ? null
-      : InitTime.fromJson(json['inittime'] as Map<String, dynamic>),
-  mid: json['mid'] as String?,
-  ticn: json['ticn'] as String?,
-  price: (json['price'] as num?)?.toDouble(),
-  sid: json['sid'] as String?,
-  status: json['status'] as String?,
-  time: json['time'] as String?,
-  uid: json['uid'] as String?,
-  underscoreId: json['_id'] == null
-      ? null
-      : UnderscoreId.fromJson(json['_id'] as Map<String, dynamic>),
-);
+EntryHistory _$EntryHistoryFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('EntryHistory', json, ($checkedConvert) {
+      final val = EntryHistory(
+        cid: $checkedConvert('cid', (v) => (v as num?)?.toInt()),
+        disbool: $checkedConvert('disbool', (v) => v as bool?),
+        done: $checkedConvert('done', (v) => v as bool?),
+        freep: $checkedConvert('freep', (v) => (v as num?)?.toDouble()),
+        inittime: $checkedConvert(
+          'inittime',
+          (v) =>
+              v == null ? null : InitTime.fromJson(v as Map<String, dynamic>),
+        ),
+        mid: $checkedConvert('mid', (v) => v as String?),
+        ticn: $checkedConvert('ticn', (v) => v as String?),
+        price: $checkedConvert('price', (v) => (v as num?)?.toDouble()),
+        sid: $checkedConvert('sid', (v) => v as String?),
+        status: $checkedConvert('status', (v) => v as String?),
+        time: $checkedConvert('time', (v) => v as String?),
+        uid: $checkedConvert('uid', (v) => v as String?),
+        underscoreId: $checkedConvert(
+          '_id',
+          (v) => v == null
+              ? null
+              : UnderscoreId.fromJson(v as Map<String, dynamic>),
+        ),
+      );
+      return val;
+    }, fieldKeyMap: const {'underscoreId': '_id'});
 
 Map<String, dynamic> _$EntryHistoryToJson(EntryHistory instance) =>
     <String, dynamic>{
@@ -125,16 +169,19 @@ Map<String, dynamic> _$EntryHistoryToJson(EntryHistory instance) =>
     };
 
 QuestCampaign _$QuestCampaignFromJson(Map<String, dynamic> json) =>
-    QuestCampaign(
-      rawCouid: json['couid'] as String,
-      rawLpic: json['lpic'] as String,
-      lpicshow: json['lpicshow'] as bool,
-      mid: (json['mid'] as List<dynamic>).map((e) => e as String).toList(),
-      spic: json['spic'] as String,
-      underscoreId: json['_id'] == null
-          ? null
-          : UnderscoreId.fromJson(json['_id'] as Map<String, dynamic>),
-    );
+    $checkedCreate('QuestCampaign', json, ($checkedConvert) {
+      final val = QuestCampaign(
+        rawCouid: $checkedConvert('couid', (v) => v as String),
+        rawLpic: $checkedConvert('lpic', (v) => v as String),
+        lpicshow: $checkedConvert('lpicshow', (v) => v as bool),
+        mid: $checkedConvert(
+          'mid',
+          (v) => (v as List<dynamic>).map((e) => e as String).toList(),
+        ),
+        spic: $checkedConvert('spic', (v) => v as String),
+      );
+      return val;
+    }, fieldKeyMap: const {'rawCouid': 'couid', 'rawLpic': 'lpic'});
 
 Map<String, dynamic> _$QuestCampaignToJson(QuestCampaign instance) =>
     <String, dynamic>{
@@ -143,5 +190,4 @@ Map<String, dynamic> _$QuestCampaignToJson(QuestCampaign instance) =>
       'lpicshow': instance.lpicshow,
       'mid': instance.mid,
       'spic': instance.spic,
-      '_id': instance.underscoreId,
     };

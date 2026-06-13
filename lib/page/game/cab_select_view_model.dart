@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -11,20 +11,23 @@ typedef _InsertResponse = ({
   ({String msg, String describe}) response,
 });
 
-class CabSelectViewModel extends BaseViewModel {
-  final VoidCallback? onInsertSuccess;
+class GameInsertService {
   final VoidCallback onAfterInserted;
   final Repository repository;
 
-  CabSelectViewModel({
-    this.onInsertSuccess,
-    required this.repository,
-    required this.onAfterInserted,
-  });
+  GameInsertService({required this.repository, required this.onAfterInserted});
+
+  static late AppFeedbackMixin _feedbackService;
+
+  static void registerRootFeedbackService(
+    AppFeedbackMixin rootUserFeedbackService,
+  ) {
+    _feedbackService = rootUserFeedbackService;
+  }
 
   Future<bool> doInsertQRPay({required String url}) async {
     try {
-      showLoading();
+      _feedbackService.showLoading();
       await Future.delayed(const Duration(milliseconds: 500));
       late _InsertResponse result;
       var rawResponse = BasicResponse.empty();
@@ -42,9 +45,6 @@ class CabSelectViewModel extends BaseViewModel {
                 describe: 'no token is inserted',
               ),
             );
-      if (result.is200) {
-        onInsertSuccess?.call();
-      }
       _showInsertResult(result);
       return true;
     } catch (e, stacktrace) {
@@ -61,9 +61,10 @@ class CabSelectViewModel extends BaseViewModel {
     required String id,
     required int index,
     required num mode,
+    VoidCallback? onInsertSuccess,
   }) async {
     try {
-      showLoading();
+      _feedbackService.showLoading();
       await Future.delayed(const Duration(milliseconds: 500));
       late _InsertResponse result;
       final sid = await Prefs.getString(PrefsToken.storeId);
@@ -105,16 +106,20 @@ class CabSelectViewModel extends BaseViewModel {
   }
 
   void _showInsertResult(_InsertResponse result) async {
-    dismissLoading();
+    _feedbackService.dismissLoading();
     result.is200
-        ? showSuccess('${result.response.msg}\n${result.response.describe}')
-        : showError('${result.response.msg}\n${result.response.describe}');
+        ? _feedbackService.showSuccess(
+            '${result.response.msg}\n${result.response.describe}',
+          )
+        : _feedbackService.showError(
+            '${result.response.msg}\n${result.response.describe}',
+          );
   }
 
   void _onInsertError(Object e, StackTrace stacktrace) async {
-    dismissLoading();
+    _feedbackService.dismissLoading();
     log('', error: '$e', name: 'doInsert', stackTrace: stacktrace);
-    showError(serviceErrorMessage);
+    _feedbackService.showServiceError();
   }
 
   void _postDoInsert() async {

@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base_stateful_state.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 
 /// 紀錄頁面的mixin
 ///
 /// 用於簡化紀錄頁面，提供標準的頁面結構。
-mixin RecordPageMixin<M, T extends StatefulWidget> on BaseStatefulState<T> {
+mixin RecordPageMixin<M, T extends StatefulWidget>
+    on State<T>, AppThemeMixin, AppFeedbackMixin {
   late final Future<M> _init;
   late final Future<bool> _getIsEnableSummarizedRecord;
 

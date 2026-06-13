@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/game/fav_game.dart';
 import 'package:x50pay/page/game/game_cab_item.dart';
@@ -26,8 +27,7 @@ class GameCabs extends StatefulWidget {
   State<GameCabs> createState() => _GameCabsState();
 }
 
-class _GameCabsState extends BaseStatefulState<GameCabs> {
-  final repo = Repository();
+class _GameCabsState extends State<GameCabs> {
   late final GameCabsViewModel viewModel;
   late List<Machine> machine;
   var key = GlobalKey();
@@ -36,7 +36,7 @@ class _GameCabsState extends BaseStatefulState<GameCabs> {
   void initState() {
     super.initState();
     viewModel = GameCabsViewModel(
-      repository: repo,
+      repository: context.read<Repository>(),
       currentLocale: context.read<LanguageProvider>().currentLocale,
     );
   }
@@ -78,8 +78,10 @@ class _GameCabsLoaded extends StatefulWidget {
   State<_GameCabsLoaded> createState() => _GameCabsLoadedState();
 }
 
-class _GameCabsLoadedState extends BaseStatefulState<_GameCabsLoaded>
-    with TickerProviderStateMixin {
+class _GameCabsLoadedState extends State<_GameCabsLoaded>
+    with AppThemeMixin, TickerProviderStateMixin {
+  S get i18n => S.of(context);
+
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   // int currentTabIndex = 0;

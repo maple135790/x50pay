@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/page/settings/record_mixin.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
@@ -12,8 +13,11 @@ class TicketUsedRecords extends StatefulWidget {
   State<TicketUsedRecords> createState() => _TicketUsedRecordsState();
 }
 
-class _TicketUsedRecordsState extends BaseStatefulState<TicketUsedRecords>
-    with RecordPageMixin<TicUsedModel, TicketUsedRecords> {
+class _TicketUsedRecordsState extends State<TicketUsedRecords>
+    with
+        AppThemeMixin,
+        AppFeedbackMixin,
+        RecordPageMixin<TicUsedModel, TicketUsedRecords> {
   @override
   List<DataColumn> buildColumns() => ['日期', '機台', '消耗']
       .map((e) => DataColumn(label: Expanded(child: Text(e, softWrap: true))))

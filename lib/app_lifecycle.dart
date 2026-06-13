@@ -17,17 +17,21 @@ import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pad_mixin.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/game/cab_select.dart';
+import 'package:x50pay/page/game/cab_select_view_model.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
+import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
 class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
-  static AppLifeCycles? _instance;
-  AppLifeCycles._();
+  @override
+  final Repository repository;
+  final SettingRepository settingRepo;
+  @override
+  final GameInsertService gameInsertService;
 
-  /// App 全局的生命週期管理
-  static AppLifeCycles get instance => _instance ??= AppLifeCycles._();
+  AppLifeCycles(this.repository, this.settingRepo, this.gameInsertService);
 
   var _lastScanTime = DateTime.fromMillisecondsSinceEpoch(0);
   int cardEmuInterval = 0;
@@ -50,7 +54,7 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
   Future<void> _handleNfc(NfcTag tag) async {
     final currentContext = GlobalSingleton.appNavigatorKey.currentContext;
     if (currentContext == null) return;
-    final isLogined = currentContext.read<LoginProvider>().isLogined;
+    final isLogined = currentContext.read<LoginProvider>().isLoggedIn;
     if (!isLogined) return;
     log('got tag', name: 'handleNfc');
 
@@ -80,33 +84,35 @@ class AppLifeCycles extends LifecycleCallback with NfcPayMixin, NfcPadMixin {
     final mid = url.split('nfcpay/').last.split('/').first;
     final cid = url.split('nfcpay/').last.split('/').last;
     if (mid.isEmpty || cid.isEmpty) return;
-    final settingRepo = SettingRepository();
     final isPreferTicket = await _getNfcPreferTicketSetting(settingRepo);
-    handleNfcPay(
-      mid: mid,
-      cid: cid,
-      repository: Repository(),
-      settingRepo: settingRepo,
-      isPreferTicket: isPreferTicket,
-      onCabSelect: (qrPayData) {
-        GlobalSingleton.instance.isNfcPayDialogOpen = true;
-        showDialog(
-          context: GlobalSingleton.appNavigatorKey.currentContext!,
-          builder: (context) {
-            return CabSelect.fromQRPay(
-              qrPayData: qrPayData,
-              onCreated: () {
-                EasyLoading.dismiss();
-              },
-              onDestroy: () {
-                GlobalSingleton.instance.isNfcPayDialogOpen = false;
-              },
-            );
-          },
+    GlobalSingleton.instance.isNfcPayDialogOpen = true;
+    try {
+      final result = await handleNfcPay(
+        mid: mid,
+        cid: cid,
+        repository: repository,
+        settingRepo: settingRepo,
+        isPreferTicket: isPreferTicket,
+      );
+      await _handleNfcPayResult(result);
+    } finally {
+      GlobalSingleton.instance.isNfcPayDialogOpen = false;
+    }
+  }
+
+  Future<void> _handleNfcPayResult(CabPaymentResult result) async {
+    switch (result) {
+      case CabPaymentCompleted():
+        return;
+      case CabPaymentNeedsSelection(:final qrPayData):
+        EasyLoading.dismiss();
+        final currentContext = GlobalSingleton.appNavigatorKey.currentContext;
+        if (currentContext == null) return;
+        await showDialog(
+          context: currentContext,
+          builder: (context) => CabSelect.fromQRPay(qrPayData: qrPayData),
         );
-      },
-      onNfcAutoPaymentDone: () {},
-    );
+    }
   }
 
   void _handleNfcEvent(Ndef ndef) async {

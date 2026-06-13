@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/free_p/free_p.dart';
 import 'package:x50pay/page/settings/record_mixin.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
@@ -12,8 +13,11 @@ class FreePointRecords extends StatefulWidget {
   State<FreePointRecords> createState() => _FreePointRecordsState();
 }
 
-class _FreePointRecordsState extends BaseStatefulState<FreePointRecords>
-    with RecordPageMixin<FreePointModel, FreePointRecords> {
+class _FreePointRecordsState extends State<FreePointRecords>
+    with
+        AppThemeMixin,
+        AppFeedbackMixin,
+        RecordPageMixin<FreePointModel, FreePointRecords> {
   late SettingsViewModel viewModel;
 
   @override

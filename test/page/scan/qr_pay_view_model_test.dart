@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
+import 'package:x50pay/common/utils/prefs_utils.dart';
+import 'package:x50pay/page/game/cab_select_view_model.dart';
+import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
@@ -16,18 +19,18 @@ class MockRepository extends Mock implements Repository {}
 
 class MockSettingRepository extends Mock implements SettingRepository {}
 
+class MockGameInsertService extends Mock implements GameInsertService {}
+
 final mockRepo = MockRepository();
 final mockSettingRepo = MockSettingRepository();
+final mockGameInsertService = MockGameInsertService();
 
 void main() {
-  final viewModel = QRPayViewModel(
+  final viewModel = QRPayService(
     repository: mockRepo,
     settingRepo: mockSettingRepo,
-    cid: '',
-    mid: '',
-    onCabSelect: (qrPayData) {},
-    onPaymentDone: () {},
     onAfterInserted: () {},
+    gameInsertService: mockGameInsertService,
   );
   setUpAll(() {
     when(() => mockRepo.selGame(any())).thenAnswer((_) async {
@@ -43,6 +46,9 @@ void main() {
       const rawResponse = '''{"code":200,"message":"smth"}''';
       return BasicResponse.fromJson(json.decode(rawResponse));
     });
+    when(
+      () => mockGameInsertService.doInsertQRPay(url: any(named: 'url')),
+    ).thenAnswer((_) async => true);
     when(
       () => mockRepo.getDocumentWithDomainPrefix(
         any(),
@@ -81,7 +87,10 @@ void main() {
       });
     });
     test('支付路由回傳須為X50Pay', () async {
-      final result = await viewModel.checkThirdPartyPaymentRedirect();
+      final result = await viewModel.checkThirdPartyPaymentRedirect(
+        mid: '5fcdcf630004a524c8fadffe',
+        cid: '70376560',
+      );
       expect(result.type, QRPayTPPRedirectType.x50Pay);
     });
   });
@@ -186,7 +195,10 @@ document.documentElement.style.setProperty('--vh', `${vh}px`);
       });
     });
     test('支付路由回傳須為jkoPay', () async {
-      final result = await viewModel.checkThirdPartyPaymentRedirect();
+      final result = await viewModel.checkThirdPartyPaymentRedirect(
+        mid: '5fcdcf630004a524c8fadffe',
+        cid: '70376560',
+      );
       expect(result.type, QRPayTPPRedirectType.jkoPay);
     });
   });
@@ -287,8 +299,127 @@ document.documentElement.style.setProperty('--vh', `${vh}px`);
       });
     });
     test('支付路由回傳須為none', () async {
-      final result = await viewModel.checkThirdPartyPaymentRedirect();
+      final result = await viewModel.checkThirdPartyPaymentRedirect(
+        mid: '5fcdcf630004a524c8fadffe',
+        cid: '70376560',
+      );
       expect(result.type, QRPayTPPRedirectType.none);
     });
   });
+
+  group('X50Pay 付款流程結果', () {
+    setUp(() {
+      when(() => mockSettingRepo.getQuickPaySettings()).thenAnswer((_) async {
+        return PaymentSettingsModel(
+          mtpMode: DefaultCabPayment.x50pay.value,
+          aGV: true,
+          nfcAuto: true,
+          nfcQuic: true,
+          nfcTicket: true,
+          nfcNVSV: "0",
+          nfcSDVX: "0",
+          nfcTwo: "0",
+          nfcQlock: 15,
+        );
+      });
+    });
+
+    test('快速 QR Pay 回傳已完成', () async {
+      SharedPreferences.setMockInitialValues({
+        PrefsToken.enabledFastQRPay.value: true,
+      });
+
+      final result = await viewModel.handleX50PayPayment(
+        mid: '5fcdcf630004a524c8fadffe',
+        cid: '70376560',
+      );
+
+      expect(result, isA<CabPaymentCompleted>());
+    });
+
+    test('直接付款回傳已完成', () async {
+      SharedPreferences.setMockInitialValues({
+        PrefsToken.enabledFastQRPay.value: false,
+      });
+      await viewModel.checkThirdPartyPaymentRedirect(
+        mid: '5fcdcf630004a524c8fadffe',
+        cid: '70376560',
+      );
+      when(() => mockRepo.getQRPayDocument(any())).thenAnswer((_) async {
+        return r'''付款中...''';
+      });
+
+      final result = await viewModel.handleX50PayPayment(
+        mid: '5fcdcf630004a524c8fadffe',
+        cid: '70376560',
+      );
+
+      expect(result, isA<CabPaymentCompleted>());
+    });
+
+    test('需要手動選擇時回傳機台付款資料', () async {
+      SharedPreferences.setMockInitialValues({
+        PrefsToken.enabledFastQRPay.value: false,
+      });
+      await viewModel.checkThirdPartyPaymentRedirect(
+        mid: '5fcdcf630004a524c8fadffe',
+        cid: '70376560',
+      );
+      when(() => mockRepo.getQRPayDocument(any())).thenAnswer((_) async {
+        return _manualCabSelectionHtml;
+      });
+
+      final result = await viewModel.handleX50PayPayment(
+        mid: '5fcdcf630004a524c8fadffe',
+        cid: '70376560',
+      );
+
+      expect(result, isA<CabPaymentNeedsSelection>());
+      final selectionResult = result as CabPaymentNeedsSelection;
+      expect(selectionResult.qrPayData.cabLabel, 'maimaiDX');
+      expect(selectionResult.qrPayData.cabNum, 1);
+    });
+  });
 }
+
+const _manualCabSelectionHtml = r'''
+<html>
+  <body>
+    <div>
+      <a>
+        <div>
+          <img src="/static/gamesimg/mmdx.png">
+          <div>maimaiDX</div>
+        </div>
+      </a>
+      <div class="center aligned content">
+        <div>
+          <div>
+            <div class="header"><strong>您已選擇 1 號機</strong></div>
+            <p>單人遊玩</p>
+            <div>
+              <div>
+                <button id="tic0-modal">遊玩券</button>
+                <button id="btn0-modal">25P</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script></script>
+    <script></script>
+    <script></script>
+    <script>
+$("#tic0").click(function() {
+    $.post('/api/v1/tic/5fcdcf630004a524c8fadffe/70376560/0',function(data){
+    });
+});
+$("#btn0").click(function() {
+    $.post('/api/v1/pay/5fcdcf630004a524c8fadffe/70376560/0',function(data){
+    });
+});
+    </script>
+  </body>
+</html>
+''';

@@ -7,10 +7,13 @@ part of 'basic_response.dart';
 // **************************************************************************
 
 BasicResponse _$BasicResponseFromJson(Map<String, dynamic> json) =>
-    BasicResponse(
-      code: (json['code'] as num).toInt(),
-      message: json['message'] as String,
-    );
+    $checkedCreate('BasicResponse', json, ($checkedConvert) {
+      final val = BasicResponse(
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        message: $checkedConvert('message', (v) => v as String),
+      );
+      return val;
+    });
 
 Map<String, dynamic> _$BasicResponseToJson(BasicResponse instance) =>
     <String, dynamic>{'code': instance.code, 'message': instance.message};

@@ -7,13 +7,19 @@ part of 'free_p.dart';
 // **************************************************************************
 
 FreePointModel _$FreePointModelFromJson(Map<String, dynamic> json) =>
-    FreePointModel(
-      code: (json['code'] as num).toInt(),
-      message: json['message'] as String,
-      logs: (json['log'] as List<dynamic>)
-          .map((e) => FreePLog.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+    $checkedCreate('FreePointModel', json, ($checkedConvert) {
+      final val = FreePointModel(
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        message: $checkedConvert('message', (v) => v as String),
+        logs: $checkedConvert(
+          'log',
+          (v) => (v as List<dynamic>)
+              .map((e) => FreePLog.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
+      );
+      return val;
+    }, fieldKeyMap: const {'logs': 'log'});
 
 Map<String, dynamic> _$FreePointModelToJson(FreePointModel instance) =>
     <String, dynamic>{
@@ -22,14 +28,21 @@ Map<String, dynamic> _$FreePointModelToJson(FreePointModel instance) =>
       'log': instance.logs,
     };
 
-FreePLog _$FreePLogFromJson(Map<String, dynamic> json) => FreePLog(
-  limitTime: json['limittime'] as String,
-  uid: json['uid'] as String,
-  expire: json['expire'] as bool,
-  fpoint: (json['fpoint'] as num).toDouble(),
-  much: (json['much'] as num).toDouble(),
-  id: UnderscoreId.fromJson(json['_id'] as Map<String, dynamic>),
-);
+FreePLog _$FreePLogFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('FreePLog', json, ($checkedConvert) {
+      final val = FreePLog(
+        limitTime: $checkedConvert('limittime', (v) => v as String),
+        uid: $checkedConvert('uid', (v) => v as String),
+        expire: $checkedConvert('expire', (v) => v as bool),
+        fpoint: $checkedConvert('fpoint', (v) => (v as num).toDouble()),
+        much: $checkedConvert('much', (v) => (v as num).toDouble()),
+        id: $checkedConvert(
+          '_id',
+          (v) => UnderscoreId.fromJson(v as Map<String, dynamic>),
+        ),
+      );
+      return val;
+    }, fieldKeyMap: const {'limitTime': 'limittime', 'id': '_id'});
 
 Map<String, dynamic> _$FreePLogToJson(FreePLog instance) => <String, dynamic>{
   'limittime': instance.limitTime,

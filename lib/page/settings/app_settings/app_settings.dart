@@ -5,9 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/color_picker_mixin.dart';
+import 'package:x50pay/page/login/login.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/app_settings/app_settings_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
@@ -20,8 +23,10 @@ class AppSettings extends StatefulWidget {
   State<AppSettings> createState() => _AppSettingsState();
 }
 
-class _AppSettingsState extends BaseStatefulState<AppSettings>
-    with ColorPickerMixin<AppSettings> {
+class _AppSettingsState extends State<AppSettings>
+    with AppThemeMixin, AppFeedbackMixin, ColorPickerMixin<AppSettings> {
+  S get i18n => S.of(context);
+
   final viewModel = AppSettingsViewModel();
   late Future<void> init;
   Color? newSeedColor;
@@ -120,10 +125,11 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
               children: [
                 Text(i18n.userAppSettingsBiometricsLoginCredContent),
                 const SizedBox(height: 15),
-                Consumer<LoginProvider>(
-                  builder: (context, vm, child) => Visibility(
-                    visible: vm.errorMsg != null,
-                    child: Row(
+                Selector<LoginProvider, LoginErrorType?>(
+                  selector: (context, provider) => provider.errorType,
+                  builder: (context, errorType, child) {
+                    if (errorType == null) return const SizedBox();
+                    return Row(
                       children: [
                         const Icon(
                           Icons.error_outline_rounded,
@@ -131,12 +137,12 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          vm.errorMsg ?? '',
+                          errorType.message,
                           style: const TextStyle(color: Colors.red),
                         ),
                       ],
-                    ),
-                  ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 15),
                 TextField(
@@ -173,8 +179,8 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
                 context.read<LoginProvider>().login(
                   email: email.text,
                   password: password.text,
-                  isShowSuccessLogin: false,
-                  onLoginSuccess: () {
+                  showSuccessDialog: false,
+                  onLoggedIn: () {
                     Navigator.of(context).pop();
                     viewModel.enableBiometricsLogin(email.text, password.text);
                   },
@@ -339,13 +345,13 @@ class _AppSettingsState extends BaseStatefulState<AppSettings>
   @override
   void initState() {
     super.initState();
-    AppLifeCycles.instance.onPaused();
+    context.read<AppLifeCycles>().onPaused();
     init = viewModel.getAppSettings();
   }
 
   @override
   void dispose() {
-    AppLifeCycles.instance.reactivateNFC();
+    context.read<AppLifeCycles>().reactivateNFC();
     super.dispose();
   }
 

@@ -9,8 +9,10 @@ import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 
 class Login extends StatefulWidget {
@@ -20,12 +22,14 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
-class _LoginState extends BaseStatefulState<Login> with BasePage {
+class _LoginState extends State<Login> with AppThemeMixin {
   late final bool enabledBiometricsLogin;
   late final Future<void> checkBiometricsLoginEnabled;
   final emailController = TextEditingController();
   final password = TextEditingController();
-  late final LoginProvider loginPrvider;
+  late final LoginProvider loginProvider;
+
+  S get i18n => S.of(context);
 
   void onForgetPasswordTap() {
     launchUrlString(
@@ -37,8 +41,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   @override
   void initState() {
     super.initState();
-    loginPrvider = context.read<LoginProvider>();
-    checkBiometricsLoginEnabled = loginPrvider.checkEnableBiometricsLogin();
+    loginProvider = context.read<LoginProvider>();
+    checkBiometricsLoginEnabled = loginProvider.checkEnableBiometricsLogin();
     EasyLoading.dismiss();
   }
 
@@ -59,8 +63,8 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
         localizedReason: i18n.loginBiometricsReason,
       );
       if (!didAuthenticate) return;
-      loginPrvider.biometricsLogin(
-        onLoginSuccess: () {
+      loginProvider.biometricsLogin(
+        onLoggedIn: () {
           context.goNamed(AppRoutes.home.routeName);
         },
       );
@@ -78,15 +82,11 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   /// 輸入帳號密碼的登入
   void doLogin() async {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (emailController.text.isEmpty || password.text.isEmpty) {
-      loginPrvider.errorMsg = '帳密不得為空';
-      return;
-    }
-
-    loginPrvider.login(
+    loginProvider.login(
       email: emailController.text,
       password: password.text,
-      onLoginSuccess: () {
+      showSuccessDialog: true,
+      onLoggedIn: () {
         context.goNamed(AppRoutes.home.routeName);
       },
     );
@@ -104,7 +104,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
   }
 
   @override
-  Widget body(BuildContext context) {
+  Widget build(BuildContext context) {
     final passwordTextField = Selector<LoginProvider, bool>(
       selector: (context, vm) => vm.isPasswordObscure,
       builder: (context, isPasswordObscure, child) {
@@ -118,7 +118,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
             prefixIcon: const Icon(Icons.lock_rounded),
             suffixIcon: GestureDetector(
               onTap: () {
-                loginPrvider.isPasswordObscure = !isPasswordObscure;
+                loginProvider.isPasswordObscure = !isPasswordObscure;
               },
               child: Icon(
                 isPasswordObscure
@@ -151,10 +151,10 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
       },
     );
 
-    final errorLabel = Selector<LoginProvider, String?>(
-      selector: (context, vm) => vm.errorMsg,
-      builder: (context, errorMsg, child) {
-        if (errorMsg == null) return const SizedBox();
+    final errorLabel = Selector<LoginProvider, LoginErrorType?>(
+      selector: (context, vm) => vm.errorType,
+      builder: (context, errorType, child) {
+        if (errorType == null) return const SizedBox();
 
         return Container(
           margin: const EdgeInsets.all(14),
@@ -177,7 +177,7 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
                 ),
               ),
               const SizedBox(width: 15),
-              Text(errorMsg),
+              Text(errorType.message),
             ],
           ),
         );
@@ -270,79 +270,94 @@ class _LoginState extends BaseStatefulState<Login> with BasePage {
       ],
     );
 
-    return Material(
-      child: FutureBuilder(
-        future: checkBiometricsLoginEnabled,
-        builder: (context, snapshot) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final maxWidth = constraints.maxWidth;
-              final topImageContainer = ClipRRect(
-                borderRadius: BorderRadius.circular(3.75),
-                child: SizedBox(
-                  height: maxWidth > 480 ? 300 : 220,
-                  width: maxWidth,
-                  child: topImage,
-                ),
-              );
+    return DebugScaffold(
+      debugFunction: () {},
+      child: Material(
+        child: FutureBuilder(
+          future: checkBiometricsLoginEnabled,
+          builder: (context, snapshot) {
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final maxWidth = constraints.maxWidth;
+                final topImageContainer = ClipRRect(
+                  borderRadius: BorderRadius.circular(3.75),
+                  child: SizedBox(
+                    height: maxWidth > 480 ? 300 : 220,
+                    width: maxWidth,
+                    child: topImage,
+                  ),
+                );
 
-              return GestureDetector(
-                onTap: dropFocus,
-                child: Column(
-                  children: [
-                    topImageContainer,
-                    errorLabel,
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Container(
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          border: Border.all(color: borderColor, width: 1),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: AutofillGroup(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(i18n.loginEmail),
-                              const SizedBox(height: 12),
-                              TextField(
-                                controller: emailController,
-                                textInputAction: TextInputAction.next,
-                                autofillHints: const [AutofillHints.username],
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: const InputDecoration(
-                                  prefixIcon: Icon(Icons.person_rounded),
+                return GestureDetector(
+                  onTap: dropFocus,
+                  child: Column(
+                    children: [
+                      topImageContainer,
+                      errorLabel,
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Container(
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            border: Border.all(color: borderColor, width: 1),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: AutofillGroup(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(i18n.loginEmail),
+                                const SizedBox(height: 12),
+                                TextField(
+                                  controller: emailController,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [AutofillHints.username],
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: const InputDecoration(
+                                    prefixIcon: Icon(Icons.person_rounded),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 15),
-                              forgotPasswordLabel,
-                              const SizedBox(height: 12),
-                              passwordTextField,
-                              const SizedBox(height: 10),
-                              Divider(color: borderColor),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  loginButton,
-                                  biometricLoginButton,
-                                  const SizedBox(width: 5),
-                                  signInButton,
-                                ],
-                              ),
-                            ],
+                                const SizedBox(height: 15),
+                                forgotPasswordLabel,
+                                const SizedBox(height: 12),
+                                passwordTextField,
+                                const SizedBox(height: 10),
+                                Divider(color: borderColor),
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    loginButton,
+                                    biometricLoginButton,
+                                    const SizedBox(width: 5),
+                                    signInButton,
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
+}
+
+extension LoginErrorTypeExt on LoginErrorType {
+  String get message => switch (this) {
+    LoginErrorType.emptyField => '帳密不得為空',
+    LoginErrorType.credentialError => '帳號或密碼錯誤',
+    LoginErrorType.emailNotVerified => 'Email尚未驗證，請先驗證信箱\n若有問題請聯絡X50粉絲團',
+    LoginErrorType.unknown => '未知錯誤，請通知開發者',
+    LoginErrorType.noLogin => 'nologin',
+    LoginErrorType.credentialCorrupted => '請重新登入 ($code)',
+  };
 }

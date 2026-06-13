@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
@@ -19,12 +18,17 @@ class GameStore extends StatefulWidget {
   State<GameStore> createState() => _GameStoreState();
 }
 
-class _GameStoreState extends BaseStatefulState<GameStore> {
-  final repo = Repository();
-  late final viewModel = GameStoreViewModel(repository: repo);
+class _GameStoreState extends State<GameStore> {
+  late final GameStoreViewModel viewModel;
   var key = GlobalKey();
 
   Locale get currentLocale => context.read<LanguageProvider>().currentLocale;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = GameStoreViewModel(repository: context.read<Repository>());
+  }
 
   Future<void> onRefresh() async {
     key = GlobalKey();

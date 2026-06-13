@@ -8,16 +8,16 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/game/cab_select.dart';
+import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_view_model.dart';
-import 'package:x50pay/providers/entry_provider.dart';
-import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/repository.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+
+typedef MachineData = ({String mid, String cid});
 
 /// 掃描QRCode 頁面
 class ScanQRCode extends StatefulWidget {
@@ -27,8 +27,8 @@ class ScanQRCode extends StatefulWidget {
   State<ScanQRCode> createState() => _ScanQRCodeState();
 }
 
-class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
-    with TickerProviderStateMixin, WidgetsBindingObserver {
+class _ScanQRCodeState extends State<ScanQRCode>
+    with AppThemeMixin, TickerProviderStateMixin, WidgetsBindingObserver {
   final controller = MobileScannerController(autoStart: false);
 
   late final Animation<double> blinkAnimation;
@@ -41,11 +41,10 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
     controller.stop();
     isShowCameraPreviewNotifier.value = false;
     setState(() {});
-    context.pushNamed(AppRoutes.ecPay.routeName).then((_) {
-      isShowCameraPreviewNotifier.value = true;
-      controller.start();
-      setState(() {});
-    });
+    await context.pushNamed(AppRoutes.ecPay.routeName).then((_) {});
+    isShowCameraPreviewNotifier.value = true;
+    controller.start();
+    setState(() {});
   }
 
   @override
@@ -86,50 +85,23 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
     super.dispose();
   }
 
-  void handleQRPay(String url, MobileScannerController controller) async {
+  void handleQRPay(String url) async {
     EasyLoading.show(status: '檢查');
     final args = url.replaceAll('https://pay.x50.fun/mid/', '').split('/');
-    final repo = Repository();
 
-    final viewModel = QRPayViewModel(
+    final viewModel = context.read<QRPayService>();
+    final redirection = await viewModel.checkThirdPartyPaymentRedirect(
       mid: args[0],
       cid: args[1],
-      repository: repo,
-      onAfterInserted: () async {
-        final userProvider = context.read<UserProvider>();
-        final entryProvider = context.read<EntryProvider>();
-        await userProvider.checkUser();
-        await entryProvider.checkEntry();
-      },
-      settingRepo: SettingRepository(),
-      onPaymentDone: () {
-        controller.start();
-      },
-      onCabSelect: (qrPayData) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return CabSelect.fromQRPay(
-              qrPayData: qrPayData,
-              onCreated: () {
-                EasyLoading.dismiss();
-              },
-              onDestroy: () {
-                controller.start();
-              },
-            );
-          },
-        );
-      },
     );
-    final redirection = await viewModel.checkThirdPartyPaymentRedirect();
-
+    final machineData = (mid: args[0], cid: args[1]);
     switch (redirection.type) {
       case QRPayTPPRedirectType.x50Pay:
+        await _handleX50PayRedirectResult(redirection.cabPaymentResult);
         break;
       case QRPayTPPRedirectType.none:
         EasyLoading.dismiss();
-        showQRPayModal(controller, viewModel);
+        showQRPayModal(machineData);
         break;
       case QRPayTPPRedirectType.jkoPay:
         launchUrlString(redirection.url, mode: LaunchMode.externalApplication);
@@ -142,19 +114,24 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
     }
   }
 
-  void debugQRPay() {
-    controller.stop();
-
-    handleQRPay(
-      'https://pay.x50.fun/mid/5fcdcf800004a524c8fae000/703765460',
-      controller,
-    );
+  Future<void> _handleX50PayRedirectResult(CabPaymentResult? result) async {
+    switch (result) {
+      case CabPaymentCompleted():
+        controller.start();
+      case CabPaymentNeedsSelection(:final qrPayData):
+        EasyLoading.dismiss();
+        await showDialog(
+          context: context,
+          builder: (context) => CabSelect.fromQRPay(qrPayData: qrPayData),
+        );
+        controller.start();
+      case null:
+        EasyLoading.dismiss();
+        controller.start();
+    }
   }
 
-  void showQRPayModal(
-    MobileScannerController controller,
-    QRPayViewModel viewModel,
-  ) async {
+  void showQRPayModal(MachineData machineData) async {
     // log('https://pay.x50.fun/api/v1/pay/$mid/$cid/0', name: 'showScanPayModal');
     await showModalBottomSheet<bool>(
       isScrollControlled: true,
@@ -171,12 +148,7 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
           snapSizes: const [0.5, 0.8],
           expand: false,
           builder: (context, controller) {
-            return ChangeNotifierProvider.value(
-              value: viewModel,
-              builder: (context, child) {
-                return QRPayModal(scrollController: controller);
-              },
-            );
+            return QRPayModal(scrollController: controller, machineData);
           },
         );
       },
@@ -191,35 +163,33 @@ class _ScanQRCodeState extends BaseStatefulState<ScanQRCode>
     log("format: ${barcode.format}", name: 'handleBarcode');
     if (value == null) return;
 
-    if (isBusy) {
-      return;
-    } else {
-      isBusy = true;
-      final nav = GoRouter.of(context);
-      isShowCameraPreviewNotifier.value = false;
+    if (isBusy) return;
 
-      // QRPay
-      if (value.startsWith('https://pay.x50.fun/mid/')) {
-        await controller.stop();
-        setState(() {});
-        handleQRPay(value, controller);
-      } else {
-        // 平板排隊
-        final msg = await Repository().qrDecryt(value);
-        if (msg != 'oof') {
-          setState(() {});
-          await EasyLoading.showInfo(
-            msg,
-            duration: const Duration(milliseconds: 1000),
-          );
-          await Future.delayed(const Duration(milliseconds: 1300));
-          nav.goNamed(AppRoutes.home.routeName);
-        }
-      }
-      isBusy = false;
-      isShowCameraPreviewNotifier.value = true;
+    isBusy = true;
+    final nav = GoRouter.of(context);
+    isShowCameraPreviewNotifier.value = false;
+
+    // QRPay
+    if (value.startsWith('https://pay.x50.fun/mid/')) {
+      await controller.stop();
       setState(() {});
+      handleQRPay(value);
+    } else {
+      // 平板排隊
+      final msg = await context.read<Repository>().qrDecryt(value);
+      if (msg != 'oof') {
+        setState(() {});
+        await EasyLoading.showInfo(
+          msg,
+          duration: const Duration(milliseconds: 1000),
+        );
+        await Future.delayed(const Duration(milliseconds: 1300));
+        nav.goNamed(AppRoutes.home.routeName);
+      }
     }
+    isBusy = false;
+    isShowCameraPreviewNotifier.value = true;
+    setState(() {});
   }
 
   Widget qrViewErrorBuilder(

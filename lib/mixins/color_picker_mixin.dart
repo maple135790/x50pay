@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:x50pay/common/base/base.dart';
 
-mixin ColorPickerMixin<T extends StatefulWidget> on BaseStatefulState<T> {
+mixin ColorPickerMixin<T extends StatefulWidget> on State<T> {
   Color pickerColor();
 
   void onColorChanged(Color color);

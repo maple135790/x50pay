@@ -7,13 +7,19 @@ part of 'play.dart';
 // **************************************************************************
 
 PlayRecordModel _$PlayRecordModelFromJson(Map<String, dynamic> json) =>
-    PlayRecordModel(
-      code: (json['code'] as num).toInt(),
-      message: json['message'] as String,
-      logs: (json['log'] as List<dynamic>)
-          .map((e) => PlayLog.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+    $checkedCreate('PlayRecordModel', json, ($checkedConvert) {
+      final val = PlayRecordModel(
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        message: $checkedConvert('message', (v) => v as String),
+        logs: $checkedConvert(
+          'log',
+          (v) => (v as List<dynamic>)
+              .map((e) => PlayLog.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
+      );
+      return val;
+    }, fieldKeyMap: const {'logs': 'log'});
 
 Map<String, dynamic> _$PlayRecordModelToJson(PlayRecordModel instance) =>
     <String, dynamic>{
@@ -22,20 +28,30 @@ Map<String, dynamic> _$PlayRecordModelToJson(PlayRecordModel instance) =>
       'log': instance.logs,
     };
 
-PlayLog _$PlayLogFromJson(Map<String, dynamic> json) => PlayLog(
-  cid: (json['cid'] as num).toInt(),
-  disbool: json['disbool'] as bool,
-  done: json['done'] as bool,
-  freep: (json['freep'] as num).toDouble(),
-  initTime: InitTime.fromJson(json['inittime'] as Map<String, dynamic>),
-  mid: json['mid'] as String,
-  price: (json['price'] as num).toDouble(),
-  sid: json['sid'] as String,
-  status: json['status'] as String,
-  time: json['time'] as String,
-  uid: json['uid'] as String,
-  id: UnderscoreId.fromJson(json['_id'] as Map<String, dynamic>),
-);
+PlayLog _$PlayLogFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('PlayLog', json, ($checkedConvert) {
+      final val = PlayLog(
+        cid: $checkedConvert('cid', (v) => (v as num).toInt()),
+        disbool: $checkedConvert('disbool', (v) => v as bool),
+        done: $checkedConvert('done', (v) => v as bool),
+        freep: $checkedConvert('freep', (v) => (v as num).toDouble()),
+        initTime: $checkedConvert(
+          'inittime',
+          (v) => InitTime.fromJson(v as Map<String, dynamic>),
+        ),
+        mid: $checkedConvert('mid', (v) => v as String),
+        price: $checkedConvert('price', (v) => (v as num).toDouble()),
+        sid: $checkedConvert('sid', (v) => v as String),
+        status: $checkedConvert('status', (v) => v as String),
+        time: $checkedConvert('time', (v) => v as String),
+        uid: $checkedConvert('uid', (v) => v as String),
+        id: $checkedConvert(
+          '_id',
+          (v) => UnderscoreId.fromJson(v as Map<String, dynamic>),
+        ),
+      );
+      return val;
+    }, fieldKeyMap: const {'initTime': 'inittime', 'id': '_id'});
 
 Map<String, dynamic> _$PlayLogToJson(PlayLog instance) => <String, dynamic>{
   'cid': instance.cid,

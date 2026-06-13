@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
 import 'package:x50pay/page/settings/record_mixin.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
@@ -13,8 +14,11 @@ class BidRecords extends StatefulWidget {
   State<BidRecords> createState() => _BidRecordsState();
 }
 
-class _BidRecordsState extends BaseStatefulState<BidRecords>
-    with RecordPageMixin<BidLogModel, BidRecords> {
+class _BidRecordsState extends State<BidRecords>
+    with
+        AppThemeMixin,
+        AppFeedbackMixin,
+        RecordPageMixin<BidLogModel, BidRecords> {
   @override
   String pageTitle() => '近兩個月的儲值紀錄如下';
 

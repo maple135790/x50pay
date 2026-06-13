@@ -7,7 +7,12 @@ part of 'lotte_list.dart';
 // **************************************************************************
 
 LotteListModel _$LotteListModelFromJson(Map<String, dynamic> json) =>
-    LotteListModel(json['list'] as List<dynamic>);
+    $checkedCreate('LotteListModel', json, ($checkedConvert) {
+      final val = LotteListModel(
+        $checkedConvert('list', (v) => v as List<dynamic>),
+      );
+      return val;
+    }, fieldKeyMap: const {'rawLotteList': 'list'});
 
 Map<String, dynamic> _$LotteListModelToJson(LotteListModel instance) =>
     <String, dynamic>{'list': instance.rawLotteList};

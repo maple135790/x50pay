@@ -12,7 +12,7 @@ class EntryModel {
   final int code;
   final List<dynamic> gr2;
   final List<Evlist>? evlist;
-  final GiftList? giftlist;
+  final List<GiftList>? giftlist;
   @JsonKey(name: 'rqc')
   final List<QuestCampaign>? questCampaign;
 
@@ -184,8 +184,6 @@ class QuestCampaign {
   final bool lpicshow;
   final List<String> mid;
   final String spic;
-  @JsonKey(name: '_id')
-  final UnderscoreId? underscoreId;
 
   QuestCampaign({
     required this.rawCouid,
@@ -193,7 +191,6 @@ class QuestCampaign {
     required this.lpicshow,
     required this.mid,
     required this.spic,
-    required this.underscoreId,
   });
 
   factory QuestCampaign.fromJson(Map<String, dynamic> json) =>

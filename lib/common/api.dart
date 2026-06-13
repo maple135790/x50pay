@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import "package:http/http.dart" as http;
 import 'package:x50pay/common/utils/prefs_utils.dart';
@@ -14,14 +15,13 @@ class Api {
   static Uri _fullURL(String dest) => Uri.parse(domainBase + dest);
 
   static void _checkNewSession(Map<String, String> headers) async {
-    if (headers['set-cookie']?.isEmpty ?? true) return;
-    String newSession = '';
+    if (!headers.containsKey('set-cookie')) return;
     final cookies = headers['set-cookie']!.split(';');
-    for (var cookie in cookies) {
-      if (!cookie.contains('session=')) continue;
-      newSession = cookie.split('=').last;
-    }
-    if (newSession.isEmpty) return;
+    final newSession = cookies
+        .firstWhereOrNull((e) => e.startsWith("session_id="))
+        ?.split("=")
+        .last;
+    if (newSession == null || newSession.isEmpty) return;
 
     Prefs.secureWrite(SecurePrefsToken.session, newSession);
   }
@@ -29,7 +29,7 @@ class Api {
   /// 通用的API請求
   ///
   /// - [dest] 請求的目的地，例如 /user/me
-  /// - [body] 請求的內容
+  /// - [rawBody] 請求的內容
   ///
   /// 以下為可選參數
   ///
@@ -52,7 +52,7 @@ class Api {
     bool withSession = false,
     bool logRequestTime = false,
     required String dest,
-    required Map<String, dynamic> body,
+    required Map<String, dynamic> rawBody,
     required HttpMethod method,
     Function(Map<String, dynamic> json)? onSuccess,
     Function(String rawValue)? onSuccessString,
@@ -64,28 +64,23 @@ class Api {
     final client = http.Client();
     Stopwatch? stopwatch;
     bool isResponseString = onSuccessString != null;
-    bool isEmptyBody = body.isEmpty;
+    bool isEmptyBody = rawBody.isEmpty;
     String? session;
     Uri url = customDest != null ? Uri.parse(customDest) : _fullURL(dest);
     String? localeTag = await Prefs.getString(PrefsToken.appLang);
     localeTag = localeTag?.toLowerCase() ?? 'zh-tw';
 
-    const fixHeaders = {
-      "Host": "pay.x50.fun",
+    final fixHeaders = {
       "Origin": "https://pay.x50.fun",
       "Referer": "https://pay.x50.fun/",
+      "Content-Type": contentType.value,
     };
 
     /// 建立請求的header
     Map<String, String> buildHeaders({bool httpGet = false}) {
       var headers = <String, String>{};
       if (withSession) {
-        headers.addAll({
-          'Accept-Language':
-              'ja-JP,ja;q=0.9,zh-TW;q=0.8,zh;q=0.7,en-US;q=0.6,en;q=0.5',
-          'Cookie': 'lang=$localeTag;session=$session',
-          "Content-Type": contentType.value,
-        });
+        headers.addAll({'Cookie': 'lang=$localeTag;session_id=$session'});
       }
       headers
         ..addAll(fixHeaders)
@@ -102,13 +97,13 @@ class Api {
     /// 字串化請求的body
     String stringifyBody() {
       if (isEmptyBody) return '';
-      return jsonEncode(body);
+      return jsonEncode(rawBody);
     }
 
     /// 建立請求的body
     Object buildBody() {
       if (contentType == ContentType.json) return stringifyBody();
-      return body;
+      return rawBody;
     }
 
     if (verbose) log('request: $url', name: 'Api');
@@ -116,55 +111,32 @@ class Api {
       session = await Prefs.secureRead(SecurePrefsToken.session);
     }
     if (logRequestTime) stopwatch = Stopwatch()..start();
-    switch (method) {
-      case HttpMethod.post:
-        response = await client.post(
-          url,
-          body: buildBody(),
-          headers: buildHeaders(),
-          encoding: Encoding.getByName('utf-8'),
-        );
 
-        if (response.statusCode == 200) {
-          isResponseString
-              ? onSuccessString.call(response.body)
-              : onSuccess?.call(jsonDecode(response.body));
-        } else {
-          onError?.call(response.statusCode, response.body);
-          log(
-            '',
-            error: 'statusCode: ${response.statusCode},\n${response.body}',
-          );
-          throw Exception([
-            'response code: ',
-            response.statusCode,
-            '\nresponse body: ',
-            response.body,
-          ]);
-        }
-        _checkNewSession(response.headers);
-        onResponseHeader?.call(response.headers);
-        break;
+    final body = buildBody();
+    final headers = buildHeaders(httpGet: method == HttpMethod.get);
 
-      case HttpMethod.get:
-        response = await client.get(url, headers: buildHeaders(httpGet: true));
-        if (response.statusCode == 200) {
-          isResponseString
-              ? onSuccessString.call(response.body)
-              : onSuccess?.call(jsonDecode(response.body));
-        } else {
-          onError?.call(response.statusCode, response.body);
-          throw Exception([
-            'response code: ',
-            response.statusCode,
-            '\nresponse body: ',
-            response.body,
-          ]);
-        }
-        _checkNewSession(response.headers);
-        onResponseHeader?.call(response.headers);
-        break;
+    response = switch (method) {
+      HttpMethod.post => await client.post(url, body: body, headers: headers),
+      HttpMethod.get => await client.get(url, headers: headers),
+    };
+
+    if (response.statusCode == 200) {
+      isResponseString
+          ? onSuccessString.call(response.body)
+          : onSuccess?.call(jsonDecode(response.body));
+    } else {
+      onError?.call(response.statusCode, response.body);
+      log('', error: 'statusCode: ${response.statusCode},\n${response.body}');
+      throw Exception([
+        'response code: ',
+        response.statusCode,
+        '\nresponse body: ',
+        response.body,
+      ]);
     }
+    _checkNewSession(response.headers);
+    onResponseHeader?.call(response.headers);
+
     if (verbose && kDebugMode) {
       log('request:', name: 'Api request');
       log(
@@ -210,7 +182,13 @@ class Api {
   }
 }
 
-enum HttpMethod { post, get }
+enum HttpMethod {
+  post("POST"),
+  get("GET");
+
+  final String value;
+  const HttpMethod(this.value);
+}
 
 enum ContentType {
   json('application/json'),

@@ -5,22 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vibration/vibration.dart';
 import 'package:x50pay/common/app_route.dart';
-import 'package:x50pay/common/base/base_stateful_state.dart';
-import 'package:x50pay/common/global_singleton.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/gen/assets.gen.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/remote_open_mixin.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/providers/user_provider.dart';
+import 'package:x50pay/repository/repository.dart';
 import 'package:x50pay/repository/setting_repository.dart';
 
 class Settings extends StatefulWidget {
@@ -41,10 +44,12 @@ class Settings extends StatefulWidget {
   State<Settings> createState() => _SettingsState();
 }
 
-class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
+class _SettingsState extends State<Settings>
+    with AppThemeMixin, AppFeedbackMixin, RemoteOpenMixin {
+  S get i18n => S.of(context);
+
   late final String avatarUrl;
   late final viewModel = SettingsViewModel(settingRepo: settingRepo);
-  late final UserModel user;
   late Future<void> intentDelay;
   final settingRepo = SettingRepository();
   final scrollController = ScrollController();
@@ -108,8 +113,10 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   }
 
   void onChangePhonePressed() async {
+    final user = context.read<UserProvider>().user;
     // 已經送出驗證碼，但使用者尚未進行驗證
-    final hasSentVerification = user.tphone != 0 && !user.phoneactive!;
+    final hasSentVerification =
+        user?.tphone != null && !(user?.phoneactive ?? false);
 
     if (hasSentVerification) {
       showDialog(
@@ -205,7 +212,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
   void initState() {
     super.initState();
     intentDelay = viewModel.init();
-    user = context.read<UserProvider>().user!;
+    final user = context.read<UserProvider>().user!;
 
     avatarUrl = user.settingsUserImageUrl;
     if (widget.shouldGoPhone) {
@@ -227,21 +234,26 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
 
   @override
   Widget build(BuildContext context) {
-    late final Widget userAvatar;
-    if (user.rawUserImgUrl != null) {
-      userAvatar = CachedNetworkImage(
-        imageUrl: avatarUrl,
-        width: 60,
-        height: 60,
-        imageBuilder: (context, imageProvider) =>
-            CircleAvatar(backgroundImage: imageProvider, radius: 30),
-      );
-    } else {
-      userAvatar = CircleAvatar(
-        foregroundImage: R.images.common.logo150.provider(),
-        radius: 30,
-      );
-    }
+    final userAvatar = Selector<UserProvider, UserModel?>(
+      selector: (context, provider) => provider.user,
+      builder: (context, user, child) {
+        if (user?.rawUserImgUrl != null) {
+          return CachedNetworkImage(
+            imageUrl: avatarUrl,
+            width: 60,
+            height: 60,
+            imageBuilder: (context, imageProvider) {
+              return CircleAvatar(backgroundImage: imageProvider, radius: 30);
+            },
+          );
+        }
+
+        return CircleAvatar(
+          foregroundImage: R.images.common.logo150.provider(),
+          radius: 30,
+        );
+      },
+    );
 
     final accountItem = Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -263,14 +275,20 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
               userAvatar,
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.8, 8, 0, 8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(user.name!),
-                    const SizedBox(height: 5),
-                    Text(user.email!),
-                  ],
+                child: Selector<UserProvider, UserModel?>(
+                  selector: (context, provider) => provider.user,
+                  builder: (context, user, child) {
+                    if (user == null) return const SizedBox();
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(user.name!),
+                        const SizedBox(height: 5),
+                        Text(user.email!),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],
@@ -401,7 +419,7 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
         onLongPress: showEasterEgg,
         child: Center(
           child: Text(
-            GlobalSingleton.instance.appVersion,
+            'GlobalSingleton.instance.appVersion',
             style: Theme.of(context).textTheme.labelSmall!.copyWith(
               color: const Color(0xff505050).withValues(alpha: 0.7),
             ),
@@ -439,6 +457,19 @@ class _SettingsState extends BaseStatefulState<Settings> with RemoteOpenMixin {
           ),
         );
       },
+    );
+  }
+
+  @override
+  Future<String> onOpenDoor(LocationData currentLocation, RemoteOpenShop shop) {
+    return context.read<Repository>().remoteOpenDoor(
+      getDistance(
+        25.0455991,
+        121.5027702,
+        currentLocation.latitude!,
+        currentLocation.longitude!,
+      ),
+      doorName: shop.doorName,
     );
   }
 }

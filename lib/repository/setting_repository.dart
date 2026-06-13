@@ -20,7 +20,7 @@ class SettingRepository extends Api {
       dest: '/nfc/getSettings',
       method: HttpMethod.get,
       withSession: true,
-      body: {},
+      rawBody: {},
       onSuccess: (json) {
         quicSettingsModel = PaymentSettingsModel.fromJson(json);
       },
@@ -40,7 +40,7 @@ class SettingRepository extends Api {
       method: HttpMethod.post,
       contentType: ContentType.json,
       withSession: true,
-      body: {'atq': atq, 'atql': atql},
+      rawBody: {'atq': atq, 'atql': atql},
     );
     return response;
   }
@@ -59,7 +59,7 @@ class SettingRepository extends Api {
       contentType: ContentType.xForm,
       method: HttpMethod.post,
       withSession: true,
-      body: {'old_pwd': oldPwd, 'pwd': pwd},
+      rawBody: {'old_pwd': oldPwd, 'pwd': pwd},
       onSuccess: (json) {
         res = BasicResponse.fromJson(json);
       },
@@ -77,7 +77,7 @@ class SettingRepository extends Api {
       dest: '/setting/chgemail',
       method: HttpMethod.post,
       withSession: true,
-      body: {'remail': remail},
+      rawBody: {'remail': remail},
       onSuccess: (json) {
         res = BasicResponse.fromJson(json);
       },
@@ -95,7 +95,7 @@ class SettingRepository extends Api {
       dest: '/setting/chgphone',
       method: HttpMethod.post,
       withSession: true,
-      body: {},
+      rawBody: {},
       contentType: ContentType.json,
       onSuccess: (json) {
         res = BasicResponse.fromJson(json);
@@ -115,7 +115,7 @@ class SettingRepository extends Api {
       method: HttpMethod.post,
       withSession: true,
       contentType: ContentType.json,
-      body: {'phone': phone},
+      rawBody: {'phone': phone},
       onSuccess: (json) {
         res = BasicResponse.fromJson(json);
       },
@@ -133,7 +133,7 @@ class SettingRepository extends Api {
       dest: '/setting/activeSms',
       method: HttpMethod.post,
       withSession: true,
-      body: {'sms': sms},
+      rawBody: {'sms': sms},
       onSuccess: (json) {
         res = BasicResponse.fromJson(json);
       },
@@ -151,7 +151,7 @@ class SettingRepository extends Api {
       dest: '/log/ticDate',
       method: HttpMethod.get,
       withSession: true,
-      body: {},
+      rawBody: {},
       onSuccess: (json) {
         ticDateLogModel = TicDateLogModel.fromJson(json);
       },
@@ -169,7 +169,7 @@ class SettingRepository extends Api {
       dest: '/log/Bid',
       method: HttpMethod.get,
       withSession: true,
-      body: {},
+      rawBody: {},
       onSuccess: (json) {
         bidLogModel = BidLogModel.fromJson(json);
       },
@@ -187,7 +187,7 @@ class SettingRepository extends Api {
       dest: '/log/Play',
       method: HttpMethod.get,
       withSession: true,
-      body: {},
+      rawBody: {},
       onSuccess: (json) {
         playRecordModel = PlayRecordModel.fromJson(json);
       },
@@ -205,7 +205,7 @@ class SettingRepository extends Api {
       dest: '/log/FreeP',
       method: HttpMethod.get,
       withSession: true,
-      body: {},
+      rawBody: {},
       onSuccess: (json) {
         freePModel = FreePointModel.fromJson(json);
       },
@@ -223,7 +223,7 @@ class SettingRepository extends Api {
       dest: '/log/ticUsed',
       method: HttpMethod.get,
       withSession: true,
-      body: {},
+      rawBody: {},
       onSuccess: (json) {
         ticUsedModel = TicUsedModel.fromJson(json);
       },
@@ -241,7 +241,7 @@ class SettingRepository extends Api {
       dest: '/settingPadConfirm',
       method: HttpMethod.post,
       withSession: true,
-      body: {'shid': shid, 'shcolor': shcolor, 'shname': shname},
+      rawBody: {'shid': shid, 'shcolor': shcolor, 'shname': shname},
       onSuccessString: (_) {},
     );
     return response;
@@ -269,7 +269,7 @@ class SettingRepository extends Api {
   }) async {
     final response = await Api.makeRequest(
       dest: '/autoConfirm',
-      body: {
+      rawBody: {
         'atc': atc,
         'atn': atn,
         'atp': atp,
@@ -295,7 +295,7 @@ class SettingRepository extends Api {
       dest: '/pad/getSettings',
       method: HttpMethod.get,
       withSession: true,
-      body: {},
+      rawBody: {},
       onSuccess: (json) {
         padSettingsModel = PadSettingsModel.fromJson(json);
       },
@@ -308,7 +308,7 @@ class SettingRepository extends Api {
       dest: '/quic/view-v4',
       method: HttpMethod.get,
       withSession: true,
-      body: {},
+      rawBody: {},
     );
     return const Utf8Decoder().convert(response.bodyBytes);
   }

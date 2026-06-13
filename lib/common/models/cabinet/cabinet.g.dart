@@ -6,23 +6,41 @@ part of 'cabinet.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CabinetModel _$CabinetModelFromJson(Map<String, dynamic> json) => CabinetModel(
-  message: json['message'] as String,
-  code: (json['code'] as num).toInt(),
-  note: json['note'] as List<dynamic>,
-  caboid: json['caboid'] as String,
-  spic: (json['spic'] as List<dynamic>?)?.map((e) => e as String).toList(),
-  surl: (json['surl'] as List<dynamic>?)?.map((e) => e as String).toList(),
-  pad: json['pad'] as bool,
-  padmid: json['padmid'] as String,
-  padlid: json['padlid'] as String,
-  cabinets: (json['cabinet'] as List<dynamic>)
-      .map((e) => Cabinet.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  reservations: (json['re'] as List<dynamic>)
-      .map((e) => (e as List<dynamic>?)?.map((e) => e as String).toList())
-      .toList(),
-);
+CabinetModel _$CabinetModelFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('CabinetModel', json, ($checkedConvert) {
+      final val = CabinetModel(
+        message: $checkedConvert('message', (v) => v as String),
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        note: $checkedConvert('note', (v) => v as List<dynamic>),
+        caboid: $checkedConvert('caboid', (v) => v as String),
+        spic: $checkedConvert(
+          'spic',
+          (v) => (v as List<dynamic>?)?.map((e) => e as String).toList(),
+        ),
+        surl: $checkedConvert(
+          'surl',
+          (v) => (v as List<dynamic>?)?.map((e) => e as String).toList(),
+        ),
+        pad: $checkedConvert('pad', (v) => v as bool),
+        padmid: $checkedConvert('padmid', (v) => v as String),
+        padlid: $checkedConvert('padlid', (v) => v as String),
+        cabinets: $checkedConvert(
+          'cabinet',
+          (v) => (v as List<dynamic>)
+              .map((e) => Cabinet.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
+        reservations: $checkedConvert(
+          're',
+          (v) => (v as List<dynamic>)
+              .map(
+                (e) => (e as List<dynamic>?)?.map((e) => e as String).toList(),
+              )
+              .toList(),
+        ),
+      );
+      return val;
+    }, fieldKeyMap: const {'cabinets': 'cabinet', 'reservations': 're'});
 
 Map<String, dynamic> _$CabinetModelToJson(CabinetModel instance) =>
     <String, dynamic>{
@@ -39,19 +57,26 @@ Map<String, dynamic> _$CabinetModelToJson(CabinetModel instance) =>
       're': instance.reservations,
     };
 
-Cabinet _$CabinetFromJson(Map<String, dynamic> json) => Cabinet(
-  num: (json['num'] as num).toInt(),
-  id: json['id'] as String,
-  label: json['lable'] as String,
-  mode: (json['mode'] as List<dynamic>).map((e) => e as List<dynamic>).toList(),
-  card: json['card'] as bool,
-  isBool: json['bool'] as bool,
-  vipbool: json['vipbool'] as bool,
-  notice: json['notice'] as String,
-  busy: json['busy'] as String,
-  nbusy: json['nbusy'] as String,
-  pcl: json['pcl'] as bool,
-);
+Cabinet _$CabinetFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('Cabinet', json, ($checkedConvert) {
+      final val = Cabinet(
+        num: $checkedConvert('num', (v) => (v as num).toInt()),
+        id: $checkedConvert('id', (v) => v as String),
+        label: $checkedConvert('lable', (v) => v as String),
+        mode: $checkedConvert(
+          'mode',
+          (v) => (v as List<dynamic>).map((e) => e as List<dynamic>).toList(),
+        ),
+        card: $checkedConvert('card', (v) => v as bool),
+        isBool: $checkedConvert('bool', (v) => v as bool),
+        vipbool: $checkedConvert('vipbool', (v) => v as bool),
+        notice: $checkedConvert('notice', (v) => v as String),
+        busy: $checkedConvert('busy', (v) => v as String),
+        nbusy: $checkedConvert('nbusy', (v) => v as String),
+        pcl: $checkedConvert('pcl', (v) => v as bool),
+      );
+      return val;
+    }, fieldKeyMap: const {'label': 'lable', 'isBool': 'bool'});
 
 Map<String, dynamic> _$CabinetToJson(Cabinet instance) => <String, dynamic>{
   'num': instance.num,

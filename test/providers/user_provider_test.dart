@@ -1,33 +1,32 @@
-import 'dart:convert';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:x50pay/common/models/api_response.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/repository.dart';
 
 class MockRepo extends Mock implements Repository {}
 
+class FakeUserModel extends Fake implements UserModel {}
+
 final mockRepo = MockRepo();
 
 void main() {
   void arrangeGetUserReturnsData() {
     when(mockRepo.getUser).thenAnswer((_) async {
-      const rawMe =
-          r'''{"message":"done","code":200,"userimg":"https://www.gravatar.com/avatar/6a4cbe004cdedee9738d82fe9670b326?size=250","email":"test@test.com","uid":"X000","givebool":0,"point":100,"name":"test","ticketint":9,"phoneactive":true,"vip":false,"vipdate":{"$date":"1990-05-05T00:00:00Z"},"sid":"","sixn":"826070","tphone":1,"fpoint":25}''';
-      return UserModel.fromJson(json.decode(rawMe));
+      return ApiResponse.createSuccess(FakeUserModel());
     });
   }
 
   void arrangeGetUserReturnsNull() {
     when(mockRepo.getUser).thenAnswer((_) async {
-      return null;
+      return ApiResponse.createFailed(FakeUserModel());
     });
   }
 
   void arrangeGetUserReturnsErrorCode() {
     when(mockRepo.getUser).thenAnswer((_) async {
-      return const UserModel(message: 'error test', code: 404);
+      return ApiResponse.createFailed(FakeUserModel());
     });
   }
 

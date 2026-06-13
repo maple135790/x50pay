@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/mixins/color_picker_mixin.dart';
 import 'package:x50pay/page/settings/popups/pad_pref_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
@@ -14,7 +14,7 @@ class PadPrefDialog extends StatefulWidget {
   State<PadPrefDialog> createState() => _PadPrefDialogState();
 }
 
-class _PadPrefDialogState extends BaseStatefulState<PadPrefDialog> {
+class _PadPrefDialogState extends State<PadPrefDialog> {
   final settingRepo = SettingRepository();
   late final Future<void> getPadPrefs;
   late final PadPrefsViewModel viewModel;
@@ -93,8 +93,8 @@ class _PadPrefLoaded extends StatefulWidget {
   State<_PadPrefLoaded> createState() => __PadPrefLoadedState();
 }
 
-class __PadPrefLoadedState extends BaseStatefulState<_PadPrefLoaded>
-    with ColorPickerMixin {
+class __PadPrefLoadedState extends State<_PadPrefLoaded>
+    with AppThemeMixin, ColorPickerMixin<_PadPrefLoaded> {
   Color? showColor;
 
   void changeNicknamePage() async {
