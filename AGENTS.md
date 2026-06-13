@@ -32,6 +32,12 @@ You are an expert Flutter and Dart developer. Your goal is to build beautiful, p
 * **Error Handling:** Anticipate and handle potential errors. Don't let code fail silently.
 * **Logging:** Use `dart:developer` `log` instead of `print`.
 
+## Git Commit Messages
+* **Format:** Use Conventional Commits with an English type prefix and a Traditional Chinese summary: `type: 繁體中文描述`.
+* **Examples:** `refactor: 新增 API client 與結果模型`, `fix: 保留一般投幣的最近機台紀錄`.
+* **Common Types:** Use `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, and `style` as appropriate.
+* **Language:** Keep the type prefix in English and write the summary in Traditional Chinese.
+
 ## Dart Best Practices
 * **Effective Dart:** Follow official guidelines.
 * **Async/Await:** Use `Future`, `async`, `await` for operations. Use `Stream` for events.
