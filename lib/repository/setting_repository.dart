@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:x50pay/common/api.dart';
+import 'package:x50pay/common/client/request_handler.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/bid/bid.dart';
 import 'package:x50pay/common/models/free_p/free_p.dart';
@@ -10,22 +10,26 @@ import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
+import 'package:x50pay/repository/base_repository.dart';
 
-class SettingRepository extends Api {
+class SettingRepository extends BaseRepository {
+  const SettingRepository(super.client);
+
+  Uri _endpoint(String path) {
+    return Uri.parse('https://pay.x50.fun/api/v1$path');
+  }
+
+  Map<String, dynamic> _decodeRes(http.Response res) {
+    return json.decode(res.body);
+  }
+
   /// 取得快速付款偏好設定API
   Future<PaymentSettingsModel> getQuickPaySettings() async {
-    late PaymentSettingsModel quicSettingsModel;
-
-    await Api.makeRequest(
-      dest: '/nfc/getSettings',
+    final res = await client.request(
+      _endpoint('/nfc/getSettings'),
       method: HttpMethod.get,
-      withSession: true,
-      rawBody: {},
-      onSuccess: (json) {
-        quicSettingsModel = PaymentSettingsModel.fromJson(json);
-      },
     );
-    return quicSettingsModel;
+    return PaymentSettingsModel.fromJson(_decodeRes(res));
   }
 
   /// 設定 Quic Pay 偏好API
@@ -35,11 +39,9 @@ class SettingRepository extends Api {
     required bool atq,
     required String atql,
   }) async {
-    final response = await Api.makeRequest(
-      dest: '/quicConfirm',
+    final response = await client.request(
+      _endpoint('/quicConfirm'),
       method: HttpMethod.post,
-      contentType: ContentType.json,
-      withSession: true,
       rawBody: {'atq': atq, 'atql': atql},
     );
     return response;
@@ -52,183 +54,116 @@ class SettingRepository extends Api {
     required String oldPwd,
     required String pwd,
   }) async {
-    late BasicResponse res;
-
-    await Api.makeRequest(
-      dest: '/setting/chgpwd',
+    final res = await client.request(
+      _endpoint('/setting/chgpwd'),
       contentType: ContentType.xForm,
       method: HttpMethod.post,
-      withSession: true,
       rawBody: {'old_pwd': oldPwd, 'pwd': pwd},
-      onSuccess: (json) {
-        res = BasicResponse.fromJson(json);
-      },
     );
-    return res;
+    return BasicResponse.fromJson(_decodeRes(res));
   }
 
   /// 變更電子郵件API
   ///
   /// 需要傳入新電子郵件[remail]
   Future<BasicResponse> changeEmail({required String remail}) async {
-    late BasicResponse res;
-
-    await Api.makeRequest(
-      dest: '/setting/chgemail',
+    final res = await client.request(
+      _endpoint('/setting/chgemail'),
       method: HttpMethod.post,
-      withSession: true,
       rawBody: {'remail': remail},
-      onSuccess: (json) {
-        res = BasicResponse.fromJson(json);
-      },
     );
-    return res;
+    return BasicResponse.fromJson(_decodeRes(res));
   }
 
   /// 變更手機號碼API
   ///
   /// 用於取消綁定手機號碼
   Future<BasicResponse> changePhone() async {
-    late BasicResponse res;
-
-    await Api.makeRequest(
-      dest: '/setting/chgphone',
+    final res = await client.request(
+      _endpoint('/setting/chgphone'),
       method: HttpMethod.post,
-      withSession: true,
       rawBody: {},
-      contentType: ContentType.json,
-      onSuccess: (json) {
-        res = BasicResponse.fromJson(json);
-      },
     );
-    return res;
+    return BasicResponse.fromJson(_decodeRes(res));
   }
 
   /// 變更手機號碼API
   ///
   /// 用於綁定新手機號碼，需要傳入新手機號碼 [phone]
   Future<BasicResponse> doChangePhone({required String phone}) async {
-    late BasicResponse res;
-
-    await Api.makeRequest(
-      dest: '/setting/activePhone',
+    final res = await client.request(
+      _endpoint('/setting/activePhone'),
       method: HttpMethod.post,
-      withSession: true,
-      contentType: ContentType.json,
       rawBody: {'phone': phone},
-      onSuccess: (json) {
-        res = BasicResponse.fromJson(json);
-      },
     );
-    return res;
+    return BasicResponse.fromJson(_decodeRes(res));
   }
 
   /// 變更手機號碼API
   ///
   /// 用於驗證新手機號碼，需要傳入簡訊驗證碼 [sms]
   Future<BasicResponse> smsActivate({required String sms}) async {
-    late BasicResponse res;
-
-    await Api.makeRequest(
-      dest: '/setting/activeSms',
+    final res = await client.request(
+      _endpoint('/setting/activeSms'),
       method: HttpMethod.post,
-      withSession: true,
       rawBody: {'sms': sms},
-      onSuccess: (json) {
-        res = BasicResponse.fromJson(json);
-      },
     );
-    return res;
+    return BasicResponse.fromJson(_decodeRes(res));
   }
 
   /// 取得獲券紀錄API
   ///
   /// 回傳獲券紀錄 [TicDateLogModel]
   Future<TicDateLogModel> getTicDateLog() async {
-    late TicDateLogModel ticDateLogModel;
-
-    await Api.makeRequest(
-      dest: '/log/ticDate',
+    final res = await client.request(
+      _endpoint('/log/ticDate'),
       method: HttpMethod.get,
-      withSession: true,
-      rawBody: {},
-      onSuccess: (json) {
-        ticDateLogModel = TicDateLogModel.fromJson(json);
-      },
     );
-    return ticDateLogModel;
+    return TicDateLogModel.fromJson(_decodeRes(res));
   }
 
   /// 取得儲值紀錄API
   ///
   /// 回傳儲值紀錄 [PayLogModel]
   Future<BidLogModel> getBidLog() async {
-    late BidLogModel bidLogModel;
-
-    await Api.makeRequest(
-      dest: '/log/Bid',
+    final res = await client.request(
+      _endpoint('/log/Bid'),
       method: HttpMethod.get,
-      withSession: true,
-      rawBody: {},
-      onSuccess: (json) {
-        bidLogModel = BidLogModel.fromJson(json);
-      },
     );
-    return bidLogModel;
+    return BidLogModel.fromJson(_decodeRes(res));
   }
 
   /// 取得P點付費明細API
   ///
   /// 回傳付費明細 [PayLogModel]
   Future<PlayRecordModel> getPlayLog() async {
-    late PlayRecordModel playRecordModel;
-
-    await Api.makeRequest(
-      dest: '/log/Play',
+    final res = await client.request(
+      _endpoint('/log/Play'),
       method: HttpMethod.get,
-      withSession: true,
-      rawBody: {},
-      onSuccess: (json) {
-        playRecordModel = PlayRecordModel.fromJson(json);
-      },
     );
-    return playRecordModel;
+    return PlayRecordModel.fromJson(_decodeRes(res));
   }
 
   /// 取得P點付費明細API
   ///
   /// 回傳付費明細 [PayLogModel]
   Future<FreePointModel> getFreePLog() async {
-    late FreePointModel freePModel;
-
-    await Api.makeRequest(
-      dest: '/log/FreeP',
+    final res = await client.request(
+      _endpoint('/log/FreeP'),
       method: HttpMethod.get,
-      withSession: true,
-      rawBody: {},
-      onSuccess: (json) {
-        freePModel = FreePointModel.fromJson(json);
-      },
     );
-    return freePModel;
+    return FreePointModel.fromJson(_decodeRes(res));
   }
 
   /// 取得扣券明細API
   ///
   /// 回傳扣券明細 [TicUsedModel]
   Future<TicUsedModel> getTicUsedLog() async {
-    late TicUsedModel ticUsedModel;
-
-    await Api.makeRequest(
-      dest: '/log/ticUsed',
+    final res = await client.request(
+      _endpoint('/log/ticUsed'),
       method: HttpMethod.get,
-      withSession: true,
-      rawBody: {},
-      onSuccess: (json) {
-        ticUsedModel = TicUsedModel.fromJson(json);
-      },
     );
-    return ticUsedModel;
+    return TicUsedModel.fromJson(_decodeRes(res));
   }
 
   /// 設定排隊平板偏好API
@@ -237,12 +172,10 @@ class SettingRepository extends Api {
     required String shcolor,
     required String shname,
   }) async {
-    final response = await Api.makeRequest(
-      dest: '/settingPadConfirm',
+    final response = await client.request(
+      _endpoint('/settingPadConfirm'),
       method: HttpMethod.post,
-      withSession: true,
       rawBody: {'shid': shid, 'shcolor': shcolor, 'shname': shname},
-      onSuccessString: (_) {},
     );
     return response;
   }
@@ -267,8 +200,8 @@ class SettingRepository extends Api {
     required int mtp,
     required bool agv,
   }) async {
-    final response = await Api.makeRequest(
-      dest: '/autoConfirm',
+    final response = await client.request(
+      _endpoint('/autoConfirm'),
       rawBody: {
         'atc': atc,
         'atn': atn,
@@ -280,8 +213,6 @@ class SettingRepository extends Api {
         'agv': agv,
       },
       method: HttpMethod.post,
-      withSession: true,
-      contentType: ContentType.json,
     );
 
     return response;
@@ -289,26 +220,17 @@ class SettingRepository extends Api {
 
   /// 取得排隊平板設定API
   Future<PadSettingsModel> getPadSettings() async {
-    late PadSettingsModel padSettingsModel;
-
-    await Api.makeRequest(
-      dest: '/pad/getSettings',
+    final res = await client.request(
+      _endpoint('/pad/getSettings'),
       method: HttpMethod.get,
-      withSession: true,
-      rawBody: {},
-      onSuccess: (json) {
-        padSettingsModel = PadSettingsModel.fromJson(json);
-      },
     );
-    return padSettingsModel;
+    return PadSettingsModel.fromJson(_decodeRes(res));
   }
 
   Future<String> getQuicDocument() async {
-    final response = await Api.makeRequest(
-      dest: '/quic/view-v4',
+    final response = await client.request(
+      _endpoint('/quic/view-v4'),
       method: HttpMethod.get,
-      withSession: true,
-      rawBody: {},
     );
     return const Utf8Decoder().convert(response.bodyBytes);
   }

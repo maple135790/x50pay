@@ -33,10 +33,10 @@ void main() async {
   final languageProvider = LanguageProvider();
   final themeProvider = AppThemeProvider();
   final cookieStorage = CookieStorage();
-  final settingsRepo = SettingRepository();
+  final appClient = AppClient(cookieStorage);
   final appRouter = AppRouter();
-
-  final repo = Repository(AppClient(cookieStorage));
+  final repo = Repository(appClient);
+  final settingsRepo = SettingRepository(appClient);
   final entryProvider = EntryProvider(repo: repo);
   final userProvider = UserProvider(repo: repo);
   final loginProvider = LoginProvider(
