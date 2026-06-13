@@ -9,7 +9,7 @@ import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
-import 'package:x50pay/page/game/cab_select_view_model.dart';
+import 'package:x50pay/page/game/game_insert_service.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';

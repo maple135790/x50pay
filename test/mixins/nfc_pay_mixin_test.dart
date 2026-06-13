@@ -7,7 +7,7 @@ import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
 import 'package:x50pay/mixins/nfc_pay_mixin.dart';
-import 'package:x50pay/page/game/cab_select_view_model.dart';
+import 'package:x50pay/page/game/game_insert_service.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
 import 'package:x50pay/repository/repository.dart';
