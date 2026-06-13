@@ -49,9 +49,8 @@ class _SettingsState extends State<Settings>
   S get i18n => S.of(context);
 
   late final String avatarUrl;
-  late final viewModel = SettingsViewModel(settingRepo: settingRepo);
+  late final SettingsViewModel viewModel;
   late Future<void> intentDelay;
-  final settingRepo = SettingRepository();
   final scrollController = ScrollController();
 
   void showEasterEgg() {
@@ -213,7 +212,9 @@ class _SettingsState extends State<Settings>
     super.initState();
     intentDelay = viewModel.init();
     final user = context.read<UserProvider>().user!;
-
+    viewModel = SettingsViewModel(
+      settingRepo: context.read<SettingRepository>(),
+    );
     avatarUrl = user.settingsUserImageUrl;
     if (widget.shouldGoPhone) {
       Future.delayed(const Duration(milliseconds: 350), () {

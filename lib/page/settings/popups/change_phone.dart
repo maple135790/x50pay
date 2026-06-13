@@ -28,8 +28,7 @@ class _ChangePhoneDialogState extends State<ChangePhoneDialog>
   @override
   void initState() {
     super.initState();
-    final settingRepo = SettingRepository();
-    viewModel = ChangePhoneViewModel(settingRepo);
+    viewModel = ChangePhoneViewModel(context.read<SettingRepository>());
   }
 
   void onRemovePhonePressed() async {
@@ -144,8 +143,7 @@ class _ChangePhoneConfirmedDialogState extends State<ChangePhoneConfirmedDialog>
   @override
   void initState() {
     super.initState();
-    final settingRepo = SettingRepository();
-    viewModel = ChangePhoneViewModel(settingRepo);
+    viewModel = ChangePhoneViewModel(context.read<SettingRepository>());
   }
 
   void changePhone() async {
