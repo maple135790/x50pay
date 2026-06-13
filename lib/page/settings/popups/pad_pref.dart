@@ -15,7 +15,6 @@ class PadPrefDialog extends StatefulWidget {
 }
 
 class _PadPrefDialogState extends State<PadPrefDialog> {
-  final settingRepo = SettingRepository();
   late final Future<void> getPadPrefs;
   late final PadPrefsViewModel viewModel;
 
@@ -55,7 +54,7 @@ class _PadPrefDialogState extends State<PadPrefDialog> {
   @override
   void initState() {
     super.initState();
-    viewModel = PadPrefsViewModel(settingRepo);
+    viewModel = PadPrefsViewModel(context.read<SettingRepository>());
     getPadPrefs = viewModel.getPadSettings();
   }
 
