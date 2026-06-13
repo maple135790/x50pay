@@ -14,7 +14,7 @@ import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/mixins/game_mixin.dart';
 import 'package:x50pay/page/game/cab_detail_view_model.dart';
 import 'package:x50pay/page/game/cab_select.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 extension on Color {

@@ -1,9 +1,8 @@
 import 'dart:developer';
 
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 class EntryProvider extends BaseViewModel {
   final Repository repo;
@@ -22,13 +21,9 @@ class EntryProvider extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 100));
 
     try {
-      if (GlobalSingleton.instance.isServiceOnline) {
-        final fetchedEntry = await repo.getEntry();
-        if (fetchedEntry == null || fetchedEntry.code != 200) return false;
-        _entry = fetchedEntry;
-      } else {
-        _entry = const EntryModel.empty();
-      }
+      final fetchedEntry = await repo.getEntry();
+      if (fetchedEntry == null || fetchedEntry.code != 200) return false;
+      _entry = fetchedEntry;
       return true;
     } catch (e, stacktrace) {
       log('', error: e, stackTrace: stacktrace, name: 'checkEntry');

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 typedef _InsertResponse = ({
   bool is200,

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 
 /// 全域變數
@@ -15,11 +14,6 @@ class GlobalSingleton {
 
   static final duringTest = Platform.environment.containsKey('FLUTTER_TEST');
 
-  /// 服務是否連接到X50Pay。
-  ///
-  /// 服務連接到X50Pay時，會將此值設為true。User 資料等會從伺服器取得。
-  final isServiceOnline = (kReleaseMode || duringTest) || false;
-
   /// 是否正在顯示 NfcPay 的 dialog
   ///
   /// 用來防止重複顯示 dialog
@@ -27,13 +21,6 @@ class GlobalSingleton {
 
   /// 最近遊玩的機台資料
   ({Cabinet cabinet, String caboid, int cabNum})? recentPlayedCabinetData;
-
-  /// App 版本，例如 `X50Pay app v1.0.0 + 1`
-  String get appVersion => _appVersion;
-  String _appVersion = '';
-  set setAppVersion(String value) {
-    _appVersion = 'X50Pay app v$value';
-  }
 
   /// 是否在掃描QRCode頁面的旗標
   ///

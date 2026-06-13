@@ -11,9 +11,10 @@ import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/repository/base_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
-class SettingRepository extends BaseRepository {
-  const SettingRepository(super.client);
+class ApiSettingRepository extends BaseRepository implements SettingRepository {
+  const ApiSettingRepository(super.client);
 
   Uri _endpoint(String path) {
     return Uri.parse('https://pay.x50.fun/api/v1$path');
@@ -24,6 +25,7 @@ class SettingRepository extends BaseRepository {
   }
 
   /// 取得快速付款偏好設定API
+  @override
   Future<PaymentSettingsModel> getQuickPaySettings() async {
     final res = await client.request(
       _endpoint('/nfc/getSettings'),
@@ -35,6 +37,7 @@ class SettingRepository extends BaseRepository {
   /// 設定 Quic Pay 偏好API
   ///
   /// 需要傳入 [atq] 和 [atql]
+  @override
   Future<http.Response> quicConfirm({
     required bool atq,
     required String atql,
@@ -50,6 +53,7 @@ class SettingRepository extends BaseRepository {
   /// 變更密碼API
   ///
   /// 需要傳入舊密碼[oldPwd] 和 新密碼[pwd]
+  @override
   Future<BasicResponse> changePassword({
     required String oldPwd,
     required String pwd,
@@ -66,6 +70,7 @@ class SettingRepository extends BaseRepository {
   /// 變更電子郵件API
   ///
   /// 需要傳入新電子郵件[remail]
+  @override
   Future<BasicResponse> changeEmail({required String remail}) async {
     final res = await client.request(
       _endpoint('/setting/chgemail'),
@@ -78,6 +83,7 @@ class SettingRepository extends BaseRepository {
   /// 變更手機號碼API
   ///
   /// 用於取消綁定手機號碼
+  @override
   Future<BasicResponse> changePhone() async {
     final res = await client.request(
       _endpoint('/setting/chgphone'),
@@ -90,6 +96,7 @@ class SettingRepository extends BaseRepository {
   /// 變更手機號碼API
   ///
   /// 用於綁定新手機號碼，需要傳入新手機號碼 [phone]
+  @override
   Future<BasicResponse> doChangePhone({required String phone}) async {
     final res = await client.request(
       _endpoint('/setting/activePhone'),
@@ -102,6 +109,7 @@ class SettingRepository extends BaseRepository {
   /// 變更手機號碼API
   ///
   /// 用於驗證新手機號碼，需要傳入簡訊驗證碼 [sms]
+  @override
   Future<BasicResponse> smsActivate({required String sms}) async {
     final res = await client.request(
       _endpoint('/setting/activeSms'),
@@ -114,6 +122,7 @@ class SettingRepository extends BaseRepository {
   /// 取得獲券紀錄API
   ///
   /// 回傳獲券紀錄 [TicDateLogModel]
+  @override
   Future<TicDateLogModel> getTicDateLog() async {
     final res = await client.request(
       _endpoint('/log/ticDate'),
@@ -125,6 +134,7 @@ class SettingRepository extends BaseRepository {
   /// 取得儲值紀錄API
   ///
   /// 回傳儲值紀錄 [PayLogModel]
+  @override
   Future<BidLogModel> getBidLog() async {
     final res = await client.request(
       _endpoint('/log/Bid'),
@@ -136,6 +146,7 @@ class SettingRepository extends BaseRepository {
   /// 取得P點付費明細API
   ///
   /// 回傳付費明細 [PayLogModel]
+  @override
   Future<PlayRecordModel> getPlayLog() async {
     final res = await client.request(
       _endpoint('/log/Play'),
@@ -147,6 +158,7 @@ class SettingRepository extends BaseRepository {
   /// 取得P點付費明細API
   ///
   /// 回傳付費明細 [PayLogModel]
+  @override
   Future<FreePointModel> getFreePLog() async {
     final res = await client.request(
       _endpoint('/log/FreeP'),
@@ -158,6 +170,7 @@ class SettingRepository extends BaseRepository {
   /// 取得扣券明細API
   ///
   /// 回傳扣券明細 [TicUsedModel]
+  @override
   Future<TicUsedModel> getTicUsedLog() async {
     final res = await client.request(
       _endpoint('/log/ticUsed'),
@@ -167,6 +180,7 @@ class SettingRepository extends BaseRepository {
   }
 
   /// 設定排隊平板偏好API
+  @override
   Future<http.Response> setPadSettings({
     required bool shid,
     required String shcolor,
@@ -190,6 +204,7 @@ class SettingRepository extends BaseRepository {
   /// - [att] 雙人遊玩機種預設扣款模式
   /// - [mtp] 機台付款碼預設
   /// - [agv] 是否預設使用回饋點數
+  @override
   Future<http.Response> autoConfirm({
     required bool atc,
     required String atn,
@@ -219,6 +234,7 @@ class SettingRepository extends BaseRepository {
   }
 
   /// 取得排隊平板設定API
+  @override
   Future<PadSettingsModel> getPadSettings() async {
     final res = await client.request(
       _endpoint('/pad/getSettings'),
@@ -227,6 +243,7 @@ class SettingRepository extends BaseRepository {
     return PadSettingsModel.fromJson(_decodeRes(res));
   }
 
+  @override
   Future<String> getQuicDocument() async {
     final response = await client.request(
       _endpoint('/quic/view-v4'),

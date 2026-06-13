@@ -6,7 +6,7 @@ import 'package:x50pay/common/base/base_view_model.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 typedef StoreDetail = ({Store store, String composedStoreId});
 

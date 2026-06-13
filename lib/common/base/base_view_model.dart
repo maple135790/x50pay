@@ -2,12 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:x50pay/common/global_singleton.dart';
 import 'package:x50pay/generated/l10n.dart';
 
 class BaseViewModel extends ChangeNotifier {
-  final isForceFetch = GlobalSingleton.instance.isServiceOnline;
-
   static bool get duringTest =>
       Platform.environment.containsKey('FLUTTER_TEST');
 

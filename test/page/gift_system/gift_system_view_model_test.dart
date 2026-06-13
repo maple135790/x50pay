@@ -5,7 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 class MockRepository extends Mock implements Repository {}
 

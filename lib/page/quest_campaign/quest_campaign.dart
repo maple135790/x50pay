@@ -13,7 +13,7 @@ import 'package:x50pay/common/models/quest_campaign/redeem_item.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/page/quest_campaign/quest_campaign_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class QuestCampaign extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:x50pay/common/models/api_response.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 class MockRepo extends Mock implements Repository {}
 

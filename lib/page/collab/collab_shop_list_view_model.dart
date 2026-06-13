@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:html/parser.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 class Sponser {
   final String? rawSponserImgUrl;

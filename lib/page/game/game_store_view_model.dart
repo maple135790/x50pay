@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:x50pay/common/base/base.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/utils/prefs_utils.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 class GameStoreViewModel extends BaseViewModel {
   final Repository repository;

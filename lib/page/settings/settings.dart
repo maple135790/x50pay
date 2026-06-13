@@ -21,9 +21,11 @@ import 'package:x50pay/mixins/remote_open_mixin.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/settings/popups/change_phone.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
+import 'package:x50pay/providers/app_info_provider.dart';
+import 'package:x50pay/providers/environment_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/repository.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class Settings extends StatefulWidget {
@@ -215,7 +217,9 @@ class _SettingsState extends State<Settings>
     viewModel = SettingsViewModel(
       settingRepo: context.read<SettingRepository>(),
     );
-    avatarUrl = user.settingsUserImageUrl;
+    avatarUrl = user.settingsUserImageUrl(
+      context.read<EnvironmentProvider>().isServiceOnline,
+    );
     if (widget.shouldGoPhone) {
       Future.delayed(const Duration(milliseconds: 350), () {
         onChangePhonePressed.call();
@@ -419,11 +423,16 @@ class _SettingsState extends State<Settings>
       GestureDetector(
         onLongPress: showEasterEgg,
         child: Center(
-          child: Text(
-            'GlobalSingleton.instance.appVersion',
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-              color: const Color(0xff505050).withValues(alpha: 0.7),
-            ),
+          child: Selector<AppInfoProvider, String>(
+            selector: (context, provider) => provider.appVersion,
+            builder: (context, appVersion, child) {
+              return Text(
+                appVersion,
+                style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                  color: const Color(0xff505050).withValues(alpha: 0.7),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -600,5 +609,19 @@ class _SettingTile extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+extension on UserModel {
+  String settingsUserImageUrl(bool isServiceOnline) {
+    if (!isServiceOnline) {
+      return "https://pay.x50.fun/static/logo.jpg";
+    }
+    if (rawUserImgUrl!.contains('size')) {
+      return '${rawUserImgUrl!.split('size').first}size=80&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg';
+    } else {
+      return rawUserImgUrl! +
+          r"&d=https%3A%2F%2Fpay.x50.fun%2Fstatic%2Flogo.jpg";
+    }
   }
 }

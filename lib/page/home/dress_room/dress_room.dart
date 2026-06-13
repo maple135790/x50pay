@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/dress_room/dress_room_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 typedef Avatar = ({String b64Image, String? id, String badgeText});

@@ -10,8 +10,8 @@ import 'package:x50pay/mixins/nfc_pay_mixin.dart';
 import 'package:x50pay/page/scan/qr_pay/cab_payment_result.dart';
 import 'package:x50pay/page/scan/qr_pay/qr_pay_data.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 
 typedef QRPayTPPRedirect = ({
@@ -53,16 +53,8 @@ class QRPayService with NfcPayMixin {
 
   Future<String> getRawEntryDocument() async {
     if (_rawEntryDocument.isNotEmpty) return _rawEntryDocument;
-
-    if (!kDebugMode || isForceFetch) {
-      final rawResponse = await repository.getDocument(_qrPayEntryUrl);
-      _rawEntryDocument = const Utf8Decoder().convert(rawResponse.bodyBytes);
-    } else {
-      // TODO: 移動至 test 並補上測試用asset
-      _rawEntryDocument = await rootBundle.loadString(
-        'assets/tests/scan_pay.html',
-      );
-    }
+    final res = await repository.getDocument(_qrPayEntryUrl);
+    _rawEntryDocument = utf8.decode(res.bodyBytes);
 
     return _rawEntryDocument;
   }
@@ -125,14 +117,12 @@ class QRPayService with NfcPayMixin {
           cabPaymentResult: paymentResult,
         );
       }
-      if (!kDebugMode || isForceFetch) {
-        final rawResponse = await repository.getDocument(_qrPayEntryUrl);
-        if (rawResponse.statusCode != 200) {
-          if (rawResponse.statusCode == 302) {
-            return _decideRedirectType(rawResponse.headers['location']!);
-          } else {
-            throw Exception('statusCode: ${rawResponse.statusCode}');
-          }
+      final rawResponse = await repository.getDocument(_qrPayEntryUrl);
+      if (rawResponse.statusCode != 200) {
+        if (rawResponse.statusCode == 302) {
+          return _decideRedirectType(rawResponse.headers['location']!);
+        } else {
+          throw Exception('statusCode: ${rawResponse.statusCode}');
         }
       }
       return (
@@ -267,14 +257,7 @@ class QRPayService with NfcPayMixin {
 
   Future<bool> _checkDirectPay() async {
     try {
-      if (!kDebugMode || isForceFetch) {
-        _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
-      } else {
-        // TODO: 移動至 test 並補上測試用asset
-        _rawMaybePayDoc = await rootBundle.loadString(
-          'assets/tests/scan_pay_x50pay.html',
-        );
-      }
+      _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
       log(_rawMaybePayDoc);
       return _rawMaybePayDoc.contains('付款中...');
     } catch (e) {
@@ -285,14 +268,7 @@ class QRPayService with NfcPayMixin {
 
   Future<QRPayData> _getQRPayData() async {
     try {
-      if (!kDebugMode || isForceFetch) {
-        _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
-      } else {
-        // TODO: 移動至 test 並補上測試用asset
-        _rawMaybePayDoc = await rootBundle.loadString(
-          'assets/tests/scan_pay_x50pay.html',
-        );
-      }
+      _rawMaybePayDoc = await repository.getQRPayDocument(x50PayUrl);
       final doc = parse(_rawMaybePayDoc);
       final imageUrl = doc
           .querySelector('body > div > a > div > img')!

@@ -16,6 +16,8 @@ import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/common/widgets/persist_app_bar.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/providers/app_info_provider.dart';
+import 'package:x50pay/providers/environment_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/route/app_route.dart';
@@ -323,51 +325,63 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
         ],
       ),
     );
-
-    final serviceStatus = GlobalSingleton.instance.isServiceOnline
-        ? 'ONLINE'
-        : 'OFFLINE';
-    final statusColor = serviceStatus == 'ONLINE' ? Colors.green : Colors.grey;
-
-    final debugStatus = Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'app version deprecated. need to use another method',
-            textScaler: const TextScaler.linear(0.95),
-            style: TextStyle(
-              fontSize: 12,
-              color: Theme.of(
-                context,
-              ).textTheme.labelMedium?.color?.withValues(alpha: 0.5),
-              fontWeight: FontWeight.bold,
+    Widget? debugStatus;
+    if (kDebugMode) {
+      debugStatus = Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Selector<AppInfoProvider, String>(
+              selector: (context, provider) => provider.appVersion,
+              builder: (context, appVersion, child) {
+                return Text(
+                  appVersion,
+                  textScaler: const TextScaler.linear(0.95),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(
+                      context,
+                    ).textTheme.labelMedium?.color?.withValues(alpha: 0.5),
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
             ),
-          ),
-          Row(
-            children: [
-              Icon(
-                Icons.circle_rounded,
-                size: 8,
-                color: statusColor.withValues(alpha: 0.5),
-              ),
-              const SizedBox(width: 2.5),
-              Text(
-                'Service $serviceStatus',
-                textScaler: const TextScaler.linear(0.95),
-                style: TextStyle(
-                  color: statusColor.withValues(alpha: 0.5),
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+            Selector<EnvironmentProvider, bool>(
+              selector: (context, provider) => provider.isServiceOnline,
+              builder: (context, isServiceOnline, child) {
+                final serviceStatus = isServiceOnline ? 'ONLINE' : 'OFFLINE';
+                final statusColor = isServiceOnline
+                    ? Colors.green
+                    : Colors.grey;
+
+                return Row(
+                  children: [
+                    Icon(
+                      Icons.circle_rounded,
+                      size: 8,
+                      color: statusColor.withValues(alpha: 0.5),
+                    ),
+                    const SizedBox(width: 2.5),
+                    Text(
+                      'Service $serviceStatus',
+                      textScaler: const TextScaler.linear(0.95),
+                      style: TextStyle(
+                        color: statusColor.withValues(alpha: 0.5),
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
 
     return AnnotatedRegion(
       value: isDarkTheme
@@ -385,7 +399,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
               top: 0,
               child: functionalHeader,
             ),
-            if (kDebugMode) debugStatus,
+            ?debugStatus,
           ],
         ),
       ),

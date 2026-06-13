@@ -1,9 +1,8 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
 class PadPrefsViewModel extends BaseViewModel {
   final SettingRepository settingRepo;
@@ -47,8 +46,6 @@ class PadPrefsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (kDebugMode && !isForceFetch) onSet.call();
-
       await settingRepo.setPadSettings(
         shname: nickname,
         shid: isNameHidden,

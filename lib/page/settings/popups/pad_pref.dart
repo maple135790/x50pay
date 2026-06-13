@@ -5,7 +5,7 @@ import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/mixins/color_picker_mixin.dart';
 import 'package:x50pay/page/settings/popups/pad_pref_view_model.dart';
 import 'package:x50pay/page/settings/popups/popup_dialog.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
 class PadPrefDialog extends StatefulWidget {
   const PadPrefDialog({super.key});

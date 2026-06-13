@@ -7,7 +7,7 @@ import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/page/grade_box/box_tab.dart';
 import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 class GradeBox extends StatefulWidget {
   /// 養成商場頁面

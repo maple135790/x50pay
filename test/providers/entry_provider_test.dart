@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/providers/entry_provider.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 class MockRepo extends Mock implements Repository {}
 

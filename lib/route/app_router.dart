@@ -9,7 +9,7 @@ import 'package:x50pay/common/widgets/scaffold_with_nav_bar.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
 import 'package:x50pay/page/pages.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class AppRouter {

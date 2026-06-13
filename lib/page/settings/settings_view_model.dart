@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/base/base.dart';
@@ -12,7 +10,7 @@ import 'package:x50pay/common/models/play/play.dart';
 import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
 typedef QuicPayPrefs = ({PaymentSettingsModel model, List<String> cards});
 
@@ -83,17 +81,12 @@ class SettingsViewModel extends BaseViewModel {
 
     await EasyLoading.show();
     await Future.delayed(const Duration(milliseconds: 200));
-    late http.Response httpResponse;
 
     try {
-      if (!kDebugMode || isForceFetch) {
-        httpResponse = await settingRepo.quicConfirm(
-          atq: autoQuic,
-          atql: autoQlock,
-        );
-      } else {
-        httpResponse = http.Response(testResponse(), 200);
-      }
+      final httpResponse = await settingRepo.quicConfirm(
+        atq: autoQuic,
+        atql: autoQlock,
+      );
       await EasyLoading.dismiss();
 
       return httpResponse.statusCode == 200;
@@ -191,25 +184,11 @@ class SettingsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForceFetch) {
-        response = await settingRepo.changePassword(oldPwd: oldPwd, pwd: pwd);
-      } else {
-        if (debugFlag == 700) {
-          response = BasicResponse.fromJson(
-            jsonDecode(testResponse(code: 700)),
-          );
-        } else if (debugFlag == 701) {
-          response = BasicResponse.fromJson(
-            jsonDecode(testResponse(code: 701)),
-          );
-        } else {
-          response = BasicResponse.fromJson(jsonDecode(testResponse()));
-        }
-      }
+      response = await settingRepo.changePassword(oldPwd: oldPwd, pwd: pwd);
       await EasyLoading.dismiss();
 
       return true;
-    } on Exception catch (e) {
+    } catch (e) {
       log('', name: 'changePassword', error: e);
       await EasyLoading.dismiss();
       return false;
@@ -224,23 +203,8 @@ class SettingsViewModel extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 200));
 
     try {
-      if (!kDebugMode || isForceFetch) {
-        response = await settingRepo.changeEmail(remail: email);
-      } else {
-        if (debugFlag == 700) {
-          response = BasicResponse.fromJson(
-            jsonDecode(testResponse(code: 700)),
-          );
-        } else if (debugFlag == 701) {
-          response = BasicResponse.fromJson(
-            jsonDecode(testResponse(code: 701)),
-          );
-        } else {
-          response = BasicResponse.fromJson(jsonDecode(testResponse()));
-        }
-      }
+      response = await settingRepo.changeEmail(remail: email);
       await EasyLoading.dismiss();
-
       return true;
     } on Exception catch (e) {
       log('', name: 'changeEmail', error: e);

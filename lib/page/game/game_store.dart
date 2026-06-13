@@ -7,7 +7,7 @@ import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/page/game/game_store_view_model.dart';
 import 'package:x50pay/providers/language_provider.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class GameStore extends StatefulWidget {

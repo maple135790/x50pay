@@ -13,14 +13,19 @@ import 'package:x50pay/common/life_cycle_manager.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/game/cab_select.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
+import 'package:x50pay/providers/app_info_provider.dart';
 import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
 import 'package:x50pay/providers/entry_provider.dart';
+import 'package:x50pay/providers/environment_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
-import 'package:x50pay/repository/repository.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/main_repository/api_main_repository.dart';
+import 'package:x50pay/repository/main_repository/local_main_repository.dart';
+import 'package:x50pay/repository/repository_factory.dart';
+import 'package:x50pay/repository/setting_repository/api_setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/local_settings_repository.dart';
 import 'package:x50pay/route/app_router.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 import 'package:x50pay/service/qr_pay_service.dart';
@@ -33,11 +38,20 @@ void main() async {
 
   final languageProvider = LanguageProvider();
   final themeProvider = AppThemeProvider();
+  final envProvider = EnvironmentProvider();
   final cookieStorage = CookieStorage();
   final appClient = AppClient(cookieStorage);
   final appRouter = AppRouter();
-  final repo = Repository(appClient);
-  final settingsRepo = SettingRepository(appClient);
+  final repo = RepositoryFactory.create(
+    envProvider,
+    apiBuilder: () => ApiMainRepository(appClient),
+    localBuilder: () => LocalMainRepository(),
+  );
+  final settingsRepo = RepositoryFactory.create(
+    envProvider,
+    apiBuilder: () => ApiSettingRepository(appClient),
+    localBuilder: () => LocalSettingsRepository(),
+  );
   final entryProvider = EntryProvider(repo: repo);
   final userProvider = UserProvider(repo: repo);
   final loginProvider = LoginProvider(
@@ -95,7 +109,7 @@ void main() async {
     loginProvider,
   );
 
-  await initializer.initialize();
+  final (packageInfo,) = await initializer.initialize();
 
   runApp(
     MultiProvider(
@@ -105,8 +119,10 @@ void main() async {
         ChangeNotifierProvider.value(value: loginProvider),
         ChangeNotifierProvider.value(value: userProvider),
         ChangeNotifierProvider.value(value: entryProvider),
+        ChangeNotifierProvider.value(value: envProvider),
         ChangeNotifierProvider(create: (_) => CoinInsertionProvider()),
         ChangeNotifierProvider(create: (_) => AppSettingsProvider()),
+        ChangeNotifierProvider(create: (_) => AppInfoProvider(packageInfo)),
         Provider.value(value: repo),
         Provider.value(value: settingsRepo),
         Provider.value(value: gameInsertService),

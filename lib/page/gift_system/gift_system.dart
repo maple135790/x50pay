@@ -8,7 +8,7 @@ import 'package:x50pay/page/gift_system/claimed_gift.dart';
 import 'package:x50pay/page/gift_system/gift_claim.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
 import 'package:x50pay/page/gift_system/lotte_box.dart';
-import 'package:x50pay/repository/repository.dart';
+import 'package:x50pay/repository/main_repository/repository.dart';
 
 class GiftSystem extends StatefulWidget {
   /// 禮物系統頁面

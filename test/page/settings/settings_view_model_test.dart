@@ -10,7 +10,7 @@ import 'package:x50pay/common/models/quicSettings/quic_settings.dart';
 import 'package:x50pay/common/models/ticDate/tic_date.dart';
 import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/page/settings/settings_view_model.dart';
-import 'package:x50pay/repository/setting_repository.dart';
+import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
 class MockSettingRepository extends Mock implements SettingRepository {}
 
