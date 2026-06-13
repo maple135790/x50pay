@@ -79,10 +79,7 @@ abstract interface class MainRepository {
   /// 開門按鈕API
   ///
   /// 需要傳入與店家距離 [distance]、店門名稱 [doorName]
-  Future<String> remoteOpenDoor(
-    double distance, {
-    required String doorName,
-  });
+  Future<String> remoteOpenDoor(double distance, {required String doorName});
 
   /// 取得禮物箱API
   ///
