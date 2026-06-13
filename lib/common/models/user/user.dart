@@ -63,7 +63,7 @@ class UserModel {
       vipdate = null,
       sid = "",
       sixn = "",
-      tphone = "0",
+      tphone = null,
       doorpwd = "";
 
   static VipDate setVipDate(String unixTimestamp) =>

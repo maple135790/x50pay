@@ -26,13 +26,16 @@ class DebugScaffold extends StatelessWidget with AppThemeMixin {
   Widget build(BuildContext context) {
     _localContext = context;
     final debugButton = Column(
+      spacing: 16,
       mainAxisSize: MainAxisSize.min,
       children: [
         FloatingActionButton(
+          heroTag: "debug function",
           onPressed: debugFunction,
           child: const Icon(Icons.developer_mode_rounded),
         ),
         FloatingActionButton(
+          heroTag: "brightness",
           child: const Icon(Icons.brightness_6_rounded),
           onPressed: () {
             final brightness = isDarkTheme ? Brightness.light : Brightness.dark;

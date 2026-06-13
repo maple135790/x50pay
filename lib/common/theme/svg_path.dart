@@ -8,7 +8,7 @@ extension SvgsExtension on ColorFilter {
   }
 }
 
-class Svgs {
+abstract final class Svgs {
   static final shopSolid = AssetBytesLoader(R.images.collab.shopSolidSvg);
   static final spinnerSolid = AssetBytesLoader(R.images.common.spinnerSolidSvg);
   static final torii = AssetBytesLoader(R.images.common.toriiSvg);

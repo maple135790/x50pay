@@ -28,7 +28,7 @@ enum MenuItem {
   collab(icon: Icons.handshake_rounded, route: AppRoutes.collab);
 
   final IconData icon;
-  final RouteProperty route;
+  final AppRoutes route;
 
   const MenuItem({required this.icon, required this.route});
 }
@@ -336,7 +336,7 @@ class _LoadedAppBarState extends State<_LoadedAppBar> with AppThemeMixin {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            GlobalSingleton.instance.appVersion,
+            'app version deprecated. need to use another method',
             textScaler: const TextScaler.linear(0.95),
             style: TextStyle(
               fontSize: 12,
