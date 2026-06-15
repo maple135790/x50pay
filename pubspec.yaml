@@ -75,6 +75,7 @@ flutter:
     - assets/images/game/
     - assets/images/home/
     - assets/images/home/mari_level/
+    - assets/images/home/top_background/
     - assets/images/scanPay/
     - assets/images/quest/
 flutter_icons:

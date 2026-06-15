@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
@@ -41,6 +42,15 @@ class TicketInfo extends StatelessWidget {
     void onMPassPressed() {
       context.pushNamed(AppRoute.buyMPass.routeName);
     }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+      child: GlassContainer(
+        height: 180,
+        padding: EdgeInsets.all(8),
+        child: Placeholder(),
+      ),
+    );
 
     return Selector<UserProvider, UserModel>(
       selector: (context, provider) => provider.user!,

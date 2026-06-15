@@ -111,6 +111,10 @@ class $AssetsImagesGameGen {
 class $AssetsImagesHomeGen {
   const $AssetsImagesHomeGen();
 
+  /// File path: assets/images/home/50paylogo-min.webp
+  AssetGenImage get a50paylogoMin =>
+      const AssetGenImage('assets/images/home/50paylogo-min.webp');
+
   /// File path: assets/images/home/bolt-solid.svg.vec
   String get boltSolidSvg => 'assets/images/home/bolt-solid.svg.vec';
 
@@ -133,11 +137,16 @@ class $AssetsImagesHomeGen {
   /// File path: assets/images/home/top.png
   AssetGenImage get top => const AssetGenImage('assets/images/home/top.png');
 
+  /// Directory path: assets/images/home/top_background
+  $AssetsImagesHomeTopBackgroundGen get topBackground =>
+      const $AssetsImagesHomeTopBackgroundGen();
+
   /// File path: assets/images/home/vts.png
   AssetGenImage get vts => const AssetGenImage('assets/images/home/vts.png');
 
   /// List of all assets
   List<dynamic> get values => [
+    a50paylogoMin,
     boltSolidSvg,
     heartRegular,
     heartRegularSvg,
@@ -185,6 +194,21 @@ class $AssetsImagesHomeMariLevelGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [ouo];
+}
+
+class $AssetsImagesHomeTopBackgroundGen {
+  const $AssetsImagesHomeTopBackgroundGen();
+
+  /// File path: assets/images/home/top_background/womd-min.webp
+  AssetGenImage get womdMin =>
+      const AssetGenImage('assets/images/home/top_background/womd-min.webp');
+
+  /// File path: assets/images/home/top_background/wotm-min.webp
+  AssetGenImage get wotmMin =>
+      const AssetGenImage('assets/images/home/top_background/wotm-min.webp');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [womdMin, wotmMin];
 }
 
 class R {

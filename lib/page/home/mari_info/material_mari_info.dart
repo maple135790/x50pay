@@ -14,20 +14,20 @@ import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/route/app_route.dart';
 
-class MariInfo extends StatefulWidget {
-  /// 真璃養成點數資訊
-  ///
-  /// 包含等級、養成點數、養成點數進度條、養成點數商城按鈕等
-  const MariInfo({super.key});
+class MaterialMariInfo extends StatefulWidget {
+  const MaterialMariInfo({super.key});
 
   @override
-  State<MariInfo> createState() => _MariInfoState();
+  State<MaterialMariInfo> createState() => _MaterialMariInfoState();
 }
 
-class _MariInfoState extends State<MariInfo> with AppThemeMixin {
+class _MaterialMariInfoState extends State<MaterialMariInfo>
+    with AppThemeMixin {
   S get i18n => S.of(context);
 
   static const avatarHeight = 270.0;
+
+  final glassBackgoundColor = const Color(0xffbbbbbc).withValues(alpha: .05);
 
   final progressBarNotifier = ValueNotifier(false);
 
@@ -247,29 +247,20 @@ class _MariInfoState extends State<MariInfo> with AppThemeMixin {
           ),
         );
 
-        final gradeBoxShopButton = TextButton(
-          onPressed: onGradeBoxPressed,
-          style: ButtonStyle(
-            overlayColor: WidgetStateProperty.all(Colors.transparent),
-            padding: WidgetStateProperty.all(
-              const EdgeInsets.symmetric(horizontal: 20),
+        final gradeBoxShopButton = ColoredBox(
+          color: glassBackgoundColor,
+          child: GestureDetector(
+            onTap: onGradeBoxPressed,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.25,
+                vertical: 6,
+              ),
+              child: Text(
+                i18n.gr2HeartBox,
+                style: const TextStyle(color: Color(0xfff5222d), fontSize: 13),
+              ),
             ),
-            textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 13)),
-            visualDensity: VisualDensity.comfortable,
-            splashFactory: NoSplash.splashFactory,
-            shape: WidgetStateProperty.all(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            ),
-            foregroundColor: WidgetStateProperty.all(const Color(0xfff5222d)),
-            backgroundColor: WidgetStateProperty.resolveWith((states) {
-              return isDarkTheme
-                  ? const Color(0x22f7f7f7)
-                  : const Color(0x88e1e1e1);
-            }),
-          ),
-          child: Text(
-            i18n.gr2HeartBox,
-            textScaler: const TextScaler.linear(0.85),
           ),
         );
 
@@ -278,12 +269,102 @@ class _MariInfoState extends State<MariInfo> with AppThemeMixin {
         final loginDayTitle = i18n.continuous(entry.gr2Day).split(" : ").first;
         final loginDayValue = i18n.continuous(entry.gr2Day).split(" : ").last;
 
+        final content = Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: 1,
+              child: SizedBox(
+                width: double.maxFinite,
+                child: Stack(
+                  fit: StackFit.passthrough,
+                  children: [
+                    mariImage,
+                    Positioned(bottom: 0, right: 0, child: dressRoomButton),
+                  ],
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Wrap(
+                    runAlignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          gradeIcon,
+                          const SizedBox(width: 5),
+                          gradeInfo,
+                          const SizedBox(width: 5),
+                        ],
+                      ),
+                      if (entry.gr2ShouldShowBouns) vipBonusInfo,
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  gradeProgressBar,
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(child: bonusProgressBar),
+                      bounsCounter,
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        bounsInfo,
+                        infoItem(
+                          icon: Icons.favorite_rounded,
+                          title: i18n.nextLv,
+                          value: "${entry.gr2Next} ${i18n.heart}",
+                        ),
+                        infoItem(
+                          icon: Icons.calendar_today_rounded,
+                          title: "$loginDayTitle : ",
+                          value: loginDayValue,
+                        ),
+                        infoItem(
+                          icon: Icons.how_to_vote_rounded,
+                          title: "$gachaTitle : ",
+                          value: gachaValue,
+                        ),
+                        infoItem(
+                          icon: Icons.sync_rounded,
+                          title: i18n.gr2ResetDate,
+                          value: entry.gr2Date,
+                        ),
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.center,
+                          child: gradeBoxShopButton,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 2),
           child: LayoutBuilder(
             builder: (context, constraint) {
               return ClipRRect(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(15),
                 child: Stack(
                   children: [
                     Positioned(
@@ -297,104 +378,12 @@ class _MariInfoState extends State<MariInfo> with AppThemeMixin {
                     ),
                     Container(
                       width: constraint.maxWidth,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: borderColor),
+                        color: glassBackgoundColor,
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: SizedBox(
-                              width: double.maxFinite,
-                              child: Stack(
-                                fit: StackFit.passthrough,
-                                children: [
-                                  mariImage,
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: dressRoomButton,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Wrap(
-                                  runAlignment: WrapAlignment.start,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        gradeIcon,
-                                        const SizedBox(width: 5),
-                                        gradeInfo,
-                                        const SizedBox(width: 5),
-                                      ],
-                                    ),
-                                    if (entry.gr2ShouldShowBouns) vipBonusInfo,
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                gradeProgressBar,
-                                const SizedBox(height: 8),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Expanded(child: bonusProgressBar),
-                                    bounsCounter,
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Flexible(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      bounsInfo,
-                                      infoItem(
-                                        icon: Icons.favorite_rounded,
-                                        title: i18n.nextLv,
-                                        value: "${entry.gr2Next} ${i18n.heart}",
-                                      ),
-                                      infoItem(
-                                        icon: Icons.calendar_today_rounded,
-                                        title: "$loginDayTitle : ",
-                                        value: loginDayValue,
-                                      ),
-                                      infoItem(
-                                        icon: Icons.how_to_vote_rounded,
-                                        title: "$gachaTitle : ",
-                                        value: gachaValue,
-                                      ),
-                                      infoItem(
-                                        icon: Icons.sync_rounded,
-                                        title: i18n.gr2ResetDate,
-                                        value: entry.gr2Date,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: gradeBoxShopButton,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: content,
                     ),
                   ],
                 ),
