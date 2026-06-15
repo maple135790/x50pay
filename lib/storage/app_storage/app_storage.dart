@@ -72,6 +72,7 @@ enum StorageKey {
   storeName,
   username,
   password,
+  useLiquidGlassTheme,
   seedColor(defaultValue: AppThemeProvider.defaultSeedColor);
 
   final Object? defaultValue;

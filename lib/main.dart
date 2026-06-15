@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/app_initializer.dart';
@@ -39,6 +40,7 @@ void main() async {
   final languageProvider = LanguageProvider();
   final themeProvider = AppThemeProvider();
   final envProvider = EnvironmentProvider();
+  final appSettingsProvider = AppSettingsProvider();
   final cookieStorage = CookieStorage();
   final appClient = AppClient(cookieStorage);
   final appRouter = AppRouter();
@@ -107,10 +109,17 @@ void main() async {
     languageProvider,
     themeProvider,
     loginProvider,
+    appSettingsProvider,
   );
 
   final (packageInfo,) = await initializer.initialize();
-
+  final app = switch (initializer.useLiquidGlassMode) {
+    true => LiquidGlassWidgets.wrap(
+      adaptiveQuality: true,
+      child: MyApp(appRouter),
+    ),
+    false => MyApp(appRouter),
+  };
   runApp(
     MultiProvider(
       providers: [
@@ -119,16 +128,17 @@ void main() async {
         ChangeNotifierProvider.value(value: loginProvider),
         ChangeNotifierProvider.value(value: userProvider),
         ChangeNotifierProvider.value(value: entryProvider),
+        ChangeNotifierProvider.value(value: appSettingsProvider),
         ChangeNotifierProvider.value(value: envProvider),
         ChangeNotifierProvider(create: (_) => CoinInsertionProvider()),
-        ChangeNotifierProvider(create: (_) => AppSettingsProvider()),
         ChangeNotifierProvider(create: (_) => AppInfoProvider(packageInfo)),
         Provider.value(value: repo),
         Provider.value(value: settingsRepo),
         Provider.value(value: gameInsertService),
         Provider.value(value: qrPayService),
+        Provider.value(value: initializer),
       ],
-      child: LifecycleManager(callback: appLifeCycles, child: MyApp(appRouter)),
+      child: LifecycleManager(callback: appLifeCycles, child: app),
     ),
   );
 }

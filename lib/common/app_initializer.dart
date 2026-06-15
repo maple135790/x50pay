@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:liquid_glass_widgets/liquid_glass_setup.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:x50pay/page/login/login_view_model.dart';
+import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 
@@ -14,18 +16,30 @@ class AppInitializer {
   final LanguageProvider _langProvider;
   final AppThemeProvider _themeProvider;
   final LoginProvider _loginProvider;
+  final AppSettingsProvider _appSettingsProvider;
 
-  AppInitializer(this._langProvider, this._themeProvider, this._loginProvider);
+  AppInitializer(
+    this._langProvider,
+    this._themeProvider,
+    this._loginProvider,
+    this._appSettingsProvider,
+  );
 
   bool _splashRemoved = false;
+
+  bool _useLiquidGlassMode = false;
+  bool get useLiquidGlassMode => _useLiquidGlassMode;
 
   Future<InitializedData> initialize() async {
     _initLogger();
     _themeProvider.configLoadingStyle();
 
-    final (appLocale, packageInfo, _, _) = await (
+    _useLiquidGlassMode = await _appSettingsProvider.getUseLiquidGlassTheme();
+
+    final (appLocale, packageInfo, _, _, _) = await (
       _langProvider.getUserPrefLocale(),
       PackageInfo.fromPlatform(),
+      LiquidGlassWidgets.initialize(),
       _themeProvider.init(),
       _loginProvider.autoLogin(),
     ).wait;
