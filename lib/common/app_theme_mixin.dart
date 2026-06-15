@@ -3,6 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:x50pay/common/theme/color_theme.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 
+class AppThemeHelper with AppThemeMixin {
+  @override
+  final BuildContext context;
+
+  const AppThemeHelper(this.context);
+}
+
 mixin AppThemeMixin {
   BuildContext get context;
 
