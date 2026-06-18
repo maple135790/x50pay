@@ -7,7 +7,7 @@ import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/sliver_padding_injector.dart';
 import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/generated/l10n.dart';
-import 'package:x50pay/page/home/event_info.dart';
+import 'package:x50pay/page/home/event_info/event_info.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/mari_info/mari_info.dart';
 import 'package:x50pay/page/home/official_info.dart';
