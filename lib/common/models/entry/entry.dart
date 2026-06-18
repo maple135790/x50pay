@@ -15,6 +15,13 @@ class EntryModel {
   final List<GiftList>? giftlist;
   @JsonKey(name: 'rqc')
   final List<QuestCampaign>? questCampaign;
+  @JsonKey(
+    name: StampData.key,
+    defaultValue: [],
+    fromJson: _StampDataExt.fromJson,
+    toJson: _StampDataExt.toJson,
+  )
+  final List<StampData> stamps;
 
   /// 首頁所使用的資料
   const EntryModel({
@@ -24,6 +31,7 @@ class EntryModel {
     this.evlist,
     this.giftlist,
     this.questCampaign,
+    required this.stamps,
   });
 
   const EntryModel.empty()
@@ -32,6 +40,7 @@ class EntryModel {
       gr2 = const [],
       evlist = null,
       giftlist = null,
+      stamps = const [],
       questCampaign = null;
 
   factory EntryModel.fromJson(Map<String, dynamic> json) =>
@@ -200,4 +209,20 @@ class QuestCampaign {
   String get lpic => "https://pay.x50.fun$rawLpic";
   String get couid =>
       rawCouid.contains('\'') ? rawCouid.replaceAll('\'', '') : rawCouid;
+}
+
+extension type StampData._(String id) {
+  Uri get fileUri => Uri(path: "/static/stamp/$id.png");
+  static const key = "stamp";
+}
+
+extension _StampDataExt on StampData {
+  static List<StampData> fromJson(List<dynamic>? json) {
+    if (json == null) return [];
+    return json.map((e) => StampData._(e.toString())).toList();
+  }
+
+  static Map<String, dynamic> toJson(List<StampData> stamps) => {
+    StampData.key: jsonEncode(stamps.map((e) => e.id)),
+  };
 }

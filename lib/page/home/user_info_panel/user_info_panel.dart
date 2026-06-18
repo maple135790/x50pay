@@ -98,7 +98,7 @@ class InfoWidgetBuilder {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 2),
                     child: Icon(
-                      Icons.open_in_new_off_rounded,
+                      Icons.open_in_new_rounded,
                       color: linkColor,
                       size: 16,
                     ),

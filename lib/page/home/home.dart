@@ -12,7 +12,7 @@ import 'package:x50pay/page/home/home_view_model.dart';
 import 'package:x50pay/page/home/mari_info/mari_info.dart';
 import 'package:x50pay/page/home/official_info.dart';
 import 'package:x50pay/page/home/recent_quests.dart';
-import 'package:x50pay/page/home/ticket_info.dart';
+import 'package:x50pay/page/home/ticket_info/ticket_info.dart';
 import 'package:x50pay/page/home/top_info.dart';
 import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
@@ -144,11 +144,11 @@ class _HomeLoaded extends StatelessWidget {
                           image: R.images.home.topBackground.womdMin.provider(),
                         ),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          SizedBox(height: 10),
-                          TopInfo(),
-                          TicketInfo(),
+                          const SizedBox(height: 10),
+                          const TopInfo(),
+                          TicketInfo(entry?.stamps),
                         ],
                       ),
                     ),

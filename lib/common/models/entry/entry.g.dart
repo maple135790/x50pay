@@ -30,9 +30,13 @@ EntryModel _$EntryModelFromJson(Map<String, dynamic> json) =>
               ?.map((e) => QuestCampaign.fromJson(e as Map<String, dynamic>))
               .toList(),
         ),
+        stamps: $checkedConvert(
+          'stamp',
+          (v) => v == null ? [] : _StampDataExt.fromJson(v as List?),
+        ),
       );
       return val;
-    }, fieldKeyMap: const {'questCampaign': 'rqc'});
+    }, fieldKeyMap: const {'questCampaign': 'rqc', 'stamps': 'stamp'});
 
 Map<String, dynamic> _$EntryModelToJson(EntryModel instance) =>
     <String, dynamic>{
@@ -42,6 +46,7 @@ Map<String, dynamic> _$EntryModelToJson(EntryModel instance) =>
       'evlist': instance.evlist,
       'giftlist': instance.giftlist,
       'rqc': instance.questCampaign,
+      'stamp': _StampDataExt.toJson(instance.stamps),
     };
 
 Evlist _$EvlistFromJson(Map<String, dynamic> json) => $checkedCreate(
