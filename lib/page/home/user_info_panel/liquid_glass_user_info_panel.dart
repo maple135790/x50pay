@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/user_info_panel/user_info_panel.dart';
 
 class LiquidGlassUserInfoPanel extends StatelessWidget {
@@ -27,9 +28,9 @@ class LiquidGlassUserInfoPanel extends StatelessWidget {
               children: [
                 builder.nameInfo(GoRouter.of(context)),
                 const SizedBox(height: 5),
-                builder.userIdInfo(),
-                const SizedBox(height: 5),
                 builder.pointInfo(),
+                const SizedBox(height: 5),
+                builder.ticketInfo(S.of(context)),
               ],
             ),
             const Spacer(),

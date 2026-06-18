@@ -202,6 +202,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "userUTicLog": MessageLookupByLibrary.simpleMessage("チケット利用履歴"),
     "vipDate": MessageLookupByLibrary.simpleMessage("有効期限 : "),
     "vipExpiredMsg": MessageLookupByLibrary.simpleMessage("左側のアイコンをクリックして購入"),
+    "vipMsgBuy1": MessageLookupByLibrary.simpleMessage("未購入"),
+    "vipMsgBuy2": MessageLookupByLibrary.simpleMessage("(購入)"),
+    "vipOwned": MessageLookupByLibrary.simpleMessage("購入済み"),
     "x50PayLanguage": MessageLookupByLibrary.simpleMessage("X50Pay 言語"),
   };
 }

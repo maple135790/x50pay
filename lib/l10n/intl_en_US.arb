@@ -163,5 +163,8 @@
   "userUTicLog": "Usage ticket history",
   "vipDate": "Expire Date : ",
   "vipExpiredMsg": "Click left \"Ticket\" icon to buy !",
+  "vipMsgBuy1": "Buy it Now!",
+  "vipMsgBuy2": "(Purchase)",
+  "vipOwned": "Owned",
   "x50PayLanguage": "X50Pay Language"
 }

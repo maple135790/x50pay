@@ -232,6 +232,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "vipExpiredMsg": MessageLookupByLibrary.simpleMessage(
       "Click left \"Ticket\" icon to buy !",
     ),
+    "vipMsgBuy1": MessageLookupByLibrary.simpleMessage("Buy it Now!"),
+    "vipMsgBuy2": MessageLookupByLibrary.simpleMessage("(Purchase)"),
+    "vipOwned": MessageLookupByLibrary.simpleMessage("Owned"),
     "x50PayLanguage": MessageLookupByLibrary.simpleMessage("X50Pay Language"),
   };
 }

@@ -162,5 +162,8 @@
   "userUTicLog": "已使用券明細",
   "vipDate": "期限 : ",
   "vipExpiredMsg": "點左側票券圖樣立刻購買",
+  "vipMsgBuy1": ", 無月票 ",
+  "vipMsgBuy2": "(購買)",
+  "vipOwned": ", 月票: ~",
   "x50PayLanguage": "X50Pay 語言"
 }

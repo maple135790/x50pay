@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_initializer.dart';
 import 'package:x50pay/common/models/user/user.dart';
 import 'package:x50pay/common/widgets/themed_widget_factory.dart';
+import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/user_info_panel/liquid_glass_user_info_panel.dart';
 import 'package:x50pay/page/home/user_info_panel/material_user_info_panel.dart';
 import 'package:x50pay/route/app_route.dart';
@@ -43,6 +44,9 @@ class InfoWidgetBuilder {
   final UserModel user;
   const InfoWidgetBuilder(this.user);
 
+  // TODO: 新增月票購買 bottomSheet
+  void _onBuyTicket() {}
+
   Widget nameInfo(GoRouter router) {
     void onPhoneActivatePressed(GoRouter router) {
       router.goNamed(
@@ -74,15 +78,42 @@ class InfoWidgetBuilder {
     );
   }
 
-  Widget userIdInfo() {
+  Widget ticketInfo(S i18n) {
+    final rawDate = user.vipdate?.rawDate;
+    final vipDate = rawDate == null ? null : DateTime.tryParse(rawDate);
+    const linkColor = Color(0xff8887ff);
+    final vipStatus = (user.vip ?? false)
+        ? [
+            TextSpan(text: i18n.vipOwned),
+            TextSpan(text: "${vipDate?.month}/${vipDate?.day}"),
+          ]
+        : [
+            TextSpan(text: i18n.vipMsgBuy1),
+            TextSpan(
+              text: i18n.vipMsgBuy2,
+              style: const TextStyle(color: linkColor),
+              recognizer: TapGestureRecognizer()..onTap = _onBuyTicket,
+              children: const [
+                WidgetSpan(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 2),
+                    child: Icon(
+                      Icons.open_in_new_off_rounded,
+                      color: linkColor,
+                      size: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ];
     return Text.rich(
       TextSpan(
         children: [
-          const WidgetSpan(
-            child: Icon(Icons.perm_contact_cal_rounded, size: 20),
-          ),
+          const WidgetSpan(child: Icon(Icons.local_activity_rounded, size: 20)),
           const WidgetSpan(child: SizedBox(width: 5)),
-          TextSpan(text: user.uid!),
+          TextSpan(text: user.ticketint!.toString()),
+          ...vipStatus,
         ],
       ),
     );
@@ -92,7 +123,7 @@ class InfoWidgetBuilder {
     return Text.rich(
       TextSpan(
         children: [
-          const WidgetSpan(child: Icon(Icons.currency_yen_rounded, size: 20)),
+          const WidgetSpan(child: Icon(Icons.wallet_rounded, size: 20)),
           const WidgetSpan(child: SizedBox(width: 5)),
           TextSpan(text: user.point!.toInt().toString()),
           const TextSpan(text: ' + '),
