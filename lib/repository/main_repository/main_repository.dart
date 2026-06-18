@@ -26,7 +26,7 @@ abstract interface class MainRepository {
   Future<ApiResponse<UserModel>> getUser();
 
   /// 取得首頁資料API
-  Future<EntryModel?> getEntry();
+  Future<ApiResponse<EntryModel>> getEntry();
 
   /// 登出API
   Future<void> logout();

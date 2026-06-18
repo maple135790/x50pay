@@ -21,9 +21,9 @@ class EntryProvider extends BaseViewModel {
     await Future.delayed(const Duration(milliseconds: 100));
 
     try {
-      final fetchedEntry = await repo.getEntry();
-      if (fetchedEntry == null || fetchedEntry.code != 200) return false;
-      _entry = fetchedEntry;
+      final res = await repo.getEntry();
+      if (res.result.isError) return false;
+      _entry = res.result.successData;
       return true;
     } catch (e, stacktrace) {
       log('', error: e, stackTrace: stacktrace, name: 'checkEntry');

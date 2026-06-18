@@ -61,13 +61,13 @@ class ApiMainRepository extends BaseRepository implements MainRepository {
 
   /// 取得首頁資料API
   @override
-  Future<EntryModel?> getEntry() async {
+  Future<ApiResponse<EntryModel>> getEntry() async {
     final res = await client.request(
       _endpoint('/user/entry'),
       method: HttpMethod.post,
       rawBody: {},
     );
-    return EntryModel.fromJson(_decodeRes(res));
+    return ApiResponse.fromJson(res, fromJson: EntryModel.fromJson);
   }
 
   /// 登出API

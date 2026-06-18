@@ -95,8 +95,8 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<EntryModel?> getEntry() async {
-    return const EntryModel.empty();
+  Future<ApiResponse<EntryModel>> getEntry() async {
+    return ApiResponse.createSuccess(const EntryModel.empty());
   }
 
   @override
