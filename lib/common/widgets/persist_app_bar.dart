@@ -70,6 +70,9 @@ class _PersistentAppBarState extends State<PersistentAppBar>
 
   @override
   Widget build(BuildContext context) {
+    final changeLangButtonColor = isDarkTheme
+        ? CustomColorThemes.appbarBoxColorDark
+        : CustomColorThemes.appbarBoxColorLight;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -116,10 +119,8 @@ class _PersistentAppBarState extends State<PersistentAppBar>
                               vertical: 6.75,
                             ),
                             decoration: BoxDecoration(
-                              color: isDarkTheme
-                                  ? CustomColorThemes.appbarBoxColorDark
-                                  : CustomColorThemes.appbarBoxColorLight,
-                              borderRadius: BorderRadius.circular(6),
+                              color: changeLangButtonColor,
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,

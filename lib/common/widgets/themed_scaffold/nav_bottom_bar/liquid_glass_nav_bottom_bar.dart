@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
-import 'package:x50pay/common/widgets/nav_bottom_bar/nav_bottom_bar.dart';
+import 'package:x50pay/common/widgets/themed_scaffold/nav_bottom_bar/menu_item.dart';
 import 'package:x50pay/generated/l10n.dart';
 
 class LiquidGlassNavBottomBar extends StatelessWidget {

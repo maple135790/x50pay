@@ -17,6 +17,7 @@ class LiquidGlassTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onLangChanged(Locale locale) {}
+    void onShowChangeVisualBottomSheet() {}
 
     void onOpenSettingsPagePressed() {
       context.goNamed(AppRoute.settings.routeName);
@@ -27,6 +28,12 @@ class LiquidGlassTopBar extends StatelessWidget {
         backgroundImage: R.images.home.a50paylogoMin.provider(),
       ),
       actions: [
+        GlassButton(
+          width: height,
+          height: height,
+          icon: const Icon(Icons.brush_rounded),
+          onTap: onShowChangeVisualBottomSheet,
+        ),
         Selector<LanguageProvider, Locale>(
           selector: (context, provider) => provider.currentLocale,
           builder: (context, locale, child) {

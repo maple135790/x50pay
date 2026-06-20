@@ -3,17 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:x50pay/common/app_initializer.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
-import 'package:x50pay/common/widgets/app_top_bar/app_top_bar.dart';
-import 'package:x50pay/common/widgets/app_top_bar/liquid_glass_top_bar.dart';
-import 'package:x50pay/common/widgets/app_top_bar/material_top_bar.dart';
-import 'package:x50pay/common/widgets/nav_bottom_bar/liquid_glass_nav_bottom_bar.dart';
-import 'package:x50pay/common/widgets/nav_bottom_bar/nav_bottom_bar.dart';
-import 'package:x50pay/common/widgets/themed_widget_factory.dart';
+import 'package:x50pay/common/widgets/themed_scaffold/nav_bottom_bar/menu_item.dart';
+import 'package:x50pay/common/widgets/themed_scaffold/themed_scaffold.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/route/app_route.dart';
 
@@ -125,31 +118,6 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
 
   @override
   Widget build(BuildContext context) {
-    final liquidGlassScaffold = GlassScaffold(
-      edgeFade: true,
-      appBar: const AppTopBar(),
-      body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          padding: MediaQuery.paddingOf(context).copyWith(
-            top:
-                MediaQuery.paddingOf(context).top +
-                LiquidGlassTopBar.height +
-                8,
-            bottom:
-                MediaQuery.paddingOf(context).bottom +
-                LiquidGlassNavBottomBar.height,
-          ),
-        ),
-        child: widget.body,
-      ),
-      bottomBar: const NavBottomBar(),
-    );
-    final materialScaffold = Scaffold(
-      appBar: const MaterialTopBar(),
-      body: widget.body,
-      bottomNavigationBar: const NavBottomBar(),
-    );
-
     return BackButtonListener(
       onBackButtonPressed: handleBackButton,
       // TODO: 等待GoRouter 修復PopScope issue (flutter #138737)
@@ -163,11 +131,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
             confirmPopup();
           }
         },
-        child: ThemedWidgetFactory.create(
-          context.read<AppInitializer>(),
-          liquidGlassWidgetBuilder: () => liquidGlassScaffold,
-          materialWidgetBuilder: () => materialScaffold,
-        ),
+        child: ThemedScaffold(widget.body),
       ),
     );
   }
