@@ -17,6 +17,12 @@ class LiquidGlassUserInfoPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
+      useOwnLayer: true,
+      settings: const LiquidGlassSettings(
+        blur: 2,
+        saturation: 2.5,
+        glassColor: Colors.white12,
+      ),
       padding: const EdgeInsets.all(16),
       child: IntrinsicHeight(
         child: Row(
@@ -43,6 +49,13 @@ class LiquidGlassUserInfoPanel extends StatelessWidget {
                 Icons.qr_code_rounded,
                 size: 45,
                 fontWeight: FontWeight.w900,
+                shadows: [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 10,
+                    spreadRadius: 10,
+                  ),
+                ],
               ),
             ),
           ],

@@ -47,6 +47,8 @@ class InfoWidgetBuilder {
   // TODO: 新增月票購買 bottomSheet
   void _onBuyTicket() {}
 
+  final _shadows = const [Shadow(blurRadius: 2.5, color: Colors.black)];
+
   Widget nameInfo(GoRouter router) {
     void onPhoneActivatePressed(GoRouter router) {
       router.goNamed(
@@ -65,9 +67,17 @@ class InfoWidgetBuilder {
 
     final isPhoneActive = user.phoneactive ?? false;
     return Text.rich(
+      style: TextStyle(shadows: _shadows),
       TextSpan(
         children: [
-          const WidgetSpan(child: Icon(Icons.person_rounded, size: 20)),
+          WidgetSpan(
+            child: Icon(
+              Icons.person_rounded,
+              size: 20,
+              shadows: _shadows,
+              fontWeight: .w700,
+            ),
+          ),
           const WidgetSpan(child: SizedBox(width: 5)),
           TextSpan(
             text: user.name!,
@@ -101,6 +111,7 @@ class InfoWidgetBuilder {
                       Icons.open_in_new_rounded,
                       color: linkColor,
                       size: 16,
+                      fontWeight: .w500,
                     ),
                   ),
                 ),
@@ -109,8 +120,15 @@ class InfoWidgetBuilder {
           ];
     return Text.rich(
       TextSpan(
+        style: TextStyle(shadows: _shadows),
         children: [
-          const WidgetSpan(child: Icon(Icons.local_activity_rounded, size: 20)),
+          WidgetSpan(
+            child: Icon(
+              Icons.local_activity_rounded,
+              size: 18,
+              shadows: _shadows,
+            ),
+          ),
           const WidgetSpan(child: SizedBox(width: 5)),
           TextSpan(text: user.ticketint!.toString()),
           ...vipStatus,
@@ -121,16 +139,16 @@ class InfoWidgetBuilder {
 
   Widget pointInfo() {
     return Text.rich(
+      style: TextStyle(shadows: _shadows),
       TextSpan(
         children: [
-          const WidgetSpan(child: Icon(Icons.wallet_rounded, size: 20)),
+          WidgetSpan(
+            child: Icon(Icons.wallet_rounded, size: 18, shadows: _shadows),
+          ),
           const WidgetSpan(child: SizedBox(width: 5)),
           TextSpan(text: user.point!.toInt().toString()),
           const TextSpan(text: ' + '),
-          TextSpan(
-            text: user.fpoint!.toInt().toString(),
-            style: const TextStyle(color: Color(0xffd4b106)),
-          ),
+          TextSpan(text: user.fpoint!.toInt().toString()),
           const TextSpan(text: ' P'),
         ],
       ),

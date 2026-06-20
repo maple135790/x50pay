@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:x50pay/page/home/ticket_info/ticket_info.dart';
@@ -10,6 +11,12 @@ class LiquidGlassTicketInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
+      useOwnLayer: true,
+      settings: const LiquidGlassSettings(
+        blur: 2,
+        saturation: 2.5,
+        glassColor: Colors.white12,
+      ),
       margin: const EdgeInsets.fromLTRB(20, 14, 20, 12),
       padding: const EdgeInsets.all(8),
       child: GridView.builder(

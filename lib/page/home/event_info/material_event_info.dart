@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/theme/color_theme.dart';
 
 class MaterialEventInfo extends StatelessWidget {
   final Iterable<String> messages;
@@ -9,18 +8,14 @@ class MaterialEventInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkTheme = Theme.brightnessOf(context) == Brightness.dark;
     final iconColor = AppThemeHelper(context).iconColor;
 
     return Container(
+      clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.fromLTRB(20, 12, 20, 2),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: isDarkTheme
-              ? CustomColorThemes.borderColorDark
-              : CustomColorThemes.borderColorLight,
-        ),
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white12,
       ),
       child: Stack(
         children: [
