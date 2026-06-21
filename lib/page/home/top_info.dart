@@ -29,19 +29,9 @@ class TopInfo extends StatelessWidget {
                 color: const Color(0xff52c41a),
                 borderRadius: BorderRadius.circular(100),
               ),
-              child: Row(
-                spacing: 7.5,
-                children: [
-                  const Icon(
-                    Icons.assignment_ind_rounded,
-                    size: 14,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    user.uid ?? 'uid',
-                    style: const TextStyle(fontSize: 12, color: Colors.white),
-                  ),
-                ],
+              child: Text(
+                "ID ${user.uid ?? ""}",
+                style: const TextStyle(fontSize: 12, color: Colors.white),
               ),
             ),
           ],
