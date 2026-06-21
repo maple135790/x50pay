@@ -1,8 +1,6 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:x50pay/common/custom_box_shadow.dart';
+import 'package:x50pay/common/widgets/material_glass.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/user_info_panel/user_info_panel.dart';
 
@@ -56,23 +54,10 @@ class MaterialUserInfoPanel extends StatelessWidget {
       ),
     );
 
-    return Container(
+    return MaterialGlass.withShadow(
       padding: const EdgeInsets.all(16),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: Colors.white12,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: const [
-          CustomBoxShadow(color: Colors.black26, blurRadius: 5),
-        ],
-      ),
-      child: BackdropFilter(
-        filterConfig: ImageFilterConfig.compose(
-          outer: const ImageFilterConfig.blur(sigmaX: 1.45, sigmaY: 1.45),
-          inner: ImageFilterConfig(ui.ColorFilter.saturation(1.7)),
-        ),
-        child: widget,
-      ),
+      borderRadius: 15,
+      child: widget,
     );
   }
 }

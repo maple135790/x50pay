@@ -1,7 +1,5 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
-import 'package:x50pay/common/custom_box_shadow.dart';
+import 'package:x50pay/common/widgets/material_glass.dart';
 import 'package:x50pay/page/home/ticket_info/ticket_info.dart';
 
 class MaterialTicketInfo extends StatelessWidget {
@@ -62,25 +60,11 @@ class MaterialTicketInfo extends StatelessWidget {
         );
       },
     );
-
-    return Container(
-      clipBehavior: Clip.antiAlias,
+    return MaterialGlass.withShadow(
       margin: const EdgeInsets.fromLTRB(20, 14, 20, 12),
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white12,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: const [
-          CustomBoxShadow(color: Colors.black26, blurRadius: 5),
-        ],
-      ),
-      child: BackdropFilter(
-        filterConfig: ImageFilterConfig.compose(
-          outer: const ImageFilterConfig.blur(sigmaX: 1.45, sigmaY: 1.45),
-          inner: ImageFilterConfig(ui.ColorFilter.saturation(1.7)),
-        ),
-        child: stampGrid,
-      ),
+      borderRadius: 15,
+      child: stampGrid,
     );
   }
 }

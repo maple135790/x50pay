@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
+import 'package:x50pay/common/widgets/material_glass.dart';
 
 class MaterialEventInfo extends StatelessWidget {
   final Iterable<String> messages;
@@ -10,13 +11,9 @@ class MaterialEventInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final iconColor = AppThemeHelper(context).iconColor;
 
-    return Container(
-      clipBehavior: Clip.antiAlias,
+    return MaterialGlass(
       margin: const EdgeInsets.fromLTRB(20, 12, 20, 2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.white12,
-      ),
+      borderRadius: 15,
       child: Stack(
         children: [
           Positioned(

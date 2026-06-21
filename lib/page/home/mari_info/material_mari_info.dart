@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
+import 'package:x50pay/common/widgets/material_glass.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/mari_info/mari_info.dart';
 import 'package:x50pay/providers/entry_provider.dart';
@@ -24,11 +25,28 @@ class MaterialMariInfo extends StatelessWidget {
       context.goNamed(AppRoute.dressRoom.routeName);
     }
 
-    final gradeBoxShopButton = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: Colors.white10,
+    final dressRoomButton = MaterialGlass(
+      width: 30,
+      height: 30,
+      shape: .circle,
+      color: Colors.white12,
+      child: GestureDetector(
+        onTap: onDressRoomPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(6.5),
+          child: SvgPicture(
+            Svgs.shirtSolid,
+            width: 17.875,
+            height: 14.3,
+            colorFilter: SvgsExtension.colorFilter(const Color(0xffffc0cb)),
+          ),
+        ),
       ),
+    );
+
+    final gradeBoxShopButton = MaterialGlass(
+      borderRadius: 100,
+      color: Colors.white12,
       child: GestureDetector(
         onTap: onGradeBoxPressed,
         child: Padding(
@@ -47,35 +65,6 @@ class MaterialMariInfo extends StatelessWidget {
         if (entry == null) return const Center(child: Text('未取得Entry 資料'));
 
         final helper = AppThemeHelper(context);
-
-        final dressRoomButton = SizedBox(
-          width: 30,
-          height: 30,
-          child: IconButton(
-            iconSize: 16.5,
-            onPressed: onDressRoomPressed,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture(
-              Svgs.shirtSolid,
-              width: 17.875,
-              height: 14.3,
-              colorFilter: SvgsExtension.colorFilter(const Color(0xffffc0cb)),
-            ),
-            color: const Color(0xffffc0cb),
-            style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(
-                helper.scaffoldBackgroundColor.withAlpha(25),
-              ),
-              side: WidgetStatePropertyAll(
-                BorderSide(
-                  color: helper.borderColor,
-                  width: 1.5,
-                  strokeAlign: BorderSide.strokeAlignCenter,
-                ),
-              ),
-            ),
-          ),
-        );
 
         final content = Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -107,11 +96,8 @@ class MaterialMariInfo extends StatelessWidget {
                   children: [
                     builder.gradeProgressbar(entry),
                     const SizedBox(height: 12),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white12,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
+                    MaterialGlass.withShadow(
+                      borderRadius: 15,
                       child: Stack(
                         children: [
                           Padding(
@@ -144,13 +130,10 @@ class MaterialMariInfo extends StatelessWidget {
           ],
         );
 
-        return Container(
+        return MaterialGlass(
           margin: const EdgeInsets.fromLTRB(20, 12, 20, 2),
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: Colors.white10,
-            borderRadius: BorderRadius.circular(15),
-          ),
+          color: Colors.white.withValues(alpha: .05),
+          borderRadius: 15,
           child: Stack(
             children: [
               Positioned(

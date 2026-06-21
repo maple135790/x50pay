@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:x50pay/common/custom_box_shadow.dart';
+import 'package:x50pay/common/widgets/material_glass.dart';
+import 'package:x50pay/common/widgets/themed_scaffold/app_top_bar/change_visual_bottom_sheet.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/generated/l10n.dart';
@@ -69,36 +70,27 @@ class _MaterialTopBarState extends State<MaterialTopBar> {
               child: child,
             );
           },
-          child: Container(
+          child: MaterialGlass.withShadow(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: Colors.white24,
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                const CustomBoxShadow(color: Colors.black26, blurRadius: 5),
+            borderRadius: 50,
+            color: Colors.white30,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                Text(
+                  locale.displayTextShort,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ],
-            ),
-            child: BackdropFilter(
-              filterConfig: const ImageFilterConfig.blur(
-                sigmaX: 1.7,
-                sigmaY: 1.7,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 8,
-                children: [
-                  Text(
-                    locale.displayText,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  const Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    size: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ],
-              ),
             ),
           ),
         );
@@ -113,7 +105,7 @@ class _MaterialTopBarState extends State<MaterialTopBar> {
             PhysicalModel(
               color: Colors.transparent,
               shape: BoxShape.circle,
-              clipBehavior: Clip.antiAlias,
+              clipBehavior: Clip.hardEdge,
               elevation: 1.2,
               child: CircleAvatar(
                 radius: 16,
@@ -123,60 +115,36 @@ class _MaterialTopBarState extends State<MaterialTopBar> {
             const Spacer(),
             GestureDetector(
               onTap: onShowChangeVisualBottomSheet,
-              child: Container(
+              child: const MaterialGlass.withShadow(
                 width: 32,
                 height: 32,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  color: Colors.white12,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    CustomBoxShadow(color: Colors.black26, blurRadius: 5),
-                  ],
-                ),
-                child: const BackdropFilter(
-                  filterConfig: ImageFilterConfig.blur(
-                    sigmaX: 1.7,
-                    sigmaY: 1.7,
-                  ),
-                  child: Icon(
-                    Icons.brush_rounded,
-                    size: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                shape: .circle,
+                color: Colors.white24,
+                child: Icon(
+                  Icons.brush_rounded,
+                  size: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             const SizedBox(width: 8),
-            Container(
-              clipBehavior: Clip.antiAlias,
+            MaterialGlass.withShadow(
               padding: const EdgeInsets.fromLTRB(10, 7, 10, 6),
-              decoration: BoxDecoration(
-                color: Colors.white12,
-                borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  const CustomBoxShadow(color: Colors.black26, blurRadius: 5),
-                ],
-              ),
-              child: BackdropFilter(
-                filterConfig: const ImageFilterConfig.blur(
-                  sigmaX: 1.7,
-                  sigmaY: 1.7,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    languageButton,
-                    const SizedBox(width: 10),
-                    SizedBox.square(
-                      dimension: 28,
-                      child: InkWell(
-                        onTap: onOpenSettingsPagePressed,
-                        child: const Icon(Icons.settings_rounded, size: 24),
-                      ),
+              color: Colors.white24,
+              borderRadius: 50,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  languageButton,
+                  const SizedBox(width: 10),
+                  SizedBox.square(
+                    dimension: 28,
+                    child: InkWell(
+                      onTap: onOpenSettingsPagePressed,
+                      child: const Icon(Icons.settings_rounded, size: 24),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
