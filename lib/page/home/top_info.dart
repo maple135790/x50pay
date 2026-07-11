@@ -19,15 +19,21 @@ class TopInfo extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 5,
           children: [
-            CircleAvatar(
-              radius: 78 / 2,
-              foregroundImage: NetworkImage(user.userImageUrl),
+            PhysicalModel(
+              color: Colors.transparent,
+              shape: BoxShape.circle,
+              elevation: 1.2,
+              child: CircleAvatar(
+                radius: 78 / 2,
+                foregroundImage: NetworkImage(user.userImageUrl),
+              ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 1.5),
               decoration: BoxDecoration(
                 color: const Color(0xff52c41a),
                 borderRadius: BorderRadius.circular(100),
+                boxShadow: [const BoxShadow(blurRadius: 12, color: Colors.black54)],
               ),
               child: Text(
                 "ID ${user.uid ?? ""}",

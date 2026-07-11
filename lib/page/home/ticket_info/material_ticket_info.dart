@@ -63,6 +63,7 @@ class MaterialTicketInfo extends StatelessWidget {
     return MaterialGlass.withShadow(
       margin: const EdgeInsets.fromLTRB(20, 14, 20, 12),
       padding: const EdgeInsets.all(8),
+      color: Colors.white24,
       borderRadius: 15,
       child: stampGrid,
     );

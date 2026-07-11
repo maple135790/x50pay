@@ -47,7 +47,7 @@ class InfoWidgetBuilder {
   // TODO: 新增月票購買 bottomSheet
   void _onBuyTicket() {}
 
-  final _shadows = const [Shadow(blurRadius: 2.5, color: Colors.black)];
+  final _shadows = const [Shadow(blurRadius: 6, color: Colors.black)];
 
   Widget nameInfo(GoRouter router) {
     void onPhoneActivatePressed(GoRouter router) {
@@ -67,7 +67,11 @@ class InfoWidgetBuilder {
 
     final isPhoneActive = user.phoneactive ?? false;
     return Text.rich(
-      style: TextStyle(shadows: _shadows),
+      style: TextStyle(
+        shadows: _shadows,
+        fontWeight: .w600,
+        color: Colors.white,
+      ),
       TextSpan(
         children: [
           WidgetSpan(
@@ -103,15 +107,16 @@ class InfoWidgetBuilder {
               text: i18n.vipMsgBuy2,
               style: const TextStyle(color: linkColor),
               recognizer: TapGestureRecognizer()..onTap = _onBuyTicket,
-              children: const [
+              children: [
                 WidgetSpan(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: Icon(
                       Icons.open_in_new_rounded,
                       color: linkColor,
                       size: 16,
-                      fontWeight: .w500,
+                      fontWeight: .w700,
+                      shadows: _shadows,
                     ),
                   ),
                 ),
@@ -120,7 +125,11 @@ class InfoWidgetBuilder {
           ];
     return Text.rich(
       TextSpan(
-        style: TextStyle(shadows: _shadows),
+        style: TextStyle(
+          shadows: _shadows,
+          fontWeight: .w600,
+          color: Colors.white,
+        ),
         children: [
           WidgetSpan(
             child: Icon(
@@ -139,7 +148,11 @@ class InfoWidgetBuilder {
 
   Widget pointInfo() {
     return Text.rich(
-      style: TextStyle(shadows: _shadows),
+      style: TextStyle(
+        shadows: _shadows,
+        fontWeight: .w600,
+        color: Colors.white,
+      ),
       TextSpan(
         children: [
           WidgetSpan(
