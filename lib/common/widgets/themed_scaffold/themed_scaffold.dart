@@ -14,23 +14,30 @@ class ThemedScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final padding = MediaQuery.paddingOf(context);
+    final statusBarHeight = padding.top;
+    final navigationBarHeight = padding.bottom;
     final liquidGlassScaffold = GlassScaffold(
       edgeFade: true,
       appBar: const LiquidGlassTopBar(),
       body: MediaQuery(
         data: MediaQuery.of(context).copyWith(
-          padding: MediaQuery.paddingOf(context).copyWith(
-            top:
-                MediaQuery.paddingOf(context).top +
-                LiquidGlassTopBar.height +
-                8,
-            bottom:
-                MediaQuery.paddingOf(context).bottom +
-                LiquidGlassNavBottomBar.height +
-                8,
+          padding: padding.copyWith(
+            top: statusBarHeight + LiquidGlassTopBar.height + 8,
+            bottom: navigationBarHeight + LiquidGlassNavBottomBar.height + 8,
           ),
         ),
-        child: body,
+        child: Stack(
+          children: [
+            Positioned.fill(child: body),
+            const Positioned(
+              left: 0,
+              right: 0,
+              height: LiquidGlassTopBar.height,
+              child: ColoredBox(color: Colors.black26),
+            ),
+          ],
+        ),
       ),
       bottomBar: const LiquidGlassNavBottomBar(),
     );
@@ -41,14 +48,22 @@ class ThemedScaffold extends StatelessWidget {
       appBar: const MaterialTopBar(),
       body: MediaQuery(
         data: MediaQuery.of(context).copyWith(
-          padding: MediaQuery.paddingOf(context).copyWith(
-            top: MediaQuery.paddingOf(context).top + kToolbarHeight,
-            bottom:
-                MediaQuery.paddingOf(context).bottom +
-                MaterialNavBottomBar.height,
+          padding: padding.copyWith(
+            top: statusBarHeight + kToolbarHeight,
+            bottom: navigationBarHeight + MaterialNavBottomBar.height,
           ),
         ),
-        child: body,
+        child: Stack(
+          children: [
+            Positioned.fill(child: body),
+            Positioned(
+              left: 0,
+              right: 0,
+              height: statusBarHeight,
+              child: const ColoredBox(color: Colors.black26),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: const MaterialNavBottomBar(),
     );
