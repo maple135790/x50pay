@@ -123,10 +123,8 @@ class _LiquidGlassChangeBackgroundBottomSheetState
         child: GlassContainer(
           width: double.maxFinite,
           margin: const EdgeInsets.fromLTRB(5, 5, 5, 11),
-          settings: LiquidGlassSettings(glassColor: Colors.white12),
-          shape: LiquidRoundedRectangle(borderRadius: 50),
-          // color: Colors.white38,
-          // borderRadius: 50,
+          settings: const LiquidGlassSettings(glassColor: Colors.white12),
+          shape: const LiquidRoundedRectangle(borderRadius: 50),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
             child: Text(

@@ -19,7 +19,9 @@ class LiquidGlassTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void onLangChanged(Locale locale) {}
+    void onLangChanged(Locale locale) {
+      context.read<LanguageProvider>().setUserPrefLocale(locale);
+    }
 
     void onShowChangeVisualBottomSheet() {
       showModalBottomSheet(
