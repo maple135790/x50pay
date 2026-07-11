@@ -67,7 +67,7 @@ class MaterialNavBottomBar extends StatelessWidget {
       child: MaterialGlass.withShadow(
         margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        color: Colors.white24,
+        color: const Color.fromARGB(59, 167, 167, 167),
         borderRadius: 100,
         child: ValueListenableBuilder(
           valueListenable: GoRouter.of(context).routeInformationProvider,

@@ -56,6 +56,7 @@ class MaterialUserInfoPanel extends StatelessWidget {
 
     return MaterialGlass.withShadow(
       padding: const EdgeInsets.all(16),
+      color: Colors.white24,
       borderRadius: 15,
       child: widget,
     );
