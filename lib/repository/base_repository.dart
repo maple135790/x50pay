@@ -1,7 +1,9 @@
 import 'package:x50pay/common/client/request_handler.dart';
 
-abstract class BaseRepository {
+abstract class Repository {
   final RequestHandler client;
 
-  const BaseRepository(this.client);
+  const Repository(this.client);
+
+  static const webDomain = "pay.x50.fun";
 }

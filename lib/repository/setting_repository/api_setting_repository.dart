@@ -13,11 +13,11 @@ import 'package:x50pay/common/models/ticUsed/tic_used.dart';
 import 'package:x50pay/repository/base_repository.dart';
 import 'package:x50pay/repository/setting_repository/setting_repository.dart';
 
-class ApiSettingRepository extends BaseRepository implements SettingRepository {
+class ApiSettingRepository extends Repository implements SettingRepository {
   const ApiSettingRepository(super.client);
 
   Uri _endpoint(String path) {
-    return Uri.parse('https://pay.x50.fun/api/v1$path');
+    return Uri.https(Repository.webDomain, 'api/v1$path');
   }
 
   Map<String, dynamic> _decodeRes(http.Response res) {
