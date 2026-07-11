@@ -9,6 +9,8 @@ sealed class Result<T> {
     StackTrace? s,
   ]) => Error.withJson(rawJson, error, s);
 
+  factory Result.errorText(String text) => Error(text);
+
   factory Result.notJson(String body, [Object? error, StackTrace? s]) {
     return Error(body, error, s);
   }

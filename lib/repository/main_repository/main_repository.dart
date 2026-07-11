@@ -6,6 +6,7 @@ import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/grade_background/grade_background.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -153,4 +154,8 @@ abstract interface class MainRepository {
   Future<GameList> favGameList();
 
   Future<void> setFavGames(List<String> favGames);
+
+  Future<ApiResponse<List<GradeBackground>>> getGradeBgList();
+
+  Future<ApiResponse<bool>> setBackground(String id);
 }

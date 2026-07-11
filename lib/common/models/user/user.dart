@@ -26,6 +26,9 @@ class UserModel {
   final String? tphone;
   final String? doorpwd;
 
+  @JsonKey(name: "bg", defaultValue: "")
+  final String backgroundId;
+
   const UserModel({
     required this.message,
     required this.code,
@@ -44,6 +47,7 @@ class UserModel {
     this.sixn,
     this.tphone,
     this.doorpwd,
+    required this.backgroundId,
   });
 
   const UserModel.empty()
@@ -63,6 +67,7 @@ class UserModel {
       sid = "",
       sixn = "",
       tphone = null,
+      backgroundId = "",
       doorpwd = "";
 
   static VipDate setVipDate(String unixTimestamp) =>

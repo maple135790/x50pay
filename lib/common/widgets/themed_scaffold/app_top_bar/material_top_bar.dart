@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/widgets/material_glass.dart';
-import 'package:x50pay/common/widgets/themed_scaffold/app_top_bar/change_visual_bottom_sheet.dart';
+import 'package:x50pay/common/widgets/themed_scaffold/app_top_bar/change_background_bottom_sheet/change_background_bottom_sheet.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/generated/l10n.dart';
@@ -24,7 +24,19 @@ class _MaterialTopBarState extends State<MaterialTopBar> {
   @override
   Widget build(BuildContext context) {
     void onLangChanged(Locale locale) {}
-    void onShowChangeVisualBottomSheet() {}
+
+    void onShowChangeVisualBottomSheet() {
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isDismissible: false,
+        useSafeArea: true,
+        scrollControlDisabledMaxHeightRatio: 0.85,
+        builder: (context) {
+          return const ChangeBackgroundBottomSheet();
+        },
+      );
+    }
 
     void onOpenSettingsPagePressed() {
       context.goNamed(AppRoute.settings.routeName);
@@ -83,12 +95,14 @@ class _MaterialTopBarState extends State<MaterialTopBar> {
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
+                    shadows: [Shadow(blurRadius: 12, color: Colors.black54)],
                   ),
                 ),
                 const Icon(
                   Icons.keyboard_arrow_down_rounded,
                   size: 20,
                   fontWeight: FontWeight.bold,
+                  shadows: [Shadow(blurRadius: 12, color: Colors.black54)],
                 ),
               ],
             ),
@@ -124,6 +138,7 @@ class _MaterialTopBarState extends State<MaterialTopBar> {
                   Icons.brush_rounded,
                   size: 18,
                   fontWeight: FontWeight.bold,
+                  shadows: [Shadow(blurRadius: 12, color: Colors.black54)],
                 ),
               ),
             ),
@@ -141,7 +156,13 @@ class _MaterialTopBarState extends State<MaterialTopBar> {
                     dimension: 28,
                     child: InkWell(
                       onTap: onOpenSettingsPagePressed,
-                      child: const Icon(Icons.settings_rounded, size: 24),
+                      child: const Icon(
+                        Icons.settings_rounded,
+                        size: 24,
+                        shadows: [
+                          Shadow(blurRadius: 12, color: Colors.black54),
+                        ],
+                      ),
                     ),
                   ),
                 ],

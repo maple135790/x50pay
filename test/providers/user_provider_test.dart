@@ -11,7 +11,14 @@ class FakeUserModel extends Fake implements UserModel {}
 
 final mockRepo = MockRepo();
 
+abstract class OnSyncUser {
+  void call(UserModel user);
+}
+
+class MockOnSyncUser extends Mock implements OnSyncUser {}
+
 void main() {
+  final mockOnSyncUser = MockOnSyncUser();
   void arrangeGetUserReturnsData() {
     when(mockRepo.getUser).thenAnswer((_) async {
       return ApiResponse.createSuccess(FakeUserModel());
@@ -33,7 +40,10 @@ void main() {
   group('取得userModel', () {
     test('當成功取得userModel時，應該回傳true，且User 不等於Null', () async {
       arrangeGetUserReturnsData();
-      final userProvider = UserProvider(repo: mockRepo);
+      final userProvider = UserProvider(
+        repo: mockRepo,
+        onSyncUser: mockOnSyncUser.call,
+      );
       final result = await userProvider.checkUser();
       expect(result, true);
       expect(userProvider.user, isNotNull);
@@ -41,7 +51,10 @@ void main() {
 
     test('當失敗取得userModel時，應該回傳false，且User 等於Null', () async {
       arrangeGetUserReturnsNull();
-      final userProvider = UserProvider(repo: mockRepo);
+      final userProvider = UserProvider(
+        repo: mockRepo,
+        onSyncUser: mockOnSyncUser.call,
+      );
       var result = await userProvider.checkUser();
       expect(result, false);
       expect(userProvider.user, isNull);
@@ -54,7 +67,10 @@ void main() {
   });
   test('當清除User資料時，User 資料為null', () async {
     arrangeGetUserReturnsData();
-    final userProvider = UserProvider(repo: mockRepo);
+    final userProvider = UserProvider(
+      repo: mockRepo,
+      onSyncUser: mockOnSyncUser.call,
+    );
     final isGotUser = await userProvider.checkUser();
     expect(isGotUser, true);
     expect(userProvider.user, isNotNull);

@@ -9,6 +9,8 @@ import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/grade_background/grade_background.dart';
+import 'package:x50pay/common/models/grade_background/grade_background_dto.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -20,11 +22,11 @@ import 'package:x50pay/repository/main_repository/main_repository.dart';
 ///
 /// Api 呼叫細節請參考 [client.request]
 /// [MainRepository] 只顯示使用呼叫，不顯示細節。
-class ApiMainRepository extends BaseRepository implements MainRepository {
+class ApiMainRepository extends Repository implements MainRepository {
   const ApiMainRepository(super.client);
 
   Uri _endpoint(String path) {
-    return Uri.parse('https://pay.x50.fun/api/v1$path');
+    return Uri.https(Repository.webDomain, 'api/v1$path');
   }
 
   Map<String, dynamic> _decodeRes(http.Response res) {
@@ -433,6 +435,37 @@ class ApiMainRepository extends BaseRepository implements MainRepository {
       rawBody: {"favlist": favGames},
       method: HttpMethod.post,
       contentType: ContentType.json,
+    );
+  }
+
+  @override
+  Future<ApiResponse<List<GradeBackground>>> getGradeBgList() async {
+    final res = await client.request(
+      _endpoint('/grade/bg/list'),
+      method: HttpMethod.get,
+    );
+    return ApiResponse.fromJson(
+      res,
+      fromJson: (json) {
+        final dto = GradeBackgroundDTO.fromJson(json);
+        return dto.backgrounds;
+      },
+    );
+  }
+
+  @override
+  Future<ApiResponse<bool>> setBackground(String id) async {
+    final res = await client.request(
+      _endpoint('/grade/bg/change'),
+      method: HttpMethod.post,
+      rawBody: {"bgid": id},
+    );
+
+    return ApiResponse.fromText(
+      res,
+      fromBody: (body) {
+        return body.toLowerCase() != "mdfk";
+      },
     );
   }
 }

@@ -19,6 +19,8 @@ import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
 import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/environment_provider.dart';
+import 'package:x50pay/providers/home_background_provider.dart';
+import 'package:x50pay/providers/home_refresh_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
@@ -54,8 +56,12 @@ void main() async {
     apiBuilder: () => ApiSettingRepository(appClient),
     localBuilder: () => LocalSettingsRepository(),
   );
+  final homeBackgroundProvider = HomeBackgroundProvider(repo);
   final entryProvider = EntryProvider(repo: repo);
-  final userProvider = UserProvider(repo: repo);
+  final userProvider = UserProvider(
+    repo: repo,
+    onSyncUser: homeBackgroundProvider.syncFromUser,
+  );
   final loginProvider = LoginProvider(
     repo,
     cookieStorage,
@@ -130,6 +136,7 @@ void main() async {
         ChangeNotifierProvider.value(value: entryProvider),
         ChangeNotifierProvider.value(value: appSettingsProvider),
         ChangeNotifierProvider.value(value: envProvider),
+        ChangeNotifierProvider.value(value: homeBackgroundProvider),
         ChangeNotifierProvider(create: (_) => CoinInsertionProvider()),
         ChangeNotifierProvider(create: (_) => AppInfoProvider(packageInfo)),
         Provider.value(value: repo),
@@ -137,6 +144,7 @@ void main() async {
         Provider.value(value: gameInsertService),
         Provider.value(value: qrPayService),
         Provider.value(value: initializer),
+        Provider(create: (_) => HomeRefreshProvider()),
       ],
       child: LifecycleManager(callback: appLifeCycles, child: app),
     ),
@@ -153,6 +161,7 @@ class MyApp extends StatelessWidget {
   void _registerFeedbackService(BuildContext context) {
     final rootUserFeedbackService = _RootAppFeedbackService(context);
     GameInsertService.registerRootFeedbackService(rootUserFeedbackService);
+    HomeBackgroundProvider.registerRootFeedbackService(rootUserFeedbackService);
   }
 
   @override

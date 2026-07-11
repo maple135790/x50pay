@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +6,6 @@ import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/sliver_padding_injector.dart';
-import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/generated/l10n.dart';
 import 'package:x50pay/page/home/event_info/event_info.dart';
 import 'package:x50pay/page/home/home_view_model.dart';
@@ -15,6 +15,8 @@ import 'package:x50pay/page/home/recent_quests.dart';
 import 'package:x50pay/page/home/ticket_info/ticket_info.dart';
 import 'package:x50pay/page/home/top_info.dart';
 import 'package:x50pay/providers/entry_provider.dart';
+import 'package:x50pay/providers/home_background_provider.dart';
+import 'package:x50pay/providers/home_refresh_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
 
 class Home extends StatefulWidget {
@@ -38,6 +40,9 @@ class _HomeState extends State<Home> with AppThemeMixin, AppFeedbackMixin {
       entryProvider: context.read<EntryProvider>(),
     )..isFunctionalHeader = false;
     initHome = viewModel.initHome();
+    context.read<HomeRefreshProvider>().registerRefreshCallback(() {
+      initHome = viewModel.initHome();
+    });
   }
 
   @override
@@ -56,11 +61,7 @@ class _HomeState extends State<Home> with AppThemeMixin, AppFeedbackMixin {
               return Center(child: Text(serviceErrorText));
             }
 
-            return _HomeLoaded(
-              onRefresh: () async {
-                initHome = viewModel.initHome();
-              },
-            );
+            return const _HomeLoaded();
           },
         );
       },
@@ -69,12 +70,13 @@ class _HomeState extends State<Home> with AppThemeMixin, AppFeedbackMixin {
 }
 
 class _HomeLoaded extends StatelessWidget {
-  final Future<void> Function() onRefresh;
-  const _HomeLoaded({required this.onRefresh});
+  const _HomeLoaded();
 
   @override
   Widget build(BuildContext context) {
     final themeHelper = AppThemeHelper(context);
+    final statusBarHeight = MediaQuery.paddingOf(context).top;
+
     Widget divider(String title) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
@@ -97,7 +99,6 @@ class _HomeLoaded extends StatelessWidget {
       double refreshTriggerPullDistance,
       double refreshIndicatorExtent,
     ) {
-      final statusBarHeight = MediaQuery.paddingOf(context).top;
       return Padding(
         padding: EdgeInsets.only(top: statusBarHeight),
         child: CupertinoSliverRefreshControl.buildRefreshIndicator(
@@ -110,62 +111,81 @@ class _HomeLoaded extends StatelessWidget {
       );
     }
 
+    Future<void> onRefresh() async {
+      context.read<HomeRefreshProvider>().refresh();
+    }
+
     return Selector<EntryProvider, EntryModel?>(
       selector: (context, provider) => provider.entry,
       builder: (context, entry, child) {
         final i18n = S.of(context);
         final recentQuests = entry?.questCampaign ?? [];
         final events = entry?.evlist;
-        final double statusBarHeight = MediaQuery.paddingOf(context).top;
 
-        return CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            CupertinoSliverRefreshControl(
-              refreshTriggerPullDistance: 40 + statusBarHeight,
-              refreshIndicatorExtent: 30 + statusBarHeight,
-              onRefresh: onRefresh,
-              builder: buildRefreshIndicator,
-            ),
-            SliverPaddingAutoInjector(
-              slivers: [
-                SliverList.list(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0x40ffffff), Colors.transparent],
-                          stops: [0, 0.25],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.center,
-                        ),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: R.images.home.topBackground.womdMin.provider(),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          const TopInfo(),
-                          TicketInfo(entry?.stamps),
-                        ],
-                      ),
-                    ),
-                    const MariInfo(),
-                    if (events != null && events.isNotEmpty)
-                      EventInfo(events: events),
-                    if (recentQuests.isNotEmpty) divider(i18n.infoNotify),
-                    if (recentQuests.isNotEmpty)
-                      RecentQuests(quests: recentQuests),
-                    divider(i18n.officialNotify),
-                    const OfficialInfo(),
-                    const SizedBox(height: 25),
-                  ],
+        final infoWithBackground = Selector<HomeBackgroundProvider, Uri>(
+          selector: (context, provider) => provider.backgroundUri,
+          builder: (context, uri, child) {
+            return Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0x40ffffff), Colors.transparent],
+                  stops: [0, 0.25],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.center,
                 ),
-              ],
-            ),
-          ],
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  alignment: Alignment.centerRight,
+                  image: CachedNetworkImageProvider(
+                    maxHeight: 800,
+                    maxWidth: 800,
+                    uri.toString(),
+                  ),
+                ),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: statusBarHeight),
+                  const TopInfo(),
+                  TicketInfo(entry?.stamps),
+                ],
+              ),
+            );
+          },
+        );
+
+        return MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              CupertinoSliverRefreshControl(
+                refreshTriggerPullDistance: 80 + statusBarHeight,
+                refreshIndicatorExtent: 60 + statusBarHeight,
+                onRefresh: onRefresh,
+                builder: buildRefreshIndicator,
+              ),
+              SliverPaddingAutoInjector(
+                slivers: [
+                  SliverList.list(
+                    children: [
+                      RepaintBoundary(child: infoWithBackground),
+                      const RepaintBoundary(child: MariInfo()),
+                      if (events != null && events.isNotEmpty)
+                        EventInfo(events: events),
+                      if (recentQuests.isNotEmpty) divider(i18n.infoNotify),
+                      if (recentQuests.isNotEmpty)
+                        RecentQuests(quests: recentQuests),
+                      divider(i18n.officialNotify),
+                      const OfficialInfo(),
+                      const SizedBox(height: 25),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
     );

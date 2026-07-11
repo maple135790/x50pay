@@ -26,7 +26,8 @@ class ThemedScaffold extends StatelessWidget {
                 8,
             bottom:
                 MediaQuery.paddingOf(context).bottom +
-                LiquidGlassNavBottomBar.height,
+                LiquidGlassNavBottomBar.height +
+                8,
           ),
         ),
         child: body,

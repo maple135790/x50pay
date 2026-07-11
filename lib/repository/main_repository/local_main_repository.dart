@@ -8,6 +8,7 @@ import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/grade_background/grade_background.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -185,5 +186,15 @@ class LocalMainRepository implements MainRepository {
   @override
   Future<void> setFavGames(List<String> favGames) {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse<List<GradeBackground>>> getGradeBgList() async {
+    return ApiResponse.createSuccess([]);
+  }
+
+  @override
+  Future<ApiResponse<bool>> setBackground(String id) async {
+    return ApiResponse.createSuccess(true);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
@@ -12,34 +13,43 @@ class LiquidGlassNavBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final i18n = S.of(context);
-    return ValueListenableBuilder(
-      valueListenable: GoRouter.of(context).routeInformationProvider,
-      builder: (context, infoProvider, child) {
-        final path = infoProvider.uri.path;
-        final selectedIndex = MenuItem.values.indexWhere(
-          (e) => path.contains(e.route.path),
-        );
-        return GlassBottomBar(
-          barHeight: height,
-          selectedIconColor: Colors.red,
-          onTabSelected: (index) {
-            context.goNamed(MenuItem.values[index].route.routeName);
-          },
-          selectedIndex: selectedIndex,
-          tabs: MenuItem.values.map((item) {
-            return GlassBottomBarTab(
-              icon: Icon(item.icon),
-              label: switch (item) {
-                MenuItem.game => i18n.navGame,
-                MenuItem.settings => i18n.navSettings,
-                MenuItem.home => 'Me',
-                MenuItem.gift => i18n.navGift,
-                MenuItem.collab => i18n.navCollab,
-              },
-            );
-          }).toList(),
-        );
-      },
+    return SafeArea(
+      child: ValueListenableBuilder(
+        valueListenable: GoRouter.of(context).routeInformationProvider,
+        builder: (context, infoProvider, child) {
+          final path = infoProvider.uri.path;
+          final selectedIndex = MenuItem.values.indexWhere(
+            (e) => path.contains(e.route.path),
+          );
+          return GlassTabBar.bottom(
+            barHeight: height,
+            selectedIconColor: Colors.red,
+            onTabSelected: (index) {
+              context.goNamed(MenuItem.values[index].route.routeName);
+            },
+            selectedIndex: selectedIndex,
+            tabs: MenuItem.values.mapIndexed((index, item) {
+              final isSelected = selectedIndex == index;
+              final shadowColor = isSelected ? Colors.white38 : Colors.black45;
+              final shadows = [
+                Shadow(blurRadius: 0.8, color: shadowColor),
+                Shadow(blurRadius: 10, color: shadowColor),
+                Shadow(blurRadius: 21, color: shadowColor),
+              ];
+              return GlassTab(
+                icon: Icon(item.icon, shadows: shadows),
+                label: switch (item) {
+                  MenuItem.game => i18n.navGame,
+                  MenuItem.settings => i18n.navSettings,
+                  MenuItem.home => 'Me',
+                  MenuItem.gift => i18n.navGift,
+                  MenuItem.collab => i18n.navCollab,
+                },
+              );
+            }).toList(),
+          );
+        },
+      ),
     );
   }
 }

@@ -54,4 +54,21 @@ class ApiResponse<T> {
 
     return ApiResponse<T>._(result, code: code);
   }
+
+  factory ApiResponse.fromText(
+    http.Response response, {
+    required T Function(String body) fromBody,
+  }) {
+    final code = response.statusCode;
+    final Result<T> result;
+    if (code != 200) {
+      _logger.info('Code not 200');
+      result = Result.errorText(response.body);
+    } else {
+      final value = fromBody(response.body);
+      result = Result.ok(value);
+    }
+
+    return ApiResponse<T>._(result, code: code);
+  }
 }

@@ -17,4 +17,13 @@ extension LocaleText on Locale {
       _ => '繁體中文',
     };
   }
+
+  String get displayTextShort {
+    return switch (tagName) {
+      'zh-TW' => 'TW',
+      'en-US' => 'US',
+      'ja-JP' => 'JP',
+      _ => 'TW',
+    };
+  }
 }

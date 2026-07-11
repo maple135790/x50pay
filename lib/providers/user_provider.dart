@@ -8,9 +8,10 @@ class UserProvider extends ChangeNotifier {
   UserModel? get user => _user;
 
   final MainRepository repo;
+  final void Function(UserModel user) _onSyncUser;
   final _logger = Logger('UserProvider');
 
-  UserProvider({required this.repo});
+  UserProvider({required this.repo, required this._onSyncUser});
 
   /// 清除使用者資料
   void clearUser() {
@@ -36,6 +37,7 @@ class UserProvider extends ChangeNotifier {
       if (user == result.successData) return true;
 
       _user = result.successData;
+      _onSyncUser(result.successData);
       return true;
     } catch (e, stacktrace) {
       _logger.warning('', e, stacktrace);

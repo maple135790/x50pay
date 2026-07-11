@@ -1,8 +1,11 @@
+import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:x50pay/common/widgets/themed_scaffold/app_top_bar/change_background_bottom_sheet/liquid_glass_change_background_bottom_sheet.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/gen/assets.gen.dart';
 import 'package:x50pay/generated/l10n.dart';
@@ -17,7 +20,41 @@ class LiquidGlassTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onLangChanged(Locale locale) {}
-    void onShowChangeVisualBottomSheet() {}
+
+    void onShowChangeVisualBottomSheet() {
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isDismissible: false,
+        useSafeArea: true,
+        scrollControlDisabledMaxHeightRatio: 0.85,
+        showDragHandle: false,
+        builder: (context) {
+          return GlassSheet(
+            isScrollable: false,
+            showDragIndicator: false,
+            enableSaturationGlow: false,
+            enableInteractionGlow: false,
+            padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
+            settings: const LiquidGlassSettings(
+              blur: 10,
+              thickness: 10,
+              glassColor: Color.fromRGBO(255, 255, 255, 0.12),
+              lightAngle: 0.75 * math.pi,
+              lightIntensity: 0.7,
+              ambientStrength: 0.4,
+              saturation: 1.2,
+              refractiveIndex: 0.15,
+              chromaticAberration: 0.0,
+            ),
+            child: SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.6,
+              child: const LiquidGlassChangeBackgroundBottomSheet(),
+            ),
+          );
+        },
+      );
+    }
 
     void onOpenSettingsPagePressed() {
       context.goNamed(AppRoute.settings.routeName);

@@ -16,7 +16,14 @@ class MockEntryModel extends Mock implements EntryModel {}
 
 final mockRepo = MockRepository();
 
+abstract class OnSyncUser {
+  void call(UserModel user);
+}
+
+class MockOnSyncUser extends Mock implements OnSyncUser {}
+
 void main() {
+  final mockOnSyncUser = MockOnSyncUser();
   void arrangeGetEntryReturnsData() {
     when(mockRepo.getEntry).thenAnswer((_) async {
       return ApiResponse.createSuccess(MockEntryModel());
@@ -47,7 +54,10 @@ void main() {
       arrangeGetEntryReturnsData();
       final viewModel = HomeViewModel(
         entryProvider: EntryProvider(repo: mockRepo),
-        userProvider: UserProvider(repo: mockRepo),
+        userProvider: UserProvider(
+          repo: mockRepo,
+          onSyncUser: mockOnSyncUser.call,
+        ),
       );
       final isFetchedData = await viewModel.initHome();
       expect(isFetchedData, true);
@@ -57,7 +67,10 @@ void main() {
       arrangeGetEntryReturnsData();
       final viewModel = HomeViewModel(
         entryProvider: EntryProvider(repo: mockRepo),
-        userProvider: UserProvider(repo: mockRepo),
+        userProvider: UserProvider(
+          repo: mockRepo,
+          onSyncUser: mockOnSyncUser.call,
+        ),
       );
       var isFetchedData = await viewModel.initHome();
       expect(isFetchedData, false);
