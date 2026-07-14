@@ -36,20 +36,26 @@ class MaterialMariInfo extends StatelessWidget {
       refreshProvider.refresh();
     }
 
-    final dressRoomButton = MaterialGlass(
-      width: 30,
-      height: 30,
-      shape: .circle,
-      color: Colors.white12,
+    final dressRoomButton = SizedBox.square(
+      dimension: kMinInteractiveDimension,
       child: GestureDetector(
         onTap: onDressRoomPressed,
-        child: Padding(
-          padding: const EdgeInsets.all(6.5),
-          child: SvgPicture(
-            Svgs.shirtSolid,
-            width: 17.875,
-            height: 14.3,
-            colorFilter: SvgsExtension.colorFilter(const Color(0xffffc0cb)),
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: MaterialGlass(
+            width: 30,
+            height: 30,
+            shape: .circle,
+            color: Colors.white12,
+            child: Padding(
+              padding: const EdgeInsets.all(6.5),
+              child: SvgPicture(
+                Svgs.shirtSolid,
+                width: 17.875,
+                height: 14.3,
+                colorFilter: SvgsExtension.colorFilter(const Color(0xffffc0cb)),
+              ),
+            ),
           ),
         ),
       ),
