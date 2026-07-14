@@ -277,7 +277,6 @@ class MariWidgetBuilder {
 
   Widget mariImage(EntryModel entry) {
     return FadeInImage(
-      key: ValueKey(entry.ava),
       image: MemoryImage(entry.ava),
       placeholder: MemoryImage(kTransparentImage),
       imageErrorBuilder: _handleMariImageError,
