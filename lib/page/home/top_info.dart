@@ -33,7 +33,9 @@ class TopInfo extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color(0xff52c41a),
                 borderRadius: BorderRadius.circular(100),
-                boxShadow: [const BoxShadow(blurRadius: 12, color: Colors.black54)],
+                boxShadow: [
+                  const BoxShadow(blurRadius: 12, color: Colors.black54),
+                ],
               ),
               child: Text(
                 "ID ${user.uid ?? ""}",

@@ -31,8 +31,6 @@ class _DressRoomState extends State<DressRoom> {
     initDressRoom = viewModel.getAvatars();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -59,5 +57,3 @@ class _DressRoomState extends State<DressRoom> {
     );
   }
 }
-
-

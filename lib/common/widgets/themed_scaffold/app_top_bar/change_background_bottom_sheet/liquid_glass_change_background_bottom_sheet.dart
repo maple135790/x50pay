@@ -48,7 +48,7 @@ class _LiquidGlassChangeBackgroundBottomSheetState
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: const Color(0xff1e1e1e),
-        borderRadius: BorderRadius.circular(15)
+        borderRadius: BorderRadius.circular(15),
       ),
       child: FutureBuilder(
         future: getBackgoundList,

@@ -3,7 +3,7 @@ import 'package:x50pay/common/app_initializer.dart';
 
 class ThemedWidgetFactory {
   ThemedWidgetFactory._();
-  
+
   static T create<T extends Widget>(
     AppInitializer initializer, {
     required T Function() liquidGlassWidgetBuilder,

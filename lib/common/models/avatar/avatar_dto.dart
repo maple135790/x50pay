@@ -14,4 +14,3 @@ class AvatarDTO extends BasicResponse {
   factory AvatarDTO.fromJson(Map<String, dynamic> json) =>
       _$AvatarDTOFromJson(json);
 }
-

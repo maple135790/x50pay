@@ -20,4 +20,3 @@ class GradeBackgroundDTO extends BasicResponse {
   @override
   Map<String, dynamic> toJson() => _$GradeBackgroundDTOToJson(this);
 }
-
