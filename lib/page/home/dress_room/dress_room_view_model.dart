@@ -1,17 +1,18 @@
 import 'dart:developer';
 
-import 'package:html/parser.dart' as html;
-import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/page/home/dress_room/dress_room.dart';
+import 'package:flutter/foundation.dart';
+import 'package:x50pay/common/models/avatar/avatar.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class DressRoomViewModel extends BaseViewModel {
+class DressRoomViewModel extends ChangeNotifier {
   final MainRepository repository;
 
   DressRoomViewModel({required this.repository});
 
   static const avatarUrl = 'https://pay.x50.fun/api/v1/list/avater';
-  final avatars = <Avatar>[];
+
+  List<Avatar> _avatars = <Avatar>[];
+  List<Avatar> get avatars => List.unmodifiable(_avatars);
 
   String _loadingStatus = '';
   String get loadingStatus => _loadingStatus;
@@ -21,34 +22,29 @@ class DressRoomViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<List<Avatar>> getAvatars() async {
-    const parentSelector = 'body > div > div > div';
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
+  String? _selectedAvatar;
+  String? get selectedId => _selectedAvatar;
+  set selectedId(String? value) {
+    if (_selectedAvatar == value) {
+      _selectedAvatar = null;
+    } else {
+      _selectedAvatar = value;
+    }
+    notifyListeners();
+  }
+
+  Future<List<Avatar>> getAvatars() async {
     try {
-      late String rawDoc;
       loadingStatus = '取得更衣室的所有衣服中...';
       final response = await repository.getAvatar();
 
-      if (response.statusCode != 200) {
-        throw Exception('statusCode: ${response.statusCode}');
+      if (response.result.isError) {
+        throw Exception('statusCode:');
       }
-      rawDoc = response.body;
-      final doc = html.parse(rawDoc, encoding: 'utf8');
-      final parents = doc.querySelectorAll(parentSelector);
-      for (final parent in parents) {
-        // 有些父元素沒有子元素，例如沒有圖片的父元素
-        if (parent.children.length < 2) continue;
-        avatars.add((
-          b64Image: parent.children[0].attributes['src']!
-              .split('data:image/webp;base64,')
-              .last,
-          id: parent.children[0].attributes['onclick']?.split("'")[1],
-          badgeText: parent.children[1]
-              .querySelector('div > div > div')!
-              .text
-              .trim(),
-        ));
-      }
+      _avatars = response.result.successData;
     } catch (e) {
       log('', name: 'DressRoomViewModel init', error: e);
       loadingStatus = '錯誤';
@@ -56,13 +52,13 @@ class DressRoomViewModel extends BaseViewModel {
     return avatars;
   }
 
-  Future<String> setAvatar(String id) async {
-    String text = '';
-    showLoading();
-    final response = await repository.setAvatar(id);
-    text = response.body;
-    dismissLoading();
+  Future<bool> setAvatar() async {
+    if (selectedId == null) return false;
 
-    return text;
+    _isLoading = true;
+    final res = await repository.setAvatar(selectedId!);
+    _isLoading = false;
+
+    return res.result.isSuccess;
   }
 }

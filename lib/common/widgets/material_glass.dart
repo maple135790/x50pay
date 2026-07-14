@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:x50pay/common/custom_box_shadow.dart';
 
@@ -13,6 +15,7 @@ class MaterialGlass extends StatelessWidget {
   final double? height;
   final BoxShape shape;
   final bool isEnabled;
+  final bool isBlurEnabled;
 
   const MaterialGlass({
     super.key,
@@ -26,6 +29,7 @@ class MaterialGlass extends StatelessWidget {
     this.height,
     this.shape = BoxShape.rectangle,
     this.isEnabled = true,
+    this.isBlurEnabled = false,
   }) : _dropShadow = false;
 
   const MaterialGlass.withShadow({
@@ -40,6 +44,7 @@ class MaterialGlass extends StatelessWidget {
     this.height,
     this.shape = BoxShape.rectangle,
     this.isEnabled = true,
+    this.isBlurEnabled = false,
   }) : _dropShadow = true;
 
   @override
@@ -61,7 +66,7 @@ class MaterialGlass extends StatelessWidget {
       ]);
     }
 
-    return Container(
+    Widget result = Container(
       width: width,
       height: height,
       padding: padding,
@@ -75,5 +80,18 @@ class MaterialGlass extends StatelessWidget {
       ),
       child: child,
     );
+
+    if (isBlurEnabled) {
+      result = ClipRRect(
+        borderRadius: effectiveBorderRadius ?? BorderRadius.zero,
+        child: BackdropFilter(
+          enabled: isBlurEnabled,
+          filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+          child: result,
+        ),
+      );
+    }
+
+    return result;
   }
 }

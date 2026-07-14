@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/client/request_handler.dart';
 import 'package:x50pay/common/models/api_response.dart';
+import 'package:x50pay/common/models/avatar/avatar.dart';
+import 'package:x50pay/common/models/avatar/avatar_dto.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
@@ -250,18 +252,34 @@ class ApiMainRepository extends Repository implements MainRepository {
 
   /// 取得更衣室的所有衣服API
   @override
-  Future<http.Response> getAvatar() {
-    return client.request(_endpoint('/list/avater'), method: HttpMethod.get);
+  Future<ApiResponse<List<Avatar>>> getAvatar() async {
+    final res = await client.request(
+      _endpoint('/grade/avater/list'),
+      method: HttpMethod.get,
+    );
+
+    return ApiResponse.fromJson(
+      res,
+      fromJson: (json) {
+        final dto = AvatarDTO.fromJson(json);
+        return dto.avatars;
+      },
+    );
   }
 
   /// 設定角色衣服API
   @override
-  Future<http.Response> setAvatar(String id) {
-    return client.request(
-      _endpoint('/cgAva/$id'),
-      rawBody: {},
+  Future<ApiResponse<bool>> setAvatar(String id) async {
+    final res = await client.request(
+      _endpoint('/grade/avater/change'),
+      rawBody: {'avaid': id},
       method: HttpMethod.post,
       contentType: ContentType.json,
+    );
+
+    return ApiResponse.fromText(
+      res,
+      fromBody: (body) => body.toLowerCase() == 'succ',
     );
   }
 

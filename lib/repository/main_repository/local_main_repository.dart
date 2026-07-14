@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/models/api_response.dart';
+import 'package:x50pay/common/models/avatar/avatar.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
@@ -71,7 +72,7 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<http.Response> getAvatar() {
+  Future<ApiResponse<List<Avatar>>> getAvatar() {
     throw UnimplementedError();
   }
 
@@ -179,7 +180,7 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<http.Response> setAvatar(String id) {
+  Future<ApiResponse<bool>> setAvatar(String id) {
     throw UnimplementedError();
   }
 

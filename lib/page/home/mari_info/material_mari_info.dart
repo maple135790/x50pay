@@ -6,9 +6,12 @@ import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/widgets/material_glass.dart';
+import 'package:x50pay/common/widgets/themed_bottom_sheet/themed_bottom_sheet.dart';
 import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/page/home/dress_room/dress_room.dart';
 import 'package:x50pay/page/home/mari_info/mari_info.dart';
 import 'package:x50pay/providers/entry_provider.dart';
+import 'package:x50pay/providers/home_refresh_provider.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class MaterialMariInfo extends StatelessWidget {
@@ -22,7 +25,15 @@ class MaterialMariInfo extends StatelessWidget {
     }
 
     void onDressRoomPressed() async {
-      context.goNamed(AppRoute.dressRoom.routeName);
+      final refreshProvider = context.read<HomeRefreshProvider>();
+      final isDressChanged = await showThemedModalBottomSheet<bool>(
+        context: context,
+        useRootNavigator: true,
+        title: S.of(context).dressRoomTitle,
+        builder: (context) => const DressRoom(),
+      );
+      if (isDressChanged != true) return;
+      refreshProvider.refresh();
     }
 
     final dressRoomButton = MaterialGlass(
