@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/widgets/material_glass.dart';
+import 'package:x50pay/common/widgets/themed_bottom_sheet/themed_bottom_sheet.dart';
 import 'package:x50pay/common/widgets/themed_scaffold/app_top_bar/change_background_bottom_sheet/change_background_bottom_sheet.dart';
 import 'package:x50pay/extensions/locale_ext.dart';
 import 'package:x50pay/gen/assets.gen.dart';
@@ -28,12 +29,11 @@ class _MaterialTopBarState extends State<MaterialTopBar> {
     }
 
     void onShowChangeVisualBottomSheet() {
-      showModalBottomSheet(
-        backgroundColor: Colors.transparent,
+      showThemedModalBottomSheet(
         context: context,
         isDismissible: false,
-        useSafeArea: true,
         scrollControlDisabledMaxHeightRatio: 0.85,
+        title: "更換角色/衣裝",
         builder: (context) {
           return const ChangeBackgroundBottomSheet();
         },

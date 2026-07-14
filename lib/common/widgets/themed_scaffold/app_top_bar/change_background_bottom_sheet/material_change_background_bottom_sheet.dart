@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/models/grade_background/grade_background.dart';
@@ -45,7 +44,7 @@ class _MaterialChangeBackgroundBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    final visualListView = MaterialGlass(
+    return MaterialGlass(
       color: const Color(0xff1e1e1e),
       borderRadius: 15,
       child: FutureBuilder(
@@ -70,40 +69,6 @@ class _MaterialChangeBackgroundBottomSheetState
             },
           );
         },
-      ),
-    );
-    final bottomPadding = MediaQuery.paddingOf(context).bottom;
-    return MaterialGlass(
-      padding: EdgeInsets.fromLTRB(26, 14, 26, 18 + bottomPadding),
-      color: Colors.grey.shade800.withValues(alpha: .85),
-      borderRadius: 16.5,
-      child: Column(
-        spacing: 8,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                '更換角色/衣裝',
-                style: TextStyle(fontSize: 17, fontWeight: .w600),
-              ),
-              MaterialGlass.withShadow(
-                shape: BoxShape.circle,
-                color: Colors.white24,
-                child: GestureDetector(
-                  onTap: () {
-                    context.pop();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: CloseButtonIcon(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Expanded(child: visualListView),
-        ],
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
@@ -45,7 +44,8 @@ class _LiquidGlassChangeBackgroundBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    final visualListView = Container(
+    return Container(
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: const Color(0xff1e1e1e),
         borderRadius: BorderRadius.circular(15)
@@ -73,28 +73,6 @@ class _LiquidGlassChangeBackgroundBottomSheetState
           );
         },
       ),
-    );
-
-    return Column(
-      spacing: 8,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              '更換角色/衣裝',
-              style: TextStyle(fontSize: 17, fontWeight: .w600),
-            ),
-            GlassIconButton(
-              icon: const CloseButtonIcon(),
-              onPressed: () {
-                context.pop();
-              },
-            ),
-          ],
-        ),
-        Expanded(child: visualListView),
-      ],
     );
   }
 
