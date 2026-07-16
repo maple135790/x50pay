@@ -27,7 +27,7 @@ class RecentQuests extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
               child: Material(
                 elevation: 5,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(15),
                 clipBehavior: Clip.antiAlias,
                 child: Container(
                   clipBehavior: Clip.antiAlias,

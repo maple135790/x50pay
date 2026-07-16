@@ -3,11 +3,14 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/models/api_response.dart';
+import 'package:x50pay/common/models/avatar/avatar.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/grade_background/grade_background.dart';
+import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -35,7 +38,7 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<String> chgGradev2(String gid, String grid) {
+  Future<ApiResponse<String>> changeGrade(String gid, String grid) {
     throw UnimplementedError();
   }
 
@@ -65,12 +68,12 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<String> fetchGradeBox() {
+  Future<ApiResponse<GradeBox>> getGradeBox(String region) {
     throw UnimplementedError();
   }
 
   @override
-  Future<http.Response> getAvatar() {
+  Future<ApiResponse<List<Avatar>>> getAvatar() {
     throw UnimplementedError();
   }
 
@@ -95,8 +98,8 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<EntryModel?> getEntry() async {
-    return const EntryModel.empty();
+  Future<ApiResponse<EntryModel>> getEntry() async {
+    return ApiResponse.createSuccess(const EntryModel.empty());
   }
 
   @override
@@ -136,7 +139,7 @@ class LocalMainRepository implements MainRepository {
 
   @override
   Future<ApiResponse<UserModel>> getUser() async {
-    return ApiResponse.createSuccess(const UserModel.empty());
+    throw UnimplementedError();
   }
 
   @override
@@ -178,12 +181,22 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<http.Response> setAvatar(String id) {
+  Future<ApiResponse<bool>> setAvatar(String id) {
     throw UnimplementedError();
   }
 
   @override
   Future<void> setFavGames(List<String> favGames) {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse<List<GradeBackground>>> getGradeBgList() async {
+    return ApiResponse.createSuccess([]);
+  }
+
+  @override
+  Future<ApiResponse<bool>> setBackground(String id) async {
+    return ApiResponse.createSuccess(true);
   }
 }

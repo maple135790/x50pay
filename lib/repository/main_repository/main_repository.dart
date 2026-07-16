@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/models/api_response.dart';
+import 'package:x50pay/common/models/avatar/avatar.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/grade_background/grade_background.dart';
+import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -26,7 +29,7 @@ abstract interface class MainRepository {
   Future<ApiResponse<UserModel>> getUser();
 
   /// 取得首頁資料API
-  Future<EntryModel?> getEntry();
+  Future<ApiResponse<EntryModel>> getEntry();
 
   /// 登出API
   Future<void> logout();
@@ -97,10 +100,10 @@ abstract interface class MainRepository {
   Future<void> giftExchange(String gid);
 
   /// 取得更衣室的所有衣服API
-  Future<http.Response> getAvatar();
+  Future<ApiResponse<List<Avatar>>> getAvatar();
 
   /// 設定角色衣服API
-  Future<http.Response> setAvatar(String id);
+  Future<ApiResponse<bool>> setAvatar(String id);
 
   /// 月票人際帝方案的購買API
   ///
@@ -131,12 +134,12 @@ abstract interface class MainRepository {
   Future<String> getSponserDocument();
 
   /// 取得養成商場內，點數兌換商品資料API
-  Future<String> fetchGradeBox();
+  Future<ApiResponse<GradeBox>> getGradeBox(String region);
 
   /// 兌換養成商場內商品API
   ///
   /// 需要傳入 [gid] 及 [grid]
-  Future<String> chgGradev2(String gid, String grid);
+  Future<ApiResponse<String>> changeGrade(String gid, String grid);
 
   Future<http.Response> getDocument(String fullUrl);
 
@@ -153,4 +156,8 @@ abstract interface class MainRepository {
   Future<GameList> favGameList();
 
   Future<void> setFavGames(List<String> favGames);
+
+  Future<ApiResponse<List<GradeBackground>>> getGradeBgList();
+
+  Future<ApiResponse<bool>> setBackground(String id);
 }

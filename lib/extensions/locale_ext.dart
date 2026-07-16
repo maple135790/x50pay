@@ -10,15 +10,20 @@ extension LocaleText on Locale {
   ///
   /// 例如 `繁體中文`、`English`、`日本語`
   String get displayText {
-    switch (tagName) {
-      case 'zh-TW':
-        return '繁體中文';
-      case 'en-US':
-        return 'English';
-      case 'ja-JP':
-        return '日本語';
-      default:
-        return '繁體中文';
-    }
+    return switch (tagName) {
+      'zh-TW' => '繁體中文',
+      'en-US' => 'English',
+      'ja-JP' => '日本語',
+      _ => '繁體中文',
+    };
+  }
+
+  String get displayTextShort {
+    return switch (tagName) {
+      'zh-TW' => 'TW',
+      'en-US' => 'US',
+      'ja-JP' => 'JP',
+      _ => 'TW',
+    };
   }
 }

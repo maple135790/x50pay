@@ -8,33 +8,36 @@ mixin AppFeedbackMixin {
 
   String get serviceErrorText => S.of(context).serviceError;
 
-  void showServiceError() {
-    EasyLoading.showError(
+  Future<void> showServiceError() {
+    return EasyLoading.showError(
       serviceErrorText,
       dismissOnTap: false,
       duration: const Duration(seconds: 2),
     );
   }
 
-  void showLoading() {
+  Future<void> showLoading() {
     dismissLoading();
-    EasyLoading.show();
+    return EasyLoading.show();
   }
 
-  void dismissLoading() {
-    if (!EasyLoading.isShow) return;
-    EasyLoading.dismiss();
+  Future<void> dismissLoading() {
+    if (!EasyLoading.isShow) return Future.value();
+    return EasyLoading.dismiss();
   }
 
-  void showSuccess(String text) {
-    EasyLoading.showSuccess(text);
+  Future<void> showSuccess(String text) {
+    return EasyLoading.showSuccess(text);
   }
 
-  void showError(String text) {
-    EasyLoading.showError(text);
+  Future<void> showError(String text) {
+    return EasyLoading.showError(text);
   }
 
-  void showInfo(String text, {Duration duration = const Duration(seconds: 1)}) {
-    EasyLoading.showInfo(text, duration: duration);
+  Future<void> showInfo(
+    String text, {
+    Duration duration = const Duration(seconds: 1),
+  }) {
+    return EasyLoading.showInfo(text, duration: duration);
   }
 }

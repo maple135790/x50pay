@@ -12,7 +12,7 @@ typedef ProgressIcon = ({Path iconPath, Size iconSize});
 
 class ProgressBar extends StatefulWidget {
   final double currentValue;
-  final VoidCallback onProgressBarCreated;
+  final VoidCallback? onProgressBarCreated;
   final String? progressText;
   final double height;
   final Color? progressColor;
@@ -23,7 +23,7 @@ class ProgressBar extends StatefulWidget {
     required this.height,
     this.progressColor,
     this.progressText,
-    required this.onProgressBarCreated,
+    this.onProgressBarCreated,
   });
 
   @override
@@ -61,7 +61,7 @@ class _ProgressBarState extends State<ProgressBar>
         }
       });
     controller.forward();
-    widget.onProgressBarCreated.call();
+    widget.onProgressBarCreated?.call();
   }
 
   @override

@@ -187,6 +187,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "userUTicLog": MessageLookupByLibrary.simpleMessage("已使用券明細"),
     "vipDate": MessageLookupByLibrary.simpleMessage("期限 : "),
     "vipExpiredMsg": MessageLookupByLibrary.simpleMessage("點左側票券圖樣立刻購買"),
+    "vipMsgBuy1": MessageLookupByLibrary.simpleMessage(", 無月票 "),
+    "vipMsgBuy2": MessageLookupByLibrary.simpleMessage("(購買)"),
+    "vipOwned": MessageLookupByLibrary.simpleMessage(", 月票: ~"),
     "x50PayLanguage": MessageLookupByLibrary.simpleMessage("X50Pay 語言"),
   };
 }

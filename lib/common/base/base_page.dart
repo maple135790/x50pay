@@ -5,7 +5,7 @@ import 'package:x50pay/common/app_theme_mixin.dart';
 import 'package:x50pay/common/widgets/persist_app_bar.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 
-class DebugScaffold extends StatelessWidget with AppThemeMixin {
+class DebugScaffold extends StatelessWidget {
   final VoidCallback? debugFunction;
   final Widget child;
 
@@ -15,16 +15,11 @@ class DebugScaffold extends StatelessWidget with AppThemeMixin {
     required this.child,
   });
 
-  static late BuildContext _localContext;
-
-  @override
-  BuildContext get context => _localContext;
-
   bool get shouldShowDebugButton => kDebugMode && debugFunction != null;
 
   @override
   Widget build(BuildContext context) {
-    _localContext = context;
+    final themeHelper = AppThemeHelper(context);
     final debugButton = Column(
       spacing: 16,
       mainAxisSize: MainAxisSize.min,
@@ -38,7 +33,9 @@ class DebugScaffold extends StatelessWidget with AppThemeMixin {
           heroTag: "brightness",
           child: const Icon(Icons.brightness_6_rounded),
           onPressed: () {
-            final brightness = isDarkTheme ? Brightness.light : Brightness.dark;
+            final brightness = themeHelper.isDarkTheme
+                ? Brightness.light
+                : Brightness.dark;
             context.read<AppThemeProvider>().changeBrightness(brightness);
           },
         ),
@@ -46,7 +43,7 @@ class DebugScaffold extends StatelessWidget with AppThemeMixin {
     );
 
     return AnnotatedRegion(
-      value: overlayStyle,
+      value: themeHelper.overlayStyle,
       child: Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(50),

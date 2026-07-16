@@ -15,13 +15,13 @@ class OfficialInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Material(
             elevation: 2.5,
             clipBehavior: Clip.antiAlias,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(15),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(15),
               child: Stack(
                 children: [
                   Image(image: R.images.home.vts.provider(), fit: BoxFit.fill),
@@ -44,13 +44,13 @@ class OfficialInfo extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
           child: Material(
             elevation: 2.5,
             clipBehavior: Clip.antiAlias,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(15),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(15),
               child: Stack(
                 children: [
                   Image(image: R.images.home.top.provider(), fit: BoxFit.fill),

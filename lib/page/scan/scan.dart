@@ -77,6 +77,7 @@ class _ScanQRCodeState extends State<ScanQRCode>
   void dispose() {
     log('dispose', name: 'ScanQRCode');
     qrPayModalTransistionController.dispose();
+    scannerBlinkController.dispose();
     controller.dispose();
     super.dispose();
   }

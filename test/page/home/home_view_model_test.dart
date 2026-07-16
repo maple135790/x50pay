@@ -12,22 +12,31 @@ class MockRepository extends Mock implements MainRepository {}
 
 class FakeUserModel extends Fake implements UserModel {}
 
+class MockEntryModel extends Mock implements EntryModel {}
+
 final mockRepo = MockRepository();
 
+abstract class OnSyncUser {
+  void call(UserModel user);
+}
+
+class MockOnSyncUser extends Mock implements OnSyncUser {}
+
 void main() {
+  final mockOnSyncUser = MockOnSyncUser();
   void arrangeGetEntryReturnsData() {
     when(mockRepo.getEntry).thenAnswer((_) async {
-      return const EntryModel(message: 'done', code: 200, gr2: []);
+      return ApiResponse.createSuccess(MockEntryModel());
     });
   }
 
-  void arrangeGetEntryReturnsNull() {
+  void arrangeGetEntryReturnsFailed() {
     when(mockRepo.getEntry).thenAnswer((_) async {
-      return null;
+      return ApiResponse.createFailed(MockEntryModel());
     });
   }
 
-  void arrangeGetUserReturnsNull() {
+  void arrangeGetUserReturnsFailed() {
     when(mockRepo.getUser).thenAnswer((_) async {
       return ApiResponse.createFailed(FakeUserModel());
     });
@@ -45,28 +54,34 @@ void main() {
       arrangeGetEntryReturnsData();
       final viewModel = HomeViewModel(
         entryProvider: EntryProvider(repo: mockRepo),
-        userProvider: UserProvider(repo: mockRepo),
+        userProvider: UserProvider(
+          repo: mockRepo,
+          onSyncUser: mockOnSyncUser.call,
+        ),
       );
       final isFetchedData = await viewModel.initHome();
       expect(isFetchedData, true);
     });
     test('當getUser 和getEntry 其中一個沒有回傳資料', () async {
-      arrangeGetUserReturnsNull();
+      arrangeGetUserReturnsFailed();
       arrangeGetEntryReturnsData();
       final viewModel = HomeViewModel(
         entryProvider: EntryProvider(repo: mockRepo),
-        userProvider: UserProvider(repo: mockRepo),
+        userProvider: UserProvider(
+          repo: mockRepo,
+          onSyncUser: mockOnSyncUser.call,
+        ),
       );
       var isFetchedData = await viewModel.initHome();
       expect(isFetchedData, false);
 
       arrangeGetUserReturnsData();
-      arrangeGetEntryReturnsNull();
+      arrangeGetEntryReturnsFailed();
       isFetchedData = await viewModel.initHome();
       expect(isFetchedData, false);
 
-      arrangeGetUserReturnsNull();
-      arrangeGetEntryReturnsNull();
+      arrangeGetUserReturnsFailed();
+      arrangeGetEntryReturnsFailed();
       isFetchedData = await viewModel.initHome();
       expect(isFetchedData, false);
     });

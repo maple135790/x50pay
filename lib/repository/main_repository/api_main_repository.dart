@@ -4,11 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:x50pay/common/client/request_handler.dart';
 import 'package:x50pay/common/models/api_response.dart';
+import 'package:x50pay/common/models/avatar/avatar.dart';
+import 'package:x50pay/common/models/avatar/avatar_dto.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/grade_background/grade_background.dart';
+import 'package:x50pay/common/models/grade_background/grade_background_dto.dart';
+import 'package:x50pay/common/models/grade_box/grade_box.dart';
+import 'package:x50pay/common/models/grade_box/grade_box_dto.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -20,11 +26,11 @@ import 'package:x50pay/repository/main_repository/main_repository.dart';
 ///
 /// Api 呼叫細節請參考 [client.request]
 /// [MainRepository] 只顯示使用呼叫，不顯示細節。
-class ApiMainRepository extends BaseRepository implements MainRepository {
+class ApiMainRepository extends Repository implements MainRepository {
   const ApiMainRepository(super.client);
 
   Uri _endpoint(String path) {
-    return Uri.parse('https://pay.x50.fun/api/v1$path');
+    return Uri.https(Repository.webDomain, 'api/v1$path');
   }
 
   Map<String, dynamic> _decodeRes(http.Response res) {
@@ -61,13 +67,13 @@ class ApiMainRepository extends BaseRepository implements MainRepository {
 
   /// 取得首頁資料API
   @override
-  Future<EntryModel?> getEntry() async {
+  Future<ApiResponse<EntryModel>> getEntry() async {
     final res = await client.request(
       _endpoint('/user/entry'),
       method: HttpMethod.post,
       rawBody: {},
     );
-    return EntryModel.fromJson(_decodeRes(res));
+    return ApiResponse.fromJson(res, fromJson: EntryModel.fromJson);
   }
 
   /// 登出API
@@ -248,18 +254,34 @@ class ApiMainRepository extends BaseRepository implements MainRepository {
 
   /// 取得更衣室的所有衣服API
   @override
-  Future<http.Response> getAvatar() {
-    return client.request(_endpoint('/list/avater'), method: HttpMethod.get);
+  Future<ApiResponse<List<Avatar>>> getAvatar() async {
+    final res = await client.request(
+      _endpoint('/grade/avater/list'),
+      method: HttpMethod.get,
+    );
+
+    return ApiResponse.fromJson(
+      res,
+      fromJson: (json) {
+        final dto = AvatarDTO.fromJson(json);
+        return dto.avatars;
+      },
+    );
   }
 
   /// 設定角色衣服API
   @override
-  Future<http.Response> setAvatar(String id) {
-    return client.request(
-      _endpoint('/cgAva/$id'),
-      rawBody: {},
+  Future<ApiResponse<bool>> setAvatar(String id) async {
+    final res = await client.request(
+      _endpoint('/grade/avater/change'),
+      rawBody: {'avaid': id},
       method: HttpMethod.post,
       contentType: ContentType.json,
+    );
+
+    return ApiResponse.fromText(
+      res,
+      fromBody: (body) => body.toLowerCase() == 'succ',
     );
   }
 
@@ -346,29 +368,34 @@ class ApiMainRepository extends BaseRepository implements MainRepository {
 
   /// 取得養成商場內，點數兌換商品資料API
   @override
-  Future<String> fetchGradeBox() async {
-    final response = await client.request(
-      _endpoint('/grade/box'),
+  Future<ApiResponse<GradeBox>> getGradeBox(String region) async {
+    final res = await client.request(
+      _endpoint('/grade/box/$region'),
       method: HttpMethod.post,
-      rawBody: {},
       contentType: ContentType.json,
     );
-    return response.body;
+
+    return ApiResponse.fromJson(
+      res,
+      fromJson: (json) {
+        final dto = GradeBoxDTO.fromJson(json);
+        return GradeBoxExt.fromDTO(dto);
+      },
+    );
   }
 
   /// 兌換養成商場內商品API
   ///
   /// 需要傳入 [gid] 及 [grid]
   @override
-  Future<String> chgGradev2(String gid, String grid) async {
+  Future<ApiResponse<String>> changeGrade(String gid, String grid) async {
     final response = await client.request(
       _endpoint('/grade/change'),
       rawBody: {'gid': gid, 'grid': grid},
       method: HttpMethod.post,
-
       contentType: ContentType.json,
     );
-    return response.body;
+    return ApiResponse.fromText(response, fromBody: (body) => body);
   }
 
   @override
@@ -433,6 +460,37 @@ class ApiMainRepository extends BaseRepository implements MainRepository {
       rawBody: {"favlist": favGames},
       method: HttpMethod.post,
       contentType: ContentType.json,
+    );
+  }
+
+  @override
+  Future<ApiResponse<List<GradeBackground>>> getGradeBgList() async {
+    final res = await client.request(
+      _endpoint('/grade/bg/list'),
+      method: HttpMethod.get,
+    );
+    return ApiResponse.fromJson(
+      res,
+      fromJson: (json) {
+        final dto = GradeBackgroundDTO.fromJson(json);
+        return dto.backgrounds;
+      },
+    );
+  }
+
+  @override
+  Future<ApiResponse<bool>> setBackground(String id) async {
+    final res = await client.request(
+      _endpoint('/grade/bg/change'),
+      method: HttpMethod.post,
+      rawBody: {"bgid": id},
+    );
+
+    return ApiResponse.fromText(
+      res,
+      fromBody: (body) {
+        return body.toLowerCase() != "mdfk";
+      },
     );
   }
 }

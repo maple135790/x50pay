@@ -1,0 +1,102 @@
+{
+    "code": 200,
+    "message": "done",
+    "result": [
+        {
+            "_id": "6a33475b4124657159f3afb6",
+            "bgid": "mariv2",
+            "enable": true,
+            "name": "真璃-2.0正裝 [舞綾真璃][官方]"
+        },
+        {
+            "_id": "6a33475b4124657159f3afb7",
+            "bgid": "rinka",
+            "enable": true,
+            "name": "璃花-常態正裝 [MiruMiu][官方]"
+        },
+        {
+            "_id": "6a33475b4124657159f3afb8",
+            "bgid": "karin",
+            "enable": true,
+            "name": "花凜-巫女正裝 [MiruMiu][官方]"
+        },
+        {
+            "_id": "6a33475b4124657159f3afb9",
+            "bgid": "riko",
+            "enable": true,
+            "name": "璃子-常態正裝 [舞綾真璃][官方]"
+        },
+        {
+            "_id": "6a33475b4124657159f3afba",
+            "bgid": "momiji",
+            "enable": true,
+            "name": "柑仔-常態正裝 [MiruMiu][官方]"
+        },
+        {
+            "_id": "6a33475b4124657159f3afbb",
+            "bgid": "mari23swim",
+            "enable": true,
+            "name": "真璃-23年夏季泳裝 [舞綾真璃][官方]"
+        },
+        {
+            "_id": "6a33475b4124657159f3afbc",
+            "bgid": "rinka23swim",
+            "enable": true,
+            "name": "璃花-23年夏季泳裝 [MiruMiu][官方]"
+        },
+        {
+            "_id": "6a3365374124657159f3afbd",
+            "bgid": "momi2026nw",
+            "enable": true,
+            "name": "柑仔-26年新年新衣 [MiruMiu][官方]"
+        },
+        {
+            "_id": "6a3373e44124657159f3afbe",
+            "bgid": "karin2026nw",
+            "enable": true,
+            "name": "花凜-26年新年新衣 [MiruMiu][官方]"
+        },
+        {
+            "_id": "6a3401b14124657159f3afbf",
+            "bgid": "50pay_01Shama",
+            "color": "white",
+            "enable": true,
+            "name": "しゃま-Party☆People☆Princess  [小捲シル][同人]"
+        },
+        {
+            "_id": "6a3403494124657159f3afc0",
+            "bgid": "50pay_02Milk",
+            "color": "white",
+            "enable": true,
+            "name": "みるく-Party☆People☆Princess [小捲シル][同人]"
+        },
+        {
+            "_id": "6a3403764124657159f3afc1",
+            "bgid": "50pay_03PRiSM",
+            "color": "dark",
+            "enable": true,
+            "name": "ソルト＆みるく-PRiSM [小捲シル][同人]"
+        },
+        {
+            "_id": "6a34039f4124657159f3afc2",
+            "bgid": "50pay_04Acid",
+            "color": "white",
+            "enable": true,
+            "name": "アシッド- Straight-into-the-lights [小捲シル][同人]"
+        },
+        {
+            "_id": "6a3403b14124657159f3afc3",
+            "bgid": "50pay_05MikaSalt",
+            "color": "white",
+            "enable": true,
+            "name": "百合咲ミカ＆ソルト- ホワイトプリンセス/ブルーロイヤル [小捲シル][同人]"
+        },
+        {
+            "_id": "6a340a164124657159f3afc4",
+            "bgid": "lekafull",
+            "color": "white",
+            "enable": true,
+            "name": "花凜-25情人節 [MiruMiu][官方]"
+        }
+    ]
+}

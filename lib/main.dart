@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/app_lifecycle.dart';
 import 'package:x50pay/common/app_initializer.dart';
@@ -18,6 +19,8 @@ import 'package:x50pay/providers/app_settings_provider.dart';
 import 'package:x50pay/providers/coin_insertion_provider.dart';
 import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/environment_provider.dart';
+import 'package:x50pay/providers/home_background_provider.dart';
+import 'package:x50pay/providers/home_refresh_provider.dart';
 import 'package:x50pay/providers/language_provider.dart';
 import 'package:x50pay/providers/theme_provider.dart';
 import 'package:x50pay/providers/user_provider.dart';
@@ -39,6 +42,7 @@ void main() async {
   final languageProvider = LanguageProvider();
   final themeProvider = AppThemeProvider();
   final envProvider = EnvironmentProvider();
+  final appSettingsProvider = AppSettingsProvider();
   final cookieStorage = CookieStorage();
   final appClient = AppClient(cookieStorage);
   final appRouter = AppRouter();
@@ -52,8 +56,12 @@ void main() async {
     apiBuilder: () => ApiSettingRepository(appClient),
     localBuilder: () => LocalSettingsRepository(),
   );
+  final homeBackgroundProvider = HomeBackgroundProvider(repo);
   final entryProvider = EntryProvider(repo: repo);
-  final userProvider = UserProvider(repo: repo);
+  final userProvider = UserProvider(
+    repo: repo,
+    onSyncUser: homeBackgroundProvider.syncFromUser,
+  );
   final loginProvider = LoginProvider(
     repo,
     cookieStorage,
@@ -107,10 +115,17 @@ void main() async {
     languageProvider,
     themeProvider,
     loginProvider,
+    appSettingsProvider,
   );
 
   final (packageInfo,) = await initializer.initialize();
-
+  final app = switch (initializer.useLiquidGlassMode) {
+    true => LiquidGlassWidgets.wrap(
+      adaptiveQuality: true,
+      child: MyApp(appRouter),
+    ),
+    false => MyApp(appRouter),
+  };
   runApp(
     MultiProvider(
       providers: [
@@ -119,16 +134,19 @@ void main() async {
         ChangeNotifierProvider.value(value: loginProvider),
         ChangeNotifierProvider.value(value: userProvider),
         ChangeNotifierProvider.value(value: entryProvider),
+        ChangeNotifierProvider.value(value: appSettingsProvider),
         ChangeNotifierProvider.value(value: envProvider),
+        ChangeNotifierProvider.value(value: homeBackgroundProvider),
         ChangeNotifierProvider(create: (_) => CoinInsertionProvider()),
-        ChangeNotifierProvider(create: (_) => AppSettingsProvider()),
         ChangeNotifierProvider(create: (_) => AppInfoProvider(packageInfo)),
         Provider.value(value: repo),
         Provider.value(value: settingsRepo),
         Provider.value(value: gameInsertService),
         Provider.value(value: qrPayService),
+        Provider.value(value: initializer),
+        Provider(create: (_) => HomeRefreshProvider()),
       ],
-      child: LifecycleManager(callback: appLifeCycles, child: MyApp(appRouter)),
+      child: LifecycleManager(callback: appLifeCycles, child: app),
     ),
   );
 }
@@ -143,6 +161,7 @@ class MyApp extends StatelessWidget {
   void _registerFeedbackService(BuildContext context) {
     final rootUserFeedbackService = _RootAppFeedbackService(context);
     GameInsertService.registerRootFeedbackService(rootUserFeedbackService);
+    HomeBackgroundProvider.registerRootFeedbackService(rootUserFeedbackService);
   }
 
   @override

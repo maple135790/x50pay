@@ -15,6 +15,13 @@ class EntryModel {
   final List<GiftList>? giftlist;
   @JsonKey(name: 'rqc')
   final List<QuestCampaign>? questCampaign;
+  @JsonKey(
+    name: StampData.key,
+    defaultValue: [],
+    fromJson: _StampDataExt.fromJson,
+    toJson: _StampDataExt.toJson,
+  )
+  final List<StampData> stamps;
 
   /// 首頁所使用的資料
   const EntryModel({
@@ -24,6 +31,7 @@ class EntryModel {
     this.evlist,
     this.giftlist,
     this.questCampaign,
+    required this.stamps,
   });
 
   const EntryModel.empty()
@@ -32,6 +40,7 @@ class EntryModel {
       gr2 = const [],
       evlist = null,
       giftlist = null,
+      stamps = const [],
       questCampaign = null;
 
   factory EntryModel.fromJson(Map<String, dynamic> json) =>
@@ -50,7 +59,7 @@ class EntryModel {
 
   String get gradeLv => _getGR2StringAt(0);
   String get gr2HowMuch => int.tryParse(_getGR2StringAt(1))?.toString() ?? '';
-  String get gr2Limit => int.tryParse(_getGR2StringAt(2))?.toString() ?? '';
+  String get gr2Limit => int.tryParse(gr2LimitFP)?.toString() ?? '';
   String get gr2Next => _getGR2StringAt(3);
   String get gr2Day => _getGR2StringAt(4).replaceAll('天', '');
   String get gr2Date => _getGR2StringAt(5);
@@ -59,8 +68,7 @@ class EntryModel {
   bool get gr2ShouldShowBouns => gr2.elementAtOrNull(8) ?? true;
   String get gr2VDay => _getGR2StringAt(9);
   String get gr2BounsLimit => _getGR2StringAt(10);
-  String get gr2Timer =>
-      double.tryParse(_getGR2StringAt(12))?.toStringAsFixed(0) ?? '';
+  String get gr2Timer => double.tryParse(gr2MuchFP)?.toStringAsFixed(0) ?? '';
   String get gr2CountMuch => _getGR2StringAt(13);
   double get gr2ProgressV5 {
     if (gr2.elementAtOrNull(13) == null || gr2.elementAtOrNull(1) == null) {
@@ -70,6 +78,9 @@ class EntryModel {
   }
 
   double get gr2Progress => _getGR2NumAt(0) / 15;
+  bool get grCMDone => int.parse(gr2Limit) > int.parse(gr2Timer);
+  String get gr2MuchFP => _getGR2StringAt(12);
+  String get gr2LimitFP => _getGR2StringAt(2);
   Uint8List get ava => base64Decode(_rawAva);
 }
 
@@ -200,4 +211,20 @@ class QuestCampaign {
   String get lpic => "https://pay.x50.fun$rawLpic";
   String get couid =>
       rawCouid.contains('\'') ? rawCouid.replaceAll('\'', '') : rawCouid;
+}
+
+extension type StampData._(String id) {
+  Uri get fileUri => Uri(path: "/static/stamp/$id.png");
+  static const key = "stamp";
+}
+
+extension _StampDataExt on StampData {
+  static List<StampData> fromJson(List<dynamic>? json) {
+    if (json == null) return [];
+    return json.map((e) => StampData._(e.toString())).toList();
+  }
+
+  static Map<String, dynamic> toJson(List<StampData> stamps) => {
+    StampData.key: jsonEncode(stamps.map((e) => e.id)),
+  };
 }

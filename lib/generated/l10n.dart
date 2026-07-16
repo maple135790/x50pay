@@ -857,6 +857,21 @@ class S {
     );
   }
 
+  /// `, 無月票 `
+  String get vipMsgBuy1 {
+    return Intl.message(', 無月票 ', name: 'vipMsgBuy1', desc: '', args: []);
+  }
+
+  /// `(購買)`
+  String get vipMsgBuy2 {
+    return Intl.message('(購買)', name: 'vipMsgBuy2', desc: '', args: []);
+  }
+
+  /// `, 月票: ~`
+  String get vipOwned {
+    return Intl.message(', 月票: ~', name: 'vipOwned', desc: '', args: []);
+  }
+
   /// `X50Pay 語言`
   String get x50PayLanguage {
     return Intl.message(

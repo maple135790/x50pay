@@ -1,50 +1,28 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 
+import '../../mocks.dart';
+
 class MockRepository extends Mock implements MainRepository {}
-
-class TestFeedbackService with AppFeedbackMixin {
-  @override
-  BuildContext get context => throw UnimplementedError();
-
-  @override
-  void dismissLoading() {}
-
-  @override
-  void showError(String text) {}
-
-  @override
-  void showLoading() {}
-
-  @override
-  void showServiceError() {}
-
-  @override
-  void showSuccess(String text) {}
-}
 
 final mockRepo = MockRepository();
 
 void main() {
+  final mockFeedback = MockFeedbackService();
   final viewModel = GameInsertService(
     repository: mockRepo,
     onAfterInserted: () {},
   );
 
-  setUpAll(() {
-    GameInsertService.registerRootFeedbackService(TestFeedbackService());
-  });
-
   setUp(() {
+    GameInsertService.registerRootFeedbackService(mockFeedback);
     SharedPreferences.setMockInitialValues({"store_id": "7037656"});
     viewModel.clearRecentPlayedData();
 
@@ -60,8 +38,17 @@ void main() {
     });
   });
 
+  void arrangeSuccessFeedbackReturnsNormal() {
+    when(() => mockFeedback.showLoading()).thenAnswer((_) => Future.value());
+    when(() => mockFeedback.dismissLoading()).thenAnswer((_) => Future.value());
+    when(
+      () => mockFeedback.showSuccess(any()),
+    ).thenAnswer((_) => Future.value());
+  }
+
   test('一般投幣成功時會記錄最近遊玩機台', () async {
     const cabinet = Cabinet.empty();
+    arrangeSuccessFeedbackReturnsNormal();
 
     final result = await viewModel.doInsert(
       isTicket: false,
@@ -82,6 +69,7 @@ void main() {
 
   test('QRPay 投幣成功時不會覆蓋最近遊玩機台', () async {
     const recentCabinet = Cabinet.empty();
+    arrangeSuccessFeedbackReturnsNormal();
     await viewModel.doInsert(
       isTicket: false,
       isUseRewardPoint: false,

@@ -163,5 +163,8 @@
   "userUTicLog": "チケット利用履歴",
   "vipDate": "有効期限 : ",
   "vipExpiredMsg": "左側のアイコンをクリックして購入",
+  "vipMsgBuy1": "未購入",
+  "vipMsgBuy2": "(購入)",
+  "vipOwned": "購入済み",
   "x50PayLanguage": "X50Pay 言語"
 }
