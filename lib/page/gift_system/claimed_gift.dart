@@ -5,21 +5,20 @@ import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/gift_system/empty_notice.dart';
 
 class ClaimedGiftPage extends StatelessWidget {
-  // TODO: rename
-  final List<ClaimedGift> claimedList;
+  final List<ClaimedGift> gifts;
 
   /// 已領取禮物頁面
-  const ClaimedGiftPage(this.claimedList, {super.key});
+  const ClaimedGiftPage(this.gifts, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (claimedList.isEmpty) {
+    if (gifts.isEmpty) {
       return const Align(alignment: .topCenter, child: EmptyNotice());
     }
 
     return Scrollbar(
       child: ListView.builder(
-        itemCount: claimedList.length,
+        itemCount: gifts.length,
         prototypeItem: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
           child: ListTile(
@@ -41,10 +40,12 @@ class ClaimedGiftPage extends StatelessWidget {
           ),
         ),
         itemBuilder: (context, index) {
-          late String subtitle;
-          if (claimedList[index].auto) {
+          final gift = gifts[index];
+
+          final String subtitle;
+          if (gift.auto) {
             subtitle = '已自動發送至會員帳號';
-          } else if (claimedList[index].name.contains('抽選')) {
+          } else if (gift.name.contains('抽選')) {
             subtitle = '請於想抽的月份自助兌換';
           } else {
             subtitle = '粉絲專頁預約';
@@ -58,7 +59,7 @@ class ClaimedGiftPage extends StatelessWidget {
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(4),
                 child: CachedNetworkImage(
-                  imageUrl: claimedList[index].pic,
+                  imageUrl: gift.pic,
                   errorWidget: (context, url, error) => Icon(
                     Icons.broken_image_rounded,
                     color: const Color(0xff505050).withValues(alpha: 0.7),
@@ -70,10 +71,7 @@ class ClaimedGiftPage extends StatelessWidget {
                   width: 50,
                 ),
               ),
-              title: Text(
-                claimedList[index].name,
-                style: const TextStyle(fontSize: 14),
-              ),
+              title: Text(gift.name, style: const TextStyle(fontSize: 14)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
