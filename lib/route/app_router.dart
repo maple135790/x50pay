@@ -248,7 +248,7 @@ class AppRouter {
           ),
           _routeTransition(
             AppRoute.gradeBox,
-            (_, _) => const NoTransitionPage(child: GradeBox()),
+            (_, _) => const NoTransitionPage(child: GradeBoxPage()),
           ),
           _routeTransition(
             AppRoute.collab,

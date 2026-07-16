@@ -29,6 +29,8 @@ class UserModel {
   @JsonKey(name: "bg", defaultValue: "")
   final String backgroundId;
 
+  final String region;
+
   const UserModel({
     required this.message,
     required this.code,
@@ -48,27 +50,8 @@ class UserModel {
     this.tphone,
     this.doorpwd,
     required this.backgroundId,
+    required this.region,
   });
-
-  const UserModel.empty()
-    : message = "",
-      code = 0,
-      rawUserImgUrl = "",
-      email = "",
-      uid = "",
-      point = 0,
-      name = "",
-      ticketint = 0,
-      phoneactive = false,
-      fpoint = 0,
-      givebool = 0,
-      vip = false,
-      vipdate = null,
-      sid = "",
-      sixn = "",
-      tphone = null,
-      backgroundId = "",
-      doorpwd = "";
 
   static VipDate setVipDate(String unixTimestamp) =>
       VipDate(rawDate: unixTimestamp);

@@ -22,7 +22,7 @@ enum AppRoute {
   gameCabs('gameCabs', path: '/game/cabs'),
   gameCab('gameCab', path: ':mid'),
   gift('gift', path: '/gift'),
-  gradeBox('gradeBox', path: '/gift/gradeBox'),
+  gradeBox('gradeBox', path: '/gradeBox'),
   collab('collab', path: '/collab'),
   scanQRCode('scanQRCode', path: '/scanQRCode'),
   questCampaign('questCampaign', path: 'questCampaign/:couid'),

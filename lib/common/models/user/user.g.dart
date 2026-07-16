@@ -32,6 +32,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => $checkedCreate(
       tphone: $checkedConvert('tphone', (v) => v as String?),
       doorpwd: $checkedConvert('doorpwd', (v) => v as String?),
       backgroundId: $checkedConvert('bg', (v) => v as String? ?? ''),
+      region: $checkedConvert('region', (v) => v as String),
     );
     return val;
   },
@@ -57,6 +58,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   'tphone': instance.tphone,
   'doorpwd': instance.doorpwd,
   'bg': instance.backgroundId,
+  'region': instance.region,
 };
 
 VipDate _$VipDateFromJson(Map<String, dynamic> json) => $checkedCreate(

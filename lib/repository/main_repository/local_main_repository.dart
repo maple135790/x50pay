@@ -10,6 +10,7 @@ import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/grade_background/grade_background.dart';
+import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -37,7 +38,7 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<String> chgGradev2(String gid, String grid) {
+  Future<ApiResponse<String>> changeGrade(String gid, String grid) {
     throw UnimplementedError();
   }
 
@@ -67,7 +68,7 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<String> fetchGradeBox() {
+  Future<ApiResponse<GradeBox>> getGradeBox(String region) {
     throw UnimplementedError();
   }
 
@@ -138,7 +139,7 @@ class LocalMainRepository implements MainRepository {
 
   @override
   Future<ApiResponse<UserModel>> getUser() async {
-    return ApiResponse.createSuccess(const UserModel.empty());
+    throw UnimplementedError();
   }
 
   @override

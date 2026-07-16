@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'grade_box.dart';
+part of 'grade_box_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GradeBox _$GradeBoxFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('GradeBox', json, ($checkedConvert) {
-      final val = GradeBox(
+GradeBoxDTO _$GradeBoxDTOFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('GradeBoxDTO', json, ($checkedConvert) {
+      final val = GradeBoxDTO(
         card: $checkedConvert(
           'card',
           (v) => (v as List<dynamic>)
@@ -33,6 +33,8 @@ GradeBox _$GradeBoxFromJson(Map<String, dynamic> json) =>
               .map((e) => GradeBoxItem.fromJson(e as Map<String, dynamic>))
               .toList(),
         ),
+        code: $checkedConvert('code', (v) => (v as num).toInt()),
+        message: $checkedConvert('message', (v) => v as String),
       );
       return val;
     });

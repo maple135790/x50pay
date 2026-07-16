@@ -3,17 +3,14 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 
+import '../../mocks.dart';
+
 class MockRepository extends Mock implements MainRepository {}
-
-abstract class FackAppFeedback with AppFeedbackMixin {}
-
-class MockFeedbackService extends Mock implements FackAppFeedback {}
 
 final mockRepo = MockRepository();
 

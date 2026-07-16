@@ -25,7 +25,17 @@ class LiquidGlassNavBottomBar extends StatelessWidget {
             barHeight: height,
             selectedIconColor: Colors.red,
             onTabSelected: (index) {
-              context.goNamed(MenuItem.values[index].route.routeName);
+              final route = MenuItem.values[index].route;
+
+              // 目標 route 和當前 route 相同時，pop 到原始位置
+              if (GoRouterState.of(context).uri.path == route.path) {
+                final router = GoRouter.of(context);
+                while (router.canPop()) {
+                  router.pop();
+                }
+                return;
+              }
+              context.goNamed(route.routeName);
             },
             selectedIndex: selectedIndex,
             tabs: MenuItem.values.mapIndexed((index, item) {

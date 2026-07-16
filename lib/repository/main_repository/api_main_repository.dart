@@ -13,6 +13,8 @@ import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/grade_background/grade_background.dart';
 import 'package:x50pay/common/models/grade_background/grade_background_dto.dart';
+import 'package:x50pay/common/models/grade_box/grade_box.dart';
+import 'package:x50pay/common/models/grade_box/grade_box_dto.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -366,29 +368,34 @@ class ApiMainRepository extends Repository implements MainRepository {
 
   /// 取得養成商場內，點數兌換商品資料API
   @override
-  Future<String> fetchGradeBox() async {
-    final response = await client.request(
-      _endpoint('/grade/box'),
+  Future<ApiResponse<GradeBox>> getGradeBox(String region) async {
+    final res = await client.request(
+      _endpoint('/grade/box/$region'),
       method: HttpMethod.post,
-      rawBody: {},
       contentType: ContentType.json,
     );
-    return response.body;
+
+    return ApiResponse.fromJson(
+      res,
+      fromJson: (json) {
+        final dto = GradeBoxDTO.fromJson(json);
+        return GradeBoxExt.fromDTO(dto);
+      },
+    );
   }
 
   /// 兌換養成商場內商品API
   ///
   /// 需要傳入 [gid] 及 [grid]
   @override
-  Future<String> chgGradev2(String gid, String grid) async {
+  Future<ApiResponse<String>> changeGrade(String gid, String grid) async {
     final response = await client.request(
       _endpoint('/grade/change'),
       rawBody: {'gid': gid, 'grid': grid},
       method: HttpMethod.post,
-
       contentType: ContentType.json,
     );
-    return response.body;
+    return ApiResponse.fromText(response, fromBody: (body) => body);
   }
 
   @override

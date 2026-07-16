@@ -1,6 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
@@ -8,11 +8,11 @@ import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/theme/svg_path.dart';
 import 'package:x50pay/common/widgets/themed_bottom_sheet/themed_bottom_sheet.dart';
 import 'package:x50pay/generated/l10n.dart';
+import 'package:x50pay/page/grade_box/grade_box_page.dart';
 import 'package:x50pay/page/home/dress_room/dress_room.dart';
 import 'package:x50pay/page/home/mari_info/mari_info.dart';
 import 'package:x50pay/providers/entry_provider.dart';
 import 'package:x50pay/providers/home_refresh_provider.dart';
-import 'package:x50pay/route/app_route.dart';
 
 class LiquidGlassMariInfo extends StatelessWidget {
   final MariWidgetBuilder builder;
@@ -21,7 +21,13 @@ class LiquidGlassMariInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onGradeBoxPressed() {
-      context.goNamed(AppRoute.gradeBox.routeName);
+      Navigator.of(context).push(
+        CupertinoPageRoute(
+          builder: (context) {
+            return const GradeBoxPage();
+          },
+        ),
+      );
     }
 
     void onDressRoomPressed() async {

@@ -31,6 +31,14 @@ class MaterialNavBottomBar extends StatelessWidget {
 
       return GestureDetector(
         onTap: () {
+          // 目標 route 和當前 route 相同時，pop 到原始位置
+          if (GoRouterState.of(context).uri.path == menu.route.path) {
+            final router = GoRouter.of(context);
+            while (router.canPop()) {
+              router.pop();
+            }
+            return;
+          }
           context.goNamed(menu.route.routeName);
         },
         child: MaterialGlass.withShadow(
@@ -41,11 +49,11 @@ class MaterialNavBottomBar extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 2,
             children: [
               Icon(
                 menu.icon,
                 color: color,
+                size: 28,
                 shadows: [Shadow(color: shadowColor, blurRadius: 8)],
               ),
               Text(
@@ -65,6 +73,7 @@ class MaterialNavBottomBar extends StatelessWidget {
 
     return SafeArea(
       child: MaterialGlass.withShadow(
+        isBlurEnabled: true,
         margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         color: const Color.fromARGB(59, 167, 167, 167),
@@ -78,13 +87,11 @@ class MaterialNavBottomBar extends StatelessWidget {
             );
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: MenuItem.values
-                  .map(
-                    (menu) => Expanded(
-                      child: buildItem(menu, isSelected: menu == current),
-                    ),
-                  )
-                  .toList(),
+              children: MenuItem.values.map((menu) {
+                return Expanded(
+                  child: buildItem(menu, isSelected: menu == current),
+                );
+              }).toList(),
             );
           },
         ),

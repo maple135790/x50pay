@@ -8,6 +8,7 @@ import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
 import 'package:x50pay/common/models/giftBox/gift_box.dart';
 import 'package:x50pay/common/models/grade_background/grade_background.dart';
+import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
 import 'package:x50pay/common/models/store/store.dart';
 import 'package:x50pay/common/models/user/user.dart';
@@ -133,12 +134,12 @@ abstract interface class MainRepository {
   Future<String> getSponserDocument();
 
   /// 取得養成商場內，點數兌換商品資料API
-  Future<String> fetchGradeBox();
+  Future<ApiResponse<GradeBox>> getGradeBox(String region);
 
   /// 兌換養成商場內商品API
   ///
   /// 需要傳入 [gid] 及 [grid]
-  Future<String> chgGradev2(String gid, String grid);
+  Future<ApiResponse<String>> changeGrade(String gid, String grid);
 
   Future<http.Response> getDocument(String fullUrl);
 

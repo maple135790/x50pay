@@ -21,12 +21,7 @@ class MaterialGlassBottomSheet extends StatelessWidget {
         right: 8,
       ),
       child: MaterialGlass(
-        padding: EdgeInsets.fromLTRB(
-          26,
-          14,
-          26,
-          18 + MediaQuery.paddingOf(context).bottom,
-        ),
+        padding: const EdgeInsets.fromLTRB(26, 14, 26, 18),
         color: Colors.grey.shade800.withValues(alpha: .85),
         borderRadius: 16.5,
         child: Column(

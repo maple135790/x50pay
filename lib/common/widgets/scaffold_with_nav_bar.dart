@@ -91,8 +91,10 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
   }
 
   Future<bool> handleBackButton() async {
-    final currentRouteName = GoRouterState.of(context).topRoute?.name;
-    final currentfullPath = GoRouterState.of(context).fullPath;
+    final routerState = GoRouterState.of(context);
+    final router = GoRouter.of(context);
+    final currentRouteName = routerState.topRoute?.name;
+    final currentfullPath = routerState.fullPath;
     if (currentfullPath == null || currentRouteName == null) return false;
 
     log('currentLocation: $currentRouteName');
@@ -109,6 +111,8 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
     } else if (currentRouteName != AppRoute.home.routeName) {
       context.goNamed(AppRoute.home.routeName);
       setState(() {});
+    } else if (router.canPop()) {
+      router.pop();
     } else {
       confirmPopup();
     }
