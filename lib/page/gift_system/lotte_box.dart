@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
-import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/gift_page_view_model.dart';
 
 class LotteBox extends StatelessWidget {
   /// 養成抽獎箱頁面

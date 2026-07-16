@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
 import 'package:x50pay/page/gift_system/gift_page_loaded.dart';
-import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/gift_page_view_model.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class GiftPage extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:x50pay/common/models/api_response.dart';
 import 'package:x50pay/common/models/gift_box/claimable_gift.dart';
 import 'package:x50pay/common/models/gift_box/claimed_gift.dart';
 import 'package:x50pay/common/models/gift_box/gift_box.dart';
-import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/gift_page_view_model.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 import '../../mocks/mock_app_feedback.dart';

@@ -5,11 +5,11 @@ import 'package:x50pay/common/theme/button_theme.dart';
 import 'package:x50pay/page/gift_system/change_confirm_dialog.dart';
 import 'package:x50pay/page/gift_system/empty_notice.dart';
 
-class GiftClaim extends StatelessWidget {
+class GiftClaimPage extends StatelessWidget {
   final List<ClaimableGift> gifts;
 
   /// 領取禮物頁面
-  const GiftClaim(this.gifts, {super.key});
+  const GiftClaimPage(this.gifts, {super.key});
 
   @override
   Widget build(BuildContext context) {

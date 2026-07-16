@@ -6,9 +6,9 @@ import 'package:x50pay/common/models/gift_box/claimable_gift.dart';
 import 'package:x50pay/common/models/gift_box/claimed_gift.dart';
 import 'package:x50pay/common/widgets/material_glass.dart';
 import 'package:x50pay/page/collab/collab_shop_list.dart';
-import 'package:x50pay/page/gift_system/claimed_gift.dart';
-import 'package:x50pay/page/gift_system/gift_claim.dart';
-import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/claimed_gift_page.dart';
+import 'package:x50pay/page/gift_system/gift_claim_page.dart';
+import 'package:x50pay/page/gift_system/gift_page_view_model.dart';
 
 enum GiftTab { claim, claimedGift, collab }
 
@@ -151,7 +151,7 @@ class _GiftPageLoadedState extends State<GiftPageLoaded>
                   .claim => Selector<GiftPageViewModel, List<ClaimableGift>>(
                     selector: (context, vm) => vm.claimableGifts,
                     builder: (context, gifts, child) {
-                      return GiftClaim(gifts);
+                      return GiftClaimPage(gifts);
                     },
                   ),
                   .claimedGift =>
