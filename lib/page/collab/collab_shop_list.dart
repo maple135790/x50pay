@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +23,7 @@ class CollabShopList extends StatefulWidget {
 class _CollabShopListState extends State<CollabShopList>
     with AppThemeMixin, AppFeedbackMixin {
   late final CollabShopListViewModel viewModel;
+  late final Future<List<Sponser>> init;
 
   @override
   void initState() {
@@ -29,6 +31,7 @@ class _CollabShopListState extends State<CollabShopList>
     viewModel = CollabShopListViewModel(
       repository: context.read<MainRepository>(),
     );
+    init = viewModel.init();
   }
 
   void showQRCodeScan() async {
@@ -38,76 +41,62 @@ class _CollabShopListState extends State<CollabShopList>
     router.pushNamed(AppRoute.scanQRCode.routeName);
   }
 
-  Widget buildSponserTiles(List<Sponser> sponserData) {
-    List<Widget> tiles = [];
-
-    for (var data in sponserData) {
-      tiles.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-          child: SizedBox(
-            height: 86.812,
-            child: Row(
+  Widget buildSponserTile(Sponser data) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+      child: SizedBox(
+        height: 86.812,
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image(
+                image: CachedNetworkImageProvider(data.sponserImgUrl),
+                fit: BoxFit.fill,
+                width: 80,
+                height: 80,
+              ),
+            ),
+            const SizedBox(width: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image(
-                    image: CachedNetworkImageProvider(data.sponserImgUrl),
-                    fit: BoxFit.fill,
-                    width: 80,
-                    height: 80,
-                  ),
-                ),
-                const SizedBox(width: 25),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        SvgPicture(
-                          Svgs.shopSolid,
-                          width: 19.25,
-                          height: 15,
-                          colorFilter: ColorFilter.mode(
-                            iconColor,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          data.sponserName,
-                          style: const TextStyle(height: 2),
-                        ),
-                      ],
+                    SvgPicture(
+                      Svgs.shopSolid,
+                      width: 19.25,
+                      height: 15,
+                      colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                     ),
-                    ...data.meta.map(
-                      (e) => Text(e, style: const TextStyle(height: 2)),
-                    ),
+                    const SizedBox(width: 10),
+                    Text(data.sponserName, style: const TextStyle(height: 2)),
                   ],
                 ),
+                ...data.meta.map((e) {
+                  return Text(e, style: const TextStyle(height: 2));
+                }),
               ],
             ),
-          ),
+          ],
         ),
-      );
-    }
-
-    return Column(mainAxisSize: MainAxisSize.min, children: tiles);
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: viewModel.init(),
+      future: init,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: SizedBox());
+          return const Center(child: CupertinoActivityIndicator());
         }
         if (snapshot.hasError) {
           return Center(child: Text(serviceErrorText));
         }
 
-        final data = snapshot.data!;
+        final sponsors = snapshot.data!;
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -137,7 +126,7 @@ class _CollabShopListState extends State<CollabShopList>
                 ),
               ),
               const Divider(),
-              buildSponserTiles(data),
+              ...sponsors.map(buildSponserTile),
             ],
           ),
         );

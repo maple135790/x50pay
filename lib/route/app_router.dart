@@ -244,7 +244,7 @@ class AppRouter {
           ),
           _routeTransition(
             AppRoute.gift,
-            (_, _) => const NoTransitionPage(child: GiftSystem()),
+            (_, _) => const NoTransitionPage(child: GiftPage()),
           ),
           _routeTransition(
             AppRoute.gradeBox,

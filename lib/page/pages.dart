@@ -5,7 +5,7 @@ export 'forgot_password/forgot_password.dart';
 export 'game/cab_detail.dart';
 export 'game/game_cabs.dart';
 export 'game/game_store.dart';
-export 'gift_system/gift_system.dart';
+export 'gift_system/gift_page.dart';
 export 'grade_box/grade_box_page.dart';
 export 'home/dress_room/dress_room.dart';
 export 'home/home.dart';

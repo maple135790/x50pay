@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
-import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/gift_page_view_model.dart';
 
 class LotteBox extends StatelessWidget {
   /// 養成抽獎箱頁面
@@ -10,8 +10,8 @@ class LotteBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-    final lotteList = context.select<GiftSystemViewModel, LotteListModel>(
-      (vm) => vm.lotteList ?? const LotteListModel.empty(),
+    final lotteList = context.select<GiftPageViewModel, LotteListModel>(
+      (vm) => const LotteListModel.empty(),
     );
 
     return Container(

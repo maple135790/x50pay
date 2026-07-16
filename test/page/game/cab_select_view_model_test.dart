@@ -8,7 +8,7 @@ import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/service/game_insert_service.dart';
 
-import '../../mocks.dart';
+import '../../mocks/mock_app_feedback.dart';
 
 class MockRepository extends Mock implements MainRepository {}
 
@@ -38,17 +38,9 @@ void main() {
     });
   });
 
-  void arrangeSuccessFeedbackReturnsNormal() {
-    when(() => mockFeedback.showLoading()).thenAnswer((_) => Future.value());
-    when(() => mockFeedback.dismissLoading()).thenAnswer((_) => Future.value());
-    when(
-      () => mockFeedback.showSuccess(any()),
-    ).thenAnswer((_) => Future.value());
-  }
-
   test('一般投幣成功時會記錄最近遊玩機台', () async {
     const cabinet = Cabinet.empty();
-    arrangeSuccessFeedbackReturnsNormal();
+    arrangeSuccessFeedbackReturnsNormal(mockFeedback);
 
     final result = await viewModel.doInsert(
       isTicket: false,
@@ -69,7 +61,7 @@ void main() {
 
   test('QRPay 投幣成功時不會覆蓋最近遊玩機台', () async {
     const recentCabinet = Cabinet.empty();
-    arrangeSuccessFeedbackReturnsNormal();
+    arrangeSuccessFeedbackReturnsNormal(mockFeedback);
     await viewModel.doInsert(
       isTicket: false,
       isUseRewardPoint: false,

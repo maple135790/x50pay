@@ -6,7 +6,7 @@ import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
-import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/gift_box/gift_box.dart';
 import 'package:x50pay/common/models/grade_background/grade_background.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
@@ -86,8 +86,8 @@ abstract interface class MainRepository {
 
   /// 取得禮物箱API
   ///
-  /// 用於禮物系統頁面，回傳 [GiftBoxModel]
-  Future<GiftBoxModel> getGiftBox();
+  /// 用於禮物系統頁面，回傳 [GiftBox]
+  Future<ApiResponse<GiftBox>> getGiftBox();
 
   /// 取得養成抽獎箱API
   ///

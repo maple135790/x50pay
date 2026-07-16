@@ -11,7 +11,7 @@ import 'package:x50pay/page/grade_box/grade_box_view_model.dart';
 import 'package:x50pay/providers/user_provider.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-import '../../mocks.dart';
+import '../../mocks/mock_app_feedback.dart';
 
 class MockRepository extends Mock implements MainRepository {}
 
@@ -67,21 +67,13 @@ void main() {
   final mockFeedback = MockFeedbackService();
   final fakeUserProvider = FakeUserProvider();
 
-  void arrangeSuccessFeedbackReturnsNormal() {
-    when(() => mockFeedback.showLoading()).thenAnswer((_) => Future.value());
-    when(() => mockFeedback.dismissLoading()).thenAnswer((_) => Future.value());
-    when(
-      () => mockFeedback.showSuccess(any()),
-    ).thenAnswer((_) => Future.value());
-  }
-
   setUp(() {
     sut = GradeBoxViewModel(
       repository: mockRepo,
       feedback: mockFeedback,
       userProvider: fakeUserProvider,
     );
-    arrangeSuccessFeedbackReturnsNormal();
+    arrangeSuccessFeedbackReturnsNormal(mockFeedback);
   });
 
   group("取得GradeBoxModel", () {
