@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:html/parser.dart';
-import 'package:x50pay/common/base/base.dart';
+import 'package:flutter/foundation.dart';
+import 'package:html/parser.dart' as html;
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 
 class Sponser {
@@ -15,8 +15,6 @@ class Sponser {
     required this.rawMeta,
   });
 
-  Sponser.empty() : rawSponserImgUrl = '', sponserName = '', rawMeta = '';
-
   String get sponserImgUrl => rawSponserImgUrl == null
       ? ''
       : rawSponserImgUrl!.startsWith('http')
@@ -27,23 +25,22 @@ class Sponser {
       rawMeta.trim().split('\n').map((e) => e.trim()).toList();
 }
 
-class CollabShopListViewModel extends BaseViewModel {
-  final MainRepository repository;
+class CollabShopListViewModel extends ChangeNotifier {
+  final MainRepository _repository;
 
-  CollabShopListViewModel({required this.repository});
+  CollabShopListViewModel({required this._repository});
 
   Future<List<Sponser>> init() async {
-    showLoading();
-    await Future.delayed(const Duration(milliseconds: 350));
-    late final String rawDocument;
-
     try {
-      rawDocument = await repository.getSponserDocument();
-      final document = parse(rawDocument);
-      final rawSponserItems =
-          document.querySelector('div > div.ts-menu.is-fluid')?.children ?? [];
+      final rawDocument = await _repository.getSponserDocument();
+      final document = html.parse(rawDocument);
+      final rawSponserItems = document
+          .querySelector('#spon > div.ts-menu.is-fluid')
+          ?.children;
 
-      List<Sponser> sponsers = [];
+      if (rawSponserItems == null || rawSponserItems.isEmpty) return [];
+
+      final sponsers = <Sponser>[];
       for (var rawItem in rawSponserItems) {
         final url = rawItem.querySelector("img")?.attributes['src'] ?? '';
         final sponserName = rawItem.getElementsByClassName('header').first.text;
@@ -61,8 +58,6 @@ class CollabShopListViewModel extends BaseViewModel {
     } catch (e) {
       log('', error: '$e', name: 'CollabShopList init');
       return [];
-    } finally {
-      dismissLoading();
     }
   }
 }

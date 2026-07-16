@@ -5,21 +5,24 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/gift_box/claimable_gift.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
-import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/empty_notice.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 import 'package:x50pay/route/app_route.dart';
 
 class GiftClaim extends StatelessWidget {
+  // TODO: rename
+  final List<ClaimableGift> canChangeList;
+
   /// 領取禮物頁面
-  const GiftClaim({super.key});
+  const GiftClaim(this.canChangeList, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final canChangeList = context.select<GiftSystemViewModel, List<CanChange>>(
-      (vm) => vm.giftBox?.canChange ?? [],
-    );
+    if (canChangeList.isEmpty) {
+      return const Align(alignment: .topCenter, child: EmptyNotice());
+    }
 
     return Scrollbar(
       child: ListView.builder(

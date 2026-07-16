@@ -1,64 +1,47 @@
-import 'dart:developer';
-
-import 'package:x50pay/common/base/base.dart';
-import 'package:x50pay/common/models/giftBox/gift_box.dart';
-import 'package:x50pay/common/models/lotteList/lotte_list.dart';
+import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
+import 'package:x50pay/common/app_service_mixin.dart';
+import 'package:x50pay/common/models/gift_box/claimable_gift.dart';
+import 'package:x50pay/common/models/gift_box/claimed_gift.dart';
+import 'package:x50pay/common/models/gift_box/gift_box.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class GiftSystemViewModel extends BaseViewModel {
-  final MainRepository repository;
+class GiftPageViewModel extends ChangeNotifier {
+  final MainRepository _repository;
+  final AppFeedbackMixin _feedbackMixin;
+  final Logger _logger;
 
-  GiftSystemViewModel({required this.repository});
+  GiftPageViewModel({required this._repository, required this._feedbackMixin})
+    : _logger = Logger('GiftPageViewModel');
 
-  GiftBoxModel? get giftBox => _giftBox;
-  GiftBoxModel? _giftBox;
-  set giftBox(GiftBoxModel? value) {
-    _giftBox = value;
-    notifyListeners();
+  GiftBox? _giftBox;
+
+  List<ClaimableGift> get claimableGifts {
+    if (_giftBox == null) return [];
+    return List.unmodifiable(_giftBox!.claimableGifts);
   }
 
-  LotteListModel? get lotteList => _lotteList;
-  LotteListModel? _lotteList;
-  set lotteList(LotteListModel? value) {
-    _lotteList = value;
-    notifyListeners();
+  List<ClaimedGift> get claimedGifts {
+    if (_giftBox == null) return [];
+    return List.unmodifiable(_giftBox!.claimedGifts);
   }
 
   /// 禮物系統頁面初始化
-  Future<void> giftSystemInit() async {
+  Future<void> init() async {
     try {
-      showLoading();
-      await Future.delayed(const Duration(milliseconds: 100));
-      giftBox = await _getGiftBox();
-      lotteList = await _getLotteList();
+      _feedbackMixin.showLoading();
+      final res = await _repository.getGiftBox();
+      if (res.result.isError) {
+        final msg = res.result.asError.errorMsg;
+        _logger.warning('getGiftBox error: $msg');
+        return;
+      }
+      _giftBox = res.result.successData;
+      notifyListeners();
     } catch (e, stacktrace) {
-      log('', name: 'err giftSystemInit', error: e, stackTrace: stacktrace);
+      _logger.warning('init', e, stacktrace);
     } finally {
-      dismissLoading();
+      _feedbackMixin.dismissLoading();
     }
-  }
-
-  /// 取得養成抽獎箱
-  Future<LotteListModel?> _getLotteList() async {
-    try {
-      lotteList = await repository.getLotteList();
-      return lotteList;
-    } catch (e) {
-      log('', name: 'err _getLotteList', error: e);
-    }
-    return null;
-  }
-
-  /// 取得禮物箱資料
-  ///
-  /// 禮物箱包含可兌換及已兌換的禮物列表
-  Future<GiftBoxModel?> _getGiftBox() async {
-    try {
-      giftBox = await repository.getGiftBox();
-      return giftBox;
-    } catch (e) {
-      log('', name: 'err _getGiftBox', error: e);
-    }
-    return null;
   }
 }

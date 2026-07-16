@@ -1,19 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/gift_box/claimed_gift.dart';
 import 'package:x50pay/common/theme/button_theme.dart';
-import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
+import 'package:x50pay/page/gift_system/empty_notice.dart';
 
-class ClaimedGift extends StatelessWidget {
+class ClaimedGiftPage extends StatelessWidget {
+  // TODO: rename
+  final List<ClaimedGift> claimedList;
+
   /// 已領取禮物頁面
-  const ClaimedGift({super.key});
+  const ClaimedGiftPage(this.claimedList, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final claimedList = context.select<GiftSystemViewModel, List<AlChange>>(
-      (vm) => vm.giftBox?.alChange ?? [],
-    );
+    if (claimedList.isEmpty) {
+      return const Align(alignment: .topCenter, child: EmptyNotice());
+    }
 
     return Scrollbar(
       child: ListView.builder(

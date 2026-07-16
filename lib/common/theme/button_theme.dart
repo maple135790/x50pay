@@ -38,15 +38,18 @@ class CustomButtonThemes {
 
   static ButtonStyle grey({bool isDarkMode = true}) {
     return ButtonStyle(
+      surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
       shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       ),
       splashFactory: NoSplash.splashFactory,
-      foregroundColor: WidgetStateProperty.all(const Color(0xff5a5a5a)),
       overlayColor: WidgetStateProperty.all(Colors.transparent),
+      foregroundColor: WidgetStateProperty.all(const Color(0xff1e1e1e)),
       backgroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.isPressed) return const Color(0xffbfbfbf);
-        if (states.isDisabled) return const Color(0xffdcead3);
+        if (states.isDisabled) {
+          return const Color(0xfffafafa).withValues(alpha: 0.5);
+        }
         return const Color(0xffc3c3c3);
       }),
     );

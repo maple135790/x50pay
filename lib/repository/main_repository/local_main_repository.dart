@@ -8,7 +8,7 @@ import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
-import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/gift_box/gift_box.dart';
 import 'package:x50pay/common/models/grade_background/grade_background.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
 import 'package:x50pay/common/models/lotteList/lotte_list.dart';
@@ -108,7 +108,7 @@ class LocalMainRepository implements MainRepository {
   }
 
   @override
-  Future<GiftBoxModel> getGiftBox() {
+  Future<ApiResponse<GiftBox>> getGiftBox() {
     throw UnimplementedError();
   }
 

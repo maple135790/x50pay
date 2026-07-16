@@ -3,30 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:x50pay/common/app_service_mixin.dart';
-import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/page/gift_system/claimed_gift.dart';
-import 'package:x50pay/page/gift_system/gift_claim.dart';
+import 'package:x50pay/page/gift_system/gift_page_loaded.dart';
 import 'package:x50pay/page/gift_system/gift_system_view_model.dart';
-import 'package:x50pay/page/gift_system/lotte_box.dart';
 import 'package:x50pay/repository/main_repository/main_repository.dart';
 
-class GiftSystem extends StatefulWidget {
+class GiftPage extends StatefulWidget {
   /// 禮物系統頁面
-  const GiftSystem({super.key});
+  const GiftPage({super.key});
 
   @override
-  State<GiftSystem> createState() => _GiftSystemState();
+  State<GiftPage> createState() => _GiftPageState();
 }
 
-class _GiftSystemState extends State<GiftSystem> with AppFeedbackMixin {
-  late final GiftSystemViewModel viewModel;
+class _GiftPageState extends State<GiftPage> with AppFeedbackMixin {
+  late final GiftPageViewModel viewModel;
   late Future<void> init;
 
   @override
   void initState() {
     super.initState();
-    viewModel = GiftSystemViewModel(repository: context.read<MainRepository>());
-    init = viewModel.giftSystemInit();
+    viewModel = GiftPageViewModel(
+      repository: context.read<MainRepository>(),
+      feedbackMixin: this,
+    );
+    init = viewModel.init();
   }
 
   @override
@@ -44,90 +44,8 @@ class _GiftSystemState extends State<GiftSystem> with AppFeedbackMixin {
             return Center(child: Text(serviceErrorText));
           }
           if (EasyLoading.isShow) EasyLoading.dismiss();
-          return const _GiftBoxLoaded();
+          return const GiftPageLoaded();
         },
-      ),
-    );
-  }
-}
-
-class _GiftBoxLoaded extends StatefulWidget {
-  const _GiftBoxLoaded();
-
-  @override
-  State<_GiftBoxLoaded> createState() => _GiftBoxLoadedState();
-}
-
-class _GiftBoxLoadedState extends State<_GiftBoxLoaded> with AppThemeMixin {
-  final tabs = const <Widget>[
-    Tab(text: '養成抽獎箱'),
-    Tab(text: '領取禮物'),
-    Tab(text: '已領取'),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: tabs.length,
-      initialIndex: 1,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              Positioned(
-                bottom: -35,
-                right: -20,
-                child: Icon(
-                  Icons.redeem_rounded,
-                  size: 120,
-                  color: IconTheme.of(context).color?.withValues(alpha: 0.1),
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    color: isDarkTheme
-                        ? const Color.fromARGB(12, 255, 255, 255)
-                        : const Color.fromARGB(12, 0, 0, 0),
-                    width: MediaQuery.of(context).size.width,
-                    height: 89.19,
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('禮物系統', style: TextStyle(fontSize: 17)),
-                        Text(
-                          'X50Pay 禮物系統',
-                          style: TextStyle(color: Color(0xffb4b4b4)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 42.5,
-                    alignment: Alignment.centerLeft,
-                    color: isDarkTheme
-                        ? const Color.fromARGB(5, 255, 255, 255)
-                        : const Color.fromARGB(5, 0, 0, 0),
-                    child: TabBar(
-                      isScrollable: true,
-                      tabAlignment: TabAlignment.start,
-                      tabs: tabs,
-                      indicatorWeight: 3,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const Expanded(
-            child: TabBarView(
-              children: [LotteBox(), GiftClaim(), ClaimedGift()],
-            ),
-          ),
-        ],
       ),
     );
   }

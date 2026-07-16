@@ -10,7 +10,8 @@ import 'package:x50pay/common/models/basic_response.dart';
 import 'package:x50pay/common/models/cabinet/cabinet.dart';
 import 'package:x50pay/common/models/entry/entry.dart';
 import 'package:x50pay/common/models/gamelist/gamelist.dart';
-import 'package:x50pay/common/models/giftBox/gift_box.dart';
+import 'package:x50pay/common/models/gift_box/gift_box.dart';
+import 'package:x50pay/common/models/gift_box/gift_box_dto.dart';
 import 'package:x50pay/common/models/grade_background/grade_background.dart';
 import 'package:x50pay/common/models/grade_background/grade_background_dto.dart';
 import 'package:x50pay/common/models/grade_box/grade_box.dart';
@@ -216,15 +217,21 @@ class ApiMainRepository extends Repository implements MainRepository {
 
   /// 取得禮物箱API
   ///
-  /// 用於禮物系統頁面，回傳 [GiftBoxModel]
+  /// 用於禮物系統頁面，回傳 [GiftBox]
   @override
-  Future<GiftBoxModel> getGiftBox() async {
+  Future<ApiResponse<GiftBox>> getGiftBox() async {
     final res = await client.request(
       _endpoint('/gift/box'),
       method: HttpMethod.post,
       rawBody: {},
     );
-    return GiftBoxModel.fromJson(_decodeRes(res));
+    return ApiResponse.fromJson(
+      res,
+      fromJson: (json) {
+        final dto = GiftBoxDTO.fromJson(json);
+        return GiftBoxExt.fromDTO(dto);
+      },
+    );
   }
 
   /// 取得養成抽獎箱API
@@ -360,7 +367,7 @@ class ApiMainRepository extends Repository implements MainRepository {
   @override
   Future<String> getSponserDocument() async {
     final response = await client.request(
-      Uri.parse('https://pay.x50.fun/static/templates-v4/sponser.html?v1.1'),
+      Uri.parse('https://pay.x50.fun/static/tmpl/giftbox.html?v6.5.11-region'),
       method: HttpMethod.get,
     );
     return const Utf8Decoder().convert(response.bodyBytes);
