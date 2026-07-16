@@ -1,4 +1,8 @@
 {
-  "dart.flutterCreatePlatforms": ["android", "ios"],
-  "dart.lineLength": 80
+    "dart.flutterCreatePlatforms": [
+        "android",
+        "ios"
+    ],
+    "dart.lineLength": 80,
+    "editor.formatOnSave": true
 }

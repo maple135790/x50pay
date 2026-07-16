@@ -25,11 +25,6 @@ class GradeBox {
 
 extension GradeBoxExt on GradeBox {
   static GradeBox fromDTO(GradeBoxDTO dto) {
-    return GradeBox(
-      card: dto.card,
-      cd: dto.cd,
-      gifts: dto.gifts,
-      x50: dto.x50,
-    );
+    return GradeBox(card: dto.card, cd: dto.cd, gifts: dto.gifts, x50: dto.x50);
   }
 }
