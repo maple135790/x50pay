@@ -1,10 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:x50pay/common/app_theme_mixin.dart';
-import 'package:x50pay/common/theme/button_theme.dart';
+import 'package:x50pay/common/widgets/confirm_exit_dialog.dart';
 import 'package:x50pay/common/widgets/themed_scaffold/nav_bottom_bar/menu_item.dart';
 import 'package:x50pay/common/widgets/themed_scaffold/themed_scaffold.dart';
 import 'package:x50pay/generated/l10n.dart';
@@ -33,26 +32,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
     return showDialog<bool>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(i18n.confirmExitAppTitle),
-          content: Text(i18n.confirmExitAppContent),
-          actions: [
-            TextButton(
-              style: CustomButtonThemes.severe(isV4: true),
-              onPressed: () {
-                SystemNavigator.pop();
-              },
-              child: Text(i18n.dialogConfirm),
-            ),
-            TextButton(
-              style: CustomButtonThemes.cancel(isDarkMode: isDarkTheme),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: Text(i18n.dialogCancel),
-            ),
-          ],
-        );
+        return const ConfirmExitDialog();
       },
     );
   }
