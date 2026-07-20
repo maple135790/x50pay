@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 由於 GoRouter issue #138737 未 resolve，關閉 prediective back gesture -->
     <application
         android:label="X50pay"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:fullBackupContent="@xml/backup_rules">
+        android:fullBackupContent="@xml/backup_rules"
+        android:enableOnBackInvokedCallback="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
